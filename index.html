@@ -618,33 +618,31 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 .qi:focus{border-color:var(--cyan)}
 .qtype{padding:5px 8px;background:var(--bg);border:1px solid var(--border);border-radius:7px;color:var(--gray);font-size:12px;outline:none;cursor:pointer}
 .qopts{display:flex;flex-direction:column;gap:7px;margin-top:9px}
-.stc-card{background:linear-gradient(180deg,rgba(16,24,34,.98) 0%,rgba(14,21,30,.98) 100%);border:1px solid rgba(0,229,255,.14);border-radius:24px;padding:26px 26px 24px;margin-bottom:20px;box-shadow:0 20px 48px rgba(2,8,23,.28);position:relative;overflow:hidden}
-.stc-card:before{content:'';position:absolute;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,var(--cyan),rgba(57,255,20,.75));opacity:.9}
-.stc-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
-.stc-num{font-family:var(--fh);font-size:24px;font-weight:900;color:rgba(37,99,235,.44);min-width:44px}
-.stc-badge{display:inline-flex;align-items:center;padding:5px 12px;border-radius:999px;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.24);color:var(--cyan);font-size:10px;font-weight:800;white-space:nowrap;letter-spacing:.8px;text-transform:uppercase}
-.stc-title{font-family:var(--fb);font-size:14px;font-weight:800;color:#c7d2fe;line-height:1.4;letter-spacing:.5px;text-transform:uppercase}
-.stc-condition{background:rgba(148,163,184,.06);border:1px solid rgba(148,163,184,.14);border-radius:20px;padding:18px 18px 16px}
-.stc-text,.stc-note{font-family:var(--fb);font-size:16px;line-height:1.7;color:var(--white);font-weight:700}
-.stc-note{margin-top:14px;color:#cbd5e1}
-.stc-variants{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0 0}
-.stc-variants span{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;background:rgba(2,132,199,.08);border:1px solid rgba(56,189,248,.18);color:#e2e8f0;font-size:13px;font-weight:700}
-.stc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:18px}
-.stc-col{background:linear-gradient(180deg,rgba(15,23,42,.92) 0%,rgba(15,23,42,.74) 100%);border:1px solid rgba(56,189,248,.18);border-radius:20px;padding:18px 18px 16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
-.stc-col-title{font-size:16px;line-height:1.55;color:var(--white);font-weight:800;min-height:108px}
-.stc-picks{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
-.stc-pick{width:54px;height:54px;border-radius:16px;border:1px solid rgba(56,189,248,.22);background:rgba(15,23,42,.9);color:#94a3b8;font-size:20px;font-weight:900;cursor:pointer;font-family:var(--fh);transition:all .18s ease}
-.stc-pick:hover{transform:translateY(-1px);border-color:var(--cyan);color:var(--cyan);box-shadow:0 12px 24px rgba(0,229,255,.08)}
-.stc-pick.active{background:linear-gradient(180deg,rgba(0,229,255,.16) 0%,rgba(0,229,255,.1) 100%);border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 0 1px rgba(0,229,255,.18) inset,0 14px 28px rgba(0,229,255,.08)}
-.stc-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:20px;padding-top:18px;border-top:1px solid rgba(148,163,184,.12)}
-.stc-check{width:auto;min-width:220px;margin-top:0}
-.stc-feedback{font-size:14px;line-height:1.6;color:#94a3b8;min-height:22px;flex:1 1 280px}
+.stc-card{background:var(--bg3);border:1px solid var(--border);border-radius:18px;padding:20px 22px;margin-bottom:18px}
+.stc-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.stc-num{font-family:var(--fh);font-size:22px;font-weight:900;color:rgba(37,99,235,.32);min-width:36px}
+.stc-badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.18);color:var(--cyan);font-size:10px;font-weight:800;white-space:nowrap}
+.stc-title{font-family:var(--fb);font-size:18px;font-weight:800;color:var(--white);line-height:1.55}
+.stc-condition{font-family:var(--fb);font-size:18px;line-height:1.55;color:var(--white);font-weight:800}
+.stc-condition p{margin:0 0 12px;color:inherit;font-size:inherit;line-height:inherit;font-weight:inherit}
+.stc-variants{display:flex;gap:16px;flex-wrap:wrap;margin:10px 0 14px}
+.stc-variants span{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:var(--bg2);border:1px solid var(--border);color:var(--white);font-size:13px}
+.stc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:16px}
+.stc-col{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px}
+.stc-col-title{font-size:14px;line-height:1.55;color:var(--white);font-weight:700;min-height:94px}
+.stc-picks{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.stc-pick{width:42px;height:42px;border-radius:12px;border:1px solid var(--border);background:var(--bg3);color:var(--gray);font-size:15px;font-weight:800;cursor:pointer;font-family:var(--fb);transition:all .18s}
+.stc-pick:hover{border-color:var(--cyan);color:var(--cyan)}
+.stc-pick.active{background:rgba(0,229,255,.12);border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 0 1px rgba(0,229,255,.14) inset}
+.stc-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:16px}
+.stc-check{width:auto;min-width:200px;margin-top:0}
+.stc-feedback{font-size:13px;line-height:1.5;color:var(--gray);min-height:20px}
 .stc-feedback.ok{color:var(--green);font-weight:700}
 .stc-feedback.bad{color:var(--orange);font-weight:700}
 .stc-solution-actions{display:flex;justify-content:flex-end;margin-top:12px}
 .stc-hide{width:auto;min-width:160px;margin-top:0}
 .stc-editor-label{margin:8px 0 12px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--cyan);opacity:.75}
-@media(max-width:920px){.stc-grid{grid-template-columns:1fr}.stc-col-title{min-height:auto}.stc-card{padding:22px 18px 20px}.stc-text,.stc-note{font-size:15px}.stc-pick{width:50px;height:50px}}
+@media(max-width:920px){.stc-grid{grid-template-columns:1fr}.stc-col-title{min-height:auto}}
 .qop{display:flex;align-items:center;gap:7px}
 .qop input[type=text]{flex:1;padding:5px 9px;background:var(--bg);border:1px solid var(--border);border-radius:7px;color:var(--white);font-size:13px;font-family:var(--fb);outline:none}
 .qop input[type=text]:focus{border-color:var(--cyan)}
@@ -2413,7 +2411,7 @@ function renderSpecialLessonTests(lessonName){
     const cols=(item.columns||[]).map(function(title,colIndex){
       return `<div class="stc-col"><div class="stc-col-title">${title}</div><div class="stc-picks">${['1','2','3'].map(function(v){return `<button class="stc-pick" type="button" data-value="${v}" onclick="specialTestPick(this,${colIndex},'${v}')">${v}</button>`;}).join('')}</div></div>`;
     }).join('');
-    return `<div class="stc-card" data-special-test data-correct="${(item.correct||[]).join(',')}"><div class="stc-head"><div class="stc-num">${String(item.num||index+1).padStart(2,'0')}</div><span class="stc-badge">${item.badge||'Тест'}</span><span class="stc-title">${item.title}</span></div><div class="stc-condition"><div class="stc-text">${item.prompt}</div><div class="stc-note">${item.note||''}</div><div class="stc-variants">${(item.variants||[]).map(function(v){return `<span>${v}</span>`;}).join('')}</div></div><div class="stc-grid">${cols}</div><div class="stc-actions"><button class="pt-sol-btn stc-check" type="button" onclick="specialTestCheck(this)">Проверить ответ</button><div class="stc-feedback" data-special-feedback>Выберите цифру 1, 2 или 3 для каждой величины, затем нажмите «Проверить ответ».</div></div><div class="pt-solution" data-special-solution><div class="pt-photo-wrap"><img class="pt-photo-img" src="${item.image}" alt="${item.title}"></div><div class="stc-solution-actions"><button class="pt-sol-btn stc-hide" type="button" onclick="specialTestHide(this)">Скрыть</button></div></div></div>`;
+    return `<div class="stc-card" data-special-test data-correct="${(item.correct||[]).join(',')}"><div class="stc-head"><div class="stc-num">${String(item.num||index+1).padStart(2,'0')}</div><span class="stc-badge">${item.badge||'Тест'}</span><span class="stc-title">${item.title}</span></div><div class="stc-condition"><p>${item.prompt}</p><div class="stc-variants">${(item.variants||[]).map(function(v){return `<span>${v}</span>`;}).join('')}</div><p>${item.note||''}</p></div><div class="stc-grid">${cols}</div><div class="stc-actions"><button class="pt-sol-btn stc-check" type="button" onclick="specialTestCheck(this)">Проверить ответ</button><div class="stc-feedback" data-special-feedback>Выберите цифру 1, 2 или 3 для каждой величины, затем нажмите «Проверить ответ».</div></div><div class="pt-solution" data-special-solution><div class="pt-photo-wrap"><img class="pt-photo-img" src="${item.image}" alt="${item.title}"></div><div class="stc-solution-actions"><button class="pt-sol-btn stc-hide" type="button" onclick="specialTestHide(this)">Скрыть</button></div></div></div>`;
   }).join('');
 }
 function specialTestPick(btn,index,value){
@@ -3707,7 +3705,7 @@ const LESSON_TASKS={
     steps:[],
     solutionHtml:`
       <div class="pt-photo-wrap">
-        <img class="pt-photo-img" src="/Users/ireksmakov/Desktop/САЙТ/ЗАДАЧИ/Закон сохранения импульса и изменения импульса/03.jpg" alt="Импульс шайб после удара">
+        <img class="pt-photo-img" src="03.jpg" alt="Импульс шайб после удара">
       </div>`,
     boardSolutionHtml:`
       <div class="task-board-manual">
@@ -3737,7 +3735,7 @@ const LESSON_TASKS={
     steps:[],
     solutionHtml:`
       <div class="pt-photo-wrap">
-        <img class="pt-photo-img" src="/Users/ireksmakov/Desktop/САЙТ/ЗАДАЧИ/Закон сохранения импульса и изменения импульса/04.jpg" alt="Куда направлены осколки после взрыва?">
+        <img class="pt-photo-img" src="04.jpg" alt="Куда направлены осколки после взрыва?">
       </div>`,
     boardSolutionHtml:`
       <div class="task-board-manual">
@@ -3770,7 +3768,7 @@ const LESSON_TASKS={
     steps:[],
     solutionHtml:`
       <div class="pt-photo-wrap">
-        <img class="pt-photo-img" src="/Users/ireksmakov/Desktop/САЙТ/ЗАДАЧИ/Закон сохранения импульса и изменения импульса/06.png" alt="Абсолютно неупругое столкновение брусков">
+        <img class="pt-photo-img" src="06.png" alt="Абсолютно неупругое столкновение брусков">
       </div>`,
     boardSolutionHtml:`
       <div class="task-board-manual">
@@ -3846,7 +3844,7 @@ const LESSON_HOMEWORK={
       badge:'Для ученика',
       cond:'Снаряд массой <strong>4 кг</strong>, летящий со скоростью <strong>400 м/с</strong>, разрывается на две равные части, одна из которых летит в направлении движения снаряда, а другая — в противоположную сторону. В момент разрыва суммарная кинетическая энергия осколков увеличилась на величину <strong>ΔE = 0,5 МДж</strong>. Определите скорость осколка, летящего по направлению движения снаряда.',
       given:'<strong>Что нужно сделать:</strong> оформить полное решение в тетради или файле, затем загрузить фото, PDF или документ ниже.<br><span class="pt-find">Карточка задания открывается по кнопке «Карточка»</span>',
-      image:'/Users/ireksmakov/Desktop/САЙТ/ЗАДАЧИ/Закон сохранения импульса и изменения импульса/05 ДЗ.jpg'
+      image:'05 ДЗ.jpg'
     }
   ]
 };
@@ -3857,9 +3855,9 @@ const LESSON_SPECIAL_TESTS={
     {
       id:'lesson12BulletBall',
       num:1,
-      title:'Определите характер изменения величин',
+      title:'Шарик висит на нити. В нем застревает пуля, летящая горизонтально, в результате чего нить отклоняется на некоторый угол.',
       badge:'ЕГЭ · выбор ответа',
-      prompt:'Шарик висит на нити. В нем застревает пуля, летящая горизонтально, в результате чего нить отклоняется на некоторый угол. Как изменятся при увеличении массы шарика следующие три величины: импульс, полученный шариком в результате попадания в него пули; скорость, которая будет у шарика тотчас после удара; угол отклонения нити?',
+      prompt:'Как изменятся при увеличении массы шарика следующие три величины: импульс, полученный шариком в результате попадания в него пули; скорость, которая будет у шарика тотчас после удара; угол отклонения нити?',
       variants:['1. Увеличится.','2. Уменьшится.','3. Не изменится.'],
       note:'Пуля застревает очень быстро. Запишите в таблицу выбранные цифры для каждой физической величины. Цифры в ответе могут повторяться.',
       columns:[
@@ -3868,7 +3866,7 @@ const LESSON_SPECIAL_TESTS={
         'Угол отклонения нити'
       ],
       correct:['1','2','2'],
-      image:'/Users/ireksmakov/Desktop/САЙТ/ЗАДАЧИ/Закон сохранения импульса и изменения импульса/08.png'
+      image:'08.png'
     }
   ]
 };
