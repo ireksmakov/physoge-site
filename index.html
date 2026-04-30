@@ -3974,7 +3974,7 @@ function renderPTasks(name){
     const photoId='ptPhoto_'+i;
     const steps=(t.steps||[]).map((s,j)=>`<div class="sr-step"><div class="sr-snum">${j+1}</div><div class="sr-sbody">${s}</div></div>`).join('');
     const extra=t.extraHtml?`<div class="pt-extra">${t.extraHtml}</div>`:'';
-    const boardBtn=t.boardMode?`<div class="pt-side-actions"><button class="pt-board-btn" onclick="openTaskBoard('${t.boardMode}')">⤢ На весь экран</button></div>`:'';
+    const boardBtn=t.boardMode?`<div class="pt-side-actions"><button class="pt-board-btn" onclick="openTaskBoard('${t.boardMode}',true)">⤢ На весь экран</button></div>`:'';
     const answerCard=`<div class="sr-ans"><div style="font-size:18px">✓</div><div><div class="sr-ans-l">Ответ</div><div class="sr-ans-v" style="color:var(--orange)">${t.ans}</div></div></div>`;
     const embedded=t.solutionHtml||getEmbeddedSolutionHtml(t);
     const answer=(embedded||t.solutionImage)?(t.hideAnswer?`<div class="pt-photo-tools"><button type="button" class="pt-photo-answer-btn" data-answer-toggle="${photoId}" onclick="ptToggleAnswer(this,'${photoId}')">Показать ответ</button></div><div class="sr-ans-wrap" id="${photoId}">${answerCard}<div class="sr-ans-cover"><button type="button" class="pt-photo-answer-btn" onclick="ptToggleAnswer(null,'${photoId}')">Показать ответ</button></div></div>`:answerCard):(t.hideAnswer?`<div class="pt-photo-tools"><button type="button" class="pt-photo-answer-btn" data-answer-toggle="${photoId}" onclick="ptToggleAnswer(this,'${photoId}')">Показать ответ</button></div><div class="sr-ans-wrap" id="${photoId}">${answerCard}<div class="sr-ans-cover"><button type="button" class="pt-photo-answer-btn" onclick="ptToggleAnswer(null,'${photoId}')">Показать ответ</button></div></div>`:answerCard);
@@ -4590,6 +4590,7 @@ function ensureTaskBoardOverlay(){
               <div class="task-board-toolbar-group end">
                 <button type="button" id="taskBoardConditionBtn" class="task-board-tool" onclick="taskBoardToggleFloating('condition')">Условие</button>
                 <button type="button" id="taskBoardGraphBtn" class="task-board-tool" onclick="taskBoardToggleFloating('graph')">Схема</button>
+                <button type="button" class="task-board-tool" onclick="taskBoardRequestFullscreen()">⤢ На весь экран</button>
                 <button type="button" class="task-board-tool" onclick="closeTaskBoard()">✕ Закрыть</button>
               </div>
             </div>
@@ -4717,7 +4718,27 @@ function ensureTaskBoardOverlay(){
   taskBoardUpdateHistoryButtons();
   return taskBoardState;
 }
-function openTaskBoard(mode){
+function taskBoardRequestFullscreen(){
+  const state=ensureTaskBoardOverlay();
+  const el=state&&state.overlay?state.overlay:null;
+  if(!el) return;
+  if(document.fullscreenElement||document.webkitFullscreenElement||document.msFullscreenElement) return;
+  const req=el.requestFullscreen||el.webkitRequestFullscreen||el.msRequestFullscreen;
+  if(typeof req!=='function') return;
+  try{
+    const result=req.call(el);
+    if(result&&typeof result.catch==='function') result.catch(function(){});
+  }catch(_err){}
+}
+function taskBoardExitFullscreen(){
+  const exit=document.exitFullscreen||document.webkitExitFullscreen||document.msExitFullscreen;
+  if(typeof exit!=='function') return;
+  try{
+    const result=exit.call(document);
+    if(result&&typeof result.catch==='function') result.catch(function(){});
+  }catch(_err){}
+}
+function openTaskBoard(mode,requestFullscreen){
   const state=ensureTaskBoardOverlay();
   const task=getTaskBoardData(mode);
   if(!task) return;
@@ -4772,6 +4793,7 @@ function openTaskBoard(mode){
   taskBoardToggleFloating('graph',false);
   state.overlay.classList.add('open');
   document.body.classList.add('task-board-lock');
+  if(requestFullscreen) taskBoardRequestFullscreen();
   taskBoardSetTool('pen');
   taskBoardUpdateCanvasSurface();
   taskBoardUpdateHistoryButtons();
@@ -4784,6 +4806,7 @@ function closeTaskBoard(){
   state.drawer.classList.remove('open');
   state.pointer=null;
   document.body.classList.remove('task-board-lock');
+  taskBoardExitFullscreen();
   taskBoardToggleFloating('condition',false);
   taskBoardToggleFloating('graph',false);
   toggleTaskBoardAnimation(false);
