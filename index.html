@@ -3795,9 +3795,20 @@ const LESSON_TASKS={
   },
   {
     num:6,level:2,exam:'ЕГЭ (1 балл)',title:'Импульс тележки после падения камня',
+    boardMode:'cartStone',graphLabel:'Схема',hasAnimation:true,
     cond:'Камень массой <strong>m<sub>1</sub> = 4 кг</strong> падает под углом <strong>60°</strong> к горизонту со скоростью <strong>10 м/с</strong> в тележку с песком, покоящуюся на горизонтальных рельсах. Чему равен импульс тележки с песком и камнем после падения камня?',
     given:'<strong>Дано:</strong> m<sub>1</sub> = 4 кг, v = 10 м/с, α = 60°, тележка до удара покоится<br><span class="pt-find">Найти: p</span>',
     steps:[],
+    boardSolutionHtml:`
+      <div class="task-board-manual">
+        <div class="task-board-step"><div class="task-board-step-num">1</div><div class="task-board-step-body"><strong>Берём горизонтальную проекцию импульса камня.</strong> Тележка движется только по рельсам, значит важна только ось <strong>x</strong>:
+          <div class="sr-fml">p<sub>x</sub> = mv cosα</div>
+        </div></div>
+        <div class="task-board-step"><div class="task-board-step-num">2</div><div class="task-board-step-body"><strong>Подставим числа.</strong>
+          <div class="sr-fml">p<sub>x</sub> = 4·10·cos60° = 20 кг·м/с</div>
+        </div></div>
+        <div class="task-board-step"><div class="task-board-step-num">3</div><div class="task-board-step-body"><strong>После падения</strong> камень и тележка движутся вместе по горизонтали, поэтому импульс системы равен найденной проекции: <strong>p = 20 кг·м/с</strong>.</div></div>
+      </div>`,
     solutionHtml:`
       <div class="pt-photo-wrap">
         <img class="pt-photo-img" src="12_06image.png" alt="Импульс тележки после падения камня">
@@ -4101,6 +4112,7 @@ function getTaskBoardData(mode){
   if(mode==='puckImpulse') return (LESSON_TASKS['Закон сохранения импульса и изменения импульса']||[]).find(function(t){return t.boardMode===mode;})||null;
   if(mode==='explosionFragments') return (LESSON_TASKS['Закон сохранения импульса и изменения импульса']||[]).find(function(t){return t.boardMode===mode;})||null;
   if(mode==='inelasticBlocks') return (LESSON_TASKS['Закон сохранения импульса и изменения импульса']||[]).find(function(t){return t.boardMode===mode;})||null;
+  if(mode==='cartStone') return (LESSON_TASKS['Закон сохранения импульса и изменения импульса']||[]).find(function(t){return t.boardMode===mode;})||null;
   return null;
 }
 function getTaskBoardGraph(mode){
@@ -4219,6 +4231,22 @@ function getTaskBoardGraph(mode){
       <rect x="30" y="286" width="398" height="52" rx="12" fill="#ffffff" stroke="#1d4ed8" stroke-width="2"></rect>
       <text x="62" y="309" fill="#1d4ed8" font-size="15" font-weight="700">Абсолютно неупругое столкновение:</text>
       <text x="58" y="329" fill="#1d4ed8" font-size="15" font-weight="700">после удара бруски движутся вместе.</text>
+    </svg>`;
+  if(mode==='cartStone') return `
+    <svg viewBox="0 0 360 230" aria-label="Падение камня в тележку">
+      <rect x="0" y="0" width="360" height="230" rx="16" fill="#f8fafc"></rect>
+      <path d="M24 170H336" stroke="#0f172a" stroke-width="2.4"></path>
+      <path d="M24 182H336" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="5 4"></path>
+      <rect x="190" y="124" width="108" height="34" rx="10" fill="#e2e8f0" stroke="#334155" stroke-width="2"></rect>
+      <circle cx="214" cy="166" r="9" fill="#334155"></circle><circle cx="274" cy="166" r="9" fill="#334155"></circle>
+      <circle cx="96" cy="66" r="12" fill="#fdba74" stroke="#f97316" stroke-width="2"></circle>
+      <path d="M108 76L190 136" stroke="#0284c7" stroke-width="2.8"></path>
+      <polygon points="190,136 178,133 184,123" fill="#0284c7"></polygon>
+      <text x="42" y="52" fill="#111827" font-size="12">m = 4 кг</text>
+      <text x="24" y="70" fill="#0284c7" font-size="12" font-weight="700">v = 10 м/с</text>
+      <text x="108" y="104" fill="#0f172a" font-size="12">α = 60°</text>
+      <text x="206" y="118" fill="#0f172a" font-size="12">тележка покоится</text>
+      <text x="24" y="208" fill="#0284c7" font-size="13" font-weight="700">p = mvcosα = 20 кг·м/с</text>
     </svg>`;
   if(mode==='puckImpulse') return `
     <svg viewBox="0 0 360 230" aria-label="Схема импульсов шайб до и после удара">
@@ -5248,6 +5276,18 @@ function taskBoardSimSync(){
         : '<strong>Идея:</strong> после удара вторая шайба продолжает движение вверх с импульсом <span class="fml">p<sub>3</sub></span>, а первая получает импульс <span class="fml">p<sub>4</sub></span> и уходит вправо и вверх.');
     return;
   }
+  if(state.mode==='cartStone'){
+    const tImpact=0.55;
+    const phase=progress<tImpact?'Падение камня':'После падения';
+    if(frame) frame.textContent=phase;
+    if(relV) relV.innerHTML=progress<tImpact?'p<sub>x</sub> = mvcosα':'p = 20 кг·м/с';
+    if(relP) relP.innerHTML='mvcos60° = 20';
+    if(key) key.innerHTML='Сохраняется p по оси x';
+    if(stateBox) stateBox.innerHTML=phase==='Падение камня'
+      ? '<strong>Идея:</strong> до удара учитываем только горизонтальную составляющую импульса камня, потому что тележка движется вдоль рельсов.'
+      : '<strong>Идея:</strong> после падения камень и тележка движутся вместе по горизонтали с импульсом <span class="fml">20 кг·м/с</span>.';
+    return;
+  }
   if(state.mode==='explosionFragments'){
     const cy=Math.round(H*0.62);
     const t1=0.42,t2=0.54;
@@ -5700,6 +5740,46 @@ function taskBoardSimDraw(){
     ctx.fillText('h = '+hNow.toFixed(2).replace('.',',')+' м',bx+12,by+86);
     ctx.fillStyle='#0284c7';ctx.font='700 12px Golos Text,sans-serif';
     ctx.fillText((phase==='До удара'||phase==='Соударение')?'ЗСИ по горизонтали':'ЗСЭ при подъёме',bx+12,by+104);
+    return;
+  }
+  if(state.mode==='cartStone'){
+    const tImpact=0.55;
+    const phase = progress<tImpact ? 'Падение камня' : 'После падения';
+    const railY=Math.min(H-110,250);
+    const cartX=Math.max(170,Math.min(W-160,W*0.58));
+    const cartW=108,cartH=34;
+    const startX=Math.max(66,cartX-120),startY=72;
+    const impactX=cartX+16,impactY=railY-cartH+8;
+    const a=Math.min(progress/tImpact,1);
+    const stoneX=progress<tImpact?taskBoardSimLerp(startX,impactX,a):cartX+34;
+    const stoneY=progress<tImpact?taskBoardSimLerp(startY,impactY,a):railY-cartH+9;
+    const move=progress<tImpact?0:Math.min((progress-tImpact)/(1-tImpact),1);
+    const shift=move*84;
+    const cx=cartX+shift;
+
+    ctx.fillStyle='#0f172a';ctx.font='bold 15px Golos Text,sans-serif';ctx.textAlign='left';
+    ctx.fillText('Падение камня в тележку на рельсах',topLeft,30);
+    ctx.fillStyle='#64748b';ctx.font='12px Golos Text,sans-serif';
+    ctx.fillText('По горизонтали сохраняется импульс: p = mvcosα.',topLeft,50);
+    ctx.strokeStyle='#111827';ctx.lineWidth=2.3;ctx.beginPath();ctx.moveTo(24,railY);ctx.lineTo(W-24,railY);ctx.stroke();
+    ctx.strokeStyle='#94a3b8';ctx.lineWidth=1.2;ctx.setLineDash([5,4]);ctx.beginPath();ctx.moveTo(24,railY+12);ctx.lineTo(W-24,railY+12);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle='#e2e8f0';ctx.strokeStyle='#334155';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(cx,railY-cartH,cartW,cartH,10);ctx.fill();ctx.stroke();
+    ctx.fillStyle='#334155';ctx.beginPath();ctx.arc(cx+24,railY+8,9,0,Math.PI*2);ctx.arc(cx+84,railY+8,9,0,Math.PI*2);ctx.fill();
+    taskBoardSimDrawBody(ctx,stoneX,stoneY,11,'#fdba74','m');
+    if(progress<tImpact){
+      taskBoardSimArrow(ctx,stoneX+12,stoneY+10,stoneX+52,stoneY+38,'#0284c7',7,2.4);
+      ctx.fillStyle='#0284c7';ctx.font='700 12px Golos Text,sans-serif';ctx.fillText('v = 10 м/с',Math.max(22,stoneX-20),stoneY-20);
+      ctx.fillStyle='#111827';ctx.font='12px Golos Text,sans-serif';ctx.fillText('α = 60°',stoneX+16,stoneY+6);
+    }else{
+      taskBoardSimArrow(ctx,cx+cartW+8,railY-18,cx+cartW+56,railY-18,'#2563eb',8,2.6);
+      ctx.fillStyle='#2563eb';ctx.font='700 12px Golos Text,sans-serif';ctx.fillText('p = 20 кг·м/с',cx+cartW-6,railY-30);
+    }
+    const bx=W-292,by=20,bw=270,bh=102;
+    ctx.fillStyle='rgba(255,255,255,.98)';ctx.fillRect(bx,by,bw,bh);ctx.strokeStyle='rgba(37,99,235,.18)';ctx.strokeRect(bx,by,bw,bh);
+    ctx.fillStyle='#64748b';ctx.font='11px Golos Text,sans-serif';ctx.fillText('Короткое решение',bx+12,by+18);
+    ctx.fillStyle='#111827';ctx.font='bold 16px Golos Text,sans-serif';ctx.fillText('Фаза: '+phase,bx+12,by+42);
+    ctx.font='12px Golos Text,sans-serif';ctx.fillText('pₓ = 4·10·cos60° = 20 кг·м/с',bx+12,by+64);
+    ctx.fillStyle='#0284c7';ctx.font='700 12px Golos Text,sans-serif';ctx.fillText('Ответ: p = 20 кг·м/с',bx+12,by+86);
     return;
   }
   if(state.mode==='explosionFragments'){
