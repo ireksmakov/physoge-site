@@ -4744,7 +4744,7 @@ function openTaskBoard(mode,requestFullscreen){
   if(!task) return;
   state.mode=mode;
   state.task=task;
-  state.title.textContent=task.title;
+  if(state.title) state.title.textContent=task.title;
   state.condition.innerHTML=task.cond;
   state.graph.innerHTML=getTaskBoardGraph(mode);
   if(state.graphLabel) state.graphLabel.textContent=task.graphLabel||'График';
