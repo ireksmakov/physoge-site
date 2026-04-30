@@ -3480,19 +3480,45 @@ function vlDrawSceneOn(canvasId,t,fullscreen){
 }
 
 /* ── Fullscreen ── */
-function vlOpenFs(){
+function vlEnterFsUi(){
   vlFsMode=true;
   document.getElementById('vlFsOverlay').classList.add('active');
   document.body.style.overflow='hidden';
   setTimeout(function(){vlDrawScene(vlT);vlDrawStopwatch(vlT);},60);
 }
-function vlCloseFs(){
+function vlExitFsUi(){
   vlFsMode=false;
   document.getElementById('vlFsOverlay').classList.remove('active');
   document.body.style.overflow='';
   setTimeout(function(){vlDrawScene(vlT);vlDrawStopwatch(vlT);},60);
 }
-document.addEventListener('keydown',function(e){if(e.key==='Escape'&&vlFsMode)vlCloseFs();});
+function vlGetFullscreenRoot(){
+  return document.getElementById('vlFsOverlay');
+}
+function vlOpenFs(){
+  var fsRoot=vlGetFullscreenRoot();
+  vlEnterFsUi();
+  if(!document.fullscreenElement&&fsRoot&&fsRoot.requestFullscreen){
+    fsRoot.requestFullscreen().catch(function(){
+      /* Фолбэк: остаёмся в overlay-режиме */
+    });
+  }
+}
+function vlCloseFs(){
+  if(document.fullscreenElement&&document.exitFullscreen){
+    document.exitFullscreen().catch(function(){
+      vlExitFsUi();
+    });
+    return;
+  }
+  vlExitFsUi();
+}
+document.addEventListener('fullscreenchange',function(){
+  if(!document.fullscreenElement&&vlFsMode){
+    vlExitFsUi();
+  }
+});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&vlFsMode&&!document.fullscreenElement)vlCloseFs();});
 
 /* ── Таблица ── */
 function vlSaveRow(){
