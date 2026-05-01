@@ -53,7 +53,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:300;background:rgba(2,9,20,0.
 .hero-label::before{content:'';width:20px;height:1px;background:var(--cyan)}
 .hero h1{font-family:var(--fh);font-size:clamp(34px,5vw,78px);font-weight:900;line-height:1.05;letter-spacing:-1.4px;margin-bottom:22px}
 .hero h1 .acc{color:var(--cyan)}
-.hero-desc{font-family:"Inter","Montserrat",Arial,sans-serif;font-size:22px;font-weight:400;line-height:1.6;color:rgba(255,255,255,.72);max-width:650px;margin-bottom:40px}
+.section-subtitle{font-family:"Inter","Montserrat",Arial,sans-serif;font-size:30px;font-weight:400;line-height:1.5;color:rgba(190,205,225,.72);max-width:1100px;margin-bottom:40px}
+@media (max-width:768px){.section-subtitle{font-size:20px;line-height:1.45}}
 .hero-desc strong{color:var(--white)}
 .hero-cta{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .btn-p{display:inline-block;background:var(--cyan);color:#000;font-family:var(--fh);font-size:13px;font-weight:700;padding:14px 30px;border-radius:8px;transition:transform .15s,box-shadow .2s;border:none;cursor:pointer}
@@ -970,7 +971,7 @@ img,svg,canvas,video,iframe{max-width:100%}
       <div>
         <div class="hero-label">Современная образовательная онлайн-платформа</div>
         <h1>Физика и математика<br>для <span class="acc">ОГЭ и ЕГЭ</span></h1>
-        <p class="hero-desc">Платформа для школьников и учителей — структурированные курсы, конструктор тестов, банк задач, симулятор экзамена и виртуальная лаборатория в одном месте.</p>
+        <p class="section-subtitle">Платформа для школьников и учителей — структурированные курсы, конструктор тестов, банк задач, симулятор экзамена и виртуальная лаборатория в одном месте.</p>
         <div class="dual-cta">
           <div class="cta-card cta-student">
             <div class="cta-card-icon">🎓</div>
