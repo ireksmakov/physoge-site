@@ -41,7 +41,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:300;background:rgba(8,12,16,0
 
 /* LANDING */
 #landing{display:block}
-.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;max-width:1200px;margin:0 auto;padding:100px 24px 60px;gap:60px}
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;max-width:1200px;margin:0 auto;padding:100px 24px 60px;gap:42px}.hero-shot{width:100%;display:block;border-radius:16px;border:1px solid var(--border);box-shadow:0 24px 64px rgba(0,0,0,.45)}.hero-media{display:flex;align-items:center;justify-content:center}
 .hero-label{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--cyan);margin-bottom:24px}
 .hero-label::before{content:'';width:20px;height:1px;background:var(--cyan)}
 .hero h1{font-family:var(--fh);font-size:clamp(30px,4vw,52px);font-weight:900;line-height:1.1;letter-spacing:-1px;margin-bottom:24px}
@@ -957,10 +957,7 @@ img,svg,canvas,video,iframe{max-width:100%}
       <div>
         <div class="hero-label">Современная образовательная онлайн-платформа</div>
         <h1>Подготовка к <span class="acc">ОГЭ и ЕГЭ</span><br>по физике<br>и математике</h1>
-        <p class="hero-desc">
-          Платформа для <strong>школьников</strong> и <strong>учителей</strong> — структурированные курсы, конструктор тестов, банк задач, симулятор экзамена и виртуальная лаборатория в одном месте.
-        </p>
-        <!-- Dual CTA -->
+        <p class="hero-desc">Платформа для школьников и учителей — структурированные курсы, конструктор тестов, банк задач, симулятор экзамена и виртуальная лаборатория в одном месте.</p>
         <div class="dual-cta">
           <div class="cta-card cta-student">
             <div class="cta-card-icon">🎓</div>
@@ -979,17 +976,10 @@ img,svg,canvas,video,iframe{max-width:100%}
             <a href="#for-teachers" class="cta-card-btn btn-orange">Инструменты →</a>
           </div>
         </div>
-        <!-- Stats -->
-        <div class="stats-grid">
-          <div class="sc"><div class="sv cc">7+</div><div class="sl">курсов на платформе</div></div>
-          <div class="sc"><div class="sv co">500+</div><div class="sl">задач в банке</div></div>
-          <div class="sc"><div class="sv cg">80%</div><div class="sl">практика и задачи</div></div>
-          <div class="sc"><div class="sv cc" style="font-size:18px">ОГЭ+ЕГЭ</div><div class="sl">форматы экзаменов</div></div>
-        </div>
       </div>
-      <div class="fbox"><div class="fbg"></div><div class="fc">
-        <div class="hero-brand" aria-label="ФИЗМАТ"><span>ФИЗ</span><span class="acc">МАТ</span></div>
-      </div></div>
+      <div class="hero-media">
+        <img class="hero-shot" src="12_07image.png" alt="Главный экран платформы ФИЗМАТ">
+      </div>
     </div>
   </section>
 
