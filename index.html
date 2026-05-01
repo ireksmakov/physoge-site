@@ -447,7 +447,9 @@ body.task-board-lock{overflow:hidden}
 .task-board-canvas-wrap.pan-mode{cursor:grab}
 .task-board-canvas-wrap.dragging{cursor:grabbing}
 .task-board-canvas{width:100%;height:100%;display:block;touch-action:none}
-.task-board-board-tip{position:absolute;left:16px;bottom:14px;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.92);border:1px solid rgba(203,213,225,.9);font-size:12px;line-height:1.45;color:#475569;box-shadow:0 10px 24px rgba(15,23,42,.08);pointer-events:none}
+.task-board-zoom-controls{position:absolute;right:16px;bottom:16px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.task-board-zoom-btn{width:38px;height:38px;border-radius:10px;border:1px solid #cbd5e1;background:rgba(255,255,255,.96);color:#0f172a;font-size:22px;line-height:1;cursor:pointer;box-shadow:0 10px 24px rgba(15,23,42,.12);transition:all .15s;font-family:var(--fb)}
+.task-board-zoom-btn:hover{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8}
 .task-board-graph svg{display:block;width:100%;height:auto}
 .task-board-problem-graph{overflow:hidden}
 .task-board-float{position:absolute;top:16px;left:16px;z-index:32;width:min(560px,calc(100% - 32px));background:#fff;border:1px solid #dbe5f0;border-radius:16px;box-shadow:0 18px 46px rgba(15,23,42,.12)}
@@ -484,7 +486,7 @@ body.task-board-lock{overflow:hidden}
 .task-board-sim-btn:hover{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8}
 .task-board-sim-btn.active{background:#dbeafe;border-color:#60a5fa;color:#1d4ed8}
 @media(max-width:1080px){.task-board-problem-main{padding-right:0;padding-top:62px}.task-board-problem-graph{top:12px;left:16px;right:auto;width:calc(100% - 32px);max-width:220px}.task-board-problem-graph.graph-open{left:0;right:0;width:100%;max-width:none;top:calc(100% + 10px)}.task-board-popup{inset:10px;padding:14px 16px 16px}.task-board-sim-panel{grid-template-columns:repeat(2,minmax(0,1fr))}.task-board-sim-speed{margin-left:0;min-width:0;justify-content:flex-start}.task-board-sim-canvas-wrap{min-height:clamp(320px,52vh,640px)}.task-board-sim-canvas{height:clamp(320px,52vh,640px)}}
-@media(max-width:820px){.task-board-shell{padding:10px}.task-board-title{font-size:20px}.task-board-condition{font-size:14px}.task-board-given{font-size:14px}.task-board-solution .task-board-step-body,.task-board-manual .task-board-step-body,.task-board-manual .task-board-step-body .sr-fml{font-size:14px;line-height:1.6}.task-board-drawer{width:288px}.task-board-popup{inset:8px;padding:12px 12px 14px;border-radius:18px}.task-board-popup-title{font-size:20px}.task-board-sim-canvas-wrap{min-height:clamp(280px,44vh,420px)}.task-board-sim-canvas{height:clamp(280px,44vh,420px)}.task-board-sim-panel{grid-template-columns:1fr}.task-board-sim-controls{align-items:stretch}.task-board-sim-play,.task-board-sim-reset,.task-board-popup-close{justify-content:center}.task-board-sim-speed{width:100%;justify-content:flex-start}.task-board-board-tip{display:none}}
+@media(max-width:820px){.task-board-shell{padding:10px}.task-board-title{font-size:20px}.task-board-condition{font-size:14px}.task-board-given{font-size:14px}.task-board-solution .task-board-step-body,.task-board-manual .task-board-step-body,.task-board-manual .task-board-step-body .sr-fml{font-size:14px;line-height:1.6}.task-board-drawer{width:288px}.task-board-popup{inset:8px;padding:12px 12px 14px;border-radius:18px}.task-board-popup-title{font-size:20px}.task-board-sim-canvas-wrap{min-height:clamp(280px,44vh,420px)}.task-board-sim-canvas{height:clamp(280px,44vh,420px)}.task-board-sim-panel{grid-template-columns:1fr}.task-board-sim-controls{align-items:stretch}.task-board-sim-play,.task-board-sim-reset,.task-board-popup-close{justify-content:center}.task-board-sim-speed{width:100%;justify-content:flex-start}}
 /* Platform sim cards */
 .ps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
 .ps-card{background:var(--bg3);border:1px solid var(--border);border-radius:13px;padding:16px;display:flex;flex-direction:column;gap:9px;transition:border-color .2s,transform .2s}
@@ -4610,7 +4612,10 @@ function ensureTaskBoardOverlay(){
                 <div class="task-board-float-body"><div id="taskBoardGraph" class="task-board-graph"></div></div>
               </div>
               <canvas id="taskBoardCanvas" class="task-board-canvas"></canvas>
-              <div class="task-board-board-tip">Левой кнопкой рисуйте. Правой кнопкой мыши или инструментом «Перемещение» двигайте доску в любую сторону.</div>
+              <div class="task-board-zoom-controls">
+                <button type="button" class="task-board-zoom-btn" onclick="taskBoardAdjustZoom(1.15)" aria-label="Увеличить доску">+</button>
+                <button type="button" class="task-board-zoom-btn" onclick="taskBoardAdjustZoom(1/1.15)" aria-label="Уменьшить доску">−</button>
+              </div>
               <div id="taskBoardSimPopup" class="task-board-popup">
                 <div class="task-board-popup-head">
                   <div id="taskBoardSimTitle" class="task-board-popup-title">Анимация движения</div>
@@ -4684,6 +4689,7 @@ function ensureTaskBoardOverlay(){
     pointer:null,
     viewX:0,
     viewY:0,
+    viewScale:1,
     sim:null
   };
   taskBoardState.canvasWrap.addEventListener('contextmenu',function(e){e.preventDefault();});
@@ -4788,6 +4794,7 @@ function openTaskBoard(mode,requestFullscreen){
   state.pointer=null;
   state.viewX=0;
   state.viewY=0;
+  state.viewScale=1;
   state.drawer.classList.remove('open');
   taskBoardToggleFloating('condition',false);
   taskBoardToggleFloating('graph',false);
@@ -4875,6 +4882,19 @@ function taskBoardUpdateCanvasSurface(){
   state.canvasWrap.classList.toggle('pan-mode',state.tool==='pan');
   state.canvasWrap.classList.toggle('dragging',!!state.pointer&&state.pointer.type==='pan');
 }
+function taskBoardAdjustZoom(multiplier){
+  const state=ensureTaskBoardOverlay();
+  const wrapRect=state.canvasWrap.getBoundingClientRect();
+  const centerX=wrapRect.width/2;
+  const centerY=wrapRect.height/2;
+  const prev=state.viewScale||1;
+  const next=Math.max(0.5,Math.min(2.5,prev*(Number(multiplier)||1)));
+  if(Math.abs(next-prev)<0.001) return;
+  state.viewX=centerX-((centerX-state.viewX)/prev)*next;
+  state.viewY=centerY-((centerY-state.viewY)/prev)*next;
+  state.viewScale=next;
+  taskBoardDraw();
+}
 function taskBoardUpdateHistoryButtons(){
   const state=ensureTaskBoardOverlay();
   if(state.undoBtn) state.undoBtn.disabled=state.historyIndex<=0;
@@ -4930,7 +4950,8 @@ function taskBoardResizeCanvas(){
 function taskBoardClientToWorld(clientX,clientY){
   const state=ensureTaskBoardOverlay();
   const rect=state.canvas.getBoundingClientRect();
-  return {x:clientX-rect.left-state.viewX,y:clientY-rect.top-state.viewY};
+  const scale=state.viewScale||1;
+  return {x:(clientX-rect.left-state.viewX)/scale,y:(clientY-rect.top-state.viewY)/scale};
 }
 function taskBoardDistance(a,b){
   const dx=a.x-b.x,dy=a.y-b.y;
@@ -5027,6 +5048,7 @@ function taskBoardDraw(){
   ctx.clearRect(0,0,rect.width,rect.height);
   ctx.save();
   ctx.translate(state.viewX,state.viewY);
+  ctx.scale(state.viewScale||1,state.viewScale||1);
   ctx.lineCap='round';
   ctx.lineJoin='round';
   state.strokes.forEach(function(stroke){
