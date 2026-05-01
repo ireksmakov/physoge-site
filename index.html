@@ -8,19 +8,26 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#080c10;--bg2:#0d1219;--bg3:#111820;--cyan:#00e5ff;--cyan-dim:#00b8cc;--orange:#ff8c00;--green:#39ff14;--white:#f0f4f8;--gray:#6b7a8d;--border:rgba(0,229,255,0.15);--fh:'Unbounded',sans-serif;--fb:'Golos Text',sans-serif}
+:root{--bg:#020914;--bg2:#081422;--bg3:#0c1b2c;--cyan:#08d8ff;--cyan-dim:#00b8cc;--orange:#ff8c00;--green:#39ff14;--white:#f2f8ff;--gray:#8a9bb2;--border:rgba(8,216,255,0.2);--fh:'Unbounded',sans-serif;--fb:'Golos Text',sans-serif}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--white);font-family:var(--fb);line-height:1.6;overflow-x:hidden}
+body{background:radial-gradient(circle at 80% 18%,rgba(8,216,255,.12),transparent 32%),linear-gradient(180deg,#01060e 0%,#020a15 55%,#030f1b 100%);color:var(--white);font-family:var(--fb);line-height:1.6;overflow-x:hidden}
 a{text-decoration:none;color:inherit}
 /* HEADER */
-header{position:fixed;top:0;left:0;right:0;z-index:300;background:rgba(8,12,16,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+header{position:fixed;top:0;left:0;right:0;z-index:300;background:rgba(2,9,20,0.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
 .nav-inner{max-width:1200px;margin:0 auto;padding:0 20px;height:64px;display:flex;align-items:center;gap:10px}
 .logo{font-family:var(--fh);font-size:17px;font-weight:900;cursor:pointer;flex-shrink:0}
 .logo span{color:var(--cyan)}
 .nav-subj{display:flex;gap:5px}
 .nav-subj a{font-size:12px;font-weight:600;padding:4px 11px;border-radius:20px;border:1px solid var(--border);color:var(--gray);transition:all .2s}
 .nav-subj a:hover,.nav-subj a.active{color:var(--cyan);border-color:var(--cyan);background:rgba(0,229,255,0.07)}
+.sim-menu{position:relative}
+.sim-toggle{font-size:12px;font-weight:600;padding:4px 11px;border-radius:20px;border:1px solid var(--border);color:var(--gray);background:transparent;cursor:pointer;transition:all .2s;font-family:var(--fb)}
+.sim-toggle:hover{color:var(--cyan);border-color:var(--cyan);background:rgba(0,229,255,0.07)}
+.sim-pop{position:absolute;top:calc(100% + 10px);left:0;display:none;flex-direction:column;gap:6px;min-width:98px;padding:8px;background:rgba(5,17,31,.96);border:1px solid var(--border);border-radius:12px;box-shadow:0 16px 36px rgba(0,0,0,.45)}
+.sim-menu.open .sim-pop,.sim-menu:hover .sim-pop{display:flex}
+.sim-pop button{border:1px solid var(--border);background:transparent;color:var(--white);padding:7px 10px;border-radius:8px;font-size:12px;cursor:pointer;transition:all .2s;font-family:var(--fb)}
+.sim-pop button:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(8,216,255,.08)}
 .nav-links{display:flex;align-items:center;gap:18px;list-style:none;margin-left:auto}
 .nav-links a{font-size:13px;color:var(--gray);cursor:pointer;transition:color .2s}
 .nav-links a:hover{color:var(--white)}
@@ -41,12 +48,12 @@ header{position:fixed;top:0;left:0;right:0;z-index:300;background:rgba(8,12,16,0
 
 /* LANDING */
 #landing{display:block}
-.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;max-width:1200px;margin:0 auto;padding:100px 24px 60px;gap:42px}.hero-shot{width:100%;display:block;border-radius:16px;border:1px solid var(--border);box-shadow:0 24px 64px rgba(0,0,0,.45)}.hero-media{display:flex;align-items:center;justify-content:center}
+.hero{min-height:100vh;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;max-width:1280px;margin:0 auto;padding:110px 24px 70px;gap:48px}.hero-shot{width:100%;display:block;border-radius:24px;border:1px solid var(--border);box-shadow:0 30px 70px rgba(0,0,0,.55)}.hero-media{display:flex;align-items:center;justify-content:center;position:relative}.hero-media::before{content:'';position:absolute;width:120%;height:120%;background:radial-gradient(circle,rgba(8,216,255,.18),transparent 62%);z-index:-1}
 .hero-label{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--cyan);margin-bottom:24px}
 .hero-label::before{content:'';width:20px;height:1px;background:var(--cyan)}
-.hero h1{font-family:var(--fh);font-size:clamp(30px,4vw,52px);font-weight:900;line-height:1.1;letter-spacing:-1px;margin-bottom:24px}
+.hero h1{font-family:var(--fh);font-size:clamp(34px,5vw,78px);font-weight:900;line-height:1.05;letter-spacing:-1.4px;margin-bottom:22px}
 .hero h1 .acc{color:var(--cyan)}
-.hero-desc{font-size:15px;color:var(--gray);max-width:460px;margin-bottom:40px;line-height:1.7}
+.hero-desc{font-size:20px;color:#d8e7f7;max-width:760px;margin-bottom:40px;line-height:1.5;font-weight:600}
 .hero-desc strong{color:var(--white)}
 .hero-cta{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .btn-p{display:inline-block;background:var(--cyan);color:#000;font-family:var(--fh);font-size:13px;font-weight:700;padding:14px 30px;border-radius:8px;transition:transform .15s,box-shadow .2s;border:none;cursor:pointer}
@@ -112,7 +119,7 @@ footer{border-top:1px solid var(--border);padding:28px 24px}
 .divider{height:1px;background:var(--border);max-width:1200px;margin:0 auto}
 
 /* DUAL CTA */
-.dual-cta{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:32px 0 0}
+.dual-cta{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:34px 0 0;max-width:760px}
 .cta-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px 20px;display:flex;align-items:center;gap:14px;transition:border-color .2s,transform .2s}
 .cta-card:hover{transform:translateY(-2px)}
 .cta-student:hover{border-color:rgba(0,229,255,.5)}
@@ -933,11 +940,17 @@ img,svg,canvas,video,iframe{max-width:100%}
       <a href="#for-students" class="active">Ученикам</a>
       <a href="#for-teachers">Учителям</a>
       <a href="#courses">Курсы</a>
+      <a href="#task-bank">Банк задач</a>
+      <div class="sim-menu" id="simMenu">
+        <button class="sim-toggle" onclick="toggleSimMenu(event)">Симуляторы</button>
+        <div class="sim-pop">
+          <button onclick="showSimulators('oge')">ОГЭ</button>
+          <button onclick="showSimulators('ege')">ЕГЭ</button>
+        </div>
+      </div>
     </div>
     <ul class="nav-links">
-      <li><a onclick="showLanding()">Главная</a></li>
-      <li><a href="#courses">Курсы</a></li>
-      <li><a onclick="showSimulators()" style="color:var(--cyan);font-weight:700;cursor:pointer">⚡ Симуляторы</a></li>
+      <li><a>Войти</a></li>
       <li><button class="btn-start" onclick="document.getElementById('courses').scrollIntoView({behavior:'smooth'})">Начать бесплатно</button></li>
     </ul>
     <button class="btn-back" id="backBtn" onclick="showLanding()">← Назад</button>
@@ -956,7 +969,7 @@ img,svg,canvas,video,iframe{max-width:100%}
     <div class="hero">
       <div>
         <div class="hero-label">Современная образовательная онлайн-платформа</div>
-        <h1>Подготовка к <span class="acc">ОГЭ и ЕГЭ</span><br>по физике<br>и математике</h1>
+        <h1>Физика и математика<br>для <span class="acc">ОГЭ и ЕГЭ</span></h1>
         <p class="hero-desc">Платформа для школьников и учителей — структурированные курсы, конструктор тестов, банк задач, симулятор экзамена и виртуальная лаборатория в одном месте.</p>
         <div class="dual-cta">
           <div class="cta-card cta-student">
@@ -986,6 +999,7 @@ img,svg,canvas,video,iframe{max-width:100%}
   <!-- ===== ДЛЯ УЧЕНИКОВ ===== -->
   <div class="divider"></div>
   <section id="for-students" class="section">
+    <div id="task-bank"></div>
     <div class="audience-header">
       <div class="aud-tag aud-student">🎓 Для учеников</div>
       <h2 class="stitle">Системная подготовка к экзамену</h2>
@@ -2090,7 +2104,17 @@ function showLanding(){
   document.getElementById('modeToggle').classList.remove('on');
   window.scrollTo(0,0);
 }
-function showSimulators(){
+function toggleSimMenu(event){
+  event.stopPropagation();
+  const m=document.getElementById('simMenu');
+  if(m) m.classList.toggle('open');
+}
+document.addEventListener('click',()=>{
+  const m=document.getElementById('simMenu');
+  if(m) m.classList.remove('open');
+});
+
+function showSimulators(examType){
   hideAll();
   document.getElementById('simulators-page').style.display='block';
   document.getElementById('backBtn').classList.add('on');
