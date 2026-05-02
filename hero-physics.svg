@@ -45,8 +45,8 @@
 
   <g transform="translate(180 560)">
     <rect x="0" y="0" width="1020" height="290" rx="28" fill="#071425" stroke="#1d3b57" stroke-width="2"/>
-    <text x="57" y="59" fill="#d8f3ff" font-size="42" font-family="Inter, Arial" font-weight="700">Пошаговый разбор</text>
-    <text x="560" y="59" fill="#d8f3ff" font-size="42" font-family="Inter, Arial" font-weight="700">Симулятор</text>
+    <text x="59" y="59" fill="#d8f3ff" font-size="40" font-family="Inter, Arial" font-weight="700">Пошаговый разбор</text>
+    <text x="562" y="59" fill="#d8f3ff" font-size="40" font-family="Inter, Arial" font-weight="700">Симулятор</text>
     <g stroke="#2f5f84" stroke-width="12" stroke-linecap="round" opacity="0.9">
       <line x1="120" y1="120" x2="430" y2="120"/>
       <line x1="120" y1="168" x2="470" y2="168"/>
