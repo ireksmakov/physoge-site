@@ -31,7 +31,7 @@
   <g fill="#bfefff" font-family="Georgia, serif" font-style="italic">
     <text x="840" y="220" font-size="110">F = ma</text>
     <text x="840" y="345" font-size="78" opacity="0.9">E = mc²</text>
-    <text x="840" y="450" font-size="78" opacity="0.85">a² + b² = c²</text>
+    <text x="855" y="438" font-size="84" opacity="0.85">a² + b² = c²</text>
   </g>
 
   <g transform="translate(915 500)" stroke="#2ecfff" stroke-width="2" opacity="0.45">
@@ -45,8 +45,8 @@
 
   <g transform="translate(180 560)">
     <rect x="0" y="0" width="1020" height="290" rx="28" fill="#071425" stroke="#1d3b57" stroke-width="2"/>
-    <text x="42" y="66" fill="#d8f3ff" font-size="12" font-family="Inter, Arial" font-weight="700">Пошаговый разбор</text>
-    <text x="545" y="66" fill="#d8f3ff" font-size="12" font-family="Inter, Arial" font-weight="700">Симуляторы</text>
+    <text x="54" y="62" fill="#d8f3ff" font-size="14" font-family="Inter, Arial" font-weight="700">Пошаговый разбор</text>
+    <text x="557" y="62" fill="#d8f3ff" font-size="14" font-family="Inter, Arial" font-weight="700">Симулятор</text>
     <g stroke="#2f5f84" stroke-width="12" stroke-linecap="round" opacity="0.9">
       <line x1="120" y1="120" x2="430" y2="120"/>
       <line x1="120" y1="168" x2="470" y2="168"/>
