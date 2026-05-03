@@ -121,16 +121,15 @@ footer{border-top:1px solid var(--border);padding:28px 24px}
 
 /* DUAL CTA */
 .dual-cta{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:34px 0 0;max-width:760px}
-.cta-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px 20px;display:flex;flex-direction:column;gap:10px;transition:border-color .2s,transform .2s}
+.cta-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px 20px;display:flex;flex-direction:column;align-items:flex-start;gap:12px;transition:border-color .2s,transform .2s}
 .cta-card:hover{transform:translateY(-2px)}
 .cta-student:hover{border-color:rgba(0,229,255,.5)}
 .cta-teacher:hover{border-color:rgba(255,140,0,.5)}
-.cta-card-top{display:flex;align-items:flex-start;gap:12px;width:100%}
-.cta-card-head{display:flex;flex-direction:column;min-width:0}
+.cta-card-row{display:flex;align-items:center;gap:12px;width:100%}
 .cta-card-icon{font-size:28px;line-height:1;transform:translateY(-2px);flex-shrink:0}
 .cta-card-title{font-family:var(--fh);font-size:14px;font-weight:700;line-height:1.2}
 .cta-card-sub{font-size:11px;color:var(--gray);line-height:1.45}
-.cta-card-btn{display:inline-block;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;font-family:var(--fh);cursor:pointer;border:none;white-space:nowrap;text-decoration:none;transition:all .15s;margin-left:auto;flex-shrink:0;align-self:flex-start;transform:translateY(-2px)}
+.cta-card-btn{display:inline-block;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;font-family:var(--fh);cursor:pointer;border:none;white-space:nowrap;text-decoration:none;transition:all .15s;flex-shrink:0;align-self:flex-start;transform:translateY(-2px)}
 .btn-cyan{background:var(--cyan);color:#000}
 .btn-cyan:hover{background:var(--cyan-dim)}
 .btn-orange{background:var(--orange);color:#000}
@@ -254,7 +253,7 @@ footer{border-top:1px solid var(--border);padding:28px 24px}
 .cp-ctag{font-size:11px;font-weight:700;padding:3px 9px;border-radius:4px;flex-shrink:0}
 .cp-cname{background:none;border:none;border-bottom:1px solid transparent;color:var(--white);font-family:var(--fh);font-size:13px;font-weight:700;padding:2px 6px;outline:none;transition:border-color .15s;max-width:380px}
 .cp-cname:focus{border-bottom-color:var(--cyan)}
-.cp-hint{font-size:11px;color:var(--gray);margin-left:auto;opacity:.6}
+.cp-hint{font-size:11px;color:var(--gray);opacity:.6}
 .cp-layout{display:flex;height:calc(100vh - 64px - 50px);overflow:hidden;--sbw:262px}
 
 /* SIDEBAR */
@@ -436,8 +435,8 @@ body.task-board-lock{overflow:hidden}
 .task-board-top-btn:hover{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8}
 .task-board-problem{position:relative;background:#fff;border:1px solid #dbe5f0;border-radius:18px;padding:14px 16px;box-shadow:0 16px 40px rgba(15,23,42,.05);overflow:visible}
 .task-board-problem-grid{display:block;position:relative;min-height:0}
-.task-board-problem-main{min-width:0;display:flex;flex-direction:column;gap:10px;padding-right:188px}
-.task-board-problem-graph{position:absolute;top:14px;right:16px;width:172px;background:transparent;border:none;padding:0;display:flex;flex-direction:column;gap:10px;min-width:0;align-self:start;z-index:18;overflow:visible}
+.task-board-problem-main{min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding-right:188px}
+.task-board-problem-graph{position:absolute;top:14px;right:16px;width:172px;background:transparent;border:none;padding:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;min-width:0;align-self:start;z-index:18;overflow:visible}
 .task-board-problem-graph .task-board-section-head{background:#f8fafc;border:1px solid #e2e8f0;border-radius:16px;padding:10px 12px;box-shadow:0 12px 30px rgba(15,23,42,.05)}
 .task-board-problem-graph.graph-open{top:calc(100% + 12px);right:0;width:min(480px,calc(100vw - 52px));background:#f8fafc;border:1px solid #e2e8f0;border-radius:16px;padding:12px 14px;box-shadow:0 22px 56px rgba(15,23,42,.12);overflow:visible}
 .task-board-problem-graph.graph-open .task-board-section-head{background:transparent;border:none;padding:0;box-shadow:none}
@@ -477,10 +476,10 @@ body.task-board-lock{overflow:hidden}
 .task-board-answer{margin-top:16px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:15px;padding:13px 14px;font-size:16px;color:#1e3a8a}
 .task-board-answer-label{font-size:10px;font-weight:700;letter-spacing:1.25px;text-transform:uppercase;color:#2563eb;margin-bottom:4px}
 .task-board-answer-value{font-family:var(--fb);font-size:20px;font-weight:800;line-height:1.45;color:#111827}
-.task-board-center{position:relative;min-width:0;display:flex;flex-direction:column;gap:10px;margin-left:0;height:100%;flex:1}
+.task-board-center{position:relative;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin-left:0;height:100%;flex:1}
 .task-board-toolbar{display:flex;align-items:center;justify-content:flex-start;gap:8px;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;white-space:nowrap;background:#fff;border:1px solid #dbe5f0;border-radius:18px;padding:10px 12px 10px 74px;box-shadow:0 14px 36px rgba(15,23,42,.05)}
 .task-board-toolbar-group{display:flex;align-items:center;gap:6px;flex-wrap:nowrap;white-space:nowrap;flex-shrink:0}
-.task-board-toolbar-group.end{margin-left:auto;flex-shrink:0}
+.task-board-toolbar-group.end{flex-shrink:0}
 .task-board-toolbar-label{font-size:12px;font-weight:700;color:#334155}
 .task-board-tool{padding:7px 9px;border-radius:10px;border:1px solid #cbd5e1;background:#fff;color:#334155;font-size:11px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb)}
 .task-board-tool:hover{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8}
@@ -520,7 +519,7 @@ body.task-board-lock{overflow:hidden}
 .task-board-sim-play:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(15,23,42,.15)}
 .task-board-sim-reset{background:#fff;color:#475569;font-size:13px;padding:10px 14px;border-radius:10px;border:1px solid #cbd5e1;cursor:pointer;transition:all .2s;font-family:var(--fb)}
 .task-board-sim-reset:hover{color:#0f172a;border-color:#93c5fd;background:#eff6ff}
-.task-board-sim-speed{margin-left:auto;display:flex;align-items:center;justify-content:flex-end;gap:8px;font-size:12px;color:#64748b;flex-wrap:wrap;min-width:220px}
+.task-board-sim-speed{display:flex;align-items:center;justify-content:flex-end;gap:8px;font-size:12px;color:#64748b;flex-wrap:wrap;min-width:220px}
 .task-board-sim-speed input[type=range]{-webkit-appearance:none;height:4px;background:#cbd5e1;border-radius:999px;width:120px;cursor:pointer;outline:none}
 .task-board-sim-speed input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:#2563eb;cursor:pointer}
 .task-board-sim-speed-value{font-family:var(--fh);font-size:12px;color:#2563eb;min-width:40px;text-align:right}
@@ -774,7 +773,7 @@ body.view-mode .view-banner{display:flex}
 .lessons-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 @media(max-width:900px){.lessons-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.lessons-grid{grid-template-columns:1fr}}
-.lesson-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:10px;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;position:relative}
+.lesson-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;display:flex;flex-direction:column;align-items:flex-start;gap:12px;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;position:relative}
 .lesson-card:hover:not(.lc-locked){transform:translateY(-3px);border-color:rgba(0,229,255,.4);box-shadow:0 10px 32px rgba(0,229,255,.08)}
 .lc-locked{opacity:.55;cursor:default}
 .lc-num{font-size:11px;font-weight:700;color:var(--gray)}
@@ -924,7 +923,7 @@ body.view-mode .view-banner{display:flex}
 .sr-play:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(0,229,255,.3)}
 .sr-reset{background:transparent;color:var(--gray);font-size:13px;padding:10px 14px;border-radius:8px;border:1px solid var(--border);cursor:pointer;transition:all .2s}
 .sr-reset:hover{color:var(--white);border-color:rgba(255,255,255,.25)}
-.sr-spd{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--gray)}
+.sr-spd{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--gray)}
 .sr-spd input[type=range]{-webkit-appearance:none;height:3px;background:var(--border);border-radius:2px;width:70px;cursor:pointer;outline:none}
 .sr-spd input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--cyan);cursor:pointer}
 .sr-spd-v{font-family:var(--fh);font-size:12px;color:var(--cyan);min-width:28px}
@@ -1019,22 +1018,18 @@ img,svg,canvas,video,iframe{max-width:100%}
         <p class="section-subtitle">Платформа для школьников и учителей — структурированные курсы, конструктор тестов, банк задач, симулятор экзамена и виртуальная лаборатория в одном месте.</p>
         <div class="dual-cta">
           <div class="cta-card cta-student">
-            <div class="cta-card-top">
+            <a href="#for-students" class="cta-card-btn btn-cyan">Начать →</a>
+            <div class="cta-card-row">
               <div class="cta-card-icon">🎓</div>
-              <div class="cta-card-head">
-                <div class="cta-card-title">Я ученик</div>
-              </div>
-              <a href="#for-students" class="cta-card-btn btn-cyan">Начать →</a>
+              <div class="cta-card-title">Я ученик</div>
             </div>
             <div class="cta-card-sub">Готовлюсь к ОГЭ / ЕГЭ</div>
           </div>
           <div class="cta-card cta-teacher">
-            <div class="cta-card-top">
+            <a href="#for-teachers" class="cta-card-btn btn-orange">Инструменты →</a>
+            <div class="cta-card-row">
               <div class="cta-card-icon">📋</div>
-              <div class="cta-card-head">
-                <div class="cta-card-title">Я учитель</div>
-              </div>
-              <a href="#for-teachers" class="cta-card-btn btn-orange">Инструменты →</a>
+              <div class="cta-card-title">Я учитель</div>
             </div>
             <div class="cta-card-sub">Создаю уроки и тесты</div>
           </div>
@@ -3208,7 +3203,7 @@ function srReset(){
               <button class="vlab-btn vlab-btn-play" id="vlPlayBtn" onclick="vlToggle()">▶ Пуск</button>
               <button class="vlab-btn vlab-btn-reset" onclick="vlReset()" style="border:1px solid var(--border)">↺ Сброс</button>
               <button class="vlab-btn vlab-btn-save" onclick="vlSaveRow()" style="border:1px solid rgba(0,229,255,.3)">📊 Записать</button>
-              <div style="margin-left:auto;font-size:12px;color:var(--gray)" id="vlStatus">Готово к запуску</div>
+              <div style="font-size:12px;color:var(--gray)" id="vlStatus">Готово к запуску</div>
             </div>
           </div>
 
