@@ -216,6 +216,28 @@ footer{border-top:1px solid var(--border);padding:28px 24px}
 .tests-card-title{font-family:var(--fh);font-size:14px;font-weight:700;margin-bottom:8px}
 .tests-card-desc{font-size:13px;color:var(--gray);line-height:1.6}
 
+
+.tests-toolbar{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 18px}
+.tests-action{background:rgba(8,216,255,.08);border:1px solid var(--border);color:var(--white);font-size:12px;font-weight:600;padding:8px 12px;border-radius:8px}
+.tests-main{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
+.tests-panel{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:20px}
+.tests-panel h3{font-family:var(--fh);font-size:14px;margin-bottom:12px}
+.tree,.tree ul{list-style:none;margin:0;padding-left:16px}
+.tree>li{padding-left:0}
+.tree li{position:relative;padding:4px 0 4px 14px;color:var(--gray);font-size:13px}
+.tree li::before{content:'';position:absolute;left:0;top:13px;width:8px;height:1px;background:var(--border-strong)}
+.tree li strong{color:var(--white)}
+.tests-list{display:flex;flex-direction:column;gap:10px}
+.test-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:rgba(2,9,20,.5)}
+.test-row small{display:block;color:var(--gray);font-size:11px}
+.test-row b{font-size:13px}
+.status-pill{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px}
+.status-draft{background:rgba(255,140,0,.14);color:var(--orange)}
+.status-pub{background:rgba(57,255,20,.12);color:var(--green)}
+.editor-stages{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:8px}
+.editor-stage{font-size:12px;padding:8px;border:1px solid var(--border);border-radius:8px;background:rgba(8,216,255,.05);text-align:center;color:var(--white)}
+@media (max-width:980px){.tests-main{grid-template-columns:1fr}.editor-stages{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
 /* ===== PLATFORM ===== */
 #platform{display:none;padding-top:64px;min-height:100vh}
 #platform.on{display:block}
@@ -2739,26 +2761,52 @@ function srReset(){
       <h1 class="tests-title">Конструктор тестов</h1>
       <p class="tests-sub">Создавайте тесты, выдавайте ученикам по ссылке, проверяйте результаты и копируйте варианты.</p>
     </div>
-    <div class="tests-grid">
-      <div class="tests-card">
-        <div class="tests-icon" style="color:var(--cyan)">🧪</div>
-        <div class="tests-card-title">Создать тест</div>
-        <div class="tests-card-desc">Соберите новый вариант из заданий и оформите его для выдачи ученикам.</div>
+    <div class="tests-toolbar">
+      <button class="tests-action">＋ Создать тест</button>
+      <button class="tests-action">⎘ Копировать тест</button>
+      <button class="tests-action">✏️ Редактировать</button>
+      <button class="tests-action">👁 Предпросмотр</button>
+      <button class="tests-action">🔗 Ссылка ученику</button>
+      <button class="tests-action">📊 Результаты</button>
+    </div>
+    <div class="tests-main">
+      <div class="tests-panel">
+        <h3>Папки и структура</h3>
+        <ul class="tree">
+          <li><strong>Конструктор тестов</strong>
+            <ul>
+              <li><strong>ОГЭ</strong>
+                <ul>
+                  <li>Физика<ul><li>Механика</li><li>Электричество</li><li>Оптика</li></ul></li>
+                  <li>Математика<ul><li>Алгебра</li><li>Геометрия</li></ul></li>
+                </ul>
+              </li>
+              <li><strong>ЕГЭ</strong><ul><li>Физика</li><li>Математика</li></ul></li>
+              <li><strong>СПО</strong><ul><li>Физика</li><li>Математика</li></ul></li>
+            </ul>
+          </li>
+        </ul>
       </div>
-      <div class="tests-card">
-        <div class="tests-icon" style="color:var(--orange)">📚</div>
-        <div class="tests-card-title">Банк тестов</div>
-        <div class="tests-card-desc">Храните созданные варианты, быстро находите нужный и запускайте повторно.</div>
+      <div class="tests-panel">
+        <h3>Список тестов</h3>
+        <div class="tests-list">
+          <div class="test-row"><div><b>ОГЭ · Физика · Механика #1</b><small>12 вопросов · 30 минут</small></div><span class="status-pill status-pub">Опубликован</span></div>
+          <div class="test-row"><div><b>ЕГЭ · Математика · Алгебра #3</b><small>20 вопросов · 45 минут</small></div><span class="status-pill status-draft">Черновик</span></div>
+          <div class="test-row"><div><b>СПО · Физика · Электричество</b><small>15 вопросов · с автопроверкой</small></div><span class="status-pill status-pub">Опубликован</span></div>
+        </div>
       </div>
-      <div class="tests-card">
-        <div class="tests-icon" style="color:var(--green)">📈</div>
-        <div class="tests-card-title">Результаты</div>
-        <div class="tests-card-desc">Смотрите ответы и успеваемость по каждому тесту в удобной сводке.</div>
-      </div>
-      <div class="tests-card">
-        <div class="tests-icon" style="color:var(--cyan)">⚙️</div>
-        <div class="tests-card-title">Настройки тестов</div>
-        <div class="tests-card-desc">Управляйте параметрами: время, доступ, отображение ответов и формат выдачи.</div>
+    </div>
+    <div class="tests-panel" style="margin-top:18px">
+      <h3>Редактор теста</h3>
+      <div class="editor-stages">
+        <div class="editor-stage">Основные настройки</div>
+        <div class="editor-stage">Начальная страница</div>
+        <div class="editor-stage">Вопросы</div>
+        <div class="editor-stage">Результат</div>
+        <div class="editor-stage">Доступ</div>
+        <div class="editor-stage">Стилизация</div>
+        <div class="editor-stage">Публикация</div>
+        <div class="editor-stage">Статистика</div>
       </div>
     </div>
   </div>
