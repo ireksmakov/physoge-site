@@ -217,18 +217,25 @@ footer{border-top:1px solid var(--border);padding:28px 24px}
 .tests-card-desc{font-size:13px;color:var(--gray);line-height:1.6}
 
 
-.tests-toolbar{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 18px}
-.tests-action{background:rgba(8,216,255,.08);border:1px solid var(--border);color:var(--white);font-size:12px;font-weight:600;padding:8px 12px;border-radius:8px}
-.tests-main{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
-.tests-panel{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:20px}
+.tests-main{display:grid;grid-template-columns:1.05fr .95fr;gap:18px}
+.tests-panel{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:20px;position:relative}
+.tests-panel::before,.tests-panel::after{pointer-events:none}
 .tests-panel h3{font-family:var(--fh);font-size:14px;margin-bottom:12px}
-.tree,.tree ul{list-style:none;margin:0;padding-left:16px}
-.tree>li{padding-left:0}
-.tree li{position:relative;padding:4px 0 4px 14px;color:var(--gray);font-size:13px}
-.tree li::before{content:'';position:absolute;left:0;top:13px;width:8px;height:1px;background:var(--border-strong)}
-.tree li strong{color:var(--white)}
+.tests-level{margin-bottom:16px}
+.tests-level-title{font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.tests-nav-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tests-nav-grid.top-level{grid-template-columns:repeat(3,minmax(0,1fr))}
+.tests-nav-btn,.tests-action{position:relative;z-index:2;pointer-events:auto;cursor:pointer;background:rgba(8,216,255,.08);border:1px solid rgba(8,216,255,.35);color:var(--white);font-size:13px;font-weight:700;padding:12px 12px;border-radius:10px;transition:all .2s;text-align:left}
+.tests-nav-btn:hover,.tests-action:hover{border-color:var(--cyan);box-shadow:0 0 0 1px rgba(0,229,255,.25) inset}
+.tests-nav-btn.active{background:rgba(0,229,255,.18);border-color:var(--cyan);color:var(--cyan)}
+.tests-selection-path{font-size:13px;color:var(--gray);margin-bottom:12px}
+.tests-topic-empty{font-size:14px;color:var(--gray);line-height:1.6;padding:20px;border:1px dashed var(--border);border-radius:12px}
+.tests-topic-title{font-family:var(--fh);font-size:22px;margin:6px 0 14px}
+.tests-toolbar{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 16px}
+.tests-action{font-size:12px;padding:9px 12px}
 .tests-list{display:flex;flex-direction:column;gap:10px}
-.test-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:rgba(2,9,20,.5)}
+.test-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:rgba(2,9,20,.5);cursor:pointer;transition:border-color .2s,background .2s}
+.test-row.active{border-color:var(--cyan);box-shadow:0 0 0 1px rgba(0,229,255,.2) inset;background:rgba(0,229,255,.08)}
 .test-row small{display:block;color:var(--gray);font-size:11px}
 .test-row b{font-size:13px}
 .status-pill{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px}
@@ -975,10 +982,9 @@ img,svg,canvas,video,iframe{max-width:100%}
     <a class="logo" onclick="showLanding()">ФИЗ<span>МАТ</span></a>
     <div class="nav-subj">
       <a href="#for-students" class="active">Ученикам</a>
-      <a href="#for-teachers">Учителям</a>
+      <a href="javascript:void(0)" onclick="showTestsPage()">Конструктор тестов</a>
       <a href="#courses">Курсы</a>
       <a href="#task-bank">Банк задач</a>
-      <a href="javascript:void(0)" onclick="showTestsPage()">Тесты</a>
       <div class="sim-menu" id="simMenu">
         <button class="sim-toggle" onclick="toggleSimMenu(event)">Симуляторы</button>
         <div class="sim-pop">
@@ -2145,11 +2151,35 @@ function showLanding(){
 function showTestsPage(){
   hideAll();
   document.getElementById('tests-page').style.display='block';
+  loadTestsData();
+  renderTestConstructorNavigation();
+  renderTopicTests();
   document.getElementById('backBtn').classList.add('on');
   document.getElementById('backBtn').onclick=showLanding;
   document.getElementById('modeToggle').classList.remove('on');
   window.scrollTo(0,0);
 }
+
+const TEST_TOPICS_STRUCTURE={"ОГЭ":{"Физика":["Механика","Электричество","Оптика"],"Математика":["Алгебра","Геометрия"]},"ЕГЭ":{"Физика":["Механика","МКТ и термодинамика","Электродинамика","Оптика","Квантовая физика"],"Математика":["Алгебра","Геометрия","Вероятность","Производная","Стереометрия"]},"СПО":{"Физика":[],"Математика":[]}};
+let selectedExam=null; let selectedSubject=null; let selectedTopic=null; let selectedTestId=null;
+let TESTS_DATA=[];
+function loadTestsData(){try{const raw=localStorage.getItem('testsData');if(raw){TESTS_DATA=JSON.parse(raw);}}catch(e){} if(!Array.isArray(TESTS_DATA)||!TESTS_DATA.length){TESTS_DATA=[{id:'test-001',title:'ОГЭ · Физика · Механика #1',exam:'ОГЭ',subject:'Физика',topic:'Механика',status:'Черновик',questions:[],settings:{timeLimit:30,attempts:1,shuffleQuestions:true,shuffleAnswers:true},results:[]},{id:'test-002',title:'ОГЭ · Физика · Механика #2',exam:'ОГЭ',subject:'Физика',topic:'Механика',status:'Опубликован',questions:[],settings:{timeLimit:30,attempts:1,shuffleQuestions:true,shuffleAnswers:true},results:[]},{id:'test-003',title:'ОГЭ · Физика · Механика · Домашняя работа',exam:'ОГЭ',subject:'Физика',topic:'Механика',status:'Черновик',questions:[],settings:{timeLimit:30,attempts:1,shuffleQuestions:true,shuffleAnswers:true},results:[]},{id:'test-004',title:'ОГЭ · Физика · Механика · Контрольная',exam:'ОГЭ',subject:'Физика',topic:'Механика',status:'Черновик',questions:[],settings:{timeLimit:30,attempts:1,shuffleQuestions:true,shuffleAnswers:true},results:[]}] ; saveTestsData();}}
+function saveTestsData(){localStorage.setItem('testsData',JSON.stringify(TESTS_DATA));}
+function renderTestConstructorNavigation(){const nav=document.getElementById('testConstructorNav'); if(!nav) return; const subjects=selectedExam?Object.keys(TEST_TOPICS_STRUCTURE[selectedExam]||{}):[]; const topics=(selectedExam&&selectedSubject)?(TEST_TOPICS_STRUCTURE[selectedExam][selectedSubject]||[]):[]; nav.innerHTML=`<div class="tests-level"><div class="tests-level-title">Экзамен</div><div class="tests-nav-grid top-level">${Object.keys(TEST_TOPICS_STRUCTURE).map(ex=>`<button class="tests-nav-btn ${selectedExam===ex?'active':''}" onclick="selectExam('${ex}')">${ex}</button>`).join('')}</div></div><div class="tests-level"><div class="tests-level-title">Предмет</div><div class="tests-nav-grid">${subjects.length?subjects.map(s=>`<button class="tests-nav-btn ${selectedSubject===s?'active':''}" onclick="selectSubject('${s}')">${s}</button>`).join(''):'<div class="tests-topic-empty">Сначала выберите экзамен.</div>'}</div></div><div class="tests-level"><div class="tests-level-title">Тема</div><div class="tests-nav-grid">${topics.length?topics.map(t=>`<button class="tests-nav-btn ${selectedTopic===t?'active':''}" onclick="selectTopic('${t}')">${t}</button>`).join(''):'<div class="tests-topic-empty">Выберите предмет, чтобы увидеть темы.</div>'}</div></div>`; }
+function selectExam(exam){selectedExam=exam; selectedSubject=null; selectedTopic=null; selectedTestId=null; renderTestConstructorNavigation(); renderTopicTests();}
+function selectSubject(subject){selectedSubject=subject; selectedTopic=null; selectedTestId=null; renderTestConstructorNavigation(); renderTopicTests();}
+function selectTopic(topic){selectedTopic=topic; selectedTestId=null; renderTestConstructorNavigation(); renderTopicTests();}
+function getSelectedTopicTests(){return TESTS_DATA.filter(t=>t.exam===selectedExam&&t.subject===selectedSubject&&t.topic===selectedTopic);}
+function renderTopicTests(){const c=document.getElementById('topicTestsContainer'); if(!c) return; const ready=selectedExam&&selectedSubject&&selectedTopic; const path=ready?`Выбрано: ${selectedExam} → ${selectedSubject} → ${selectedTopic}`:'Выбрано: —'; if(!ready){c.innerHTML=`<div class="tests-selection-path">${path}</div><div class="tests-topic-empty">Выберите экзамен, предмет и тему, чтобы создать или редактировать тест.</div>`; return;} const tests=getSelectedTopicTests(); c.innerHTML=`<div class="tests-selection-path">${path}</div><h3 class="tests-topic-title">${selectedExam} · ${selectedSubject} · ${selectedTopic}</h3><div class="tests-toolbar"><button class="tests-action" onclick="createTestInSelectedTopic()">＋ Создать тест</button><button class="tests-action" onclick="copySelectedTest()">⎘ Копировать тест</button><button class="tests-action" onclick="editSelectedTest()">✏️ Редактировать</button><button class="tests-action" onclick="previewSelectedTest()">👁 Предпросмотр</button><button class="tests-action" onclick="copyStudentLink()">🔗 Ссылка ученику</button><button class="tests-action" onclick="showSelectedTestResults()">📊 Результаты</button></div><h3>Список тестов темы</h3><div class="tests-list">${tests.length?tests.map(t=>`<div class="test-row ${selectedTestId===t.id?'active':''}" onclick="selectTest('${t.id}')"><div><b>${t.title}</b><small>${(t.questions||[]).length} вопросов · ${(t.settings&&t.settings.timeLimit)||30} минут</small></div><span class="status-pill ${t.status==='Опубликован'?'status-pub':'status-draft'}">${t.status||'Черновик'}</span></div>`).join(''):'<div class="tests-topic-empty">В этой теме пока нет тестов.</div>'}</div>`;}
+function selectTest(testId){selectedTestId=testId; renderTopicTests();}
+function createTestInSelectedTopic(){if(!(selectedExam&&selectedSubject&&selectedTopic)) return; const id=`test-${Date.now()}`; const t={id,title:`Новый тест — ${selectedExam} · ${selectedSubject} · ${selectedTopic}`,exam:selectedExam,subject:selectedSubject,topic:selectedTopic,status:'Черновик',questions:[],settings:{timeLimit:30,attempts:1,shuffleQuestions:true,shuffleAnswers:true},results:[]}; TESTS_DATA.unshift(t); selectedTestId=id; saveTestsData(); renderTopicTests();}
+function getSelectedTest(){return TESTS_DATA.find(t=>t.id===selectedTestId&&t.exam===selectedExam&&t.subject===selectedSubject&&t.topic===selectedTopic);} 
+function copySelectedTest(){const t=getSelectedTest(); if(!t){alert('Сначала выберите тест для копирования.');return;} const c=JSON.parse(JSON.stringify(t)); c.id=`test-${Date.now()}`; c.title=t.title+' (копия)'; c.status='Черновик'; TESTS_DATA.unshift(c); selectedTestId=c.id; saveTestsData(); renderTopicTests();}
+function editSelectedTest(){const t=getSelectedTest(); if(!t){alert('Сначала выберите тест для редактирования.');return;} alert('Открыт редактор теста: '+t.title);} 
+function previewSelectedTest(){const t=getSelectedTest(); if(!t){alert('Сначала выберите тест для предпросмотра.');return;} alert('Предпросмотр теста: '+t.title);} 
+function copyStudentLink(){const t=getSelectedTest(); if(!t){alert('Сначала выберите тест.');return;} const link='#test/pass/'+t.id; navigator.clipboard?.writeText(link); alert('Ссылка скопирована: '+link);} 
+function showSelectedTestResults(){const t=getSelectedTest(); if(!t){alert('Сначала выберите тест.');return;} alert('Результаты теста: '+t.title+' (попыток: '+((t.results||[]).length)+')');}
+
 function toggleSimMenu(event){
   event.stopPropagation();
   const m=document.getElementById('simMenu');
@@ -2756,57 +2786,14 @@ function srReset(){
 <div id="tests-page">
   <div class="tests-wrap">
     <button onclick="showLanding()" style="display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border);color:var(--gray);font-size:13px;padding:8px 16px;border-radius:8px;cursor:pointer;transition:all .2s;white-space:nowrap;font-family:var(--fb);margin-bottom:20px" onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--gray)'">← Назад</button>
-    <div class="tests-hero">
-      <div class="tests-label">Платформа ФИЗМАТ</div>
-      <h1 class="tests-title">Конструктор тестов</h1>
-      <p class="tests-sub">Создавайте тесты, выдавайте ученикам по ссылке, проверяйте результаты и копируйте варианты.</p>
-    </div>
-    <div class="tests-toolbar">
-      <button class="tests-action">＋ Создать тест</button>
-      <button class="tests-action">⎘ Копировать тест</button>
-      <button class="tests-action">✏️ Редактировать</button>
-      <button class="tests-action">👁 Предпросмотр</button>
-      <button class="tests-action">🔗 Ссылка ученику</button>
-      <button class="tests-action">📊 Результаты</button>
-    </div>
+    <div class="tests-hero"><div class="tests-label">Платформа ФИЗМАТ</div><h1 class="tests-title">Конструктор тестов</h1><p class="tests-sub">Создавайте тесты, выдавайте ученикам по ссылке, проверяйте результаты и копируйте варианты.</p></div>
     <div class="tests-main">
       <div class="tests-panel">
-        <h3>Папки и структура</h3>
-        <ul class="tree">
-          <li><strong>Конструктор тестов</strong>
-            <ul>
-              <li><strong>ОГЭ</strong>
-                <ul>
-                  <li>Физика<ul><li>Механика</li><li>Электричество</li><li>Оптика</li></ul></li>
-                  <li>Математика<ul><li>Алгебра</li><li>Геометрия</li></ul></li>
-                </ul>
-              </li>
-              <li><strong>ЕГЭ</strong><ul><li>Физика</li><li>Математика</li></ul></li>
-              <li><strong>СПО</strong><ul><li>Физика</li><li>Математика</li></ul></li>
-            </ul>
-          </li>
-        </ul>
+        <h3>Навигация по тестам</h3>
+        <div id="testConstructorNav"></div>
       </div>
       <div class="tests-panel">
-        <h3>Список тестов</h3>
-        <div class="tests-list">
-          <div class="test-row"><div><b>ОГЭ · Физика · Механика #1</b><small>12 вопросов · 30 минут</small></div><span class="status-pill status-pub">Опубликован</span></div>
-          <div class="test-row"><div><b>ЕГЭ · Математика · Алгебра #3</b><small>20 вопросов · 45 минут</small></div><span class="status-pill status-draft">Черновик</span></div>
-          <div class="test-row"><div><b>СПО · Физика · Электричество</b><small>15 вопросов · с автопроверкой</small></div><span class="status-pill status-pub">Опубликован</span></div>
-        </div>
-      </div>
-    </div>
-    <div class="tests-panel" style="margin-top:18px">
-      <h3>Редактор теста</h3>
-      <div class="editor-stages">
-        <div class="editor-stage">Основные настройки</div>
-        <div class="editor-stage">Начальная страница</div>
-        <div class="editor-stage">Вопросы</div>
-        <div class="editor-stage">Результат</div>
-        <div class="editor-stage">Доступ</div>
-        <div class="editor-stage">Стилизация</div>
-        <div class="editor-stage">Публикация</div>
-        <div class="editor-stage">Статистика</div>
+        <div id="topicTestsContainer"></div>
       </div>
     </div>
   </div>
