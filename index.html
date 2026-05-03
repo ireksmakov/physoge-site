@@ -48,13 +48,13 @@ header{position:fixed;top:0;left:0;right:0;z-index:300;background:rgba(2,9,20,0.
 
 /* LANDING */
 #landing{display:block}
-.hero{min-height:100vh;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;max-width:1280px;margin:0 auto;padding:110px 24px 70px;gap:48px}.hero-shot{width:100%;display:block;border-radius:24px;border:1px solid var(--border-strong);box-shadow:0 34px 88px rgba(0,0,0,.58)}.hero-media{display:flex;align-items:center;justify-content:center;position:relative}.hero-media::before{content:'';position:absolute;width:120%;height:120%;background:radial-gradient(circle,rgba(8,216,255,.18),transparent 62%);z-index:-1}
+.hero{min-height:100vh;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;max-width:1280px;margin:0 auto;padding:110px 24px 70px;gap:48px}.hero-shot{width:100%;display:block;border-radius:24px;border:1px solid var(--border-strong);box-shadow:0 34px 88px rgba(0,0,0,.58)}.hero-media{display:flex;align-items:center;justify-content:center;position:relative;transform:translateY(-35px)}.hero-media::before{content:'';position:absolute;width:120%;height:120%;background:radial-gradient(circle,rgba(8,216,255,.18),transparent 62%);z-index:-1}
 .hero-label{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--cyan);margin-bottom:24px}
 .hero-label::before{content:'';width:20px;height:1px;background:var(--cyan)}
-.hero h1{font-family:var(--fh);font-size:clamp(29px,5vw,73px);font-weight:900;line-height:1.05;letter-spacing:-1.4px;margin-bottom:22px}
+.hero h1{font-family:var(--fh);font-size:clamp(30px,4.4vw,68px);font-weight:900;line-height:1.05;letter-spacing:-1.4px;margin-bottom:22px}
 .hero h1 .acc{color:var(--cyan)}
-.section-subtitle{font-family:"Inter","Montserrat",Arial,sans-serif;font-size:12px;font-weight:400;line-height:1.5;color:rgba(190,205,225,.72);max-width:1100px;margin-bottom:40px}
-@media (max-width:768px){.section-subtitle{font-size:12px;line-height:1.45}}
+.section-subtitle{font-family:"Inter","Montserrat",Arial,sans-serif;font-size:14px;font-weight:400;line-height:1.55;color:rgba(190,205,225,.82);max-width:1100px;margin-bottom:40px}
+@media (max-width:768px){.section-subtitle{font-size:13px;line-height:1.5}}
 .hero-desc strong{color:var(--white)}
 .hero-cta{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .btn-p{display:inline-block;background:var(--cyan);color:#000;font-family:var(--fh);font-size:13px;font-weight:700;padding:14px 30px;border-radius:8px;transition:transform .15s,box-shadow .2s;border:none;cursor:pointer}
@@ -121,14 +121,16 @@ footer{border-top:1px solid var(--border);padding:28px 24px}
 
 /* DUAL CTA */
 .dual-cta{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:34px 0 0;max-width:760px}
-.cta-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px 20px;display:flex;align-items:center;gap:14px;transition:border-color .2s,transform .2s}
+.cta-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px 20px;display:flex;flex-direction:column;gap:10px;transition:border-color .2s,transform .2s}
 .cta-card:hover{transform:translateY(-2px)}
 .cta-student:hover{border-color:rgba(0,229,255,.5)}
 .cta-teacher:hover{border-color:rgba(255,140,0,.5)}
-.cta-card-icon{font-size:28px;flex-shrink:0}
-.cta-card-title{font-family:var(--fh);font-size:14px;font-weight:700;margin-bottom:2px}
-.cta-card-sub{font-size:11px;color:var(--gray)}
-.cta-card-btn{display:inline-block;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;font-family:var(--fh);cursor:pointer;border:none;white-space:nowrap;text-decoration:none;transition:all .15s;margin-left:auto;flex-shrink:0}
+.cta-card-top{display:flex;align-items:flex-start;gap:12px;width:100%}
+.cta-card-head{display:flex;flex-direction:column;min-width:0}
+.cta-card-icon{font-size:28px;line-height:1;transform:translateY(-2px);flex-shrink:0}
+.cta-card-title{font-family:var(--fh);font-size:14px;font-weight:700;line-height:1.2}
+.cta-card-sub{font-size:11px;color:var(--gray);line-height:1.45}
+.cta-card-btn{display:inline-block;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;font-family:var(--fh);cursor:pointer;border:none;white-space:nowrap;text-decoration:none;transition:all .15s;margin-left:auto;flex-shrink:0;align-self:flex-start;transform:translateY(-2px)}
 .btn-cyan{background:var(--cyan);color:#000}
 .btn-cyan:hover{background:var(--cyan-dim)}
 .btn-orange{background:var(--orange);color:#000}
@@ -721,7 +723,7 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 .view-banner{display:none;align-items:center;gap:8px;background:rgba(57,255,20,.08);border:1px solid rgba(57,255,20,.25);border-radius:8px;padding:10px 16px;margin-bottom:20px;font-size:13px;color:var(--green)}
 body.view-mode .view-banner{display:flex}
 
-@media(max-width:900px){.hero{grid-template-columns:1fr;padding-top:80px}.fbox{display:none}.cgrid{grid-template-columns:1fr 1fr}.how-g{grid-template-columns:1fr 1fr}.how-step{border-right:none;border-bottom:1px solid var(--border)}.cp-layout{--sbw:210px}}
+@media(max-width:900px){.hero{grid-template-columns:1fr;padding-top:80px}.hero-media{transform:translateY(-12px)}.fbox{display:none}.cgrid{grid-template-columns:1fr 1fr}.how-g{grid-template-columns:1fr 1fr}.how-step{border-right:none;border-bottom:1px solid var(--border)}.cp-layout{--sbw:210px}}
 @media(max-width:600px){.nav-subj{display:none}.cgrid{grid-template-columns:1fr}.how-g{grid-template-columns:1fr}.stats-grid{grid-template-columns:1fr 1fr}.cp-sb,.cp-resizer{display:none}}
 
 /* ── SIMULATORS HUB PAGE ── */
@@ -981,9 +983,9 @@ img,svg,canvas,video,iframe{max-width:100%}
   <nav class="nav-inner">
     <a class="logo" onclick="showLanding()">ФИЗ<span>МАТ</span></a>
     <div class="nav-subj">
-      <a href="#for-students" class="active">Ученикам</a>
+      <a href="#courses" class="active">Курсы</a>
       <a href="javascript:void(0)" onclick="showTestsPage()">Конструктор тестов</a>
-      <a href="#courses">Курсы</a>
+      <a href="#for-students">Ученикам</a>
       <a href="#task-bank">Банк задач</a>
       <div class="sim-menu" id="simMenu">
         <button class="sim-toggle" onclick="toggleSimMenu(event)">Симуляторы</button>
@@ -1017,20 +1019,24 @@ img,svg,canvas,video,iframe{max-width:100%}
         <p class="section-subtitle">Платформа для школьников и учителей — структурированные курсы, конструктор тестов, банк задач, симулятор экзамена и виртуальная лаборатория в одном месте.</p>
         <div class="dual-cta">
           <div class="cta-card cta-student">
-            <div class="cta-card-icon">🎓</div>
-            <div>
-              <div class="cta-card-title">Я ученик</div>
-              <div class="cta-card-sub">Готовлюсь к ОГЭ / ЕГЭ</div>
+            <div class="cta-card-top">
+              <div class="cta-card-icon">🎓</div>
+              <div class="cta-card-head">
+                <div class="cta-card-title">Я ученик</div>
+              </div>
+              <a href="#for-students" class="cta-card-btn btn-cyan">Начать →</a>
             </div>
-            <a href="#for-students" class="cta-card-btn btn-cyan">Начать →</a>
+            <div class="cta-card-sub">Готовлюсь к ОГЭ / ЕГЭ</div>
           </div>
           <div class="cta-card cta-teacher">
-            <div class="cta-card-icon">📋</div>
-            <div>
-              <div class="cta-card-title">Я учитель</div>
-              <div class="cta-card-sub">Создаю уроки и тесты</div>
+            <div class="cta-card-top">
+              <div class="cta-card-icon">📋</div>
+              <div class="cta-card-head">
+                <div class="cta-card-title">Я учитель</div>
+              </div>
+              <a href="#for-teachers" class="cta-card-btn btn-orange">Инструменты →</a>
             </div>
-            <a href="#for-teachers" class="cta-card-btn btn-orange">Инструменты →</a>
+            <div class="cta-card-sub">Создаю уроки и тесты</div>
           </div>
         </div>
       </div>
