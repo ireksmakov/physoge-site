@@ -202,6 +202,20 @@ footer{border-top:1px solid var(--border);padding:28px 24px}
 .price-list li{font-size:13px;color:var(--gray);line-height:1.5}
 .price-list li:first-child{color:var(--white)}
 
+/* ===== TESTS PAGE ===== */
+#tests-page{display:none;min-height:100vh;padding-top:64px}
+.tests-wrap{max-width:1200px;margin:0 auto;padding:52px 24px 72px}
+.tests-hero{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:40px 34px;box-shadow:var(--panel-shadow);margin-bottom:28px}
+.tests-label{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--cyan);margin-bottom:12px}
+.tests-title{font-family:var(--fh);font-size:clamp(28px,4vw,52px);font-weight:900;line-height:1.08;letter-spacing:-.8px;margin-bottom:14px}
+.tests-sub{font-size:15px;color:var(--gray);max-width:760px;line-height:1.7}
+.tests-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.tests-card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:22px;transition:transform .2s,border-color .2s,box-shadow .2s}
+.tests-card:hover{transform:translateY(-4px);border-color:rgba(8,216,255,.45);box-shadow:0 14px 34px rgba(0,229,255,.12)}
+.tests-icon{font-size:26px;margin-bottom:12px}
+.tests-card-title{font-family:var(--fh);font-size:14px;font-weight:700;margin-bottom:8px}
+.tests-card-desc{font-size:13px;color:var(--gray);line-height:1.6}
+
 /* ===== PLATFORM ===== */
 #platform{display:none;padding-top:64px;min-height:100vh}
 #platform.on{display:block}
@@ -942,6 +956,7 @@ img,svg,canvas,video,iframe{max-width:100%}
       <a href="#for-teachers">Учителям</a>
       <a href="#courses">Курсы</a>
       <a href="#task-bank">Банк задач</a>
+      <a href="javascript:void(0)" onclick="showTestsPage()">Тесты</a>
       <div class="sim-menu" id="simMenu">
         <button class="sim-toggle" onclick="toggleSimMenu(event)">Симуляторы</button>
         <div class="sim-pop">
@@ -2093,7 +2108,7 @@ function setMode(m){
 
 /* ============ NAV ============ */
 function hideAll(){
-  ['landing','platform','simulators-page','lesson-page','sim-rupd','sim-zsi'].forEach(id=>{
+  ['landing','platform','simulators-page','lesson-page','sim-rupd','sim-zsi','tests-page'].forEach(id=>{
     const el=document.getElementById(id);
     if(el){el.style.display='none';el.classList.remove('on');}
   });
@@ -2102,6 +2117,14 @@ function showLanding(){
   hideAll();
   document.getElementById('landing').style.display='block';
   document.getElementById('backBtn').classList.remove('on');
+  document.getElementById('modeToggle').classList.remove('on');
+  window.scrollTo(0,0);
+}
+function showTestsPage(){
+  hideAll();
+  document.getElementById('tests-page').style.display='block';
+  document.getElementById('backBtn').classList.add('on');
+  document.getElementById('backBtn').onclick=showLanding;
   document.getElementById('modeToggle').classList.remove('on');
   window.scrollTo(0,0);
 }
@@ -2706,6 +2729,40 @@ function srReset(){
 }
 
 </script>
+
+<!-- ═══════ КОНСТРУКТОР ТЕСТОВ ═══════ -->
+<div id="tests-page">
+  <div class="tests-wrap">
+    <button onclick="showLanding()" style="display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border);color:var(--gray);font-size:13px;padding:8px 16px;border-radius:8px;cursor:pointer;transition:all .2s;white-space:nowrap;font-family:var(--fb);margin-bottom:20px" onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--gray)'">← Назад</button>
+    <div class="tests-hero">
+      <div class="tests-label">Платформа ФИЗМАТ</div>
+      <h1 class="tests-title">Конструктор тестов</h1>
+      <p class="tests-sub">Создавайте тесты, выдавайте ученикам по ссылке, проверяйте результаты и копируйте варианты.</p>
+    </div>
+    <div class="tests-grid">
+      <div class="tests-card">
+        <div class="tests-icon" style="color:var(--cyan)">🧪</div>
+        <div class="tests-card-title">Создать тест</div>
+        <div class="tests-card-desc">Соберите новый вариант из заданий и оформите его для выдачи ученикам.</div>
+      </div>
+      <div class="tests-card">
+        <div class="tests-icon" style="color:var(--orange)">📚</div>
+        <div class="tests-card-title">Банк тестов</div>
+        <div class="tests-card-desc">Храните созданные варианты, быстро находите нужный и запускайте повторно.</div>
+      </div>
+      <div class="tests-card">
+        <div class="tests-icon" style="color:var(--green)">📈</div>
+        <div class="tests-card-title">Результаты</div>
+        <div class="tests-card-desc">Смотрите ответы и успеваемость по каждому тесту в удобной сводке.</div>
+      </div>
+      <div class="tests-card">
+        <div class="tests-icon" style="color:var(--cyan)">⚙️</div>
+        <div class="tests-card-title">Настройки тестов</div>
+        <div class="tests-card-desc">Управляйте параметрами: время, доступ, отображение ответов и формат выдачи.</div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ═══════ СИМУЛЯТОРЫ ХАБ ═══════ -->
 <div id="simulators-page">
