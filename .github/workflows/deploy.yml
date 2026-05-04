@@ -2,7 +2,10 @@ name: Deploy to Zomro
 
 on:
   push:
-    branches: [ "main", "master", "work" ]
+    branches:
+      - main
+      - master
+      - work
   workflow_dispatch:
 
 jobs:
@@ -10,21 +13,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Оформление заказа
         uses: actions/checkout@v4
 
-      - name: Install ssh key
+      - name: Установить ключ SSH
         uses: webfactory/ssh-agent@v0.9.0
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.ZOMRO_SSH_KEY }}
 
-      - name: Add host to known_hosts
+      - name: Добавить хост в known_hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -p ${{ secrets.ZOMRO_PORT }} -H ${{ secrets.ZOMRO_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Deploy with rsync
+      - name: Развертывание с помощью rsync
         run: |
           rsync -az --delete \
             --exclude '.git/' \
-            ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_PATH }}/
+            --exclude '.github/' \
+            -e "ssh -p ${{ secrets.ZOMRO_PORT }}" \
+            ./ ${{ secrets.ZOMRO_USER }}@${{ secrets.ZOMRO_HOST }}:${{ secrets.ZOMRO_PATH }}
