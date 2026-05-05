@@ -1347,7 +1347,7 @@ img,svg,canvas,video,iframe{max-width:100%}
         <div class="cd">Подготовка к ОГЭ по кодификатору. Механика, МКТ, электричество, оптика. Алгоритмы решения и банк задач.</div>
         <div class="cmeta"><div class="mi"><span class="dot"></span>68 уроков</div><div class="mi"><span class="dot"></span>4 модуля</div></div>
         <div class="course-badges"><span class="cb cb-free">1 модуль бесплатно</span><span class="cb cb-sim">Симулятор ОГЭ</span></div>
-        <button class="bcourse" onclick="openCourse('oge-phy')">Открыть курс</button>
+        <a class="bcourse" href="#course/oge-phy">Открыть курс</a>
       </div>
       <div class="ccard" data-cat="physics">
         <div class="ci">⚡</div><span class="ctag tp">Физика</span>
@@ -1355,7 +1355,7 @@ img,svg,canvas,video,iframe{max-width:100%}
         <div class="cd">Полная подготовка к ЕГЭ — механика, МКТ, электродинамика, оптика, квантовая физика.</div>
         <div class="cmeta"><div class="mi"><span class="dot"></span>60 уроков</div><div class="mi"><span class="dot"></span>6 модулей</div></div>
         <div class="course-badges"><span class="cb cb-free">1 модуль бесплатно</span></div>
-        <button class="bcourse" onclick="openCourse('ege-phy')">Открыть курс</button>
+        <a class="bcourse" href="#course/ege-phy">Открыть курс</a>
       </div>
       <div class="ccard" data-cat="math">
         <div class="ci">📐</div><span class="ctag tm">Математика</span>
@@ -1363,7 +1363,7 @@ img,svg,canvas,video,iframe{max-width:100%}
         <div class="cd">Алгебра, геометрия, теория вероятностей — полная подготовка к ОГЭ по кодификатору.</div>
         <div class="cmeta"><div class="mi"><span class="dot"></span>35 уроков</div><div class="mi"><span class="dot"></span>4 модуля</div></div>
         <div class="course-badges"><span class="cb cb-free">1 модуль бесплатно</span><span class="cb cb-sim">Симулятор ОГЭ</span></div>
-        <button class="bcourse" onclick="openCourse('oge-mat')">Открыть курс</button>
+        <a class="bcourse" href="#course/oge-mat">Открыть курс</a>
       </div>
       <div class="ccard" data-cat="math">
         <div class="ci">📐</div><span class="ctag tm">Математика</span>
@@ -1371,7 +1371,7 @@ img,svg,canvas,video,iframe{max-width:100%}
         <div class="cd">Базовый уровень ЕГЭ — задачи, геометрия, уравнения, статистика. 48 уроков.</div>
         <div class="cmeta"><div class="mi"><span class="dot"></span>48 уроков</div><div class="mi"><span class="dot"></span>4 модуля</div></div>
         <div class="course-badges"><span class="cb cb-free">1 модуль бесплатно</span></div>
-        <button class="bcourse" onclick="openCourse('ege-mat-base')">Открыть курс</button>
+        <a class="bcourse" href="#course/ege-mat-base">Открыть курс</a>
       </div>
       <div class="ccard" data-cat="math">
         <div class="ci">📐</div><span class="ctag tm">Математика</span>
@@ -1379,7 +1379,7 @@ img,svg,canvas,video,iframe{max-width:100%}
         <div class="cd">Профильный уровень — производные, интегралы, стереометрия, сложные уравнения.</div>
         <div class="cmeta"><div class="mi"><span class="dot"></span>55 уроков</div><div class="mi"><span class="dot"></span>5 модулей</div></div>
         <div class="course-badges"><span class="cb cb-free">1 модуль бесплатно</span></div>
-        <button class="bcourse" onclick="openCourse('ege-mat-pro')">Открыть курс</button>
+        <a class="bcourse" href="#course/ege-mat-pro">Открыть курс</a>
       </div>
       <div class="ccard" data-cat="spo">
         <div class="ci">🎓</div><span class="ctag ts">СПО</span>
@@ -1387,7 +1387,7 @@ img,svg,canvas,video,iframe{max-width:100%}
         <div class="cd">Физика для студентов СПО — базовый курс для технических специальностей.</div>
         <div class="cmeta"><div class="mi"><span class="dot"></span>6 уроков</div><div class="mi"><span class="dot"></span>1 модуль</div></div>
         <div class="course-badges"><span class="cb cb-free">Бесплатно</span></div>
-        <button class="bcourse" onclick="openCourse('spo-phy')">Открыть курс</button>
+        <a class="bcourse" href="#course/spo-phy">Открыть курс</a>
       </div>
       <div class="ccard" data-cat="spo">
         <div class="ci">🎓</div><span class="ctag ts">СПО</span>
@@ -1395,7 +1395,7 @@ img,svg,canvas,video,iframe{max-width:100%}
         <div class="cd">Математика для студентов СПО — алгебра, начала анализа, геометрия по программе СПО.</div>
         <div class="cmeta"><div class="mi"><span class="dot"></span>8 уроков</div><div class="mi"><span class="dot"></span>2 модуля</div></div>
         <div class="course-badges"><span class="cb cb-free">Бесплатно</span></div>
-        <button class="bcourse" onclick="openCourse('spo-mat')">Открыть курс</button>
+        <a class="bcourse" href="#course/spo-mat">Открыть курс</a>
       </div>
     </div>
   </section>
@@ -2296,7 +2296,7 @@ function setMode(m){
 
 /* ============ NAV ============ */
 function hideAll(){
-  ['landing','platform','simulators-page','lesson-page','sim-rupd','sim-zsi','tests-page','test-topic-page','test-editor-page','test-preview-page','student-test-page'].forEach(id=>{
+  ['landing','platform','simulators-page','lesson-page','sim-rupd','sim-zsi','tests-page','test-topic-page','test-editor-page','test-preview-page','student-test-page','test-generator-page'].forEach(id=>{
     const el=document.getElementById(id);
     if(el){el.style.display='none';el.classList.remove('on');}
   });
@@ -2541,7 +2541,40 @@ function clearAllTestResults(testId){const t=TESTS_DATA.find(x=>x.id===testId); 
 let studentSession=null;
 function showHomeFromRoute(){window.location.hash='#home';}
 function renderTestNotFound(){const p=document.getElementById('student-test-page'); if(!p) return; p.style.display='block'; p.innerHTML='<div class="student-test-wrap"><div class="student-test-error"><h2>Тест не найден</h2><div>Возможно, тест был удалён или данные пока хранятся только в браузере учителя. Для настоящей выдачи тестов ученикам позже будет подключена серверная база данных.</div><a class="tests-editor-back" href="#home">На главную</a></div></div>';}
-function showCoursesPage(){showLanding('#courses');}
+function showCoursesPage(){
+  hideAll();
+  const landing=document.getElementById('landing');
+  if(landing) landing.style.display='block';
+
+  const modeToggle=document.getElementById('modeToggle');
+  if(modeToggle) modeToggle.classList.remove('on');
+
+  const backBtn=document.getElementById('backBtn');
+  if(backBtn) backBtn.classList.remove('on');
+
+  setBackHref('#home');
+
+  requestAnimationFrame(()=>{
+    const courses=document.getElementById('courses');
+    if(courses) courses.scrollIntoView({behavior:'smooth',block:'start'});
+    else window.scrollTo(0,0);
+  });
+}
+
+function showTestGeneratorPage(){
+  hideAll();
+  const page=document.getElementById('test-generator-page');
+  if(page){
+    page.style.display='block';
+    document.getElementById('backBtn')?.classList.add('on');
+    setBackHref('#tests');
+    document.getElementById('modeToggle')?.classList.remove('on');
+    window.scrollTo(0,0);
+    return;
+  }
+  showTestsPage();
+}
+
 function showStudentsPage(){showLanding('#for-students');}
 function showBankPage(){showLanding('#task-bank');}
 function showSimulatorsPage(){showSimulators();}
@@ -2554,6 +2587,11 @@ function handleRoute(){
   if(hash==='#students') return showStudentsPage();
   if(hash==='#bank') return showBankPage();
   if(hash==='#simulators') return showSimulatorsPage();
+  if(hash==='#tests/generator') return showTestGeneratorPage();
+  if(hash.startsWith('#course/')){
+    const key=hash.replace('#course/','');
+    return openCourse(key);
+  }
   if(hash.startsWith('#test/pass/')) return openStudentTestRoute(hash.slice(11));
   if(hash.startsWith('#test/edit/')) return openTestEditRoute(hash.slice(11));
   if(hash.startsWith('#test/results/')) return openTestResultsRoute(hash.slice(14));
@@ -2668,16 +2706,33 @@ function openSim(key){
   window.scrollTo(0,0);
 }
 function openCourse(key){
-  AC=key;CM=0;CL=0;
-  document.getElementById('landing').style.display='none';
-  document.getElementById('platform').classList.add('on');
-  if(document.getElementById('simulators-page')) document.getElementById('simulators-page').style.display='none';
-  if(document.getElementById('sim-rupd')) document.getElementById('sim-rupd').style.display='none';
-  document.getElementById('backBtn').classList.add('on');
-  setBackHref('#home');
-  document.getElementById('modeToggle').classList.add('on');
-  renderTopbar();renderSb();renderContent();
+  if(!COURSES[key]){
+    showCoursesPage();
+    return;
+  }
+
+  AC=key;
+  CM=0;
+  CL=0;
+
+  hideAll();
+
+  const platform=document.getElementById('platform');
+  if(platform){
+    platform.style.display='';
+    platform.classList.add('on');
+  }
+
+  document.getElementById('backBtn')?.classList.add('on');
+  setBackHref('#courses');
+
+  document.getElementById('modeToggle')?.classList.add('on');
+
+  renderTopbar();
+  renderSb();
+  renderContent();
   initSidebarResize();
+
   window.scrollTo(0,0);
 }
 function fc(cat,btn){
