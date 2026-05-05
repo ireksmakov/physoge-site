@@ -2327,8 +2327,8 @@ function hideAll(){
     'landing',
     'platform',
     'simulators-page',
-    'module-page',
     'lesson-page',
+    'module-page',
     'sim-rupd',
     'sim-zsi',
     'tests-page',
@@ -2338,15 +2338,17 @@ function hideAll(){
     'student-test-page',
     'student-variant-page',
     'tests-generator-page',
-    'test-generator-page'
-  ].forEach(id=>{
-    const el=document.getElementById(id);
+    'test-generator-page',
+    'student-variant-intro-page',
+    'student-variant-solve-page',
+    'student-variant-check-page',
+    'student-variant-result-page'
+  ].forEach(id => {
+    const el = document.getElementById(id);
     if(el){
-      el.style.display='none';
-      el.style.pointerEvents='none';
-      el.classList.remove('on');
-      el.classList.remove('open');
-      el.classList.remove('active');
+      el.style.display = 'none';
+      el.style.pointerEvents = 'none';
+      el.classList.remove('on', 'open', 'active');
       el.classList.remove('page-active');
       el.classList.add('page-hidden');
     }
@@ -2354,20 +2356,18 @@ function hideAll(){
 
   document.body.classList.remove('task-board-lock');
 
-  const taskBoardOverlay=document.getElementById('taskBoardOverlay');
+  const taskBoardOverlay = document.getElementById('taskBoardOverlay');
   if(taskBoardOverlay){
-    taskBoardOverlay.classList.remove('open','page-active');
-    taskBoardOverlay.classList.add('page-hidden');
-    taskBoardOverlay.style.display='none';
-    taskBoardOverlay.style.pointerEvents='none';
+    taskBoardOverlay.classList.remove('open');
+    taskBoardOverlay.style.display = 'none';
+    taskBoardOverlay.style.pointerEvents = 'none';
   }
 
-  const vlFsOverlay=document.getElementById('vlFsOverlay');
+  const vlFsOverlay = document.getElementById('vlFsOverlay');
   if(vlFsOverlay){
-    vlFsOverlay.classList.remove('active','page-active');
-    vlFsOverlay.classList.add('page-hidden');
-    vlFsOverlay.style.display='none';
-    vlFsOverlay.style.pointerEvents='none';
+    vlFsOverlay.classList.remove('active');
+    vlFsOverlay.style.display = 'none';
+    vlFsOverlay.style.pointerEvents = 'none';
   }
 }
 function setBackHref(hash){
@@ -2376,43 +2376,66 @@ function setBackHref(hash){
 }
 function showLanding(scrollTarget){
   hideAll();
-  const landing=document.getElementById('landing');
-  if(landing){landing.style.display='block';landing.style.pointerEvents='auto';landing.classList.remove('page-hidden');landing.classList.add('page-active');}
-  document.getElementById('backBtn').classList.remove('on');
+
+  const landing = document.getElementById('landing');
+  if(landing){
+    landing.style.display = 'block';
+    landing.style.pointerEvents = 'auto';
+    landing.classList.remove('page-hidden');
+    landing.classList.add('page-active');
+  }
+
+  const platform = document.getElementById('platform');
+  if(platform) platform.classList.remove('on');
+
+  const modeToggle = document.getElementById('modeToggle');
+  if(modeToggle) modeToggle.classList.remove('on');
+
+  const backBtn = document.getElementById('backBtn');
+  if(backBtn) backBtn.classList.remove('on');
+
   setBackHref('#home');
-  document.getElementById('modeToggle').classList.remove('on');
-  if(scrollTarget){setTimeout(()=>document.querySelector(scrollTarget)?.scrollIntoView({behavior:'smooth'}),0);}
-  else window.scrollTo(0,0);
+  updateActiveNav(window.location.hash || '#home');
+
+  requestAnimationFrame(() => {
+    if(scrollTarget){
+      const target = document.querySelector(scrollTarget);
+      if(target){
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+    }
+    window.scrollTo(0, 0);
+  });
 }
 function showTestsPage(){
   hideAll();
 
-  const page=document.getElementById('tests-page');
+  const page = document.getElementById('tests-page');
   if(!page){
     console.error('tests-page not found');
     return;
   }
 
-  page.style.display='block';
-  page.style.pointerEvents='auto';
+  page.style.display = 'block';
+  page.style.pointerEvents = 'auto';
   page.classList.remove('page-hidden');
   page.classList.add('page-active');
 
-  loadTestsData();
-  renderTestConstructorNavigation();
-  renderTopicTests();
+  if(typeof loadTestsData === 'function') loadTestsData();
+  if(typeof renderTestConstructorNavigation === 'function') renderTestConstructorNavigation();
+  if(typeof renderTopicTests === 'function') renderTopicTests();
 
-  const backBtn=document.getElementById('backBtn');
+  const backBtn = document.getElementById('backBtn');
   if(backBtn) backBtn.classList.add('on');
 
-  setBackHref('#home');
+  if(typeof setBackHref === 'function') setBackHref('#home');
 
-  const modeToggle=document.getElementById('modeToggle');
+  const modeToggle = document.getElementById('modeToggle');
   if(modeToggle) modeToggle.classList.remove('on');
 
   updateActiveNav('#tests');
-
-  window.scrollTo(0,0);
+  window.scrollTo(0, 0);
 }
 function renderTestTopicPage(){
   hideAll();
@@ -2690,8 +2713,26 @@ function showBankPage(){
 }
 
 function showSimulatorsPage(){
+  hideAll();
+
+  const page = document.getElementById('simulators-page');
+  if(page){
+    page.style.display = 'block';
+    page.style.pointerEvents = 'auto';
+    page.classList.remove('page-hidden');
+    page.classList.add('page-active');
+  }
+
+  const modeToggle = document.getElementById('modeToggle');
+  if(modeToggle) modeToggle.classList.remove('on');
+
+  const backBtn = document.getElementById('backBtn');
+  if(backBtn) backBtn.classList.add('on');
+
+  if(typeof setBackHref === 'function') setBackHref('#home');
+
   updateActiveNav('#simulators');
-  showSimulators();
+  window.scrollTo(0, 0);
 }
 
 function openStudentTestRoute(route){
@@ -2712,26 +2753,56 @@ function openTestPreviewRoute(id){
 }
 
 function handleRoute(){
-  const hash=window.location.hash||'#home';
+  const hash = window.location.hash || '#home';
 
-  if(hash==='#home') return showLanding();
-  if(hash==='#courses') return showCoursesPage();
-  if(hash==='#tests') return showTestsPage();
-  if(hash==='#students') return showStudentsPage();
-  if(hash==='#bank') return showBankPage();
-  if(hash==='#simulators') return showSimulatorsPage();
-  if(hash==='#tests/topic') return renderTestTopicPage();
-  if(hash==='#tests/generator') return renderTestsGeneratorPage();
+  if(hash === '#home') return showLanding();
+  if(hash === '#courses') return showCoursesPage();
+  if(hash === '#tests') return showTestsPage();
+  if(hash === '#students') return showStudentsPage ? showStudentsPage() : showLanding('#students');
+  if(hash === '#bank') return showBankPage ? showBankPage() : showLanding('#bank');
+  if(hash === '#simulators') return showSimulatorsPage();
 
   if(hash.startsWith('#course/')){
-    const key=hash.replace('#course/','');
-    return openCourse(key);
+    const key = hash.replace('#course/', '');
+    if(typeof openCourse === 'function') return openCourse(key);
+    return showCoursesPage();
   }
 
-  if(hash.startsWith('#test/pass/')) return openStudentTestRoute(hash.slice(11));
-  if(hash.startsWith('#test/edit/')) return openTestEditRoute(hash.slice(11));
-  if(hash.startsWith('#test/results/')) return openTestResultsRoute(hash.slice(14));
-  if(hash.startsWith('#test/preview/')) return openTestPreviewRoute(hash.slice(14));
+  if(hash === '#tests/topic'){
+    if(typeof renderTestTopicPage === 'function') return renderTestTopicPage();
+    return showTestsPage();
+  }
+
+  if(hash === '#tests/generator'){
+    if(typeof renderTestsGeneratorPage === 'function') return renderTestsGeneratorPage();
+    return showTestsPage();
+  }
+
+  if(hash.startsWith('#test/pass/')){
+    const id = hash.replace('#test/pass/', '');
+    if(typeof openStudentTestRoute === 'function') return openStudentTestRoute(id);
+    return showTestsPage();
+  }
+
+  if(hash.startsWith('#test/edit/')){
+    const id = hash.replace('#test/edit/', '');
+    if(typeof renderTestEditorPage === 'function') return renderTestEditorPage(id);
+    return showTestsPage();
+  }
+
+  if(hash.startsWith('#test/results/')){
+    const id = hash.replace('#test/results/', '');
+    if(typeof openTestResults === 'function') return openTestResults(id);
+    if(typeof openTestResultsRoute === 'function') return openTestResultsRoute(id);
+    return showTestsPage();
+  }
+
+  if(hash.startsWith('#test/preview/')){
+    const id = hash.replace('#test/preview/', '');
+    if(typeof openTestPreview === 'function') return openTestPreview(id);
+    if(typeof openTestPreviewRoute === 'function') return openTestPreviewRoute(id);
+    return showTestsPage();
+  }
 
   return showLanding();
 }
@@ -2744,10 +2815,32 @@ document.addEventListener('click',()=>{
 });
 
 function showCoursesPage(){
+  hideAll();
+
+  const landing = document.getElementById('landing');
+  if(landing){
+    landing.style.display = 'block';
+    landing.style.pointerEvents = 'auto';
+    landing.classList.remove('page-hidden');
+    landing.classList.add('page-active');
+  }
+
+  const modeToggle = document.getElementById('modeToggle');
+  if(modeToggle) modeToggle.classList.remove('on');
+
+  const backBtn = document.getElementById('backBtn');
+  if(backBtn) backBtn.classList.remove('on');
+
   updateActiveNav('#courses');
-  const firstCourseKey=Object.keys(COURSES||{})[0];
-  if(firstCourseKey){openCourse(firstCourseKey); return;}
-  showLanding();
+
+  requestAnimationFrame(() => {
+    const courses = document.getElementById('courses');
+    if(courses){
+      courses.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      window.scrollTo(0, 0);
+    }
+  });
 }
 
 function showSimulators(examType){
