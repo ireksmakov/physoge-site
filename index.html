@@ -2764,8 +2764,7 @@ function handleRoute(){
 
   if(hash.startsWith('#course/')){
     const key = hash.replace('#course/', '');
-    if(typeof openCourse === 'function') return openCourse(key);
-    return showCoursesPage();
+    return openCourse(key);
   }
 
   if(hash === '#tests/topic'){
@@ -2932,32 +2931,53 @@ function openSim(key){
   window.scrollTo(0,0);
 }
 function openCourse(key){
-  if(!COURSES[key]){
-    showCoursesPage();
+  if(!COURSES || !COURSES[key]){
+    console.warn('Курс не найден:', key);
+    window.location.hash = '#courses';
     return;
   }
 
-  AC=key;
-  CM=0;
-  CL=0;
+  AC = key;
+  CM = 0;
+  CL = 0;
 
   hideAll();
 
-  const platform=document.getElementById('platform');
+  const platform = document.getElementById('platform');
   if(platform){
-    platform.style.display='';
+    platform.style.display = 'block';
+    platform.style.pointerEvents = 'auto';
     platform.classList.add('on');
   }
 
-  document.getElementById('backBtn')?.classList.add('on');
-  setBackHref('#courses');
+  const landing = document.getElementById('landing');
+  if(landing){
+    landing.style.display = 'none';
+    landing.style.pointerEvents = 'none';
+  }
 
-  document.getElementById('modeToggle')?.classList.add('on');
+  const backBtn = document.getElementById('backBtn');
+  if(backBtn){
+    backBtn.classList.add('on');
+  }
 
-  renderTopbar();
-  renderSb();
-  renderContent();
-  initSidebarResize();
+  if(typeof setBackHref === 'function'){
+    setBackHref('#courses');
+  }
+
+  const modeToggle = document.getElementById('modeToggle');
+  if(modeToggle){
+    modeToggle.classList.add('on');
+  }
+
+  if(typeof renderTopbar === 'function') renderTopbar();
+  if(typeof renderSb === 'function') renderSb();
+  if(typeof renderContent === 'function') renderContent();
+  if(typeof initSidebarResize === 'function') initSidebarResize();
+
+  if(typeof updateActiveNav === 'function'){
+    updateActiveNav('#courses');
+  }
 
   window.scrollTo(0,0);
 }
