@@ -2374,6 +2374,17 @@ function setBackHref(hash){
   const back=document.getElementById('backBtn');
   if(back) back.setAttribute('href',hash||'#home');
 }
+function showPage(id, display='block'){
+  const el = document.getElementById(id);
+  if(!el) return null;
+
+  el.classList.remove('page-hidden');
+  el.classList.add('page-active');
+  el.style.display = display;
+  el.style.pointerEvents = 'auto';
+
+  return el;
+}
 function showLanding(scrollTarget){
   hideAll();
 
@@ -2411,16 +2422,11 @@ function showLanding(scrollTarget){
 function showTestsPage(){
   hideAll();
 
-  const page = document.getElementById('tests-page');
+  const page = showPage('tests-page');
   if(!page){
     console.error('tests-page not found');
     return;
   }
-
-  page.style.display = 'block';
-  page.style.pointerEvents = 'auto';
-  page.classList.remove('page-hidden');
-  page.classList.add('page-active');
 
   if(typeof loadTestsData === 'function') loadTestsData();
   if(typeof renderTestConstructorNavigation === 'function') renderTestConstructorNavigation();
@@ -2704,24 +2710,18 @@ function updateActiveNav(hash){
 
 function showStudentsPage(){
   updateActiveNav('#students');
-  showLanding('#aud');
+  showLanding('#for-students');
 }
 
 function showBankPage(){
   updateActiveNav('#bank');
-  showLanding('#benefits');
+  showLanding('#task-bank');
 }
 
 function showSimulatorsPage(){
   hideAll();
 
-  const page = document.getElementById('simulators-page');
-  if(page){
-    page.style.display = 'block';
-    page.style.pointerEvents = 'auto';
-    page.classList.remove('page-hidden');
-    page.classList.add('page-active');
-  }
+  showPage('simulators-page');
 
   const modeToggle = document.getElementById('modeToggle');
   if(modeToggle) modeToggle.classList.remove('on');
@@ -2736,19 +2736,24 @@ function showSimulatorsPage(){
 }
 
 function openStudentTestRoute(route){
-  if(route) return openStudentVariantById(route.split('?')[0]);
-  showTestsPage();
+  if(!route) return showTestsPage();
+
+  const [id, query=''] = route.split('?');
+  const params = new URLSearchParams(query);
+  const step = params.get('step') || 'intro';
+
+  return openStudentVariantRoute(id, step);
 }
 function openTestEditRoute(id){
   if(id) return renderTestEditorPage(id.split('?')[0]);
   showTestsPage();
 }
 function openTestResultsRoute(id){
-  if(id) return renderTestResultsPage(id.split('?')[0]);
+  if(id) return openTestResults(id.split('?')[0]);
   showTestsPage();
 }
 function openTestPreviewRoute(id){
-  if(id) return openTestPreviewById(id.split('?')[0]);
+  if(id) return openTestPreview(id.split('?')[0]);
   showTestsPage();
 }
 
@@ -2778,9 +2783,18 @@ function handleRoute(){
   }
 
   if(hash.startsWith('#test/pass/')){
-    const id = hash.replace('#test/pass/', '');
-    if(typeof openStudentTestRoute === 'function') return openStudentTestRoute(id);
-    return showTestsPage();
+    const route = hash.replace('#test/pass/', '');
+    return openStudentTestRoute(route);
+  }
+
+  if(hash.startsWith('#test/check/')){
+    const id = hash.replace('#test/check/', '');
+    return openStudentVariantRoute(id, 'check');
+  }
+
+  if(hash.startsWith('#test/result/')){
+    const id = hash.replace('#test/result/', '');
+    return openStudentVariantRoute(id, 'result');
   }
 
   if(hash.startsWith('#test/edit/')){
@@ -2863,9 +2877,8 @@ var openCourse_back=false;
 function goBack(){
   if(simPrevPage==='platform'){
     hideAll();
-    var pl=document.getElementById('platform');
-    pl.style.display='';
-    pl.classList.add('on');
+    const pl = showPage('platform');
+    if(pl) pl.classList.add('on');
     document.getElementById('backBtn').classList.add('on');
     setBackHref('#home');
     document.getElementById('modeToggle').classList.add('on');
@@ -2893,14 +2906,14 @@ function openLesson(section,num,title,simKey){
   document.getElementById('backBtn').classList.add('on');
   setBackHref('#simulators');
   if(simKey==='rupd'){
-    document.getElementById('sim-rupd').style.display='block';
+    showPage('sim-rupd');
     setTimeout(()=>{initSrChart();srReset();},50);
   } else if(simKey==='zsi'){
-    document.getElementById('sim-zsi').style.display='block';
+    showPage('sim-zsi');
     setTimeout(()=>{zsiInit();},60);
   } else {
     // generic lesson page
-    document.getElementById('lesson-page').style.display='block';
+    showPage('lesson-page');
     const sectionNames={mechanics:'Механика',thermo:'Молекулярная физика',electro:'Электродинамика',optics:'Оптика',quantum:'Квантовая физика'};
     document.getElementById('lp-label').textContent=sectionNames[section]||section;
     document.getElementById('lp-title').textContent='Урок '+num+'. '+title;
@@ -2918,12 +2931,12 @@ function openSim(key){
   openCourse_back=false;
   hideAll();
   if(key==='rupd'){
-    document.getElementById('sim-rupd').style.display='block';
+    showPage('sim-rupd');
     document.getElementById('backBtn').classList.add('on');
     setBackHref('#simulators');
     setTimeout(()=>{initSrChart();srReset();},50);
   } else if(key==='zsi'){
-    document.getElementById('sim-zsi').style.display='block';
+    showPage('sim-zsi');
     document.getElementById('backBtn').classList.add('on');
     setBackHref('#simulators');
     setTimeout(()=>{zsiInit();},60);
@@ -2943,10 +2956,8 @@ function openCourse(key){
 
   hideAll();
 
-  const platform = document.getElementById('platform');
+  const platform = showPage('platform');
   if(platform){
-    platform.style.display = 'block';
-    platform.style.pointerEvents = 'auto';
     platform.classList.add('on');
   }
 
