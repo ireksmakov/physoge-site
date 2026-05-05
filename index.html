@@ -1133,6 +1133,21 @@ img,svg,canvas,video,iframe{max-width:100%}
 .btn-start{line-height:1}
 .hero-label,.slbl,.sh-label,.sr-label{letter-spacing:1.2px}
 .ctag,.platform-badge,.ftag,.cb,.price-label,.aud-tag,.sb-lbl,.pt-level,.pl-badge,.th-section-title,.vlab-table th,.sr-sec{letter-spacing:.8px}
+
+.tests-generator-page{display:none;min-height:100vh;padding:72px 20px 28px;background:var(--bg)}
+.tests-generator-wrap{max-width:1240px;margin:0 auto}
+.generator-steps{display:flex;gap:10px;margin:16px 0 20px}
+.generator-step{padding:8px 12px;border:1px solid var(--border);border-radius:999px;color:var(--gray)}
+.generator-step.active{border-color:var(--cyan);color:var(--cyan)}
+.generator-layout{display:grid;grid-template-columns:1fr 340px;gap:16px}
+.generator-list,.generator-summary-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px}
+.generator-topic-row{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.generator-topic-main{min-width:0}.generator-topic-title{font-weight:700}.generator-topic-meta{color:var(--gray);font-size:12px;margin-top:4px}
+.generator-count{display:flex;align-items:center;gap:8px}.generator-minus,.generator-plus{width:28px;height:28px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--white)}
+.generator-minus:disabled,.generator-plus:disabled{opacity:.4;cursor:not-allowed}
+.generator-summary{display:flex;flex-direction:column;gap:10px}.generator-generate{width:100%;padding:11px;border:none;border-radius:10px;background:var(--cyan);color:#001;font-weight:800}.generator-reset{width:100%;padding:10px;border:1px solid var(--border);background:transparent;color:var(--white);border-radius:10px}.generator-empty,.generator-result{padding:18px;color:var(--gray)}
+@media(max-width:980px){.generator-layout{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body class="edit-mode">
@@ -2296,7 +2311,7 @@ function setMode(m){
 
 /* ============ NAV ============ */
 function hideAll(){
-  ['landing','platform','simulators-page','lesson-page','sim-rupd','sim-zsi','tests-page','test-topic-page','test-editor-page','test-preview-page','student-test-page','test-generator-page'].forEach(id=>{
+  ['landing','platform','simulators-page','lesson-page','sim-rupd','sim-zsi','tests-page','test-topic-page','test-editor-page','test-preview-page','student-test-page','test-generator-page','tests-generator-page'].forEach(id=>{
     const el=document.getElementById(id);
     if(el){el.style.display='none';el.classList.remove('on');}
   });
@@ -2562,17 +2577,7 @@ function showCoursesPage(){
 }
 
 function showTestGeneratorPage(){
-  hideAll();
-  const page=document.getElementById('test-generator-page');
-  if(page){
-    page.style.display='block';
-    document.getElementById('backBtn')?.classList.add('on');
-    setBackHref('#tests');
-    document.getElementById('modeToggle')?.classList.remove('on');
-    window.scrollTo(0,0);
-    return;
-  }
-  showTestsPage();
+  renderTestsGeneratorPage();
 }
 
 function showStudentsPage(){showLanding('#for-students');}
@@ -2613,6 +2618,23 @@ function toggleSimMenu(event){
   const m=document.getElementById('simMenu');
   if(m) m.classList.toggle('open');
 }
+
+const generatorState={courseBank:[],selection:{},filters:{exam:'',subject:'',section:'',source:'all',difficulty:'Случайная'},result:null};
+function toQuestionTypeByAnswer(ans){const v=(ans??'').toString().trim(); return /^-?\d+(?:[\.,]\d+)?$/.test(v)?'number':'text';}
+function normalizeLessonTaskToConstructorQuestion(t,meta){const answer=t&&t.ans!=null?String(t.ans):''; const type=toQuestionTypeByAnswer(answer); const text=[t?.name||t?.title||'Задача',t?.desc||''].filter(Boolean).join(' — '); return {id:'course-task-'+Math.random().toString(36).slice(2,9),exam:meta.exam,subject:meta.subject,section:meta.section,contentTopic:meta.contentTopic,lessonTitle:meta.lessonTitle,sourceType:'lesson-task',type,text,points:1,difficulty:t?.level||t?.badge||'Базовый',options:[],correctAnswer:type==='number'?{value:answer,tolerance:''}:{value:answer,caseSensitive:false},explanation:t?.steps||'',source:`Курс ФИЗМАТ · Задачи · ${meta.lessonTitle}`,imageUrl:t?.solutionImage||'',courseMeta:meta};}
+function normalizeLessonQuestionToConstructorQuestion(q,meta){if((q?.type||'')==='choice'){return {id:'course-task-'+Math.random().toString(36).slice(2,9),exam:meta.exam,subject:meta.subject,section:meta.section,contentTopic:meta.contentTopic,lessonTitle:meta.lessonTitle,sourceType:'lesson-test',type:'single',text:q.text||'',points:1,difficulty:'Базовый',options:(q.opts||[]).map((o,i)=>({id:'o'+(i+1),text:o||'',correct:Number(q.correct)===i})),correctAnswer:null,explanation:q.explanation||'',source:`Курс ФИЗМАТ · Тесты · ${meta.lessonTitle}`,imageUrl:q.imageUrl||'',courseMeta:meta};}
+const ans=q?.answer??''; const t=toQuestionTypeByAnswer(ans); return {id:'course-task-'+Math.random().toString(36).slice(2,9),exam:meta.exam,subject:meta.subject,section:meta.section,contentTopic:meta.contentTopic,lessonTitle:meta.lessonTitle,sourceType:'lesson-test',type:t,text:q?.text||'',points:1,difficulty:'Базовый',options:[],correctAnswer:t==='number'?{value:String(ans),tolerance:''}:{value:String(ans),caseSensitive:false},explanation:q?.explanation||'',source:`Курс ФИЗМАТ · Тесты · ${meta.lessonTitle}`,imageUrl:q?.imageUrl||'',courseMeta:meta};}
+function normalizeSpecialTestToConstructorQuestion(item,meta){if(!item||!item.prompt||!Array.isArray(item.variants)) return null; return {id:'course-task-'+Math.random().toString(36).slice(2,9),exam:meta.exam,subject:meta.subject,section:meta.section,contentTopic:meta.contentTopic,lessonTitle:meta.lessonTitle,sourceType:'special-test',type:'single',text:item.prompt,points:1,difficulty:'Базовый',options:item.variants.map((v,i)=>({id:'o'+(i+1),text:(v&&v.text)||String(v||''),correct:Number(item.correct)===i})),correctAnswer:null,explanation:item.explanation||'',source:`Курс ФИЗМАТ · Спецтест · ${meta.lessonTitle}`,imageUrl:item.imageUrl||'',courseMeta:meta};}
+function buildCourseTaskBank(){const bank=[]; Object.entries(COURSES||{}).forEach(([courseKey,c])=>{(c.modules||[]).forEach((m,mi)=>{(m.lessons||[]).forEach((ld,li)=>{const meta={courseKey,moduleIndex:mi,lessonIndex:li,sourceType:'lesson-task',exam:c.exam||'ЕГЭ',subject:c.subject||'Физика',section:m.name||'Раздел',contentTopic:ld.title||'Тема',lessonTitle:ld.title||'Тема'}; (ld.tasks||[]).forEach(t=>bank.push(normalizeLessonTaskToConstructorQuestion(t,meta))); (ld.questions||[]).forEach(q=>bank.push(normalizeLessonQuestionToConstructorQuestion(q,{...meta,sourceType:'lesson-test'}))); (ld.specialTests||[]).forEach(st=>{const n=normalizeSpecialTestToConstructorQuestion(st,{...meta,sourceType:'special-test'}); if(n) bank.push(n);});});});}); return bank;}
+function renderGeneratorTopicRows(){const mount=document.getElementById('generatorTopicRows'); if(!mount) return; const f=generatorState.filters; const grouped={}; generatorState.courseBank.filter(x=>(!f.exam||x.exam===f.exam)&&(!f.subject||x.subject===f.subject)&&(!f.section||x.section===f.section)&&((f.source==='all')||(f.source==='tasks'&&x.sourceType==='lesson-task')||(f.source==='tests'&&x.sourceType!=='lesson-task'))).forEach(x=>{const k=[x.exam,x.subject,x.section,x.contentTopic].join('|'); (grouped[k]||(grouped[k]={exam:x.exam,subject:x.subject,section:x.section,topic:x.contentTopic,items:[]})).items.push(x);}); const keys=Object.keys(grouped); if(!keys.length){mount.innerHTML='<div class="generator-empty">В выбранном разделе пока нет заданий для генерации.</div>'; updateGeneratorSummary(); return;} mount.innerHTML=keys.map(k=>{const g=grouped[k],avail=g.items.length,sel=Math.min(generatorState.selection[k]||0,avail); generatorState.selection[k]=sel; return `<div class="generator-topic-row"><div class="generator-topic-main"><div class="generator-topic-title">${escapeHtml(g.topic)}</div><div class="generator-topic-meta">${escapeHtml(g.exam+' · '+g.subject+' · '+g.section)} · Доступно: ${avail} заданий</div></div><div class="generator-count"><button class="generator-minus" ${avail? '':'disabled'} onclick="updateGeneratorTopicCount('${k}',-1)">-</button><input value="${sel}" style="width:44px;text-align:center" readonly><button class="generator-plus" ${avail? '':'disabled'} onclick="updateGeneratorTopicCount('${k}',1)">+</button></div></div>`;}).join(''); updateGeneratorSummary(); }
+function updateGeneratorTopicCount(k,d){const max=(document.querySelectorAll('.generator-topic-row').length, (()=>{const [exam,subject,section,topic]=k.split('|'); return generatorState.courseBank.filter(x=>x.exam===exam&&x.subject===subject&&x.section===section&&x.contentTopic===topic).length;})()); const cur=generatorState.selection[k]||0; generatorState.selection[k]=Math.max(0,Math.min(max,cur+d)); renderGeneratorTopicRows();}
+function selectOneFromEveryTopic(){Object.keys(generatorState.selection).forEach(k=>generatorState.selection[k]=Math.max(1,generatorState.selection[k]||0)); renderGeneratorTopicRows();}
+function resetGeneratorSelection(){generatorState.selection={}; generatorState.result=null; renderTestsGeneratorPage();}
+function generateTestFromCourseBank(){const picked=[]; const usedTopics=new Set(); Object.entries(generatorState.selection).forEach(([k,count])=>{if(!count) return; const [exam,subject,section,topic]=k.split('|'); let pool=generatorState.courseBank.filter(x=>x.exam===exam&&x.subject===subject&&x.section===section&&x.contentTopic===topic); for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]];} picked.push(...pool.slice(0,count)); usedTopics.add(k);}); if(!picked.length){alert('Выберите хотя бы одну тему и количество заданий.'); return;} const exam=generatorState.filters.exam||picked[0].exam||'ЕГЭ'; const subject=generatorState.filters.subject||picked[0].subject||'Физика'; const test={id:'test-'+Date.now(),title:`Сгенерированный тест · ${exam} · ${subject}`,exam,subject,section:'Сборный тест',contentTopic:'Из курса',status:'Черновик',settings:{timeLimit:30,attempts:1,shuffleQuestions:true,shuffleAnswers:true,description:'Тест сгенерирован из заданий курса.'},startPage:{studentTitle:'Сгенерированный тест',instruction:'Внимательно выполните задания. После завершения тест будет проверен автоматически.',collectFullName:true,collectClass:true,collectEmail:false,collectPhone:false},style:{theme:'dark',accent:'cyan',textSize:'normal',background:'standard',showTimer:true,showProgress:true},questions:picked,results:[]}; TESTS_DATA.push(test); saveTestsData(); generatorState.result={id:test.id,title:test.title,qc:picked.length,tc:usedTopics.size,sources:[...new Set(picked.map(x=>x.sourceType))]}; renderGeneratorResult();}
+function renderGeneratorResult(){const m=document.getElementById('generatorResult'); if(!m||!generatorState.result) return; const r=generatorState.result; m.innerHTML=`<div class="generator-result"><h3>Тест создан</h3><div>${escapeHtml(r.title)}</div><div>Заданий: ${r.qc} · Тем: ${r.tc}</div><div>Источники: ${escapeHtml(r.sources.join(', '))}</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><a class="tests-editor-save" href="#test/edit/${r.id}">Открыть редактор теста</a><a class="tests-editor-back" href="#test/preview/${r.id}">Открыть предпросмотр</a><a class="tests-editor-back" href="#tests">Перейти к списку тестов</a><button class="tests-editor-back" onclick="resetGeneratorSelection()">Создать ещё один тест</button></div></div>`;}
+function updateGeneratorSummary(){const total=Object.values(generatorState.selection).reduce((s,v)=>s+(Number(v)||0),0); const topics=Object.values(generatorState.selection).filter(v=>Number(v)>0).length; const c=document.getElementById('generatorSummary'); if(c) c.innerHTML=`<div><b>Выбрано:</b></div><div>тем: ${topics}</div><div>заданий: ${total}</div>`;}
+function renderTestsGeneratorPage(){hideAll(); const page=document.getElementById('tests-generator-page'); if(!page) return; page.style.display='block'; document.getElementById('backBtn')?.classList.add('on'); setBackHref('#tests'); document.getElementById('modeToggle')?.classList.remove('on'); if(!generatorState.courseBank.length) generatorState.courseBank=buildCourseTaskBank(); const exams=[...new Set(generatorState.courseBank.map(x=>x.exam))]; const subjects=[...new Set(generatorState.courseBank.filter(x=>!generatorState.filters.exam||x.exam===generatorState.filters.exam).map(x=>x.subject))]; const sections=[...new Set(generatorState.courseBank.filter(x=>(!generatorState.filters.exam||x.exam===generatorState.filters.exam)&&(!generatorState.filters.subject||x.subject===generatorState.filters.subject)).map(x=>x.section))]; page.innerHTML=`<div class="tests-generator-wrap"><a class="tests-editor-back" href="#tests">← Назад к списку тестов</a><h2>Генератор теста из курса</h2><div style="color:var(--gray)">Выберите темы курса и количество заданий, затем создайте тест.</div><div class="generator-steps"><span class="generator-step active">1. Создание</span><span class="generator-step">2. Проверка</span><span class="generator-step">3. Итоги</span></div><div class="generator-layout"><div class="generator-list"><div style="display:grid;grid-template-columns:repeat(4,minmax(120px,1fr));gap:8px;margin-bottom:10px"><select onchange="generatorState.filters.exam=this.value;renderTestsGeneratorPage()"><option value="">Экзамен</option>${exams.map(x=>`<option ${generatorState.filters.exam===x?'selected':''}>${x}</option>`).join('')}</select><select onchange="generatorState.filters.subject=this.value;renderTestsGeneratorPage()"><option value="">Предмет</option>${subjects.map(x=>`<option ${generatorState.filters.subject===x?'selected':''}>${x}</option>`).join('')}</select><select onchange="generatorState.filters.section=this.value;renderTestsGeneratorPage()"><option value="">Раздел</option>${sections.map(x=>`<option ${generatorState.filters.section===x?'selected':''}>${x}</option>`).join('')}</select><select onchange="generatorState.filters.source=this.value;renderTestsGeneratorPage()"><option value="all" ${generatorState.filters.source==='all'?'selected':''}>Задачи + тесты</option><option value="tasks" ${generatorState.filters.source==='tasks'?'selected':''}>Только задачи</option><option value="tests" ${generatorState.filters.source==='tests'?'selected':''}>Только тесты</option></select></div><div id="generatorTopicRows"></div></div><div class="generator-summary"><div class="generator-summary-card"><div id="generatorSummary"></div><div style="margin-top:10px"><button class="generator-generate" onclick="generateTestFromCourseBank()">Сгенерировать тест</button></div><div style="margin-top:8px"><button class="generator-reset" onclick="resetGeneratorSelection()">Сбросить</button></div><div style="margin-top:8px"><button class="generator-reset" onclick="selectOneFromEveryTopic()">Выбрать все темы по 1 заданию</button></div></div></div></div><div id="generatorResult"></div></div>`; renderGeneratorTopicRows(); renderGeneratorResult(); window.scrollTo(0,0);}
+
 window.addEventListener('hashchange',handleRoute);
 document.addEventListener('DOMContentLoaded',handleRoute);
 document.addEventListener('click',()=>{
@@ -3237,6 +3259,7 @@ function srReset(){
       <h3>Конструктор тестов</h3>
       <div id="testConstructorNav"></div>
       <div id="openTopicTestsMount"></div>
+      <a href="#tests/generator" class="tests-action">⚡ Собрать тест из курса</a>
     </div>
   </div>
 </div>
@@ -3245,6 +3268,7 @@ function srReset(){
 <div id="test-editor-page"></div>
 <div id="test-preview-page" class="test-preview-page"></div>
 <div id="student-test-page" class="student-test-page"></div>
+<div id="tests-generator-page" class="tests-generator-page"></div>
 
 <!-- ═══════ СИМУЛЯТОРЫ ХАБ ═══════ -->
 <div id="simulators-page">
