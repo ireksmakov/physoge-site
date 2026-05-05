@@ -2324,16 +2324,31 @@ function setMode(m){
 /* ============ NAV ============ */
 function hideAll(){
   [
-    'landing','platform','simulators-page','lesson-page','module-page','sim-rupd','sim-zsi','tests-page','test-topic-page',
-    'test-editor-page','test-preview-page','student-test-page','student-variant-page','tests-generator-page','test-generator-page',
-    'student-variant-intro-page','student-variant-solve-page','student-variant-check-page','student-variant-result-page'
+    'landing',
+    'platform',
+    'simulators-page',
+    'module-page',
+    'lesson-page',
+    'sim-rupd',
+    'sim-zsi',
+    'tests-page',
+    'test-topic-page',
+    'test-editor-page',
+    'test-preview-page',
+    'student-test-page',
+    'student-variant-page',
+    'tests-generator-page',
+    'test-generator-page'
   ].forEach(id=>{
     const el=document.getElementById(id);
     if(el){
       el.style.display='none';
-      el.classList.remove('on','open','active','page-active');
-      el.classList.add('page-hidden');
       el.style.pointerEvents='none';
+      el.classList.remove('on');
+      el.classList.remove('open');
+      el.classList.remove('active');
+      el.classList.remove('page-active');
+      el.classList.add('page-hidden');
     }
   });
 
@@ -2371,13 +2386,32 @@ function showLanding(scrollTarget){
 }
 function showTestsPage(){
   hideAll();
-  const testsPage=document.getElementById('tests-page');
-  if(testsPage){testsPage.style.display='block';testsPage.style.pointerEvents='auto';testsPage.classList.remove('page-hidden');testsPage.classList.add('page-active');}
+
+  const page=document.getElementById('tests-page');
+  if(!page){
+    console.error('tests-page not found');
+    return;
+  }
+
+  page.style.display='block';
+  page.style.pointerEvents='auto';
+  page.classList.remove('page-hidden');
+  page.classList.add('page-active');
+
   loadTestsData();
   renderTestConstructorNavigation();
-  document.getElementById('backBtn').classList.add('on');
+  renderTopicTests();
+
+  const backBtn=document.getElementById('backBtn');
+  if(backBtn) backBtn.classList.add('on');
+
   setBackHref('#home');
-  document.getElementById('modeToggle').classList.remove('on');
+
+  const modeToggle=document.getElementById('modeToggle');
+  if(modeToggle) modeToggle.classList.remove('on');
+
+  updateActiveNav('#tests');
+
   window.scrollTo(0,0);
 }
 function renderTestTopicPage(){
@@ -2638,6 +2672,70 @@ function renderGeneratorResult(){const m=document.getElementById('generatorResul
 function updateGeneratorSummary(){const total=Object.values(generatorState.selection).reduce((s,v)=>s+(Number(v)||0),0); const topics=Object.values(generatorState.selection).filter(v=>Number(v)>0).length; const c=document.getElementById('generatorSummary'); if(c) c.innerHTML=`<div><b>Выбрано:</b></div><div>тем: ${topics}</div><div>заданий: ${total}</div>`;}
 function renderTestsGeneratorPage(){hideAll(); const page=document.getElementById('tests-generator-page'); if(!page) return; page.style.display='block'; page.style.pointerEvents='auto'; page.classList.remove('page-hidden'); page.classList.add('page-active'); document.getElementById('backBtn')?.classList.add('on'); setBackHref('#tests'); document.getElementById('modeToggle')?.classList.remove('on'); if(!generatorState.courseBank.length) generatorState.courseBank=buildCourseTaskBank(); const exams=[...new Set(generatorState.courseBank.map(x=>x.exam))]; const subjects=[...new Set(generatorState.courseBank.filter(x=>!generatorState.filters.exam||x.exam===generatorState.filters.exam).map(x=>x.subject))]; const sections=[...new Set(generatorState.courseBank.filter(x=>(!generatorState.filters.exam||x.exam===generatorState.filters.exam)&&(!generatorState.filters.subject||x.subject===generatorState.filters.subject)).map(x=>x.section))]; page.innerHTML=`<div class="tests-generator-wrap"><a class="tests-editor-back" href="#tests">← Назад к списку тестов</a><h2>Генератор теста из курса</h2><div style="color:var(--gray)">Выберите темы курса и количество заданий, затем создайте тест.</div><div class="generator-steps"><span class="generator-step active">1. Создание</span><span class="generator-step">2. Проверка</span><span class="generator-step">3. Итоги</span></div><div class="generator-layout"><div class="generator-list"><div style="display:grid;grid-template-columns:repeat(4,minmax(120px,1fr));gap:8px;margin-bottom:10px"><select onchange="generatorState.filters.exam=this.value;renderTestsGeneratorPage()"><option value="">Экзамен</option>${exams.map(x=>`<option ${generatorState.filters.exam===x?'selected':''}>${x}</option>`).join('')}</select><select onchange="generatorState.filters.subject=this.value;renderTestsGeneratorPage()"><option value="">Предмет</option>${subjects.map(x=>`<option ${generatorState.filters.subject===x?'selected':''}>${x}</option>`).join('')}</select><select onchange="generatorState.filters.section=this.value;renderTestsGeneratorPage()"><option value="">Раздел</option>${sections.map(x=>`<option ${generatorState.filters.section===x?'selected':''}>${x}</option>`).join('')}</select><select onchange="generatorState.filters.source=this.value;renderTestsGeneratorPage()"><option value="all" ${generatorState.filters.source==='all'?'selected':''}>Задачи + тесты</option><option value="tasks" ${generatorState.filters.source==='tasks'?'selected':''}>Только задачи</option><option value="tests" ${generatorState.filters.source==='tests'?'selected':''}>Только тесты</option></select></div><div id="generatorTopicRows"></div></div><div class="generator-summary"><div class="generator-summary-card"><div id="generatorSummary"></div><div style="margin-top:10px"><button class="generator-generate" onclick="generateTestFromCourseBank()">Сгенерировать тест</button></div><div style="margin-top:8px"><button class="generator-reset" onclick="resetGeneratorSelection()">Сбросить</button></div><div style="margin-top:8px"><button class="generator-reset" onclick="selectOneFromEveryTopic()">Выбрать все темы по 1 заданию</button></div></div></div></div><div id="generatorResult"></div></div>`; renderGeneratorTopicRows(); renderGeneratorResult(); window.scrollTo(0,0);}
 
+
+function updateActiveNav(hash){
+  document.querySelectorAll('.nav-subj a').forEach(a=>{
+    a.classList.toggle('active',a.getAttribute('href')===hash);
+  });
+}
+
+function showStudentsPage(){
+  updateActiveNav('#students');
+  showLanding('#aud');
+}
+
+function showBankPage(){
+  updateActiveNav('#bank');
+  showLanding('#benefits');
+}
+
+function showSimulatorsPage(){
+  updateActiveNav('#simulators');
+  showSimulators();
+}
+
+function openStudentTestRoute(route){
+  if(route) return openStudentVariantById(route.split('?')[0]);
+  showTestsPage();
+}
+function openTestEditRoute(id){
+  if(id) return renderTestEditorPage(id.split('?')[0]);
+  showTestsPage();
+}
+function openTestResultsRoute(id){
+  if(id) return renderTestResultsPage(id.split('?')[0]);
+  showTestsPage();
+}
+function openTestPreviewRoute(id){
+  if(id) return openTestPreviewById(id.split('?')[0]);
+  showTestsPage();
+}
+
+function handleRoute(){
+  const hash=window.location.hash||'#home';
+
+  if(hash==='#home') return showLanding();
+  if(hash==='#courses') return showCoursesPage();
+  if(hash==='#tests') return showTestsPage();
+  if(hash==='#students') return showStudentsPage();
+  if(hash==='#bank') return showBankPage();
+  if(hash==='#simulators') return showSimulatorsPage();
+  if(hash==='#tests/topic') return renderTestTopicPage();
+  if(hash==='#tests/generator') return renderTestsGeneratorPage();
+
+  if(hash.startsWith('#course/')){
+    const key=hash.replace('#course/','');
+    return openCourse(key);
+  }
+
+  if(hash.startsWith('#test/pass/')) return openStudentTestRoute(hash.slice(11));
+  if(hash.startsWith('#test/edit/')) return openTestEditRoute(hash.slice(11));
+  if(hash.startsWith('#test/results/')) return openTestResultsRoute(hash.slice(14));
+  if(hash.startsWith('#test/preview/')) return openTestPreviewRoute(hash.slice(14));
+
+  return showLanding();
+}
+
 window.addEventListener('hashchange',handleRoute);
 document.addEventListener('DOMContentLoaded',handleRoute);
 document.addEventListener('click',()=>{
@@ -2646,12 +2744,14 @@ document.addEventListener('click',()=>{
 });
 
 function showCoursesPage(){
+  updateActiveNav('#courses');
   const firstCourseKey=Object.keys(COURSES||{})[0];
   if(firstCourseKey){openCourse(firstCourseKey); return;}
   showLanding();
 }
 
 function showSimulators(examType){
+  updateActiveNav('#simulators');
   hideAll();
   const simulatorsPage=document.getElementById('simulators-page');
   if(simulatorsPage){simulatorsPage.style.display='block';simulatorsPage.style.pointerEvents='auto';simulatorsPage.classList.remove('page-hidden');simulatorsPage.classList.add('page-active');}
