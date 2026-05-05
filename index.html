@@ -14,7 +14,10 @@ html{scroll-behavior:smooth}
 body{background:radial-gradient(circle at 80% 18%,rgba(8,216,255,.12),transparent 32%),linear-gradient(180deg,#01060e 0%,#020a15 55%,#030f1b 100%);color:var(--white);font-family:var(--fb);line-height:1.6;overflow-x:hidden}
 a{text-decoration:none;color:inherit}
 /* HEADER */
-header{position:fixed;top:0;left:0;right:0;z-index:300;background:rgba(2,9,20,0.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+header{position:fixed;top:0;left:0;right:0;z-index:10000;background:rgba(2,9,20,0.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+.page-hidden{display:none !important;pointer-events:none !important}
+.page-active{pointer-events:auto !important}
+
 .nav-inner{max-width:1200px;margin:0 auto;padding:0 20px;height:64px;display:flex;align-items:center;gap:10px}
 .logo{font-family:var(--fh);font-size:17px;font-weight:900;cursor:pointer;flex-shrink:0}
 .logo span{color:var(--cyan)}
@@ -2320,10 +2323,37 @@ function setMode(m){
 
 /* ============ NAV ============ */
 function hideAll(){
-  ['landing','platform','simulators-page','lesson-page','sim-rupd','sim-zsi','tests-page','test-topic-page','test-editor-page','test-preview-page','student-test-page','test-generator-page','tests-generator-page'].forEach(id=>{
+  [
+    'landing','platform','simulators-page','lesson-page','module-page','sim-rupd','sim-zsi','tests-page','test-topic-page',
+    'test-editor-page','test-preview-page','student-test-page','student-variant-page','tests-generator-page','test-generator-page',
+    'student-variant-intro-page','student-variant-solve-page','student-variant-check-page','student-variant-result-page'
+  ].forEach(id=>{
     const el=document.getElementById(id);
-    if(el){el.style.display='none';el.classList.remove('on');}
+    if(el){
+      el.style.display='none';
+      el.classList.remove('on','open','active','page-active');
+      el.classList.add('page-hidden');
+      el.style.pointerEvents='none';
+    }
   });
+
+  document.body.classList.remove('task-board-lock');
+
+  const taskBoardOverlay=document.getElementById('taskBoardOverlay');
+  if(taskBoardOverlay){
+    taskBoardOverlay.classList.remove('open','page-active');
+    taskBoardOverlay.classList.add('page-hidden');
+    taskBoardOverlay.style.display='none';
+    taskBoardOverlay.style.pointerEvents='none';
+  }
+
+  const vlFsOverlay=document.getElementById('vlFsOverlay');
+  if(vlFsOverlay){
+    vlFsOverlay.classList.remove('active','page-active');
+    vlFsOverlay.classList.add('page-hidden');
+    vlFsOverlay.style.display='none';
+    vlFsOverlay.style.pointerEvents='none';
+  }
 }
 function setBackHref(hash){
   const back=document.getElementById('backBtn');
@@ -2331,7 +2361,8 @@ function setBackHref(hash){
 }
 function showLanding(scrollTarget){
   hideAll();
-  document.getElementById('landing').style.display='block';
+  const landing=document.getElementById('landing');
+  if(landing){landing.style.display='block';landing.style.pointerEvents='auto';landing.classList.remove('page-hidden');landing.classList.add('page-active');}
   document.getElementById('backBtn').classList.remove('on');
   setBackHref('#home');
   document.getElementById('modeToggle').classList.remove('on');
@@ -2340,7 +2371,8 @@ function showLanding(scrollTarget){
 }
 function showTestsPage(){
   hideAll();
-  document.getElementById('tests-page').style.display='block';
+  const testsPage=document.getElementById('tests-page');
+  if(testsPage){testsPage.style.display='block';testsPage.style.pointerEvents='auto';testsPage.classList.remove('page-hidden');testsPage.classList.add('page-active');}
   loadTestsData();
   renderTestConstructorNavigation();
   document.getElementById('backBtn').classList.add('on');
@@ -2353,7 +2385,7 @@ function renderTestTopicPage(){
   loadTestsData();
   const page=document.getElementById('test-topic-page');
   if(!page) return;
-  page.style.display='block';
+  page.style.display='block'; page.style.pointerEvents='auto'; page.classList.remove('page-hidden'); page.classList.add('page-active');
   page.innerHTML=`<div class="test-topic-wrap"><a class="tests-editor-back" href="#tests">← Назад к выбору темы</a><div class="tests-panel" style="margin-top:12px"><div id="topicTestsContainer"></div></div></div>`;
   renderTopicTests();
   document.getElementById('backBtn').classList.add('on');
@@ -2466,7 +2498,7 @@ function createTestInSelectedContentTopic(){if(!(selectedExam&&selectedSubject&&
 function getSelectedTest(){return TESTS_DATA.find(t=>t.id===selectedTestId&&t.exam===selectedExam&&t.subject===selectedSubject&&t.section===selectedSection&&t.contentTopic===selectedContentTopic);} 
 function copySelectedTest(){const t=getSelectedTest(); if(!t){alert('Сначала выберите тест для копирования.');return;} const c=JSON.parse(JSON.stringify(t)); c.id=`test-${Date.now()}-${Math.random().toString(36).slice(2,8)}`; c.title=t.title+' (копия)'; c.status='Черновик'; TESTS_DATA.unshift(c); selectedTestId=c.id; saveTestsData(); rerenderCurrentTestUI();}
 function editSelectedTest(){const t=getSelectedTest(); if(!t){alert('Сначала выберите тест.');return;} window.location.hash=`#test/edit/${t.id}`;} 
-function renderTestEditorPage(testId){const page=document.getElementById('test-editor-page'); if(!page) return; const t=findTestById(testId); hideAll(); page.style.display='block'; if(!t){page.innerHTML='<div class="tests-wrap"><div class="tests-topic-empty">Тест не найден. <a class="tests-editor-back" href="#tests">Вернуться к списку</a></div></div>'; return;} selectedExam=t.exam; selectedSubject=t.subject; selectedSection=t.section; selectedContentTopic=t.contentTopic; selectedTestId=t.id; testsEditorMode=true; testsEditorMessage=''; if(!testsEditorTab) testsEditorTab='basic'; page.innerHTML=`<div class="tests-wrap"><a class="tests-editor-back" href="#tests">← Назад к списку тестов</a><div style="margin-top:12px">${renderTestEditor()}</div></div>`; window.scrollTo(0,0);}
+function renderTestEditorPage(testId){const page=document.getElementById('test-editor-page'); if(!page) return; const t=findTestById(testId); hideAll(); page.style.display='block'; page.style.pointerEvents='auto'; page.classList.remove('page-hidden'); page.classList.add('page-active'); if(!t){page.innerHTML='<div class="tests-wrap"><div class="tests-topic-empty">Тест не найден. <a class="tests-editor-back" href="#tests">Вернуться к списку</a></div></div>'; return;} selectedExam=t.exam; selectedSubject=t.subject; selectedSection=t.section; selectedContentTopic=t.contentTopic; selectedTestId=t.id; testsEditorMode=true; testsEditorMessage=''; if(!testsEditorTab) testsEditorTab='basic'; page.innerHTML=`<div class="tests-wrap"><a class="tests-editor-back" href="#tests">← Назад к списку тестов</a><div style="margin-top:12px">${renderTestEditor()}</div></div>`; window.scrollTo(0,0);}
 function backToTestsList(){testsEditorMode=false; testsEditorMessage=''; testsEditorTab='basic'; rerenderCurrentTestUI();}
 function showEditorStubTabMessage(){testsEditorMessage='Эта вкладка будет добавлена на следующем этапе.'; rerenderCurrentTestUI();}
 function ensureTestSettings(t){if(!t.settings||typeof t.settings!=='object') t.settings={}; if(!(Number(t.settings.timeLimit)>0)) t.settings.timeLimit=30; if(!(Number(t.settings.attempts)>0)) t.settings.attempts=1; if(typeof t.settings.shuffleQuestions!=='boolean') t.settings.shuffleQuestions=true; if(typeof t.settings.shuffleAnswers!=='boolean') t.settings.shuffleAnswers=true; if(typeof t.settings.description!=='string') t.settings.description=''; return t.settings;}
@@ -2501,8 +2533,8 @@ let previewSession={testId:null,stage:'start',questionIndex:0,showAnswers:false,
 function previewSelectedTest(){const t=getSelectedTest(); if(!t){alert('Сначала выберите тест для предпросмотра.');return;} openTestPreview(t.id);}
 function ensureTestPreviewPage(){let el=document.getElementById('test-preview-page'); if(el) return el; el=document.createElement('div'); el.id='test-preview-page'; el.className='test-preview-page'; document.body.appendChild(el); return el;}
 function getPreviewTest(){return TESTS_DATA.find(t=>t.id===previewSession.testId)||null;}
-function openTestPreview(testId){const t=TESTS_DATA.find(x=>x.id===testId); if(!t) return; ensureTestStartPage(t); ensureConstructorQuestions(t); previewSession={testId:t.id,stage:'start',questionIndex:0,showAnswers:false,answers:{},lastResult:null,student:{fullName:'',className:'',email:'',phone:''}}; ['landing','platform','tests-page','simulators-page'].forEach(id=>{const n=document.getElementById(id); if(n) n.style.display='none';}); const p=ensureTestPreviewPage(); p.style.display='block'; renderTestPreviewPage();}
-function closeTestPreviewToBuilder(){const p=document.getElementById('test-preview-page'); if(p) p.style.display='none'; const tests=document.getElementById('tests-page'); if(tests) tests.style.display='block'; rerenderCurrentTestUI(); window.scrollTo(0,0);}
+function openTestPreview(testId){const t=TESTS_DATA.find(x=>x.id===testId); if(!t) return; ensureTestStartPage(t); ensureConstructorQuestions(t); previewSession={testId:t.id,stage:'start',questionIndex:0,showAnswers:false,answers:{},lastResult:null,student:{fullName:'',className:'',email:'',phone:''}}; hideAll(); const p=ensureTestPreviewPage(); p.style.display='block'; p.style.pointerEvents='auto'; p.classList.remove('page-hidden'); p.classList.add('page-active'); renderTestPreviewPage();}
+function closeTestPreviewToBuilder(){const p=document.getElementById('test-preview-page'); if(p){p.style.display='none'; p.style.pointerEvents='none'; p.classList.remove('page-active'); p.classList.add('page-hidden');} const tests=document.getElementById('tests-page'); if(tests){tests.style.display='block'; tests.style.pointerEvents='auto'; tests.classList.remove('page-hidden'); tests.classList.add('page-active');} rerenderCurrentTestUI(); window.scrollTo(0,0);}
 function startPreviewQuestions(){previewSession.stage='question'; previewSession.questionIndex=0; renderTestPreviewPage();}
 function previewPrevQuestion(){if(previewSession.questionIndex>0){previewSession.questionIndex--; renderTestPreviewPage();}}
 function previewNextQuestion(){const t=getPreviewTest(); const qs=(t&&t.questions)||[]; if(previewSession.questionIndex<qs.length-1){previewSession.questionIndex++; renderTestPreviewPage();}}
@@ -2570,7 +2602,7 @@ function saveAttempts(arr){localStorage.setItem(STUDENT_ATTEMPTS_KEY,JSON.string
 function loadStudentAttempt(testId){const all=loadAttempts(); return all.find(a=>a.testId===testId)||null;}
 function saveStudentAttempt(attempt){const all=loadAttempts(); const i=all.findIndex(a=>a.attemptId===attempt.attemptId); if(i>=0) all[i]=attempt; else all.push(attempt); saveAttempts(all); return attempt;}
 function renderStudentVariantSteps(step){const map={intro:1,solve:2,check:3,result:4}; const cur=map[step]||1; return `<div class="student-variant-steps">${['Создание','Решение','Проверка','Итоги'].map((n,i)=>`<div class="student-variant-step ${i+1===cur?'active':''}">${i+1<cur?'✓':i+1} ${n}</div>`).join('')}</div>`;}
-function openStudentVariantRoute(id,step){const t=findTestById(id); hideAll(); const p=document.getElementById('student-variant-page'); if(!t||!p){renderTestNotFound(); return;} const test=getSafeTest(t); p.style.display='block'; let attempt=loadStudentAttempt(test.id); if(!attempt){attempt={attemptId:'attempt-'+Date.now(),testId:test.id,startedAt:new Date().toISOString(),submittedAt:null,student:{fullName:'',className:'',email:'',phone:''},answers:{},autoCheck:{score:0,maxScore:0,items:[]},manualCheck:{score:0,maxScore:0,items:[]},finalResult:{totalScore:0,maxScore:0,percent:0,grade:'2'},status:'started'}; saveStudentAttempt(attempt);} if(step==='check') return renderStudentVariantCheck(test,attempt); if(step==='result') return renderStudentVariantResult(test,attempt); return renderStudentVariantIntro(test);}
+function openStudentVariantRoute(id,step){const t=findTestById(id); hideAll(); const p=document.getElementById('student-variant-page'); if(!t||!p){renderTestNotFound(); return;} const test=getSafeTest(t); p.style.display='block'; p.style.pointerEvents='auto'; p.classList.remove('page-hidden'); p.classList.add('page-active'); let attempt=loadStudentAttempt(test.id); if(!attempt){attempt={attemptId:'attempt-'+Date.now(),testId:test.id,startedAt:new Date().toISOString(),submittedAt:null,student:{fullName:'',className:'',email:'',phone:''},answers:{},autoCheck:{score:0,maxScore:0,items:[]},manualCheck:{score:0,maxScore:0,items:[]},finalResult:{totalScore:0,maxScore:0,percent:0,grade:'2'},status:'started'}; saveStudentAttempt(attempt);} if(step==='check') return renderStudentVariantCheck(test,attempt); if(step==='result') return renderStudentVariantResult(test,attempt); return renderStudentVariantIntro(test);}
 function renderStudentVariantIntro(test){const p=document.getElementById('student-variant-page'); p.innerHTML=`<div class="student-variant-hero"><div class="student-variant-intro"><div class="student-variant-meta"><div>${escapeHtml(test.exam||'ЕГЭ')} · ${escapeHtml(test.subject||'Физика')}</div><h1>${escapeHtml(test.title||'Тест без названия')}</h1><div>${escapeHtml(test.settings?.description||'')}</div><div>Дата: ${new Date().toLocaleDateString('ru-RU')} · Заданий: ${(test.questions||[]).length}</div><div class="student-variant-actions"><button class="tests-editor-save" onclick="window.location.hash='#test/pass/${test.id}?step=solve';renderStudentVariantSolve(findTestById('${test.id}'),loadStudentAttempt('${test.id}'))">Приступить к выполнению</button><button class="tests-editor-back" onclick="copyStudentLinkById('${test.id}')">Скопировать ссылку</button></div><div class="student-variant-meta">Как проходит проверка: автопроверка для тестовых типов, ручная — для развернутых ответов.</div></div><div class="student-variant-meta"><h3>Иллюстрация</h3><div style="height:280px;background:linear-gradient(135deg,#dff0ff,#f5f9ff);border-radius:12px"></div></div></div></div>`;}
 function renderAnswerInput(q,a){if(q.type==='single') return (q.options||[]).map((o,i)=>`<label><input type='radio' name='sq_${q.id}' ${a===i?'checked':''} onchange="setStudentAnswer('${q.id}',${i})"> ${escapeHtml(o.text||'')}</label>`).join('<br>'); if(q.type==='multiple') return (q.options||[]).map((o,i)=>`<label><input type='checkbox' ${(Array.isArray(a)&&a.includes(i))?'checked':''} onchange="toggleStudentAnswer('${q.id}',${i},this.checked)"> ${escapeHtml(o.text||'')}</label>`).join('<br>'); if(q.type==='number') return `<input type='number' value='${escapeHtml(a??'')}' oninput="setStudentAnswer('${q.id}',this.value)">`; if(q.type==='text'||q.type==='open') return `<textarea oninput="setStudentAnswer('${q.id}',this.value)">${escapeHtml(a||'')}</textarea>`; return '<div>Этот тип вопроса пока отображается в упрощённом режиме.</div>';}
 function setStudentAnswer(qid,val){const testId=(window.location.hash.match(/#test\/(?:pass|check|result)\/([^?]+)/)||[])[1]; const a=loadStudentAttempt(testId); if(!a) return; a.answers[qid]=val; saveStudentAttempt(a);} function toggleStudentAnswer(qid,i,on){const testId=(window.location.hash.match(/#test\/(?:pass|check|result)\/([^?]+)/)||[])[1]; const a=loadStudentAttempt(testId); if(!a) return; const arr=Array.isArray(a.answers[qid])?a.answers[qid]:[]; a.answers[qid]=on?[...new Set([...arr,i])]:arr.filter(x=>x!==i); saveStudentAttempt(a);}
@@ -2583,7 +2615,7 @@ function goStudentResult(testId){const t=findTestById(testId); const a=loadStude
 function renderStudentVariantResult(test,attempt){const p=document.getElementById('student-variant-page'); const rows=(attempt.autoCheck.items||[]).map(it=>`<tr><td>${it.number}</td><td>${it.score}</td><td>${it.maxScore}</td></tr>`).join(''); p.innerHTML=`<div class='student-variant-layout'><div class='student-variant-main'>${renderStudentVariantSteps('result')}<h2>Ваши результаты</h2><div class='student-result-table'><table><thead><tr><th>№</th><th>Балл</th><th>Макс</th></tr></thead><tbody>${rows}</tbody></table></div></div><div class='student-result-summary'><div>Итог: ${attempt.finalResult.totalScore}/${attempt.finalResult.maxScore}</div><div>${attempt.finalResult.percent}% · оценка ${attempt.finalResult.grade}</div><a class='tests-editor-back' href='#tests'>Вернуться к тестам</a></div></div>`;}
 async function copyStudentLinkById(id){const link=window.location.origin+window.location.pathname+'#test/pass/'+id; try{if(navigator.clipboard&&navigator.clipboard.writeText){await navigator.clipboard.writeText(link);} else {const ta=document.createElement('textarea');ta.value=link;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();} showTestsNotice('Ссылка скопирована','success');}catch(e){alert(link);}}
 function showHomeFromRoute(){window.location.hash='#home';}
-function renderTestNotFound(){const p=document.getElementById('student-test-page'); if(!p) return; p.style.display='block'; p.innerHTML='<div class="student-test-wrap"><div class="student-test-error"><h2>Тест не найден</h2><div>Возможно, тест был удалён.</div><a class="tests-editor-back" href="#home">На главную</a></div></div>';} 
+function renderTestNotFound(){const p=document.getElementById('student-test-page'); if(!p) return; p.style.display='block'; p.style.pointerEvents='auto'; p.classList.remove('page-hidden'); p.classList.add('page-active'); p.innerHTML='<div class="student-test-wrap"><div class="student-test-error"><h2>Тест не найден</h2><div>Возможно, тест был удалён.</div><a class="tests-editor-back" href="#home">На главную</a></div></div>';} 
 function toggleSimMenu(event){
   event.stopPropagation();
   const m=document.getElementById('simMenu');
@@ -2604,7 +2636,7 @@ function resetGeneratorSelection(){generatorState.selection={}; generatorState.r
 function generateTestFromCourseBank(){const picked=[]; const usedTopics=new Set(); Object.entries(generatorState.selection).forEach(([k,count])=>{if(!count) return; const [exam,subject,section,topic]=k.split('|'); let pool=generatorState.courseBank.filter(x=>x.exam===exam&&x.subject===subject&&x.section===section&&x.contentTopic===topic); for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]];} picked.push(...pool.slice(0,count)); usedTopics.add(k);}); if(!picked.length){alert('Выберите хотя бы одну тему и количество заданий.'); return;} const exam=generatorState.filters.exam||picked[0].exam||'ЕГЭ'; const subject=generatorState.filters.subject||picked[0].subject||'Физика'; const test={id:'test-'+Date.now(),title:`Сгенерированный тест · ${exam} · ${subject}`,exam,subject,section:'Сборный тест',contentTopic:'Из курса',status:'Черновик',settings:{timeLimit:30,attempts:1,shuffleQuestions:true,shuffleAnswers:true,description:'Тест сгенерирован из заданий курса.'},startPage:{studentTitle:'Сгенерированный тест',instruction:'Внимательно выполните задания. После завершения тест будет проверен автоматически.',collectFullName:true,collectClass:true,collectEmail:false,collectPhone:false},style:{theme:'dark',accent:'cyan',textSize:'normal',background:'standard',showTimer:true,showProgress:true},questions:picked,results:[]}; TESTS_DATA.push(test); saveTestsData(); generatorState.result={id:test.id,title:test.title,qc:picked.length,tc:usedTopics.size,sources:[...new Set(picked.map(x=>x.sourceType))]}; renderGeneratorResult();}
 function renderGeneratorResult(){const m=document.getElementById('generatorResult'); if(!m||!generatorState.result) return; const r=generatorState.result; m.innerHTML=`<div class="generator-result"><h3>Тест создан</h3><div>${escapeHtml(r.title)}</div><div>Заданий: ${r.qc} · Тем: ${r.tc}</div><div>Источники: ${escapeHtml(r.sources.join(', '))}</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><a class="tests-editor-save" href="#test/edit/${r.id}">Открыть редактор теста</a><a class="tests-editor-back" href="#test/preview/${r.id}">Открыть предпросмотр</a><a class="tests-editor-back" href="#tests">Перейти к списку тестов</a><button class="tests-editor-back" onclick="resetGeneratorSelection()">Создать ещё один тест</button></div></div>`;}
 function updateGeneratorSummary(){const total=Object.values(generatorState.selection).reduce((s,v)=>s+(Number(v)||0),0); const topics=Object.values(generatorState.selection).filter(v=>Number(v)>0).length; const c=document.getElementById('generatorSummary'); if(c) c.innerHTML=`<div><b>Выбрано:</b></div><div>тем: ${topics}</div><div>заданий: ${total}</div>`;}
-function renderTestsGeneratorPage(){hideAll(); const page=document.getElementById('tests-generator-page'); if(!page) return; page.style.display='block'; document.getElementById('backBtn')?.classList.add('on'); setBackHref('#tests'); document.getElementById('modeToggle')?.classList.remove('on'); if(!generatorState.courseBank.length) generatorState.courseBank=buildCourseTaskBank(); const exams=[...new Set(generatorState.courseBank.map(x=>x.exam))]; const subjects=[...new Set(generatorState.courseBank.filter(x=>!generatorState.filters.exam||x.exam===generatorState.filters.exam).map(x=>x.subject))]; const sections=[...new Set(generatorState.courseBank.filter(x=>(!generatorState.filters.exam||x.exam===generatorState.filters.exam)&&(!generatorState.filters.subject||x.subject===generatorState.filters.subject)).map(x=>x.section))]; page.innerHTML=`<div class="tests-generator-wrap"><a class="tests-editor-back" href="#tests">← Назад к списку тестов</a><h2>Генератор теста из курса</h2><div style="color:var(--gray)">Выберите темы курса и количество заданий, затем создайте тест.</div><div class="generator-steps"><span class="generator-step active">1. Создание</span><span class="generator-step">2. Проверка</span><span class="generator-step">3. Итоги</span></div><div class="generator-layout"><div class="generator-list"><div style="display:grid;grid-template-columns:repeat(4,minmax(120px,1fr));gap:8px;margin-bottom:10px"><select onchange="generatorState.filters.exam=this.value;renderTestsGeneratorPage()"><option value="">Экзамен</option>${exams.map(x=>`<option ${generatorState.filters.exam===x?'selected':''}>${x}</option>`).join('')}</select><select onchange="generatorState.filters.subject=this.value;renderTestsGeneratorPage()"><option value="">Предмет</option>${subjects.map(x=>`<option ${generatorState.filters.subject===x?'selected':''}>${x}</option>`).join('')}</select><select onchange="generatorState.filters.section=this.value;renderTestsGeneratorPage()"><option value="">Раздел</option>${sections.map(x=>`<option ${generatorState.filters.section===x?'selected':''}>${x}</option>`).join('')}</select><select onchange="generatorState.filters.source=this.value;renderTestsGeneratorPage()"><option value="all" ${generatorState.filters.source==='all'?'selected':''}>Задачи + тесты</option><option value="tasks" ${generatorState.filters.source==='tasks'?'selected':''}>Только задачи</option><option value="tests" ${generatorState.filters.source==='tests'?'selected':''}>Только тесты</option></select></div><div id="generatorTopicRows"></div></div><div class="generator-summary"><div class="generator-summary-card"><div id="generatorSummary"></div><div style="margin-top:10px"><button class="generator-generate" onclick="generateTestFromCourseBank()">Сгенерировать тест</button></div><div style="margin-top:8px"><button class="generator-reset" onclick="resetGeneratorSelection()">Сбросить</button></div><div style="margin-top:8px"><button class="generator-reset" onclick="selectOneFromEveryTopic()">Выбрать все темы по 1 заданию</button></div></div></div></div><div id="generatorResult"></div></div>`; renderGeneratorTopicRows(); renderGeneratorResult(); window.scrollTo(0,0);}
+function renderTestsGeneratorPage(){hideAll(); const page=document.getElementById('tests-generator-page'); if(!page) return; page.style.display='block'; page.style.pointerEvents='auto'; page.classList.remove('page-hidden'); page.classList.add('page-active'); document.getElementById('backBtn')?.classList.add('on'); setBackHref('#tests'); document.getElementById('modeToggle')?.classList.remove('on'); if(!generatorState.courseBank.length) generatorState.courseBank=buildCourseTaskBank(); const exams=[...new Set(generatorState.courseBank.map(x=>x.exam))]; const subjects=[...new Set(generatorState.courseBank.filter(x=>!generatorState.filters.exam||x.exam===generatorState.filters.exam).map(x=>x.subject))]; const sections=[...new Set(generatorState.courseBank.filter(x=>(!generatorState.filters.exam||x.exam===generatorState.filters.exam)&&(!generatorState.filters.subject||x.subject===generatorState.filters.subject)).map(x=>x.section))]; page.innerHTML=`<div class="tests-generator-wrap"><a class="tests-editor-back" href="#tests">← Назад к списку тестов</a><h2>Генератор теста из курса</h2><div style="color:var(--gray)">Выберите темы курса и количество заданий, затем создайте тест.</div><div class="generator-steps"><span class="generator-step active">1. Создание</span><span class="generator-step">2. Проверка</span><span class="generator-step">3. Итоги</span></div><div class="generator-layout"><div class="generator-list"><div style="display:grid;grid-template-columns:repeat(4,minmax(120px,1fr));gap:8px;margin-bottom:10px"><select onchange="generatorState.filters.exam=this.value;renderTestsGeneratorPage()"><option value="">Экзамен</option>${exams.map(x=>`<option ${generatorState.filters.exam===x?'selected':''}>${x}</option>`).join('')}</select><select onchange="generatorState.filters.subject=this.value;renderTestsGeneratorPage()"><option value="">Предмет</option>${subjects.map(x=>`<option ${generatorState.filters.subject===x?'selected':''}>${x}</option>`).join('')}</select><select onchange="generatorState.filters.section=this.value;renderTestsGeneratorPage()"><option value="">Раздел</option>${sections.map(x=>`<option ${generatorState.filters.section===x?'selected':''}>${x}</option>`).join('')}</select><select onchange="generatorState.filters.source=this.value;renderTestsGeneratorPage()"><option value="all" ${generatorState.filters.source==='all'?'selected':''}>Задачи + тесты</option><option value="tasks" ${generatorState.filters.source==='tasks'?'selected':''}>Только задачи</option><option value="tests" ${generatorState.filters.source==='tests'?'selected':''}>Только тесты</option></select></div><div id="generatorTopicRows"></div></div><div class="generator-summary"><div class="generator-summary-card"><div id="generatorSummary"></div><div style="margin-top:10px"><button class="generator-generate" onclick="generateTestFromCourseBank()">Сгенерировать тест</button></div><div style="margin-top:8px"><button class="generator-reset" onclick="resetGeneratorSelection()">Сбросить</button></div><div style="margin-top:8px"><button class="generator-reset" onclick="selectOneFromEveryTopic()">Выбрать все темы по 1 заданию</button></div></div></div></div><div id="generatorResult"></div></div>`; renderGeneratorTopicRows(); renderGeneratorResult(); window.scrollTo(0,0);}
 
 window.addEventListener('hashchange',handleRoute);
 document.addEventListener('DOMContentLoaded',handleRoute);
@@ -2613,9 +2645,16 @@ document.addEventListener('click',()=>{
   if(m) m.classList.remove('open');
 });
 
+function showCoursesPage(){
+  const firstCourseKey=Object.keys(COURSES||{})[0];
+  if(firstCourseKey){openCourse(firstCourseKey); return;}
+  showLanding();
+}
+
 function showSimulators(examType){
   hideAll();
-  document.getElementById('simulators-page').style.display='block';
+  const simulatorsPage=document.getElementById('simulators-page');
+  if(simulatorsPage){simulatorsPage.style.display='block';simulatorsPage.style.pointerEvents='auto';simulatorsPage.classList.remove('page-hidden');simulatorsPage.classList.add('page-active');}
   document.getElementById('backBtn').classList.add('on');
   setBackHref('#home');
   document.getElementById('modeToggle').classList.remove('on');
@@ -2640,7 +2679,8 @@ function goBack(){
     document.getElementById('modeToggle').classList.add('on');
   } else {
     hideAll();
-    document.getElementById('simulators-page').style.display='block';
+    const simulatorsPage=document.getElementById('simulators-page');
+  if(simulatorsPage){simulatorsPage.style.display='block';simulatorsPage.style.pointerEvents='auto';simulatorsPage.classList.remove('page-hidden');simulatorsPage.classList.add('page-active');}
     document.getElementById('backBtn').classList.add('on');
     setBackHref('#home');
   }
