@@ -624,6 +624,34 @@ body.edit-mode .et{display:inline}
 .pt-board-btn{width:100%;padding:9px 12px;border-radius:8px;border:1px solid rgba(0,229,255,.22);background:rgba(0,229,255,.08);color:var(--cyan);font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb)}
 .pt-board-btn:hover{background:rgba(0,229,255,.16);border-color:rgba(0,229,255,.38);color:var(--white);box-shadow:0 0 18px rgba(0,229,255,.2);transform:translateY(-1px)}
 
+
+/* ===== TASK 07 PENDULUM IMPACT ANIMATION ===== */
+.task07-anim-lock{overflow:hidden}
+.task07-anim-overlay{position:fixed;inset:0;z-index:12000;display:none;background:radial-gradient(circle at 18% 12%,rgba(0,229,255,.16),transparent 34%),radial-gradient(circle at 78% 18%,rgba(255,140,0,.16),transparent 30%),rgba(2,6,23,.94);backdrop-filter:blur(10px);color:var(--white);padding:18px;box-sizing:border-box}
+.task07-anim-overlay.open{display:flex;animation:taskBoardOverlayFade .24s ease both}
+.task07-anim-modal{width:min(1180px,100%);height:min(820px,100%);margin:auto;display:flex;flex-direction:column;gap:14px;background:linear-gradient(180deg,rgba(11,18,32,.98),rgba(5,10,20,.98));border:1px solid rgba(0,229,255,.24);border-radius:24px;box-shadow:0 34px 90px rgba(0,0,0,.52),0 0 60px rgba(0,229,255,.12);overflow:hidden}
+.task07-anim-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:18px 20px 0}
+.task07-anim-kicker{font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:var(--cyan);margin-bottom:5px}
+.task07-anim-title{font-family:var(--fh);font-size:clamp(22px,2.8vw,34px);line-height:1.05;font-weight:800;color:var(--white)}
+.task07-anim-sub{font-size:13px;color:var(--gray);margin-top:7px;line-height:1.55}
+.task07-anim-close{flex-shrink:0;padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.04);color:var(--white);font:800 13px var(--fb);cursor:pointer;transition:all .18s}
+.task07-anim-close:hover{border-color:rgba(255,140,0,.5);color:var(--orange);background:rgba(255,140,0,.08)}
+.task07-anim-body{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:14px;padding:0 20px 20px;min-height:0;flex:1}
+.task07-anim-stage{position:relative;min-height:420px;border:1px solid rgba(107,122,141,.24);border-radius:20px;background:linear-gradient(180deg,#08111f,#050914);overflow:hidden;box-shadow:inset 0 0 46px rgba(0,229,255,.05)}
+.task07-anim-svg{display:block;width:100%;height:100%;min-height:420px}
+.task07-anim-side{display:flex;flex-direction:column;gap:12px;min-height:0}
+.task07-anim-formulas,.task07-anim-steps{border:1px solid rgba(107,122,141,.22);border-radius:18px;background:rgba(255,255,255,.035);padding:14px}
+.task07-anim-panel-title{font-family:var(--fh);font-size:14px;font-weight:800;color:var(--white);margin-bottom:10px}
+.task07-anim-formula{font-size:14px;line-height:1.55;color:#dbeafe;padding:7px 9px;border-radius:10px;background:rgba(0,229,255,.055);border:1px solid rgba(0,229,255,.12);margin-top:7px}
+.task07-anim-step{display:flex;gap:9px;align-items:flex-start;font-size:12px;line-height:1.45;color:var(--gray);padding:8px 0;border-top:1px solid rgba(107,122,141,.14)}
+.task07-anim-step:first-of-type{border-top:0;padding-top:0}.task07-anim-step-num{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;background:rgba(107,122,141,.18);color:var(--gray);font:800 11px var(--fh)}
+.task07-anim-step.active{color:var(--white)}.task07-anim-step.active .task07-anim-step-num{background:linear-gradient(135deg,var(--cyan),#2563eb);color:#001018;box-shadow:0 0 18px rgba(0,229,255,.28)}
+.task07-anim-controls{display:flex;gap:9px;flex-wrap:wrap;align-items:center;padding:0 20px 18px}
+.task07-anim-btn{padding:10px 14px;border-radius:12px;border:1px solid rgba(0,229,255,.2);background:rgba(0,229,255,.08);color:var(--cyan);font:800 13px var(--fb);cursor:pointer;transition:all .18s}.task07-anim-btn:hover{background:rgba(0,229,255,.16);color:var(--white);transform:translateY(-1px)}
+.task07-anim-progress{flex:1;min-width:160px;height:8px;border-radius:999px;background:rgba(107,122,141,.24);overflow:hidden}.task07-anim-progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--orange));border-radius:inherit;transition:width .08s linear}
+.task07-card-anim-btn{margin-top:8px;background:rgba(255,140,0,.08);border-color:rgba(255,140,0,.24);color:var(--orange)}.task07-card-anim-btn:hover{background:rgba(255,140,0,.16);border-color:rgba(255,140,0,.42);color:var(--white)}
+@media(max-width:900px){.task07-anim-overlay{padding:8px}.task07-anim-body{grid-template-columns:1fr;overflow:auto}.task07-anim-stage{min-height:360px}.task07-anim-svg{min-height:360px}.task07-anim-side{display:grid;grid-template-columns:1fr}.task07-anim-modal{height:100%;border-radius:18px}.task07-anim-head{padding:14px 14px 0}.task07-anim-body{padding:0 14px 14px}.task07-anim-controls{padding:0 14px 14px}}
+
 /* ===== BLANK TASK BLOCKS ===== */
 .pt-notice{display:none;margin:0 0 12px;padding:10px 12px;border-radius:10px;border:1px solid rgba(57,255,20,.25);background:rgba(57,255,20,.08);color:var(--green);font-size:12px;font-weight:700}
 .pt-notice.on{display:block}
@@ -5249,7 +5277,9 @@ function renderPTasks(name){
     const cond=t.cond?String(t.cond):(isBlank&&EMODE?'<div class="pt-empty-text">Пустой блок задачи. Условие будет добавлено через Codex.</div>':'');
     const steps=(t.steps||[]).map((s,j)=>`<div class="sr-step"><div class="sr-snum">${j+1}</div><div class="sr-sbody">${s}</div></div>`).join('');
     const extra=t.extraHtml?`<div class="pt-extra">${t.extraHtml}</div>`:'';
-    const boardBtn=t.boardMode?`<div class="pt-side-actions"><button class="pt-board-btn" onclick="openTaskBoard('${String(t.boardMode).replace(/'/g,"\\'")}',true)">⤢ На весь экран</button></div>`:'';
+    const taskId=String(t.id||'');
+    const boardModeSafe=String(t.boardMode||'').replace(/'/g,"\\'");
+    const boardBtn=t.boardMode?`<div class="pt-side-actions"><button class="pt-board-btn" onclick="openTaskBoard('${boardModeSafe}',true)">⤢ На весь экран</button>${taskId==='lesson12-task07'?`<button class="pt-board-btn task07-card-anim-btn" onclick="openTaskAnimation('lesson12-task07')">▶ Анимация процесса</button>`:''}</div>`:'';
     const hasAnswer=String(t.ans||'').trim();
     const answerCard=hasAnswer?`<div class="sr-ans"><div style="font-size:18px">✓</div><div><div class="sr-ans-l">Ответ</div><div class="sr-ans-v" style="color:var(--orange)">${t.ans}</div></div></div>`:'';
     const hasStructuredSolution=hasFilledTaskSolution(t)||hasLegacyTaskTextSolution(t);
@@ -6372,8 +6402,179 @@ function taskBoardDraw(){
   taskBoardUpdateCanvasSurface();
   taskBoardUpdateHistoryButtons();
 }
+
+let task07AnimationState=null;
+function openTaskAnimation(taskId){
+  if(taskId!=='lesson12-task07') return;
+  const overlay=ensureTask07AnimationOverlay();
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden','false');
+  document.body.classList.add('task07-anim-lock');
+  renderTask07Animation(overlay.querySelector('[data-task07-stage]'));
+  resetTask07Animation();
+  playTask07Animation();
+}
+function ensureTask07AnimationOverlay(){
+  let overlay=document.getElementById('task07AnimationOverlay');
+  if(overlay) return overlay;
+  document.body.insertAdjacentHTML('beforeend', `
+    <div id="task07AnimationOverlay" class="task07-anim-overlay" aria-hidden="true">
+      <div class="task07-anim-modal" role="dialog" aria-modal="true" aria-labelledby="task07AnimTitle">
+        <div class="task07-anim-head">
+          <div>
+            <div class="task07-anim-kicker">ЕГЭ · Физика · Урок 12 · Задача 07</div>
+            <div id="task07AnimTitle" class="task07-anim-title">Маятник после удара</div>
+            <div class="task07-anim-sub">Живая схема: налёт малого тела, удар, падение тела вниз и подъём груза маятника до α = 90°.</div>
+          </div>
+          <button type="button" class="task07-anim-close" onclick="closeTask07Animation()">✕ Закрыть</button>
+        </div>
+        <div class="task07-anim-body">
+          <div class="task07-anim-stage" data-task07-stage></div>
+          <div class="task07-anim-side">
+            <div class="task07-anim-formulas">
+              <div class="task07-anim-panel-title">Краткие формулы</div>
+              <div class="task07-anim-formula">1) m·v = M·V</div>
+              <div class="task07-anim-formula">2) V = (m/M)·v = 5 м/с</div>
+              <div class="task07-anim-formula">3) MV²/2 = MgH</div>
+              <div class="task07-anim-formula">4) H = L(1 − cos α)</div>
+              <div class="task07-anim-formula">5) α = 90°</div>
+            </div>
+            <div class="task07-anim-steps" id="task07AnimSteps">
+              <div class="task07-anim-panel-title">Прогресс процесса</div>
+              ${['m летит горизонтально со скоростью v','M висит на нити длиной L','Удар малого тела о груз','m останавливается и падает вниз','M получает скорость V и идёт по дуге','Маятник достигает максимального угла','В верхней точке: α = 90°'].map((text,i)=>`<div class="task07-anim-step" data-step="${i}"><div class="task07-anim-step-num">${i+1}</div><div>${text}</div></div>`).join('')}
+            </div>
+          </div>
+        </div>
+        <div class="task07-anim-controls">
+          <button type="button" class="task07-anim-btn" id="task07AnimPlayBtn" onclick="playTask07Animation()">▶ Старт</button>
+          <button type="button" class="task07-anim-btn" onclick="pauseTask07Animation()">⏸ Пауза</button>
+          <button type="button" class="task07-anim-btn" onclick="resetTask07Animation(true)">↺ Повтор</button>
+          <button type="button" class="task07-anim-btn" onclick="closeTask07Animation()">✕ Закрыть</button>
+          <div class="task07-anim-progress" aria-hidden="true"><span id="task07AnimProgress"></span></div>
+        </div>
+      </div>
+    </div>`);
+  overlay=document.getElementById('task07AnimationOverlay');
+  overlay.addEventListener('click',function(e){ if(e.target===overlay) closeTask07Animation(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&overlay.classList.contains('open')) closeTask07Animation(); });
+  return overlay;
+}
+function renderTask07Animation(container){
+  if(!container) return;
+  container.innerHTML=`
+    <svg class="task07-anim-svg" viewBox="0 0 900 560" aria-label="Анимация удара малого тела по маятнику">
+      <defs>
+        <marker id="task07ArrowCyan" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#00e5ff"/></marker>
+        <marker id="task07ArrowOrange" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#ff8c00"/></marker>
+        <radialGradient id="task07BobGrad" cx="35%" cy="30%"><stop offset="0" stop-color="#fff7ed"/><stop offset=".45" stop-color="#fb923c"/><stop offset="1" stop-color="#c2410c"/></radialGradient>
+        <radialGradient id="task07BallGrad" cx="35%" cy="30%"><stop offset="0" stop-color="#ecfeff"/><stop offset=".5" stop-color="#22d3ee"/><stop offset="1" stop-color="#0e7490"/></radialGradient>
+        <filter id="task07Glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <rect width="900" height="560" fill="transparent"/>
+      <path d="M60 500 H840" stroke="rgba(107,122,141,.28)" stroke-width="2" stroke-dasharray="8 8"/>
+      <text x="34" y="38" fill="#e2e8f0" font-size="20" font-weight="800">Маятник после удара: m останавливается, M уходит по дуге</text>
+      <text x="34" y="64" fill="#94a3b8" font-size="14">M = 0,2 кг · m = 0,1 кг · L = 1,25 м · v = 10 м/с · g = 10 м/с²</text>
+      <g id="task07Trajectory"><path d="M420 380 A260 260 0 0 0 680 120" fill="none" stroke="rgba(0,229,255,.34)" stroke-width="3" stroke-dasharray="9 8"/><text x="585" y="330" fill="#00e5ff" font-size="15" font-weight="700">траектория по дуге</text></g>
+      <g id="task07Mount"><path d="M330 112 H510" stroke="#e2e8f0" stroke-width="8" stroke-linecap="round"/><path d="M340 95 l-22 34 M382 95 l-22 34 M424 95 l-22 34 M466 95 l-22 34 M508 95 l-22 34" stroke="rgba(148,163,184,.65)" stroke-width="3"/><circle cx="420" cy="120" r="8" fill="#e2e8f0"/></g>
+      <line id="task07RestLine" x1="420" y1="120" x2="420" y2="380" stroke="rgba(148,163,184,.42)" stroke-width="2" stroke-dasharray="7 7"/>
+      <path id="task07AngleArc" d="" fill="none" stroke="#ff8c00" stroke-width="4" stroke-linecap="round"/>
+      <text id="task07AngleLabel" x="0" y="0" fill="#ff8c00" font-size="22" font-weight="900" filter="url(#task07Glow)">α = 90°</text>
+      <g id="task07Pendulum"><line id="task07String" x1="420" y1="120" x2="420" y2="380" stroke="#e2e8f0" stroke-width="4" stroke-linecap="round"/><circle id="task07Bob" cx="420" cy="380" r="32" fill="url(#task07BobGrad)" stroke="#fed7aa" stroke-width="3"/><text id="task07MLabel" x="410" y="386" fill="#111827" font-size="18" font-weight="900">M</text></g>
+      <g id="task07SmallBody"><circle id="task07Ball" cx="90" cy="380" r="20" fill="url(#task07BallGrad)" stroke="#a5f3fc" stroke-width="3"/><text id="task07mLabel" x="84" y="386" fill="#062b33" font-size="16" font-weight="900">m</text></g>
+      <line id="task07vArrow" x1="126" y1="380" x2="210" y2="380" stroke="#00e5ff" stroke-width="4" marker-end="url(#task07ArrowCyan)"/><text id="task07vLabel" x="220" y="371" fill="#00e5ff" font-size="20" font-weight="800">v</text>
+      <line id="task07VArrow" x1="446" y1="378" x2="522" y2="378" stroke="#ff8c00" stroke-width="4" marker-end="url(#task07ArrowOrange)"/><text id="task07VLabel" x="530" y="371" fill="#ff8c00" font-size="20" font-weight="800">V</text>
+      <line id="task07LBrace" x1="388" y1="120" x2="388" y2="380" stroke="rgba(226,232,240,.72)" stroke-width="2"/><path d="M380 120 H396 M380 380 H396" stroke="rgba(226,232,240,.72)" stroke-width="2"/><text x="358" y="255" fill="#e2e8f0" font-size="19" font-weight="800">L</text>
+      <g id="task07Burst" opacity="0"><circle cx="420" cy="380" r="24" fill="none" stroke="#ff8c00" stroke-width="4"/><circle cx="420" cy="380" r="42" fill="none" stroke="#fbbf24" stroke-width="3"/><text x="450" y="350" fill="#fbbf24" font-size="18" font-weight="900">удар</text></g>
+      <text id="task07Phase" x="34" y="528" fill="#e2e8f0" font-size="17" font-weight="800">Старт: малое тело m летит к маятнику.</text>
+    </svg>`;
+  const overlay=document.getElementById('task07AnimationOverlay');
+  task07AnimationState={overlay,container,svg:container.querySelector('svg'),duration:7.2,t:0,last:0,raf:0,running:false,finished:false};
+  updateTask07Animation(0);
+}
+function playTask07Animation(){
+  const state=task07AnimationState;
+  if(!state) return;
+  if(state.running) return;
+  if(state.finished||state.t>=state.duration){ state.t=0; state.finished=false; updateTask07Animation(0); }
+  state.running=true; state.last=0;
+  const btn=document.getElementById('task07AnimPlayBtn'); if(btn) btn.textContent='⏸ Идёт';
+  const step=function(ts){
+    if(!state.running) return;
+    if(!state.last) state.last=ts;
+    const dt=Math.min((ts-state.last)/1000,0.05);
+    state.last=ts; state.t=Math.min(state.t+dt,state.duration);
+    updateTask07Animation(state.t/state.duration);
+    if(state.t<state.duration){ state.raf=requestAnimationFrame(step); }
+    else{ state.running=false; state.finished=true; state.last=0; const b=document.getElementById('task07AnimPlayBtn'); if(b) b.textContent='↺ Повтор'; }
+  };
+  state.raf=requestAnimationFrame(step);
+}
+function pauseTask07Animation(){
+  const state=task07AnimationState; if(!state) return;
+  state.running=false; cancelAnimationFrame(state.raf); state.last=0;
+  const btn=document.getElementById('task07AnimPlayBtn'); if(btn) btn.textContent='▶ Продолжить';
+}
+function resetTask07Animation(autoplay){
+  const state=task07AnimationState; if(!state) return;
+  state.running=false; cancelAnimationFrame(state.raf); state.t=0; state.last=0; state.finished=false;
+  updateTask07Animation(0);
+  const btn=document.getElementById('task07AnimPlayBtn'); if(btn) btn.textContent='▶ Старт';
+  if(autoplay) playTask07Animation();
+}
+function closeTask07Animation(){
+  const state=task07AnimationState;
+  if(state){ state.running=false; cancelAnimationFrame(state.raf); state.last=0; }
+  const overlay=document.getElementById('task07AnimationOverlay');
+  if(overlay){ overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true'); }
+  document.body.classList.remove('task07-anim-lock');
+}
+function updateTask07Animation(progress){
+  const state=task07AnimationState; if(!state||!state.svg) return;
+  const svg=state.svg;
+  const clamp=function(v,a,b){return Math.max(a,Math.min(b,v));};
+  const smooth=function(t){t=clamp(t,0,1);return t*t*(3-2*t);};
+  const set=function(id,attrs){const el=svg.querySelector('#'+id); if(!el) return; Object.keys(attrs).forEach(k=>el.setAttribute(k,attrs[k]));};
+  const text=function(id,value){const el=svg.querySelector('#'+id); if(el) el.textContent=value;};
+  const pivotX=420,pivotY=120,L=260,bobR=32,impactP=0.38,releaseP=0.47,topP=0.88;
+  const fly=smooth(progress/impactP);
+  const rise=smooth((progress-releaseP)/(topP-releaseP));
+  const fall=smooth((progress-impactP)/(0.70-impactP));
+  const theta=(Math.PI/2)*rise;
+  const bobX=pivotX+Math.sin(theta)*L;
+  const bobY=pivotY+Math.cos(theta)*L;
+  let ballX=90+(pivotX-bobR-20-90)*fly;
+  let ballY=380;
+  if(progress>=impactP){ballX=pivotX-bobR-20; ballY=380+120*fall;}
+  set('task07String',{x2:bobX.toFixed(1),y2:bobY.toFixed(1)});
+  set('task07Bob',{cx:bobX.toFixed(1),cy:bobY.toFixed(1)});
+  set('task07MLabel',{x:(bobX-10).toFixed(1),y:(bobY+6).toFixed(1)});
+  set('task07Ball',{cx:ballX.toFixed(1),cy:ballY.toFixed(1)});
+  set('task07mLabel',{x:(ballX-6).toFixed(1),y:(ballY+6).toFixed(1)});
+  set('task07vArrow',{x1:(ballX+30).toFixed(1),y1:(ballY).toFixed(1),x2:(ballX+108).toFixed(1),y2:(ballY).toFixed(1),opacity:progress<impactP?1:0});
+  set('task07vLabel',{x:(ballX+116).toFixed(1),y:(ballY-9).toFixed(1),opacity:progress<impactP?1:0});
+  const tangentX=bobX+Math.cos(theta)*86, tangentY=bobY-Math.sin(theta)*86;
+  set('task07VArrow',{x1:(bobX+Math.cos(theta)*34).toFixed(1),y1:(bobY-Math.sin(theta)*34).toFixed(1),x2:tangentX.toFixed(1),y2:tangentY.toFixed(1),opacity:progress>=releaseP&&progress<topP?1:0});
+  set('task07VLabel',{x:(tangentX+8).toFixed(1),y:(tangentY-8).toFixed(1),opacity:progress>=releaseP&&progress<topP?1:0});
+  const burstOpacity=progress>impactP&&progress<releaseP?1-Math.abs((progress-impactP)/(releaseP-impactP)-0.45):0;
+  set('task07Burst',{opacity:Math.max(0,burstOpacity).toFixed(2)});
+  const angleR=72;
+  const endX=pivotX+Math.sin(theta)*angleR,endY=pivotY+Math.cos(theta)*angleR;
+  set('task07AngleArc',{d:`M ${pivotX} ${pivotY+angleR} A ${angleR} ${angleR} 0 0 0 ${endX.toFixed(1)} ${endY.toFixed(1)}`,opacity:progress>releaseP?1:0});
+  set('task07AngleLabel',{x:(pivotX+88).toFixed(1),y:(pivotY+45).toFixed(1),opacity:progress>0.72?1:0});
+  const phase=progress<0.16?'Шаг 1: малое тело m летит горизонтально со скоростью v.':progress<impactP?'Шаг 2: груз M висит на нити длиной L в покое.':progress<releaseP?'Шаг 3: короткий удар — импульс передаётся грузу маятника.':progress<0.70?'Шаг 4: малое тело остановилось и падает вертикально вниз.':progress<topP?'Шаг 5–6: груз M движется по дуге и поднимается.':'Шаг 7: верхняя точка подъёма, α = 90°.';
+  text('task07Phase',phase);
+  const bar=document.getElementById('task07AnimProgress'); if(bar) bar.style.width=(progress*100).toFixed(1)+'%';
+  const active=progress<0.16?0:progress<0.30?1:progress<releaseP?2:progress<0.70?3:progress<0.80?4:progress<topP?5:6;
+  document.querySelectorAll('#task07AnimSteps .task07-anim-step').forEach(function(el,i){el.classList.toggle('active',i===active);});
+}
+
 function toggleTaskBoardAnimation(force){
   const state=ensureTaskBoardOverlay();
+  if(state.task&&(state.task.id==='lesson12-task07'||state.mode==='task07-pendulum-impact')){
+    if(force===false){ closeTask07Animation(); return; }
+    openTaskAnimation('lesson12-task07');
+    return;
+  }
   if(!state.task||state.task.hasAnimation===false){
     if(state.sim){
       state.sim.running=false;
