@@ -543,7 +543,7 @@ body.edit-mode .et{display:inline}
 
 /* ===== TASK SOLUTION WORKSPACE ===== */
 @keyframes solutionFadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-.task-solution-workspace{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(320px,.95fr);gap:18px;align-items:start;color:#0f172a;font-family:var(--fb)}
+.task-solution-workspace{display:grid;grid-template-columns:1fr;gap:18px;align-items:start;color:#0f172a;font-family:var(--fb)}
 .task-solution-left,.task-solution-right{min-width:0;display:flex;flex-direction:column;gap:12px}
 .task-solution-section{background:#fff;border:1px solid #dbe5f0;border-radius:16px;padding:14px 16px;box-shadow:0 12px 30px rgba(15,23,42,.055);animation:solutionFadeUp .36s ease both;overflow-wrap:anywhere;word-break:break-word}
 .task-solution-section:nth-child(1){animation-delay:0ms}.task-solution-section:nth-child(2){animation-delay:90ms}.task-solution-section:nth-child(3){animation-delay:180ms}.task-solution-section:nth-child(4){animation-delay:270ms}.task-solution-section:nth-child(5){animation-delay:360ms}.task-solution-section:nth-child(6){animation-delay:450ms}.task-solution-section:nth-child(7){animation-delay:540ms}
@@ -5143,8 +5143,20 @@ function renderSolutionImageHtml(path,alt,cls){
 }
 
 
+
+function stripSolutionImagesHtml(html){
+  const source=String(html||'');
+  if(!source.trim()) return '';
+  if(typeof document==='undefined'){
+    return source.replace(/<img\b[^>]*>/gi,'');
+  }
+  const template=document.createElement('template');
+  template.innerHTML=source;
+  template.content.querySelectorAll('.pt-photo-wrap,.task-board-photo-wrap,.solution-image-card,img').forEach(function(el){el.remove();});
+  return template.innerHTML.trim();
+}
+
 function renderTaskSolutionWorkspace(task,cls){
-  const imageCls=cls==='task-board'?'task-board':'pt';
   const title=escapeHtml(task.solutionTitle||('Решение задачи '+String(task.num||'')+'. '+(task.title||'')));
   const condition=String(task.cond||'').trim()||'Условие пока не добавлено';
   const givenRaw=String(task.given||'').trim();
@@ -5159,9 +5171,6 @@ function renderTaskSolutionWorkspace(task,cls){
     ? `<ul class="tutor-hints">${task.tutorHints.map(function(h){return `<li>${h}</li>`;}).join('')}</ul>`
     : '<ul class="tutor-hints"><li>Подсказки репетитору пока не добавлены.</li></ul>';
   const answer=String(task.answerText||task.ans||'Ответ пока не добавлен').trim();
-  const image=task.solutionImage
-    ? `<div class="solution-image-card"><h3 class="task-solution-section-title">Инфографика решения</h3>${renderSolutionImageHtml(task.solutionImage,task.solutionTitle||task.title||'Инфографика решения',imageCls)}</div>`
-    : '<div class="solution-image-card"><h3 class="task-solution-section-title">Инфографика решения</h3><div class="pt-empty-text">Изображение решения пока не добавлено.</div></div>';
   return `<div class="task-solution-workspace" aria-label="${title}">
     <div class="task-solution-left">
       <div class="task-solution-section"><h3 class="task-solution-section-title">Условие</h3><p>${condition}</p></div>
@@ -5172,7 +5181,6 @@ function renderTaskSolutionWorkspace(task,cls){
       <div class="task-solution-section"><h3 class="task-solution-section-title">Подсказки репетитору</h3>${hints}</div>
       <div class="task-solution-section solution-answer-box"><h3 class="task-solution-section-title">Ответ</h3><div class="solution-answer-value">${answer}</div></div>
     </div>
-    <div class="task-solution-right">${image}</div>
   </div>`;
 }
 
@@ -5196,12 +5204,12 @@ function renderPTasks(name){
     const hasAnswer=String(t.ans||'').trim();
     const answerCard=hasAnswer?`<div class="sr-ans"><div style="font-size:18px">✓</div><div><div class="sr-ans-l">Ответ</div><div class="sr-ans-v" style="color:var(--orange)">${t.ans}</div></div></div>`:'';
     const hasSolutionWorkspace=!!(t.solutionTextHtml||t.solutionFormulas||t.tutorHints);
-    const embedded=hasSolutionWorkspace?renderTaskSolutionWorkspace(t,'pt'):(t.solutionHtml||getEmbeddedSolutionHtml(t));
-    const answer=hasSolutionWorkspace?'':(embedded||t.solutionImage)?(t.hideAnswer&&answerCard?`<div class="pt-photo-tools"><button type="button" class="pt-photo-answer-btn" data-answer-toggle="${photoId}" onclick="ptToggleAnswer(this,'${photoId}')">Показать ответ</button></div><div class="sr-ans-wrap" id="${photoId}">${answerCard}<div class="sr-ans-cover"><button type="button" class="pt-photo-answer-btn" onclick="ptToggleAnswer(null,'${photoId}')">Показать ответ</button></div></div>`:answerCard):(t.hideAnswer&&answerCard?`<div class="pt-photo-tools"><button type="button" class="pt-photo-answer-btn" data-answer-toggle="${photoId}" onclick="ptToggleAnswer(this,'${photoId}')">Показать ответ</button></div><div class="sr-ans-wrap" id="${photoId}">${answerCard}<div class="sr-ans-cover"><button type="button" class="pt-photo-answer-btn" onclick="ptToggleAnswer(null,'${photoId}')">Показать ответ</button></div></div>`:answerCard);
+    const embeddedRaw=hasSolutionWorkspace?renderTaskSolutionWorkspace(t,'pt'):(t.solutionHtml||getEmbeddedSolutionHtml(t));
+    const embedded=stripSolutionImagesHtml(embeddedRaw);
+    const answer=hasSolutionWorkspace?'':embedded?(t.hideAnswer&&answerCard?`<div class="pt-photo-tools"><button type="button" class="pt-photo-answer-btn" data-answer-toggle="${photoId}" onclick="ptToggleAnswer(this,'${photoId}')">Показать ответ</button></div><div class="sr-ans-wrap" id="${photoId}">${answerCard}<div class="sr-ans-cover"><button type="button" class="pt-photo-answer-btn" onclick="ptToggleAnswer(null,'${photoId}')">Показать ответ</button></div></div>`:answerCard):(t.hideAnswer&&answerCard?`<div class="pt-photo-tools"><button type="button" class="pt-photo-answer-btn" data-answer-toggle="${photoId}" onclick="ptToggleAnswer(this,'${photoId}')">Показать ответ</button></div><div class="sr-ans-wrap" id="${photoId}">${answerCard}<div class="sr-ans-cover"><button type="button" class="pt-photo-answer-btn" onclick="ptToggleAnswer(null,'${photoId}')">Показать ответ</button></div></div>`:answerCard);
     const rich=embedded?`<div class="pt-rich-card">${embedded}</div>`:'';
-    const photo=(!embedded&&t.solutionImage)?renderSolutionImageHtml(t.solutionImage,t.title||'Задача','pt'):'';
-    const blankSolution=isBlank&&EMODE&&!embedded&&!t.solutionImage&&!steps?'<div class="pt-empty-text">Решение пока не добавлено.</div>':'';
-    const solutionInner=embedded?`${rich}${extra}${answer}`:(t.solutionImage?`${photo}${extra}${answer}`:`${steps}${extra}${answer}${blankSolution}`);
+    const fallbackSolution=!embedded&&!steps&&!extra&&!answer?'<div class="pt-empty-text">Решение пока не добавлено.</div>':'';
+    const solutionInner=embedded?`${rich}${extra}${answer}`:`${steps}${extra}${answer}${fallbackSolution}`;
     const emptySolution=!String(solutionInner||'').trim();
     h+=`<div class="pt-card${isBlank?' pt-blank-card':''}"><div class="pt-head"><div class="pt-num">${String(t.num).padStart(2,'0')}</div><span class="pt-level ${lvlC[t.level]||lvlC[1]}">${lvlL[t.level]||lvlL[1]}</span><span class="pt-exam">${t.exam||'ЕГЭ'}</span><span class="pt-title">${t.title||'Новая задача'}</span></div><div class="pt-body"><div class="pt-condition">${cond}</div><div class="pt-side">${boardBtn}<button class="pt-sol-btn" data-empty-solution="${emptySolution?'1':'0'}" onclick="ptToggle('${sid}',this)">▶ Решение</button></div></div><div class="pt-solution" id="${sid}">${solutionInner}</div></div>`;
   });
@@ -5774,16 +5782,15 @@ function getEmbeddedSolutionHtml(task){
   return task.solutionHtml||'';
 }
 function renderTaskBoardSolution(task){
-  const embedded = (task.solutionTextHtml||task.solutionFormulas||task.tutorHints)?renderTaskSolutionWorkspace(task,'task-board'):(task.boardSolutionHtml || task.solutionHtml || getEmbeddedSolutionHtml(task));
+  const embeddedRaw=(task.solutionTextHtml||task.solutionFormulas||task.tutorHints)?renderTaskSolutionWorkspace(task,'task-board'):(task.boardSolutionHtml || task.solutionHtml || getEmbeddedSolutionHtml(task));
+  const embedded=stripSolutionImagesHtml(embeddedRaw);
   if(embedded){
     return `<div class="task-board-rich">${embedded}</div>`;
   }
-  if(task.solutionImage){
-    return renderSolutionImageHtml(task.solutionImage,task.title||'Решение задачи','task-board');
-  }
-  return (task.steps||[]).map(function(step,index){
+  const steps=(task.steps||[]).map(function(step,index){
     return `<div class="task-board-step"><div class="task-board-step-num">${index+1}</div><div class="task-board-step-body">${step}</div></div>`;
   }).join('');
+  return steps||'<div class="pt-empty-text">Решение пока не добавлено.</div>';
 }
 function ensureTaskBoardOverlay(){
   if(taskBoardState) return taskBoardState;
