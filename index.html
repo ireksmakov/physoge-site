@@ -595,36 +595,18 @@ body.edit-mode .et{display:inline}
 .pt-board-btn{width:100%;padding:9px 12px;border-radius:8px;border:1px solid rgba(0,229,255,.22);background:rgba(0,229,255,.08);color:var(--cyan);font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb)}
 .pt-board-btn:hover{background:rgba(0,229,255,.16);border-color:rgba(0,229,255,.38);color:var(--white)}
 
-/* ===== LESSON TASK EDITOR ===== */
-.pt-edit-panel{display:none;margin:0 0 14px;padding:12px;background:rgba(255,140,0,.05);border:1px solid rgba(255,140,0,.24);border-radius:13px;gap:8px;align-items:center;flex-wrap:wrap}
-body.edit-mode .pt-edit-panel{display:flex}
-.pt-edit-hint{font-size:11px;color:var(--gray);margin-right:auto;line-height:1.5}
-.pt-edit-btn,.pt-card-action,.pt-editor-save,.pt-step-add{border:1px solid rgba(0,229,255,.22);background:rgba(0,229,255,.07);color:var(--cyan);border-radius:8px;padding:8px 11px;font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb)}
-.pt-edit-btn:hover,.pt-card-action:hover,.pt-editor-save:hover,.pt-step-add:hover{background:rgba(0,229,255,.14);border-color:rgba(0,229,255,.42);color:var(--white)}
-.pt-edit-btn.accent,.pt-editor-save{border-color:rgba(255,140,0,.38);background:rgba(255,140,0,.1);color:var(--orange)}
-.pt-edit-btn.danger,.pt-card-action.danger{border-color:rgba(255,68,68,.28);background:rgba(255,68,68,.08);color:#ff6b6b}
+/* ===== BLANK TASK BLOCKS ===== */
 .pt-notice{display:none;margin:0 0 12px;padding:10px 12px;border-radius:10px;border:1px solid rgba(57,255,20,.25);background:rgba(57,255,20,.08);color:var(--green);font-size:12px;font-weight:700}
 .pt-notice.on{display:block}
-.pt-card-actions{display:none;margin-left:auto;gap:6px;flex-wrap:wrap;align-items:center}
-body.edit-mode .pt-card-actions{display:flex}
-.pt-card-action{padding:6px 8px;font-size:11px}
-.pt-card-action:disabled{opacity:.42;cursor:not-allowed}
-.pt-editor{background:linear-gradient(180deg,rgba(255,140,0,.08),rgba(0,229,255,.035));border:1px solid rgba(0,229,255,.28);border-radius:15px;padding:16px;margin-bottom:12px;box-shadow:0 14px 34px rgba(0,0,0,.12)}
-.pt-editor-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap}
-.pt-editor-title{font-family:var(--fh);font-size:14px;font-weight:800;color:var(--white)}
-.pt-editor-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.pt-editor-field{display:flex;flex-direction:column;gap:5px;min-width:0}
-.pt-editor-field.full{grid-column:1/-1}
-.pt-editor-field label{font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--orange)}
-.pt-editor-field input,.pt-editor-field select,.pt-editor-field textarea{width:100%;border:1px solid rgba(0,229,255,.18);background:rgba(5,12,18,.86);color:var(--white);border-radius:9px;padding:9px 10px;font:13px var(--fb);outline:none;resize:vertical;min-width:0}
-.pt-editor-field textarea{min-height:86px;line-height:1.55}
-.pt-editor-field input:focus,.pt-editor-field select:focus,.pt-editor-field textarea:focus{border-color:rgba(0,229,255,.55);box-shadow:0 0 0 2px rgba(0,229,255,.08)}
-.pt-steps-editor{display:flex;flex-direction:column;gap:8px}
-.pt-step-edit{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:start}
-.pt-step-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,140,0,.12);border:1px solid rgba(255,140,0,.3);color:var(--orange);font-size:11px;font-weight:800}
-.pt-step-del{border:1px solid rgba(255,68,68,.28);background:rgba(255,68,68,.08);color:#ff6b6b;border-radius:8px;padding:7px 9px;cursor:pointer;font-weight:800}
-.pt-editor-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-@media(max-width:720px){.pt-edit-panel{align-items:stretch}.pt-edit-hint{width:100%;margin-right:0}.pt-edit-btn,.pt-card-action,.pt-editor-save{width:100%;justify-content:center}.pt-card-actions{width:100%;margin-left:0}.pt-card-action{width:auto;flex:1}.pt-editor-grid{grid-template-columns:1fr}.pt-step-edit{grid-template-columns:24px 1fr}.pt-step-del{grid-column:2}.pt-editor-actions>*{flex:1 1 100%}}
+.pt-blank-card{border-style:dashed;border-color:rgba(0,229,255,.34);background:linear-gradient(180deg,rgba(0,229,255,.035),rgba(255,140,0,.025))}
+.pt-blank-card:hover{border-color:rgba(0,229,255,.62)}
+.pt-empty-text{color:rgba(107,122,141,.78);font-style:italic;border:1px dashed rgba(0,229,255,.25);border-radius:10px;padding:12px;background:rgba(0,229,255,.035)}
+.pt-blank-add-wrap{display:none;margin:18px 0 4px}
+body.edit-mode .pt-blank-add-wrap{display:block}
+body.view-mode .pt-blank-add-wrap{display:none}
+.pt-blank-add-btn{width:100%;padding:14px 16px;border-radius:14px;border:1px dashed rgba(0,229,255,.5);background:rgba(0,229,255,.055);color:var(--cyan);font:800 13px var(--fb);cursor:pointer;transition:all .18s}
+.pt-blank-add-btn:hover{background:rgba(0,229,255,.12);border-color:rgba(0,229,255,.85);color:var(--white);transform:translateY(-1px)}
+@media(max-width:720px){.pt-blank-add-btn{padding:13px 12px;font-size:12px}.pt-empty-text{font-size:13px}}
 body.task-board-lock{overflow:hidden}
 .task-board-overlay{position:fixed;inset:0;z-index:9999;background:#eef3f9;color:#0f172a;display:none}
 .task-board-overlay.open{display:flex}
@@ -4919,84 +4901,88 @@ const LESSON_LABS={
 'Закон Ома. Цепи':[{icon:'⚡',name:'Вольт-амперная характеристика',badge:'Скоро',desc:'Измерение I при разных U. Определение R из наклона ВАХ.',steps:['Изменять U от 0 до 10 В','Записывать I','Построить I(U)','Найти R'],btn:'soon'}]
 };
 
-const LESSON_TASKS_STORAGE_KEY='phizmat_lesson_tasks_v1';
-let PT_EDITING_TASK_ID=null;
+const BLANK_TASK_BLOCKS_STORAGE_KEY='phizmat_blank_task_blocks_v1';
 let PT_NOTICE_TIMER=0;
 
-function loadLessonTasksStore(){
+function loadBlankTaskBlocks(){
   try{
-    const raw=localStorage.getItem(LESSON_TASKS_STORAGE_KEY);
+    const raw=localStorage.getItem(BLANK_TASK_BLOCKS_STORAGE_KEY);
     if(!raw)return{};
     const data=JSON.parse(raw);
-    return data&&typeof data==='object'&&!Array.isArray(data)?data:{};
+    if(data&&typeof data==='object'&&!Array.isArray(data))return data;
+    console.warn('Некорректный формат пустых блоков задач в localStorage. Используется пустой список.');
+    return{};
   }catch(err){
-    console.warn('Повреждён localStorage с задачами уроков. Ключ очищен:',err);
-    try{localStorage.removeItem(LESSON_TASKS_STORAGE_KEY);}catch(e){}
+    console.warn('Повреждён localStorage с пустыми блоками задач:',err);
     return{};
   }
 }
-function saveLessonTasksStore(store){
-  try{localStorage.setItem(LESSON_TASKS_STORAGE_KEY,JSON.stringify(store||{}));}
-  catch(err){console.warn('Не удалось сохранить задачи урока в localStorage:',err);}
+function saveBlankTaskBlocks(store){
+  try{localStorage.setItem(BLANK_TASK_BLOCKS_STORAGE_KEY,JSON.stringify(store||{}));}
+  catch(err){console.warn('Не удалось сохранить пустые блоки задач в localStorage:',err);}
 }
-function lessonTaskHash(v){
-  v=String(v||'');let h=0;
-  for(let i=0;i<v.length;i++)h=((h<<5)-h+v.charCodeAt(i))|0;
-  return Math.abs(h).toString(36);
-}
-function lessonTaskBaseId(lessonName,t,i){return 'base_'+lessonTaskHash(lessonName+'|'+(t&&t.id||'')+'|'+(t&&t.num||i+1)+'|'+(t&&t.title||''));}
 function lessonTaskDomId(id){return String(id||'').replace(/[^a-zA-Z0-9_-]/g,'_');}
 function lessonTaskCurrentName(){try{return COURSES[AC].modules[CM].lessons[CL];}catch(err){return'';}}
-function normalizeLessonTask(lessonName,t,i,isBase){
-  const copy=Object.assign({},t||{});
-  copy.id=copy.id||lessonTaskBaseId(lessonName,copy,i);
-  copy.num=Number(copy.num)||i+1;
-  copy.title=copy.title||'Задача';
-  copy.level=Number(copy.level)||1;
-  copy.exam=copy.exam||'ЕГЭ (1 балл)';
-  copy.type=copy.type||'numeric';
-  copy.cond=copy.cond||'';
-  copy.given=copy.given||'';
-  copy.ans=copy.ans==null?'':copy.ans;
-  copy.steps=Array.isArray(copy.steps)?copy.steps.slice():[];
-  copy.points=Number(copy.points)||1;
-  copy.__base=!!isBase;
-  return copy;
+function normalizeBlankTaskBlock(task,i){
+  const t=Object.assign({},task||{});
+  t.num=Number(t.num)||i+1;
+  t.level=Number(t.level)||2;
+  t.exam=t.exam||'ЕГЭ';
+  t.title=t.title||'Новая задача';
+  t.cond=t.cond||'';
+  t.given=t.given||'';
+  t.ans=t.ans==null?'':t.ans;
+  t.steps=Array.isArray(t.steps)?t.steps.slice():[];
+  t.solutionHtml=t.solutionHtml||'';
+  t.solutionImage=t.solutionImage||'';
+  t.extraHtml=t.extraHtml||'';
+  t.boardMode=t.boardMode||('blank-task-'+Date.now()+'-'+i);
+  t.isBlank=true;
+  t.id=t.id||t.boardMode;
+  return t;
 }
-function getLessonTaskBaseIds(lessonName){return (LESSON_TASKS[lessonName]||[]).map((t,i)=>lessonTaskBaseId(lessonName,t,i));}
-function getEditableLessonTasks(lessonName){
+function getBlankTasksForLesson(lessonName){
   try{
-    const base=(LESSON_TASKS[lessonName]||[]).map((t,i)=>normalizeLessonTask(lessonName,t,i,true));
-    const baseIds=new Set(base.map(t=>t.id));
-    const store=loadLessonTasksStore();
-    const entry=(store&&store[lessonName])||{};
-    const changed=(entry.tasks&&typeof entry.tasks==='object')?entry.tasks:{};
-    let merged=base.map(t=>normalizeLessonTask(lessonName,Object.assign({},t,changed[t.id]||{}),t.num-1,true));
-    Object.keys(changed).forEach(id=>{
-      if(!baseIds.has(id))merged.push(normalizeLessonTask(lessonName,changed[id],merged.length,false));
-    });
-    const byId={};merged.forEach(t=>{byId[t.id]=t;});
-    const ordered=[];(Array.isArray(entry.order)?entry.order:[]).forEach(id=>{if(byId[id]){ordered.push(byId[id]);delete byId[id];}});
-    merged=ordered.concat(Object.values(byId));
-    return merged.filter(t=>!t.hidden).map((t,i)=>Object.assign({},t,{num:Number(t.num)||i+1}));
-  }catch(err){console.warn('Не удалось собрать задачи урока:',err);return (LESSON_TASKS[lessonName]||[]).map((t,i)=>normalizeLessonTask(lessonName,t,i,true));}
+    const store=loadBlankTaskBlocks();
+    const list=Array.isArray(store[lessonName])?store[lessonName]:[];
+    return list.map((task,i)=>normalizeBlankTaskBlock(task,i));
+  }catch(err){
+    console.warn('Не удалось получить пустые блоки задач урока:',err);
+    return[];
+  }
 }
-function saveEditableLessonTasks(lessonName,tasks){
-  try{
-    const store=loadLessonTasksStore();
-    const entry=store[lessonName]||{tasks:{},order:[]};
-    entry.tasks=entry.tasks&&typeof entry.tasks==='object'?entry.tasks:{};
-    const baseIds=new Set(getLessonTaskBaseIds(lessonName));
-    (tasks||[]).forEach((task,i)=>{
-      const t=Object.assign({},task,{num:Number(task.num)||i+1,updatedAt:task.updatedAt||new Date().toISOString()});
-      t.__base=undefined;
-      if(!baseIds.has(t.id))t._custom=true;
-      entry.tasks[t.id]=t;
-    });
-    entry.order=(tasks||[]).map(t=>t.id);
-    store[lessonName]=entry;
-    saveLessonTasksStore(store);
-  }catch(err){console.warn('Не удалось сохранить задачи урока:',err);}
+function addBlankTaskBlock(lessonName){
+  lessonName=lessonName||lessonTaskCurrentName();
+  if(!lessonName){showLessonTaskNotice('Урок не найден — пустой блок не добавлен');return;}
+  const base=Array.isArray(LESSON_TASKS[lessonName])?LESSON_TASKS[lessonName]:[];
+  const blanks=getBlankTasksForLesson(lessonName);
+  const nextNumber=base.concat(blanks).reduce((m,t)=>Math.max(m,Number(t&&t.num)||0),0)+1;
+  const task={
+    id:'blank-task-'+Date.now(),
+    num:nextNumber,
+    level:2,
+    exam:'ЕГЭ',
+    title:'Новая задача',
+    cond:'',
+    given:'',
+    ans:'',
+    steps:[],
+    solutionHtml:'',
+    solutionImage:'',
+    extraHtml:'',
+    boardMode:'blank-task-'+Date.now(),
+    isBlank:true
+  };
+  const store=loadBlankTaskBlocks();
+  const list=Array.isArray(store[lessonName])?store[lessonName]:[];
+  list.push(task);
+  store[lessonName]=list;
+  saveBlankTaskBlocks(store);
+  refreshLessonTasksPanel();
+  showLessonTaskNotice('Пустой блок задачи добавлен');
+}
+function renderBlankTaskAddButton(lessonName){
+  return '<div class="pt-blank-add-wrap"><button type="button" class="pt-blank-add-btn" onclick="addBlankTaskBlock()">+ Добавить пустой блок задачи</button></div>';
 }
 function renderLessonTaskNotice(){return '<div id="ptNotice" class="pt-notice"></div>';}
 function showLessonTaskNotice(msg){
@@ -5010,131 +4996,41 @@ function refreshLessonTasksPanel(){
   const pan=document.getElementById('pan-tasks');
   if(pan)pan.innerHTML=renderPTasks(lessonTaskCurrentName());
 }
-function addLessonTask(){
-  const lessonName=lessonTaskCurrentName();
-  const tasks=getEditableLessonTasks(lessonName);
-  const now=new Date().toISOString();
-  const nextNum=tasks.reduce((m,t)=>Math.max(m,Number(t.num)||0),0)+1;
-  const task={id:'custom_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7),num:nextNum,title:'Новая задача',level:1,exam:'ЕГЭ (1 балл)',type:'numeric',cond:'Введите условие задачи...',given:'<strong>Дано:</strong><br><span class="pt-find">Найти:</span>',ans:'Ответ',steps:['Шаг 1','Шаг 2'],solutionImage:'',solutionHtml:'',boardMode:'',source:'',points:1,createdAt:now,updatedAt:now,_custom:true};
-  tasks.push(task);saveEditableLessonTasks(lessonName,tasks);PT_EDITING_TASK_ID=task.id;refreshLessonTasksPanel();showLessonTaskNotice('Новая задача добавлена');
-}
-function importLessonTaskTemplate(){
-  const lessonName=lessonTaskCurrentName();
-  const tasks=getEditableLessonTasks(lessonName);
-  const src=tasks[0]||{title:'Шаблон задачи',level:1,exam:'ЕГЭ (1 балл)',type:'numeric',cond:'Введите условие задачи...',given:'<strong>Дано:</strong><br><span class="pt-find">Найти:</span>',ans:'Ответ',steps:['Шаг 1','Шаг 2'],points:1};
-  const now=new Date().toISOString();
-  const copy=Object.assign({},src,{id:'custom_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7),num:tasks.length+1,title:(src.title||'Задача')+' (шаблон)',createdAt:now,updatedAt:now,_custom:true,hidden:false});
-  copy.steps=Array.isArray(src.steps)?src.steps.slice():[];
-  tasks.push(copy);saveEditableLessonTasks(lessonName,tasks);PT_EDITING_TASK_ID=copy.id;refreshLessonTasksPanel();showLessonTaskNotice('Задача импортирована из шаблона');
-}
-function editLessonTask(id){PT_EDITING_TASK_ID=id;refreshLessonTasksPanel();}
-function cancelLessonTaskEdit(){PT_EDITING_TASK_ID=null;refreshLessonTasksPanel();}
-function readLessonTaskGivenParts(given){
-  const txt=String(given||'');
-  const m=txt.match(/<span[^>]*class=["'][^"']*pt-find[^"']*["'][^>]*>([\s\S]*?)<\/span>/i);
-  return {given:m?txt.replace(m[0],'').trim():txt,find:m?m[1].replace(/^\s*Найти:\s*/i,''):''};
-}
-function buildLessonTaskGiven(given,find){
-  const g=String(given||'').trim()||'<strong>Дано:</strong>';
-  const f=String(find||'').trim();
-  return g+(f?'<br><span class="pt-find">Найти: '+escapeHtml(f)+'</span>':'');
-}
-function addLessonTaskStep(id){
-  const box=document.getElementById('pte_'+lessonTaskDomId(id));if(!box)return;
-  const steps=box.querySelector('[data-steps]');if(!steps)return;
-  const i=steps.querySelectorAll('[data-step-row]').length;
-  steps.insertAdjacentHTML('beforeend',renderLessonTaskStepEditor('Шаг '+(i+1),i));
-}
-function deleteLessonTaskStep(btn){const row=btn.closest('[data-step-row]');if(row)row.remove();}
-function saveLessonTask(id){
-  const lessonName=lessonTaskCurrentName();
-  const tasks=getEditableLessonTasks(lessonName);
-  const idx=tasks.findIndex(t=>t.id===id);if(idx<0)return;
-  const box=document.getElementById('pte_'+lessonTaskDomId(id));if(!box)return;
-  const val=n=>{const el=box.querySelector('[name="'+n+'"]');return el?el.value:'';};
-  const task=Object.assign({},tasks[idx]);
-  task.num=Math.max(1,parseInt(val('num')||task.num||idx+1,10)||idx+1);
-  task.title=val('title')||'Задача';
-  task.level=Math.max(1,Math.min(3,parseInt(val('level')||1,10)||1));
-  task.exam=val('exam')||'ЕГЭ (1 балл)';
-  task.type=val('type')||'numeric';
-  task.cond=val('cond');
-  task.given=buildLessonTaskGiven(val('given'),val('find'));
-  task.ans=val('ans');
-  task.points=Math.max(1,parseInt(val('points')||1,10)||1);
-  task.source=val('source');
-  task.image=val('image');
-  task.solutionImage=val('solutionImage');
-  task.solutionHtml=val('solutionHtml');
-  task.boardMode=val('boardMode');
-  task.steps=[...box.querySelectorAll('[name="step"]')].map(el=>el.value.trim()).filter(Boolean);
-  task.updatedAt=new Date().toISOString();
-  tasks[idx]=task;
-  saveEditableLessonTasks(lessonName,tasks);PT_EDITING_TASK_ID=null;refreshLessonTasksPanel();showLessonTaskNotice('Задача сохранена');
-}
-function duplicateLessonTask(id){
-  const lessonName=lessonTaskCurrentName();const tasks=getEditableLessonTasks(lessonName);const idx=tasks.findIndex(t=>t.id===id);if(idx<0)return;
-  const now=new Date().toISOString();const copy=Object.assign({},tasks[idx],{id:'custom_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7),title:(tasks[idx].title||'Задача')+' (копия)',createdAt:now,updatedAt:now,_custom:true,hidden:false});
-  copy.steps=Array.isArray(tasks[idx].steps)?tasks[idx].steps.slice():[];tasks.splice(idx+1,0,copy);tasks.forEach((t,i)=>t.num=i+1);
-  saveEditableLessonTasks(lessonName,tasks);refreshLessonTasksPanel();showLessonTaskNotice('Задача продублирована');
-}
-function deleteLessonTask(id){
-  const lessonName=lessonTaskCurrentName();const tasks=getEditableLessonTasks(lessonName);const idx=tasks.findIndex(t=>t.id===id);if(idx<0)return;
-  if(!confirm('Удалить задачу «'+(tasks[idx].title||'Задача')+'»?'))return;
-  const store=loadLessonTasksStore();const entry=store[lessonName]||{tasks:{},order:[]};entry.tasks=entry.tasks&&typeof entry.tasks==='object'?entry.tasks:{};
-  const baseIds=new Set(getLessonTaskBaseIds(lessonName));
-  if(baseIds.has(id)){entry.tasks[id]=Object.assign({},tasks[idx],{hidden:true,updatedAt:new Date().toISOString()});}
-  else delete entry.tasks[id];
-  entry.order=(entry.order||tasks.map(t=>t.id)).filter(x=>x!==id);store[lessonName]=entry;saveLessonTasksStore(store);
-  if(PT_EDITING_TASK_ID===id)PT_EDITING_TASK_ID=null;refreshLessonTasksPanel();showLessonTaskNotice('Задача удалена');
-}
-function moveLessonTask(id,direction){
-  const lessonName=lessonTaskCurrentName();const tasks=getEditableLessonTasks(lessonName);const idx=tasks.findIndex(t=>t.id===id);const ni=idx+direction;
-  if(idx<0||ni<0||ni>=tasks.length)return;
-  const tmp=tasks[idx];tasks[idx]=tasks[ni];tasks[ni]=tmp;tasks.forEach((t,i)=>t.num=i+1);
-  saveEditableLessonTasks(lessonName,tasks);refreshLessonTasksPanel();showLessonTaskNotice('Порядок задач сохранён');
-}
-function saveLessonTasksLesson(){const lessonName=lessonTaskCurrentName();saveEditableLessonTasks(lessonName,getEditableLessonTasks(lessonName));showLessonTaskNotice('Задачи урока сохранены');}
-function resetLessonTasksLesson(){
-  const lessonName=lessonTaskCurrentName();if(!confirm('Сбросить задачи текущего урока к исходным?'))return;
-  const store=loadLessonTasksStore();delete store[lessonName];saveLessonTasksStore(store);PT_EDITING_TASK_ID=null;refreshLessonTasksPanel();showLessonTaskNotice('Задачи урока сброшены к исходным');
-}
-function renderLessonTaskStepEditor(text,i){return `<div class="pt-step-edit" data-step-row><div class="pt-step-num">${i+1}</div><textarea name="step">${escapeHtml(text||'')}</textarea><button type="button" class="pt-step-del" onclick="deleteLessonTaskStep(this)">✕</button></div>`;}
-function renderLessonTaskEditor(t){
-  const parts=readLessonTaskGivenParts(t.given);
-  const typeOpts=[['numeric','Числовой'],['single','Один ответ'],['multiple','Несколько ответов'],['open','Развёрнутое решение']].map(o=>`<option value="${o[0]}" ${t.type===o[0]?'selected':''}>${o[1]}</option>`).join('');
-  const examOpts=['ЕГЭ (1 балл)','ЕГЭ (2 балла)','ОГЭ','СПО'].map(x=>`<option ${t.exam===x?'selected':''}>${x}</option>`).join('');
-  const steps=(t.steps&&t.steps.length?t.steps:['']).map((s,i)=>renderLessonTaskStepEditor(s,i)).join('');
-  return `<div class="pt-editor" id="pte_${lessonTaskDomId(t.id)}" data-task-editor="${escapeHtml(t.id)}"><div class="pt-editor-head"><div class="pt-editor-title">✏️ Редактирование задачи ${String(t.num).padStart(2,'0')}</div><button class="pt-card-action" onclick="cancelLessonTaskEdit()">Отмена</button></div><div class="pt-editor-grid"><div class="pt-editor-field"><label>Номер задачи</label><input name="num" type="number" min="1" value="${escapeHtml(t.num)}"></div><div class="pt-editor-field"><label>Название задачи</label><input name="title" value="${escapeHtml(t.title||'')}"></div><div class="pt-editor-field"><label>Уровень</label><select name="level"><option value="1" ${Number(t.level)===1?'selected':''}>Базовый</option><option value="2" ${Number(t.level)===2?'selected':''}>Средний</option><option value="3" ${Number(t.level)===3?'selected':''}>Сложный</option></select></div><div class="pt-editor-field"><label>Тип экзамена / баллы</label><select name="exam">${examOpts}</select></div><div class="pt-editor-field"><label>Тип ответа</label><select name="type">${typeOpts}</select></div><div class="pt-editor-field"><label>Баллы</label><input name="points" type="number" min="1" value="${escapeHtml(t.points||1)}"></div><div class="pt-editor-field full"><label>Условие задачи</label><textarea name="cond">${escapeHtml(t.cond||'')}</textarea></div><div class="pt-editor-field"><label>Дано</label><textarea name="given">${escapeHtml(parts.given||'')}</textarea></div><div class="pt-editor-field"><label>Найти</label><textarea name="find">${escapeHtml(parts.find||'')}</textarea></div><div class="pt-editor-field"><label>Правильный ответ</label><input name="ans" value="${escapeHtml(t.ans||'')}"></div><div class="pt-editor-field"><label>Источник</label><input name="source" value="${escapeHtml(t.source||'')}"></div><div class="pt-editor-field"><label>Путь к изображению условия</label><input name="image" value="${escapeHtml(t.image||'')}"></div><div class="pt-editor-field"><label>Путь к изображению решения</label><input name="solutionImage" value="${escapeHtml(t.solutionImage||'')}"></div><div class="pt-editor-field"><label>boardMode</label><input name="boardMode" value="${escapeHtml(t.boardMode||'')}"></div><div class="pt-editor-field full"><label>HTML-решение</label><textarea name="solutionHtml">${escapeHtml(t.solutionHtml||'')}</textarea></div><div class="pt-editor-field full"><label>Шаги решения</label><div class="pt-steps-editor" data-steps>${steps}</div><button type="button" class="pt-step-add" onclick="addLessonTaskStep('${t.id}')">+ Добавить шаг</button></div></div><div class="pt-editor-actions"><button class="pt-editor-save" onclick="saveLessonTask('${t.id}')">Сохранить</button><button class="pt-card-action" onclick="cancelLessonTaskEdit()">Отмена</button></div></div>`;
-}
 function renderPTasks(name){
-  const tasks=getEditableLessonTasks(name);
-  const empty=`<div style="text-align:center;padding:40px 20px;color:var(--gray)"><div style="font-size:32px;margin-bottom:12px">📋</div><div style="font-family:var(--fh);font-size:14px;font-weight:700;color:var(--white);margin-bottom:6px">Задачи в разработке</div><div style="font-size:13px">Задачи для темы <strong style="color:var(--orange)">"${escapeHtml(name)}"</strong> появятся в ближайшее время.</div></div>`;
-  const panel=`<div class="pt-edit-panel"><div class="pt-edit-hint">Редактор задач текущего урока · данные сохраняются в localStorage</div><button class="pt-edit-btn accent" onclick="addLessonTask()">+ Добавить задачу</button><button class="pt-edit-btn" onclick="importLessonTaskTemplate()">Импорт из шаблона</button><button class="pt-edit-btn" onclick="saveLessonTasksLesson()">Сохранить задачи урока</button><button class="pt-edit-btn danger" onclick="resetLessonTasksLesson()">Сбросить задачи урока к исходным</button></div>${renderLessonTaskNotice()}`;
-  if(!tasks||!tasks.length) return panel+empty;
+  const baseTasks=Array.isArray(LESSON_TASKS[name])?LESSON_TASKS[name].map(t=>Object.assign({},t,{isBlank:false})):[];
+  const blankTasks=getBlankTasksForLesson(name);
+  const tasks=baseTasks.concat(blankTasks).map((t,i)=>Object.assign({},t,{num:Number(t.num)||i+1}));
+  const empty=`<div style="text-align:center;padding:40px 20px;color:var(--gray)"><div style="font-size:32px;margin-bottom:12px">📋</div><div style="font-family:var(--fh);font-size:14px;font-weight:700;color:var(--white);margin-bottom:6px">Задачи в разработке</div><div style="font-size:13px">Задачи для темы <strong style="color:var(--orange)">"${escapeHtml(name||'')}"</strong> появятся в ближайшее время.</div></div>`;
   const lvlL=['','Базовый','Средний','Сложный'],lvlC=['','pt-l1','pt-l2','pt-l3'];
-  let h=panel+'<div style="font-size:12px;color:var(--gray);margin-bottom:14px">Нажмите <strong style="color:var(--orange)">«Решение»</strong>, чтобы увидеть пошаговый разбор.</div>';
+  let h=renderLessonTaskNotice();
+  if(!tasks.length){return h+empty+renderBlankTaskAddButton(name);}
+  h+='<div style="font-size:12px;color:var(--gray);margin-bottom:14px">Нажмите <strong style="color:var(--orange)">«Решение»</strong>, чтобы увидеть пошаговый разбор.</div>';
   tasks.forEach((t,i)=>{
-    if(EMODE&&PT_EDITING_TASK_ID===t.id){h+=renderLessonTaskEditor(t);return;}
-    const sid='ptS_'+i;
+    const sid='ptS_'+lessonTaskDomId((t.id||t.boardMode||i)+'_'+i);
     const photoId='ptPhoto_'+i;
+    const isBlank=!!t.isBlank;
+    const cond=t.cond?String(t.cond):(isBlank&&EMODE?'<div class="pt-empty-text">Пустой блок задачи. Условие будет добавлено через Codex.</div>':'');
+    const given=String(t.given||'');
     const steps=(t.steps||[]).map((s,j)=>`<div class="sr-step"><div class="sr-snum">${j+1}</div><div class="sr-sbody">${s}</div></div>`).join('');
     const extra=t.extraHtml?`<div class="pt-extra">${t.extraHtml}</div>`:'';
-    const boardBtn=t.boardMode?`<div class="pt-side-actions"><button class="pt-board-btn" onclick="openTaskBoard('${t.boardMode}',true)">⤢ На весь экран</button></div>`:'';
-    const answerCard=`<div class="sr-ans"><div style="font-size:18px">✓</div><div><div class="sr-ans-l">Ответ</div><div class="sr-ans-v" style="color:var(--orange)">${t.ans}</div></div></div>`;
+    const boardBtn=t.boardMode?`<div class="pt-side-actions"><button class="pt-board-btn" onclick="openTaskBoard('${String(t.boardMode).replace(/'/g,"\\'")}',true)">⤢ На весь экран</button></div>`:'';
+    const hasAnswer=String(t.ans||'').trim();
+    const answerCard=hasAnswer?`<div class="sr-ans"><div style="font-size:18px">✓</div><div><div class="sr-ans-l">Ответ</div><div class="sr-ans-v" style="color:var(--orange)">${t.ans}</div></div></div>`:'';
     const embedded=t.solutionHtml||getEmbeddedSolutionHtml(t);
-    const answer=(embedded||t.solutionImage)?(t.hideAnswer?`<div class="pt-photo-tools"><button type="button" class="pt-photo-answer-btn" data-answer-toggle="${photoId}" onclick="ptToggleAnswer(this,'${photoId}')">Показать ответ</button></div><div class="sr-ans-wrap" id="${photoId}">${answerCard}<div class="sr-ans-cover"><button type="button" class="pt-photo-answer-btn" onclick="ptToggleAnswer(null,'${photoId}')">Показать ответ</button></div></div>`:answerCard):(t.hideAnswer?`<div class="pt-photo-tools"><button type="button" class="pt-photo-answer-btn" data-answer-toggle="${photoId}" onclick="ptToggleAnswer(this,'${photoId}')">Показать ответ</button></div><div class="sr-ans-wrap" id="${photoId}">${answerCard}<div class="sr-ans-cover"><button type="button" class="pt-photo-answer-btn" onclick="ptToggleAnswer(null,'${photoId}')">Показать ответ</button></div></div>`:answerCard);
+    const answer=(embedded||t.solutionImage)?(t.hideAnswer&&answerCard?`<div class="pt-photo-tools"><button type="button" class="pt-photo-answer-btn" data-answer-toggle="${photoId}" onclick="ptToggleAnswer(this,'${photoId}')">Показать ответ</button></div><div class="sr-ans-wrap" id="${photoId}">${answerCard}<div class="sr-ans-cover"><button type="button" class="pt-photo-answer-btn" onclick="ptToggleAnswer(null,'${photoId}')">Показать ответ</button></div></div>`:answerCard):(t.hideAnswer&&answerCard?`<div class="pt-photo-tools"><button type="button" class="pt-photo-answer-btn" data-answer-toggle="${photoId}" onclick="ptToggleAnswer(this,'${photoId}')">Показать ответ</button></div><div class="sr-ans-wrap" id="${photoId}">${answerCard}<div class="sr-ans-cover"><button type="button" class="pt-photo-answer-btn" onclick="ptToggleAnswer(null,'${photoId}')">Показать ответ</button></div></div>`:answerCard);
     const rich=embedded?`<div class="pt-rich-card">${embedded}</div>`:'';
-    const photo=(!embedded&&t.solutionImage)?`<div class="pt-photo-wrap"><img class="pt-photo-img" src="${t.solutionImage}" alt="${escapeHtml(t.title)}"></div>`:'';
-    const solutionInner=embedded?`${rich}${extra}${answer}`:(t.solutionImage?`${photo}${extra}${answer}`:`${steps}${extra}${answer}`);
-    const actions=`<div class="pt-card-actions"><button class="pt-card-action" onclick="editLessonTask('${t.id}')">✏️ Редактировать</button><button class="pt-card-action" onclick="duplicateLessonTask('${t.id}')">📋 Дублировать</button><button class="pt-card-action danger" onclick="deleteLessonTask('${t.id}')">🗑 Удалить</button><button class="pt-card-action" ${i===0?'disabled':''} onclick="moveLessonTask('${t.id}',-1)">↑ Вверх</button><button class="pt-card-action" ${i===tasks.length-1?'disabled':''} onclick="moveLessonTask('${t.id}',1)">↓ Вниз</button></div>`;
-    h+=`<div class="pt-card"><div class="pt-head"><div class="pt-num">${String(t.num).padStart(2,'0')}</div><span class="pt-level ${lvlC[t.level]||lvlC[1]}">${lvlL[t.level]||lvlL[1]}</span><span class="pt-exam">${t.exam||'ЕГЭ (1 балл)'}</span><span class="pt-title">${t.title}</span>${actions}</div><div class="pt-body"><div class="pt-condition">${t.cond}</div><div>${boardBtn}<div class="pt-given">${t.given}</div><button class="pt-sol-btn" onclick="ptToggle('${sid}',this)">▶ Решение</button></div></div><div class="pt-solution" id="${sid}">${solutionInner}</div></div>`;
+    const photo=(!embedded&&t.solutionImage)?`<div class="pt-photo-wrap"><img class="pt-photo-img" src="${t.solutionImage}" alt="${escapeHtml(t.title||'Задача')}"></div>`:'';
+    const blankSolution=isBlank&&EMODE&&!embedded&&!t.solutionImage&&!steps?'<div class="pt-empty-text">Решение пока не добавлено.</div>':'';
+    const solutionInner=embedded?`${rich}${extra}${answer}`:(t.solutionImage?`${photo}${extra}${answer}`:`${steps}${extra}${answer}${blankSolution}`);
+    const emptySolution=!String(solutionInner||'').trim();
+    h+=`<div class="pt-card${isBlank?' pt-blank-card':''}"><div class="pt-head"><div class="pt-num">${String(t.num).padStart(2,'0')}</div><span class="pt-level ${lvlC[t.level]||lvlC[1]}">${lvlL[t.level]||lvlL[1]}</span><span class="pt-exam">${t.exam||'ЕГЭ'}</span><span class="pt-title">${t.title||'Новая задача'}</span></div><div class="pt-body"><div class="pt-condition">${cond}</div><div>${boardBtn}<div class="pt-given">${given}</div><button class="pt-sol-btn" data-empty-solution="${emptySolution?'1':'0'}" onclick="ptToggle('${sid}',this)">▶ Решение</button></div></div><div class="pt-solution" id="${sid}">${solutionInner}</div></div>`;
   });
-  return h;
+  return h+renderBlankTaskAddButton(name);
 }
 function ptToggle(id,btn){
   const el=document.getElementById(id);
   if(!el)return;
+  if(btn&&btn.dataset&&btn.dataset.emptySolution==='1'&&!EMODE)return;
   const o=el.classList.toggle('open');
   btn.textContent=o?'▼ Скрыть':'▶ Решение';
   if(o)requestAnimationFrame(function(){el.scrollIntoView({block:'nearest',behavior:'smooth'});});
@@ -5284,6 +5180,15 @@ function impulseCarsDraw(demo){
 var taskBoardState=null;
 function cloneTaskBoardStrokes(strokes){return JSON.parse(JSON.stringify(strokes||[]));}
 function getTaskBoardData(mode){
+  if(String(mode||'').indexOf('blank-task-')===0){
+    const store=loadBlankTaskBlocks();
+    for(const lessonName in store){
+      const list=Array.isArray(store[lessonName])?store[lessonName]:[];
+      const found=list.find(function(t){return t&&t.boardMode===mode;});
+      if(found)return normalizeBlankTaskBlock(found,0);
+    }
+    return {title:'Новая задача',cond:'',given:'',ans:'',steps:[],solutionHtml:'',solutionImage:'',boardMode:mode,isBlank:true,hasAnimation:false};
+  }
   if(mode==='impulseCars') return (LESSON_TASKS['Импульс']||[]).find(function(t){return t.boardMode===mode;})||null;
   if(mode==='momentumSystem') return (LESSON_TASKS['Закон сохранения импульса и изменения импульса']||[]).find(function(t){return t.boardMode===mode;})||null;
   if(mode==='energyHill') return (LESSON_TASKS['Закон сохранения энергии и изменения энергии']||[]).find(function(t){return t.boardMode===mode;})||null;
@@ -5292,6 +5197,10 @@ function getTaskBoardData(mode){
   if(mode==='explosionFragments') return (LESSON_TASKS['Закон сохранения импульса и изменения импульса']||[]).find(function(t){return t.boardMode===mode;})||null;
   if(mode==='inelasticBlocks') return (LESSON_TASKS['Закон сохранения импульса и изменения импульса']||[]).find(function(t){return t.boardMode===mode;})||null;
   if(mode==='cartStone') return (LESSON_TASKS['Закон сохранения импульса и изменения импульса']||[]).find(function(t){return t.boardMode===mode;})||null;
+  for(const lessonName in LESSON_TASKS){
+    const found=(LESSON_TASKS[lessonName]||[]).find(function(t){return t&&t.boardMode===mode;});
+    if(found)return found;
+  }
   return null;
 }
 function getTaskBoardGraph(mode){
