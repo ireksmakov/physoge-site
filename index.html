@@ -543,15 +543,21 @@ body.edit-mode .et{display:inline}
 
 /* ===== TASK SOLUTION WORKSPACE ===== */
 @keyframes solutionFadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-.task-solution-workspace{display:grid;grid-template-columns:1fr;gap:18px;align-items:start;color:#0f172a;font-family:var(--fb)}
+.task-solution-workspace,.task-solution-panel{display:flex;flex-direction:column;gap:14px;align-items:stretch;color:#0f172a;font-family:var(--fb)}
 .task-solution-left,.task-solution-right{min-width:0;display:flex;flex-direction:column;gap:12px}
+.task-solution-main-title{font-family:var(--fh);font-size:22px;font-weight:900;line-height:1.15;color:#0f172a;margin:0 0 2px;letter-spacing:-.3px}
 .task-solution-section{background:#fff;border:1px solid #dbe5f0;border-radius:16px;padding:14px 16px;box-shadow:0 12px 30px rgba(15,23,42,.055);animation:solutionFadeUp .36s ease both;overflow-wrap:anywhere;word-break:break-word}
 .task-solution-section:nth-child(1){animation-delay:0ms}.task-solution-section:nth-child(2){animation-delay:90ms}.task-solution-section:nth-child(3){animation-delay:180ms}.task-solution-section:nth-child(4){animation-delay:270ms}.task-solution-section:nth-child(5){animation-delay:360ms}.task-solution-section:nth-child(6){animation-delay:450ms}.task-solution-section:nth-child(7){animation-delay:540ms}
 .task-solution-section-title{font-family:var(--fh);font-size:16px;font-weight:900;line-height:1.25;color:#1e3a8a;margin:0 0 10px;display:flex;align-items:center;gap:8px}
 .task-solution-section p{margin:0 0 10px;font-size:14px;line-height:1.7;color:#334155}.task-solution-section p:last-child{margin-bottom:0}
-.formula-line{display:block;margin:8px 0;padding:10px 12px;border-radius:12px;background:linear-gradient(135deg,#f8fafc 0%,#eff6ff 100%);border:1px solid #bfdbfe;color:#0f172a;font-family:Georgia,'Times New Roman',serif;font-size:clamp(18px,2.1vw,24px);line-height:1.45;font-weight:700;text-align:center;overflow-x:auto;white-space:normal}
+.task-solution-muted{color:#64748b!important;font-style:italic}
+.task-solution-placeholder{padding:18px;border:1px dashed #cbd5e1;border-radius:18px;background:#f8fafc}.task-solution-placeholder p{margin:0;color:#64748b;font-size:15px;line-height:1.65;font-weight:700}
+.formula-line,.solution-formula-line{display:block;margin:8px 0;padding:10px 12px;border-radius:12px;background:linear-gradient(135deg,#f8fafc 0%,#eff6ff 100%);border:1px solid #bfdbfe;color:#0f172a;font-family:Georgia,'Times New Roman',serif;font-size:clamp(18px,2.1vw,24px);line-height:1.45;font-weight:700;text-align:center;overflow-x:auto;white-space:normal}
+.solution-formulas-box{background:linear-gradient(135deg,#f8fafc 0%,#eef6ff 100%);border-color:#bfdbfe}.solution-formulas-list{display:flex;flex-direction:column;gap:8px}
+.solution-steps-list{margin:0;padding-left:24px;color:#334155;font-size:14px;line-height:1.7}.solution-steps-list li{padding-left:6px;margin:8px 0}.solution-steps-list li::marker{font-weight:900;color:#2563eb}
 .tutor-hints{margin:0;padding-left:20px;color:#334155;font-size:14px;line-height:1.65}.tutor-hints li{margin:7px 0;padding-left:2px}.tutor-hints ol{margin:6px 0 0;padding-left:20px}
 .solution-answer-box{border-color:#fdba74;background:linear-gradient(135deg,#fff7ed 0%,#fffbeb 100%);color:#9a3412}.solution-answer-box .task-solution-section-title{color:#c2410c}.solution-answer-value{font-family:var(--fh);font-size:26px;font-weight:900;color:#ea580c;line-height:1.25}
+.solution-tutor-card{border-color:#c4b5fd;background:linear-gradient(135deg,#faf5ff 0%,#f5f3ff 100%);box-shadow:0 10px 24px rgba(124,58,237,.08)}.solution-tutor-card .task-solution-section-title{color:#6d28d9}
 .solution-image-card{background:#fff;border:1px solid #dbe5f0;border-radius:18px;padding:14px;box-shadow:0 14px 34px rgba(15,23,42,.08);animation:solutionFadeUp .4s ease .12s both}.solution-image-card .pt-photo-wrap,.solution-image-card .task-board-photo-wrap{margin-top:0;box-shadow:none}
 .task-board-overlay.solution-workspace-mode .task-board-layout{display:block;width:100%;height:100%;margin:0;padding:0;overflow:hidden}.task-board-overlay.solution-workspace-mode .task-board-drawer{position:absolute;left:0;top:20px;bottom:auto;width:min(660px,calc(100vw - 58px));max-height:calc(100% - 40px);transform:translateX(calc(-100% + 38px));pointer-events:none;z-index:30;flex:none}.task-board-overlay.solution-workspace-mode .task-board-drawer.open{transform:translateX(0);pointer-events:auto}.task-board-overlay.solution-workspace-mode .task-board-drawer-tab{display:block}.task-board-overlay.solution-workspace-mode .task-board-drawer-inner{border-radius:0 22px 22px 0;height:100%;padding:14px;overflow:auto}.task-board-overlay.solution-workspace-mode .task-board-drawer-title{font-size:18px;font-weight:900;line-height:1.25;color:#1e3a8a;margin:0 0 12px}.task-board-overlay.solution-workspace-mode .task-board-rich{padding:0;border:none;box-shadow:none;background:transparent}.task-board-overlay.solution-workspace-mode .task-solution-workspace{display:block}.task-board-overlay.solution-workspace-mode .task-solution-right{margin-top:12px}
 @media(max-width:980px){.task-solution-workspace{grid-template-columns:1fr}.task-board-overlay.solution-workspace-mode .task-board-drawer{width:min(92vw,660px)}.task-board-overlay.solution-workspace-mode .task-board-center{min-height:100%}}
@@ -4824,6 +4830,26 @@ const LESSON_TASKS={
     tags:['импульс','энергия','маятник','ЕГЭ','сложный'],
     cond:'Маятник состоит из маленького груза массой M = 200 г и очень легкой нити подвеса длиной L = 1,25 м. Он висит в состоянии покоя в вертикальном положении. В груз ударяется небольшое тело массой m = 100 г, летевшее в горизонтальном направлении со скоростью v = 10 м/с. После удара тело останавливается и падает вертикально вниз. На какой максимальный угол α маятник отклонится от положения равновесия после удара?',
     given:'<strong>Дано:</strong><br>M = 200 г = 0,2 кг<br>m = 100 г = 0,1 кг<br>L = 1,25 м<br>v = 10 м/с<br>g = 10 м/с²<br>после удара малое тело останавливается<br><span class="pt-find">Найти: α — максимальный угол отклонения маятника</span>',
+    solution:{
+      idea:'Разделяем процесс на два этапа: короткий удар, где сохраняется горизонтальная проекция импульса, и последующий подъём маятника, где кинетическая энергия переходит в потенциальную.',
+      formulas:[
+        'm v = M V',
+        'V = (m / M) v',
+        'M V² / 2 = M g H',
+        'H = V² / 2g',
+        'H = L(1 − cos α)',
+        'cos α = 1 − H / L'
+      ],
+      steps:[
+        'При ударе сохраняется горизонтальная проекция импульса: m v = M V.',
+        'Выражаем скорость маятника сразу после удара: V = (m / M) v = (0,1 / 0,2) · 10 = 5 м/с.',
+        'После удара кинетическая энергия груза переходит в потенциальную: H = V² / 2g = 5² / (2 · 10) = 1,25 м.',
+        'Связываем высоту подъёма с углом: H = L(1 − cos α), поэтому cos α = 1 − H / L.',
+        'Подставляем L = 1,25 м и H = 1,25 м: cos α = 0, значит α = 90°.'
+      ],
+      answer:'α = 90°',
+      tutorHint:'Сначала подчеркните, что импульс сохраняется только на этапе короткого удара по горизонтали, а после удара нужно переходить к закону сохранения механической энергии для подъёма маятника.'
+    },
     steps:[],
     solutionTextHtml:`
       <p><strong>Шаг 1.</strong> Сохраняется горизонтальная проекция импульса при ударе:</p>
@@ -5012,6 +5038,7 @@ function normalizeBlankTaskBlock(task,i){
   t.steps=Array.isArray(t.steps)?t.steps.slice():[];
   t.solutionHtml=t.solutionHtml||'';
   t.solutionImage=t.solutionImage||'';
+  t.solution=(t.solution&&typeof t.solution==='object')?t.solution:{idea:'',formulas:[],steps:[],answer:'',tutorHint:''};
   t.extraHtml=t.extraHtml||'';
   t.boardMode=t.boardMode||('blank-task-'+Date.now()+'-'+i);
   t.isBlank=true;
@@ -5086,6 +5113,7 @@ function addBlankTaskBlock(lessonName){
     steps:[],
     solutionHtml:'',
     solutionImage:'',
+    solution:{idea:'',formulas:[],steps:[],answer:'',tutorHint:''},
     extraHtml:'',
     boardMode:'blank-task-'+Date.now(),
     isBlank:true
@@ -5156,32 +5184,56 @@ function stripSolutionImagesHtml(html){
   return template.innerHTML.trim();
 }
 
-function renderTaskSolutionWorkspace(task,cls){
-  const title=escapeHtml(task.solutionTitle||('Решение задачи '+String(task.num||'')+'. '+(task.title||'')));
-  const condition=String(task.cond||'').trim()||'Условие пока не добавлено';
-  const givenRaw=String(task.given||'').trim();
-  const findMatch=givenRaw.match(/<span[^>]*class="pt-find"[^>]*>([\s\S]*?)<\/span>/i);
-  const given=givenRaw?givenRaw.replace(/<br>\s*<span[^>]*class="pt-find"[^>]*>[\s\S]*?<\/span>/i,'').replace(/<span[^>]*class="pt-find"[^>]*>[\s\S]*?<\/span>/i,''):'<span>Дано пока не добавлено</span>';
-  const findText=String(task.findText||((findMatch&&findMatch[1])?findMatch[1].replace(/^\s*Найти:\s*/i,''):'')).trim()||'Что требуется найти — пока не указано';
-  const solutionText=String(task.solutionTextHtml||'').trim()||'<p>Краткое решение пока не добавлено</p>';
-  const formulas=Array.isArray(task.solutionFormulas)&&task.solutionFormulas.length
-    ? task.solutionFormulas.map(function(f){return `<div class="formula-line">${escapeHtml(f)}</div>`;}).join('')
-    : '<p>Основные формулы пока не добавлены</p>';
-  const hints=Array.isArray(task.tutorHints)&&task.tutorHints.length
-    ? `<ul class="tutor-hints">${task.tutorHints.map(function(h){return `<li>${h}</li>`;}).join('')}</ul>`
-    : '<ul class="tutor-hints"><li>Подсказки репетитору пока не добавлены.</li></ul>';
-  const answer=String(task.answerText||task.ans||'Ответ пока не добавлен').trim();
-  return `<div class="task-solution-workspace" aria-label="${title}">
-    <div class="task-solution-left">
-      <div class="task-solution-section"><h3 class="task-solution-section-title">Условие</h3><p>${condition}</p></div>
-      <div class="task-solution-section"><h3 class="task-solution-section-title">Дано</h3><div class="pt-given">${given}</div></div>
-      <div class="task-solution-section"><h3 class="task-solution-section-title">Найти</h3><p>${findText}</p></div>
-      <div class="task-solution-section"><h3 class="task-solution-section-title">Краткое решение</h3>${solutionText}</div>
-      <div class="task-solution-section"><h3 class="task-solution-section-title">Основные формулы</h3>${formulas}</div>
-      <div class="task-solution-section"><h3 class="task-solution-section-title">Подсказки репетитору</h3>${hints}</div>
-      <div class="task-solution-section solution-answer-box"><h3 class="task-solution-section-title">Ответ</h3><div class="solution-answer-value">${answer}</div></div>
-    </div>
+const TASK_SOLUTION_PLACEHOLDER='Решение ещё не заполнено. Добавьте краткое решение, формулы и комментарии.';
+
+function taskSolutionList(value){
+  if(Array.isArray(value)) return value.map(function(item){return String(item||'').trim();}).filter(Boolean);
+  const text=String(value||'').trim();
+  return text?[text]:[];
+}
+function getTaskSolutionData(task){
+  const raw=task&&task.solution&&typeof task.solution==='object'?task.solution:null;
+  return {
+    idea:String(raw&&raw.idea||'').trim(),
+    formulas:taskSolutionList(raw&&raw.formulas),
+    steps:taskSolutionList(raw&&raw.steps),
+    answer:String(raw&&raw.answer||'').trim(),
+    tutorHint:String(raw&&raw.tutorHint||'').trim()
+  };
+}
+function hasFilledTaskSolution(task){
+  const solution=getTaskSolutionData(task);
+  return !!(solution.idea||solution.formulas.length||solution.steps.length||solution.answer||solution.tutorHint);
+}
+function renderTaskSolutionPanel(task){
+  const title=escapeHtml(task&&task.solutionTitle||('Решение задачи '+String(task&&task.num||'')+'. '+(task&&task.title||'')));
+  const solution=getTaskSolutionData(task||{});
+  if(!hasFilledTaskSolution(task||{})){
+    return `<div class="task-solution-panel task-solution-placeholder" aria-label="${title}">
+      <h3 class="task-solution-main-title">Решение</h3>
+      <p>${TASK_SOLUTION_PLACEHOLDER}</p>
+    </div>`;
+  }
+  const idea=solution.idea?`<p>${escapeHtml(solution.idea)}</p>`:'<p class="task-solution-muted">Идея решения пока не добавлена.</p>';
+  const formulas=solution.formulas.length
+    ? solution.formulas.map(function(formula){return `<div class="solution-formula-line">${escapeHtml(formula)}</div>`;}).join('')
+    : '<p class="task-solution-muted">Основные формулы пока не добавлены.</p>';
+  const steps=solution.steps.length
+    ? `<ol class="solution-steps-list">${solution.steps.map(function(step){return `<li>${escapeHtml(step)}</li>`;}).join('')}</ol>`
+    : '<p class="task-solution-muted">Шаги решения пока не добавлены.</p>';
+  const answer=solution.answer?escapeHtml(solution.answer):'Ответ пока не добавлен.';
+  const tutorHint=solution.tutorHint?escapeHtml(solution.tutorHint):'Подсказка репетитору пока не добавлена.';
+  return `<div class="task-solution-panel" aria-label="${title}">
+    <h3 class="task-solution-main-title">Решение</h3>
+    <section class="task-solution-section"><h4 class="task-solution-section-title">Идея решения</h4>${idea}</section>
+    <section class="task-solution-section solution-formulas-box"><h4 class="task-solution-section-title">Основные формулы</h4><div class="solution-formulas-list">${formulas}</div></section>
+    <section class="task-solution-section"><h4 class="task-solution-section-title">Шаги решения</h4>${steps}</section>
+    <section class="task-solution-section solution-answer-box"><h4 class="task-solution-section-title">Ответ</h4><div class="solution-answer-value">${answer}</div></section>
+    <aside class="task-solution-section solution-tutor-card"><h4 class="task-solution-section-title">Подсказка репетитору</h4><p>${tutorHint}</p></aside>
   </div>`;
+}
+function renderTaskSolutionWorkspace(task,cls){
+  return renderTaskSolutionPanel(task);
 }
 
 function renderPTasks(name){
@@ -5195,22 +5247,13 @@ function renderPTasks(name){
   h+='<div style="font-size:12px;color:var(--gray);margin-bottom:14px">Нажмите <strong style="color:var(--orange)">«Решение»</strong>, чтобы увидеть пошаговый разбор.</div>';
   tasks.forEach((t,i)=>{
     const sid='ptS_'+lessonTaskDomId((t.id||t.boardMode||i)+'_'+i);
-    const photoId='ptPhoto_'+i;
     const isBlank=!!t.isBlank;
     const cond=t.cond?String(t.cond):(isBlank&&EMODE?'<div class="pt-empty-text">Пустой блок задачи. Условие будет добавлено через Codex.</div>':'');
-    const steps=(t.steps||[]).map((s,j)=>`<div class="sr-step"><div class="sr-snum">${j+1}</div><div class="sr-sbody">${s}</div></div>`).join('');
     const extra=t.extraHtml?`<div class="pt-extra">${t.extraHtml}</div>`:'';
     const boardBtn=t.boardMode?`<div class="pt-side-actions"><button class="pt-board-btn" onclick="openTaskBoard('${String(t.boardMode).replace(/'/g,"\\'")}',true)">⤢ На весь экран</button></div>`:'';
-    const hasAnswer=String(t.ans||'').trim();
-    const answerCard=hasAnswer?`<div class="sr-ans"><div style="font-size:18px">✓</div><div><div class="sr-ans-l">Ответ</div><div class="sr-ans-v" style="color:var(--orange)">${t.ans}</div></div></div>`:'';
-    const hasSolutionWorkspace=!!(t.solutionTextHtml||t.solutionFormulas||t.tutorHints);
-    const embeddedRaw=hasSolutionWorkspace?renderTaskSolutionWorkspace(t,'pt'):(t.solutionHtml||getEmbeddedSolutionHtml(t));
-    const embedded=stripSolutionImagesHtml(embeddedRaw);
-    const answer=hasSolutionWorkspace?'':embedded?(t.hideAnswer&&answerCard?`<div class="pt-photo-tools"><button type="button" class="pt-photo-answer-btn" data-answer-toggle="${photoId}" onclick="ptToggleAnswer(this,'${photoId}')">Показать ответ</button></div><div class="sr-ans-wrap" id="${photoId}">${answerCard}<div class="sr-ans-cover"><button type="button" class="pt-photo-answer-btn" onclick="ptToggleAnswer(null,'${photoId}')">Показать ответ</button></div></div>`:answerCard):(t.hideAnswer&&answerCard?`<div class="pt-photo-tools"><button type="button" class="pt-photo-answer-btn" data-answer-toggle="${photoId}" onclick="ptToggleAnswer(this,'${photoId}')">Показать ответ</button></div><div class="sr-ans-wrap" id="${photoId}">${answerCard}<div class="sr-ans-cover"><button type="button" class="pt-photo-answer-btn" onclick="ptToggleAnswer(null,'${photoId}')">Показать ответ</button></div></div>`:answerCard);
-    const rich=embedded?`<div class="pt-rich-card">${embedded}</div>`:'';
-    const fallbackSolution=!embedded&&!steps&&!extra&&!answer?'<div class="pt-empty-text">Решение пока не добавлено.</div>':'';
-    const solutionInner=embedded?`${rich}${extra}${answer}`:`${steps}${extra}${answer}${fallbackSolution}`;
-    const emptySolution=!String(solutionInner||'').trim();
+    const solutionPanel=renderTaskSolutionPanel(t);
+    const solutionInner=`<div class="pt-rich-card">${solutionPanel}</div>${extra}`;
+    const emptySolution=false;
     h+=`<div class="pt-card${isBlank?' pt-blank-card':''}"><div class="pt-head"><div class="pt-num">${String(t.num).padStart(2,'0')}</div><span class="pt-level ${lvlC[t.level]||lvlC[1]}">${lvlL[t.level]||lvlL[1]}</span><span class="pt-exam">${t.exam||'ЕГЭ'}</span><span class="pt-title">${t.title||'Новая задача'}</span></div><div class="pt-body"><div class="pt-condition">${cond}</div><div class="pt-side">${boardBtn}<button class="pt-sol-btn" data-empty-solution="${emptySolution?'1':'0'}" onclick="ptToggle('${sid}',this)">▶ Решение</button></div></div><div class="pt-solution" id="${sid}">${solutionInner}</div></div>`;
   });
   return h+renderBlankTaskAddButton(name);
@@ -5375,7 +5418,7 @@ function getTaskBoardData(mode){
       const found=list.find(function(t){return t&&t.boardMode===mode;});
       if(found)return normalizeBlankTaskBlock(found,0);
     }
-    return {title:'Новая задача',cond:'',given:'',ans:'',steps:[],solutionHtml:'',solutionImage:'',boardMode:mode,isBlank:true,hasAnimation:false};
+    return {title:'Новая задача',cond:'',given:'',ans:'',steps:[],solutionHtml:'',solutionImage:'',solution:{idea:'',formulas:[],steps:[],answer:'',tutorHint:''},boardMode:mode,isBlank:true,hasAnimation:false};
   }
   if(mode==='impulseCars') return (LESSON_TASKS['Импульс']||[]).find(function(t){return t.boardMode===mode;})||null;
   if(mode==='momentumSystem') return (LESSON_TASKS['Закон сохранения импульса и изменения импульса']||[]).find(function(t){return t.boardMode===mode;})||null;
@@ -5782,15 +5825,7 @@ function getEmbeddedSolutionHtml(task){
   return task.solutionHtml||'';
 }
 function renderTaskBoardSolution(task){
-  const embeddedRaw=(task.solutionTextHtml||task.solutionFormulas||task.tutorHints)?renderTaskSolutionWorkspace(task,'task-board'):(task.boardSolutionHtml || task.solutionHtml || getEmbeddedSolutionHtml(task));
-  const embedded=stripSolutionImagesHtml(embeddedRaw);
-  if(embedded){
-    return `<div class="task-board-rich">${embedded}</div>`;
-  }
-  const steps=(task.steps||[]).map(function(step,index){
-    return `<div class="task-board-step"><div class="task-board-step-num">${index+1}</div><div class="task-board-step-body">${step}</div></div>`;
-  }).join('');
-  return steps||'<div class="pt-empty-text">Решение пока не добавлено.</div>';
+  return `<div class="task-board-rich">${renderTaskSolutionPanel(task)}</div>`;
 }
 function ensureTaskBoardOverlay(){
   if(taskBoardState) return taskBoardState;
@@ -6028,7 +6063,7 @@ function openTaskBoard(mode,requestFullscreen){
     state.animBtn.style.display=task.hasAnimation===false?'none':'inline-flex';
     state.animBtn.textContent='▶ Анимация';
   }
-  const useSolutionWorkspace=!!(task.solutionTextHtml||task.solutionFormulas||task.tutorHints);
+  const useSolutionWorkspace=true;
   state.solution.innerHTML=renderTaskBoardSolution(task);
   state.answer.innerHTML=task.ans;
   const answerWrap=state.answer?state.answer.closest('.task-board-answer'):null;
