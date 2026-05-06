@@ -4827,6 +4827,8 @@ const LESSON_TASKS={
     tags:['импульс','энергия','маятник','ЕГЭ','сложный'],
     cond:'Маятник состоит из маленького груза массой M = 200 г и очень легкой нити подвеса длиной L = 1,25 м. Он висит в состоянии покоя в вертикальном положении. В груз ударяется небольшое тело массой m = 100 г, летевшее в горизонтальном направлении со скоростью v = 10 м/с. После удара тело останавливается и падает вертикально вниз. На какой максимальный угол α маятник отклонится от положения равновесия после удара?',
     given:'<strong>Дано:</strong><br>M = 200 г = 0,2 кг<br>m = 100 г = 0,1 кг<br>L = 1,25 м<br>v = 10 м/с<br>g = 10 м/с²<br>после удара малое тело останавливается<br><span class="pt-find">Найти: α — максимальный угол отклонения маятника</span>',
+    solutionImage: "images/task-07-pendulum-impact-solution-card.png",
+    solutionTitle:'Решение задачи 07. Маятник после удара',
     steps:[
       `Во время короткого удара учитываем горизонтальный импульс: малое тело массой <span class="fml">m</span> после удара останавливается, поэтому весь его начальный импульс получает груз маятника:<div class="sr-fml">mv = Mu</div>`,
       `Находим скорость груза маятника сразу после удара:<div class="sr-fml">u = ${mFrac('mv','M')} = ${mFrac('0,1 · 10','0,2')} = 5 м/с</div>`,
@@ -5249,7 +5251,7 @@ function renderPTasks(name){
     const boardBtn=t.boardMode?`<div class="pt-side-actions"><button class="pt-board-btn" onclick="openTaskBoard('${String(t.boardMode).replace(/'/g,"\\'")}',true)">⤢ На весь экран</button></div>`:'';
     const hasAnswer=String(t.ans||'').trim();
     const answerCard=hasAnswer?`<div class="sr-ans"><div style="font-size:18px">✓</div><div><div class="sr-ans-l">Ответ</div><div class="sr-ans-v" style="color:var(--orange)">${t.ans}</div></div></div>`:'';
-    const hasStructuredSolution=hasFilledTaskSolution(t)||hasLegacyTaskSolution(t);
+    const hasStructuredSolution=hasFilledTaskSolution(t)||hasLegacyTaskTextSolution(t);
     const embeddedRaw=hasStructuredSolution?renderTaskSolutionPanel(t,'pt'):(t.solutionHtml||getEmbeddedSolutionHtml(t));
     const embedded=String(embeddedRaw||'').trim();
     const imageOnly=!embedded&&t.solutionImage?renderSolutionImageHtml(t.solutionImage,t.solutionTitle||t.title||'Решение задачи','pt'):'';
@@ -5830,7 +5832,7 @@ function getEmbeddedSolutionHtml(task){
   return task.solutionHtml||'';
 }
 function renderTaskBoardSolution(task){
-  const embeddedRaw=(hasFilledTaskSolution(task)||hasLegacyTaskSolution(task))?renderTaskSolutionPanel(task,'task-board'):(task.boardSolutionHtml || task.solutionHtml || getEmbeddedSolutionHtml(task));
+  const embeddedRaw=(hasFilledTaskSolution(task)||hasLegacyTaskTextSolution(task))?renderTaskSolutionPanel(task,'task-board'):(task.boardSolutionHtml || task.solutionHtml || getEmbeddedSolutionHtml(task));
   const embedded=String(embeddedRaw||'').trim();
   if(embedded){
     return `<div class="task-board-rich">${embedded}</div>`;
