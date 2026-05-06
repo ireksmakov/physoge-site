@@ -837,6 +837,132 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 .thx-scheme-step strong{color:var(--white)}
 @media (max-width:980px){.thx-grid.two,.thx-grid.three,.thx-mini-grid{grid-template-columns:1fr}.thx-eq{font-size:20px}.th-html{padding:16px}}
 
+.zsi-theory-carousel {
+  background: #ffffff;
+  color: #10233e;
+  border-radius: 20px;
+  padding: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(8,216,255,.22);
+}
+
+.zsi-carousel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.zsi-carousel-kicker {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #0b63ce;
+  margin-bottom: 4px;
+}
+
+.zsi-carousel-head h3 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.2;
+  color: #0b2470;
+}
+
+.zsi-carousel-controls {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.zsi-carousel-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid #b9d5ff;
+  background: #eef6ff;
+  color: #0b63ce;
+  font-size: 20px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.zsi-carousel-btn:hover {
+  background: #dbeeff;
+}
+
+.zsi-carousel-track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding-bottom: 10px;
+}
+
+.zsi-carousel-track::-webkit-scrollbar {
+  height: 8px;
+}
+
+.zsi-carousel-track::-webkit-scrollbar-thumb {
+  background: #b9d5ff;
+  border-radius: 999px;
+}
+
+.zsi-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  margin: 0;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #dbe8ff;
+}
+
+.zsi-slide img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #ffffff;
+}
+
+.zsi-slide figcaption {
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #31547f;
+  background: #f5f9ff;
+  border-top: 1px solid #dbe8ff;
+}
+
+.zsi-carousel-hint {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #5b6f8f;
+}
+
+@media (max-width: 700px) {
+  .zsi-theory-carousel {
+    padding: 10px;
+    border-radius: 16px;
+  }
+
+  .zsi-carousel-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .zsi-carousel-head h3 {
+    font-size: 18px;
+  }
+
+  .zsi-carousel-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
 /* VIDEO / TESTS / HW */
 .vd{border:1.5px dashed var(--border);border-radius:12px;padding:24px;text-align:center;margin-bottom:18px;transition:all .2s}
 .vd:hover{border-color:var(--cyan);background:rgba(0,229,255,.03)}
@@ -1682,9 +1808,43 @@ const THEORY = {
 ],
 'Закон сохранения импульса и изменения импульса':[
   {type:'html',html:`
-    <div class="theory-image-block">
-      <img src="images/lesson12-zsi-theory.png" alt="Закон сохранения импульса — теория урока 12" class="lesson-theory-image">
-    </div>`}
+    <div class="zsi-theory-carousel">
+      <div class="zsi-carousel-head">
+        <div>
+          <div class="zsi-carousel-kicker">Урок 12 · Теория</div>
+          <h3>Закон сохранения импульса</h3>
+        </div>
+        <div class="zsi-carousel-controls">
+          <button type="button" class="zsi-carousel-btn" onclick="scrollZsiTheory(-1)">←</button>
+          <button type="button" class="zsi-carousel-btn" onclick="scrollZsiTheory(1)">→</button>
+        </div>
+      </div>
+
+      <div class="zsi-carousel-track" id="zsiTheoryTrack">
+        <figure class="zsi-slide">
+          <img src="images/lesson12-zsi-theory-01-impulse.png" alt="Закон сохранения импульса: импульс тела, импульс силы и теорема об изменении импульса">
+          <figcaption>1/4 · Импульс тела и импульс силы</figcaption>
+        </figure>
+
+        <figure class="zsi-slide">
+          <img src="images/lesson12-zsi-theory-02-conservation-law.png" alt="Закон сохранения импульса: условия применения, упругие и неупругие взаимодействия">
+          <figcaption>2/4 · Закон сохранения импульса</figcaption>
+        </figure>
+
+        <figure class="zsi-slide">
+          <img src="images/lesson12-zsi-theory-03-solved-examples.png" alt="Закон сохранения импульса: примеры решения задач">
+          <figcaption>3/4 · Примеры решения задач</figcaption>
+        </figure>
+
+        <figure class="zsi-slide">
+          <img src="images/lesson12-zsi-theory-04-formulas-algorithm.png" alt="Закон сохранения импульса: формулы, алгоритм и важные замечания">
+          <figcaption>4/4 · Формулы и алгоритм</figcaption>
+        </figure>
+      </div>
+
+      <div class="zsi-carousel-hint">Прокручивайте карточки влево и вправо или используйте кнопки со стрелками.</div>
+    </div>
+  `}
 ],
 'Работа силы':[
   {type:'text',label:'📌 Определения',title:'Энергия и механическая работа',text:`Энергия — скалярная физическая величина, характеризующая способность тела совершать работу. Работа силы — скалярная величина, которая показывает, как действие силы связано с перемещением тела. Если силы нет, перемещения нет или сила перпендикулярна перемещению, работа не совершается.`},
@@ -3079,6 +3239,19 @@ function renderTheory(){
     }
   });
   return h;
+}
+
+function scrollZsiTheory(direction){
+  const track = document.getElementById('zsiTheoryTrack');
+  if(!track) return;
+
+  const slide = track.querySelector('.zsi-slide');
+  const step = slide ? slide.offsetWidth + 16 : track.clientWidth;
+
+  track.scrollBy({
+    left: direction * step,
+    behavior: 'smooth'
+  });
 }
 
 function saveBlock(i,field,val){getTH()[i][field]=val}
