@@ -671,6 +671,38 @@ body.task-board-lock{overflow:hidden}
 .task-board-photo-wrap{border-radius:16px;overflow:hidden;background:#fff;border:1px solid rgba(148,163,184,.28);box-shadow:0 14px 34px rgba(15,23,42,.08);margin-top:10px}
 .task-board-photo-img{display:block;width:100%;height:auto;background:#fff}
 .task-board-solution-title{font-family:var(--fh);font-size:18px;font-weight:900;line-height:1.25;color:#1e3a8a;margin:0 0 10px}
+
+@keyframes taskSolutionFadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.task-solution-workspace{display:grid;grid-template-columns:minmax(320px,.92fr) minmax(320px,1.08fr);gap:18px;align-items:start;margin-top:4px}
+.task-solution-left,.task-solution-right{display:flex;flex-direction:column;gap:12px;min-width:0}
+.task-solution-section{background:#fff;border:1px solid #dbe5f0;border-radius:18px;padding:14px 16px;box-shadow:0 14px 34px rgba(15,23,42,.06);color:#475569;line-height:1.62;animation:taskSolutionFadeUp .42s ease both;animation-delay:calc(var(--section-index,0)*95ms);min-width:0}
+.pt-solution .task-solution-section{background:var(--bg2);border-color:var(--border);box-shadow:none;color:var(--gray)}
+.task-solution-section p{margin:8px 0 10px}
+.task-solution-section p:first-child{margin-top:0}
+.task-solution-section strong{color:#111827;font-weight:850}
+.pt-solution .task-solution-section strong{color:var(--white)}
+.task-solution-section-title{font-family:var(--fh);font-size:16px;font-weight:900;line-height:1.25;color:#1e3a8a;margin:0 0 10px}
+.pt-solution .task-solution-section-title{color:var(--orange)}
+.formula-line{display:block;margin:8px 0;padding:10px 12px;border-radius:14px;background:linear-gradient(135deg,#f8fafc,#eef6ff);border:1px solid #dbeafe;color:#0f172a;font-family:Georgia,'Times New Roman',serif;font-size:clamp(18px,1.55vw,23px);font-weight:700;line-height:1.45;letter-spacing:.01em;overflow-wrap:anywhere}
+.formula-line .frac{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;vertical-align:middle;line-height:1;margin:0 .16em}
+.formula-line .frac>span{display:block;padding:0 .18em}
+.formula-line .frac .f-top{border-bottom:1.6px solid currentColor;padding-bottom:.08em}
+.formula-line .frac .f-bottom{padding-top:.08em}
+.pt-solution .formula-line{background:rgba(0,229,255,.07);border-color:rgba(0,229,255,.18);color:var(--white)}
+.tutor-hints{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+.tutor-hints li{padding-left:2px;line-height:1.55}
+.solution-answer-box{display:flex;align-items:center;gap:10px;background:#fff7ed;border:1px solid #fed7aa;border-radius:16px;padding:13px 15px;color:#9a3412;font-size:18px;font-weight:900}
+.solution-answer-box strong{color:#111827}
+.pt-solution .solution-answer-box{background:rgba(255,140,0,.09);border-color:rgba(255,140,0,.24);color:var(--orange)}
+.solution-image-card{background:#fff;border:1px solid #dbe5f0;border-radius:20px;padding:14px;box-shadow:0 16px 40px rgba(15,23,42,.07);animation:taskSolutionFadeUp .42s ease both;animation-delay:120ms}
+.pt-solution .solution-image-card{background:var(--bg2);border-color:var(--border);box-shadow:none}
+.solution-image-card .pt-photo-wrap,.solution-image-card .task-board-photo-wrap{margin-top:0}
+.task-board-rich .task-solution-workspace{grid-template-columns:1fr;gap:12px}
+.task-board-drawer.solution-workspace-open{width:min(1180px,calc(100% - 64px));transform:translateX(calc(-100% + 38px))}
+.task-board-drawer.solution-workspace-open.open{transform:translateX(0)}
+.task-board-drawer.solution-workspace-open .task-board-drawer-title{font-size:18px;font-weight:900;line-height:1.25;color:#1e3a8a;max-width:none;margin-bottom:12px}
+.task-board-drawer.solution-workspace-open .task-board-rich .task-solution-workspace{grid-template-columns:minmax(320px,.95fr) minmax(320px,1.05fr)}
+@media(max-width:900px){.task-solution-workspace,.task-board-drawer.solution-workspace-open .task-board-rich .task-solution-workspace{grid-template-columns:1fr}.task-board-drawer.solution-workspace-open{width:min(720px,calc(100% - 48px))}}
 .task-board-static-given{border-left:4px solid #f97316;border-radius:0 12px 12px 0;background:#f8fafc;padding:12px 14px;margin-bottom:12px;font-size:15px;line-height:1.7;color:#475569}
 .task-board-static-given strong{color:#111827}
 .task-board-center{position:relative;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin-left:0;height:100%;flex:1}
@@ -4808,19 +4840,44 @@ const LESSON_TASKS={
     cond:'Маятник состоит из маленького груза массой M = 200 г и очень легкой нити подвеса длиной L = 1,25 м. Он висит в состоянии покоя в вертикальном положении. В груз ударяется небольшое тело массой m = 100 г, летевшее в горизонтальном направлении со скоростью v = 10 м/с. После удара тело останавливается и падает вертикально вниз. На какой максимальный угол α маятник отклонится от положения равновесия после удара?',
     given:'<strong>Дано:</strong><br>M = 200 г = 0,2 кг<br>m = 100 г = 0,1 кг<br>L = 1,25 м<br>v = 10 м/с<br>g = 10 м/с²<br>после удара малое тело останавливается<br><span class="pt-find">Найти: α — максимальный угол отклонения маятника</span>',
     steps:[],
-    solutionHtml:`
-      <div class="pt-solution-title">Решение задачи 07. Маятник после удара</div>
-      <div class="pt-photo-wrap">
-        <img class="pt-photo-img" src="images/task-07-pendulum-impact-solution-card.png" alt="Решение задачи 07. Маятник после удара" onerror="handleSolutionImageError(this,'images/task-07-pendulum-impact-solution-card.png')">
-        <div class="pt-img-fallback">Изображение решения пока не найдено</div>
-      </div>`,
-    boardSolutionHtml:`
-      <div class="task-board-static-given"><strong>Дано:</strong><br>M = 200 г = 0,2 кг<br>m = 100 г = 0,1 кг<br>L = 1,25 м<br>v = 10 м/с<br>g = 10 м/с²<br>после удара малое тело останавливается<br><strong>Найти:</strong> α — максимальный угол отклонения маятника</div>
-      <div class="task-board-solution-title">Решение задачи 07. Маятник после удара</div>
-      <div class="task-board-photo-wrap">
-        <img class="task-board-photo-img" src="images/task-07-pendulum-impact-solution-card.png" alt="Решение задачи 07. Маятник после удара" onerror="handleSolutionImageError(this,'images/task-07-pendulum-impact-solution-card.png')">
-        <div class="pt-img-fallback">Изображение решения пока не найдено</div>
-      </div>`,
+    solutionTextHtml:`
+      <h3 class="task-solution-section-title">Краткое решение</h3>
+      <p><strong>Шаг 1.</strong> Сохраняется горизонтальная проекция импульса при ударе:</p>
+      <div class="formula-line">m v = M V</div>
+      <p>Отсюда:</p>
+      <div class="formula-line">V = ${mFrac('m','M')} v</div>
+      <p><strong>Шаг 2.</strong> После удара кинетическая энергия груза переходит в потенциальную:</p>
+      <div class="formula-line">${mFrac('M V<sup>2</sup>','2')} = M g H</div>
+      <p>Отсюда:</p>
+      <div class="formula-line">H = ${mFrac('V<sup>2</sup>','2g')}</div>
+      <p><strong>Шаг 3.</strong> Связь высоты подъёма с углом отклонения:</p>
+      <div class="formula-line">H = L(1 − cos α)</div>
+      <p>Отсюда:</p>
+      <div class="formula-line">cos α = 1 − ${mFrac('H','L')}</div>
+      <p><strong>Шаг 4.</strong> Подстановка:</p>
+      <div class="formula-line">V = ${mFrac('0,1','0,2')} · 10 = 5 м/с</div>
+      <div class="formula-line">H = ${mFrac('5<sup>2</sup>','2 · 10')} = 1,25 м</div>
+      <div class="formula-line">cos α = 1 − ${mFrac('1,25','1,25')} = 0</div>
+      <div class="formula-line">α = 90°</div>`,
+    solutionFormulas:[
+      'm v = M V',
+      'V = (m / M) v',
+      'M V² / 2 = M g H',
+      'H = V² / 2g',
+      'H = L(1 − cos α)',
+      'cos α = 1 − H / L'
+    ],
+    tutorHints:[
+      'Сначала объяснить, что при коротком ударе сохраняется только горизонтальная проекция импульса.',
+      'Вертикальную проекцию импульса не используем, потому что после удара тело падает вниз, а маятник начинает двигаться горизонтально.',
+      'После удара импульс уже не сохраняется для одного груза маятника, но сохраняется механическая энергия при подъёме.',
+      'Важно разделить задачу на два этапа: 1) удар — закон сохранения импульса; 2) подъём маятника — закон сохранения энергии.',
+      'Массы нужно перевести в килограммы: M = 0,2 кг, m = 0,1 кг.',
+      'Для ЕГЭ важно показать переход от H = L(1 − cos α) к cos α = 1 − H/L.'
+    ],
+    answerText:'α = 90°',
+    solutionHtml:'',
+    boardSolutionHtml:'',
     ans:'α = 90°'
   }
 ],
@@ -5049,6 +5106,45 @@ function renderSolutionImageHtml(path,alt,cls){
   return `<div class="${wrapClass}"><img class="${imgClass}" src="${safePath}" alt="${safeAlt}" onerror="handleSolutionImageError(this)"><div class="pt-img-fallback">Изображение решения пока не найдено</div></div>`;
 }
 
+function hasStructuredTaskSolution(task){
+  return !!(task&&(task.solutionTextHtml||task.solutionFormulas||task.tutorHints||task.answerText));
+}
+function renderSolutionFormulas(formulas){
+  if(!Array.isArray(formulas)||!formulas.length) return '<div class="formula-line">Основные формулы пока не добавлены</div>';
+  return formulas.map(function(formula){return `<div class="formula-line">${formula}</div>`;}).join('');
+}
+function renderTutorHints(hints){
+  if(!Array.isArray(hints)||!hints.length) return '<div class="pt-empty-text">Подсказки репетитору пока не добавлены</div>';
+  return `<ul class="tutor-hints">${hints.map(function(hint){return `<li>${hint}</li>`;}).join('')}</ul>`;
+}
+function getTaskFindText(task){
+  const explicit=String(task.findText||'').trim();
+  if(explicit) return explicit;
+  const given=String(task.given||'');
+  const match=given.match(/<span[^>]*class=["'][^"']*pt-find[^"']*["'][^>]*>([\s\S]*?)<\/span>/i);
+  if(match) return match[1].replace(/^\s*Найти:\s*/i,'').trim();
+  return 'Искомая величина пока не указана';
+}
+function renderStructuredTaskSolution(task,cls){
+  const imageCls=cls==='task-board'?'task-board':'pt';
+  const solutionText=String(task.solutionTextHtml||'').trim()||'<p>Краткое решение пока не добавлено</p>';
+  const answerText=String(task.answerText||task.ans||'').trim();
+  const findText=getTaskFindText(task);
+  const image=task.solutionImage?`<div class="solution-image-card"><h3 class="task-solution-section-title">Инфографика решения</h3>${renderSolutionImageHtml(task.solutionImage,task.solutionTitle||task.title||'Решение задачи',imageCls)}</div>`:'';
+  return `<div class="task-solution-workspace">
+    <div class="task-solution-left">
+      <div class="task-solution-section" style="--section-index:0"><h3 class="task-solution-section-title">Условие</h3><div>${task.cond||'Условие пока не добавлено'}</div></div>
+      <div class="task-solution-section" style="--section-index:1"><h3 class="task-solution-section-title">Дано</h3><div>${task.given||'Дано пока не добавлено'}</div></div>
+      <div class="task-solution-section" style="--section-index:2"><h3 class="task-solution-section-title">Найти</h3><div>${findText}</div></div>
+      <div class="task-solution-section" style="--section-index:3">${solutionText}</div>
+      <div class="task-solution-section" style="--section-index:4"><h3 class="task-solution-section-title">Основные формулы</h3>${renderSolutionFormulas(task.solutionFormulas)}</div>
+      <div class="task-solution-section" style="--section-index:5"><h3 class="task-solution-section-title">Подсказки репетитору</h3>${renderTutorHints(task.tutorHints)}</div>
+      ${answerText?`<div class="task-solution-section" style="--section-index:6"><h3 class="task-solution-section-title">Ответ</h3><div class="solution-answer-box"><span>✓</span><strong>${answerText}</strong></div></div>`:''}
+    </div>
+    <div class="task-solution-right">${image||'<div class="solution-image-card"><h3 class="task-solution-section-title">Инфографика решения</h3><div class="pt-empty-text">Изображение решения пока не добавлено</div></div>'}</div>
+  </div>`;
+}
+
 function renderPTasks(name){
   const baseTasks=Array.isArray(LESSON_TASKS[name])?LESSON_TASKS[name].map(t=>Object.assign({},t,{isBlank:false})):[];
   const blankTasks=getBlankTasksForLesson(name);
@@ -5068,8 +5164,9 @@ function renderPTasks(name){
     const boardBtn=t.boardMode?`<div class="pt-side-actions"><button class="pt-board-btn" onclick="openTaskBoard('${String(t.boardMode).replace(/'/g,"\\'")}',true)">⤢ На весь экран</button></div>`:'';
     const hasAnswer=String(t.ans||'').trim();
     const answerCard=hasAnswer?`<div class="sr-ans"><div style="font-size:18px">✓</div><div><div class="sr-ans-l">Ответ</div><div class="sr-ans-v" style="color:var(--orange)">${t.ans}</div></div></div>`:'';
-    const embedded=t.solutionHtml||getEmbeddedSolutionHtml(t);
-    const answer=(embedded||t.solutionImage)?(t.hideAnswer&&answerCard?`<div class="pt-photo-tools"><button type="button" class="pt-photo-answer-btn" data-answer-toggle="${photoId}" onclick="ptToggleAnswer(this,'${photoId}')">Показать ответ</button></div><div class="sr-ans-wrap" id="${photoId}">${answerCard}<div class="sr-ans-cover"><button type="button" class="pt-photo-answer-btn" onclick="ptToggleAnswer(null,'${photoId}')">Показать ответ</button></div></div>`:answerCard):(t.hideAnswer&&answerCard?`<div class="pt-photo-tools"><button type="button" class="pt-photo-answer-btn" data-answer-toggle="${photoId}" onclick="ptToggleAnswer(this,'${photoId}')">Показать ответ</button></div><div class="sr-ans-wrap" id="${photoId}">${answerCard}<div class="sr-ans-cover"><button type="button" class="pt-photo-answer-btn" onclick="ptToggleAnswer(null,'${photoId}')">Показать ответ</button></div></div>`:answerCard);
+    const structured=hasStructuredTaskSolution(t)?renderStructuredTaskSolution(t,'pt'):'';
+    const embedded=structured||t.solutionHtml||getEmbeddedSolutionHtml(t);
+    const answer=structured?'':((embedded||t.solutionImage)?(t.hideAnswer&&answerCard?`<div class="pt-photo-tools"><button type="button" class="pt-photo-answer-btn" data-answer-toggle="${photoId}" onclick="ptToggleAnswer(this,'${photoId}')">Показать ответ</button></div><div class="sr-ans-wrap" id="${photoId}">${answerCard}<div class="sr-ans-cover"><button type="button" class="pt-photo-answer-btn" onclick="ptToggleAnswer(null,'${photoId}')">Показать ответ</button></div></div>`:answerCard):(t.hideAnswer&&answerCard?`<div class="pt-photo-tools"><button type="button" class="pt-photo-answer-btn" data-answer-toggle="${photoId}" onclick="ptToggleAnswer(this,'${photoId}')">Показать ответ</button></div><div class="sr-ans-wrap" id="${photoId}">${answerCard}<div class="sr-ans-cover"><button type="button" class="pt-photo-answer-btn" onclick="ptToggleAnswer(null,'${photoId}')">Показать ответ</button></div></div>`:answerCard));
     const rich=embedded?`<div class="pt-rich-card">${embedded}</div>`:'';
     const photo=(!embedded&&t.solutionImage)?renderSolutionImageHtml(t.solutionImage,t.title||'Задача','pt'):'';
     const blankSolution=isBlank&&EMODE&&!embedded&&!t.solutionImage&&!steps?'<div class="pt-empty-text">Решение пока не добавлено.</div>':'';
@@ -5646,7 +5743,8 @@ function getEmbeddedSolutionHtml(task){
   return task.solutionHtml||'';
 }
 function renderTaskBoardSolution(task){
-  const embedded = task.boardSolutionHtml || task.solutionHtml || getEmbeddedSolutionHtml(task);
+  const structured=hasStructuredTaskSolution(task)?renderStructuredTaskSolution(task,'task-board'):'';
+  const embedded = structured || task.boardSolutionHtml || task.solutionHtml || getEmbeddedSolutionHtml(task);
   if(embedded){
     return `<div class="task-board-rich">${embedded}</div>`;
   }
@@ -5891,9 +5989,11 @@ function openTaskBoard(mode,requestFullscreen){
     state.animBtn.textContent='▶ Анимация';
   }
   state.solution.innerHTML=renderTaskBoardSolution(task);
+  const hasStructured=hasStructuredTaskSolution(task);
+  state.drawer.classList.toggle('solution-workspace-open',hasStructured);
   state.answer.innerHTML=task.ans;
   const answerWrap=state.answer?state.answer.closest('.task-board-answer'):null;
-  if(answerWrap) answerWrap.style.display=task.ans?'':'none';
+  if(answerWrap) answerWrap.style.display=(!hasStructured&&task.ans)?'':'none';
   state.strokes=[];
   state.history=[[]];
   state.historyIndex=0;
