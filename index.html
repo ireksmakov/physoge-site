@@ -4979,22 +4979,62 @@ function normalizeBlankTaskBlock(task,i){
   t.id=t.id||t.boardMode;
   return t;
 }
-function getBlankTasksForLesson(lessonName){
+function getNextFreeTaskNumber(baseTasks,blankTasks){
+  const used=new Set();
+  [...baseTasks,...blankTasks].forEach(task=>{
+    const n=Number(task&&task.num);
+    if(Number.isFinite(n))used.add(n);
+  });
+  let next=1;
+  while(used.has(next))next++;
+  return next;
+}
+function normalizeBlankTaskNumbers(lessonName){
   try{
     const store=loadBlankTaskBlocks();
-    const list=Array.isArray(store[lessonName])?store[lessonName]:[];
-    return list.map((task,i)=>normalizeBlankTaskBlock(task,i));
+    const baseTasks=Array.isArray(LESSON_TASKS[lessonName])?LESSON_TASKS[lessonName]:[];
+    const blanks=Array.isArray(store[lessonName])?store[lessonName]:[];
+    const used=new Set(baseTasks.map(t=>Number(t&&t.num)).filter(n=>Number.isFinite(n)));
+    let changed=false;
+    let next=used.size?Math.max(...used)+1:1;
+    blanks.forEach((blank,i)=>{
+      if(!blank||typeof blank!=='object'){
+        blank={};
+        blanks[i]=blank;
+        changed=true;
+      }
+      const current=Number(blank.num);
+      if(!Number.isFinite(current)||used.has(current)){
+        while(used.has(next))next++;
+        blank.num=next;
+        used.add(next);
+        next++;
+        changed=true;
+      }else{
+        used.add(current);
+      }
+    });
+    if(changed){
+      store[lessonName]=blanks;
+      saveBlankTaskBlocks(store);
+    }
+    return blanks.map((task,i)=>normalizeBlankTaskBlock(task,i));
   }catch(err){
-    console.warn('Не удалось получить пустые блоки задач урока:',err);
+    console.warn('Не удалось нормализовать номера пустых блоков задач:',err);
     return[];
   }
+}
+function getBlankTasksForLesson(lessonName){
+  return normalizeBlankTaskNumbers(lessonName);
 }
 function addBlankTaskBlock(lessonName){
   lessonName=lessonName||lessonTaskCurrentName();
   if(!lessonName){showLessonTaskNotice('Урок не найден — пустой блок не добавлен');return;}
-  const base=Array.isArray(LESSON_TASKS[lessonName])?LESSON_TASKS[lessonName]:[];
-  const blanks=getBlankTasksForLesson(lessonName);
-  const nextNumber=base.concat(blanks).reduce((m,t)=>Math.max(m,Number(t&&t.num)||0),0)+1;
+  const baseTasks=Array.isArray(LESSON_TASKS[lessonName])?LESSON_TASKS[lessonName]:[];
+  const blankTasks=getBlankTasksForLesson(lessonName)||[];
+  const allTasks=[...baseTasks,...blankTasks];
+  const usedNums=allTasks.map(t=>Number(t&&t.num)).filter(n=>Number.isFinite(n));
+  const nextNumber=usedNums.length?Math.max(...usedNums)+1:1;
   const task={
     id:'blank-task-'+Date.now(),
     num:nextNumber,
@@ -5019,8 +5059,22 @@ function addBlankTaskBlock(lessonName){
   refreshLessonTasksPanel();
   showLessonTaskNotice('Пустой блок задачи добавлен');
 }
+function clearBlankTaskBlocksForLesson(lessonName){
+  lessonName=lessonName||lessonTaskCurrentName();
+  if(!EMODE){showLessonTaskNotice('Очистка пустых блоков доступна только в режиме редактирования');return;}
+  if(!lessonName){showLessonTaskNotice('Урок не найден — пустые блоки не удалены');return;}
+  if(!confirm('Удалить все пустые блоки этого урока? Задачи из кода не будут удалены.'))return;
+  const store=loadBlankTaskBlocks();
+  if(Array.isArray(store[lessonName])){
+    delete store[lessonName];
+    saveBlankTaskBlocks(store);
+  }
+  refreshLessonTasksPanel();
+  showLessonTaskNotice('Пустые блоки текущего урока удалены');
+}
 function renderBlankTaskAddButton(lessonName){
-  return '<div class="pt-blank-add-wrap"><button type="button" class="pt-blank-add-btn" onclick="addBlankTaskBlock()">+ Добавить пустой блок задачи</button></div>';
+  const clearBtn=EMODE?'<button type="button" class="pt-blank-add-btn" onclick="clearBlankTaskBlocksForLesson()">Очистить пустые блоки задач</button>':'';
+  return '<div class="pt-blank-add-wrap"><button type="button" class="pt-blank-add-btn" onclick="addBlankTaskBlock()">+ Добавить пустой блок задачи</button>'+clearBtn+'</div>';
 }
 function renderLessonTaskNotice(){return '<div id="ptNotice" class="pt-notice"></div>';}
 function showLessonTaskNotice(msg){
@@ -5051,7 +5105,7 @@ function renderSolutionImageHtml(path,alt,cls){
 
 function renderPTasks(name){
   const baseTasks=Array.isArray(LESSON_TASKS[name])?LESSON_TASKS[name].map(t=>Object.assign({},t,{isBlank:false})):[];
-  const blankTasks=getBlankTasksForLesson(name);
+  const blankTasks=normalizeBlankTaskNumbers(name);
   const tasks=baseTasks.concat(blankTasks).map((t,i)=>Object.assign({},t,{num:Number(t.num)||i+1}));
   const empty=`<div style="text-align:center;padding:40px 20px;color:var(--gray)"><div style="font-size:32px;margin-bottom:12px">📋</div><div style="font-family:var(--fh);font-size:14px;font-weight:700;color:var(--white);margin-bottom:6px">Задачи в разработке</div><div style="font-size:13px">Задачи для темы <strong style="color:var(--orange)">"${escapeHtml(name||'')}"</strong> появятся в ближайшее время.</div></div>`;
   const lvlL=['','Базовый','Средний','Сложный'],lvlC=['','pt-l1','pt-l2','pt-l3'];
