@@ -745,7 +745,16 @@ body.task-board-lock{overflow:hidden}
 .task-board-canvas-wrap.erase-mode{cursor:cell}
 .task-board-canvas-wrap.pan-mode{cursor:grab}
 .task-board-canvas-wrap.dragging{cursor:grabbing}
-.task-board-canvas{width:100%;height:100%;min-width:100%;min-height:100%;display:block;touch-action:none}
+.task-board-canvas{position:absolute;inset:0;width:100%;height:100%;min-width:100%;min-height:100%;display:block;touch-action:none;z-index:1}
+.task-board-object-layer{position:absolute;inset:0;z-index:3;pointer-events:none;transform-origin:0 0;touch-action:none}
+.task-board-image-object{position:absolute;left:0;top:0;box-sizing:border-box;border:2px solid transparent;border-radius:10px;background:rgba(255,255,255,.02);pointer-events:auto;user-select:none;touch-action:none;cursor:grab}
+.task-board-image-object.selected{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.18),0 14px 34px rgba(15,23,42,.12)}
+.task-board-image-object.dragging{cursor:grabbing}
+.task-board-image-object img{display:block;width:100%;height:100%;border-radius:8px;object-fit:fill;pointer-events:none;-webkit-user-drag:none}
+.task-board-image-delete{position:absolute;right:-12px;top:-12px;width:24px;height:24px;border-radius:999px;border:1px solid #fecaca;background:#fff;color:#dc2626;font-size:16px;font-weight:900;line-height:20px;display:none;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 10px 22px rgba(15,23,42,.18);padding:0;z-index:4}
+.task-board-image-object.selected .task-board-image-delete{display:flex}
+.task-board-image-resize{position:absolute;right:-7px;bottom:-7px;width:14px;height:14px;border-radius:4px;background:#2563eb;border:2px solid #fff;display:none;cursor:nwse-resize;box-shadow:0 6px 14px rgba(15,23,42,.2);z-index:3}
+.task-board-image-object.selected .task-board-image-resize{display:block}
 .task-board-zoom-controls{position:absolute;right:20px;bottom:20px;display:flex;flex-direction:column;gap:8px;z-index:40}
 .task-board-zoom-btn{width:38px;height:38px;border-radius:10px;border:1px solid #cbd5e1;background:rgba(255,255,255,.96);color:#0f172a;font-size:22px;line-height:1;cursor:pointer;box-shadow:0 10px 24px rgba(15,23,42,.12);transition:all .15s;font-family:var(--fb)}
 .task-board-zoom-btn:hover{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8}
@@ -5482,7 +5491,197 @@ function impulseCarsDraw(demo){
 
 
 var taskBoardState=null;
+const TASK_BOARD_STORAGE_PREFIX='physoge_task_board_state_';
 function cloneTaskBoardStrokes(strokes){return JSON.parse(JSON.stringify(strokes||[]));}
+function cloneTaskBoardObjects(objects){return JSON.parse(JSON.stringify(objects||[]));}
+function taskBoardSnapshot(){
+  const state=ensureTaskBoardOverlay();
+  return {strokes:cloneTaskBoardStrokes(state.strokes),objects:cloneTaskBoardObjects(state.boardObjects)};
+}
+function taskBoardApplySnapshot(snapshot){
+  const state=ensureTaskBoardOverlay();
+  state.strokes=cloneTaskBoardStrokes(snapshot&&snapshot.strokes);
+  state.boardObjects=cloneTaskBoardObjects(snapshot&&snapshot.objects);
+  if(!state.boardObjects.some(function(obj){return obj.id===state.selectedObjectId;})) state.selectedObjectId=null;
+  taskBoardDraw();
+  renderBoardObjects();
+}
+function taskBoardStorageKey(mode){return TASK_BOARD_STORAGE_PREFIX+encodeURIComponent(String(mode||'default'));}
+function taskBoardSaveState(showNotice){
+  const state=ensureTaskBoardOverlay();
+  if(!state.mode) return;
+  const data={drawing:cloneTaskBoardStrokes(state.strokes),objects:cloneTaskBoardObjects(state.boardObjects)};
+  try{
+    localStorage.setItem(taskBoardStorageKey(state.mode),JSON.stringify(data));
+    if(showNotice) alert('Доска сохранена вместе с картинками.');
+  }catch(err){
+    console.warn('Не удалось сохранить состояние доски:',err);
+    if(showNotice) alert('Не удалось сохранить доску: возможно, изображения слишком большие для localStorage.');
+  }
+}
+function restoreBoardState(){
+  const state=ensureTaskBoardOverlay();
+  let data=null;
+  try{data=JSON.parse(localStorage.getItem(taskBoardStorageKey(state.mode))||'null');}
+  catch(err){console.warn('Не удалось восстановить состояние доски:',err);}
+  state.strokes=cloneTaskBoardStrokes(data&&data.drawing);
+  state.boardObjects=cloneTaskBoardObjects(data&&data.objects);
+  state.selectedObjectId=null;
+  state.history=[taskBoardSnapshot()];
+  state.historyIndex=0;
+  renderBoardObjects();
+}
+function taskBoardOpenImagePicker(){
+  const state=ensureTaskBoardOverlay();
+  if(state.imageInput){state.imageInput.value='';state.imageInput.click();}
+}
+function taskBoardImageInputChange(e){
+  const file=e.target&&e.target.files&&e.target.files[0];
+  if(!file||!/^image\/(png|jpe?g|webp)$/i.test(file.type)) return;
+  taskBoardReadImageFile(file,function(src){addImageToBoard(src);});
+}
+function taskBoardReadImageFile(file,done){
+  const reader=new FileReader();
+  reader.onload=function(){taskBoardNormalizeImageSrc(String(reader.result||''),done);};
+  reader.readAsDataURL(file);
+}
+function taskBoardNormalizeImageSrc(src,done){
+  const img=new Image();
+  img.onload=function(){
+    const max=1600;
+    if(img.naturalWidth<=max&&img.naturalHeight<=max){done(src);return;}
+    const ratio=Math.min(max/img.naturalWidth,max/img.naturalHeight,1);
+    const canvas=document.createElement('canvas');
+    canvas.width=Math.max(1,Math.round(img.naturalWidth*ratio));
+    canvas.height=Math.max(1,Math.round(img.naturalHeight*ratio));
+    const ctx=canvas.getContext('2d');
+    ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    done(canvas.toDataURL('image/jpeg',0.85));
+  };
+  img.onerror=function(){done(src);};
+  img.src=src;
+}
+function taskBoardPasteImage(e){
+  if(!taskBoardState||!taskBoardState.overlay.classList.contains('open')) return;
+  const items=e.clipboardData&&e.clipboardData.items?Array.from(e.clipboardData.items):[];
+  const item=items.find(function(it){return it&&/^image\/(png|jpeg)$/i.test(it.type||'');});
+  if(!item) return;
+  const file=item.getAsFile&&item.getAsFile();
+  if(!file) return;
+  e.preventDefault();
+  taskBoardReadImageFile(file,function(src){addImageToBoard(src);});
+}
+function taskBoardVisibleCenterWorld(){
+  const state=ensureTaskBoardOverlay();
+  const rect=state.canvasWrap.getBoundingClientRect();
+  const scale=state.viewScale||1;
+  return {x:(rect.width/2-state.viewX)/scale,y:(rect.height/2-state.viewY)/scale};
+}
+function addImageToBoard(src){
+  const state=ensureTaskBoardOverlay();
+  const img=new Image();
+  img.onload=function(){
+    const center=taskBoardVisibleCenterWorld();
+    const maxW=420,maxH=320;
+    const ratio=Math.min(maxW/(img.naturalWidth||maxW),maxH/(img.naturalHeight||maxH),1);
+    const width=Math.max(80,Math.round((img.naturalWidth||320)*ratio));
+    const height=Math.max(60,Math.round((img.naturalHeight||220)*ratio));
+    const obj={id:'img-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),type:'image',src:src,x:Math.round(center.x-width/2),y:Math.round(center.y-height/2),width:width,height:height};
+    state.boardObjects.push(obj);
+    renderBoardObjects();
+    selectBoardObject(obj.id);
+    taskBoardPushHistory();
+    taskBoardSaveState(false);
+  };
+  img.onerror=function(){alert('Не удалось вставить изображение.');};
+  img.src=src;
+}
+function renderBoardObjects(){
+  const state=ensureTaskBoardOverlay();
+  if(!state.objectLayer) return;
+  state.objectLayer.style.transform='translate('+state.viewX+'px,'+state.viewY+'px) scale('+(state.viewScale||1)+')';
+  state.objectLayer.innerHTML='';
+  state.boardObjects.forEach(function(obj){
+    if(!obj||obj.type!=='image') return;
+    const el=document.createElement('div');
+    el.className='task-board-image-object'+(obj.id===state.selectedObjectId?' selected':'');
+    el.dataset.id=obj.id;
+    el.style.left=(Number(obj.x)||0)+'px';
+    el.style.top=(Number(obj.y)||0)+'px';
+    el.style.width=Math.max(24,Number(obj.width)||120)+'px';
+    el.style.height=Math.max(24,Number(obj.height)||90)+'px';
+    const img=document.createElement('img');
+    img.src=obj.src;
+    img.alt='Изображение на доске';
+    const del=document.createElement('button');
+    del.type='button';
+    del.className='task-board-image-delete';
+    del.textContent='×';
+    del.setAttribute('aria-label','Удалить картинку');
+    const resize=document.createElement('div');
+    resize.className='task-board-image-resize';
+    el.appendChild(img);el.appendChild(del);el.appendChild(resize);
+    state.objectLayer.appendChild(el);
+  });
+}
+function selectBoardObject(id){
+  const state=ensureTaskBoardOverlay();
+  state.selectedObjectId=id||null;
+  renderBoardObjects();
+}
+function findBoardObject(id){
+  const state=ensureTaskBoardOverlay();
+  return state.boardObjects.find(function(obj){return obj.id===id;})||null;
+}
+function moveBoardObject(id,dx,dy){
+  const obj=findBoardObject(id);if(!obj) return;
+  obj.x=Math.round((Number(obj.x)||0)+dx);
+  obj.y=Math.round((Number(obj.y)||0)+dy);
+}
+function resizeBoardObject(id,width,height){
+  const obj=findBoardObject(id);if(!obj) return;
+  obj.width=Math.max(32,Math.round(width));
+  obj.height=Math.max(32,Math.round(height));
+}
+function deleteSelectedBoardObject(){
+  const state=ensureTaskBoardOverlay();
+  if(!state.selectedObjectId) return;
+  const before=state.boardObjects.length;
+  state.boardObjects=state.boardObjects.filter(function(obj){return obj.id!==state.selectedObjectId;});
+  state.selectedObjectId=null;
+  if(state.boardObjects.length!==before){renderBoardObjects();taskBoardPushHistory();taskBoardSaveState(false);}
+}
+function taskBoardObjectPointerDown(e){
+  const state=ensureTaskBoardOverlay();
+  const objectEl=e.target.closest('.task-board-image-object');
+  if(!objectEl) return;
+  const id=objectEl.dataset.id;
+  const obj=findBoardObject(id);
+  if(!obj) return;
+  e.preventDefault();
+  e.stopPropagation();
+  selectBoardObject(id);
+  if(e.target.closest('.task-board-image-delete')){deleteSelectedBoardObject();return;}
+  const scale=state.viewScale||1;
+  const start={x:e.clientX,y:e.clientY,objX:obj.x,objY:obj.y,width:obj.width,height:obj.height};
+  const isResize=!!e.target.closest('.task-board-image-resize');
+  objectEl.classList.add('dragging');
+  const move=function(ev){
+    const dx=(ev.clientX-start.x)/scale;
+    const dy=(ev.clientY-start.y)/scale;
+    if(isResize) resizeBoardObject(id,start.width+dx,start.height+dy);
+    else{obj.x=Math.round(start.objX+dx);obj.y=Math.round(start.objY+dy);}
+    renderBoardObjects();
+  };
+  const up=function(){
+    window.removeEventListener('pointermove',move);
+    window.removeEventListener('pointerup',up);
+    taskBoardPushHistory();
+    taskBoardSaveState(false);
+  };
+  window.addEventListener('pointermove',move);
+  window.addEventListener('pointerup',up,{once:true});
+}
 function getTaskBoardData(mode){
   if(String(mode||'').indexOf('blank-task-')===0){
     const store=loadBlankTaskBlocks();
@@ -5936,6 +6135,8 @@ function ensureTaskBoardOverlay(){
                 <button type="button" class="task-board-tool" data-board-tool="pan" onclick="taskBoardSetTool('pan')">✋ Перемещение</button>
                 <button type="button" class="task-board-tool" id="taskBoardUndoBtn" onclick="taskBoardUndo()">↶ Назад</button>
                 <button type="button" class="task-board-tool" id="taskBoardRedoBtn" onclick="taskBoardRedo()">↷ Вперёд</button>
+                <button type="button" class="task-board-tool" onclick="taskBoardOpenImagePicker()">🖼 Картинка</button>
+                <button type="button" class="task-board-tool" onclick="taskBoardSaveState(true)">💾 Сохранить</button>
               </div>
               <div class="task-board-toolbar-group">
                 <span class="task-board-toolbar-label">Цвет</span>
@@ -5972,6 +6173,8 @@ function ensureTaskBoardOverlay(){
                 <div class="task-board-float-body"><div id="taskBoardGraph" class="task-board-graph"></div></div>
               </div>
               <canvas id="taskBoardCanvas" class="task-board-canvas"></canvas>
+              <div id="taskBoardObjectLayer" class="task-board-object-layer"></div>
+              <input id="taskBoardImageInput" type="file" accept="image/png,image/jpeg,image/jpg,image/webp" style="display:none">
               <div class="task-board-zoom-controls">
                 <button type="button" class="task-board-zoom-btn" onclick="taskBoardAdjustZoom(1.15)" aria-label="Увеличить доску">+</button>
                 <button type="button" class="task-board-zoom-btn" onclick="taskBoardAdjustZoom(1/1.15)" aria-label="Уменьшить доску">−</button>
@@ -6022,6 +6225,8 @@ function ensureTaskBoardOverlay(){
     answer:document.getElementById('taskBoardAnswer'),
     canvasWrap:document.getElementById('taskBoardCanvasWrap'),
     canvas:document.getElementById('taskBoardCanvas'),
+    objectLayer:document.getElementById('taskBoardObjectLayer'),
+    imageInput:document.getElementById('taskBoardImageInput'),
     ctx:document.getElementById('taskBoardCanvas').getContext('2d'),
     sizeInput:document.getElementById('taskBoardSize'),
     sizeValue:document.getElementById('taskBoardSizeValue'),
@@ -6044,7 +6249,9 @@ function ensureTaskBoardOverlay(){
     mode:null,
     task:null,
     strokes:[],
-    history:[[]],
+    boardObjects:[],
+    selectedObjectId:null,
+    history:[{strokes:[],objects:[]}],
     historyIndex:0,
     pointer:null,
     viewX:0,
@@ -6057,6 +6264,9 @@ function ensureTaskBoardOverlay(){
   taskBoardInitFloatDrag(taskBoardState,'graph');
   taskBoardState.canvas.addEventListener('pointerdown',taskBoardPointerDown);
   taskBoardState.canvas.addEventListener('pointermove',taskBoardPointerMove);
+  taskBoardState.objectLayer.addEventListener('pointerdown',taskBoardObjectPointerDown);
+  taskBoardState.imageInput.addEventListener('change',taskBoardImageInputChange);
+  document.addEventListener('paste',taskBoardPasteImage);
   window.addEventListener('pointerup',taskBoardPointerUp);
   window.addEventListener('pointercancel',taskBoardPointerUp);
   window.addEventListener('resize',taskBoardResizeCanvas);
@@ -6069,6 +6279,11 @@ function ensureTaskBoardOverlay(){
       e.preventDefault();
       if(taskBoardState.simPopup.classList.contains('open')) toggleTaskBoardAnimation(false);
       else closeTaskBoard();
+      return;
+    }
+    if((e.key==='Delete'||e.key==='Backspace')&&taskBoardState.selectedObjectId){
+      e.preventDefault();
+      deleteSelectedBoardObject();
       return;
     }
     if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){
@@ -6153,12 +6368,15 @@ function openTaskBoard(mode,requestFullscreen){
   const answerWrap=state.answer?state.answer.closest('.task-board-answer'):null;
   if(answerWrap) answerWrap.style.display=(task.ans&&!useSolutionWorkspace)?'':'none';
   state.strokes=[];
-  state.history=[[]];
+  state.boardObjects=[];
+  state.selectedObjectId=null;
+  state.history=[{strokes:[],objects:[]}];
   state.historyIndex=0;
   state.pointer=null;
   state.viewX=0;
   state.viewY=0;
   state.viewScale=1;
+  restoreBoardState();
   const showStaticBoardContent=mode==='task07-pendulum-impact';
   state.overlay.classList.toggle('solution-workspace-mode',useSolutionWorkspace);
   state.drawer.classList.toggle('open',showStaticBoardContent||useSolutionWorkspace);
@@ -6270,7 +6488,7 @@ function taskBoardUpdateHistoryButtons(){
 function taskBoardPushHistory(){
   const state=ensureTaskBoardOverlay();
   state.history=state.history.slice(0,state.historyIndex+1);
-  state.history.push(cloneTaskBoardStrokes(state.strokes));
+  state.history.push(taskBoardSnapshot());
   if(state.history.length>80){
     state.history.shift();
   }else{
@@ -6283,24 +6501,29 @@ function taskBoardUndo(){
   const state=ensureTaskBoardOverlay();
   if(state.historyIndex<=0) return;
   state.historyIndex--;
-  state.strokes=cloneTaskBoardStrokes(state.history[state.historyIndex]);
-  taskBoardDraw();
+  taskBoardApplySnapshot(state.history[state.historyIndex]);
+  taskBoardSaveState(false);
   taskBoardUpdateHistoryButtons();
 }
 function taskBoardRedo(){
   const state=ensureTaskBoardOverlay();
   if(state.historyIndex>=state.history.length-1) return;
   state.historyIndex++;
-  state.strokes=cloneTaskBoardStrokes(state.history[state.historyIndex]);
-  taskBoardDraw();
+  taskBoardApplySnapshot(state.history[state.historyIndex]);
+  taskBoardSaveState(false);
   taskBoardUpdateHistoryButtons();
 }
 function taskBoardClear(){
   const state=ensureTaskBoardOverlay();
-  if(!state.strokes.length) return;
+  if(!state.strokes.length&&!state.boardObjects.length) return;
+  if(!confirm('Очистить рисунок и все вставленные картинки?')) return;
   state.strokes=[];
+  state.boardObjects=[];
+  state.selectedObjectId=null;
+  renderBoardObjects();
   taskBoardPushHistory();
   taskBoardDraw();
+  taskBoardSaveState(false);
 }
 function taskBoardResizeCanvas(){
   if(!taskBoardState) return;
@@ -6351,6 +6574,7 @@ function taskBoardEraseAt(clientX,clientY){
 function taskBoardPointerDown(e){
   const state=ensureTaskBoardOverlay();
   if(!state.overlay.classList.contains('open')) return;
+  if(e.target===state.canvas&&state.selectedObjectId) selectBoardObject(null);
   if(e.button===2||state.tool==='pan'){
     state.pointer={type:'pan',x:e.clientX,y:e.clientY};
     taskBoardUpdateCanvasSurface();
@@ -6397,8 +6621,10 @@ function taskBoardPointerUp(e){
       taskBoardDraw();
     }
     taskBoardPushHistory();
+    taskBoardSaveState(false);
   }else if(state.pointer.type==='eraser'&&state.pointer.changed){
     taskBoardPushHistory();
+    taskBoardSaveState(false);
   }
   state.pointer=null;
   taskBoardUpdateCanvasSurface();
@@ -6435,6 +6661,7 @@ function taskBoardDraw(){
   });
   ctx.restore();
   taskBoardUpdateCanvasSurface();
+  renderBoardObjects();
   taskBoardUpdateHistoryButtons();
 }
 
