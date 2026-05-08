@@ -26,9 +26,9 @@ header{position:fixed;top:0;left:0;right:0;z-index:10000;background:rgba(2,9,20,
 .nav-subj a:hover,.nav-subj a.active{color:var(--cyan);border-color:var(--cyan);background:rgba(0,229,255,0.07)}
 .sim-menu{position:relative}
 .sim-toggle{font-size:12px;font-weight:600;padding:4px 11px;border-radius:20px;border:1px solid var(--border);color:var(--gray);background:transparent;cursor:pointer;transition:all .2s;font-family:var(--fb);white-space:nowrap}
-.sim-toggle:hover{color:var(--cyan);border-color:var(--cyan);background:rgba(0,229,255,0.07)}
+.sim-toggle:hover,.sim-toggle.open{color:var(--cyan);border-color:var(--cyan);background:rgba(0,229,255,0.07)}
 .sim-pop{position:absolute;top:calc(100% + 10px);left:0;display:none;flex-direction:column;gap:6px;min-width:98px;padding:8px;background:rgba(5,17,31,.96);border:1px solid var(--border);border-radius:12px;box-shadow:0 16px 36px rgba(0,0,0,.45)}
-.sim-menu.open .sim-pop,.sim-menu:hover .sim-pop{display:flex}
+.sim-menu.open .sim-pop{display:flex}
 .sim-pop button,.sim-pop a{border:1px solid var(--border);background:transparent;color:var(--white);padding:7px 10px;border-radius:8px;font-size:12px;cursor:pointer;transition:all .2s;font-family:var(--fb)}
 .sim-pop button:hover,.sim-pop a:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(8,216,255,.08)}
 .nav-links{display:flex;align-items:center;gap:18px;list-style:none;margin-left:auto;flex:0 0 auto}
@@ -2856,10 +2856,45 @@ function renderStudentVariantResult(test,attempt){const p=document.getElementByI
 async function copyStudentLinkById(id){const link=window.location.origin+window.location.pathname+'#test/pass/'+id; try{if(navigator.clipboard&&navigator.clipboard.writeText){await navigator.clipboard.writeText(link);} else {const ta=document.createElement('textarea');ta.value=link;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();} showTestsNotice('Ссылка скопирована','success');}catch(e){alert(link);}}
 function showHomeFromRoute(){window.location.hash='#home';}
 function renderTestNotFound(){const p=document.getElementById('student-test-page'); if(!p) return; p.style.display='block'; p.style.pointerEvents='auto'; p.classList.remove('page-hidden'); p.classList.add('page-active'); p.innerHTML='<div class="student-test-wrap"><div class="student-test-error"><h2>Тест не найден</h2><div>Возможно, тест был удалён.</div><a class="tests-editor-back" href="#home">На главную</a></div></div>';} 
-function toggleSimMenu(event){
-  event.stopPropagation();
-  const m=document.getElementById('simMenu');
-  if(m) m.classList.toggle('open');
+function closeSimMenu(){
+  const simMenu = document.querySelector('.sim-menu');
+  const simToggle = document.querySelector('.sim-toggle');
+
+  if(simMenu) simMenu.classList.remove('open');
+  if(simToggle) simToggle.classList.remove('open');
+}
+
+function initSimMenu(){
+  const simToggle = document.querySelector('.sim-toggle');
+  const simMenu = document.querySelector('.sim-menu');
+
+  if(!simToggle || !simMenu) return;
+
+  simToggle.addEventListener('click', function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    simMenu.classList.toggle('open');
+    simToggle.classList.toggle('open');
+  });
+
+  document.addEventListener('click', function(e){
+    if(!simToggle.contains(e.target) && !simMenu.contains(e.target)){
+      closeSimMenu();
+    }
+  });
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){
+      closeSimMenu();
+    }
+  });
+
+  simMenu.querySelectorAll('a, button').forEach(function(item){
+    if(item === simToggle) return;
+    item.addEventListener('click', function(){
+      closeSimMenu();
+    });
+  });
 }
 
 const generatorState={courseBank:[],selection:{},filters:{exam:'',subject:'',section:'',source:'all',difficulty:'Случайная'},result:null};
@@ -2998,10 +3033,9 @@ function handleRoute(){
 }
 
 window.addEventListener('hashchange',handleRoute);
-document.addEventListener('DOMContentLoaded',handleRoute);
-document.addEventListener('click',()=>{
-  const m=document.getElementById('simMenu');
-  if(m) m.classList.remove('open');
+document.addEventListener('DOMContentLoaded',function(){
+  initSimMenu();
+  handleRoute();
 });
 
 function showCoursesPage(){
