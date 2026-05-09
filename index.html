@@ -5494,7 +5494,7 @@ function renderPTasks(name){
     const extra=t.extraHtml?`<div class="pt-extra">${t.extraHtml}</div>`:'';
     const taskId=String(t.id||'');
     const boardModeSafe=String(t.boardMode||'').replace(/'/g,"\\'");
-    const boardBtn=t.boardMode?`<div class="pt-side-actions"><button class="pt-board-btn" onclick="openTaskBoard('${boardModeSafe}')">⤢ На весь экран</button>${taskId==='lesson12-task07'?`<button class="pt-board-btn task07-card-anim-btn" onclick="openTaskAnimation('lesson12-task07')">▶ Анимация процесса</button>`:''}</div>`:'';
+    const boardBtn=t.boardMode?`<div class="pt-side-actions"><button class="pt-board-btn" onclick="openTaskBoard('${boardModeSafe}')">🧑‍🏫 Доска</button>${taskId==='lesson12-task07'?`<button class="pt-board-btn task07-card-anim-btn" onclick="openTaskAnimation('lesson12-task07')">▶ Анимация процесса</button>`:''}</div>`:'';
     const hasAnswer=String(t.ans||'').trim();
     const answerCard=hasAnswer?`<div class="sr-ans"><div style="font-size:18px">✓</div><div><div class="sr-ans-l">Ответ</div><div class="sr-ans-v" style="color:var(--orange)">${t.ans}</div></div></div>`:'';
     const hasStructuredSolution=hasFilledTaskSolution(t)||hasLegacyTaskTextSolution(t);
