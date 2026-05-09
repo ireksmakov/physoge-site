@@ -770,6 +770,10 @@ body.task-board-lock{overflow:hidden}
 .task-board-laser-pointer.active{display:block;opacity:1}
 @keyframes taskBoardLaserPulse{0%{transform:scale(.72);opacity:.9}100%{transform:scale(1.45);opacity:0}}
 .task-board-lasso-path{fill:rgba(37,99,235,.08);stroke:#2563eb;stroke-width:2;stroke-dasharray:8 6;vector-effect:non-scaling-stroke;filter:drop-shadow(0 2px 4px rgba(37,99,235,.18))}
+.task-board-laser-pointer{position:absolute;left:0;top:0;width:18px;height:18px;border-radius:50%;background:rgba(255,0,0,.95);box-shadow:0 0 12px rgba(255,0,0,.95),0 0 28px rgba(255,0,0,.75),0 0 48px rgba(255,0,0,.45);transform:translate(-50%,-50%);pointer-events:none;z-index:20040;display:none;transition:left .06s linear,top .06s linear;will-change:left,top}
+.task-board-laser-pointer::after{content:'';position:absolute;inset:-8px;border:2px solid rgba(255,0,0,.42);border-radius:50%;box-shadow:0 0 18px rgba(255,0,0,.38);animation:taskBoardLaserPulse 1s ease-out infinite}
+.task-board-laser-pointer.active{display:block}
+@keyframes taskBoardLaserPulse{0%{transform:scale(.72);opacity:.85}70%{transform:scale(1.28);opacity:.12}100%{transform:scale(1.42);opacity:0}}
 .task-board-image-object{position:absolute;left:0;top:0;box-sizing:border-box;border:2px solid transparent;border-radius:10px;background:rgba(255,255,255,.02);pointer-events:auto;user-select:none;touch-action:none;cursor:grab}
 .task-board-image-object.selected{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.18),0 14px 34px rgba(15,23,42,.12)}
 .task-board-image-object.dragging{cursor:grabbing}
@@ -5926,8 +5930,13 @@ function deleteSelectedBoardObject(){
 }
 function taskBoardObjectPointerDown(e){
   const state=ensureTaskBoardOverlay();
-  if(e.target.closest('.task-board-text-input')) return;
-  const objectEl=e.target.closest('.task-board-image-object,.task-board-text-object');
+  if(state.tool==='pointer'){
+    taskBoardLaserPointerMove(e);
+    e.preventDefault();
+    e.stopPropagation();
+    return;
+  }
+  const objectEl=e.target.closest('.task-board-image-object');
   if(!objectEl) return;
   const id=objectEl.dataset.id;
   const obj=findBoardObject(id);
@@ -6752,6 +6761,7 @@ function taskBoardExitFullscreen(){
   // Browser Fullscreen API не используем: закрытие скрывает overlay без выхода из режима браузера.
 }
 function resetTaskBoardOverlayState(state){
+  taskBoardHideLaserPointer();
   if(state&&state.overlay){
     state.overlay.classList.remove('open');
     state.overlay.setAttribute('aria-hidden','true');
@@ -6906,6 +6916,7 @@ function toggleTaskBoardDrawer(force){
 function taskBoardSetTool(tool){
   const state=ensureTaskBoardOverlay();
   state.tool=tool;
+  if(tool!=='pointer') taskBoardHideLaserPointer();
   document.querySelectorAll('[data-board-tool]').forEach(function(btn){btn.classList.toggle('active',btn.getAttribute('data-board-tool')===tool);});
   if(tool!=='pointer') taskBoardHideLaserPointer();
   taskBoardUpdateCanvasSurface();
@@ -7033,6 +7044,27 @@ function taskBoardClientToWorld(clientX,clientY){
   const scale=state.viewScale||1;
   return {x:(clientX-rect.left-state.viewX)/scale,y:(clientY-rect.top-state.viewY)/scale};
 }
+function taskBoardHideLaserPointer(){
+  if(!taskBoardState||!taskBoardState.laserPointer) return;
+  taskBoardState.laserPointer.classList.remove('active');
+}
+function taskBoardLaserPointerMove(e){
+  const state=ensureTaskBoardOverlay();
+  if(state.tool!=='pointer'||!state.overlay.classList.contains('open')){
+    taskBoardHideLaserPointer();
+    return;
+  }
+  const rect=state.canvasWrap.getBoundingClientRect();
+  const x=e.clientX-rect.left;
+  const y=e.clientY-rect.top;
+  if(x<0||y<0||x>rect.width||y>rect.height){
+    taskBoardHideLaserPointer();
+    return;
+  }
+  state.laserPointer.style.left=x+'px';
+  state.laserPointer.style.top=y+'px';
+  state.laserPointer.classList.add('active');
+}
 function taskBoardDistance(a,b){
   const dx=a.x-b.x,dy=a.y-b.y;
   return Math.sqrt(dx*dx+dy*dy);
@@ -7141,14 +7173,13 @@ function taskBoardSelectObjectsInsideLasso(points){
 function taskBoardPointerDown(e){
   const state=ensureTaskBoardOverlay();
   if(!state.overlay.classList.contains('open')) return;
-  if(e.target===state.canvas&&state.selectedObjectId) selectBoardObject(null);
-  if(e.button===0&&state.tool==='text'){
-    const world=taskBoardClientToWorld(e.clientX,e.clientY);
-    taskBoardStartTextInput(world,null);
-    e.preventDefault();
+  if(state.tool==='pointer'){
+    taskBoardLaserPointerMove(e);
+    if(e.button===0) e.preventDefault();
     return;
   }
-  if(e.button===2||state.tool==='pan'||state.tool==='lasso'){
+  if(e.target===state.canvas&&taskBoardGetSelectedObjectIds().length) selectBoardObject(null);
+  if(e.button===2||state.tool==='pan'){
     state.pointer={type:'pan',x:e.clientX,y:e.clientY};
     taskBoardUpdateCanvasSurface();
   }else if(e.button===0&&state.tool==='lasso'){
