@@ -2557,6 +2557,7 @@ function hideAll(){
   const taskBoardOverlay = document.getElementById('taskBoardOverlay');
   if(taskBoardOverlay){
     taskBoardOverlay.classList.remove('open');
+    taskBoardOverlay.setAttribute('aria-hidden', 'true');
     taskBoardOverlay.style.display = 'none';
     taskBoardOverlay.style.pointerEvents = 'none';
   }
@@ -6534,79 +6535,99 @@ function taskBoardExitFullscreen(){
     if(result&&typeof result.catch==='function') result.catch(function(){});
   }catch(_err){}
 }
+function resetTaskBoardOverlayState(state){
+  if(state&&state.overlay){
+    state.overlay.classList.remove('open');
+    state.overlay.setAttribute('aria-hidden','true');
+    state.overlay.style.display='none';
+    state.overlay.style.pointerEvents='none';
+  }
+  document.body.classList.remove('task-board-lock');
+}
 function openTaskBoard(mode,requestFullscreen=false){
   const state=ensureTaskBoardOverlay();
-  const task=getTaskBoardData(mode);
-  if(!task) return;
-  state.mode=mode;
-  state.task=task;
-  if(state.title) state.title.textContent=task.title;
-  state.condition.innerHTML=task.cond;
-  state.graph.innerHTML=getTaskBoardGraph(mode);
-  if(state.graphLabel) state.graphLabel.textContent=task.graphLabel||'График';
-  const isPuckImpulse = mode==='puckImpulse';
-  const isExplosion = mode==='explosionFragments';
-  const isBlocks = mode==='inelasticBlocks';
-  const isMomentum = mode==='momentumSystem' || isPuckImpulse || isExplosion;
-  const isEnergyHill = mode==='energyHill';
-  const isEnergyPendulum = mode==='energyPendulum';
-  const isEnergy = isEnergyHill || isEnergyPendulum;
-  if(state.simTitle) state.simTitle.textContent=isBlocks?'Анимация столкновения брусков':(isExplosion?'Анимация взрыва снаряда':(isPuckImpulse?'Анимация удара шайб':(isMomentum?'Анимация соударения':(isEnergyPendulum?'Анимация удара и подъёма доски':(isEnergyHill?'Анимация подъёма по горке':'Анимация движения')))));
-  if(state.simNote) state.simNote.innerHTML=isBlocks
-    ? 'Покажите спуск первого бруска по наклонной плоскости, момент абсолютно неупругого удара и дальнейшее совместное движение двух брусков.'
-    : isExplosion
-    ? 'Покажите полёт снаряда до взрыва, момент разрыва и разлёт осколков в разные стороны. Кнопкой «Старт» процесс запускается заново.'
-    : (isPuckImpulse
-      ? 'Покажите движение шайб до удара, момент столкновения и направления импульсов после удара. Кнопкой «Старт» процесс запускается заново.'
-      : (isMomentum
-        ? 'Покажите сближение тел, момент удара и дальнейшее совместное движение. Кнопкой «Старт» запускается весь процесс заново.'
-        : (isEnergyPendulum
-          ? 'Покажите налёт шарика, момент прилипания и дальнейший подъём доски. Сначала используется закон сохранения импульса по горизонтали, затем — закон сохранения энергии.'
-          : (isEnergyHill
-            ? 'Покажите, как шайба поднимается по горке, теряя скорость, но сохраняя полную механическую энергию.'
-            : 'Запустите движение кнопкой «Старт», ставьте на паузу во время объяснения и при необходимости повторяйте анимацию заново.'))));
-  if(state.simBtnsWrap) state.simBtnsWrap.classList.toggle('is-hidden',isMomentum||isEnergy||isBlocks);
-  if(state.simFrameLabel) state.simFrameLabel.textContent=(isMomentum||isEnergy||isBlocks)?'Этап':'Система отсчёта';
-  if(state.simRelVLabel) state.simRelVLabel.textContent=isBlocks?'Скорость бруска':(isExplosion?'Скорость осколка 2':(isPuckImpulse?'Импульс p4':(isMomentum?'Импульс системы':(isEnergyPendulum?'u после удара':(isEnergyHill?'Скорость шайбы':'Относительная скорость')))));
-  if(state.simRelPLabel) state.simRelPLabel.textContent=isBlocks?'Кинетическая энергия':(isExplosion?'Изменение энергии':(isPuckImpulse?'Импульс p3':(isMomentum?'После удара':(isEnergyPendulum?'Высота h':(isEnergyHill?'Высота':'Импульс первого авто')))));
-  if(state.simKeyLabel) state.simKeyLabel.textContent='Ключевая мысль';
-  if(state.animBtn){
-    state.animBtn.style.display=task.hasAnimation===false?'none':'inline-flex';
-    state.animBtn.textContent='▶ Анимация';
+  try{
+    const task=getTaskBoardData(mode);
+    if(!task) return;
+    state.mode=mode;
+    state.task=task;
+    if(state.title) state.title.textContent=task.title;
+    state.condition.innerHTML=task.cond;
+    state.graph.innerHTML=getTaskBoardGraph(mode);
+    if(state.graphLabel) state.graphLabel.textContent=task.graphLabel||'График';
+    const isPuckImpulse = mode==='puckImpulse';
+    const isExplosion = mode==='explosionFragments';
+    const isBlocks = mode==='inelasticBlocks';
+    const isMomentum = mode==='momentumSystem' || isPuckImpulse || isExplosion;
+    const isEnergyHill = mode==='energyHill';
+    const isEnergyPendulum = mode==='energyPendulum';
+    const isEnergy = isEnergyHill || isEnergyPendulum;
+    if(state.simTitle) state.simTitle.textContent=isBlocks?'Анимация столкновения брусков':(isExplosion?'Анимация взрыва снаряда':(isPuckImpulse?'Анимация удара шайб':(isMomentum?'Анимация соударения':(isEnergyPendulum?'Анимация удара и подъёма доски':(isEnergyHill?'Анимация подъёма по горке':'Анимация движения')))));
+    if(state.simNote) state.simNote.innerHTML=isBlocks
+      ? 'Покажите спуск первого бруска по наклонной плоскости, момент абсолютно неупругого удара и дальнейшее совместное движение двух брусков.'
+      : isExplosion
+      ? 'Покажите полёт снаряда до взрыва, момент разрыва и разлёт осколков в разные стороны. Кнопкой «Старт» процесс запускается заново.'
+      : (isPuckImpulse
+        ? 'Покажите движение шайб до удара, момент столкновения и направления импульсов после удара. Кнопкой «Старт» процесс запускается заново.'
+        : (isMomentum
+          ? 'Покажите сближение тел, момент удара и дальнейшее совместное движение. Кнопкой «Старт» запускается весь процесс заново.'
+          : (isEnergyPendulum
+            ? 'Покажите налёт шарика, момент прилипания и дальнейший подъём доски. Сначала используется закон сохранения импульса по горизонтали, затем — закон сохранения энергии.'
+            : (isEnergyHill
+              ? 'Покажите, как шайба поднимается по горке, теряя скорость, но сохраняя полную механическую энергию.'
+              : 'Запустите движение кнопкой «Старт», ставьте на паузу во время объяснения и при необходимости повторяйте анимацию заново.'))));
+    if(state.simBtnsWrap) state.simBtnsWrap.classList.toggle('is-hidden',isMomentum||isEnergy||isBlocks);
+    if(state.simFrameLabel) state.simFrameLabel.textContent=(isMomentum||isEnergy||isBlocks)?'Этап':'Система отсчёта';
+    if(state.simRelVLabel) state.simRelVLabel.textContent=isBlocks?'Скорость бруска':(isExplosion?'Скорость осколка 2':(isPuckImpulse?'Импульс p4':(isMomentum?'Импульс системы':(isEnergyPendulum?'u после удара':(isEnergyHill?'Скорость шайбы':'Относительная скорость')))));
+    if(state.simRelPLabel) state.simRelPLabel.textContent=isBlocks?'Кинетическая энергия':(isExplosion?'Изменение энергии':(isPuckImpulse?'Импульс p3':(isMomentum?'После удара':(isEnergyPendulum?'Высота h':(isEnergyHill?'Высота':'Импульс первого авто')))));
+    if(state.simKeyLabel) state.simKeyLabel.textContent='Ключевая мысль';
+    if(state.animBtn){
+      state.animBtn.style.display=task.hasAnimation===false?'none':'inline-flex';
+      state.animBtn.textContent='▶ Анимация';
+    }
+    const useSolutionWorkspace=!!(hasFilledTaskSolution(task)||hasLegacyTaskSolution(task));
+    state.solution.innerHTML=renderTaskBoardSolution(task);
+    state.answer.innerHTML=task.ans;
+    const answerWrap=state.answer?state.answer.closest('.task-board-answer'):null;
+    if(answerWrap) answerWrap.style.display=(task.ans&&!useSolutionWorkspace)?'':'none';
+    state.strokes=[];
+    state.boardObjects=[];
+    state.selectedObjectId=null;
+    state.history=[{strokes:[],objects:[]}];
+    state.historyIndex=0;
+    state.pointer=null;
+    state.viewX=0;
+    state.viewY=0;
+    state.viewScale=1;
+    restoreBoardState();
+    const showStaticBoardContent=mode==='task07-pendulum-impact';
+    state.overlay.classList.toggle('solution-workspace-mode',useSolutionWorkspace);
+    state.drawer.classList.toggle('open',showStaticBoardContent||useSolutionWorkspace);
+    taskBoardToggleFloating('condition',showStaticBoardContent);
+    taskBoardToggleFloating('graph',false);
+    state.overlay.style.display='block';
+    state.overlay.style.pointerEvents='auto';
+    state.overlay.setAttribute('aria-hidden','false');
+    state.overlay.classList.add('open');
+    document.body.classList.add('task-board-lock');
+    // Browser Fullscreen API не используем. Доска открывается как fixed overlay.
+    taskBoardCloseDropdowns();
+    taskBoardSetTool('pen');
+    taskBoardUpdateCanvasSurface();
+    taskBoardUpdateHistoryButtons();
+    taskBoardResizeCanvas();
+    toggleTaskBoardAnimation(false);
+  }catch(err){
+    console.error('Task board open failed:', err);
+    resetTaskBoardOverlayState(state);
   }
-  const useSolutionWorkspace=!!(hasFilledTaskSolution(task)||hasLegacyTaskSolution(task));
-  state.solution.innerHTML=renderTaskBoardSolution(task);
-  state.answer.innerHTML=task.ans;
-  const answerWrap=state.answer?state.answer.closest('.task-board-answer'):null;
-  if(answerWrap) answerWrap.style.display=(task.ans&&!useSolutionWorkspace)?'':'none';
-  state.strokes=[];
-  state.boardObjects=[];
-  state.selectedObjectId=null;
-  state.history=[{strokes:[],objects:[]}];
-  state.historyIndex=0;
-  state.pointer=null;
-  state.viewX=0;
-  state.viewY=0;
-  state.viewScale=1;
-  restoreBoardState();
-  const showStaticBoardContent=mode==='task07-pendulum-impact';
-  state.overlay.classList.toggle('solution-workspace-mode',useSolutionWorkspace);
-  state.drawer.classList.toggle('open',showStaticBoardContent||useSolutionWorkspace);
-  taskBoardToggleFloating('condition',showStaticBoardContent);
-  taskBoardToggleFloating('graph',false);
-  state.overlay.classList.add('open');
-  document.body.classList.add('task-board-lock');
-  // Не используем browser fullscreen. Доска уже открывается как fixed overlay.
-  taskBoardCloseDropdowns();
-  taskBoardSetTool('pen');
-  taskBoardUpdateCanvasSurface();
-  taskBoardUpdateHistoryButtons();
-  taskBoardResizeCanvas();
-  toggleTaskBoardAnimation(false);
 }
 function closeTaskBoard(){
   const state=ensureTaskBoardOverlay();
   state.overlay.classList.remove('open');
+  state.overlay.setAttribute('aria-hidden','true');
+  state.overlay.style.display='none';
+  state.overlay.style.pointerEvents='none';
   state.overlay.classList.remove('solution-workspace-mode');
   state.drawer.classList.remove('open');
   state.pointer=null;
