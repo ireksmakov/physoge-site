@@ -507,7 +507,8 @@ body.edit-mode .et{display:inline}
 @keyframes ptSlideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes taskBoardOverlayFade{from{opacity:0}to{opacity:1}}
 @keyframes taskBoardZoomIn{from{opacity:.88;transform:scale(.975)}to{opacity:1;transform:scale(1)}}
-.pt-card{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:18px 22px;margin-bottom:12px;transition:border-color .2s,box-shadow .2s;animation:ptFadeUp .3s ease both}
+.pt-card{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:18px 22px;margin-bottom:12px;transition:border-color .2s,box-shadow .2s;animation:ptFadeUp .3s ease both;pointer-events:auto}
+.pt-card::before,.pt-card::after{pointer-events:none}
 .pt-card:hover{border-color:rgba(255,140,0,.3);box-shadow:0 0 22px rgba(255,140,0,.08)}
 .pt-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
 .pt-num{font-family:var(--fh);font-size:22px;font-weight:900;color:rgba(255,140,0,.3);min-width:36px}
@@ -517,10 +518,10 @@ body.edit-mode .et{display:inline}
 .pt-l3{background:rgba(168,85,247,.12);color:#a855f7}
 .pt-title{font-family:var(--fh);font-size:13px;font-weight:700;color:var(--white)}
 .pt-exam{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.18);color:var(--cyan);font-size:10px;font-weight:700;white-space:nowrap}
-.pt-body{display:grid;grid-template-columns:minmax(0,1fr) 160px;gap:14px;align-items:start}
-.pt-side{display:flex;flex-direction:column;gap:10px;align-items:stretch}
+.pt-body{display:grid;grid-template-columns:minmax(0,1fr) 160px;gap:14px;align-items:start;pointer-events:auto}
+.pt-side{display:flex;flex-direction:column;gap:10px;align-items:stretch;position:relative;z-index:20;pointer-events:auto}
 @media(max-width:680px){.pt-body{grid-template-columns:1fr}.pt-side{max-width:260px;width:100%}}
-.pt-condition{font-size:14px;color:var(--gray);line-height:1.82}
+.pt-condition{font-size:14px;color:var(--gray);line-height:1.82;pointer-events:auto}
 .pt-condition strong{color:var(--white)}
 .pt-given{background:var(--bg2);border-left:3px solid var(--orange);border-radius:0 7px 7px 0;padding:10px 13px;font-size:13px;line-height:1.82;color:var(--gray)}
 .pt-given strong{color:var(--white)}.pt-find{color:var(--orange);font-weight:700}
@@ -621,8 +622,8 @@ body.edit-mode .et{display:inline}
 .pt-demo-btn{padding:8px 12px;border-radius:8px;border:1px solid rgba(0,229,255,.15);background:rgba(0,229,255,.05);color:var(--gray);font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb)}
 .pt-demo-btn:hover{color:var(--white);border-color:rgba(0,229,255,.35)}
 .pt-demo-btn.active{background:rgba(0,229,255,.14);color:var(--cyan);border-color:rgba(0,229,255,.35)}
-.pt-side-actions{margin:0}
-.pt-board-btn{width:100%;padding:9px 12px;border-radius:8px;border:1px solid rgba(0,229,255,.22);background:rgba(0,229,255,.08);color:var(--cyan);font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb)}
+.pt-side-actions{margin:0;position:relative;z-index:20;pointer-events:auto}
+.pt-board-btn{width:100%;padding:9px 12px;border-radius:8px;border:1px solid rgba(0,229,255,.22);background:rgba(0,229,255,.08);color:var(--cyan);font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb);position:relative;z-index:25;pointer-events:auto}
 .pt-board-btn:hover{background:rgba(0,229,255,.16);border-color:rgba(0,229,255,.38);color:var(--white);box-shadow:0 0 18px rgba(0,229,255,.2);transform:translateY(-1px)}
 
 
@@ -667,8 +668,8 @@ body.view-mode .pt-blank-add-wrap{display:none}
 @media(max-width:720px){.pt-blank-add-btn{padding:13px 12px;font-size:12px}.pt-empty-text{font-size:13px}}
 html,body{margin:0;padding:0}
 body.task-board-lock{overflow:hidden}
-.task-board-overlay{position:fixed;inset:0;width:100vw;height:100dvh;margin:0;padding:0;overflow:hidden;z-index:20000;background:#fff;color:#0f172a;display:none}
-.task-board-overlay.open{display:block;animation:taskBoardOverlayFade .26s ease both}
+.task-board-overlay{position:fixed;inset:0;width:100vw;height:100dvh;margin:0;padding:0;overflow:hidden;z-index:20000;background:#fff;color:#0f172a;display:none;pointer-events:none}
+.task-board-overlay.open{display:block;pointer-events:auto;animation:taskBoardOverlayFade .26s ease both}
 .task-board-overlay.open .task-board-shell{animation:taskBoardZoomIn .28s ease both}
 .task-board-shell{position:relative;display:block;width:100%;height:100%;min-width:100%;min-height:100%;margin:0;padding:0;background:#fff;overflow:hidden}
 .task-board-top{display:none}
@@ -5505,9 +5506,19 @@ function renderPTasks(name){
     const steps=(t.steps||[]).map((s,j)=>`<div class="sr-step"><div class="sr-snum">${j+1}</div><div class="sr-sbody">${s}</div></div>`).join('');
     const extra=t.extraHtml?`<div class="pt-extra">${t.extraHtml}</div>`:'';
     const taskId=String(t.id||'');
-    const boardModeSafe=escapeHtml(String(t.boardMode||''));
-    const taskIdSafe=escapeHtml(taskId);
-    const boardBtn=t.boardMode?`<div class="pt-side-actions"><button type="button" class="pt-board-btn" data-board-mode="${boardModeSafe}" data-task-id="${taskIdSafe}">🧑‍🏫 Доска</button>${taskId==='lesson12-task07'?`<button class="pt-board-btn task07-card-anim-btn" onclick="openTaskAnimation('lesson12-task07')">▶ Анимация процесса</button>`:''}</div>`:'';
+    const boardModeAttr=escapeHtml(String(t.boardMode||t.id||'default-board'));
+    const boardBtn=`
+      <div class="pt-side-actions">
+        <button
+          type="button"
+          class="pt-board-btn"
+          data-board-mode="${boardModeAttr}"
+          onclick="taskBoardOpenFromButton(this,event)"
+        >🧑‍🏫 Доска</button>
+        ${taskId==='lesson12-task07'
+          ? `<button type="button" class="pt-board-btn task07-card-anim-btn" onclick="openTaskAnimation('lesson12-task07')">▶ Анимация процесса</button>`
+          : ''}
+      </div>`;
     const hasAnswer=String(t.ans||'').trim();
     const answerCard=hasAnswer?`<div class="sr-ans"><div style="font-size:18px">✓</div><div><div class="sr-ans-l">Ответ</div><div class="sr-ans-v" style="color:var(--orange)">${t.ans}</div></div></div>`:'';
     const hasStructuredSolution=hasFilledTaskSolution(t)||hasLegacyTaskTextSolution(t);
@@ -6802,24 +6813,59 @@ function resetTaskBoardOverlayState(state){
   }
   document.body.classList.remove('task-board-lock');
 }
+function taskBoardOpenFromButton(btn,event){
+  if(event){
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  const mode = btn && btn.getAttribute('data-board-mode');
+
+  if(!mode){
+    console.warn('Не найден data-board-mode для кнопки Доска', btn);
+    openTaskBoard('default-board');
+    return;
+  }
+
+  openTaskBoard(mode);
+}
 function initTaskBoardOpenDelegation(){
   if(document.__taskBoardOpenDelegationReady) return;
   document.__taskBoardOpenDelegationReady=true;
-  document.addEventListener('click',function(e){
-    const btn=e.target.closest('[data-board-mode]');
+  document.addEventListener('click',function(event){
+    const btn=event.target.closest('.pt-board-btn[data-board-mode]');
     if(!btn||btn.disabled) return;
-    e.preventDefault();
-    e.stopPropagation();
-    openTaskBoard(btn.getAttribute('data-board-mode')||'',false,btn.getAttribute('data-task-id')||'');
-  });
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    taskBoardOpenFromButton(btn,event);
+  },true);
 }
 initTaskBoardOpenDelegation();
 function openTaskBoard(mode,requestFullscreen=false,taskId=''){
   const state=ensureTaskBoardOverlay();
   try{
-    const foundTask=getTaskBoardData(mode);
-    const task=foundTask||createTaskBoardFallbackData(mode,taskId);
-    if(!foundTask) console.warn('Task board data not found, opened fallback board:', mode||taskId||'(empty)');
+    let task=getTaskBoardData(mode);
+
+    if(!task){
+      console.warn('Task board data not found, opening empty board:', mode);
+      task={
+        title:'Доска',
+        cond:'<p>Пустая рабочая доска. Данные задачи не найдены, но доска доступна для работы.</p>',
+        given:'',
+        ans:'',
+        steps:[],
+        solutionHtml:'',
+        solutionImage:'',
+        solution:{idea:'',formulas:[],steps:[],answer:'',tutorHint:''},
+        boardMode:mode||'default-board',
+        id:taskId||'',
+        isFallback:true,
+        hasAnimation:false,
+        graphLabel:'Схема'
+      };
+    }
     state.mode=mode;
     state.task=task;
     if(state.title) state.title.textContent=task.title;
