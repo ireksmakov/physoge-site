@@ -6838,7 +6838,6 @@ function taskBoardRedo(){
 function taskBoardClear(){
   const state=ensureTaskBoardOverlay();
   if(!state.strokes.length&&!state.boardObjects.length) return;
-  if(!confirm('Очистить рисунок и все вставленные картинки?')) return;
   state.strokes=[];
   state.boardObjects=[];
   state.selectedObjectId=null;
