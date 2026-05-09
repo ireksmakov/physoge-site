@@ -4,27 +4,32 @@ on:
   push:
     branches:
       - main
-      - "основной"
+      - master
+      - work
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Get files from GitHub
+      - name: Оформление заказа
         uses: actions/checkout@v4
 
-      - name: Prepare SSH
+      - name: Установить ключ SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.ZOMRO_SSH_KEY }}
+
+      - name: Добавить хост в known_hosts
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.ZOMRO_SSH_KEY }}" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -p ${{ secrets.ZOMRO_PORT }} ${{ secrets.ZOMRO_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -p ${{ secrets.ZOMRO_PORT }} -H ${{ secrets.ZOMRO_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Deploy files to Zomro
+      - name: Развертывание с помощью rsync
         run: |
-          rsync -avz --delete \
-            --exclude ".git" \
-            --exclude ".github" \
-            -e "ssh -i ~/.ssh/deploy_key -p ${{ secrets.ZOMRO_PORT }}" \
+          rsync -az --delete \
+            --exclude '.git/' \
+            --exclude '.github/' \
+            -e "ssh -p ${{ secrets.ZOMRO_PORT }}" \
             ./ ${{ secrets.ZOMRO_USER }}@${{ secrets.ZOMRO_HOST }}:${{ secrets.ZOMRO_PATH }}
