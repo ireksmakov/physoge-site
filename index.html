@@ -2439,7 +2439,7 @@ const COURSES={
   ]}
 };
 
-let AC=null,CM=0,CL=0,EMODE=true;
+let AC=null,CM=0,CL=0,CTAB='theory',EMODE=true;
 const LD={};
 function lk(){return AC+'_'+CM+'_'+CL}
 function gld(){if(!LD[lk()])LD[lk()]={videos:[],questions:[{text:'',type:'choice',opts:['','','',''],correct:0,answer:''}],files:[]};return LD[lk()]}
@@ -3009,6 +3009,7 @@ function parseCourseRoute(hash){
   const courseKey = parts[0] ? safeDecodeRoutePart(parts[0]) : '';
   let moduleIndex = null;
   let lessonIndex = null;
+  let tabId = null;
 
   for(let i = 1; i < parts.length; i += 1){
     if(parts[i] === 'm'){
@@ -3017,10 +3018,14 @@ function parseCourseRoute(hash){
     } else if(parts[i] === 'l'){
       lessonIndex = parseOptionalRouteIndex(parts[i + 1]);
       i += 1;
+    } else if(parts[i] === 't'){
+      const parsedTabId = parts[i + 1] ? safeDecodeRoutePart(parts[i + 1]) : '';
+      tabId = isValidCourseTab(parsedTabId) ? parsedTabId : null;
+      i += 1;
     }
   }
 
-  return {courseKey, moduleIndex, lessonIndex};
+  return {courseKey, moduleIndex, lessonIndex, tabId};
 }
 function ensureRouteMessagePage(){
   let page = document.getElementById('route-message-page');
@@ -3069,8 +3074,8 @@ function handleRoute(){
   if(hash === '#simulators') return showSimulatorsPage();
 
   if(hash.startsWith('#course/')){
-    const {courseKey, moduleIndex, lessonIndex} = parseCourseRoute(hash);
-    return openCourse(courseKey, moduleIndex, lessonIndex);
+    const {courseKey, moduleIndex, lessonIndex, tabId} = parseCourseRoute(hash);
+    return openCourse(courseKey, moduleIndex, lessonIndex, tabId);
   }
 
   if(hash === '#tests/topic'){
@@ -3244,6 +3249,18 @@ function openSim(key){
   window.scrollTo(0,0);
 }
 const LAST_COURSE_LESSON_STORAGE_KEY = 'fizmat_last_course_lesson';
+const COURSE_TABS = ['theory','tasks','sims','lab','video','tests','hw'];
+function isValidCourseTab(tabId){
+  return COURSE_TABS.includes(tabId);
+}
+function getCourseTabActiveClass(tabId){
+  const activeClasses = {tasks:'active-ptasks', sims:'active-psims', lab:'active-plab'};
+  return activeClasses[tabId] || 'active';
+}
+function getCourseRoute(courseKey,moduleIndex,lessonIndex,tabId){
+  const safeTabId = isValidCourseTab(tabId) ? tabId : 'theory';
+  return `#course/${encodeURIComponent(courseKey)}/m/${moduleIndex}/l/${lessonIndex}/t/${safeTabId}`;
+}
 function readLastCourseLessons(){
   try{
     const raw = localStorage.getItem(LAST_COURSE_LESSON_STORAGE_KEY);
@@ -3253,11 +3270,13 @@ function readLastCourseLessons(){
     return {};
   }
 }
-function saveLastCourseLesson(courseKey,moduleIndex,lessonIndex){
+function saveLastCourseLesson(courseKey,moduleIndex,lessonIndex,tabId){
   if(!courseKey) return;
   try{
     const data = readLastCourseLessons();
-    data[courseKey] = {module:moduleIndex, lesson:lessonIndex};
+    const previous = data[courseKey] && typeof data[courseKey] === 'object' ? data[courseKey] : {};
+    const tab = isValidCourseTab(tabId) ? tabId : 'theory';
+    data[courseKey] = {...previous, module:moduleIndex, lesson:lessonIndex, tab};
     localStorage.setItem(LAST_COURSE_LESSON_STORAGE_KEY, JSON.stringify(data));
   }catch(err){
     console.warn('Не удалось сохранить последний урок курса:', err);
@@ -3271,28 +3290,40 @@ function getSavedCourseLesson(courseKey,c){
   if(!saved) return null;
   const moduleIndex = Number(saved.module);
   const lessonIndex = Number(saved.lesson);
-  return isValidCourseLesson(c,moduleIndex,lessonIndex) ? {moduleIndex,lessonIndex} : null;
+  const tabId = isValidCourseTab(saved.tab) ? saved.tab : null;
+  return isValidCourseLesson(c,moduleIndex,lessonIndex) ? {moduleIndex,lessonIndex,tabId} : null;
 }
-function resolveCourseLesson(courseKey,c,moduleIndex,lessonIndex){
-  if(isValidCourseLesson(c,moduleIndex,lessonIndex)){
-    return {moduleIndex,lessonIndex};
-  }
+function resolveCourseLesson(courseKey,c,moduleIndex,lessonIndex,tabId){
   const saved = getSavedCourseLesson(courseKey,c);
-  if(saved) return saved;
-  return {moduleIndex:0,lessonIndex:0};
+  let selected;
+  if(isValidCourseLesson(c,moduleIndex,lessonIndex)){
+    selected = {moduleIndex,lessonIndex};
+  } else if(saved){
+    selected = {moduleIndex:saved.moduleIndex, lessonIndex:saved.lessonIndex};
+  } else {
+    selected = {moduleIndex:0, lessonIndex:0};
+  }
+
+  const savedMatchesLesson = saved && saved.moduleIndex === selected.moduleIndex && saved.lessonIndex === selected.lessonIndex;
+  selected.tabId = isValidCourseTab(tabId) ? tabId : (savedMatchesLesson && saved.tabId ? saved.tabId : 'theory');
+  return selected;
 }
-function openCourse(key,moduleIndex,lessonIndex){
+function openCourse(key,moduleIndex,lessonIndex,tabId){
   if(!COURSES || !COURSES[key]){
     console.warn('Курс не найден:', key);
     return showCourseNotFound();
   }
 
   const c = COURSES[key];
-  const selected = resolveCourseLesson(key,c,moduleIndex,lessonIndex);
+  const selected = resolveCourseLesson(key,c,moduleIndex,lessonIndex,tabId);
   AC = key;
   CM = selected.moduleIndex;
   CL = selected.lessonIndex;
-  saveLastCourseLesson(AC,CM,CL);
+  CTAB = selected.tabId || 'theory';
+  saveLastCourseLesson(AC,CM,CL,CTAB);
+  if(window.location.hash !== getCourseRoute(AC,CM,CL,CTAB)){
+    history.replaceState(null,'',getCourseRoute(AC,CM,CL,CTAB));
+  }
 
   hideAll();
 
@@ -3401,7 +3432,7 @@ function lDl(e){e.currentTarget.classList.remove('dov')}
 function lDd(e,tmi,tli){if(!dLs)return;e.preventDefault();const{mi:smi,li:sli}=dLs;if(smi===tmi&&sli===tli)return;const c=COURSES[AC];const[mv]=c.modules[smi].lessons.splice(sli,1);const a=(smi===tmi&&sli<tli)?tli-1:tli;c.modules[tmi].lessons.splice(a,0,mv);if(CM===smi&&CL===sli){CM=tmi;CL=a}dLs=null;renderSb()}
 
 /* EDIT ACTIONS */
-function selL(e,mi,li){if(e.target.tagName==='INPUT'||e.target.tagName==='BUTTON')return;CM=mi;CL=li;saveLastCourseLesson(AC,CM,CL);history.replaceState(null,'',`#course/${AC}/m/${CM}/l/${CL}`);renderSb();renderContent()}
+function selL(e,mi,li){if(e.target.tagName==='INPUT'||e.target.tagName==='BUTTON')return;CM=mi;CL=li;CTAB='theory';saveLastCourseLesson(AC,CM,CL,CTAB);history.replaceState(null,'',getCourseRoute(AC,CM,CL,CTAB));renderSb();renderContent()}
 function togM(mi){COURSES[AC].modules[mi].open=!COURSES[AC].modules[mi].open;renderSb()}
 function addModule(){COURSES[AC].modules.push({name:'Новый модуль',open:true,lessons:['Урок 1']});CM=COURSES[AC].modules.length-1;CL=0;renderSb();renderContent()}
 function delM(mi){const c=COURSES[AC];if(c.modules.length<=1){alert('Нельзя удалить единственный модуль');return}if(!confirm('Удалить модуль «'+c.modules[mi].name+'»?'))return;c.modules.splice(mi,1);CM=Math.min(CM,c.modules.length-1);CL=0;renderSb();renderContent()}
@@ -3409,7 +3440,15 @@ function addL(mi){COURSES[AC].modules[mi].lessons.push('Новый урок');CM
 function delL(mi,li){const m=COURSES[AC].modules[mi];if(m.lessons.length<=1){alert('Должен быть хотя бы 1 урок');return}m.lessons.splice(li,1);if(CM===mi&&CL>=m.lessons.length)CL=m.lessons.length-1;renderSb();renderContent()}
 
 /* ============ CONTENT ============ */
+function courseTabButtonClass(tabId,activeClass){
+  if(CTAB !== tabId) return 'cpt';
+  return 'cpt ' + (activeClass || getCourseTabActiveClass(tabId));
+}
+function coursePanelClass(tabId){
+  return CTAB === tabId ? 'cp-panel active' : 'cp-panel';
+}
 function renderContent(){
+  if(!isValidCourseTab(CTAB)) CTAB='theory';
   const c=COURSES[AC],name=c.modules[CM].lessons[CL],ld=gld();
   const topHint=document.getElementById('topHint');
   if(topHint)topHint.textContent=EMODE?'✏️ Кликните для переименования · ⠿ Перетащите для смены порядка':'👁 Режим просмотра';
@@ -3426,27 +3465,34 @@ function renderContent(){
       <div class="cps"><div class="cpsv">${ld.files.length}</div><div class="cpsl">работ сдано</div></div>
     </div>
     <div class="cp-tabs">
-      <button class="cpt active" onclick="showTab('theory',this)">📖 Теория</button>
-      <button class="cpt" onclick="showTab('tasks',this,'active-ptasks')">📋 Задачи</button>
-      <button class="cpt" onclick="showTab('sims',this,'active-psims')">⚡ Симуляторы</button>
-      <button class="cpt" onclick="showTab('lab',this,'active-plab')">🔬 Лабораторные</button>
-      <button class="cpt" onclick="showTab('video',this)">▶ Видео</button>
-      <button class="cpt" onclick="showTab('tests',this)">✏️ Тесты</button>
-      <button class="cpt" onclick="showTab('hw',this)">📎 Домашнее задание</button>
+      <button class="${courseTabButtonClass('theory')}" onclick="showTab('theory',this)">📖 Теория</button>
+      <button class="${courseTabButtonClass('tasks','active-ptasks')}" onclick="showTab('tasks',this,'active-ptasks')">📋 Задачи</button>
+      <button class="${courseTabButtonClass('sims','active-psims')}" onclick="showTab('sims',this,'active-psims')">⚡ Симуляторы</button>
+      <button class="${courseTabButtonClass('lab','active-plab')}" onclick="showTab('lab',this,'active-plab')">🔬 Лабораторные</button>
+      <button class="${courseTabButtonClass('video')}" onclick="showTab('video',this)">▶ Видео</button>
+      <button class="${courseTabButtonClass('tests')}" onclick="showTab('tests',this)">✏️ Тесты</button>
+      <button class="${courseTabButtonClass('hw')}" onclick="showTab('hw',this)">📎 Домашнее задание</button>
     </div>
-    <div id="pan-theory" class="cp-panel active">${renderTheory()}</div>
-    <div id="pan-tasks"  class="cp-panel">${renderPTasks(name)}</div>
-    <div id="pan-sims"   class="cp-panel">${renderPSims(name)}</div>
-    <div id="pan-lab"    class="cp-panel">${renderPLab(name)}</div>
-    <div id="pan-video"  class="cp-panel">${renderVideo(ld)}</div>
-    <div id="pan-tests"  class="cp-panel">${renderTests(ld)}</div>
-    <div id="pan-hw"     class="cp-panel">${renderHW(ld)}</div>`;
+    <div id="pan-theory" class="${coursePanelClass('theory')}">${renderTheory()}</div>
+    <div id="pan-tasks"  class="${coursePanelClass('tasks')}">${renderPTasks(name)}</div>
+    <div id="pan-sims"   class="${coursePanelClass('sims')}">${renderPSims(name)}</div>
+    <div id="pan-lab"    class="${coursePanelClass('lab')}">${renderPLab(name)}</div>
+    <div id="pan-video"  class="${coursePanelClass('video')}">${renderVideo(ld)}</div>
+    <div id="pan-tests"  class="${coursePanelClass('tests')}">${renderTests(ld)}</div>
+    <div id="pan-hw"     class="${coursePanelClass('hw')}">${renderHW(ld)}</div>`;
 }
 function showTab(id,btn,colorClass){
+  if(!isValidCourseTab(id)) id='theory';
   document.querySelectorAll('.cp-panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.cpt').forEach(t=>{t.classList.remove('active','active-ptasks','active-psims','active-plab');});
-  document.getElementById('pan-'+id).classList.add('active');
-  btn.classList.add(colorClass||'active');
+  const panel = document.getElementById('pan-'+id);
+  if(panel) panel.classList.add('active');
+  if(btn) btn.classList.add(colorClass||getCourseTabActiveClass(id));
+  CTAB = id;
+  saveLastCourseLesson(AC,CM,CL,CTAB);
+  if(AC !== null && AC !== undefined){
+    history.replaceState(null,'',getCourseRoute(AC,CM,CL,CTAB));
+  }
 }
 
 /* ============ THEORY RENDERING ============ */
