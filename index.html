@@ -2535,6 +2535,7 @@ function hideAll(){
     'student-test-page',
     'student-variant-page',
     'tests-generator-page',
+    'route-message-page',
     'test-generator-page',
     'student-variant-intro-page',
     'student-variant-solve-page',
@@ -2989,19 +2990,87 @@ function openTestPreviewRoute(id){
   showTestsPage();
 }
 
+function parseOptionalRouteIndex(value){
+  if(value === undefined || value === null || value === '') return null;
+  const index = Number(value);
+  return Number.isInteger(index) && index >= 0 ? index : null;
+}
+function safeDecodeRoutePart(value){
+  try{
+    return decodeURIComponent(value);
+  }catch(err){
+    console.warn('Некорректная часть маршрута:', value, err);
+    return value;
+  }
+}
+function parseCourseRoute(hash){
+  const route = (hash || '').replace(/^#course\/?/, '').split('?')[0];
+  const parts = route.split('/').filter(Boolean);
+  const courseKey = parts[0] ? safeDecodeRoutePart(parts[0]) : '';
+  let moduleIndex = null;
+  let lessonIndex = null;
+
+  for(let i = 1; i < parts.length; i += 1){
+    if(parts[i] === 'm'){
+      moduleIndex = parseOptionalRouteIndex(parts[i + 1]);
+      i += 1;
+    } else if(parts[i] === 'l'){
+      lessonIndex = parseOptionalRouteIndex(parts[i + 1]);
+      i += 1;
+    }
+  }
+
+  return {courseKey, moduleIndex, lessonIndex};
+}
+function ensureRouteMessagePage(){
+  let page = document.getElementById('route-message-page');
+  if(!page){
+    page = document.createElement('div');
+    page.id = 'route-message-page';
+    page.className = 'page-hidden';
+    document.body.appendChild(page);
+  }
+  return page;
+}
+function showRouteMessage(title,message,backHref='#courses',backText='Вернуться к курсам'){
+  hideAll();
+  const page = ensureRouteMessagePage();
+  page.innerHTML = `<div class="tests-wrap"><div class="tests-topic-empty"><h2>${escapeHtml(title)}</h2><div>${escapeHtml(message)}</div><a class="tests-editor-back" href="${backHref}">${escapeHtml(backText)}</a></div></div>`;
+  page.style.display = 'block';
+  page.style.pointerEvents = 'auto';
+  page.classList.remove('page-hidden');
+  page.classList.add('page-active');
+
+  const backBtn = document.getElementById('backBtn');
+  if(backBtn) backBtn.classList.add('on');
+  if(typeof setBackHref === 'function') setBackHref(backHref);
+
+  const modeToggle = document.getElementById('modeToggle');
+  if(modeToggle) modeToggle.classList.remove('on');
+
+  window.scrollTo(0,0);
+}
+function showCourseNotFound(){
+  return showRouteMessage('Курс не найден','Курс не найден или ещё загружается.','#courses','Вернуться к курсам');
+}
+function showNotFoundRoute(hash){
+  return showRouteMessage('Страница не найдена',`Маршрут ${hash || 'без адреса'} не найден.`,'#home','На главную');
+}
+
 function handleRoute(){
   const hash = window.location.hash || '#home';
 
   if(hash === '#home') return showLanding();
   if(hash === '#courses') return showCoursesPage();
   if(hash === '#tests') return showTestsPage();
+  if(hash === '#for-teachers') return showLanding('#for-teachers');
   if(hash === '#students') return showStudentsPage ? showStudentsPage() : showLanding('#students');
   if(hash === '#bank') return showBankPage ? showBankPage() : showLanding('#bank');
   if(hash === '#simulators') return showSimulatorsPage();
 
   if(hash.startsWith('#course/')){
-    const key = hash.replace('#course/', '');
-    return openCourse(key);
+    const {courseKey, moduleIndex, lessonIndex} = parseCourseRoute(hash);
+    return openCourse(courseKey, moduleIndex, lessonIndex);
   }
 
   if(hash === '#tests/topic'){
@@ -3049,7 +3118,7 @@ function handleRoute(){
     return showTestsPage();
   }
 
-  return showLanding();
+  return showNotFoundRoute(hash);
 }
 
 window.addEventListener('hashchange',handleRoute);
@@ -3174,16 +3243,56 @@ function openSim(key){
   }
   window.scrollTo(0,0);
 }
-function openCourse(key){
+const LAST_COURSE_LESSON_STORAGE_KEY = 'fizmat_last_course_lesson';
+function readLastCourseLessons(){
+  try{
+    const raw = localStorage.getItem(LAST_COURSE_LESSON_STORAGE_KEY);
+    return raw ? JSON.parse(raw) || {} : {};
+  }catch(err){
+    console.warn('Не удалось прочитать последний урок курса:', err);
+    return {};
+  }
+}
+function saveLastCourseLesson(courseKey,moduleIndex,lessonIndex){
+  if(!courseKey) return;
+  try{
+    const data = readLastCourseLessons();
+    data[courseKey] = {module:moduleIndex, lesson:lessonIndex};
+    localStorage.setItem(LAST_COURSE_LESSON_STORAGE_KEY, JSON.stringify(data));
+  }catch(err){
+    console.warn('Не удалось сохранить последний урок курса:', err);
+  }
+}
+function isValidCourseLesson(c,moduleIndex,lessonIndex){
+  return Number.isInteger(moduleIndex) && Number.isInteger(lessonIndex) && moduleIndex >= 0 && lessonIndex >= 0 && !!(c && c.modules && c.modules[moduleIndex] && c.modules[moduleIndex].lessons && c.modules[moduleIndex].lessons[lessonIndex] !== undefined);
+}
+function getSavedCourseLesson(courseKey,c){
+  const saved = readLastCourseLessons()[courseKey];
+  if(!saved) return null;
+  const moduleIndex = Number(saved.module);
+  const lessonIndex = Number(saved.lesson);
+  return isValidCourseLesson(c,moduleIndex,lessonIndex) ? {moduleIndex,lessonIndex} : null;
+}
+function resolveCourseLesson(courseKey,c,moduleIndex,lessonIndex){
+  if(isValidCourseLesson(c,moduleIndex,lessonIndex)){
+    return {moduleIndex,lessonIndex};
+  }
+  const saved = getSavedCourseLesson(courseKey,c);
+  if(saved) return saved;
+  return {moduleIndex:0,lessonIndex:0};
+}
+function openCourse(key,moduleIndex,lessonIndex){
   if(!COURSES || !COURSES[key]){
     console.warn('Курс не найден:', key);
-    window.location.hash = '#courses';
-    return;
+    return showCourseNotFound();
   }
 
+  const c = COURSES[key];
+  const selected = resolveCourseLesson(key,c,moduleIndex,lessonIndex);
   AC = key;
-  CM = 0;
-  CL = 0;
+  CM = selected.moduleIndex;
+  CL = selected.lessonIndex;
+  saveLastCourseLesson(AC,CM,CL);
 
   hideAll();
 
@@ -3292,7 +3401,7 @@ function lDl(e){e.currentTarget.classList.remove('dov')}
 function lDd(e,tmi,tli){if(!dLs)return;e.preventDefault();const{mi:smi,li:sli}=dLs;if(smi===tmi&&sli===tli)return;const c=COURSES[AC];const[mv]=c.modules[smi].lessons.splice(sli,1);const a=(smi===tmi&&sli<tli)?tli-1:tli;c.modules[tmi].lessons.splice(a,0,mv);if(CM===smi&&CL===sli){CM=tmi;CL=a}dLs=null;renderSb()}
 
 /* EDIT ACTIONS */
-function selL(e,mi,li){if(e.target.tagName==='INPUT'||e.target.tagName==='BUTTON')return;CM=mi;CL=li;renderSb();renderContent()}
+function selL(e,mi,li){if(e.target.tagName==='INPUT'||e.target.tagName==='BUTTON')return;CM=mi;CL=li;saveLastCourseLesson(AC,CM,CL);history.replaceState(null,'',`#course/${AC}/m/${CM}/l/${CL}`);renderSb();renderContent()}
 function togM(mi){COURSES[AC].modules[mi].open=!COURSES[AC].modules[mi].open;renderSb()}
 function addModule(){COURSES[AC].modules.push({name:'Новый модуль',open:true,lessons:['Урок 1']});CM=COURSES[AC].modules.length-1;CL=0;renderSb();renderContent()}
 function delM(mi){const c=COURSES[AC];if(c.modules.length<=1){alert('Нельзя удалить единственный модуль');return}if(!confirm('Удалить модуль «'+c.modules[mi].name+'»?'))return;c.modules.splice(mi,1);CM=Math.min(CM,c.modules.length-1);CL=0;renderSb();renderContent()}
