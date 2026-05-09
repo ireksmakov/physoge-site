@@ -726,14 +726,18 @@ body.task-board-lock{overflow:hidden}
 .task-board-static-given{border-left:4px solid #f97316;border-radius:0 12px 12px 0;background:#f8fafc;padding:12px 14px;margin-bottom:12px;font-size:15px;line-height:1.7;color:#475569}
 .task-board-static-given strong{color:#111827}
 .task-board-center{position:relative;display:block;width:100%;height:100%;min-width:100%;min-height:100%;margin:0;padding:0;overflow:visible}
-.task-board-toolbar{position:relative;left:auto;top:0;right:auto;width:calc(100% - 74px);z-index:20020;display:flex;visibility:visible;opacity:1;align-items:center;justify-content:flex-start;gap:8px;flex-wrap:nowrap;overflow:visible;white-space:nowrap;background:rgba(255,255,255,.94);border:1px solid #dbe5f0;border-radius:18px;padding:10px 12px;margin:20px 20px 0 54px;box-shadow:0 14px 36px rgba(15,23,42,.08)}
+.task-board-toolbar{position:fixed;z-index:20020;top:16px;left:16px;width:auto;max-width:calc(100vw - 32px);display:flex;visibility:visible;opacity:1;align-items:center;justify-content:flex-start;gap:6px;flex-wrap:nowrap;overflow:visible;white-space:nowrap;padding:6px;border:1px solid rgba(219,229,240,.92);border-radius:16px;background:rgba(255,255,255,.94);box-shadow:0 12px 34px rgba(15,23,42,.18);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);user-select:none}
 .task-board-toolbar::-webkit-scrollbar{display:none}
+.task-board-toolbar-drag{width:26px;height:34px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;border:0;border-radius:12px;background:rgba(241,245,249,.86);color:#64748b;font-size:18px;font-weight:900;line-height:1;cursor:grab;touch-action:none;user-select:none;font-family:var(--fb)}
+.task-board-toolbar-drag:hover{background:#e0f2fe;color:#1d4ed8}
+.task-board-toolbar-drag:active,.task-board-toolbar.dragging .task-board-toolbar-drag{cursor:grabbing;background:#dbeafe;color:#1d4ed8}
 .task-board-dropdown{position:relative;flex:0 0 auto}
-.task-board-dropdown-toggle,.task-board-close-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 12px;border-radius:12px;border:1px solid #cbd5e1;background:#fff;color:#0f172a;font-size:13px;font-weight:800;cursor:pointer;transition:all .18s;font-family:var(--fb);box-shadow:0 10px 24px rgba(15,23,42,.05)}
+.task-board-dropdown-toggle,.task-board-close-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 10px;border-radius:12px;border:1px solid #cbd5e1;background:#fff;color:#0f172a;font-size:13px;font-weight:800;cursor:pointer;transition:all .18s;font-family:var(--fb);box-shadow:0 10px 24px rgba(15,23,42,.05);white-space:nowrap}
 .task-board-dropdown-toggle:hover,.task-board-close-btn:hover{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8;box-shadow:0 0 18px rgba(37,99,235,.16);transform:translateY(-1px)}
-.task-board-close-btn{margin-left:auto;color:#dc2626;border-color:#fecaca}
+.task-board-close-btn{margin-left:0;color:#dc2626;border-color:#fecaca}
 .task-board-close-btn:hover{background:#fff7ed;border-color:#fdba74;color:#c2410c}
-.task-board-dropdown-menu{position:absolute;top:calc(100% + 8px);left:0;min-width:220px;display:none;flex-direction:column;gap:6px;padding:10px;background:rgba(255,255,255,.98);border:1px solid #dbe5f0;border-radius:14px;box-shadow:0 18px 46px rgba(15,23,42,.16);z-index:20030;white-space:normal}
+.task-board-dropdown-menu{position:absolute;top:calc(100% + 8px);left:0;min-width:220px;max-width:calc(100vw - 16px);display:none;flex-direction:column;gap:6px;padding:10px;background:rgba(255,255,255,.98);border:1px solid #dbe5f0;border-radius:14px;box-shadow:0 18px 46px rgba(15,23,42,.16);z-index:20030;white-space:normal}
+.task-board-dropdown.align-right .task-board-dropdown-menu{left:auto;right:0}
 .task-board-dropdown.open .task-board-dropdown-menu{display:flex}
 .task-board-materials-menu{min-width:190px}
 .task-board-menu-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 4px}
@@ -5659,6 +5663,8 @@ function impulseCarsDraw(demo){
 
 var taskBoardState=null;
 const TASK_BOARD_STORAGE_PREFIX='physoge_task_board_state_';
+const TASK_BOARD_TOOLBAR_POSITION_KEY='fizmat_task_board_toolbar_position';
+const TASK_BOARD_TOOLBAR_DEFAULT_POSITION={x:16,y:16};
 function cloneTaskBoardStrokes(strokes){return JSON.parse(JSON.stringify(strokes||[]));}
 function cloneTaskBoardObjects(objects){return JSON.parse(JSON.stringify(objects||[]));}
 function taskBoardSnapshot(){
@@ -6296,6 +6302,7 @@ function ensureTaskBoardOverlay(){
           </div>
           <div class="task-board-center">
             <div class="task-board-toolbar" id="taskBoardToolbar">
+              <button type="button" class="task-board-toolbar-drag" id="taskBoardToolbarDrag" aria-label="Перетащить панель доски" title="Перетащить панель доски">⋮⋮</button>
               <div class="task-board-dropdown" data-task-board-dropdown="tools">
                 <button type="button" class="task-board-dropdown-toggle" onclick="taskBoardToggleDropdown('tools')" aria-haspopup="true" aria-expanded="false">🧰 Инструменты ▼</button>
                 <div class="task-board-dropdown-menu">
@@ -6391,6 +6398,7 @@ function ensureTaskBoardOverlay(){
   taskBoardState={
     overlay:document.getElementById('taskBoardOverlay'),
     toolbar:document.getElementById('taskBoardToolbar'),
+    toolbarDrag:document.getElementById('taskBoardToolbarDrag'),
     title:document.getElementById('taskBoardTitle'),
     condition:document.getElementById('taskBoardCondition'),
     conditionWrap:document.getElementById('taskBoardConditionWrap'),
@@ -6442,6 +6450,7 @@ function ensureTaskBoardOverlay(){
   taskBoardState.canvasWrap.addEventListener('contextmenu',function(e){e.preventDefault();});
   taskBoardInitFloatDrag(taskBoardState,'condition');
   taskBoardInitFloatDrag(taskBoardState,'graph');
+  taskBoardInitToolbarDrag(taskBoardState);
   taskBoardState.canvas.addEventListener('pointerdown',taskBoardPointerDown);
   taskBoardState.canvas.addEventListener('pointermove',taskBoardPointerMove);
   taskBoardState.objectLayer.addEventListener('pointerdown',taskBoardObjectPointerDown);
@@ -6449,7 +6458,7 @@ function ensureTaskBoardOverlay(){
   document.addEventListener('paste',taskBoardPasteImage);
   window.addEventListener('pointerup',taskBoardPointerUp);
   window.addEventListener('pointercancel',taskBoardPointerUp);
-  window.addEventListener('resize',taskBoardResizeCanvas);
+  window.addEventListener('resize',function(){taskBoardResizeCanvas();taskBoardApplyToolbarPosition();taskBoardClampOpenDropdowns();});
   document.addEventListener('fullscreenchange',taskBoardResizeCanvas);
   document.addEventListener('webkitfullscreenchange',taskBoardResizeCanvas);
   document.addEventListener('msfullscreenchange',taskBoardResizeCanvas);
@@ -6488,6 +6497,95 @@ function ensureTaskBoardOverlay(){
   taskBoardUpdateHistoryButtons();
   return taskBoardState;
 }
+function taskBoardClampToolbarPosition(pos){
+  const state=taskBoardState;
+  const toolbar=state&&state.toolbar;
+  const margin=8;
+  const fallback=TASK_BOARD_TOOLBAR_DEFAULT_POSITION;
+  const rect=toolbar?toolbar.getBoundingClientRect():{width:0,height:0};
+  const maxX=Math.max(margin,window.innerWidth-rect.width-margin);
+  const maxY=Math.max(margin,window.innerHeight-rect.height-margin);
+  const x=Number.isFinite(pos&&pos.x)?pos.x:fallback.x;
+  const y=Number.isFinite(pos&&pos.y)?pos.y:fallback.y;
+  return {x:Math.min(Math.max(x,margin),maxX),y:Math.min(Math.max(y,margin),maxY)};
+}
+function taskBoardReadToolbarPosition(){
+  try{
+    const data=JSON.parse(localStorage.getItem(TASK_BOARD_TOOLBAR_POSITION_KEY)||'null');
+    if(data&&Number.isFinite(data.x)&&Number.isFinite(data.y)) return data;
+  }catch(err){console.warn('Не удалось восстановить позицию панели доски:',err);}
+  return TASK_BOARD_TOOLBAR_DEFAULT_POSITION;
+}
+function taskBoardSaveToolbarPosition(pos){
+  try{localStorage.setItem(TASK_BOARD_TOOLBAR_POSITION_KEY,JSON.stringify({x:Math.round(pos.x),y:Math.round(pos.y)}));}
+  catch(err){console.warn('Не удалось сохранить позицию панели доски:',err);}
+}
+function taskBoardSetToolbarPosition(pos,save){
+  const state=taskBoardState;
+  if(!state||!state.toolbar) return;
+  const next=taskBoardClampToolbarPosition(pos);
+  state.toolbar.style.left=next.x+'px';
+  state.toolbar.style.top=next.y+'px';
+  state.toolbar.style.right='auto';
+  state.toolbar.style.bottom='auto';
+  if(save) taskBoardSaveToolbarPosition(next);
+}
+function taskBoardApplyToolbarPosition(){
+  taskBoardSetToolbarPosition(taskBoardReadToolbarPosition(),false);
+}
+function taskBoardResetToolbarPosition(){
+  taskBoardSetToolbarPosition(TASK_BOARD_TOOLBAR_DEFAULT_POSITION,true);
+  taskBoardClampOpenDropdowns();
+}
+function taskBoardClampOpenDropdowns(){
+  const state=taskBoardState;
+  if(!state||!state.toolbar) return;
+  state.toolbar.querySelectorAll('.task-board-dropdown.open').forEach(function(dropdown){
+    dropdown.classList.remove('align-right');
+    const menu=dropdown.querySelector('.task-board-dropdown-menu');
+    if(!menu) return;
+    const rect=menu.getBoundingClientRect();
+    dropdown.classList.toggle('align-right',rect.right>window.innerWidth-8);
+  });
+}
+function taskBoardInitToolbarDrag(state){
+  const handle=state&&state.toolbarDrag;
+  const toolbar=state&&state.toolbar;
+  if(!handle||!toolbar) return;
+  handle.addEventListener('dblclick',function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    taskBoardResetToolbarPosition();
+  });
+  handle.addEventListener('pointerdown',function(e){
+    if(e.button!==undefined&&e.button!==0) return;
+    e.preventDefault();
+    e.stopPropagation();
+    taskBoardCloseDropdowns();
+    const rect=toolbar.getBoundingClientRect();
+    const start={pointerId:e.pointerId,dx:e.clientX-rect.left,dy:e.clientY-rect.top};
+    toolbar.classList.add('dragging');
+    try{handle.setPointerCapture(e.pointerId);}catch(_err){}
+    function move(ev){
+      if(ev.pointerId!==start.pointerId) return;
+      ev.preventDefault();
+      taskBoardSetToolbarPosition({x:ev.clientX-start.dx,y:ev.clientY-start.dy},false);
+    }
+    function end(ev){
+      if(ev.pointerId!==start.pointerId) return;
+      ev.preventDefault();
+      toolbar.classList.remove('dragging');
+      window.removeEventListener('pointermove',move,true);
+      window.removeEventListener('pointerup',end,true);
+      window.removeEventListener('pointercancel',end,true);
+      try{handle.releasePointerCapture(start.pointerId);}catch(_err){}
+      taskBoardSetToolbarPosition({x:ev.clientX-start.dx,y:ev.clientY-start.dy},true);
+    }
+    window.addEventListener('pointermove',move,true);
+    window.addEventListener('pointerup',end,true);
+    window.addEventListener('pointercancel',end,true);
+  });
+}
 function taskBoardHasOpenDropdown(){
   const state=taskBoardState;
   return !!(state&&state.toolbar&&state.toolbar.querySelector('.task-board-dropdown.open'));
@@ -6508,6 +6606,7 @@ function taskBoardToggleDropdown(name){
   dropdown.classList.toggle('open',shouldOpen);
   const toggle=dropdown.querySelector('.task-board-dropdown-toggle');
   if(toggle) toggle.setAttribute('aria-expanded',shouldOpen?'true':'false');
+  if(shouldOpen) requestAnimationFrame(taskBoardClampOpenDropdowns);
 }
 function taskBoardToggleColors(){
   const state=ensureTaskBoardOverlay();
@@ -6516,24 +6615,10 @@ function taskBoardToggleColors(){
   if(dropdown) dropdown.classList.toggle('colors-open');
 }
 function taskBoardRequestFullscreen(){
-  const state=ensureTaskBoardOverlay();
-  const el=state&&state.overlay?state.overlay:null;
-  if(!el) return;
-  if(document.fullscreenElement||document.webkitFullscreenElement||document.msFullscreenElement) return;
-  const req=el.requestFullscreen||el.webkitRequestFullscreen||el.msRequestFullscreen;
-  if(typeof req!=='function') return;
-  try{
-    const result=req.call(el);
-    if(result&&typeof result.catch==='function') result.catch(function(){});
-  }catch(_err){}
+  // Browser Fullscreen API не используем: доска остаётся fixed overlay внутри сайта.
 }
 function taskBoardExitFullscreen(){
-  const exit=document.exitFullscreen||document.webkitExitFullscreen||document.msExitFullscreen;
-  if(typeof exit!=='function') return;
-  try{
-    const result=exit.call(document);
-    if(result&&typeof result.catch==='function') result.catch(function(){});
-  }catch(_err){}
+  // Browser Fullscreen API не используем: закрытие скрывает overlay без выхода из режима браузера.
 }
 function resetTaskBoardOverlayState(state){
   if(state&&state.overlay){
@@ -6611,6 +6696,7 @@ function openTaskBoard(mode,requestFullscreen=false){
     state.overlay.classList.add('open');
     document.body.classList.add('task-board-lock');
     // Browser Fullscreen API не используем. Доска открывается как fixed overlay.
+    taskBoardApplyToolbarPosition();
     taskBoardCloseDropdowns();
     taskBoardSetTool('pen');
     taskBoardUpdateCanvasSurface();
