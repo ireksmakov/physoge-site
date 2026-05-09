@@ -770,10 +770,6 @@ body.task-board-lock{overflow:hidden}
 .task-board-laser-pointer.active{display:block;opacity:1}
 @keyframes taskBoardLaserPulse{0%{transform:scale(.72);opacity:.9}100%{transform:scale(1.45);opacity:0}}
 .task-board-lasso-path{fill:rgba(37,99,235,.08);stroke:#2563eb;stroke-width:2;stroke-dasharray:8 6;vector-effect:non-scaling-stroke;filter:drop-shadow(0 2px 4px rgba(37,99,235,.18))}
-.task-board-laser-pointer{position:absolute;left:0;top:0;width:18px;height:18px;border-radius:50%;background:rgba(255,0,0,.95);box-shadow:0 0 12px rgba(255,0,0,.95),0 0 28px rgba(255,0,0,.75),0 0 48px rgba(255,0,0,.45);transform:translate(-50%,-50%);pointer-events:none;z-index:20040;display:none;transition:left .06s linear,top .06s linear;will-change:left,top}
-.task-board-laser-pointer::after{content:'';position:absolute;inset:-8px;border:2px solid rgba(255,0,0,.42);border-radius:50%;box-shadow:0 0 18px rgba(255,0,0,.38);animation:taskBoardLaserPulse 1s ease-out infinite}
-.task-board-laser-pointer.active{display:block}
-@keyframes taskBoardLaserPulse{0%{transform:scale(.72);opacity:.85}70%{transform:scale(1.28);opacity:.12}100%{transform:scale(1.42);opacity:0}}
 .task-board-image-object{position:absolute;left:0;top:0;box-sizing:border-box;border:2px solid transparent;border-radius:10px;background:rgba(255,255,255,.02);pointer-events:auto;user-select:none;touch-action:none;cursor:grab}
 .task-board-image-object.selected{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.18),0 14px 34px rgba(15,23,42,.12)}
 .task-board-image-object.dragging{cursor:grabbing}
@@ -5509,8 +5505,9 @@ function renderPTasks(name){
     const steps=(t.steps||[]).map((s,j)=>`<div class="sr-step"><div class="sr-snum">${j+1}</div><div class="sr-sbody">${s}</div></div>`).join('');
     const extra=t.extraHtml?`<div class="pt-extra">${t.extraHtml}</div>`:'';
     const taskId=String(t.id||'');
-    const boardModeSafe=String(t.boardMode||'').replace(/'/g,"\\'");
-    const boardBtn=t.boardMode?`<div class="pt-side-actions"><button class="pt-board-btn" onclick="openTaskBoard('${boardModeSafe}')">🧑‍🏫 Доска</button>${taskId==='lesson12-task07'?`<button class="pt-board-btn task07-card-anim-btn" onclick="openTaskAnimation('lesson12-task07')">▶ Анимация процесса</button>`:''}</div>`:'';
+    const boardModeSafe=escapeHtml(String(t.boardMode||''));
+    const taskIdSafe=escapeHtml(taskId);
+    const boardBtn=t.boardMode?`<div class="pt-side-actions"><button type="button" class="pt-board-btn" data-board-mode="${boardModeSafe}" data-task-id="${taskIdSafe}">🧑‍🏫 Доска</button>${taskId==='lesson12-task07'?`<button class="pt-board-btn task07-card-anim-btn" onclick="openTaskAnimation('lesson12-task07')">▶ Анимация процесса</button>`:''}</div>`:'';
     const hasAnswer=String(t.ans||'').trim();
     const answerCard=hasAnswer?`<div class="sr-ans"><div style="font-size:18px">✓</div><div><div class="sr-ans-l">Ответ</div><div class="sr-ans-v" style="color:var(--orange)">${t.ans}</div></div></div>`:'';
     const hasStructuredSolution=hasFilledTaskSolution(t)||hasLegacyTaskTextSolution(t);
@@ -5947,7 +5944,21 @@ function taskBoardObjectPointerDown(e){
   if(e.detail>=2&&obj.type==='text'){taskBoardStartTextInput({x:obj.x,y:obj.y},obj);return;}
   if(e.target.closest('.task-board-image-delete')){deleteSelectedBoardObject();return;}
   const scale=state.viewScale||1;
-  const start={x:e.clientX,y:e.clientY,objX:obj.x,objY:obj.y,width:obj.width,height:obj.height,moved:false};
+  const selectedIds=taskBoardGetSelectedObjectIds();
+  const dragIds=selectedIds.indexOf(id)!==-1?selectedIds:[id];
+  const start={
+    x:e.clientX,
+    y:e.clientY,
+    objX:obj.x,
+    objY:obj.y,
+    width:obj.width,
+    height:obj.height,
+    moved:false,
+    objects:dragIds.map(function(dragId){
+      const dragObj=findBoardObject(dragId);
+      return dragObj?{id:dragObj.id,x:Number(dragObj.x)||0,y:Number(dragObj.y)||0}:null;
+    }).filter(Boolean)
+  };
   const isResize=obj.type==='image'&&!!e.target.closest('.task-board-image-resize');
   objectEl.classList.add('dragging');
   const move=function(ev){
@@ -5966,6 +5977,8 @@ function taskBoardObjectPointerDown(e){
   const up=function(){
     window.removeEventListener('pointermove',move);
     window.removeEventListener('pointerup',up);
+    window.removeEventListener('pointercancel',up);
+    objectEl.classList.remove('dragging');
     if(start.moved||(isResize&&(obj.width!==start.width||obj.height!==start.height))){
       taskBoardPushHistory();
       taskBoardSaveState(false);
@@ -5975,6 +5988,7 @@ function taskBoardObjectPointerDown(e){
   };
   window.addEventListener('pointermove',move);
   window.addEventListener('pointerup',up,{once:true});
+  window.addEventListener('pointercancel',up,{once:true});
 }
 function taskBoardObjectDblClick(e){
   const objectEl=e.target.closest('.task-board-text-object');
@@ -6008,6 +6022,24 @@ function getTaskBoardData(mode){
     if(found)return found;
   }
   return null;
+}
+function createTaskBoardFallbackData(mode,taskId){
+  const label=String(taskId||mode||'').trim();
+  return {
+    title:label?'Интерактивная доска: '+label:'Интерактивная доска',
+    cond:'<div class="pt-empty-text">Данные задачи не найдены. Открыта пустая доска — можно писать, рисовать и добавлять материалы.</div>',
+    given:'',
+    ans:'',
+    steps:[],
+    solutionHtml:'',
+    solutionImage:'',
+    solution:{idea:'',formulas:[],steps:[],answer:'',tutorHint:''},
+    boardMode:mode||'',
+    id:taskId||'',
+    isFallback:true,
+    hasAnimation:false,
+    graphLabel:'Схема'
+  };
 }
 function getTaskBoardGraph(mode){
   if(mode==='impulseCars') return `
@@ -6770,11 +6802,24 @@ function resetTaskBoardOverlayState(state){
   }
   document.body.classList.remove('task-board-lock');
 }
-function openTaskBoard(mode,requestFullscreen=false){
+function initTaskBoardOpenDelegation(){
+  if(document.__taskBoardOpenDelegationReady) return;
+  document.__taskBoardOpenDelegationReady=true;
+  document.addEventListener('click',function(e){
+    const btn=e.target.closest('[data-board-mode]');
+    if(!btn||btn.disabled) return;
+    e.preventDefault();
+    e.stopPropagation();
+    openTaskBoard(btn.getAttribute('data-board-mode')||'',false,btn.getAttribute('data-task-id')||'');
+  });
+}
+initTaskBoardOpenDelegation();
+function openTaskBoard(mode,requestFullscreen=false,taskId=''){
   const state=ensureTaskBoardOverlay();
   try{
-    const task=getTaskBoardData(mode);
-    if(!task) return;
+    const foundTask=getTaskBoardData(mode);
+    const task=foundTask||createTaskBoardFallbackData(mode,taskId);
+    if(!foundTask) console.warn('Task board data not found, opened fallback board:', mode||taskId||'(empty)');
     state.mode=mode;
     state.task=task;
     if(state.title) state.title.textContent=task.title;
@@ -6918,12 +6963,14 @@ function taskBoardSetTool(tool){
   state.tool=tool;
   if(tool!=='pointer') taskBoardHideLaserPointer();
   document.querySelectorAll('[data-board-tool]').forEach(function(btn){btn.classList.toggle('active',btn.getAttribute('data-board-tool')===tool);});
-  if(tool!=='pointer') taskBoardHideLaserPointer();
   taskBoardUpdateCanvasSurface();
 }
 function taskBoardLaserPointerMove(e){
   const state=ensureTaskBoardOverlay();
-  if(state.tool!=='pointer'||!state.overlay.classList.contains('open')) return;
+  if(state.tool!=='pointer'||!state.overlay.classList.contains('open')){
+    taskBoardHideLaserPointer();
+    return;
+  }
   taskBoardShowLaserPointer(e);
 }
 function taskBoardShowLaserPointer(e){
@@ -7043,27 +7090,6 @@ function taskBoardClientToWorld(clientX,clientY){
   const rect=state.canvas.getBoundingClientRect();
   const scale=state.viewScale||1;
   return {x:(clientX-rect.left-state.viewX)/scale,y:(clientY-rect.top-state.viewY)/scale};
-}
-function taskBoardHideLaserPointer(){
-  if(!taskBoardState||!taskBoardState.laserPointer) return;
-  taskBoardState.laserPointer.classList.remove('active');
-}
-function taskBoardLaserPointerMove(e){
-  const state=ensureTaskBoardOverlay();
-  if(state.tool!=='pointer'||!state.overlay.classList.contains('open')){
-    taskBoardHideLaserPointer();
-    return;
-  }
-  const rect=state.canvasWrap.getBoundingClientRect();
-  const x=e.clientX-rect.left;
-  const y=e.clientY-rect.top;
-  if(x<0||y<0||x>rect.width||y>rect.height){
-    taskBoardHideLaserPointer();
-    return;
-  }
-  state.laserPointer.style.left=x+'px';
-  state.laserPointer.style.top=y+'px';
-  state.laserPointer.classList.add('active');
 }
 function taskBoardDistance(a,b){
   const dx=a.x-b.x,dy=a.y-b.y;
