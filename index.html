@@ -773,6 +773,10 @@ body.task-board-lock{overflow:hidden}
 .task-board-image-object.selected .task-board-image-delete{display:flex}
 .task-board-image-resize{position:absolute;right:-7px;bottom:-7px;width:14px;height:14px;border-radius:4px;background:#2563eb;border:2px solid #fff;display:none;cursor:nwse-resize;box-shadow:0 6px 14px rgba(15,23,42,.2);z-index:3}
 .task-board-image-object.selected .task-board-image-resize{display:block}
+.task-board-text-object{position:absolute;left:0;top:0;box-sizing:border-box;min-width:24px;max-width:620px;padding:4px 6px;border:2px solid transparent;border-radius:8px;background:rgba(255,255,255,.72);color:#0f172a;font-weight:700;line-height:1.25;white-space:pre-wrap;overflow-wrap:anywhere;pointer-events:auto;user-select:none;touch-action:none;cursor:grab;text-shadow:0 1px 0 rgba(255,255,255,.75)}
+.task-board-text-object.selected{border-color:#2563eb;background:rgba(239,246,255,.9);box-shadow:0 0 0 3px rgba(37,99,235,.18),0 12px 28px rgba(15,23,42,.1)}
+.task-board-text-object.dragging{cursor:grabbing}
+.task-board-text-input{position:absolute;left:0;top:0;box-sizing:border-box;min-width:180px;min-height:38px;padding:6px 8px;border:2px solid #2563eb;border-radius:9px;background:#fff;color:#0f172a;font-family:var(--fb);font-weight:700;line-height:1.25;resize:none;outline:none;box-shadow:0 0 0 3px rgba(37,99,235,.18),0 14px 32px rgba(15,23,42,.14);z-index:6;pointer-events:auto}
 .task-board-zoom-controls{position:absolute;right:20px;bottom:20px;display:flex;flex-direction:column;gap:8px;z-index:40}
 .task-board-zoom-btn{width:38px;height:38px;border-radius:10px;border:1px solid #cbd5e1;background:rgba(255,255,255,.96);color:#0f172a;font-size:22px;line-height:1;cursor:pointer;box-shadow:0 10px 24px rgba(15,23,42,.12);transition:all .15s;font-family:var(--fb)}
 .task-board-zoom-btn:hover{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8}
@@ -5676,6 +5680,8 @@ function taskBoardSnapshot(){
 }
 function taskBoardApplySnapshot(snapshot){
   const state=ensureTaskBoardOverlay();
+  if(state.textInput&&state.textInput.parentNode) state.textInput.parentNode.removeChild(state.textInput);
+  state.textInput=null;
   state.strokes=cloneTaskBoardStrokes(snapshot&&snapshot.strokes);
   state.boardObjects=cloneTaskBoardObjects(snapshot&&snapshot.objects);
   const validIds=taskBoardGetSelectedObjectIds().filter(function(id){return state.boardObjects.some(function(obj){return obj.id===id;});});
@@ -5691,7 +5697,7 @@ function taskBoardSaveState(showNotice){
   const data={drawing:cloneTaskBoardStrokes(state.strokes),objects:cloneTaskBoardObjects(state.boardObjects)};
   try{
     localStorage.setItem(taskBoardStorageKey(state.mode),JSON.stringify(data));
-    if(showNotice) alert('Доска сохранена вместе с картинками.');
+    if(showNotice) alert('Доска сохранена вместе с объектами.');
   }catch(err){
     console.warn('Не удалось сохранить состояние доски:',err);
     if(showNotice) alert('Не удалось сохранить доску: возможно, изображения слишком большие для localStorage.');
@@ -5778,35 +5784,102 @@ function renderBoardObjects(){
   const state=ensureTaskBoardOverlay();
   if(!state.objectLayer) return;
   state.objectLayer.style.transform='translate('+state.viewX+'px,'+state.viewY+'px) scale('+(state.viewScale||1)+')';
+  if(state.textInput&&state.textInput.parentNode) return;
   state.objectLayer.innerHTML='';
   const selectedIds=taskBoardGetSelectedObjectIds();
   state.boardObjects.forEach(function(obj){
-    if(!obj||obj.type!=='image') return;
+    if(!obj) return;
     const el=document.createElement('div');
-    el.className='task-board-image-object'+(selectedIds.indexOf(obj.id)!==-1?' selected':'');
     el.dataset.id=obj.id;
     el.style.left=(Number(obj.x)||0)+'px';
     el.style.top=(Number(obj.y)||0)+'px';
-    el.style.width=Math.max(24,Number(obj.width)||120)+'px';
-    el.style.height=Math.max(24,Number(obj.height)||90)+'px';
-    const img=document.createElement('img');
-    img.src=obj.src;
-    img.alt='Изображение на доске';
-    const del=document.createElement('button');
-    del.type='button';
-    del.className='task-board-image-delete';
-    del.textContent='×';
-    del.setAttribute('aria-label','Удалить картинку');
-    const resize=document.createElement('div');
-    resize.className='task-board-image-resize';
-    el.appendChild(img);el.appendChild(del);el.appendChild(resize);
+    if(obj.type==='image'){
+      el.className='task-board-image-object'+(obj.id===state.selectedObjectId?' selected':'');
+      el.style.width=Math.max(24,Number(obj.width)||120)+'px';
+      el.style.height=Math.max(24,Number(obj.height)||90)+'px';
+      const img=document.createElement('img');
+      img.src=obj.src;
+      img.alt='Изображение на доске';
+      const del=document.createElement('button');
+      del.type='button';
+      del.className='task-board-image-delete';
+      del.textContent='×';
+      del.setAttribute('aria-label','Удалить картинку');
+      const resize=document.createElement('div');
+      resize.className='task-board-image-resize';
+      el.appendChild(img);el.appendChild(del);el.appendChild(resize);
+    }else if(obj.type==='text'){
+      el.className='task-board-text-object'+(obj.id===state.selectedObjectId?' selected':'');
+      el.style.color=obj.color||state.color||'#0f172a';
+      el.style.fontSize=Math.max(12,Number(obj.fontSize)||22)+'px';
+      el.textContent=String(obj.text||'');
+      el.title='Двойной клик — редактировать текст';
+    }else return;
     state.objectLayer.appendChild(el);
   });
 }
-function taskBoardGetSelectedObjectIds(){
+function taskBoardCreateTextObject(text,x,y,color,fontSize){
+  return {id:'text-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),type:'text',text:String(text||''),x:Math.round(Number(x)||0),y:Math.round(Number(y)||0),color:color||'#0f172a',fontSize:Math.max(12,Number(fontSize)||22)};
+}
+function taskBoardAutosizeTextInput(input){
+  if(!input) return;
+  input.style.height='auto';
+  input.style.width=Math.max(180,Math.min(620,input.scrollWidth+6))+'px';
+  input.style.height=Math.max(38,input.scrollHeight+4)+'px';
+}
+function taskBoardStartTextInput(world,obj){
   const state=ensureTaskBoardOverlay();
-  if(Array.isArray(state.selectedObjectIds)&&state.selectedObjectIds.length) return state.selectedObjectIds.slice();
-  return state.selectedObjectId?[state.selectedObjectId]:[];
+  if(!state.objectLayer) return;
+  if(state.textInput&&state.textInput.parentNode) state.textInput.blur();
+  const isEdit=!!(obj&&obj.id);
+  if(isEdit) selectBoardObject(obj.id); else selectBoardObject(null);
+  const input=document.createElement('textarea');
+  input.className='task-board-text-input';
+  input.rows=1;
+  input.value=isEdit?String(obj.text||''):'';
+  input.placeholder='Введите текст';
+  input.style.left=(Number(isEdit?obj.x:world.x)||0)+'px';
+  input.style.top=(Number(isEdit?obj.y:world.y)||0)+'px';
+  input.style.color=isEdit?(obj.color||state.color):(state.color||'#0f172a');
+  input.style.fontSize=Math.max(12,Number(isEdit?obj.fontSize:22)||22)+'px';
+  state.textInput=input;
+  state.objectLayer.appendChild(input);
+  const finish=function(save){
+    if(state.textInput!==input) return;
+    state.textInput=null;
+    const text=String(input.value||'').trim();
+    if(input.parentNode) input.parentNode.removeChild(input);
+    if(save&&text){
+      if(isEdit){
+        obj.text=text;
+        obj.color=obj.color||state.color;
+        obj.fontSize=Math.max(12,Number(obj.fontSize)||22);
+        selectBoardObject(obj.id);
+      }else{
+        const textObj=taskBoardCreateTextObject(text,world.x,world.y,state.color,22);
+        state.boardObjects.push(textObj);
+        selectBoardObject(textObj.id);
+      }
+      renderBoardObjects();
+      taskBoardPushHistory();
+      taskBoardSaveState(false);
+    }else if(save&&isEdit&&!text){
+      state.boardObjects=state.boardObjects.filter(function(item){return item.id!==obj.id;});
+      state.selectedObjectId=null;
+      renderBoardObjects();
+      taskBoardPushHistory();
+      taskBoardSaveState(false);
+    }else{
+      renderBoardObjects();
+    }
+  };
+  input.addEventListener('keydown',function(e){
+    if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();finish(true);}
+    else if(e.key==='Escape'){e.preventDefault();finish(false);}
+  });
+  input.addEventListener('input',function(){taskBoardAutosizeTextInput(input);});
+  input.addEventListener('blur',function(){finish(true);});
+  setTimeout(function(){input.focus();input.select();taskBoardAutosizeTextInput(input);},0);
 }
 function selectBoardObject(id){
   const state=ensureTaskBoardOverlay();
@@ -5848,29 +5921,25 @@ function deleteSelectedBoardObject(){
 }
 function taskBoardObjectPointerDown(e){
   const state=ensureTaskBoardOverlay();
-  const objectEl=e.target.closest('.task-board-image-object');
+  if(e.target.closest('.task-board-text-input')) return;
+  const objectEl=e.target.closest('.task-board-image-object,.task-board-text-object');
   if(!objectEl) return;
   const id=objectEl.dataset.id;
   const obj=findBoardObject(id);
   if(!obj) return;
   e.preventDefault();
   e.stopPropagation();
-  const selectedBefore=taskBoardGetSelectedObjectIds();
-  const keepSelection=selectedBefore.indexOf(id)!==-1&&selectedBefore.length>1;
-  if(!keepSelection) selectBoardObject(id);
+  selectBoardObject(id);
+  if(e.detail>=2&&obj.type==='text'){taskBoardStartTextInput({x:obj.x,y:obj.y},obj);return;}
   if(e.target.closest('.task-board-image-delete')){deleteSelectedBoardObject();return;}
   const scale=state.viewScale||1;
-  const isResize=!!e.target.closest('.task-board-image-resize');
-  const dragIds=(keepSelection&&!isResize)?selectedBefore:[id];
-  const startObjects=dragIds.map(function(dragId){
-    const dragObj=findBoardObject(dragId);
-    return dragObj?{id:dragId,x:Number(dragObj.x)||0,y:Number(dragObj.y)||0}:null;
-  }).filter(Boolean);
-  const start={x:e.clientX,y:e.clientY,objX:obj.x,objY:obj.y,width:obj.width,height:obj.height,objects:startObjects};
+  const start={x:e.clientX,y:e.clientY,objX:obj.x,objY:obj.y,width:obj.width,height:obj.height,moved:false};
+  const isResize=obj.type==='image'&&!!e.target.closest('.task-board-image-resize');
   objectEl.classList.add('dragging');
   const move=function(ev){
     const dx=(ev.clientX-start.x)/scale;
     const dy=(ev.clientY-start.y)/scale;
+    if(Math.abs(dx)>0.5||Math.abs(dy)>0.5) start.moved=true;
     if(isResize) resizeBoardObject(id,start.width+dx,start.height+dy);
     else{
       start.objects.forEach(function(item){
@@ -5883,11 +5952,24 @@ function taskBoardObjectPointerDown(e){
   const up=function(){
     window.removeEventListener('pointermove',move);
     window.removeEventListener('pointerup',up);
-    taskBoardPushHistory();
-    taskBoardSaveState(false);
+    if(start.moved||(isResize&&(obj.width!==start.width||obj.height!==start.height))){
+      taskBoardPushHistory();
+      taskBoardSaveState(false);
+    }else{
+      renderBoardObjects();
+    }
   };
   window.addEventListener('pointermove',move);
   window.addEventListener('pointerup',up,{once:true});
+}
+function taskBoardObjectDblClick(e){
+  const objectEl=e.target.closest('.task-board-text-object');
+  if(!objectEl) return;
+  const obj=findBoardObject(objectEl.dataset.id);
+  if(!obj||obj.type!=='text') return;
+  e.preventDefault();
+  e.stopPropagation();
+  taskBoardStartTextInput({x:obj.x,y:obj.y},obj);
 }
 function getTaskBoardData(mode){
   if(String(mode||'').indexOf('blank-task-')===0){
@@ -6475,8 +6557,7 @@ function ensureTaskBoardOverlay(){
     strokes:[],
     boardObjects:[],
     selectedObjectId:null,
-    selectedObjectIds:[],
-    lassoPoints:[],
+    textInput:null,
     history:[{strokes:[],objects:[]}],
     historyIndex:0,
     pointer:null,
@@ -6492,6 +6573,7 @@ function ensureTaskBoardOverlay(){
   taskBoardState.canvas.addEventListener('pointerdown',taskBoardPointerDown);
   taskBoardState.canvas.addEventListener('pointermove',taskBoardPointerMove);
   taskBoardState.objectLayer.addEventListener('pointerdown',taskBoardObjectPointerDown);
+  taskBoardState.objectLayer.addEventListener('dblclick',taskBoardObjectDblClick);
   taskBoardState.imageInput.addEventListener('change',taskBoardImageInputChange);
   document.addEventListener('paste',taskBoardPasteImage);
   window.addEventListener('pointerup',taskBoardPointerUp);
@@ -6508,13 +6590,15 @@ function ensureTaskBoardOverlay(){
   document.addEventListener('keydown',function(e){
     if(!taskBoardState||!taskBoardState.overlay.classList.contains('open')) return;
     if(e.key==='Escape'){
+      if(taskBoardState.textInput) return;
       e.preventDefault();
       if(taskBoardHasOpenDropdown()) taskBoardCloseDropdowns();
       else if(taskBoardState.simPopup.classList.contains('open')) toggleTaskBoardAnimation(false);
       else closeTaskBoard();
       return;
     }
-    if((e.key==='Delete'||e.key==='Backspace')&&taskBoardGetSelectedObjectIds().length){
+    if(taskBoardState.textInput) return;
+    if((e.key==='Delete'||e.key==='Backspace')&&taskBoardState.selectedObjectId){
       e.preventDefault();
       deleteSelectedBoardObject();
       return;
@@ -6752,6 +6836,8 @@ function openTaskBoard(mode,requestFullscreen=false){
 }
 function closeTaskBoard(){
   const state=ensureTaskBoardOverlay();
+  if(state.textInput&&state.textInput.parentNode) state.textInput.parentNode.removeChild(state.textInput);
+  state.textInput=null;
   state.overlay.classList.remove('open');
   state.overlay.setAttribute('aria-hidden','true');
   state.overlay.style.display='none';
@@ -6881,6 +6967,8 @@ function taskBoardRedo(){
 }
 function taskBoardClear(){
   const state=ensureTaskBoardOverlay();
+  if(state.textInput&&state.textInput.parentNode) state.textInput.parentNode.removeChild(state.textInput);
+  state.textInput=null;
   if(!state.strokes.length&&!state.boardObjects.length) return;
   state.strokes=[];
   state.boardObjects=[];
@@ -7018,8 +7106,14 @@ function taskBoardSelectObjectsInsideLasso(points){
 function taskBoardPointerDown(e){
   const state=ensureTaskBoardOverlay();
   if(!state.overlay.classList.contains('open')) return;
-  if(e.target===state.canvas&&taskBoardGetSelectedObjectIds().length) selectBoardObject(null);
-  if(e.button===2||state.tool==='pan'){
+  if(e.target===state.canvas&&state.selectedObjectId) selectBoardObject(null);
+  if(e.button===0&&state.tool==='text'){
+    const world=taskBoardClientToWorld(e.clientX,e.clientY);
+    taskBoardStartTextInput(world,null);
+    e.preventDefault();
+    return;
+  }
+  if(e.button===2||state.tool==='pan'||state.tool==='lasso'){
     state.pointer={type:'pan',x:e.clientX,y:e.clientY};
     taskBoardUpdateCanvasSurface();
   }else if(e.button===0&&state.tool==='lasso'){
@@ -7027,7 +7121,7 @@ function taskBoardPointerDown(e){
   }else if(state.tool==='eraser'){
     state.pointer={type:'eraser',changed:false};
     state.pointer.changed=taskBoardEraseAt(e.clientX,e.clientY)||state.pointer.changed;
-  }else if(e.button===0&&(state.tool==='pen'||state.tool==='text'||state.tool==='pointer')){
+  }else if(e.button===0&&(state.tool==='pen'||state.tool==='pointer')){
     const world=taskBoardClientToWorld(e.clientX,e.clientY);
     state.pointer={type:'draw',start:world,last:world,changed:false};
   }else return;
