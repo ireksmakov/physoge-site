@@ -39,16 +39,6 @@ header{position:fixed;top:0;left:0;right:0;z-index:10000;background:rgba(2,9,20,
 .btn-back{display:none;align-items:center;gap:5px;font-size:13px;color:var(--gray);background:none;border:1px solid var(--border);padding:6px 13px;border-radius:6px;cursor:pointer;transition:all .2s;white-space:nowrap;flex:0 0 auto}
 .btn-back:hover{color:var(--cyan);border-color:var(--cyan)}
 .btn-back.on{display:flex}
-/* MODE TOGGLE */
-.mode-toggle{display:none;align-items:center;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;flex:0 0 auto}
-.mode-toggle.on{display:flex}
-.mode-btn{padding:6px 14px;font-size:12px;font-weight:700;background:none;border:none;cursor:pointer;color:var(--gray);transition:all .15s;font-family:var(--fb);white-space:nowrap}
-.mode-btn.active-view{background:#0d3a1a;color:var(--green)}
-.mode-btn.active-edit{background:rgba(255,140,0,0.15);color:var(--orange)}
-.mode-btn:not([class*="active"]):hover{color:var(--white)}
-.edit-dot{width:6px;height:6px;border-radius:50%;background:var(--orange);animation:blink 1.2s infinite;display:inline-block;margin-right:4px}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-
 /* LANDING */
 #landing{display:block}
 .hero{min-height:92vh;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;max-width:1280px;margin:0 auto;padding:52px 24px 20px;gap:36px}.hero-shot{width:100%;display:block;border-radius:24px;border:1px solid var(--border-strong);box-shadow:0 34px 88px rgba(0,0,0,.58)}.hero-media{display:flex;align-items:center;justify-content:center;position:relative;transform:translateY(-35px)}.hero-media::before{content:'';position:absolute;width:120%;height:120%;background:radial-gradient(circle,rgba(8,216,255,.18),transparent 62%);z-index:-1}
@@ -57,7 +47,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:10000;background:rgba(2,9,20,
 .hero h1{font-family:var(--fh);font-size:clamp(30px,4.4vw,68px);font-weight:900;line-height:1.05;letter-spacing:-1.4px;margin-bottom:22px}
 .hero h1 .acc{color:var(--cyan)}
 .section-subtitle{font-family:"Inter","Montserrat",Arial,sans-serif;font-size:14px;font-weight:400;line-height:1.55;color:rgba(190,205,225,.82);max-width:1100px;margin-bottom:34px}
-@media (max-width:1180px){.nav-inner{padding:0 16px;gap:8px}.nav-subj{gap:4px}.nav-links{gap:12px}.nav-subj a,.sim-toggle{font-size:11px;padding:4px 8px}.nav-links a,.btn-back{font-size:12px}.btn-start{font-size:10px;padding:8px 12px}.mode-btn{font-size:11px;padding:6px 10px}}
+@media (max-width:1180px){.nav-inner{padding:0 16px;gap:8px}.nav-subj{gap:4px}.nav-links{gap:12px}.nav-subj a,.sim-toggle{font-size:11px;padding:4px 8px}.nav-links a,.btn-back{font-size:12px}.btn-start{font-size:10px;padding:8px 12px}}
 @media (max-width:768px){.section-subtitle{font-size:13px;line-height:1.5}}
 .hero-desc strong{color:var(--white)}
 .hero-cta{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
@@ -1156,9 +1146,6 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 .fli{display:flex;align-items:center;gap:11px;padding:9px 13px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;margin-bottom:7px}
 .fbadge{padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:rgba(0,229,255,.12);color:var(--cyan)}
 
-/* VIEW MODE overlay message */
-.view-banner{display:none;align-items:center;gap:8px;background:rgba(57,255,20,.08);border:1px solid rgba(57,255,20,.25);border-radius:8px;padding:10px 16px;margin-bottom:20px;font-size:13px;color:var(--green)}
-body.view-mode .view-banner{display:flex}
 
 @media(max-width:900px){.hero{grid-template-columns:1fr;min-height:auto;padding:58px 24px 20px}.hero-media{transform:translateY(-6px)}.fbox{display:none}.cgrid{grid-template-columns:1fr 1fr}.how-g{grid-template-columns:1fr 1fr}.how-step{border-right:none;border-bottom:1px solid var(--border)}.cp-layout{--sbw:210px}}
 @media(max-width:600px){.nav-subj{display:none}.cgrid{grid-template-columns:1fr}.how-g{grid-template-columns:1fr}.stats-grid{grid-template-columns:1fr 1fr}.cp-sb,.cp-resizer{display:none}}
@@ -1429,7 +1416,7 @@ img,svg,canvas,video,iframe{max-width:100%}
 
 </style>
 </head>
-<body class="edit-mode">
+<body class="view-mode">
 
 <header>
   <nav class="nav-inner">
@@ -1452,10 +1439,6 @@ img,svg,canvas,video,iframe{max-width:100%}
       <li><a href="#courses" class="btn-start">Начать бесплатно</a></li>
     </ul>
     <a href="#home" class="btn-back" id="backBtn">← Назад</a>
-    <div class="mode-toggle" id="modeToggle">
-      <button class="mode-btn active-edit" id="btnEdit" onclick="setMode('edit')"><span class="edit-dot"></span>Редактирование</button>
-      <button class="mode-btn" id="btnView" onclick="setMode('view')">👁 Просмотр</button>
-    </div>
   </nav>
 </header>
 
@@ -2468,7 +2451,7 @@ const COURSES={
   ]}
 };
 
-let AC=null,CM=0,CL=0,CTAB='theory',EMODE=true;
+let AC=null,CM=0,CL=0,CTAB='theory',EMODE=false;
 const LD={};
 function lk(){return AC+'_'+CM+'_'+CL}
 function gld(){if(!LD[lk()])LD[lk()]={videos:[],questions:[{text:'',type:'choice',opts:['','','',''],correct:0,answer:''}],files:[]};return LD[lk()]}
@@ -2536,15 +2519,6 @@ function initSidebarResize(){
     e.preventDefault();
   });
   window.addEventListener('resize',syncSbWidth);
-}
-
-/* ============ MODE ============ */
-function setMode(m){
-  EMODE=(m==='edit');
-  document.body.className=EMODE?'edit-mode':'view-mode';
-  document.getElementById('btnEdit').className='mode-btn'+(EMODE?' active-edit':'');
-  document.getElementById('btnView').className='mode-btn'+(EMODE?'':' active-view');
-  renderContent();
 }
 
 /* ============ NAV ============ */
@@ -2626,9 +2600,6 @@ function showLanding(scrollTarget){
   const platform = document.getElementById('platform');
   if(platform) platform.classList.remove('on');
 
-  const modeToggle = document.getElementById('modeToggle');
-  if(modeToggle) modeToggle.classList.remove('on');
-
   const backBtn = document.getElementById('backBtn');
   if(backBtn) backBtn.classList.remove('on');
 
@@ -2664,9 +2635,6 @@ function showTestsPage(){
 
   if(typeof setBackHref === 'function') setBackHref('#home');
 
-  const modeToggle = document.getElementById('modeToggle');
-  if(modeToggle) modeToggle.classList.remove('on');
-
   updateActiveNav('#tests');
   window.scrollTo(0, 0);
 }
@@ -2680,7 +2648,6 @@ function renderTestTopicPage(){
   renderTopicTests();
   document.getElementById('backBtn').classList.add('on');
   setBackHref('#tests');
-  document.getElementById('modeToggle').classList.remove('on');
   window.scrollTo(0,0);
 }
 
@@ -2961,7 +2928,7 @@ function resetGeneratorSelection(){generatorState.selection={}; generatorState.r
 function generateTestFromCourseBank(){const picked=[]; const usedTopics=new Set(); Object.entries(generatorState.selection).forEach(([k,count])=>{if(!count) return; const [exam,subject,section,topic]=k.split('|'); let pool=generatorState.courseBank.filter(x=>x.exam===exam&&x.subject===subject&&x.section===section&&x.contentTopic===topic); for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]];} picked.push(...pool.slice(0,count)); usedTopics.add(k);}); if(!picked.length){alert('Выберите хотя бы одну тему и количество заданий.'); return;} const exam=generatorState.filters.exam||picked[0].exam||'ЕГЭ'; const subject=generatorState.filters.subject||picked[0].subject||'Физика'; const test={id:'test-'+Date.now(),title:`Сгенерированный тест · ${exam} · ${subject}`,exam,subject,section:'Сборный тест',contentTopic:'Из курса',status:'Черновик',settings:{timeLimit:30,attempts:1,shuffleQuestions:true,shuffleAnswers:true,description:'Тест сгенерирован из заданий курса.'},startPage:{studentTitle:'Сгенерированный тест',instruction:'Внимательно выполните задания. После завершения тест будет проверен автоматически.',collectFullName:true,collectClass:true,collectEmail:false,collectPhone:false},style:{theme:'dark',accent:'cyan',textSize:'normal',background:'standard',showTimer:true,showProgress:true},questions:picked,results:[]}; TESTS_DATA.push(test); saveTestsData(); generatorState.result={id:test.id,title:test.title,qc:picked.length,tc:usedTopics.size,sources:[...new Set(picked.map(x=>x.sourceType))]}; renderGeneratorResult();}
 function renderGeneratorResult(){const m=document.getElementById('generatorResult'); if(!m||!generatorState.result) return; const r=generatorState.result; m.innerHTML=`<div class="generator-result"><h3>Тест создан</h3><div>${escapeHtml(r.title)}</div><div>Заданий: ${r.qc} · Тем: ${r.tc}</div><div>Источники: ${escapeHtml(r.sources.join(', '))}</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><a class="tests-editor-save" href="#test/edit/${r.id}">Открыть редактор теста</a><a class="tests-editor-back" href="#test/preview/${r.id}">Открыть предпросмотр</a><a class="tests-editor-back" href="#tests">Перейти к списку тестов</a><button class="tests-editor-back" onclick="resetGeneratorSelection()">Создать ещё один тест</button></div></div>`;}
 function updateGeneratorSummary(){const total=Object.values(generatorState.selection).reduce((s,v)=>s+(Number(v)||0),0); const topics=Object.values(generatorState.selection).filter(v=>Number(v)>0).length; const c=document.getElementById('generatorSummary'); if(c) c.innerHTML=`<div><b>Выбрано:</b></div><div>тем: ${topics}</div><div>заданий: ${total}</div>`;}
-function renderTestsGeneratorPage(){hideAll(); const page=document.getElementById('tests-generator-page'); if(!page) return; page.style.display='block'; page.style.pointerEvents='auto'; page.classList.remove('page-hidden'); page.classList.add('page-active'); document.getElementById('backBtn')?.classList.add('on'); setBackHref('#tests'); document.getElementById('modeToggle')?.classList.remove('on'); if(!generatorState.courseBank.length) generatorState.courseBank=buildCourseTaskBank(); const exams=[...new Set(generatorState.courseBank.map(x=>x.exam))]; const subjects=[...new Set(generatorState.courseBank.filter(x=>!generatorState.filters.exam||x.exam===generatorState.filters.exam).map(x=>x.subject))]; const sections=[...new Set(generatorState.courseBank.filter(x=>(!generatorState.filters.exam||x.exam===generatorState.filters.exam)&&(!generatorState.filters.subject||x.subject===generatorState.filters.subject)).map(x=>x.section))]; page.innerHTML=`<div class="tests-generator-wrap"><a class="tests-editor-back" href="#tests">← Назад к списку тестов</a><h2>Генератор теста из курса</h2><div style="color:var(--gray)">Выберите темы курса и количество заданий, затем создайте тест.</div><div class="generator-steps"><span class="generator-step active">1. Создание</span><span class="generator-step">2. Проверка</span><span class="generator-step">3. Итоги</span></div><div class="generator-layout"><div class="generator-list"><div style="display:grid;grid-template-columns:repeat(4,minmax(120px,1fr));gap:8px;margin-bottom:10px"><select onchange="generatorState.filters.exam=this.value;renderTestsGeneratorPage()"><option value="">Экзамен</option>${exams.map(x=>`<option ${generatorState.filters.exam===x?'selected':''}>${x}</option>`).join('')}</select><select onchange="generatorState.filters.subject=this.value;renderTestsGeneratorPage()"><option value="">Предмет</option>${subjects.map(x=>`<option ${generatorState.filters.subject===x?'selected':''}>${x}</option>`).join('')}</select><select onchange="generatorState.filters.section=this.value;renderTestsGeneratorPage()"><option value="">Раздел</option>${sections.map(x=>`<option ${generatorState.filters.section===x?'selected':''}>${x}</option>`).join('')}</select><select onchange="generatorState.filters.source=this.value;renderTestsGeneratorPage()"><option value="all" ${generatorState.filters.source==='all'?'selected':''}>Задачи + тесты</option><option value="tasks" ${generatorState.filters.source==='tasks'?'selected':''}>Только задачи</option><option value="tests" ${generatorState.filters.source==='tests'?'selected':''}>Только тесты</option></select></div><div id="generatorTopicRows"></div></div><div class="generator-summary"><div class="generator-summary-card"><div id="generatorSummary"></div><div style="margin-top:10px"><button class="generator-generate" onclick="generateTestFromCourseBank()">Сгенерировать тест</button></div><div style="margin-top:8px"><button class="generator-reset" onclick="resetGeneratorSelection()">Сбросить</button></div><div style="margin-top:8px"><button class="generator-reset" onclick="selectOneFromEveryTopic()">Выбрать все темы по 1 заданию</button></div></div></div></div><div id="generatorResult"></div></div>`; renderGeneratorTopicRows(); renderGeneratorResult(); window.scrollTo(0,0);}
+function renderTestsGeneratorPage(){hideAll(); const page=document.getElementById('tests-generator-page'); if(!page) return; page.style.display='block'; page.style.pointerEvents='auto'; page.classList.remove('page-hidden'); page.classList.add('page-active'); document.getElementById('backBtn')?.classList.add('on'); setBackHref('#tests'); if(!generatorState.courseBank.length) generatorState.courseBank=buildCourseTaskBank(); const exams=[...new Set(generatorState.courseBank.map(x=>x.exam))]; const subjects=[...new Set(generatorState.courseBank.filter(x=>!generatorState.filters.exam||x.exam===generatorState.filters.exam).map(x=>x.subject))]; const sections=[...new Set(generatorState.courseBank.filter(x=>(!generatorState.filters.exam||x.exam===generatorState.filters.exam)&&(!generatorState.filters.subject||x.subject===generatorState.filters.subject)).map(x=>x.section))]; page.innerHTML=`<div class="tests-generator-wrap"><a class="tests-editor-back" href="#tests">← Назад к списку тестов</a><h2>Генератор теста из курса</h2><div style="color:var(--gray)">Выберите темы курса и количество заданий, затем создайте тест.</div><div class="generator-steps"><span class="generator-step active">1. Создание</span><span class="generator-step">2. Проверка</span><span class="generator-step">3. Итоги</span></div><div class="generator-layout"><div class="generator-list"><div style="display:grid;grid-template-columns:repeat(4,minmax(120px,1fr));gap:8px;margin-bottom:10px"><select onchange="generatorState.filters.exam=this.value;renderTestsGeneratorPage()"><option value="">Экзамен</option>${exams.map(x=>`<option ${generatorState.filters.exam===x?'selected':''}>${x}</option>`).join('')}</select><select onchange="generatorState.filters.subject=this.value;renderTestsGeneratorPage()"><option value="">Предмет</option>${subjects.map(x=>`<option ${generatorState.filters.subject===x?'selected':''}>${x}</option>`).join('')}</select><select onchange="generatorState.filters.section=this.value;renderTestsGeneratorPage()"><option value="">Раздел</option>${sections.map(x=>`<option ${generatorState.filters.section===x?'selected':''}>${x}</option>`).join('')}</select><select onchange="generatorState.filters.source=this.value;renderTestsGeneratorPage()"><option value="all" ${generatorState.filters.source==='all'?'selected':''}>Задачи + тесты</option><option value="tasks" ${generatorState.filters.source==='tasks'?'selected':''}>Только задачи</option><option value="tests" ${generatorState.filters.source==='tests'?'selected':''}>Только тесты</option></select></div><div id="generatorTopicRows"></div></div><div class="generator-summary"><div class="generator-summary-card"><div id="generatorSummary"></div><div style="margin-top:10px"><button class="generator-generate" onclick="generateTestFromCourseBank()">Сгенерировать тест</button></div><div style="margin-top:8px"><button class="generator-reset" onclick="resetGeneratorSelection()">Сбросить</button></div><div style="margin-top:8px"><button class="generator-reset" onclick="selectOneFromEveryTopic()">Выбрать все темы по 1 заданию</button></div></div></div></div><div id="generatorResult"></div></div>`; renderGeneratorTopicRows(); renderGeneratorResult(); window.scrollTo(0,0);}
 
 
 function updateActiveNav(hash){
@@ -2984,9 +2951,6 @@ function showSimulatorsPage(){
   hideAll();
 
   showPage('simulators-page');
-
-  const modeToggle = document.getElementById('modeToggle');
-  if(modeToggle) modeToggle.classList.remove('on');
 
   const backBtn = document.getElementById('backBtn');
   if(backBtn) backBtn.classList.add('on');
@@ -3085,9 +3049,6 @@ function showRouteMessage(title,message,backHref='#courses',backText='Верну
   if(backBtn) backBtn.classList.add('on');
   if(typeof setBackHref === 'function') setBackHref(backHref);
 
-  const modeToggle = document.getElementById('modeToggle');
-  if(modeToggle) modeToggle.classList.remove('on');
-
   window.scrollTo(0,0);
 }
 function showCourseNotFound(){
@@ -3182,9 +3143,6 @@ function showCoursesPage(){
     landing.classList.add('page-active');
   }
 
-  const modeToggle = document.getElementById('modeToggle');
-  if(modeToggle) modeToggle.classList.remove('on');
-
   const backBtn = document.getElementById('backBtn');
   if(backBtn) backBtn.classList.remove('on');
 
@@ -3207,7 +3165,6 @@ function showSimulators(examType){
   if(simulatorsPage){simulatorsPage.style.display='block';simulatorsPage.style.pointerEvents='auto';simulatorsPage.classList.remove('page-hidden');simulatorsPage.classList.add('page-active');}
   document.getElementById('backBtn').classList.add('on');
   setBackHref('#home');
-  document.getElementById('modeToggle').classList.remove('on');
   window.scrollTo(0,0);
 }
 function backToSimulators(){
@@ -3225,7 +3182,6 @@ function goBack(){
     if(pl) pl.classList.add('on');
     document.getElementById('backBtn').classList.add('on');
     setBackHref('#home');
-    document.getElementById('modeToggle').classList.add('on');
   } else {
     hideAll();
     const simulatorsPage=document.getElementById('simulators-page');
@@ -3442,11 +3398,6 @@ function openCourse(key,moduleIndex,lessonIndex,tabId){
     setBackHref('#courses');
   }
 
-  const modeToggle = document.getElementById('modeToggle');
-  if(modeToggle){
-    modeToggle.classList.add('on');
-  }
-
   if(typeof renderTopbar === 'function') renderTopbar();
   if(typeof renderSb === 'function') renderSb();
   if(typeof renderContent === 'function') renderContent();
@@ -3469,66 +3420,36 @@ function renderTopbar(){
   const c=COURSES[AC];
   document.getElementById('cpTopbar').innerHTML=
     `<span class="cp-ctag ${c.cls}">${c.tag}</span>
-     <input class="cp-cname" value="${c.name}" onchange="COURSES[AC].name=this.value" placeholder="Название курса">
-     <span class="cp-hint" id="topHint">${EMODE?'✏️ Кликните на название для переименования · ⠿ Перетащите для смены порядка':'👁 Режим просмотра — только чтение'}</span>`;
+     <span class="cp-cname">${c.name}</span>`;
 }
 
 /* ============ SIDEBAR ============ */
-let dLs=null,dMs=null;
 function renderSb(){
   const c=COURSES[AC];let n=1,h='';
-  h=`<div class="sb-top"><span class="sb-lbl">Содержание</span>
-     <button class="sb-btn edit-only" onclick="addModule()">+ Модуль</button></div>`;
+  h=`<div class="sb-top"><span class="sb-lbl">Содержание</span></div>`;
   c.modules.forEach((m,mi)=>{
     let lh=m.open?m.lessons.map((l,li)=>{
       const act=mi===CM&&li===CL,idx=n++;
-      return`<div class="lli${act?' active':''}" draggable="true" data-mi="${mi}" data-li="${li}"
-        ondragstart="lDs(event,${mi},${li})" ondragend="lDe(event)"
-        ondragover="lDo(event)" ondragleave="lDl(event)" ondrop="lDd(event,${mi},${li})"
-        onclick="selL(event,${mi},${li})">
-        <span class="ldh">⠿</span><span class="lnum">${idx}</span>
-        <input class="lni" value="${l}" onclick="event.stopPropagation()"
-          onchange="COURSES[AC].modules[${mi}].lessons[${li}]=this.value;renderSb()">
-        <div class="lacts"><button class="icb d" onclick="event.stopPropagation();delL(${mi},${li})">✕</button></div>
+      return`<div class="lli${act?' active':''}" data-mi="${mi}" data-li="${li}" onclick="selL(event,${mi},${li})">
+        <span class="lnum">${idx}</span>
+        <span class="lni">${l}</span>
       </div>`;
-    }).join('')+`<button class="al-btn edit-only" onclick="addL(${mi})">+ урок</button>`:'';
+    }).join(''):'';
     if(!m.open)n+=m.lessons.length;
-    h+=`<div class="mod-block" data-mi="${mi}"
-      ondragover="mDo(event,${mi})" ondragleave="mDl(event)" ondrop="mDd(event,${mi})">
-      <div class="mod-head" draggable="true" ondragstart="mDs(event,${mi})" ondragend="mDe(event)">
-        <span class="dh">⠿</span>
+    h+=`<div class="mod-block" data-mi="${mi}">
+      <div class="mod-head">
         <button class="mtog${m.open?' open':''}" onclick="togM(${mi})">▶</button>
-        <input class="mni" value="${m.name}" onclick="event.stopPropagation()"
-          onchange="COURSES[AC].modules[${mi}].name=this.value">
-        <div class="macts">
-          <button class="icb" onclick="addL(${mi})">+</button>
-          <button class="icb d" onclick="delM(${mi})">✕</button>
-        </div>
+        <span class="mni">${m.name}</span>
       </div>
       ${m.open?`<div class="lessons-ul">${lh}</div>`:''}
     </div>`;
   });
-  h+=`<button class="am-btn edit-only" onclick="addModule()">+ Добавить модуль</button>`;
   document.getElementById('cpSb').innerHTML=h;
 }
 
-/* MODULE D&D */
-function mDs(e,mi){dMs=mi;e.dataTransfer.effectAllowed='move';setTimeout(()=>{const b=document.querySelector(`.mod-block[data-mi="${mi}"]`);if(b)b.style.opacity='.4'},0)}
-function mDe(e){document.querySelectorAll('.mod-block').forEach(b=>{b.style.opacity='1';b.classList.remove('drop-above')});dMs=null}
-function mDo(e,mi){if(dMs===null||dLs)return;e.preventDefault();document.querySelectorAll('.mod-block').forEach(b=>b.classList.remove('drop-above'));document.querySelector(`.mod-block[data-mi="${mi}"]`).classList.add('drop-above')}
-function mDl(e){e.currentTarget.classList.remove('drop-above')}
-function mDd(e,tmi){if(dMs===null||dMs===tmi)return;e.preventDefault();const c=COURSES[AC];const[mv]=c.modules.splice(dMs,1);const a=dMs<tmi?tmi-1:tmi;c.modules.splice(a,0,mv);if(CM===dMs)CM=a;dMs=null;renderSb()}
-
-/* LESSON D&D */
-function lDs(e,mi,li){dLs={mi,li};e.dataTransfer.effectAllowed='move';setTimeout(()=>e.target.classList.add('dragging'),0)}
-function lDe(e){e.target.classList.remove('dragging');document.querySelectorAll('.lli').forEach(r=>r.classList.remove('dov'));dLs=null}
-function lDo(e){if(!dLs)return;e.preventDefault();document.querySelectorAll('.lli').forEach(r=>r.classList.remove('dov'));e.currentTarget.classList.add('dov')}
-function lDl(e){e.currentTarget.classList.remove('dov')}
-function lDd(e,tmi,tli){if(!dLs)return;e.preventDefault();const{mi:smi,li:sli}=dLs;if(smi===tmi&&sli===tli)return;const c=COURSES[AC];const[mv]=c.modules[smi].lessons.splice(sli,1);const a=(smi===tmi&&sli<tli)?tli-1:tli;c.modules[tmi].lessons.splice(a,0,mv);if(CM===smi&&CL===sli){CM=tmi;CL=a}dLs=null;renderSb()}
-
-/* EDIT ACTIONS */
+/* COURSE NAVIGATION */
 function selL(e,mi,li){
-  if(e.target.tagName==='INPUT'||e.target.tagName==='BUTTON')return;
+  if(e.target.tagName==='BUTTON')return;
   CM=mi;
   CL=li;
   CTAB='theory';
@@ -3540,21 +3461,13 @@ function selL(e,mi,li){
   renderContent();
 }
 function togM(mi){COURSES[AC].modules[mi].open=!COURSES[AC].modules[mi].open;renderSb()}
-function addModule(){COURSES[AC].modules.push({name:'Новый модуль',open:true,lessons:['Урок 1']});CM=COURSES[AC].modules.length-1;CL=0;renderSb();renderContent()}
-function delM(mi){const c=COURSES[AC];if(c.modules.length<=1){alert('Нельзя удалить единственный модуль');return}if(!confirm('Удалить модуль «'+c.modules[mi].name+'»?'))return;c.modules.splice(mi,1);CM=Math.min(CM,c.modules.length-1);CL=0;renderSb();renderContent()}
-function addL(mi){COURSES[AC].modules[mi].lessons.push('Новый урок');CM=mi;CL=COURSES[AC].modules[mi].lessons.length-1;COURSES[AC].modules[mi].open=true;renderSb();renderContent()}
-function delL(mi,li){const m=COURSES[AC].modules[mi];if(m.lessons.length<=1){alert('Должен быть хотя бы 1 урок');return}m.lessons.splice(li,1);if(CM===mi&&CL>=m.lessons.length)CL=m.lessons.length-1;renderSb();renderContent()}
 
 /* ============ CONTENT ============ */
 function renderContent(){
   const c=COURSES[AC],name=c.modules[CM].lessons[CL],ld=gld();
-  const topHint=document.getElementById('topHint');
-  if(topHint)topHint.textContent=EMODE?'✏️ Кликните для переименования · ⠿ Перетащите для смены порядка':'👁 Режим просмотра';
   document.getElementById('cpCon').innerHTML=`
-    <div class="view-banner">👁 Режим просмотра — редактирование отключено. Переключитесь в режим редактирования для изменений.</div>
     <div class="lt-row">
-      <input class="lt-inp" value="${name}" onchange="COURSES[AC].modules[CM].lessons[CL]=this.value;renderSb()" placeholder="Название урока">
-      <span class="et">✏️ редактируемое</span>
+      <div class="lt-inp">${name}</div>
     </div>
     <div class="lmeta">${c.modules[CM].name} · ${c.name}</div>
     <div class="cp-stats">
@@ -3608,30 +3521,32 @@ function showTab(id,btn,colorClass){
 /* ============ THEORY RENDERING ============ */
 function renderTheory(){
   const blocks=getTH();
-  let h=`<div class="add-block-bar">
+  let h=EMODE?`<div class="add-block-bar">
     <span style="font-size:11px;color:var(--gray);margin-right:2px">Добавить блок:</span>
     <button class="abb" onclick="addBlock('text')">+ Текст</button>
     <button class="abb" onclick="addBlock('formula')">+ Формула</button>
     <button class="abb" onclick="addBlock('html')">+ HTML</button>
-  </div>`;
+  </div>`:'';
   blocks.forEach((b,i)=>{
+    const del=EMODE?`<div class="th-block-del" onclick="delBlock(${i})">✕</div>`:'';
+    const editAttrs=EMODE?' contenteditable="true"':'';
     if(b.type==='formula'){
       h+=`<div class="formula-block" style="position:relative">
-        <div class="th-block-del" onclick="delBlock(${i})">✕</div>
-        <span class="formula-main-f" contenteditable="${EMODE}" onblur="saveBlock(${i},'f',this.innerHTML)">${b.f}</span>
-        <span class="formula-sub" contenteditable="${EMODE}" onblur="saveBlock(${i},'sub',this.innerHTML)">${b.sub}</span>
+        ${del}
+        <span class="formula-main-f"${editAttrs}${EMODE?` onblur="saveBlock(${i},'f',this.innerHTML)"`:''}>${b.f}</span>
+        <span class="formula-sub"${editAttrs}${EMODE?` onblur="saveBlock(${i},'sub',this.innerHTML)"`:''}>${b.sub}</span>
       </div>`;
     } else if(b.type==='html'){
       h+=`<div class="th-html">
-        <div class="th-block-del" onclick="delBlock(${i})">✕</div>
-        <div class="th-html-body" contenteditable="${EMODE}" onblur="saveBlock(${i},'html',this.innerHTML)">${b.html}</div>
+        ${del}
+        <div class="th-html-body"${editAttrs}${EMODE?` onblur="saveBlock(${i},'html',this.innerHTML)"`:''}>${b.html}</div>
       </div>`;
     } else {
       h+=`<div class="th-block">
-        <div class="th-block-del" onclick="delBlock(${i})">✕</div>
+        ${del}
         <div class="tb-label">${b.label||'📌'}</div>
-        <div class="tb-title" contenteditable="${EMODE}" onblur="saveBlock(${i},'title',this.innerText)">${b.title}</div>
-        <div class="tb-text" contenteditable="${EMODE}" onblur="saveBlock(${i},'text',this.innerText)">${b.text}</div>
+        <div class="tb-title"${editAttrs}${EMODE?` onblur="saveBlock(${i},'title',this.innerText)"`:''}>${b.title}</div>
+        <div class="tb-text"${editAttrs}${EMODE?` onblur="saveBlock(${i},'text',this.innerText)"`:''}>${b.text}</div>
       </div>`;
     }
   });
@@ -3665,13 +3580,14 @@ function renderVideo(ld){
   const list=ld.videos.map((v,i)=>`<div class="vi"><div class="vt">▶</div>
     <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600">${v.title}</div>
     <div style="font-size:11px;color:var(--gray);margin-top:2px">${v.src==='url'?'YouTube':'Файл'}</div></div>
-    <button class="db" onclick="delVid(${i})">✕</button></div>`).join('');
-  return`<div class="vd"><p>Вставьте ссылку на YouTube или загрузите видеофайл</p>
+    ${EMODE?`<button class="db" onclick="delVid(${i})">✕</button>`:''}</div>`).join('');
+  const editor=EMODE?`<div class="vd"><p>Вставьте ссылку на YouTube или загрузите видеофайл</p>
     <div class="ur"><input id="vu" class="fi2" type="text" placeholder="https://youtube.com/watch?v=...">
     <button class="fb2 fb2c" onclick="addVU()">Добавить</button></div>
     <label class="fb2" style="cursor:pointer;display:inline-block">Загрузить файл
       <input type="file" accept="video/*" style="display:none" onchange="addVF(this)"></label>
-  </div>
+  </div>`:'';
+  return`${editor}
   <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--cyan);margin-bottom:10px">Видео урока</div>
   ${list||'<div class="emp">Видео не добавлены</div>'}`;
 }
@@ -3683,6 +3599,9 @@ function delVid(i){gld().videos.splice(i,1);reTab('video')}
 function renderTests(ld){
   const lessonName=COURSES[AC].modules[CM].lessons[CL];
   const special=renderSpecialLessonTests(lessonName);
+  if(!EMODE){
+    return special || '<div class="emp">Тесты для этого урока пока не добавлены</div>';
+  }
   const editorLabel=special?'<div class="stc-editor-label">Редактор банка тестовых вопросов</div>':'';
   return`${special}${editorLabel}<div class="qtb"><div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--cyan)">Вопросы теста</div>
     <div style="flex:1"></div>
