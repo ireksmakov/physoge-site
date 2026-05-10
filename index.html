@@ -788,7 +788,10 @@ body.task-board-lock header,body.task-board-lock .topbar,body.task-board-lock .s
 .task-board-float-head:active{cursor:grabbing}
 .task-board-float-body{padding:12px}
 .task-board-float-close{padding:4px 10px;border:1px solid #cbd5e1;background:#fff;border-radius:10px;cursor:pointer;font-weight:700}
-.task-board-solution-wrap{position:absolute;left:420px;top:96px;width:420px;max-width:calc(100vw - 32px);max-height:calc(100vh - 140px);overflow:auto;background:rgba(255,255,255,.97);border:1px solid #d8e5f5;border-radius:18px;box-shadow:0 18px 50px rgba(15,23,42,.16);z-index:20020;pointer-events:auto}
+.task-board-solution-wrap{position:absolute;left:420px;top:96px;width:420px;resize:none;min-width:320px;min-height:220px;max-width:calc(100vw - 40px);max-height:calc(100vh - 120px);overflow:auto;background:rgba(255,255,255,.97);border:1px solid #d8e5f5;border-radius:18px;box-shadow:0 18px 50px rgba(15,23,42,.16);z-index:20020;pointer-events:auto}
+.task-board-resize-handle{position:absolute;right:8px;bottom:8px;width:22px;height:22px;border-radius:8px;cursor:nwse-resize;z-index:5;background:linear-gradient(135deg,transparent 45%,rgba(37,99,235,.35) 45%,rgba(37,99,235,.35) 55%,transparent 55%),linear-gradient(135deg,transparent 62%,rgba(37,99,235,.55) 62%,rgba(37,99,235,.55) 72%,transparent 72%)}
+.task-board-resize-handle:hover{background-color:rgba(37,99,235,.08)}
+.task-board-float.resizing{user-select:none}
 .task-board-solution-wrap .task-board-float-head{cursor:grab;user-select:none;touch-action:none}
 .task-board-solution-wrap.dragging .task-board-float-head,.task-board-solution-wrap .task-board-float-head:active{cursor:grabbing}
 .task-board-solution{padding:14px 16px;font-size:16px;line-height:1.55;color:#334155}
@@ -6653,6 +6656,7 @@ function ensureTaskBoardOverlay(){
                   <button type="button" class="task-board-float-close" onclick="taskBoardToggleFloating('condition',false)">Скрыть</button>
                 </div>
                 <div class="task-board-float-body"><div id="taskBoardCondition" class="task-board-condition"></div></div>
+                <div class="task-board-resize-handle" data-float-resize="condition" title="Изменить размер"></div>
               </div>
               <div id="taskBoardGraphWrap" class="task-board-float" style="display:none;left:auto;right:16px;width:min(420px,calc(100% - 32px));">
                 <div class="task-board-float-head" data-float-drag="graph">
@@ -6660,6 +6664,7 @@ function ensureTaskBoardOverlay(){
                   <button type="button" class="task-board-float-close" onclick="taskBoardToggleFloating('graph',false)">Скрыть</button>
                 </div>
                 <div class="task-board-float-body"><div id="taskBoardGraph" class="task-board-graph"></div></div>
+                <div class="task-board-resize-handle" data-float-resize="graph" title="Изменить размер"></div>
               </div>
               <div class="task-board-float task-board-solution-wrap" id="taskBoardSolutionWrap" style="display:none">
                 <div class="task-board-float-head" data-float-drag="solution">
@@ -6667,6 +6672,7 @@ function ensureTaskBoardOverlay(){
                   <strong>Решение</strong>
                 </div>
                 <div class="task-board-float-body task-board-solution" id="taskBoardSolution"></div>
+                <div class="task-board-resize-handle" data-float-resize="solution" title="Изменить размер"></div>
               </div>
               <canvas id="taskBoardCanvas" class="task-board-canvas"></canvas>
               <div id="taskBoardObjectLayer" class="task-board-object-layer"></div>
@@ -6773,6 +6779,9 @@ function ensureTaskBoardOverlay(){
   taskBoardInitFloatDrag(taskBoardState,'condition');
   taskBoardInitFloatDrag(taskBoardState,'graph');
   taskBoardInitFloatDrag(taskBoardState,'solution');
+  taskBoardInitFloatResize(taskBoardState,'condition');
+  taskBoardInitFloatResize(taskBoardState,'graph');
+  taskBoardInitFloatResize(taskBoardState,'solution');
   taskBoardState.canvas.addEventListener('pointerdown',taskBoardPointerDown);
   taskBoardState.canvas.addEventListener('pointermove',taskBoardPointerMove);
   taskBoardState.objectLayer.addEventListener('pointerdown',taskBoardObjectPointerDown);
@@ -7086,6 +7095,110 @@ function taskBoardInitFloatDrag(state,kind){
     window.addEventListener('pointerup',up);
   });
 }
+function taskBoardInitFloatResize(state,kind){
+  const wrap=
+    kind==='graph'?state.graphWrap:
+    kind==='solution'?state.solutionWrap:
+    state.conditionWrap;
+  if(!wrap||wrap.__resizeReady) return;
+  const handle=wrap.querySelector('[data-float-resize="'+kind+'"]');
+  if(!handle) return;
+  wrap.__resizeReady=true;
+  const storageKey=
+    kind==='graph'
+      ? 'fizmat_task_board_graph_size'
+      : kind==='solution'
+        ? 'fizmat_task_board_solution_size'
+        : 'fizmat_task_board_condition_size';
+  const defaultSize=
+    kind==='solution'
+      ? {width:520,height:560}
+      : kind==='graph'
+        ? {width:420,height:320}
+        : {width:380,height:260};
+  function clampSize(width,height){
+    const minWidth=kind==='solution'?320:260;
+    const minHeight=kind==='solution'?220:180;
+    const maxWidth=Math.max(minWidth,window.innerWidth-40);
+    const maxHeight=Math.max(minHeight,window.innerHeight-120);
+    return {
+      width:Math.max(minWidth,Math.min(width,maxWidth)),
+      height:Math.max(minHeight,Math.min(height,maxHeight))
+    };
+  }
+  function saveSize(){
+    try{
+      localStorage.setItem(storageKey,JSON.stringify({
+        width:wrap.offsetWidth,
+        height:wrap.offsetHeight
+      }));
+    }catch(e){}
+  }
+  function restoreSize(){
+    try{
+      const raw=localStorage.getItem(storageKey);
+      if(!raw) return;
+      const size=JSON.parse(raw);
+      if(!Number.isFinite(size.width)||!Number.isFinite(size.height)) return;
+      const next=clampSize(size.width,size.height);
+      wrap.style.width=next.width+'px';
+      wrap.style.height=next.height+'px';
+    }catch(e){}
+  }
+  handle.addEventListener('pointerdown',function(e){
+    if(e.button!==undefined&&e.button!==0) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const start={
+      pointerId:e.pointerId,
+      x:e.clientX,
+      y:e.clientY,
+      width:wrap.offsetWidth,
+      height:wrap.offsetHeight
+    };
+    wrap.classList.add('resizing');
+    try{
+      handle.setPointerCapture(e.pointerId);
+    }catch(_err){}
+    function move(ev){
+      if(ev.pointerId!==start.pointerId) return;
+      ev.preventDefault();
+      ev.stopPropagation();
+      const next=clampSize(
+        start.width+ev.clientX-start.x,
+        start.height+ev.clientY-start.y
+      );
+      wrap.style.width=next.width+'px';
+      wrap.style.height=next.height+'px';
+    }
+    function end(ev){
+      if(ev.pointerId!==start.pointerId) return;
+      ev.preventDefault();
+      ev.stopPropagation();
+      wrap.classList.remove('resizing');
+      window.removeEventListener('pointermove',move,true);
+      window.removeEventListener('pointerup',end,true);
+      window.removeEventListener('pointercancel',end,true);
+      try{
+        handle.releasePointerCapture(start.pointerId);
+      }catch(_err){}
+      saveSize();
+    }
+    window.addEventListener('pointermove',move,true);
+    window.addEventListener('pointerup',end,true);
+    window.addEventListener('pointercancel',end,true);
+  });
+  handle.addEventListener('dblclick',function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    wrap.style.width=defaultSize.width+'px';
+    wrap.style.height=defaultSize.height+'px';
+    try{
+      localStorage.removeItem(storageKey);
+    }catch(_err){}
+  });
+  restoreSize();
+}
 function toggleTaskBoardSolution(force){
   const state=taskBoardState||ensureTaskBoardOverlay();
   if(!state||!state.solutionWrap) return;
@@ -7096,6 +7209,7 @@ function toggleTaskBoardSolution(force){
   state.solutionWrap.style.pointerEvents=shouldOpen?'auto':'none';
   if(shouldOpen){
     taskBoardInitFloatDrag(state,'solution');
+    taskBoardInitFloatResize(state,'solution');
   }
 }
 function toggleTaskBoardDrawer(force){
