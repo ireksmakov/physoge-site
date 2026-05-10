@@ -3094,6 +3094,7 @@ function showNotFoundRoute(hash){
 function handleRoute(){
   const hash = window.location.hash || '#home';
 
+  try{
   if(hash === '#home') return showLanding();
   if(hash === '#courses') return showCoursesPage();
   if(hash === '#tests') return showTestsPage();
@@ -3153,6 +3154,9 @@ function handleRoute(){
   }
 
   return showNotFoundRoute(hash);
+  }finally{
+    setTimeout(restoreTaskBoardAfterRefresh,350);
+  }
 }
 
 window.addEventListener('hashchange',handleRoute);
@@ -3292,6 +3296,37 @@ function getCourseRoute(courseKey,moduleIndex,lessonIndex,tabId){
   const safeCourseKey = encodeURIComponent(courseKey || '');
   const safeTabId = isValidCourseTab(tabId) ? tabId : 'theory';
   return `#course/${safeCourseKey}/m/${moduleIndex}/l/${lessonIndex}/t/${safeTabId}`;
+}
+function restoreTaskBoardAfterRefresh(){
+  if(window.__taskBoardRestoreAttempted) return;
+  window.__taskBoardRestoreAttempted = true;
+
+  let saved = null;
+
+  try{
+    saved = JSON.parse(sessionStorage.getItem('fizmat_task_board_open') || 'null');
+  }catch(e){
+    saved = null;
+  }
+
+  if(!saved || !saved.isOpen) return;
+
+  if(saved.route && window.location.hash !== saved.route){
+    history.replaceState(null, '', saved.route);
+
+    if(saved.route.startsWith('#course/')){
+      const {courseKey, moduleIndex, lessonIndex, tabId} = parseCourseRoute(saved.route);
+      openCourse(courseKey, moduleIndex, lessonIndex, tabId);
+    }
+  }
+
+  setTimeout(() => {
+    try{
+      openTaskBoard(saved.mode || 'default-board', false, saved.taskId || '');
+    }catch(err){
+      console.error('Failed to restore task board after refresh:', err);
+    }
+  }, 300);
 }
 function readLastCourseLessons(){
   try{
@@ -5543,7 +5578,8 @@ function renderPTasks(name){
     const extra=t.extraHtml?`<div class="pt-extra">${t.extraHtml}</div>`:'';
     const taskId=String(t.id||'');
     const boardModeSafe=String(t.boardMode||'').replace(/'/g,"\\'");
-    const boardBtn=t.boardMode?`<div class="pt-side-actions"><button class="pt-board-btn" onclick="openTaskBoard('${boardModeSafe}',true)">⤢ На весь экран</button>${taskId==='lesson12-task07'?`<button class="pt-board-btn task07-card-anim-btn" onclick="openTaskAnimation('lesson12-task07')">▶ Анимация процесса</button>`:''}</div>`:'';
+    const taskIdSafe=taskId.replace(/'/g,"\\'");
+    const boardBtn=t.boardMode?`<div class="pt-side-actions"><button class="pt-board-btn" onclick="openTaskBoard('${boardModeSafe}',true,'${taskIdSafe}')">⤢ На весь экран</button>${taskId==='lesson12-task07'?`<button class="pt-board-btn task07-card-anim-btn" onclick="openTaskAnimation('lesson12-task07')">▶ Анимация процесса</button>`:''}</div>`:'';
     const hasAnswer=String(t.ans||'').trim();
     const answerCard=hasAnswer?`<div class="sr-ans"><div style="font-size:18px">✓</div><div><div class="sr-ans-l">Ответ</div><div class="sr-ans-v" style="color:var(--orange)">${t.ans}</div></div></div>`:'';
     const hasStructuredSolution=hasFilledTaskSolution(t)||hasLegacyTaskTextSolution(t);
@@ -6931,12 +6967,13 @@ function taskBoardExitFullscreen(){
     if(result&&typeof result.catch==='function') result.catch(function(){});
   }catch(_err){}
 }
-function openTaskBoard(mode,requestFullscreen){
+function openTaskBoard(mode,requestFullscreen=false,taskId=''){
   const state=ensureTaskBoardOverlay();
   const task=getTaskBoardData(mode);
   if(!task) return;
   state.mode=mode;
   state.task=task;
+  state.taskId=taskId||'';
   if(state.title) state.title.textContent=task.title;
   state.condition.innerHTML=task.cond;
   state.graph.innerHTML=getTaskBoardGraph(mode);
@@ -7010,6 +7047,17 @@ function openTaskBoard(mode,requestFullscreen){
   taskBoardUpdateHistoryButtons();
   taskBoardResizeCanvas();
   toggleTaskBoardAnimation(false);
+  try{
+    sessionStorage.setItem('fizmat_task_board_open', JSON.stringify({
+      isOpen: true,
+      route: window.location.hash,
+      mode: mode || 'default-board',
+      taskId: taskId || '',
+      time: Date.now()
+    }));
+  }catch(err){
+    console.warn('Не удалось сохранить состояние открытия доски:', err);
+  }
 }
 function closeTaskBoard(){
   const state=ensureTaskBoardOverlay();
@@ -7020,6 +7068,7 @@ function closeTaskBoard(){
   state.overlay.style.display='none';
   state.overlay.style.pointerEvents='none';
   state.overlay.setAttribute('aria-hidden','true');
+  sessionStorage.removeItem('fizmat_task_board_open');
   state.overlay.classList.remove('solution-workspace-mode');
   state.drawer.classList.remove('open');
   state.pointer=null;
