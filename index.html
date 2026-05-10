@@ -5514,6 +5514,7 @@ function renderPTasks(name){
           class="pt-board-btn"
           data-board-mode="${boardModeAttr}"
           onclick="taskBoardOpenFromButton(this,event)"
+          onpointerdown="taskBoardOpenFromButton(this,event)"
         >🧑‍🏫 Доска</button>
         ${taskId==='lesson12-task07'
           ? `<button type="button" class="pt-board-btn task07-card-anim-btn" onclick="openTaskAnimation('lesson12-task07')">▶ Анимация процесса</button>`
@@ -6813,58 +6814,90 @@ function resetTaskBoardOverlayState(state){
   }
   document.body.classList.remove('task-board-lock');
 }
+function taskBoardGetEventElement(event){
+  const target = event && event.target;
+  if(!target) return null;
+  return target.nodeType === 1 ? target : (target.parentElement || null);
+}
+function taskBoardFindOpenButton(event){
+  const el = taskBoardGetEventElement(event);
+  return el && el.closest ? el.closest('.pt-board-btn[data-board-mode]') : null;
+}
 function taskBoardOpenFromButton(btn,event){
   if(event){
     event.preventDefault();
     event.stopPropagation();
+    if(typeof event.stopImmediatePropagation === 'function'){
+      event.stopImmediatePropagation();
+    }
   }
 
-  const mode = btn && btn.getAttribute('data-board-mode');
+  if(!btn) return;
 
-  if(!mode){
-    console.warn('Не найден data-board-mode для кнопки Доска', btn);
-    openTaskBoard('default-board');
-    return;
-  }
+  const now = Date.now();
+  if(btn.__taskBoardLastOpen && now - btn.__taskBoardLastOpen < 450) return;
+  btn.__taskBoardLastOpen = now;
 
+  const mode =
+    btn.getAttribute('data-board-mode') ||
+    (btn.dataset && btn.dataset.boardMode) ||
+    btn.getAttribute('data-task-id') ||
+    'default-board';
+
+  console.info('Opening task board:', mode);
   openTaskBoard(mode);
 }
 function initTaskBoardOpenDelegation(){
   if(document.__taskBoardOpenDelegationReady) return;
-  document.__taskBoardOpenDelegationReady=true;
-  document.addEventListener('click',function(event){
-    const btn=event.target.closest('.pt-board-btn[data-board-mode]');
-    if(!btn||btn.disabled) return;
+  document.__taskBoardOpenDelegationReady = true;
 
-    event.preventDefault();
-    event.stopPropagation();
-
+  function handleBoardOpenEvent(event){
+    const btn = taskBoardFindOpenButton(event);
+    if(!btn || btn.disabled) return;
     taskBoardOpenFromButton(btn,event);
-  },true);
+  }
+
+  document.addEventListener('pointerdown', handleBoardOpenEvent, true);
+  document.addEventListener('click', handleBoardOpenEvent, true);
 }
 initTaskBoardOpenDelegation();
 function openTaskBoard(mode,requestFullscreen=false,taskId=''){
   const state=ensureTaskBoardOverlay();
   try{
+    if(
+      !state ||
+      !state.overlay ||
+      !state.canvasWrap ||
+      !state.canvas ||
+      !state.condition ||
+      !state.solution
+    ){
+      console.error('Task board overlay was not created correctly', state);
+      resetTaskBoardOverlayState(state);
+      return;
+    }
+
     let task=getTaskBoardData(mode);
 
     if(!task){
       console.warn('Task board data not found, opening empty board:', mode);
-      task={
-        title:'Доска',
-        cond:'<p>Пустая рабочая доска. Данные задачи не найдены, но доска доступна для работы.</p>',
-        given:'',
-        ans:'',
-        steps:[],
-        solutionHtml:'',
-        solutionImage:'',
-        solution:{idea:'',formulas:[],steps:[],answer:'',tutorHint:''},
-        boardMode:mode||'default-board',
-        id:taskId||'',
-        isFallback:true,
-        hasAnimation:false,
-        graphLabel:'Схема'
-      };
+      task = typeof createTaskBoardFallbackData === 'function'
+        ? createTaskBoardFallbackData(mode,taskId)
+        : {
+          title:'Доска',
+          cond:'<p>Пустая рабочая доска. Данные задачи не найдены, но доска доступна для работы.</p>',
+          given:'',
+          ans:'',
+          steps:[],
+          solutionHtml:'',
+          solutionImage:'',
+          solution:{idea:'',formulas:[],steps:[],answer:'',tutorHint:''},
+          boardMode:mode||'default-board',
+          id:taskId||'',
+          isFallback:true,
+          hasAnimation:false,
+          graphLabel:'Схема'
+        };
     }
     state.mode=mode;
     state.task=task;
