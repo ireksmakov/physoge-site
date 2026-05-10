@@ -628,8 +628,8 @@ body.edit-mode .et{display:inline}
 
 /* ===== TASK 07 PENDULUM IMPACT ANIMATION ===== */
 .task07-anim-lock{overflow:hidden}
-.task07-anim-overlay{position:fixed;inset:0;z-index:12000;display:none;background:radial-gradient(circle at 18% 12%,rgba(0,229,255,.16),transparent 34%),radial-gradient(circle at 78% 18%,rgba(255,140,0,.16),transparent 30%),rgba(2,6,23,.94);backdrop-filter:blur(10px);color:var(--white);padding:18px;box-sizing:border-box}
-.task07-anim-overlay.open{display:flex;animation:taskBoardOverlayFade .24s ease both}
+.task-board-animation-overlay,.task07-anim-overlay{position:fixed;inset:0;z-index:2147483600;display:none;pointer-events:none;background:radial-gradient(circle at 18% 12%,rgba(0,229,255,.16),transparent 34%),radial-gradient(circle at 78% 18%,rgba(255,140,0,.16),transparent 30%),rgba(2,6,23,.94);backdrop-filter:blur(10px);color:var(--white);padding:18px;box-sizing:border-box}
+.task-board-animation-overlay.open,.task07-anim-overlay.open{display:flex;pointer-events:auto;animation:taskBoardOverlayFade .24s ease both}
 .task07-anim-modal{width:min(1180px,100%);height:min(820px,100%);margin:auto;display:flex;flex-direction:column;gap:14px;background:linear-gradient(180deg,rgba(11,18,32,.98),rgba(5,10,20,.98));border:1px solid rgba(0,229,255,.24);border-radius:24px;box-shadow:0 34px 90px rgba(0,0,0,.52),0 0 60px rgba(0,229,255,.12);overflow:hidden}
 .task07-anim-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:18px 20px 0}
 .task07-anim-kicker{font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:var(--cyan);margin-bottom:5px}
@@ -6877,10 +6877,27 @@ function ensureTaskBoardOverlay(){
     taskBoardSetColor(color);
   },true);
   document.addEventListener('click',function(e){
+    const btn=e.target.closest&&e.target.closest('[data-close-task-animation]');
+    if(!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    closeTaskBoardAnimation();
+  },true);
+  document.addEventListener('click',function(e){
     if(!taskBoardState||!taskBoardState.overlay.classList.contains('open')) return;
     if(taskBoardState.toolbar&&taskBoardState.toolbar.contains(e.target)) return;
     taskBoardCloseDropdowns();
   });
+  document.addEventListener('keydown',function(e){
+    const anim=document.getElementById('task07AnimationOverlay')||document.getElementById('taskBoardAnimationOverlay')||document.querySelector('.task-board-animation-overlay');
+    if(e.key==='Escape'&&anim&&anim.classList.contains('open')){
+      e.preventDefault();
+      e.stopPropagation();
+      if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+      closeTaskBoardAnimation();
+      return;
+    }
+  },true);
   document.addEventListener('keydown',function(e){
     if(!taskBoardState||!taskBoardState.overlay.classList.contains('open')) return;
     if(e.target&&e.target.closest&&e.target.closest('.task-board-text-input')) return;
@@ -7076,7 +7093,8 @@ function closeTaskBoard(){
   taskBoardToggleFloating('condition',false);
   taskBoardToggleFloating('graph',false);
   toggleTaskBoardSolution(false);
-  toggleTaskBoardAnimation(false);
+  if(state.task&&(state.task.id==='lesson12-task07'||state.mode==='task07-pendulum-impact')) closeTask07Animation({keepBoard:false});
+  else toggleTaskBoardAnimation(false);
   taskBoardCloseDropdowns();
 }
 function taskBoardHideFloating(kind){
@@ -7781,6 +7799,17 @@ let task07AnimationState=null;
 function openTaskAnimation(taskId){
   if(taskId!=='lesson12-task07') return;
   const overlay=ensureTask07AnimationOverlay();
+  const hasOpenBoard=!!(taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
+  overlay.dataset.keepTaskBoard=hasOpenBoard?'true':'false';
+  if(hasOpenBoard){
+    taskBoardState.overlay.style.display='block';
+    taskBoardState.overlay.style.pointerEvents='auto';
+    taskBoardState.overlay.classList.add('open');
+    taskBoardState.overlay.setAttribute('aria-hidden','false');
+    document.body.classList.add('task-board-lock');
+  }
+  overlay.style.display='flex';
+  overlay.style.pointerEvents='auto';
   overlay.classList.add('open');
   overlay.setAttribute('aria-hidden','false');
   document.body.classList.add('task07-anim-lock');
@@ -7792,7 +7821,7 @@ function ensureTask07AnimationOverlay(){
   let overlay=document.getElementById('task07AnimationOverlay');
   if(overlay) return overlay;
   document.body.insertAdjacentHTML('beforeend', `
-    <div id="task07AnimationOverlay" class="task07-anim-overlay" aria-hidden="true">
+    <div id="task07AnimationOverlay" class="task07-anim-overlay task-board-animation-overlay" aria-hidden="true">
       <div class="task07-anim-modal" role="dialog" aria-modal="true" aria-labelledby="task07AnimTitle">
         <div class="task07-anim-head">
           <div>
@@ -7800,7 +7829,11 @@ function ensureTask07AnimationOverlay(){
             <div id="task07AnimTitle" class="task07-anim-title">Маятник после удара</div>
             <div class="task07-anim-sub">Живая схема: налёт малого тела, удар, падение тела вниз и подъём груза маятника до α = 90°.</div>
           </div>
-          <button type="button" class="task07-anim-close" onclick="closeTask07Animation()">✕ Закрыть</button>
+          <button
+            type="button"
+            class="task07-anim-close task-board-animation-close"
+            data-close-task-animation="true"
+          >✕ Закрыть</button>
         </div>
         <div class="task07-anim-body">
           <div class="task07-anim-stage" data-task07-stage></div>
@@ -7823,7 +7856,7 @@ function ensureTask07AnimationOverlay(){
           <button type="button" class="task07-anim-btn" id="task07AnimPlayBtn" onclick="playTask07Animation()">▶ Старт</button>
           <button type="button" class="task07-anim-btn" onclick="pauseTask07Animation()">⏸ Пауза</button>
           <button type="button" class="task07-anim-btn" onclick="resetTask07Animation(true)">↺ Повтор</button>
-          <button type="button" class="task07-anim-btn" onclick="closeTask07Animation()">✕ Закрыть</button>
+          <button type="button" class="task07-anim-btn task-board-animation-close" data-close-task-animation="true">✕ Закрыть</button>
           <div class="task07-anim-progress" aria-hidden="true"><span id="task07AnimProgress"></span></div>
         </div>
       </div>
@@ -7895,12 +7928,37 @@ function resetTask07Animation(autoplay){
   const btn=document.getElementById('task07AnimPlayBtn'); if(btn) btn.textContent='▶ Старт';
   if(autoplay) playTask07Animation();
 }
-function closeTask07Animation(){
-  const state=task07AnimationState;
-  if(state){ state.running=false; cancelAnimationFrame(state.raf); state.last=0; }
-  const overlay=document.getElementById('task07AnimationOverlay');
-  if(overlay){ overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true'); }
+function closeTaskBoardAnimation(options){
+  const keepBoard=!(options&&options.keepBoard===false);
+  const state=taskBoardState;
+  const animState=task07AnimationState;
+  if(animState){ animState.running=false; cancelAnimationFrame(animState.raf); animState.last=0; }
+  const anim=document.getElementById('task07AnimationOverlay')||document.getElementById('taskBoardAnimationOverlay')||document.querySelector('.task-board-animation-overlay');
+  const shouldRestoreBoard=!!(state&&state.overlay&&(state.overlay.classList.contains('open')||(anim&&anim.dataset.keepTaskBoard==='true')));
+  if(anim){
+    anim.classList.remove('open');
+    anim.style.display='none';
+    anim.style.pointerEvents='none';
+    anim.setAttribute('aria-hidden','true');
+  }
   document.body.classList.remove('task07-anim-lock');
+  if(!keepBoard) return;
+  if(shouldRestoreBoard){
+    state.overlay.style.display='block';
+    state.overlay.style.pointerEvents='auto';
+    state.overlay.classList.add('open');
+    state.overlay.setAttribute('aria-hidden','false');
+    document.body.classList.add('task-board-lock');
+    if(typeof taskBoardResizeCanvas==='function') taskBoardResizeCanvas();
+    if(typeof taskBoardUpdateCanvasSurface==='function') taskBoardUpdateCanvasSurface();
+    if(typeof renderBoardObjects==='function') renderBoardObjects();
+  }
+}
+function closeTask07Animation(options){
+  closeTaskBoardAnimation(options);
+}
+function closeTaskAnimation(options){
+  closeTaskBoardAnimation(options);
 }
 function updateTask07Animation(progress){
   const state=task07AnimationState; if(!state||!state.svg) return;
@@ -7945,8 +8003,14 @@ function updateTask07Animation(progress){
 function toggleTaskBoardAnimation(force){
   const state=ensureTaskBoardOverlay();
   if(state.task&&(state.task.id==='lesson12-task07'||state.mode==='task07-pendulum-impact')){
-    if(force===false){ closeTask07Animation(); return; }
-    openTaskAnimation('lesson12-task07');
+    const anim=document.getElementById('task07AnimationOverlay')||document.getElementById('taskBoardAnimationOverlay')||document.querySelector('.task-board-animation-overlay');
+    const isOpen=!!(anim&&anim.classList.contains('open'));
+    const shouldOpen=typeof force==='boolean'?force:!isOpen;
+    if(shouldOpen){
+      openTaskAnimation('lesson12-task07');
+    }else{
+      closeTaskBoardAnimation();
+    }
     return;
   }
   if(!state.task||state.task.hasAnimation===false){
