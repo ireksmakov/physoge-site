@@ -5829,42 +5829,17 @@ async function taskBoardDownloadPng(){
 
   if(!blob) return;
 
-  if(window.showSaveFilePicker){
-    try{
-      const handle=await window.showSaveFilePicker({
-        suggestedName:fileName,
-        types:[
-          {
-            description:'PNG image',
-            accept:{
-              'image/png':['.png']
-            }
-          }
-        ]
-      });
-
-      const writable=await handle.createWritable();
-      await writable.write(blob);
-      await writable.close();
-
-      taskBoardShowSaveToast?.('PNG сохранён');
-      return;
-    }catch(err){
-      if(err&&err.name==='AbortError'){
-        return;
-      }
-
-      console.warn('Save picker failed, fallback to download:',err);
-    }
-  }
-
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
+
   a.href=url;
   a.download=fileName;
+  a.style.display='none';
+
   document.body.appendChild(a);
   a.click();
   a.remove();
+
   setTimeout(function(){URL.revokeObjectURL(url);},1000);
 
   taskBoardShowSaveToast?.('PNG скачан');
