@@ -5827,34 +5827,8 @@ async function taskBoardDownloadPng(){
     return;
   }
   const fileName=taskBoardGetExportFileName();
-  let saveHandle=null;
-  if(window.showSaveFilePicker){
-    try{
-      saveHandle=await window.showSaveFilePicker({
-        suggestedName:fileName,
-        types:[{
-          description:'PNG image',
-          accept:{'image/png':['.png']}
-        }]
-      });
-    }catch(err){
-      if(err&&err.name==='AbortError') return;
-      console.warn('Save picker failed, fallback to download:',err);
-    }
-  }
   const blob=await taskBoardCreateExportBlob();
   if(!blob) return;
-  if(saveHandle){
-    try{
-      const writable=await saveHandle.createWritable();
-      await writable.write(blob);
-      await writable.close();
-      taskBoardShowSaveToast?.('PNG сохранён');
-      return;
-    }catch(err){
-      console.warn('File write failed, fallback to download:',err);
-    }
-  }
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
   a.href=url;
@@ -5863,7 +5837,6 @@ async function taskBoardDownloadPng(){
   a.click();
   a.remove();
   setTimeout(function(){URL.revokeObjectURL(url);},1000);
-  taskBoardShowSaveToast?.('PNG скачан');
 }
 function taskBoardShowSaveToast(text){
   const state=taskBoardState;
