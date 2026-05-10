@@ -667,8 +667,10 @@ body.view-mode .pt-blank-add-wrap{display:none}
 @media(max-width:720px){.pt-blank-add-btn{padding:13px 12px;font-size:12px}.pt-empty-text{font-size:13px}}
 html,body{margin:0;padding:0}
 body.task-board-lock{overflow:hidden}
-.task-board-overlay{position:fixed;inset:0;width:100vw;height:100dvh;margin:0;padding:0;overflow:hidden;z-index:9999;background:#fff;color:#0f172a;display:none}
-.task-board-overlay.open{display:block;animation:taskBoardOverlayFade .26s ease both}
+body.task-board-lock header,body.task-board-lock .topbar,body.task-board-lock .site-header,body.task-board-lock .app-header,body.task-board-lock .main-header,body.task-board-lock .nav,body.task-board-lock .navbar{z-index:1!important}
+body.task-board-lock header,body.task-board-lock .topbar,body.task-board-lock .site-header,body.task-board-lock .app-header,body.task-board-lock .main-header{pointer-events:none}
+.task-board-overlay{position:fixed;inset:0;width:100vw;height:100vh;margin:0;padding:0;overflow:hidden;z-index:2147483000;background:#fff;color:#0f172a;display:none;pointer-events:none}
+.task-board-overlay.open{display:block;pointer-events:auto;animation:taskBoardOverlayFade .26s ease both}
 .task-board-overlay.open .task-board-shell{animation:taskBoardZoomIn .28s ease both}
 .task-board-shell{position:relative;display:block;width:100%;height:100%;min-width:100%;min-height:100%;margin:0;padding:0;background:#fff;overflow:hidden}
 .task-board-top{display:none}
@@ -726,14 +728,14 @@ body.task-board-lock{overflow:hidden}
 .task-board-static-given{border-left:4px solid #f97316;border-radius:0 12px 12px 0;background:#f8fafc;padding:12px 14px;margin-bottom:12px;font-size:15px;line-height:1.7;color:#475569}
 .task-board-static-given strong{color:#111827}
 .task-board-center{position:relative;display:block;width:100%;height:100%;min-width:100%;min-height:100%;margin:0;padding:0;overflow:hidden}
-.task-board-toolbar{position:absolute;left:54px;top:20px;right:20px;z-index:25;display:flex;align-items:center;justify-content:flex-start;gap:8px;flex-wrap:nowrap;overflow:visible;white-space:nowrap;background:rgba(255,255,255,.94);border:1px solid #dbe5f0;border-radius:18px;padding:10px 12px;box-shadow:0 14px 36px rgba(15,23,42,.08)}
+.task-board-toolbar{position:fixed;left:54px;top:20px;right:20px;z-index:2147483100;pointer-events:auto;display:flex;align-items:center;justify-content:flex-start;gap:8px;flex-wrap:nowrap;overflow:visible;white-space:nowrap;background:rgba(255,255,255,.94);border:1px solid #dbe5f0;border-radius:18px;padding:10px 12px;box-shadow:0 14px 36px rgba(15,23,42,.08)}
 .task-board-toolbar::-webkit-scrollbar{display:none}
 .task-board-dropdown{position:relative;flex:0 0 auto}
 .task-board-dropdown-toggle,.task-board-close-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 12px;border-radius:12px;border:1px solid #cbd5e1;background:#fff;color:#0f172a;font-size:13px;font-weight:800;cursor:pointer;transition:all .18s;font-family:var(--fb);box-shadow:0 10px 24px rgba(15,23,42,.05)}
 .task-board-dropdown-toggle:hover,.task-board-close-btn:hover{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8;box-shadow:0 0 18px rgba(37,99,235,.16);transform:translateY(-1px)}
 .task-board-close-btn{margin-left:auto;color:#dc2626;border-color:#fecaca}
 .task-board-close-btn:hover{background:#fff7ed;border-color:#fdba74;color:#c2410c}
-.task-board-dropdown-menu{position:absolute;top:calc(100% + 8px);left:0;min-width:220px;display:none;flex-direction:column;gap:6px;padding:10px;background:rgba(255,255,255,.98);border:1px solid #dbe5f0;border-radius:14px;box-shadow:0 18px 46px rgba(15,23,42,.16);z-index:100;white-space:normal}
+.task-board-dropdown-menu{position:absolute;top:calc(100% + 8px);left:0;min-width:220px;display:none;flex-direction:column;gap:6px;padding:10px;background:rgba(255,255,255,.98);border:1px solid #dbe5f0;border-radius:14px;box-shadow:0 18px 46px rgba(15,23,42,.16);z-index:2147483200;pointer-events:auto;white-space:normal}
 .task-board-dropdown.open .task-board-dropdown-menu{display:flex}
 .task-board-materials-menu{min-width:190px}
 .task-board-menu-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 4px}
@@ -5647,6 +5649,7 @@ function restoreBoardState(){
   state.strokes=cloneTaskBoardStrokes(data&&data.drawing);
   state.boardObjects=cloneTaskBoardObjects(data&&data.objects);
   state.selectedObjectId=null;
+  state.selectedObjectIds=[];
   state.history=[taskBoardSnapshot()];
   state.historyIndex=0;
   renderBoardObjects();
@@ -6271,7 +6274,13 @@ function ensureTaskBoardOverlay(){
                     <input id="taskBoardSize" class="task-board-size-input" type="range" min="2" max="12" value="4" oninput="taskBoardSetSize(this.value)">
                     <span id="taskBoardSizeValue" class="task-board-size">4 px</span>
                   </div>
-                  <button type="button" class="task-board-clear" onclick="taskBoardClear()">🧹 Очистить</button>
+                  <button
+                    type="button"
+                    class="task-board-clear"
+                    data-board-action="clear"
+                  >
+                    🧹 Очистить
+                  </button>
                   <button type="button" class="task-board-tool" id="taskBoardUndoBtn" onclick="taskBoardUndo()">↶ Назад</button>
                   <button type="button" class="task-board-tool" id="taskBoardRedoBtn" onclick="taskBoardRedo()">↷ Вперёд</button>
                   <button type="button" class="task-board-tool" onclick="taskBoardSaveState(true)">💾 Сохранить</button>
@@ -6384,6 +6393,7 @@ function ensureTaskBoardOverlay(){
     strokes:[],
     boardObjects:[],
     selectedObjectId:null,
+    selectedObjectIds:[],
     history:[{strokes:[],objects:[]}],
     historyIndex:0,
     pointer:null,
@@ -6406,6 +6416,15 @@ function ensureTaskBoardOverlay(){
   document.addEventListener('fullscreenchange',taskBoardResizeCanvas);
   document.addEventListener('webkitfullscreenchange',taskBoardResizeCanvas);
   document.addEventListener('msfullscreenchange',taskBoardResizeCanvas);
+  document.addEventListener('click',function(e){
+    const clearBtn=e.target&&e.target.closest?e.target.closest('[data-board-action="clear"]'):null;
+    if(!clearBtn) return;
+    if(!taskBoardState||!taskBoardState.overlay||!taskBoardState.overlay.classList.contains('open')) return;
+    e.preventDefault();
+    e.stopPropagation();
+    if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+    taskBoardClear();
+  });
   document.addEventListener('click',function(e){
     if(!taskBoardState||!taskBoardState.overlay.classList.contains('open')) return;
     if(taskBoardState.toolbar&&taskBoardState.toolbar.contains(e.target)) return;
@@ -6536,6 +6555,7 @@ function openTaskBoard(mode,requestFullscreen){
   state.strokes=[];
   state.boardObjects=[];
   state.selectedObjectId=null;
+  state.selectedObjectIds=[];
   state.history=[{strokes:[],objects:[]}];
   state.historyIndex=0;
   state.pointer=null;
@@ -6548,8 +6568,11 @@ function openTaskBoard(mode,requestFullscreen){
   state.drawer.classList.toggle('open',showStaticBoardContent||useSolutionWorkspace);
   taskBoardToggleFloating('condition',showStaticBoardContent);
   taskBoardToggleFloating('graph',false);
-  state.overlay.classList.add('open');
   document.body.classList.add('task-board-lock');
+  state.overlay.style.display='block';
+  state.overlay.style.pointerEvents='auto';
+  state.overlay.classList.add('open');
+  state.overlay.setAttribute('aria-hidden','false');
   if(requestFullscreen) taskBoardRequestFullscreen();
   taskBoardCloseDropdowns();
   taskBoardSetTool('pen');
@@ -6560,11 +6583,14 @@ function openTaskBoard(mode,requestFullscreen){
 }
 function closeTaskBoard(){
   const state=ensureTaskBoardOverlay();
+  document.body.classList.remove('task-board-lock');
   state.overlay.classList.remove('open');
+  state.overlay.style.display='none';
+  state.overlay.style.pointerEvents='none';
+  state.overlay.setAttribute('aria-hidden','true');
   state.overlay.classList.remove('solution-workspace-mode');
   state.drawer.classList.remove('open');
   state.pointer=null;
-  document.body.classList.remove('task-board-lock');
   taskBoardExitFullscreen();
   taskBoardToggleFloating('condition',false);
   taskBoardToggleFloating('graph',false);
@@ -6682,17 +6708,29 @@ function taskBoardRedo(){
   taskBoardSaveState(false);
   taskBoardUpdateHistoryButtons();
 }
+function taskBoardEnsureOverlayVisible(){
+  const state=taskBoardState;
+  if(!state||!state.overlay) return;
+  state.overlay.style.display='block';
+  state.overlay.style.pointerEvents='auto';
+  state.overlay.classList.add('open');
+  state.overlay.setAttribute('aria-hidden','false');
+  document.body.classList.add('task-board-lock');
+}
 function taskBoardClear(){
-  const state=ensureTaskBoardOverlay();
-  if(!state.strokes.length&&!state.boardObjects.length) return;
-  if(!confirm('Очистить рисунок и все вставленные картинки?')) return;
+  const state=taskBoardState;
+  if(!state) return;
   state.strokes=[];
   state.boardObjects=[];
   state.selectedObjectId=null;
-  renderBoardObjects();
+  state.selectedObjectIds=[];
+  if(typeof taskBoardClearLasso==='function') taskBoardClearLasso();
+  if(typeof taskBoardHideLaserPointer==='function') taskBoardHideLaserPointer();
   taskBoardPushHistory();
   taskBoardDraw();
+  renderBoardObjects();
   taskBoardSaveState(false);
+  taskBoardEnsureOverlayVisible();
 }
 function taskBoardResizeCanvas(){
   if(!taskBoardState) return;
