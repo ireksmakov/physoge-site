@@ -5513,8 +5513,8 @@ function renderPTasks(name){
           type="button"
           class="pt-board-btn"
           data-board-mode="${boardModeAttr}"
-          onclick="taskBoardOpenFromButton(this,event)"
-          onpointerdown="taskBoardOpenFromButton(this,event)"
+          onclick="return taskBoardButtonClick(event,this)"
+          onpointerup="return taskBoardButtonClick(event,this)"
         >🧑‍🏫 Доска</button>
         ${taskId==='lesson12-task07'
           ? `<button type="button" class="pt-board-btn task07-card-anim-btn" onclick="openTaskAnimation('lesson12-task07')">▶ Анимация процесса</button>`
@@ -6823,7 +6823,7 @@ function taskBoardFindOpenButton(event){
   const el = taskBoardGetEventElement(event);
   return el && el.closest ? el.closest('.pt-board-btn[data-board-mode]') : null;
 }
-function taskBoardOpenFromButton(btn,event){
+function taskBoardButtonClick(event, btn){
   if(event){
     event.preventDefault();
     event.stopPropagation();
@@ -6832,60 +6832,67 @@ function taskBoardOpenFromButton(btn,event){
     }
   }
 
-  if(!btn) return;
-
-  const now = Date.now();
-  if(btn.__taskBoardLastOpen && now - btn.__taskBoardLastOpen < 450) return;
-  btn.__taskBoardLastOpen = now;
+  btn = btn || (event && event.currentTarget);
 
   const mode =
-    btn.getAttribute('data-board-mode') ||
-    (btn.dataset && btn.dataset.boardMode) ||
-    btn.getAttribute('data-task-id') ||
+    btn?.getAttribute?.('data-board-mode') ||
+    btn?.dataset?.boardMode ||
     'default-board';
 
-  console.info('Opening task board:', mode);
+  console.info('[TaskBoard] button click, mode:', mode);
+
   openTaskBoard(mode);
+
+  return false;
+}
+function taskBoardOpenFromButton(btn,event){
+  return taskBoardButtonClick(event,btn);
 }
 function initTaskBoardOpenDelegation(){
   if(document.__taskBoardOpenDelegationReady) return;
   document.__taskBoardOpenDelegationReady = true;
 
-  function handleBoardOpenEvent(event){
-    const btn = taskBoardFindOpenButton(event);
-    if(!btn || btn.disabled) return;
-    taskBoardOpenFromButton(btn,event);
+  function getBoardButton(event){
+    const target = event && event.target;
+    const el = target && target.nodeType === 1 ? target : target?.parentElement;
+    return el && el.closest ? el.closest('.pt-board-btn[data-board-mode]') : null;
   }
 
-  document.addEventListener('pointerdown', handleBoardOpenEvent, true);
-  document.addEventListener('click', handleBoardOpenEvent, true);
+  function handle(event){
+    const btn = getBoardButton(event);
+    if(!btn || btn.disabled) return;
+    taskBoardButtonClick(event, btn);
+  }
+
+  document.addEventListener('pointerup', handle, true);
+  document.addEventListener('click', handle, true);
 }
 initTaskBoardOpenDelegation();
 function openTaskBoard(mode,requestFullscreen=false,taskId=''){
   const state=ensureTaskBoardOverlay();
-  try{
-    if(
-      !state ||
-      !state.overlay ||
-      !state.canvasWrap ||
-      !state.canvas ||
-      !state.condition ||
-      !state.solution
-    ){
-      console.error('Task board overlay was not created correctly', state);
-      resetTaskBoardOverlayState(state);
-      return;
-    }
 
+  if(!state || !state.overlay || !state.canvasWrap || !state.canvas){
+    console.error('[TaskBoard] overlay was not created correctly', state);
+    return;
+  }
+
+  // Сначала показываем доску, чтобы пользователь сразу видел открытие.
+  state.overlay.style.display='block';
+  state.overlay.style.pointerEvents='auto';
+  state.overlay.setAttribute('aria-hidden','false');
+  state.overlay.classList.add('open');
+  document.body.classList.add('task-board-lock');
+
+  try{
     let task=getTaskBoardData(mode);
 
     if(!task){
-      console.warn('Task board data not found, opening empty board:', mode);
+      console.warn('[TaskBoard] data not found, opening empty board:', mode);
       task = typeof createTaskBoardFallbackData === 'function'
         ? createTaskBoardFallbackData(mode,taskId)
         : {
           title:'Доска',
-          cond:'<p>Пустая рабочая доска. Данные задачи не найдены, но доска доступна для работы.</p>',
+          cond:'<p>Пустая рабочая доска.</p>',
           given:'',
           ans:'',
           steps:[],
@@ -6899,12 +6906,12 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
           graphLabel:'Схема'
         };
     }
-    state.mode=mode;
+    state.mode=mode||'default-board';
     state.task=task;
-    if(state.title) state.title.textContent=task.title;
-    state.condition.innerHTML=task.cond;
-    state.graph.innerHTML=getTaskBoardGraph(mode);
-    if(state.graphLabel) state.graphLabel.textContent=task.graphLabel||'График';
+    if(state.title) state.title.textContent=task.title||'Доска';
+    if(state.condition) state.condition.innerHTML=task.cond||'';
+    if(state.graph) state.graph.innerHTML=getTaskBoardGraph(mode)||'';
+    if(state.graphLabel) state.graphLabel.textContent=task.graphLabel||'Схема';
     const isPuckImpulse = mode==='puckImpulse';
     const isExplosion = mode==='explosionFragments';
     const isBlocks = mode==='inelasticBlocks';
@@ -6936,8 +6943,8 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
       state.animBtn.textContent='▶ Анимация';
     }
     const useSolutionWorkspace=!!(hasFilledTaskSolution(task)||hasLegacyTaskSolution(task));
-    state.solution.innerHTML=renderTaskBoardSolution(task);
-    state.answer.innerHTML=task.ans;
+    if(state.solution) state.solution.innerHTML=renderTaskBoardSolution(task);
+    if(state.answer) state.answer.innerHTML=task.ans||'';
     const answerWrap=state.answer?state.answer.closest('.task-board-answer'):null;
     if(answerWrap) answerWrap.style.display=(task.ans&&!useSolutionWorkspace)?'':'none';
     state.strokes=[];
@@ -6957,14 +6964,9 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
     restoreBoardState();
     const showStaticBoardContent=mode==='task07-pendulum-impact';
     state.overlay.classList.toggle('solution-workspace-mode',useSolutionWorkspace);
-    state.drawer.classList.toggle('open',showStaticBoardContent||useSolutionWorkspace);
+    if(state.drawer) state.drawer.classList.toggle('open',showStaticBoardContent||useSolutionWorkspace);
     taskBoardToggleFloating('condition',showStaticBoardContent);
     taskBoardToggleFloating('graph',false);
-    state.overlay.style.display='block';
-    state.overlay.style.pointerEvents='auto';
-    state.overlay.setAttribute('aria-hidden','false');
-    state.overlay.classList.add('open');
-    document.body.classList.add('task-board-lock');
     // Browser Fullscreen API не используем. Доска открывается как fixed overlay.
     taskBoardApplyToolbarPosition();
     taskBoardCloseDropdowns();
@@ -6974,8 +6976,18 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
     taskBoardResizeCanvas();
     toggleTaskBoardAnimation(false);
   }catch(err){
-    console.error('Task board open failed:', err);
-    resetTaskBoardOverlayState(state);
+    console.error('[TaskBoard] open failed after overlay was shown:', err);
+
+    // ВАЖНО: не закрывать overlay полностью.
+    // Показываем пустую доску с сообщением об ошибке.
+    if(state.condition){
+      state.condition.innerHTML=
+        '<p>Доска открыта, но данные задачи не загрузились. Можно пользоваться пустой доской.</p>';
+    }
+    if(state.solution){
+      state.solution.innerHTML=
+        '<div class="pt-empty-text">Решение не загрузилось из-за ошибки в данных задачи.</div>';
+    }
   }
 }
 function closeTaskBoard(){
