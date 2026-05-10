@@ -6515,49 +6515,50 @@ function ensureTaskBoardOverlay(){
             <div class="task-board-toolbar" id="taskBoardToolbar">
               <button type="button" class="task-board-toolbar-drag" id="taskBoardToolbarDrag" aria-label="Перетащить панель доски" title="Перетащить панель доски">⋮⋮</button>
               <div class="task-board-dropdown" data-dropdown-name="tools">
-                <button type="button" class="task-board-dropdown-toggle" data-task-board-dropdown="tools" aria-haspopup="true" aria-expanded="false">🧰 Инструменты ▼</button>
+                <button type="button" class="task-board-dropdown-toggle" data-task-board-dropdown="tools" onclick="taskBoardToggleDropdown('tools'); return false;" aria-haspopup="true" aria-expanded="false">🧰 Инструменты ▼</button>
                 <div class="task-board-dropdown-menu">
-                  <button type="button" class="task-board-tool active" data-board-action="tool" data-tool="pen" data-board-tool="pen">✏️ Карандаш</button>
-                  <button type="button" class="task-board-tool" data-board-action="tool" data-tool="eraser" data-board-tool="eraser">⌫ Ластик</button>
-                  <button type="button" class="task-board-tool" data-board-action="tool" data-tool="lasso" data-board-tool="lasso">⛶ Лассо</button>
-                  <button type="button" class="task-board-tool" data-board-action="tool" data-tool="move" data-board-tool="move">✋ Перемещение</button>
-                  <button type="button" class="task-board-tool" data-board-action="tool" data-tool="mouse" data-board-tool="mouse">🖱 Мышь</button>
-                  <button type="button" class="task-board-tool" data-board-action="tool" data-tool="text" data-board-tool="text">T Текст</button>
-                  <button type="button" class="task-board-tool" data-board-action="tool" data-tool="pointer" data-board-tool="pointer">☝ Указка</button>
+                  <button type="button" class="task-board-tool active" data-board-action="tool" data-tool="pen" data-board-tool="pen" onclick="taskBoardSetTool('pen'); taskBoardCloseDropdowns(); return false;">✏️ Карандаш</button>
+                  <button type="button" class="task-board-tool" data-board-action="tool" data-tool="eraser" data-board-tool="eraser" onclick="taskBoardSetTool('eraser'); taskBoardCloseDropdowns(); return false;">⌫ Ластик</button>
+                  <button type="button" class="task-board-tool" data-board-action="tool" data-tool="lasso" data-board-tool="lasso" onclick="taskBoardSetTool('lasso'); taskBoardCloseDropdowns(); return false;">⛶ Лассо</button>
+                  <button type="button" class="task-board-tool" data-board-action="tool" data-tool="move" data-board-tool="move" onclick="taskBoardSetTool('move'); taskBoardCloseDropdowns(); return false;">✋ Перемещение</button>
+                  <button type="button" class="task-board-tool" data-board-action="tool" data-tool="mouse" data-board-tool="mouse" onclick="taskBoardSetTool('mouse'); taskBoardCloseDropdowns(); return false;">🖱 Мышь</button>
+                  <button type="button" class="task-board-tool" data-board-action="tool" data-tool="text" data-board-tool="text" onclick="taskBoardSetTool('text'); taskBoardCloseDropdowns(); return false;">T Текст</button>
+                  <button type="button" class="task-board-tool" data-board-action="tool" data-tool="pointer" data-board-tool="pointer" onclick="taskBoardSetTool('pointer'); taskBoardCloseDropdowns(); return false;">☝ Указка</button>
                   <button
                     type="button"
                     class="task-board-tool task-board-colors-toggle"
                     data-board-action="colors"
+                    onclick="taskBoardToggleColors(); return false;"
                   >
                     🎨 Цвета <span id="taskBoardColorDot" class="task-board-color-dot" aria-hidden="true"></span>
                   </button>
                   <div class="task-board-color-palette" aria-label="Палитра доски">
-                    <button type="button" class="task-board-color active" data-board-color="#0f172a" style="--sw:#0f172a" aria-label="Чёрный цвет" title="Чёрный"></button>
-                    <button type="button" class="task-board-color" data-board-color="#2563eb" style="--sw:#2563eb" aria-label="Синий цвет" title="Синий"></button>
-                    <button type="button" class="task-board-color" data-board-color="#dc2626" style="--sw:#dc2626" aria-label="Красный цвет" title="Красный"></button>
-                    <button type="button" class="task-board-color" data-board-color="#16a34a" style="--sw:#16a34a" aria-label="Зелёный цвет" title="Зелёный"></button>
+                    <button type="button" class="task-board-color active" data-board-color="#0f172a" style="--sw:#0f172a" onclick="taskBoardSetColor('#0f172a'); return false;" aria-label="Чёрный цвет" title="Чёрный"></button>
+                    <button type="button" class="task-board-color" data-board-color="#2563eb" style="--sw:#2563eb" onclick="taskBoardSetColor('#2563eb'); return false;" aria-label="Синий цвет" title="Синий"></button>
+                    <button type="button" class="task-board-color" data-board-color="#dc2626" style="--sw:#dc2626" onclick="taskBoardSetColor('#dc2626'); return false;" aria-label="Красный цвет" title="Красный"></button>
+                    <button type="button" class="task-board-color" data-board-color="#16a34a" style="--sw:#16a34a" onclick="taskBoardSetColor('#16a34a'); return false;" aria-label="Зелёный цвет" title="Зелёный"></button>
                   </div>
                   <div class="task-board-menu-row">
                     <span class="task-board-menu-label">Толщина:</span>
-                    <input id="taskBoardSize" class="task-board-size-input" type="range" data-board-size min="1" max="20" value="4">
+                    <input id="taskBoardSize" class="task-board-size-input" type="range" data-board-size min="1" max="20" value="4" oninput="taskBoardSetSize(this.value)">
                     <span id="taskBoardSizeValue" class="task-board-size">4 px</span>
                   </div>
-                  <button type="button" class="task-board-clear" data-board-action="clear">🧹 Очистить</button>
-                  <button type="button" class="task-board-tool" id="taskBoardUndoBtn" data-board-action="undo">↶ Назад</button>
-                  <button type="button" class="task-board-tool" id="taskBoardRedoBtn" data-board-action="redo">↷ Вперёд</button>
-                  <button type="button" class="task-board-tool" data-board-action="save">💾 Сохранить</button>
+                  <button type="button" class="task-board-clear" data-board-action="clear" onclick="taskBoardClear(); return false;">🧹 Очистить</button>
+                  <button type="button" class="task-board-tool" id="taskBoardUndoBtn" data-board-action="undo" onclick="taskBoardUndo(); return false;">↶ Назад</button>
+                  <button type="button" class="task-board-tool" id="taskBoardRedoBtn" data-board-action="redo" onclick="taskBoardRedo(); return false;">↷ Вперёд</button>
+                  <button type="button" class="task-board-tool" data-board-action="save" onclick="taskBoardSaveState(true); return false;">💾 Сохранить</button>
                 </div>
               </div>
               <div class="task-board-dropdown" data-dropdown-name="materials">
-                <button type="button" class="task-board-dropdown-toggle" data-task-board-dropdown="materials" aria-haspopup="true" aria-expanded="false">📂 Материалы ▼</button>
+                <button type="button" class="task-board-dropdown-toggle" data-task-board-dropdown="materials" onclick="taskBoardToggleDropdown('materials'); return false;" aria-haspopup="true" aria-expanded="false">📂 Материалы ▼</button>
                 <div class="task-board-dropdown-menu task-board-materials-menu">
-                  <button type="button" id="taskBoardConditionBtn" class="task-board-tool" data-board-material="condition">📄 Условие</button>
-                  <button type="button" id="taskBoardGraphBtn" class="task-board-tool" data-board-material="graph">🧩 Схема</button>
-                  <button type="button" class="task-board-tool" id="taskBoardAnimBtn" data-board-material="animation">▶ Анимация</button>
-                  <button type="button" class="task-board-tool" data-board-material="solution">✅ Решение</button>
+                  <button type="button" id="taskBoardConditionBtn" class="task-board-tool" data-board-material="condition" onclick="toggleTaskBoardCondition(); taskBoardCloseDropdowns(); return false;">📄 Условие</button>
+                  <button type="button" id="taskBoardGraphBtn" class="task-board-tool" data-board-material="graph" onclick="toggleTaskBoardGraph(); taskBoardCloseDropdowns(); return false;">🧩 Схема</button>
+                  <button type="button" class="task-board-tool" id="taskBoardAnimBtn" data-board-material="animation" onclick="toggleTaskBoardAnimation(); taskBoardCloseDropdowns(); return false;">▶ Анимация</button>
+                  <button type="button" class="task-board-tool" data-board-material="solution" onclick="toggleTaskBoardSolution(); taskBoardCloseDropdowns(); return false;">✅ Решение</button>
                 </div>
               </div>
-              <button type="button" class="task-board-close-btn" data-board-close="true">✕ Закрыть</button>
+              <button type="button" class="task-board-close-btn" data-board-close="true" onclick="closeTaskBoard(); return false;">✕ Закрыть</button>
             </div>
             <div id="taskBoardCanvasWrap" class="task-board-canvas-wrap pen-mode">
               <div class="task-board-condition-drawer task-board-float open" id="taskBoardConditionDrawer">
@@ -6816,46 +6817,31 @@ function taskBoardInitToolbarDrag(state){
     window.addEventListener('pointercancel',end,true);
   });
 }
-function taskBoardHasOpenDropdown(){
-  const state=taskBoardState;
-  return !!(state&&state.toolbar&&state.toolbar.querySelector('.task-board-dropdown.open'));
-}
-function taskBoardCloseDropdowns(){
-  const state=taskBoardState;
-  if(!state||!state.toolbar) return;
-  state.toolbar.querySelectorAll('.task-board-dropdown.open').forEach(function(drop){drop.classList.remove('open');});
-  state.toolbar.querySelectorAll('.task-board-dropdown-toggle[aria-expanded]').forEach(function(btn){btn.setAttribute('aria-expanded','false');});
-}
 function taskBoardBindToolbarControls(state){
   if(!state || !state.toolbar || state.toolbar.__controlsReady) return;
-  state.toolbar.__controlsReady = true;
 
   const toolbar = state.toolbar;
+  state.toolbar.__controlsReady = true;
 
-  toolbar.addEventListener('pointerdown', function(e){
-    const ui = e.target && e.target.closest
-      ? e.target.closest('button, input, textarea, select, .task-board-dropdown-menu, .task-board-dropdown-toggle')
-      : null;
+  function stopToolbarPointer(e){
+    const target = e.target;
+    if(!target || !target.closest) return;
 
-    if(!ui) return;
-
-    // Не даём canvas/drag-слоям перехватить нажатие по кнопкам панели.
-    e.stopPropagation();
-  }, true);
-
-  toolbar.addEventListener('pointerup', function(e){
-    const ui = e.target && e.target.closest
-      ? e.target.closest('button, input, textarea, select, .task-board-dropdown-menu, .task-board-dropdown-toggle')
-      : null;
+    const ui = target.closest(
+      'button, input, textarea, select, .task-board-dropdown, .task-board-dropdown-menu, .task-board-dropdown-toggle'
+    );
 
     if(!ui) return;
 
+    // Не даём canvas и drag-слоям перехватить нажатие по кнопкам панели.
     e.stopPropagation();
-  }, true);
+  }
+
+  toolbar.addEventListener('pointerdown', stopToolbarPointer, true);
+  toolbar.addEventListener('pointerup', stopToolbarPointer, true);
 
   toolbar.addEventListener('click', function(e){
     const target = e.target;
-
     if(!target || !target.closest) return;
 
     const dropdownToggle = target.closest('[data-task-board-dropdown]');
@@ -6876,7 +6862,11 @@ function taskBoardBindToolbarControls(state){
       const action = actionBtn.getAttribute('data-board-action');
 
       if(action === 'tool'){
-        const tool = actionBtn.getAttribute('data-tool') || actionBtn.getAttribute('data-board-tool') || 'pen';
+        const tool =
+          actionBtn.getAttribute('data-tool') ||
+          actionBtn.getAttribute('data-board-tool') ||
+          'pen';
+
         taskBoardSetTool(tool);
         taskBoardCloseDropdowns();
         return;
@@ -6906,6 +6896,16 @@ function taskBoardBindToolbarControls(state){
         taskBoardSaveState(true);
         return;
       }
+    }
+
+    const colorBtn = target.closest('[data-board-color]');
+    if(colorBtn){
+      e.preventDefault();
+      e.stopPropagation();
+
+      const color = colorBtn.getAttribute('data-board-color');
+      taskBoardSetColor(color);
+      return;
     }
 
     const materialBtn = target.closest('[data-board-material]');
@@ -6940,22 +6940,6 @@ function taskBoardBindToolbarControls(state){
       }
     }
 
-    const colorBtn = target.closest('[data-board-color]');
-    if(colorBtn){
-      e.preventDefault();
-      e.stopPropagation();
-
-      const color = colorBtn.getAttribute('data-board-color');
-      taskBoardSetColor(color);
-
-      toolbar.querySelectorAll('[data-board-color]').forEach(function(btn){
-        btn.classList.remove('active');
-      });
-
-      colorBtn.classList.add('active');
-      return;
-    }
-
     const closeBtn = target.closest('[data-board-close]');
     if(closeBtn){
       e.preventDefault();
@@ -6967,17 +6951,29 @@ function taskBoardBindToolbarControls(state){
   }, true);
 
   toolbar.addEventListener('input', function(e){
-    const sizeInput = e.target && e.target.closest
+    const input = e.target && e.target.closest
       ? e.target.closest('[data-board-size]')
       : null;
 
-    if(!sizeInput) return;
+    if(!input) return;
 
     e.stopPropagation();
 
-    const size = Number(sizeInput.value) || 4;
+    const size = Number(input.value) || 4;
     taskBoardSetSize(size);
   }, true);
+}
+
+
+function taskBoardHasOpenDropdown(){
+  const state=taskBoardState;
+  return !!(state&&state.toolbar&&state.toolbar.querySelector('.task-board-dropdown.open'));
+}
+function taskBoardCloseDropdowns(){
+  const state=taskBoardState;
+  if(!state||!state.toolbar) return;
+  state.toolbar.querySelectorAll('.task-board-dropdown.open').forEach(function(drop){drop.classList.remove('open');});
+  state.toolbar.querySelectorAll('.task-board-dropdown-toggle[aria-expanded]').forEach(function(btn){btn.setAttribute('aria-expanded','false');});
 }
 function taskBoardIsUiTarget(target){
   return !!(
@@ -7010,10 +7006,11 @@ function taskBoardHandleActionClick(e){
   e.stopPropagation();
   const action=btn.getAttribute('data-board-action');
   if(action==='tool'){
-    taskBoardSetTool(btn.getAttribute('data-tool'));
+    taskBoardSetTool(btn.getAttribute('data-tool')||btn.getAttribute('data-board-tool')||'pen');
     taskBoardCloseDropdowns();
     return;
   }
+  if(action==='colors'){taskBoardToggleColors();return;}
   if(action==='clear'){taskBoardClear();return;}
   if(action==='undo'){taskBoardUndo();return;}
   if(action==='redo'){taskBoardRedo();return;}
