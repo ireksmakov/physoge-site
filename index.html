@@ -628,8 +628,8 @@ body.edit-mode .et{display:inline}
 
 /* ===== TASK 07 PENDULUM IMPACT ANIMATION ===== */
 .task07-anim-lock{overflow:hidden}
-.task-board-animation-overlay,.task07-anim-overlay{position:fixed;inset:0;z-index:2147483600;display:none;pointer-events:none;background:radial-gradient(circle at 18% 12%,rgba(0,229,255,.16),transparent 34%),radial-gradient(circle at 78% 18%,rgba(255,140,0,.16),transparent 30%),rgba(2,6,23,.94);backdrop-filter:blur(10px);color:var(--white);padding:18px;box-sizing:border-box}
-.task-board-animation-overlay.open,.task07-anim-overlay.open{display:flex;pointer-events:auto;animation:taskBoardOverlayFade .24s ease both}
+.task-board-animation-overlay,.task-animation-overlay,.task07-anim-overlay{position:fixed;inset:0;z-index:2147483600;display:none;pointer-events:none;background:radial-gradient(circle at 18% 12%,rgba(0,229,255,.16),transparent 34%),radial-gradient(circle at 78% 18%,rgba(255,140,0,.16),transparent 30%),rgba(2,6,23,.94);backdrop-filter:blur(10px);color:var(--white);padding:18px;box-sizing:border-box}
+.task-board-animation-overlay.open,.task-animation-overlay.open,.task07-anim-overlay.open{display:block;pointer-events:auto;animation:taskBoardOverlayFade .24s ease both}
 .task07-anim-modal{width:min(1180px,100%);height:min(820px,100%);margin:auto;display:flex;flex-direction:column;gap:14px;background:linear-gradient(180deg,rgba(11,18,32,.98),rgba(5,10,20,.98));border:1px solid rgba(0,229,255,.24);border-radius:24px;box-shadow:0 34px 90px rgba(0,0,0,.52),0 0 60px rgba(0,229,255,.12);overflow:hidden}
 .task07-anim-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:18px 20px 0}
 .task07-anim-kicker{font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:var(--cyan);margin-bottom:5px}
@@ -6889,7 +6889,7 @@ function ensureTaskBoardOverlay(){
     taskBoardCloseDropdowns();
   });
   document.addEventListener('keydown',function(e){
-    const anim=document.getElementById('task07AnimationOverlay')||document.getElementById('taskBoardAnimationOverlay')||document.querySelector('.task-board-animation-overlay');
+    const anim=document.getElementById('taskBoardAnimationOverlay')||document.getElementById('task07AnimationOverlay')||document.querySelector('.task-board-animation-overlay')||document.querySelector('.task-animation-overlay');
     if(e.key==='Escape'&&anim&&anim.classList.contains('open')){
       e.preventDefault();
       e.stopPropagation();
@@ -7093,8 +7093,17 @@ function closeTaskBoard(){
   taskBoardToggleFloating('condition',false);
   taskBoardToggleFloating('graph',false);
   toggleTaskBoardSolution(false);
-  if(state.task&&(state.task.id==='lesson12-task07'||state.mode==='task07-pendulum-impact')) closeTask07Animation({keepBoard:false});
-  else toggleTaskBoardAnimation(false);
+  if(state.task&&(state.task.id==='lesson12-task07'||state.mode==='task07-pendulum-impact')){
+    const anim=document.getElementById('taskBoardAnimationOverlay')||document.getElementById('task07AnimationOverlay')||document.querySelector('.task-board-animation-overlay')||document.querySelector('.task-animation-overlay');
+    if(task07AnimationState){ task07AnimationState.running=false; cancelAnimationFrame(task07AnimationState.raf); task07AnimationState.last=0; }
+    if(anim){
+      anim.classList.remove('open');
+      anim.style.display='none';
+      anim.style.pointerEvents='none';
+      anim.setAttribute('aria-hidden','true');
+    }
+    document.body.classList.remove('task07-anim-lock');
+  }else toggleTaskBoardAnimation(false);
   taskBoardCloseDropdowns();
 }
 function taskBoardHideFloating(kind){
@@ -7808,7 +7817,7 @@ function openTaskAnimation(taskId){
     taskBoardState.overlay.setAttribute('aria-hidden','false');
     document.body.classList.add('task-board-lock');
   }
-  overlay.style.display='flex';
+  overlay.style.display='block';
   overlay.style.pointerEvents='auto';
   overlay.classList.add('open');
   overlay.setAttribute('aria-hidden','false');
@@ -7928,37 +7937,47 @@ function resetTask07Animation(autoplay){
   const btn=document.getElementById('task07AnimPlayBtn'); if(btn) btn.textContent='▶ Старт';
   if(autoplay) playTask07Animation();
 }
-function closeTaskBoardAnimation(options){
-  const keepBoard=!(options&&options.keepBoard===false);
+function closeTaskBoardAnimation(){
   const state=taskBoardState;
   const animState=task07AnimationState;
   if(animState){ animState.running=false; cancelAnimationFrame(animState.raf); animState.last=0; }
-  const anim=document.getElementById('task07AnimationOverlay')||document.getElementById('taskBoardAnimationOverlay')||document.querySelector('.task-board-animation-overlay');
-  const shouldRestoreBoard=!!(state&&state.overlay&&(state.overlay.classList.contains('open')||(anim&&anim.dataset.keepTaskBoard==='true')));
+
+  const anim=
+    document.getElementById('taskBoardAnimationOverlay')||
+    document.getElementById('task07AnimationOverlay')||
+    document.querySelector('.task-board-animation-overlay')||
+    document.querySelector('.task-animation-overlay');
+
   if(anim){
     anim.classList.remove('open');
     anim.style.display='none';
     anim.style.pointerEvents='none';
     anim.setAttribute('aria-hidden','true');
   }
+
   document.body.classList.remove('task07-anim-lock');
-  if(!keepBoard) return;
-  if(shouldRestoreBoard){
+
+  // ВАЖНО: вернуть пользователя на доску, не меняя маршрут и не закрывая доску.
+  if(state&&state.overlay){
     state.overlay.style.display='block';
     state.overlay.style.pointerEvents='auto';
     state.overlay.classList.add('open');
     state.overlay.setAttribute('aria-hidden','false');
+
     document.body.classList.add('task-board-lock');
-    if(typeof taskBoardResizeCanvas==='function') taskBoardResizeCanvas();
-    if(typeof taskBoardUpdateCanvasSurface==='function') taskBoardUpdateCanvasSurface();
-    if(typeof renderBoardObjects==='function') renderBoardObjects();
+
+    requestAnimationFrame(function(){
+      taskBoardResizeCanvas?.();
+      taskBoardRedraw?.();
+      taskBoardRenderObjects?.();
+    });
   }
 }
-function closeTask07Animation(options){
-  closeTaskBoardAnimation(options);
+function closeTask07Animation(){
+  closeTaskBoardAnimation();
 }
-function closeTaskAnimation(options){
-  closeTaskBoardAnimation(options);
+function closeTaskAnimation(){
+  closeTaskBoardAnimation();
 }
 function updateTask07Animation(progress){
   const state=task07AnimationState; if(!state||!state.svg) return;
@@ -8003,14 +8022,40 @@ function updateTask07Animation(progress){
 function toggleTaskBoardAnimation(force){
   const state=ensureTaskBoardOverlay();
   if(state.task&&(state.task.id==='lesson12-task07'||state.mode==='task07-pendulum-impact')){
-    const anim=document.getElementById('task07AnimationOverlay')||document.getElementById('taskBoardAnimationOverlay')||document.querySelector('.task-board-animation-overlay');
+    let anim=
+      document.getElementById('taskBoardAnimationOverlay')||
+      document.getElementById('task07AnimationOverlay')||
+      document.querySelector('.task-board-animation-overlay')||
+      document.querySelector('.task-animation-overlay');
     const isOpen=!!(anim&&anim.classList.contains('open'));
     const shouldOpen=typeof force==='boolean'?force:!isOpen;
+
     if(shouldOpen){
+      // Доску НЕ закрывать: анимация открывается поверх неё.
+      if(state&&state.overlay){
+        state.overlay.style.display='block';
+        state.overlay.style.pointerEvents='auto';
+        state.overlay.classList.add('open');
+        state.overlay.setAttribute('aria-hidden','false');
+        document.body.classList.add('task-board-lock');
+      }
+
       openTaskAnimation('lesson12-task07');
-    }else{
-      closeTaskBoardAnimation();
+      anim=
+        document.getElementById('taskBoardAnimationOverlay')||
+        document.getElementById('task07AnimationOverlay')||
+        document.querySelector('.task-board-animation-overlay')||
+        document.querySelector('.task-animation-overlay');
+      if(anim){
+        anim.style.display='block';
+        anim.style.pointerEvents='auto';
+        anim.classList.add('open');
+        anim.setAttribute('aria-hidden','false');
+      }
+      return;
     }
+
+    closeTaskBoardAnimation();
     return;
   }
   if(!state.task||state.task.hasAnimation===false){
