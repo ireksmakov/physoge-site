@@ -3307,6 +3307,10 @@ function restoreTaskBoardAfterRefresh(){
   if(window.__taskBoardRestoreAttempted) return;
   window.__taskBoardRestoreAttempted = true;
 
+  sessionStorage.removeItem('fizmat_task_animation_open');
+  sessionStorage.removeItem('task_animation_open');
+  sessionStorage.removeItem('board_animation_open');
+
   let saved = null;
 
   try{
@@ -3319,20 +3323,31 @@ function restoreTaskBoardAfterRefresh(){
 
   if(saved.route && window.location.hash !== saved.route){
     history.replaceState(null, '', saved.route);
-
-    if(saved.route.startsWith('#course/')){
-      const {courseKey, moduleIndex, lessonIndex, tabId} = parseCourseRoute(saved.route);
-      openCourse(courseKey, moduleIndex, lessonIndex, tabId);
-    }
   }
 
-  setTimeout(() => {
+  requestAnimationFrame(() => {
     try{
       openTaskBoard(saved.mode || 'default-board', false, saved.taskId || '');
+
+      // После обновления нужно вернуть только доску, не окно анимации.
+      closeTaskBoardAnimation?.();
+
+      const state = taskBoardState;
+      if(state && state.overlay){
+        state.overlay.style.display = 'block';
+        state.overlay.style.pointerEvents = 'auto';
+        state.overlay.classList.add('open');
+        state.overlay.setAttribute('aria-hidden','false');
+        document.body.classList.add('task-board-lock');
+      }
+
+      taskBoardResizeCanvas?.();
+      taskBoardRedraw?.();
+      taskBoardRenderObjects?.();
     }catch(err){
       console.error('Failed to restore task board after refresh:', err);
     }
-  }, 300);
+  });
 }
 function readLastCourseLessons(){
   try{
@@ -8186,6 +8201,21 @@ function toggleTaskBoardAnimation(force){
     const shouldOpen=typeof force==='boolean'?force:!isOpen;
 
     if(shouldOpen){
+      if(taskBoardState){
+        try{
+          sessionStorage.setItem('fizmat_task_board_open', JSON.stringify({
+            isOpen: true,
+            route: window.location.hash,
+            mode: taskBoardState.mode || taskBoardState.boardMode || 'default-board',
+            taskId: taskBoardState.taskId || '',
+            time: Date.now(),
+            restoreToBoardOnly: true
+          }));
+        }catch(err){
+          console.warn('Не удалось сохранить состояние доски перед открытием анимации:', err);
+        }
+      }
+
       // Доску НЕ закрывать: анимация открывается поверх неё.
       if(state&&state.overlay){
         state.overlay.style.display='block';
@@ -8232,6 +8262,20 @@ function toggleTaskBoardAnimation(force){
   state.drawer.classList.toggle('anim-hidden',open);
   if(state.animBtn) state.animBtn.textContent=open?'✕ Анимация':'▶ Анимация';
   if(open){
+    if(taskBoardState){
+      try{
+        sessionStorage.setItem('fizmat_task_board_open', JSON.stringify({
+          isOpen: true,
+          route: window.location.hash,
+          mode: taskBoardState.mode || taskBoardState.boardMode || 'default-board',
+          taskId: taskBoardState.taskId || '',
+          time: Date.now(),
+          restoreToBoardOnly: true
+        }));
+      }catch(err){
+        console.warn('Не удалось сохранить состояние доски перед открытием анимации:', err);
+      }
+    }
     state.simPopup.scrollTop=0;
     taskBoardSimReset(true);
     taskBoardSimResize();
