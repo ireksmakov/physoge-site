@@ -727,28 +727,43 @@ body.task-board-lock{overflow:hidden}
 .task-board-static-given{border-left:4px solid #f97316;border-radius:0 12px 12px 0;background:#f8fafc;padding:12px 14px;margin-bottom:12px;font-size:15px;line-height:1.7;color:#475569}
 .task-board-static-given strong{color:#111827}
 .task-board-center{position:relative;display:block;width:100%;height:100%;min-width:100%;min-height:100%;margin:0;padding:0;overflow:visible}
-.task-board-toolbar{position:fixed;z-index:20080;pointer-events:auto;top:16px;left:16px;width:auto;max-width:calc(100vw - 32px);display:flex;visibility:visible;opacity:1;align-items:center;justify-content:flex-start;gap:6px;flex-wrap:nowrap;overflow:visible;white-space:nowrap;padding:6px;border:1px solid rgba(219,229,240,.92);border-radius:16px;background:rgba(255,255,255,.94);box-shadow:0 12px 34px rgba(15,23,42,.18);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);user-select:none}
+.task-board-toolbar{position:fixed;z-index:30000 !important;pointer-events:auto !important;top:16px;left:16px;width:auto;max-width:calc(100vw - 32px);display:flex;visibility:visible;opacity:1;align-items:center;justify-content:flex-start;gap:6px;flex-wrap:nowrap;overflow:visible;white-space:nowrap;padding:6px;border:1px solid rgba(219,229,240,.92);border-radius:16px;background:rgba(255,255,255,.94);box-shadow:0 12px 34px rgba(15,23,42,.18);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);user-select:none}
 .task-board-toolbar::-webkit-scrollbar{display:none}
 .task-board-toolbar-drag{width:26px;height:34px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;border:0;border-radius:12px;background:rgba(241,245,249,.86);color:#64748b;font-size:18px;font-weight:900;line-height:1;cursor:grab;touch-action:none;user-select:none;font-family:var(--fb)}
 .task-board-toolbar-drag:hover{background:#e0f2fe;color:#1d4ed8}
 .task-board-toolbar-drag:active,.task-board-toolbar.dragging .task-board-toolbar-drag{cursor:grabbing;background:#dbeafe;color:#1d4ed8}
-.task-board-dropdown{position:relative;z-index:20090;pointer-events:auto;flex:0 0 auto}
+.task-board-dropdown{position:relative;z-index:30010 !important;pointer-events:auto !important;flex:0 0 auto}
 .task-board-dropdown-toggle,.task-board-close-btn{position:relative;z-index:20090;pointer-events:auto;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 10px;border-radius:12px;border:1px solid #cbd5e1;background:#fff;color:#0f172a;font-size:13px;font-weight:800;cursor:pointer;transition:all .18s;font-family:var(--fb);box-shadow:0 10px 24px rgba(15,23,42,.05);white-space:nowrap}
 .task-board-dropdown-toggle:hover,.task-board-close-btn:hover{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8;box-shadow:0 0 18px rgba(37,99,235,.16);transform:translateY(-1px)}
 .task-board-close-btn{margin-left:0;color:#dc2626;border-color:#fecaca}
 .task-board-close-btn:hover{background:#fff7ed;border-color:#fdba74;color:#c2410c}
-.task-board-dropdown-menu{position:absolute;top:calc(100% + 8px);left:0;min-width:220px;max-width:calc(100vw - 16px);display:none;flex-direction:column;gap:6px;padding:10px;background:rgba(255,255,255,.98);border:1px solid #dbe5f0;border-radius:14px;box-shadow:0 18px 46px rgba(15,23,42,.16);z-index:20100;pointer-events:auto;white-space:normal}
+.task-board-dropdown-menu{position:absolute;top:calc(100% + 8px);left:0;min-width:220px;max-width:calc(100vw - 16px);display:none;flex-direction:column;gap:6px;padding:10px;background:rgba(255,255,255,.98);border:1px solid #dbe5f0;border-radius:14px;box-shadow:0 18px 46px rgba(15,23,42,.16);z-index:30020 !important;pointer-events:auto !important;white-space:normal}
 .task-board-dropdown.align-right .task-board-dropdown-menu{left:auto;right:0}
 .task-board-dropdown.open .task-board-dropdown-menu{display:flex}
-.task-board-dropdown-menu button,.task-board-toolbar button,.task-board-toolbar input{pointer-events:auto;cursor:pointer}
+.task-board-dropdown-menu button,.task-board-toolbar button,.task-board-toolbar input{pointer-events:auto !important;cursor:pointer}
 .task-board-toolbar button,
 .task-board-toolbar input,
 .task-board-dropdown-toggle,
 .task-board-close-btn{
-  pointer-events:auto;
+  pointer-events:auto !important;
+  cursor:pointer;
   touch-action:manipulation;
   position:relative;
-  z-index:20110;
+  z-index:30030 !important;
+}
+
+.task-board-dropdown-menu button{
+  pointer-events:auto !important;
+  cursor:pointer;
+  touch-action:manipulation;
+  position:relative;
+  z-index:30030 !important;
+}
+.task-board-canvas-wrap,
+.task-board-canvas,
+.task-board-object-layer,
+.task-board-lasso-layer{
+  z-index:1;
 }
 .task-board-materials-menu{min-width:190px}
 .task-board-menu-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 4px}
@@ -6959,6 +6974,12 @@ function taskBoardBindToolbarControls(state){
     if(!control) return;
 
     e.stopPropagation();
+
+    if(taskBoardWasHardToolbarPointerHandled(control)){
+      markPointerToolbarAction();
+      return;
+    }
+
     if(handleToolbarControl(e)){
       markPointerToolbarAction();
     }
@@ -6970,7 +6991,6 @@ function taskBoardBindToolbarControls(state){
     if(Date.now() - toolbar.__lastPointerToolbarAction < 700){
       e.preventDefault();
       e.stopPropagation();
-      if(e.stopImmediatePropagation) e.stopImmediatePropagation();
       return;
     }
 
@@ -6990,6 +7010,121 @@ function taskBoardBindToolbarControls(state){
     taskBoardSetSize(size);
   }, true);
 }
+
+function taskBoardWasHardToolbarPointerHandled(control){
+  const handled = window.__taskBoardHardToolbarLastControl;
+  return !!(
+    control &&
+    handled &&
+    handled.control === control &&
+    Date.now() - handled.time < 700
+  );
+}
+function taskBoardHardHandleToolbarPointerDown(e){
+  const target = e.target;
+  if(!target || !target.closest) return;
+  const isToolbarClick = target.closest(
+    '.task-board-toolbar, .task-board-dropdown-menu, .task-board-dropdown, .task-board-close-btn'
+  );
+  if(!isToolbarClick) return;
+  const control = target.closest(
+    '[data-task-board-dropdown], [data-board-action], [data-board-material], [data-board-color], [data-board-close], input[data-board-size], button'
+  );
+  if(!control) return;
+  e.preventDefault();
+  e.stopPropagation();
+  window.__taskBoardHardToolbarLastControl = {control: control, time: Date.now()};
+  const toolbar = control.closest('.task-board-toolbar');
+  if(toolbar) toolbar.__lastPointerToolbarAction = Date.now();
+  taskBoardHandleToolbarControl(control, e);
+}
+function taskBoardHandleToolbarControl(control, e){
+  if(!control) return;
+  const dropdown = control.closest('[data-task-board-dropdown]');
+  if(dropdown){
+    const name = dropdown.getAttribute('data-task-board-dropdown');
+    taskBoardToggleDropdown(name);
+    return;
+  }
+  const closeBtn = control.closest('[data-board-close]');
+  if(closeBtn){
+    closeTaskBoard();
+    return;
+  }
+  const actionBtn = control.closest('[data-board-action]');
+  if(actionBtn){
+    const action = actionBtn.getAttribute('data-board-action');
+    if(action === 'tool'){
+      const tool = actionBtn.getAttribute('data-tool') || actionBtn.getAttribute('data-board-tool') || 'pen';
+      taskBoardSetTool(tool);
+      taskBoardCloseDropdowns();
+      return;
+    }
+    if(action === 'colors'){
+      taskBoardToggleColors();
+      return;
+    }
+    if(action === 'clear'){
+      taskBoardClear();
+      return;
+    }
+    if(action === 'undo'){
+      taskBoardUndo();
+      return;
+    }
+    if(action === 'redo'){
+      taskBoardRedo();
+      return;
+    }
+    if(action === 'save'){
+      taskBoardSaveState(true);
+      return;
+    }
+  }
+  const colorBtn = control.closest('[data-board-color]');
+  if(colorBtn){
+    const color = colorBtn.getAttribute('data-board-color');
+    taskBoardSetColor(color);
+    return;
+  }
+  const materialBtn = control.closest('[data-board-material]');
+  if(materialBtn){
+    const material = materialBtn.getAttribute('data-board-material');
+    if(material === 'condition'){
+      toggleTaskBoardCondition();
+      taskBoardCloseDropdowns();
+      return;
+    }
+    if(material === 'graph'){
+      toggleTaskBoardGraph();
+      taskBoardCloseDropdowns();
+      return;
+    }
+    if(material === 'animation'){
+      toggleTaskBoardAnimation();
+      taskBoardCloseDropdowns();
+      return;
+    }
+    if(material === 'solution'){
+      toggleTaskBoardSolution();
+      taskBoardCloseDropdowns();
+      return;
+    }
+  }
+}
+function initTaskBoardHardToolbarFix(){
+  if(window.__taskBoardHardToolbarFixReady) return;
+  window.__taskBoardHardToolbarFixReady = true;
+  window.addEventListener('pointerdown', taskBoardHardHandleToolbarPointerDown, true);
+}
+initTaskBoardHardToolbarFix();
+document.addEventListener('input', function(e){
+  const input = e.target && e.target.closest ? e.target.closest('input[data-board-size]') : null;
+  if(!input) return;
+  e.stopPropagation();
+  const size = Number(input.value) || 4;
+  taskBoardSetSize(size);
+}, true);
 
 function taskBoardHasOpenDropdown(){
   const state=taskBoardState;
