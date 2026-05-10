@@ -793,11 +793,14 @@ body.task-board-lock{overflow:hidden}
 .task-board-float-head:active{cursor:grabbing}
 .task-board-float-body{padding:12px}
 .task-board-float-close{padding:4px 10px;border:1px solid #cbd5e1;background:#fff;border-radius:10px;cursor:pointer;font-weight:700}
-.task-board-condition-drawer{position:fixed;left:16px;top:96px;bottom:auto;width:360px;max-width:calc(100vw - 32px);max-height:calc(100vh - 120px);overflow:auto;background:rgba(255,255,255,.96);border:1px solid #d8e5f5;border-radius:18px;box-shadow:0 18px 50px rgba(15,23,42,.16);z-index:20010;padding:16px;display:none;transform:none;transition:none;pointer-events:none}
+.task-board-condition-drawer{position:fixed;left:16px;top:96px;width:380px;max-width:calc(100vw - 32px);max-height:calc(100vh - 120px);overflow:auto;background:rgba(255,255,255,.96);border:1px solid #d8e5f5;border-radius:18px;box-shadow:0 18px 50px rgba(15,23,42,.16);z-index:20010;padding:16px;pointer-events:auto;display:none;transform:none;transition:none}
 .task-board-condition-drawer.open{display:block;pointer-events:auto;transform:none}
-.task-board-condition-drawer .task-board-drawer-title{font-weight:800;font-size:18px;line-height:1.25;margin:0 0 10px;color:#0f172a;font-family:var(--fb)}
+.task-board-condition-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.task-board-condition-drag{cursor:grab;user-select:none;width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;background:#eef6ff;color:#64748b;font-weight:800}
+.task-board-condition-drag:active{cursor:grabbing}
+.task-board-condition{font-size:16px;line-height:1.55;color:#334155}
 .task-board-condition-drawer .task-board-condition{font-size:16px;line-height:1.55;color:#334155;margin-bottom:0}
-@media(max-width:700px){.task-board-condition-drawer{left:10px;right:10px;top:88px;width:auto;max-width:none}}
+@media(max-width:700px){.task-board-condition-drawer{left:10px;top:88px;width:min(380px,calc(100vw - 20px));max-width:calc(100vw - 20px)}}
 .task-board-popup{position:fixed;inset:12px;display:none;flex-direction:column;gap:12px;padding:18px 22px 22px;background:rgba(255,255,255,.997);border:1px solid #dbe5f0;border-radius:26px;box-shadow:0 28px 90px rgba(15,23,42,.18);z-index:10030;overflow:auto}
 .task-board-popup.open{display:flex}
 .task-board-popup-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:0;position:sticky;top:0;background:rgba(255,255,255,.97);padding-bottom:4px;z-index:2}
@@ -828,9 +831,9 @@ body.task-board-lock{overflow:hidden}
 .task-board-sim-btn.active{background:#dbeafe;border-color:#60a5fa;color:#1d4ed8}
 @media(max-width:1080px){.task-board-problem-main{padding-right:0;padding-top:62px}.task-board-problem-graph{top:12px;left:16px;right:auto;width:calc(100% - 32px);max-width:220px}.task-board-problem-graph.graph-open{left:0;right:0;width:100%;max-width:none;top:calc(100% + 10px)}.task-board-popup{inset:10px;padding:14px 16px 16px}.task-board-sim-panel{grid-template-columns:repeat(2,minmax(0,1fr))}.task-board-sim-speed{margin-left:0;min-width:0;justify-content:flex-start}.task-board-sim-canvas-wrap{min-height:clamp(320px,52vh,640px)}.task-board-sim-canvas{height:clamp(320px,52vh,640px)}}
 @media(max-width:820px){.task-board-shell{padding:10px}.task-board-title{font-size:20px}.task-board-condition{font-size:14px}.task-board-given{font-size:14px}.task-board-solution .task-board-step-body,.task-board-manual .task-board-step-body,.task-board-manual .task-board-step-body .sr-fml{font-size:14px;line-height:1.6}.task-board-drawer{width:288px}.task-board-popup{inset:8px;padding:12px 12px 14px;border-radius:18px}.task-board-popup-title{font-size:20px}.task-board-sim-canvas-wrap{min-height:clamp(280px,44vh,420px)}.task-board-sim-canvas{height:clamp(280px,44vh,420px)}.task-board-sim-panel{grid-template-columns:1fr}.task-board-sim-controls{align-items:stretch}.task-board-sim-play,.task-board-sim-reset,.task-board-popup-close{justify-content:center}.task-board-sim-speed{width:100%;justify-content:flex-start}}
-.task-board-overlay.solution-workspace-mode .task-board-condition-drawer,.task-board-condition-drawer.task-board-drawer{position:fixed;left:16px;top:96px;bottom:auto;width:360px;max-width:calc(100vw - 32px);max-height:calc(100vh - 120px);transform:none;z-index:20010}
+.task-board-overlay.solution-workspace-mode .task-board-condition-drawer,.task-board-condition-drawer.task-board-drawer{position:fixed;left:16px;top:96px;bottom:auto;width:380px;max-width:calc(100vw - 32px);max-height:calc(100vh - 120px);transform:none;z-index:20010}
 .task-board-overlay.solution-workspace-mode .task-board-condition-drawer.open{transform:none;pointer-events:auto}
-@media(max-width:700px){.task-board-overlay.solution-workspace-mode .task-board-condition-drawer,.task-board-condition-drawer.task-board-drawer{left:10px;right:10px;top:88px;width:auto;max-width:none}}
+@media(max-width:700px){.task-board-overlay.solution-workspace-mode .task-board-condition-drawer,.task-board-condition-drawer.task-board-drawer{left:10px;top:88px;width:min(380px,calc(100vw - 20px));max-width:calc(100vw - 20px)}}
 /* Platform sim cards */
 .ps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
 .ps-card{background:var(--bg3);border:1px solid var(--border);border-radius:13px;padding:16px;display:flex;flex-direction:column;gap:9px;transition:border-color .2s,transform .2s}
@@ -5513,14 +5516,30 @@ function renderPTasks(name){
     const cond=t.cond?String(t.cond):(isBlank&&EMODE?'<div class="pt-empty-text">Пустой блок задачи. Условие будет добавлено через Codex.</div>':'');
     const steps=(t.steps||[]).map((s,j)=>`<div class="sr-step"><div class="sr-snum">${j+1}</div><div class="sr-sbody">${s}</div></div>`).join('');
     const extra=t.extraHtml?`<div class="pt-extra">${t.extraHtml}</div>`:'';
-    const taskId=String(t.id||'');
-    const boardModeAttr=escapeHtml(String(t.boardMode||t.id||'default-board'));
+    const taskId=String(t.id||t.boardMode||`${AC||'course'}-m${CM}-l${CL}-task-${i+1}`);
+    const boardMode=String(t.boardMode||taskId);
+    TASK_BOARD_RUNTIME_TASKS[taskId]={
+      id:taskId,
+      boardMode:boardMode,
+      title:t.title||`Задача ${i+1}`,
+      cond:t.cond||t.condition||t.text||'',
+      given:t.given||'',
+      ans:t.ans||'',
+      steps:t.steps||[],
+      solutionHtml:t.solutionHtml||'',
+      solutionImage:t.solutionImage||'',
+      solution:t.solution||null,
+      graphLabel:t.graphLabel||'Схема',
+      hasAnimation:!!t.hasAnimation
+    };
+    TASK_BOARD_RUNTIME_TASKS[boardMode]=TASK_BOARD_RUNTIME_TASKS[taskId];
     const boardBtn=`
       <div class="pt-side-actions">
         <button
           type="button"
           class="pt-board-btn"
-          data-board-mode="${boardModeAttr}"
+          data-task-id="${escapeHtml(taskId)}"
+          data-board-mode="${escapeHtml(boardMode)}"
           onclick="return taskBoardButtonClick(event,this)"
           onpointerup="return taskBoardButtonClick(event,this)"
         >🧑‍🏫 Доска</button>
@@ -5695,6 +5714,7 @@ function impulseCarsDraw(demo){
 
 
 var taskBoardState=null;
+const TASK_BOARD_RUNTIME_TASKS = {};
 const TASK_BOARD_STORAGE_PREFIX='physoge_task_board_state_';
 const TASK_BOARD_TOOLBAR_POSITION_KEY='fizmat_task_board_toolbar_position';
 const TASK_BOARD_TOOLBAR_DEFAULT_POSITION={x:16,y:16};
@@ -6524,8 +6544,11 @@ function ensureTaskBoardOverlay(){
               </div>
               <button type="button" class="task-board-close-btn" onclick="closeTaskBoard()">✕ Закрыть</button>
             </div>
-            <div class="task-board-drawer task-board-condition-drawer" id="taskBoardConditionDrawer">
-              <div class="task-board-drawer-title">Условие</div>
+            <div class="task-board-condition-drawer open" id="taskBoardConditionDrawer">
+              <div class="task-board-condition-head">
+                <span class="task-board-condition-drag" title="Перетащить">⋮⋮</span>
+                <strong>Условие</strong>
+              </div>
               <div class="task-board-condition" id="taskBoardCondition"></div>
             </div>
             <div id="taskBoardCanvasWrap" class="task-board-canvas-wrap pen-mode">
@@ -6576,14 +6599,15 @@ function ensureTaskBoardOverlay(){
         </div>
       </div>
     </div>`);
+  const overlay=document.getElementById('taskBoardOverlay');
   taskBoardState={
-    overlay:document.getElementById('taskBoardOverlay'),
-    toolbar:document.getElementById('taskBoardToolbar'),
+    overlay:overlay,
+    toolbar:overlay.querySelector('#taskBoardToolbar'),
     toolbarDrag:document.getElementById('taskBoardToolbarDrag'),
-    title:document.getElementById('taskBoardTitle'),
-    conditionDrawer:document.getElementById('taskBoardConditionDrawer'),
-    condition:document.getElementById('taskBoardCondition'),
-    conditionWrap:document.getElementById('taskBoardConditionDrawer'),
+    title:overlay.querySelector('#taskBoardTitle'),
+    conditionDrawer:overlay.querySelector('#taskBoardConditionDrawer'),
+    condition:overlay.querySelector('#taskBoardCondition'),
+    conditionWrap:overlay.querySelector('#taskBoardConditionDrawer'),
     graph:document.getElementById('taskBoardGraph'),
     graphWrap:document.getElementById('taskBoardGraphWrap'),
     graphLabel:document.getElementById('taskBoardGraphLabel'),
@@ -6646,7 +6670,7 @@ function ensureTaskBoardOverlay(){
   document.addEventListener('paste',taskBoardPasteImage);
   window.addEventListener('pointerup',taskBoardPointerUp);
   window.addEventListener('pointercancel',taskBoardPointerUp);
-  window.addEventListener('resize',function(){taskBoardResizeCanvas();taskBoardApplyToolbarPosition();taskBoardClampOpenDropdowns();});
+  window.addEventListener('resize',function(){taskBoardResizeCanvas();taskBoardApplyToolbarPosition();restoreTaskBoardConditionPosition();taskBoardClampOpenDropdowns();});
   document.addEventListener('fullscreenchange',taskBoardResizeCanvas);
   document.addEventListener('webkitfullscreenchange',taskBoardResizeCanvas);
   document.addEventListener('msfullscreenchange',taskBoardResizeCanvas);
@@ -6845,9 +6869,14 @@ function taskBoardButtonClick(event, btn){
     btn?.dataset?.boardMode ||
     'default-board';
 
-  console.info('[TaskBoard] button click, mode:', mode);
+  const taskId =
+    btn?.getAttribute?.('data-task-id') ||
+    btn?.dataset?.taskId ||
+    mode;
 
-  openTaskBoard(mode);
+  console.info('[TaskBoard] open from task:', { mode, taskId });
+
+  openTaskBoard(mode, false, taskId);
 
   return false;
 }
@@ -6890,32 +6919,43 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
   document.body.classList.add('task-board-lock');
 
   try{
-    let task=getTaskBoardData(mode);
+    let task=
+      TASK_BOARD_RUNTIME_TASKS[taskId] ||
+      TASK_BOARD_RUNTIME_TASKS[mode] ||
+      getTaskBoardData(mode);
 
     if(!task){
-      console.warn('[TaskBoard] data not found, opening empty board:', mode);
-      task = typeof createTaskBoardFallbackData === 'function'
-        ? createTaskBoardFallbackData(mode,taskId)
-        : {
-          title:'Доска',
-          cond:'<p>Пустая рабочая доска. Данные задачи не найдены, но доска доступна для работы.</p>',
-          given:'',
-          ans:'',
-          steps:[],
-          solutionHtml:'',
-          solutionImage:'',
-          solution:{idea:'',formulas:[],steps:[],answer:'',tutorHint:''},
-          boardMode:mode||'default-board',
-          id:taskId||'',
-          isFallback:true,
-          hasAnimation:false,
-          graphLabel:'Схема'
-        };
+      console.warn('[TaskBoard] task not found:', {mode, taskId});
+      task = {
+        title:'Доска',
+        cond:'<p>Условие задачи не найдено.</p>',
+        given:'',
+        ans:'',
+        steps:[],
+        solutionHtml:'',
+        solutionImage:'',
+        solution:null,
+        boardMode:mode||'default-board',
+        id:taskId||'',
+        isFallback:true,
+        hasAnimation:false,
+        graphLabel:'Схема'
+      };
     }
     state.mode=mode||'default-board';
     state.task=task;
     if(state.title) state.title.textContent=task.title||'Доска';
-    if(state.condition) state.condition.innerHTML=task.cond||task.condition||'<p>Условие задачи не найдено.</p>';
+    const conditionHtml=
+      task.cond ||
+      task.condition ||
+      task.text ||
+      '<p>Условие задачи не найдено.</p>';
+    if(state.condition){
+      state.condition.innerHTML=conditionHtml;
+    }
+    if(task.given&&state.condition){
+      state.condition.innerHTML+=`<div class="task-board-given">${task.given}</div>`;
+    }
     if(state.graph) state.graph.innerHTML=getTaskBoardGraph(mode)||'';
     if(state.graphLabel) state.graphLabel.textContent=task.graphLabel||'Схема';
     const isPuckImpulse = mode==='puckImpulse';
@@ -6981,6 +7021,8 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
     taskBoardUpdateHistoryButtons();
     taskBoardResizeCanvas();
     toggleTaskBoardAnimation(false);
+    initTaskBoardConditionDrag();
+    restoreTaskBoardConditionPosition();
     showTaskBoardCondition();
   }catch(err){
     console.error('[TaskBoard] open failed after overlay was shown:', err);
@@ -6997,6 +7039,96 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
         '<div class="pt-empty-text">Решение не загрузилось из-за ошибки в данных задачи.</div>';
     }
   }
+}
+
+function initTaskBoardConditionDrag(){
+  const state = taskBoardState;
+  if(!state || !state.conditionDrawer || state.conditionDragReady) return;
+
+  const drawer = state.conditionDrawer;
+  const handle = drawer.querySelector('.task-board-condition-drag');
+  if(!handle) return;
+
+  state.conditionDragReady = true;
+
+  let dragging = false;
+  let startX = 0;
+  let startY = 0;
+  let startLeft = 0;
+  let startTop = 0;
+
+  handle.addEventListener('pointerdown', function(e){
+    e.preventDefault();
+    e.stopPropagation();
+
+    dragging = true;
+    handle.setPointerCapture?.(e.pointerId);
+
+    const rect = drawer.getBoundingClientRect();
+    startX = e.clientX;
+    startY = e.clientY;
+    startLeft = rect.left;
+    startTop = rect.top;
+  });
+
+  handle.addEventListener('pointermove', function(e){
+    if(!dragging) return;
+
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+
+    let nextLeft = startLeft + dx;
+    let nextTop = startTop + dy;
+
+    const maxLeft = window.innerWidth - drawer.offsetWidth - 8;
+    const maxTop = window.innerHeight - drawer.offsetHeight - 8;
+
+    nextLeft = Math.max(8, Math.min(nextLeft, maxLeft));
+    nextTop = Math.max(8, Math.min(nextTop, maxTop));
+
+    drawer.style.left = nextLeft + 'px';
+    drawer.style.top = nextTop + 'px';
+    drawer.style.right = 'auto';
+  });
+
+  handle.addEventListener('pointerup', function(e){
+    if(!dragging) return;
+    dragging = false;
+
+    const rect = drawer.getBoundingClientRect();
+    localStorage.setItem('fizmat_task_board_condition_position', JSON.stringify({
+      x: rect.left,
+      y: rect.top
+    }));
+  });
+
+  handle.addEventListener('dblclick', function(){
+    drawer.style.left = '16px';
+    drawer.style.top = '96px';
+    drawer.style.right = 'auto';
+    localStorage.removeItem('fizmat_task_board_condition_position');
+  });
+}
+function restoreTaskBoardConditionPosition(){
+  const state = taskBoardState;
+  if(!state || !state.conditionDrawer) return;
+
+  try{
+    const raw = localStorage.getItem('fizmat_task_board_condition_position');
+    if(!raw) return;
+
+    const pos = JSON.parse(raw);
+    if(typeof pos.x !== 'number' || typeof pos.y !== 'number') return;
+
+    const drawer = state.conditionDrawer;
+
+    const maxLeft = window.innerWidth - drawer.offsetWidth - 8;
+    const maxTop = window.innerHeight - drawer.offsetHeight - 8;
+
+    drawer.style.left = Math.max(8, Math.min(pos.x, maxLeft)) + 'px';
+    drawer.style.top = Math.max(8, Math.min(pos.y, maxTop)) + 'px';
+    drawer.style.right = 'auto';
+  }catch(e){}
 }
 function closeTaskBoard(){
   const state=ensureTaskBoardOverlay();
