@@ -5822,13 +5822,42 @@ function taskBoardCreateExportBlob(){
 }
 async function taskBoardDownloadPng(){
   const state=taskBoardState;
-  if(!state||!state.canvas){
-    console.warn('Task board canvas not found');
-    return;
-  }
+  if(!state||!state.canvas) return;
+
   const fileName=taskBoardGetExportFileName();
   const blob=await taskBoardCreateExportBlob();
+
   if(!blob) return;
+
+  if(window.showSaveFilePicker){
+    try{
+      const handle=await window.showSaveFilePicker({
+        suggestedName:fileName,
+        types:[
+          {
+            description:'PNG image',
+            accept:{
+              'image/png':['.png']
+            }
+          }
+        ]
+      });
+
+      const writable=await handle.createWritable();
+      await writable.write(blob);
+      await writable.close();
+
+      taskBoardShowSaveToast?.('PNG сохранён');
+      return;
+    }catch(err){
+      if(err&&err.name==='AbortError'){
+        return;
+      }
+
+      console.warn('Save picker failed, fallback to download:',err);
+    }
+  }
+
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
   a.href=url;
@@ -5837,6 +5866,8 @@ async function taskBoardDownloadPng(){
   a.click();
   a.remove();
   setTimeout(function(){URL.revokeObjectURL(url);},1000);
+
+  taskBoardShowSaveToast?.('PNG скачан');
 }
 function taskBoardShowSaveToast(text){
   const state=taskBoardState;
