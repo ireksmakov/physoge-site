@@ -745,10 +745,10 @@ body.task-board-lock header,body.task-board-lock .topbar,body.task-board-lock .s
 .task-board-tool:hover{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8;box-shadow:0 0 18px rgba(37,99,235,.16);transform:translateY(-1px)}
 .task-board-tool.active{background:#dbeafe;border-color:#60a5fa;color:#1d4ed8}
 .task-board-tool:disabled,.task-board-clear:disabled{opacity:.45;cursor:not-allowed}
-.task-board-color-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#0f172a;border:2px solid #fff;box-shadow:0 0 0 1px rgba(15,23,42,.22);margin-left:auto;flex:0 0 auto}
-.task-board-color-palette{display:none;grid-template-columns:repeat(4,28px);gap:8px;padding:2px 4px 6px}.task-board-dropdown.colors-open .task-board-color-palette{display:grid}
-.task-board-color{width:28px;height:28px;border-radius:50%;border:2px solid transparent;background:var(--sw);cursor:pointer;transition:all .18s;padding:0}
-.task-board-color.active{transform:scale(1.08);box-shadow:0 0 0 3px rgba(37,99,235,.18);border-color:#fff}
+.task-board-color-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#0f172a;margin-left:6px;vertical-align:middle}
+.task-board-color-palette{display:none;grid-template-columns:repeat(4,32px);gap:8px;padding:2px 4px 6px}.task-board-dropdown.colors-open .task-board-color-palette{display:grid}
+.task-board-color{width:32px;height:32px;border-radius:999px;border:2px solid transparent;background:var(--sw);cursor:pointer;pointer-events:auto;transition:all .18s;padding:0}
+.task-board-color.active{border-color:#2563eb;box-shadow:0 0 0 4px rgba(37,99,235,.18)}
 .task-board-size-input{accent-color:#2563eb;max-width:120px}
 .task-board-size{font-size:11px;color:#475569;min-width:36px;text-align:right;font-weight:700}
 .task-board-clear{display:flex;align-items:center;justify-content:flex-start;gap:7px;width:100%;padding:8px 10px;border-radius:10px;border:1px solid #cbd5e1;background:#fff;color:#0f172a;font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb);text-align:left}
@@ -6475,12 +6475,12 @@ function ensureTaskBoardOverlay(){
                   <button type="button" class="task-board-tool" data-board-tool="mouse" onclick="taskBoardSetTool('mouse')">🖱 Мышь</button>
                   <button type="button" class="task-board-tool" data-board-tool="text" onclick="taskBoardSetTool('text')">T Текст</button>
                   <button type="button" class="task-board-tool" data-board-tool="pointer" onclick="taskBoardSetTool('pointer')">☝ Указка</button>
-                  <button type="button" class="task-board-tool task-board-colors-toggle" onclick="taskBoardToggleColors()">🎨 Цвета <span id="taskBoardColorDot" class="task-board-color-dot" aria-hidden="true"></span></button>
+                  <button type="button" class="task-board-tool task-board-colors-toggle" data-board-action="colors">🎨 Цвета <span id="taskBoardColorDot" class="task-board-color-dot" aria-hidden="true"></span></button>
                   <div class="task-board-color-palette" aria-label="Палитра доски">
-                    <button type="button" class="task-board-color active" data-board-color="#0f172a" style="--sw:#0f172a" onclick="taskBoardSetColor('#0f172a')" aria-label="Чёрный цвет"></button>
-                    <button type="button" class="task-board-color" data-board-color="#1d4ed8" style="--sw:#1d4ed8" onclick="taskBoardSetColor('#1d4ed8')" aria-label="Синий цвет"></button>
-                    <button type="button" class="task-board-color" data-board-color="#dc2626" style="--sw:#dc2626" onclick="taskBoardSetColor('#dc2626')" aria-label="Красный цвет"></button>
-                    <button type="button" class="task-board-color" data-board-color="#16a34a" style="--sw:#16a34a" onclick="taskBoardSetColor('#16a34a')" aria-label="Зелёный цвет"></button>
+                    <button type="button" class="task-board-color active" data-board-color="#0f172a" style="--sw:#0f172a" title="Чёрный"></button>
+                    <button type="button" class="task-board-color" data-board-color="#2563eb" style="--sw:#2563eb" title="Синий"></button>
+                    <button type="button" class="task-board-color" data-board-color="#dc2626" style="--sw:#dc2626" title="Красный"></button>
+                    <button type="button" class="task-board-color" data-board-color="#16a34a" style="--sw:#16a34a" title="Зелёный"></button>
                   </div>
                   <div class="task-board-menu-row">
                     <span class="task-board-menu-label">Толщина:</span>
@@ -6647,6 +6647,10 @@ function ensureTaskBoardOverlay(){
     e.preventDefault();
     e.stopPropagation();
     if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+    if(action==='colors'){
+      taskBoardToggleColors();
+      return;
+    }
     if(action==='clear'){
       taskBoardClear();
       return;
@@ -6656,6 +6660,17 @@ function ensureTaskBoardOverlay(){
       return;
     }
   });
+
+  document.addEventListener('click',function(e){
+    const colorBtn=e.target&&e.target.closest?e.target.closest('[data-board-color]'):null;
+    if(!colorBtn) return;
+    if(!taskBoardState||!taskBoardState.overlay||!taskBoardState.overlay.classList.contains('open')) return;
+    e.preventDefault();
+    e.stopPropagation();
+    if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+    const color=colorBtn.getAttribute('data-board-color');
+    taskBoardSetColor(color);
+  },true);
   document.addEventListener('click',function(e){
     if(!taskBoardState||!taskBoardState.overlay.classList.contains('open')) return;
     if(taskBoardState.toolbar&&taskBoardState.toolbar.contains(e.target)) return;
@@ -6693,6 +6708,7 @@ function ensureTaskBoardOverlay(){
       taskBoardRedo();
     }
   });
+  taskBoardState.color=taskBoardState.color||'#0f172a';
   taskBoardSetColor(taskBoardState.color);
   taskBoardSetSize(taskBoardState.size);
   taskBoardSetTool('pen');
@@ -6706,7 +6722,7 @@ function taskBoardHasOpenDropdown(){
 function taskBoardCloseDropdowns(){
   const state=taskBoardState;
   if(!state||!state.toolbar) return;
-  state.toolbar.querySelectorAll('.task-board-dropdown.open').forEach(function(drop){drop.classList.remove('open');});
+  state.toolbar.querySelectorAll('.task-board-dropdown.open').forEach(function(drop){drop.classList.remove('open');drop.classList.remove('colors-open');});
   state.toolbar.querySelectorAll('.task-board-dropdown-toggle[aria-expanded]').forEach(function(btn){btn.setAttribute('aria-expanded','false');});
 }
 function taskBoardToggleDropdown(name){
@@ -6817,6 +6833,8 @@ function openTaskBoard(mode,requestFullscreen){
   state.overlay.setAttribute('aria-hidden','false');
   if(requestFullscreen) taskBoardRequestFullscreen();
   taskBoardCloseDropdowns();
+  state.color=state.color||'#0f172a';
+  taskBoardSetColor(state.color);
   taskBoardSetTool('pen');
   taskBoardUpdateCanvasSurface();
   taskBoardUpdateHistoryButtons();
@@ -6915,10 +6933,30 @@ function taskBoardSetTool(tool){
   taskBoardUpdateCanvasSurface();
 }
 function taskBoardSetColor(color){
-  const state=ensureTaskBoardOverlay();
-  state.color=color;
-  document.querySelectorAll('[data-board-color]').forEach(function(btn){btn.classList.toggle('active',btn.getAttribute('data-board-color')===color);});
-  if(state.colorDot) state.colorDot.style.background=color;
+  const state=taskBoardState;
+  if(!state) return;
+
+  state.color=color||'#0f172a';
+
+  document.querySelectorAll('.task-board-color').forEach(function(btn){
+    btn.classList.toggle('active',btn.getAttribute('data-board-color')===state.color);
+  });
+
+  const dot=document.getElementById('taskBoardColorDot');
+  if(dot){
+    dot.style.background=state.color;
+  }
+  if(state.colorDot){
+    state.colorDot.style.background=state.color;
+  }
+  if(state.textInput&&state.textInput.el&&!state.textInput.objectId){
+    state.textInput.el.style.color=state.color;
+  }
+  const laser=state.laserPointer||state.canvasWrap?.querySelector('#taskBoardLaserPointer');
+  if(laser){
+    laser.style.background=state.color;
+    laser.style.boxShadow='0 0 10px '+state.color+',0 0 24px '+state.color+',0 0 48px '+state.color+'88,0 0 76px '+state.color+'55';
+  }
 }
 function taskBoardSetSize(value){
   const state=ensureTaskBoardOverlay();
@@ -7238,7 +7276,7 @@ function taskBoardPointerMove(e){
     const world=taskBoardClientToWorld(e.clientX,e.clientY);
     if(taskBoardDistance(world,state.pointer.last)<0.6) return;
     state.selectedStrokeIds=[];
-    state.strokes.push({id:taskBoardStrokeId(),kind:'segment',color:state.color,size:state.size,points:[{x:state.pointer.last.x,y:state.pointer.last.y},{x:world.x,y:world.y}]});
+    state.strokes.push({id:taskBoardStrokeId(),kind:'segment',color:state.color||'#0f172a',size:state.size,points:[{x:state.pointer.last.x,y:state.pointer.last.y},{x:world.x,y:world.y}]});
     state.pointer.last=world;
     state.pointer.changed=true;
     taskBoardDraw();
@@ -7250,7 +7288,7 @@ function taskBoardPointerUp(e){
   if(state.pointer.type==='draw'){
     if(!state.pointer.changed){
       state.selectedStrokeIds=[];
-      state.strokes.push({id:taskBoardStrokeId(),kind:'dot',color:state.color,size:state.size,x:state.pointer.start.x,y:state.pointer.start.y});
+      state.strokes.push({id:taskBoardStrokeId(),kind:'dot',color:state.color||'#0f172a',size:state.size,x:state.pointer.start.x,y:state.pointer.start.y});
       taskBoardDraw();
     }
     taskBoardPushHistory();
