@@ -560,7 +560,7 @@ body.edit-mode .et{display:inline}
 .solution-answer-box{border-color:#fdba74;background:linear-gradient(135deg,#fff7ed 0%,#fffbeb 100%);color:#9a3412}.solution-answer-box .task-solution-section-title{color:#c2410c}.solution-answer-value{font-family:var(--fh);font-size:26px;font-weight:900;color:#ea580c;line-height:1.25}
 .solution-tutor-card{border-color:#c4b5fd;background:linear-gradient(135deg,#faf5ff 0%,#f5f3ff 100%);box-shadow:0 10px 24px rgba(124,58,237,.08)}.solution-tutor-card .task-solution-section-title{color:#6d28d9}
 .solution-image-card{background:#fff;border:1px solid #dbe5f0;border-radius:18px;padding:14px;box-shadow:0 14px 34px rgba(15,23,42,.08);animation:solutionFadeUp .4s ease .12s both}.solution-image-card .pt-photo-wrap,.solution-image-card .task-board-photo-wrap{margin-top:0;box-shadow:none}
-.task-board-overlay.solution-workspace-mode .task-board-layout{display:block;width:100%;height:100%;margin:0;padding:0;overflow:hidden}.task-board-overlay.solution-workspace-mode .task-board-drawer{position:absolute;left:0;top:20px;bottom:auto;width:min(660px,calc(100vw - 58px));max-height:calc(100% - 40px);transform:translateX(calc(-100% + 38px));pointer-events:none;z-index:30;flex:none}.task-board-overlay.solution-workspace-mode .task-board-drawer.open{transform:translateX(0);pointer-events:auto}.task-board-overlay.solution-workspace-mode .task-board-drawer-tab{display:block}.task-board-overlay.solution-workspace-mode .task-board-drawer-inner{border-radius:0 22px 22px 0;height:100%;padding:14px;overflow:auto}.task-board-overlay.solution-workspace-mode .task-board-drawer-title{font-size:18px;font-weight:900;line-height:1.25;color:#1e3a8a;margin:0 0 12px}.task-board-overlay.solution-workspace-mode .task-board-rich{padding:0;border:none;box-shadow:none;background:transparent}.task-board-overlay.solution-workspace-mode .task-solution-workspace{display:block}.task-board-overlay.solution-workspace-mode .task-solution-right{margin-top:12px}
+.task-board-overlay.solution-workspace-mode .task-board-layout{display:block;width:100%;height:100%;margin:0;padding:0;overflow:hidden}.task-board-overlay.solution-workspace-mode .task-board-drawer{position:absolute;left:0;top:20px;bottom:auto;width:min(660px,calc(100vw - 58px));max-height:calc(100% - 40px);transform:translateX(-100%);pointer-events:none;z-index:30;flex:none}.task-board-overlay.solution-workspace-mode .task-board-drawer.open{transform:translateX(-100%);pointer-events:none}.task-board-overlay.solution-workspace-mode .task-board-drawer-inner{border-radius:0 22px 22px 0;height:100%;padding:14px;overflow:auto}.task-board-overlay.solution-workspace-mode .task-board-drawer-title{font-size:18px;font-weight:900;line-height:1.25;color:#1e3a8a;margin:0 0 12px}.task-board-overlay.solution-workspace-mode .task-board-rich{padding:0;border:none;box-shadow:none;background:transparent}.task-board-overlay.solution-workspace-mode .task-solution-workspace{display:block}.task-board-overlay.solution-workspace-mode .task-solution-right{margin-top:12px}
 @media(max-width:980px){.task-solution-workspace{grid-template-columns:1fr}.task-board-overlay.solution-workspace-mode .task-board-drawer{width:min(92vw,660px)}.task-board-overlay.solution-workspace-mode .task-board-center{min-height:100%}}
 
 .sol-card{color:#0f172a;font-family:var(--fb)}
@@ -700,11 +700,10 @@ body.task-board-lock header,body.task-board-lock .topbar,body.task-board-lock .s
 .task-board-given{background:none;border-left:4px solid #f97316;border-radius:0 12px 12px 0;padding:10px 12px;font-size:15px;line-height:1.65;color:#475569;max-width:none;overflow-wrap:anywhere;word-break:break-word}
 .task-board-given .pt-find{color:#ea580c;font-weight:800}
 .task-board-layout{position:relative;display:block;width:100%;height:100%;min-width:100%;min-height:100%;margin:0;padding:0;overflow:hidden}
-.task-board-drawer{position:absolute;left:0;top:20px;bottom:auto;width:320px;max-height:calc(100% - 40px);transform:translateX(calc(-100% + 38px));transition:transform .24s ease,opacity .18s ease,visibility .18s ease;z-index:30;pointer-events:none}
-.task-board-drawer.open{transform:translateX(0)}
-.task-board-drawer.open,.task-board-drawer .task-board-drawer-tab{pointer-events:auto}
+.task-board-drawer{position:absolute;left:0;top:20px;bottom:auto;width:320px;max-height:calc(100% - 40px);transform:translateX(-100%);transition:transform .24s ease,opacity .18s ease,visibility .18s ease;z-index:30;pointer-events:none}
+.task-board-drawer.open{transform:translateX(-100%);pointer-events:none}
 .task-board-drawer.anim-hidden{opacity:0;visibility:hidden;pointer-events:none}
-.task-board-drawer-tab{position:absolute;right:-38px;top:0;width:38px;height:156px;border:none;border-radius:0 14px 14px 0;background:#1d4ed8;color:#fff;font-size:13px;font-weight:800;letter-spacing:.4px;cursor:pointer;writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);box-shadow:0 18px 36px rgba(29,78,216,.18);font-family:var(--fb);z-index:31}
+.task-board-solution-tab,.task-board-drawer-tab,.task-board-side-tab,.solution-tab{display:none!important;pointer-events:none!important}
 .task-board-drawer-inner{height:100%;max-height:inherit;background:#ffffff;border:1px solid #dbe5f0;border-radius:0 18px 18px 0;padding:16px 16px 16px 18px;box-shadow:0 20px 48px rgba(15,23,42,.08);overflow:auto}
 .task-board-drawer-title{font-family:"Inter","Montserrat",Arial,sans-serif;font-size:75px;font-weight:400;line-height:1.6;color:rgba(255,255,255,.72);max-width:650px;margin-bottom:12px;margin-left:3px}
 .task-board-solution .task-board-step{display:flex;gap:11px;align-items:flex-start;margin-bottom:13px}
@@ -6587,7 +6586,6 @@ function ensureTaskBoardOverlay(){
       <div class="task-board-shell">
         <div class="task-board-layout">
           <div id="taskBoardDrawer" class="task-board-drawer">
-            <button type="button" class="task-board-drawer-tab" onclick="toggleTaskBoardSolution()">Решение</button>
             <div class="task-board-drawer-inner">
               <div class="task-board-drawer-title">Пошаговый разбор</div>
               <div class="task-board-answer" style="display:none">
@@ -6976,7 +6974,7 @@ function openTaskBoard(mode,requestFullscreen){
   const showStaticBoardContent=mode==='task07-pendulum-impact';
   state.overlay.classList.toggle('solution-workspace-mode',useSolutionWorkspace);
   state.drawer.classList.toggle('open',false);
-  toggleTaskBoardSolution(showStaticBoardContent||useSolutionWorkspace);
+  toggleTaskBoardSolution(false);
   taskBoardToggleFloating('condition',showStaticBoardContent);
   taskBoardToggleFloating('graph',false);
   document.body.classList.add('task-board-lock');
@@ -7091,14 +7089,12 @@ function taskBoardInitFloatDrag(state,kind){
 function toggleTaskBoardSolution(force){
   const state=taskBoardState||ensureTaskBoardOverlay();
   if(!state||!state.solutionWrap) return;
-  const isHidden=
-    typeof force==='boolean'
-      ? force
-      : (state.solutionWrap.style.display==='none'||!state.solutionWrap.classList.contains('open'));
-  state.solutionWrap.classList.toggle('open',isHidden);
-  state.solutionWrap.style.display=isHidden?'block':'none';
-  state.solutionWrap.style.pointerEvents=isHidden?'auto':'none';
-  if(isHidden){
+  const isOpen=state.solutionWrap.classList.contains('open');
+  const shouldOpen=typeof force==='boolean'?force:!isOpen;
+  state.solutionWrap.classList.toggle('open',shouldOpen);
+  state.solutionWrap.style.display=shouldOpen?'block':'none';
+  state.solutionWrap.style.pointerEvents=shouldOpen?'auto':'none';
+  if(shouldOpen){
     taskBoardInitFloatDrag(state,'solution');
   }
 }
