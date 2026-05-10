@@ -768,6 +768,10 @@ body.task-board-lock header,body.task-board-lock .topbar,body.task-board-lock .s
 .task-board-image-object.selected .task-board-image-delete{display:flex}
 .task-board-image-resize{position:absolute;right:-7px;bottom:-7px;width:14px;height:14px;border-radius:4px;background:#2563eb;border:2px solid #fff;display:none;cursor:nwse-resize;box-shadow:0 6px 14px rgba(15,23,42,.2);z-index:3}
 .task-board-image-object.selected .task-board-image-resize{display:block}
+.task-board-text-input{position:absolute;min-width:180px;min-height:42px;padding:8px 10px;border:2px solid #2563eb;border-radius:10px;background:#ffffff;color:#0f172a;font:600 22px/1.35 inherit;outline:none;resize:both;z-index:2147483400;box-shadow:0 10px 30px rgba(15,23,42,.18)}
+.task-board-text-object{position:absolute;white-space:pre-wrap;cursor:move;user-select:none;padding:4px 6px;border-radius:8px;color:#0f172a;font-weight:700;line-height:1.35;z-index:2147481200;pointer-events:auto;touch-action:none;box-sizing:border-box}
+.task-board-text-object.selected{outline:2px solid #2563eb;background:rgba(37,99,235,.08)}
+.task-board-text-object.dragging{cursor:grabbing}
 .task-board-zoom-controls{position:absolute;right:20px;bottom:20px;display:flex;flex-direction:column;gap:8px;z-index:40}
 .task-board-zoom-btn{width:38px;height:38px;border-radius:10px;border:1px solid #cbd5e1;background:rgba(255,255,255,.96);color:#0f172a;font-size:22px;line-height:1;cursor:pointer;box-shadow:0 10px 24px rgba(15,23,42,.12);transition:all .15s;font-family:var(--fb)}
 .task-board-zoom-btn:hover{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8}
@@ -5784,6 +5788,105 @@ function taskBoardVisibleCenterWorld(){
   const scale=state.viewScale||1;
   return {x:(rect.width/2-state.viewX)/scale,y:(rect.height/2-state.viewY)/scale};
 }
+function taskBoardGetPoint(e){
+  return taskBoardClientToWorld(e.clientX,e.clientY);
+}
+function taskBoardWorldToLayer(point){
+  const state=ensureTaskBoardOverlay();
+  const scale=state.viewScale||1;
+  return {x:(Number(point&&point.x)||0)*scale+state.viewX,y:(Number(point&&point.y)||0)*scale+state.viewY};
+}
+function taskBoardStartTextInput(point,objectToEdit){
+  const state=ensureTaskBoardOverlay();
+  taskBoardCommitTextInput();
+  const input=document.createElement('textarea');
+  input.className='task-board-text-input';
+  input.value=objectToEdit&&objectToEdit.type==='text'?String(objectToEdit.text||''):'';
+  input.placeholder='Введите текст';
+  const worldPoint={x:Number(point&&point.x)||0,y:Number(point&&point.y)||0};
+  const layerPoint=taskBoardWorldToLayer(worldPoint);
+  input.style.left=layerPoint.x+'px';
+  input.style.top=layerPoint.y+'px';
+  input.style.color=(objectToEdit&&objectToEdit.color)||state.color||'#0f172a';
+  input.style.fontSize=((objectToEdit&&Number(objectToEdit.fontSize))||24)+'px';
+  state.canvasWrap.appendChild(input);
+  state.textInput={el:input,point:worldPoint,objectId:objectToEdit&&objectToEdit.id?objectToEdit.id:null,originalText:objectToEdit?String(objectToEdit.text||''):''};
+  if(objectToEdit&&objectToEdit.id){
+    state.selectedObjectId=objectToEdit.id;
+    renderBoardObjects();
+  }else{
+    state.selectedObjectId=null;
+    state.selectedObjectIds=[];
+    state.selectedStrokeIds=[];
+    renderBoardObjects();
+  }
+  input.addEventListener('keydown',function(e){
+    if(e.key==='Enter'&&!e.shiftKey){
+      e.preventDefault();
+      taskBoardCommitTextInput();
+    }
+    if(e.key==='Escape'){
+      e.preventDefault();
+      taskBoardCancelTextInput();
+    }
+  });
+  input.addEventListener('blur',function(){setTimeout(function(){taskBoardCommitTextInput();},0);});
+  requestAnimationFrame(function(){input.focus();input.select();});
+}
+function taskBoardCommitTextInput(){
+  const state=taskBoardState;
+  if(!state||!state.textInput||!state.textInput.el) return;
+  const data=state.textInput;
+  const input=data.el;
+  const text=String(input.value||'').trim();
+  if(input.parentNode) input.parentNode.removeChild(input);
+  state.textInput=null;
+  let changed=false;
+  if(data.objectId){
+    const obj=findBoardObject(data.objectId);
+    if(obj&&obj.type==='text'){
+      if(text){
+        changed=obj.text!==text;
+        obj.text=text;
+        obj.color=obj.color||state.color||'#0f172a';
+        obj.fontSize=Number(obj.fontSize)||24;
+        state.selectedObjectId=obj.id;
+      }else{
+        state.boardObjects=state.boardObjects.filter(function(item){return item.id!==data.objectId;});
+        state.selectedObjectId=null;
+        changed=true;
+      }
+    }
+  }else if(text){
+    const obj={id:'text-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),type:'text',text:text,x:Math.round(data.point.x),y:Math.round(data.point.y),color:state.color||'#0f172a',fontSize:24};
+    state.boardObjects.push(obj);
+    state.selectedObjectId=obj.id;
+    changed=true;
+  }
+  taskBoardRenderObjects();
+  if(changed){
+    taskBoardPushHistory?.();
+    taskBoardSaveState?.(false);
+  }
+}
+function taskBoardCancelTextInput(){
+  const state=taskBoardState;
+  if(!state||!state.textInput||!state.textInput.el) return;
+  const input=state.textInput.el;
+  if(input.parentNode) input.parentNode.removeChild(input);
+  state.textInput=null;
+  taskBoardRenderObjects();
+}
+function taskBoardRenderTextObjects(){
+  renderBoardObjects();
+}
+function taskBoardRenderObjects(){
+  renderBoardObjects();
+}
+function taskBoardEditTextObject(obj){
+  if(!obj||obj.type!=='text') return;
+  taskBoardStartTextInput({x:Number(obj.x)||0,y:Number(obj.y)||0},obj);
+}
 function addImageToBoard(src){
   const state=ensureTaskBoardOverlay();
   const img=new Image();
@@ -5809,11 +5912,31 @@ function renderBoardObjects(){
   state.objectLayer.style.transform='translate('+state.viewX+'px,'+state.viewY+'px) scale('+(state.viewScale||1)+')';
   state.objectLayer.innerHTML='';
   state.boardObjects.forEach(function(obj){
-    if(!obj||obj.type!=='image') return;
-    const el=document.createElement('div');
+    if(!obj) return;
     const isSelected=obj.id===state.selectedObjectId||(state.selectedObjectIds||[]).includes(obj.id);
+    if(obj.type==='text'){
+      const el=document.createElement('div');
+      el.className='task-board-text-object'+(isSelected?' selected':'');
+      el.dataset.id=obj.id;
+      el.dataset.objectId=obj.id;
+      el.textContent=String(obj.text||'');
+      el.style.left=(Number(obj.x)||0)+'px';
+      el.style.top=(Number(obj.y)||0)+'px';
+      el.style.color=obj.color||'#0f172a';
+      el.style.fontSize=((Number(obj.fontSize)||24))+'px';
+      el.addEventListener('dblclick',function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        taskBoardEditTextObject(obj);
+      });
+      state.objectLayer.appendChild(el);
+      return;
+    }
+    if(obj.type!=='image') return;
+    const el=document.createElement('div');
     el.className='task-board-image-object'+(isSelected?' selected':'');
     el.dataset.id=obj.id;
+    el.dataset.objectId=obj.id;
     el.style.left=(Number(obj.x)||0)+'px';
     el.style.top=(Number(obj.y)||0)+'px';
     el.style.width=Math.max(24,Number(obj.width)||120)+'px';
@@ -5861,7 +5984,7 @@ function deleteSelectedBoardObject(){
 }
 function taskBoardObjectPointerDown(e){
   const state=ensureTaskBoardOverlay();
-  const objectEl=e.target.closest('.task-board-image-object');
+  const objectEl=e.target.closest('.task-board-image-object,.task-board-text-object');
   if(!objectEl) return;
   const id=objectEl.dataset.id;
   const obj=findBoardObject(id);
@@ -5872,7 +5995,7 @@ function taskBoardObjectPointerDown(e){
   if(e.target.closest('.task-board-image-delete')){deleteSelectedBoardObject();return;}
   const scale=state.viewScale||1;
   const start={x:e.clientX,y:e.clientY,objX:obj.x,objY:obj.y,width:obj.width,height:obj.height};
-  const isResize=!!e.target.closest('.task-board-image-resize');
+  const isResize=obj.type==='image'&&!!e.target.closest('.task-board-image-resize');
   objectEl.classList.add('dragging');
   const move=function(ev){
     const dx=(ev.clientX-start.x)/scale;
@@ -6486,6 +6609,7 @@ function ensureTaskBoardOverlay(){
     history:[{strokes:[],objects:[]}],
     historyIndex:0,
     pointer:null,
+    textInput:null,
     viewX:0,
     viewY:0,
     viewScale:1,
@@ -6529,6 +6653,7 @@ function ensureTaskBoardOverlay(){
   });
   document.addEventListener('keydown',function(e){
     if(!taskBoardState||!taskBoardState.overlay.classList.contains('open')) return;
+    if(e.target&&e.target.closest&&e.target.closest('.task-board-text-input')) return;
     if(e.key==='Escape'){
       e.preventDefault();
       if(taskBoardHasOpenDropdown()) taskBoardCloseDropdowns();
@@ -6690,6 +6815,7 @@ function openTaskBoard(mode,requestFullscreen){
 }
 function closeTaskBoard(){
   const state=ensureTaskBoardOverlay();
+  taskBoardCommitTextInput();
   document.body.classList.remove('task-board-lock');
   state.overlay.classList.remove('open');
   state.overlay.style.display='none';
@@ -6827,6 +6953,7 @@ function taskBoardEnsureOverlayVisible(){
 function taskBoardClear(){
   const state=taskBoardState;
   if(!state) return;
+  taskBoardCancelTextInput();
   state.strokes=[];
   state.boardObjects=[];
   state.selectedObjectId=null;
@@ -7004,6 +7131,12 @@ function taskBoardEraseAt(clientX,clientY){
 function taskBoardPointerDown(e){
   const state=ensureTaskBoardOverlay();
   if(!state.overlay.classList.contains('open')) return;
+  if(e.button===0&&state.tool==='text'){
+    const point=taskBoardGetPoint(e);
+    taskBoardStartTextInput(point);
+    e.preventDefault();
+    return;
+  }
   if(e.target===state.canvas&&state.selectedObjectId) selectBoardObject(null);
   if(e.button===0&&state.tool==='lasso'){
     const world=taskBoardClientToWorld(e.clientX,e.clientY);
@@ -7020,7 +7153,7 @@ function taskBoardPointerDown(e){
   }else if(state.tool==='eraser'){
     state.pointer={type:'eraser',changed:false};
     state.pointer.changed=taskBoardEraseAt(e.clientX,e.clientY)||state.pointer.changed;
-  }else if(e.button===0&&(state.tool==='pen'||state.tool==='text'||state.tool==='pointer')){
+  }else if(e.button===0&&(state.tool==='pen'||state.tool==='pointer')){
     const world=taskBoardClientToWorld(e.clientX,e.clientY);
     state.pointer={type:'draw',start:world,last:world,changed:false};
   }else return;
