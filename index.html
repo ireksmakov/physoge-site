@@ -788,14 +788,14 @@ body.task-board-lock{overflow:hidden}
 .task-board-zoom-btn:hover{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8}
 .task-board-graph svg{display:block;width:100%;height:auto}
 .task-board-problem-graph{overflow:hidden}
-.task-board-float{position:absolute;top:16px;left:16px;z-index:32;width:min(560px,calc(100% - 32px));background:#fff;border:1px solid #dbe5f0;border-radius:16px;box-shadow:0 18px 46px rgba(15,23,42,.12)}
-.task-board-float-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-bottom:1px solid #e2e8f0;background:#f8fafc;cursor:grab}
-.task-board-float-head:active{cursor:grabbing}
-.task-board-float-body{padding:12px}
+.task-board-float{position:absolute;top:16px;left:16px;z-index:32;width:min(560px,calc(100% - 32px));background:#fff;border:1px solid #dbe5f0;border-radius:16px;box-shadow:0 18px 46px rgba(15,23,42,.12);pointer-events:auto}
+.task-board-float-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-bottom:1px solid #e2e8f0;background:#f8fafc;cursor:grab;user-select:none;touch-action:none}
+.task-board-float.dragging .task-board-float-head,.task-board-float-head:active{cursor:grabbing}
+.task-board-float-body{padding:12px;pointer-events:auto}
 .task-board-float-close{padding:4px 10px;border:1px solid #cbd5e1;background:#fff;border-radius:10px;cursor:pointer;font-weight:700}
-.task-board-condition-drawer{position:fixed;left:16px;top:96px;width:380px;max-width:calc(100vw - 32px);max-height:calc(100vh - 120px);overflow:auto;background:rgba(255,255,255,.96);border:1px solid #d8e5f5;border-radius:18px;box-shadow:0 18px 50px rgba(15,23,42,.16);z-index:20010;padding:16px;pointer-events:auto;display:none;transform:none;transition:none}
+.task-board-condition-drawer{position:absolute;left:16px;top:16px;width:380px;max-width:calc(100% - 32px);max-height:calc(100% - 32px);overflow:auto;background:rgba(255,255,255,.96);border:1px solid #d8e5f5;border-radius:18px;box-shadow:0 18px 50px rgba(15,23,42,.16);z-index:32;padding:0;pointer-events:auto;display:none;transform:none;transition:none}
 .task-board-condition-drawer.open{display:block;pointer-events:auto;transform:none}
-.task-board-condition-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.task-board-condition-head{display:flex;align-items:center;gap:10px;margin-bottom:0}
 .task-board-condition-drag{cursor:grab;user-select:none;width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;background:#eef6ff;color:#64748b;font-weight:800}
 .task-board-condition-drag:active{cursor:grabbing}
 .task-board-condition{font-size:16px;line-height:1.55;color:#334155}
@@ -831,9 +831,9 @@ body.task-board-lock{overflow:hidden}
 .task-board-sim-btn.active{background:#dbeafe;border-color:#60a5fa;color:#1d4ed8}
 @media(max-width:1080px){.task-board-problem-main{padding-right:0;padding-top:62px}.task-board-problem-graph{top:12px;left:16px;right:auto;width:calc(100% - 32px);max-width:220px}.task-board-problem-graph.graph-open{left:0;right:0;width:100%;max-width:none;top:calc(100% + 10px)}.task-board-popup{inset:10px;padding:14px 16px 16px}.task-board-sim-panel{grid-template-columns:repeat(2,minmax(0,1fr))}.task-board-sim-speed{margin-left:0;min-width:0;justify-content:flex-start}.task-board-sim-canvas-wrap{min-height:clamp(320px,52vh,640px)}.task-board-sim-canvas{height:clamp(320px,52vh,640px)}}
 @media(max-width:820px){.task-board-shell{padding:10px}.task-board-title{font-size:20px}.task-board-condition{font-size:14px}.task-board-given{font-size:14px}.task-board-solution .task-board-step-body,.task-board-manual .task-board-step-body,.task-board-manual .task-board-step-body .sr-fml{font-size:14px;line-height:1.6}.task-board-drawer{width:288px}.task-board-popup{inset:8px;padding:12px 12px 14px;border-radius:18px}.task-board-popup-title{font-size:20px}.task-board-sim-canvas-wrap{min-height:clamp(280px,44vh,420px)}.task-board-sim-canvas{height:clamp(280px,44vh,420px)}.task-board-sim-panel{grid-template-columns:1fr}.task-board-sim-controls{align-items:stretch}.task-board-sim-play,.task-board-sim-reset,.task-board-popup-close{justify-content:center}.task-board-sim-speed{width:100%;justify-content:flex-start}}
-.task-board-overlay.solution-workspace-mode .task-board-condition-drawer,.task-board-condition-drawer.task-board-drawer{position:fixed;left:16px;top:96px;bottom:auto;width:380px;max-width:calc(100vw - 32px);max-height:calc(100vh - 120px);transform:none;z-index:20010}
+.task-board-overlay.solution-workspace-mode .task-board-condition-drawer,.task-board-condition-drawer.task-board-drawer{position:absolute;left:16px;top:16px;bottom:auto;width:380px;max-width:calc(100% - 32px);max-height:calc(100% - 32px);transform:none;z-index:32}
 .task-board-overlay.solution-workspace-mode .task-board-condition-drawer.open{transform:none;pointer-events:auto}
-@media(max-width:700px){.task-board-overlay.solution-workspace-mode .task-board-condition-drawer,.task-board-condition-drawer.task-board-drawer{left:10px;top:88px;width:min(380px,calc(100vw - 20px));max-width:calc(100vw - 20px)}}
+@media(max-width:700px){.task-board-overlay.solution-workspace-mode .task-board-condition-drawer,.task-board-condition-drawer.task-board-drawer{left:10px;top:10px;width:min(380px,calc(100% - 20px));max-width:calc(100% - 20px)}}
 /* Platform sim cards */
 .ps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
 .ps-card{background:var(--bg3);border:1px solid var(--border);border-radius:13px;padding:16px;display:flex;flex-direction:column;gap:9px;transition:border-color .2s,transform .2s}
@@ -5522,12 +5522,20 @@ function renderPTasks(name){
       id:taskId,
       boardMode:boardMode,
       title:t.title||`Задача ${i+1}`,
+      num:Number(t.num)||i+1,
+      level:t.level||2,
+      exam:t.exam||'',
+      points:t.points||'',
       cond:t.cond||t.condition||t.text||'',
+      condition:t.condition||t.cond||t.text||'',
+      text:t.text||t.cond||t.condition||'',
       given:t.given||'',
       ans:t.ans||'',
       steps:t.steps||[],
+      extraHtml:t.extraHtml||'',
       solutionHtml:t.solutionHtml||'',
       solutionImage:t.solutionImage||'',
+      solutionTitle:t.solutionTitle||'',
       solution:t.solution||null,
       graphLabel:t.graphLabel||'Схема',
       hasAnimation:!!t.hasAnimation
@@ -6544,14 +6552,14 @@ function ensureTaskBoardOverlay(){
               </div>
               <button type="button" class="task-board-close-btn" onclick="closeTaskBoard()">✕ Закрыть</button>
             </div>
-            <div class="task-board-condition-drawer open" id="taskBoardConditionDrawer">
-              <div class="task-board-condition-head">
-                <span class="task-board-condition-drag" title="Перетащить">⋮⋮</span>
-                <strong>Условие</strong>
-              </div>
-              <div class="task-board-condition" id="taskBoardCondition"></div>
-            </div>
             <div id="taskBoardCanvasWrap" class="task-board-canvas-wrap pen-mode">
+              <div class="task-board-condition-drawer task-board-float open" id="taskBoardConditionDrawer">
+                <div class="task-board-condition-head task-board-float-head" data-float-drag="condition">
+                  <span class="task-board-condition-drag" title="Перетащить">⋮⋮</span>
+                  <strong>Условие</strong>
+                </div>
+                <div class="task-board-condition task-board-float-body" id="taskBoardCondition"></div>
+              </div>
               <div id="taskBoardGraphWrap" class="task-board-float" style="display:none;left:auto;right:16px;width:min(420px,calc(100% - 32px));">
                 <div class="task-board-float-head" data-float-drag="graph">
                   <div id="taskBoardGraphLabel" class="task-board-problem-label">Схема</div>
@@ -6887,14 +6895,14 @@ function initTaskBoardOpenDelegation(){
   if(document.__taskBoardOpenDelegationReady) return;
   document.__taskBoardOpenDelegationReady = true;
 
-  function getBoardButton(event){
+  function findBoardButton(event){
     const target = event && event.target;
     const el = target && target.nodeType === 1 ? target : target?.parentElement;
     return el && el.closest ? el.closest('.pt-board-btn[data-board-mode]') : null;
   }
 
   function handle(event){
-    const btn = getBoardButton(event);
+    const btn = findBoardButton(event);
     if(!btn || btn.disabled) return;
     taskBoardButtonClick(event, btn);
   }
@@ -6929,6 +6937,8 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
       task = {
         title:'Доска',
         cond:'<p>Условие задачи не найдено.</p>',
+        condition:'<p>Условие задачи не найдено.</p>',
+        text:'',
         given:'',
         ans:'',
         steps:[],
@@ -6955,6 +6965,13 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
     }
     if(task.given&&state.condition){
       state.condition.innerHTML+=`<div class="task-board-given">${task.given}</div>`;
+    }
+    if(state.conditionWrap){
+      state.conditionWrap.style.display='block';
+      state.conditionWrap.style.pointerEvents='auto';
+      if(typeof state.conditionWrap.__restoreFloatPosition==='function'){
+        state.conditionWrap.__restoreFloatPosition();
+      }
     }
     if(state.graph) state.graph.innerHTML=getTaskBoardGraph(mode)||'';
     if(state.graphLabel) state.graphLabel.textContent=task.graphLabel||'Схема';
@@ -7021,8 +7038,9 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
     taskBoardUpdateHistoryButtons();
     taskBoardResizeCanvas();
     toggleTaskBoardAnimation(false);
-    initTaskBoardConditionDrag();
-    restoreTaskBoardConditionPosition();
+    if(state.graphWrap&&typeof state.graphWrap.__restoreFloatPosition==='function'){
+      state.graphWrap.__restoreFloatPosition();
+    }
     showTaskBoardCondition();
   }catch(err){
     console.error('[TaskBoard] open failed after overlay was shown:', err);
@@ -7110,26 +7128,34 @@ function initTaskBoardConditionDrag(){
   });
 }
 function restoreTaskBoardConditionPosition(){
-  const state = taskBoardState;
-  if(!state || !state.conditionDrawer) return;
+  const state=taskBoardState;
+  if(!state||!state.conditionWrap) return;
+  if(typeof state.conditionWrap.__restoreFloatPosition==='function'){
+    state.conditionWrap.__restoreFloatPosition();
+    return;
+  }
 
   try{
-    const raw = localStorage.getItem('fizmat_task_board_condition_position');
+    const raw=localStorage.getItem('fizmat_task_board_condition_position');
     if(!raw) return;
 
-    const pos = JSON.parse(raw);
-    if(typeof pos.x !== 'number' || typeof pos.y !== 'number') return;
+    const pos=JSON.parse(raw);
+    const left=Number.isFinite(pos.left)?pos.left:pos.x;
+    const top=Number.isFinite(pos.top)?pos.top:pos.y;
+    if(!Number.isFinite(left)||!Number.isFinite(top)) return;
 
-    const drawer = state.conditionDrawer;
+    const wrap=state.conditionWrap;
+    const parent=state.canvasWrap||document.documentElement;
+    const parentRect=parent.getBoundingClientRect();
+    const maxLeft=Math.max(8,parentRect.width-wrap.offsetWidth-8);
+    const maxTop=Math.max(8,parentRect.height-wrap.offsetHeight-8);
 
-    const maxLeft = window.innerWidth - drawer.offsetWidth - 8;
-    const maxTop = window.innerHeight - drawer.offsetHeight - 8;
-
-    drawer.style.left = Math.max(8, Math.min(pos.x, maxLeft)) + 'px';
-    drawer.style.top = Math.max(8, Math.min(pos.y, maxTop)) + 'px';
-    drawer.style.right = 'auto';
+    wrap.style.left=Math.max(8,Math.min(left,maxLeft))+'px';
+    wrap.style.top=Math.max(8,Math.min(top,maxTop))+'px';
+    wrap.style.right='auto';
   }catch(e){}
 }
+
 function closeTaskBoard(){
   const state=ensureTaskBoardOverlay();
   if(state.textInput&&state.textInput.parentNode) state.textInput.parentNode.removeChild(state.textInput);
@@ -7160,31 +7186,33 @@ function showTaskBoardCondition(){
 }
 function toggleTaskBoardCondition(){
   const state=taskBoardState;
-  if(!state||!state.conditionDrawer) return;
+  const wrap=state&&state.conditionWrap;
+  if(!state||!wrap) return;
 
-  const isOpen=state.conditionDrawer.classList.contains('open');
+  const isOpen=wrap.classList.contains('open');
 
   if(isOpen){
-    state.conditionDrawer.classList.remove('open');
-    state.conditionDrawer.style.display='none';
-    state.conditionDrawer.style.pointerEvents='none';
+    wrap.classList.remove('open');
+    wrap.style.display='none';
+    wrap.style.pointerEvents='none';
     if(state.conditionBtn) state.conditionBtn.classList.remove('active');
   } else {
-    state.conditionDrawer.classList.add('open');
-    state.conditionDrawer.style.display='block';
-    state.conditionDrawer.style.pointerEvents='auto';
+    wrap.classList.add('open');
+    wrap.style.display='block';
+    wrap.style.pointerEvents='auto';
     if(state.conditionBtn) state.conditionBtn.classList.add('active');
   }
 }
 function taskBoardToggleFloating(kind,force){
   const state=ensureTaskBoardOverlay();
   if(kind==='condition'){
-    const shouldOpen=typeof force==='boolean'?force:!(state.conditionDrawer&&state.conditionDrawer.classList.contains('open'));
+    const wrap=state.conditionWrap;
+    const shouldOpen=typeof force==='boolean'?force:!(wrap&&wrap.classList.contains('open'));
     if(shouldOpen) showTaskBoardCondition();
-    else if(state.conditionDrawer){
-      state.conditionDrawer.classList.remove('open');
-      state.conditionDrawer.style.display='none';
-      state.conditionDrawer.style.pointerEvents='none';
+    else if(wrap){
+      wrap.classList.remove('open');
+      wrap.style.display='none';
+      wrap.style.pointerEvents='none';
       if(state.conditionBtn) state.conditionBtn.classList.remove('active');
     }
     return;
@@ -7199,28 +7227,129 @@ function taskBoardToggleFloating(kind,force){
 }
 function taskBoardInitFloatDrag(state,kind){
   const wrap=kind==='graph'?state.graphWrap:state.conditionWrap;
-  if(!wrap) return;
+  if(!wrap || wrap.__dragReady) return;
+
   const head=wrap.querySelector('[data-float-drag="'+kind+'"]');
   if(!head) return;
-  head.addEventListener('pointerdown',function(e){
-    if(e.target.closest('button')) return;
-    const startX=e.clientX,startY=e.clientY;
-    const rect=wrap.getBoundingClientRect();
-    const parentRect=state.canvasWrap.getBoundingClientRect();
-    const offsetX=rect.left-parentRect.left,offsetY=rect.top-parentRect.top;
-    const move=function(ev){
-      wrap.style.left=Math.max(8,offsetX+(ev.clientX-startX))+'px';
-      wrap.style.top=Math.max(8,offsetY+(ev.clientY-startY))+'px';
+
+  wrap.__dragReady=true;
+
+  const storageKey=kind==='condition'
+    ? 'fizmat_task_board_condition_position'
+    : 'fizmat_task_board_graph_position';
+
+  function clampPosition(left,top){
+    const parent=state.canvasWrap||document.documentElement;
+    const parentRect=parent.getBoundingClientRect();
+    const maxLeft=Math.max(8,parentRect.width-wrap.offsetWidth-8);
+    const maxTop=Math.max(8,parentRect.height-wrap.offsetHeight-8);
+
+    return {
+      left:Math.max(8,Math.min(left,maxLeft)),
+      top:Math.max(8,Math.min(top,maxTop))
+    };
+  }
+
+  function savePosition(){
+    try{
+      localStorage.setItem(storageKey,JSON.stringify({
+        left:parseFloat(wrap.style.left)||16,
+        top:parseFloat(wrap.style.top)||16
+      }));
+    }catch(e){}
+  }
+
+  function restorePosition(){
+    try{
+      const parent=state.canvasWrap||document.documentElement;
+      const parentRect=parent.getBoundingClientRect();
+      if(parentRect.width<=0||parentRect.height<=0) return;
+      const raw=localStorage.getItem(storageKey);
+      if(!raw) return;
+      const pos=JSON.parse(raw);
+      if(!Number.isFinite(pos.left)||!Number.isFinite(pos.top)) return;
+      const next=clampPosition(pos.left,pos.top);
+      wrap.style.left=next.left+'px';
+      wrap.style.top=next.top+'px';
       wrap.style.right='auto';
+    }catch(e){}
+  }
+
+  wrap.__restoreFloatPosition=restorePosition;
+
+  head.addEventListener('pointerdown',function(e){
+    if(e.button!==undefined && e.button!==0) return;
+    if(e.target.closest('button')) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const parentRect=state.canvasWrap.getBoundingClientRect();
+    const rect=wrap.getBoundingClientRect();
+
+    const start={
+      pointerId:e.pointerId,
+      x:e.clientX,
+      y:e.clientY,
+      left:rect.left-parentRect.left,
+      top:rect.top-parentRect.top
     };
-    const up=function(){
-      window.removeEventListener('pointermove',move);
-      window.removeEventListener('pointerup',up);
-    };
-    window.addEventListener('pointermove',move);
-    window.addEventListener('pointerup',up);
+
+    wrap.classList.add('dragging');
+    try{head.setPointerCapture(e.pointerId);}catch(_err){}
+
+    function move(ev){
+      if(ev.pointerId!==start.pointerId) return;
+
+      ev.preventDefault();
+      ev.stopPropagation();
+
+      const next=clampPosition(
+        start.left+ev.clientX-start.x,
+        start.top+ev.clientY-start.y
+      );
+
+      wrap.style.left=next.left+'px';
+      wrap.style.top=next.top+'px';
+      wrap.style.right='auto';
+    }
+
+    function end(ev){
+      if(ev.pointerId!==start.pointerId) return;
+
+      ev.preventDefault();
+      ev.stopPropagation();
+
+      wrap.classList.remove('dragging');
+
+      window.removeEventListener('pointermove',move,true);
+      window.removeEventListener('pointerup',end,true);
+      window.removeEventListener('pointercancel',end,true);
+
+      try{head.releasePointerCapture(start.pointerId);}catch(_err){}
+
+      savePosition();
+    }
+
+    window.addEventListener('pointermove',move,true);
+    window.addEventListener('pointerup',end,true);
+    window.addEventListener('pointercancel',end,true);
   });
+
+  head.addEventListener('dblclick',function(e){
+    e.preventDefault();
+    e.stopPropagation();
+
+    wrap.style.left='16px';
+    wrap.style.top='16px';
+    wrap.style.right='auto';
+
+    try{localStorage.removeItem(storageKey);}catch(_err){}
+  });
+
+  restorePosition();
 }
+
 function toggleTaskBoardDrawer(force){
   const state=ensureTaskBoardOverlay();
   const shouldOpen=typeof force==='boolean'?force:!state.drawer.classList.contains('open');
