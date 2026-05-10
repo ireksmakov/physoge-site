@@ -507,8 +507,7 @@ body.edit-mode .et{display:inline}
 @keyframes ptSlideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes taskBoardOverlayFade{from{opacity:0}to{opacity:1}}
 @keyframes taskBoardZoomIn{from{opacity:.88;transform:scale(.975)}to{opacity:1;transform:scale(1)}}
-.pt-card{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:18px 22px;margin-bottom:12px;transition:border-color .2s,box-shadow .2s;animation:ptFadeUp .3s ease both;pointer-events:auto}
-.pt-card::before,.pt-card::after{pointer-events:none}
+.pt-card{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:18px 22px;margin-bottom:12px;transition:border-color .2s,box-shadow .2s;animation:ptFadeUp .3s ease both}
 .pt-card:hover{border-color:rgba(255,140,0,.3);box-shadow:0 0 22px rgba(255,140,0,.08)}
 .pt-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
 .pt-num{font-family:var(--fh);font-size:22px;font-weight:900;color:rgba(255,140,0,.3);min-width:36px}
@@ -518,10 +517,10 @@ body.edit-mode .et{display:inline}
 .pt-l3{background:rgba(168,85,247,.12);color:#a855f7}
 .pt-title{font-family:var(--fh);font-size:13px;font-weight:700;color:var(--white)}
 .pt-exam{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.18);color:var(--cyan);font-size:10px;font-weight:700;white-space:nowrap}
-.pt-body{display:grid;grid-template-columns:minmax(0,1fr) 160px;gap:14px;align-items:start;pointer-events:auto}
-.pt-side{display:flex;flex-direction:column;gap:10px;align-items:stretch;position:relative;z-index:20;pointer-events:auto}
+.pt-body{display:grid;grid-template-columns:minmax(0,1fr) 160px;gap:14px;align-items:start}
+.pt-side{display:flex;flex-direction:column;gap:10px;align-items:stretch}
 @media(max-width:680px){.pt-body{grid-template-columns:1fr}.pt-side{max-width:260px;width:100%}}
-.pt-condition{font-size:14px;color:var(--gray);line-height:1.82;pointer-events:auto}
+.pt-condition{font-size:14px;color:var(--gray);line-height:1.82}
 .pt-condition strong{color:var(--white)}
 .pt-given{background:var(--bg2);border-left:3px solid var(--orange);border-radius:0 7px 7px 0;padding:10px 13px;font-size:13px;line-height:1.82;color:var(--gray)}
 .pt-given strong{color:var(--white)}.pt-find{color:var(--orange);font-weight:700}
@@ -622,8 +621,8 @@ body.edit-mode .et{display:inline}
 .pt-demo-btn{padding:8px 12px;border-radius:8px;border:1px solid rgba(0,229,255,.15);background:rgba(0,229,255,.05);color:var(--gray);font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb)}
 .pt-demo-btn:hover{color:var(--white);border-color:rgba(0,229,255,.35)}
 .pt-demo-btn.active{background:rgba(0,229,255,.14);color:var(--cyan);border-color:rgba(0,229,255,.35)}
-.pt-side-actions{margin:0;position:relative;z-index:20;pointer-events:auto}
-.pt-board-btn{width:100%;padding:9px 12px;border-radius:8px;border:1px solid rgba(0,229,255,.22);background:rgba(0,229,255,.08);color:var(--cyan);font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb);position:relative;z-index:25;pointer-events:auto}
+.pt-side-actions{margin:0}
+.pt-board-btn{width:100%;padding:9px 12px;border-radius:8px;border:1px solid rgba(0,229,255,.22);background:rgba(0,229,255,.08);color:var(--cyan);font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb)}
 .pt-board-btn:hover{background:rgba(0,229,255,.16);border-color:rgba(0,229,255,.38);color:var(--white);box-shadow:0 0 18px rgba(0,229,255,.2);transform:translateY(-1px)}
 
 
@@ -668,8 +667,8 @@ body.view-mode .pt-blank-add-wrap{display:none}
 @media(max-width:720px){.pt-blank-add-btn{padding:13px 12px;font-size:12px}.pt-empty-text{font-size:13px}}
 html,body{margin:0;padding:0}
 body.task-board-lock{overflow:hidden}
-.task-board-overlay{position:fixed;inset:0;width:100vw;height:100dvh;margin:0;padding:0;overflow:hidden;z-index:20000;background:#fff;color:#0f172a;display:none;pointer-events:none}
-.task-board-overlay.open{display:block;pointer-events:auto;animation:taskBoardOverlayFade .26s ease both}
+.task-board-overlay{position:fixed;inset:0;width:100vw;height:100dvh;margin:0;padding:0;overflow:hidden;z-index:9999;background:#fff;color:#0f172a;display:none}
+.task-board-overlay.open{display:block;animation:taskBoardOverlayFade .26s ease both}
 .task-board-overlay.open .task-board-shell{animation:taskBoardZoomIn .28s ease both}
 .task-board-shell{position:relative;display:block;width:100%;height:100%;min-width:100%;min-height:100%;margin:0;padding:0;background:#fff;overflow:hidden}
 .task-board-top{display:none}
@@ -698,14 +697,14 @@ body.task-board-lock{overflow:hidden}
 .task-board-problem-graph.is-collapsed{padding-bottom:12px}
 .task-board-given{background:none;border-left:4px solid #f97316;border-radius:0 12px 12px 0;padding:10px 12px;font-size:15px;line-height:1.65;color:#475569;max-width:none;overflow-wrap:anywhere;word-break:break-word}
 .task-board-given .pt-find{color:#ea580c;font-weight:800}
-.task-board-layout{position:relative;flex:1;min-height:0;display:flex;overflow:hidden}
-.task-board-drawer{position:absolute;left:0;top:18px;bottom:18px;width:320px;transform:translateX(calc(-100% + 38px));transition:transform .24s ease,opacity .18s ease,visibility .18s ease;z-index:8;pointer-events:none}
+.task-board-layout{position:relative;display:block;width:100%;height:100%;min-width:100%;min-height:100%;margin:0;padding:0;overflow:hidden}
+.task-board-drawer{position:absolute;left:0;top:20px;bottom:auto;width:320px;max-height:calc(100% - 40px);transform:translateX(calc(-100% + 38px));transition:transform .24s ease,opacity .18s ease,visibility .18s ease;z-index:30;pointer-events:none}
 .task-board-drawer.open{transform:translateX(0)}
 .task-board-drawer.open,.task-board-drawer .task-board-drawer-tab{pointer-events:auto}
 .task-board-drawer.anim-hidden{opacity:0;visibility:hidden;pointer-events:none}
-.task-board-drawer-tab{position:absolute;right:-38px;top:18px;width:38px;height:156px;border:none;border-radius:0 14px 14px 0;background:#1d4ed8;color:#fff;font-size:13px;font-weight:800;letter-spacing:.4px;cursor:pointer;writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);box-shadow:0 18px 36px rgba(29,78,216,.18);font-family:var(--fb)}
-.task-board-drawer-inner{height:100%;background:#ffffff;border:1px solid #dbe5f0;border-radius:18px;padding:16px 16px 16px 18px;box-shadow:0 20px 48px rgba(15,23,42,.08);overflow:auto}
-.task-board-drawer-title{font-family:"Inter","Montserrat",Arial,sans-serif;font-size:75px;font-weight:400;line-height:1.6;color:rgba(255,255,255,.72);max-width:650px;margin-bottom:12px}
+.task-board-drawer-tab{position:absolute;right:-38px;top:0;width:38px;height:156px;border:none;border-radius:0 14px 14px 0;background:#1d4ed8;color:#fff;font-size:13px;font-weight:800;letter-spacing:.4px;cursor:pointer;writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);box-shadow:0 18px 36px rgba(29,78,216,.18);font-family:var(--fb);z-index:31}
+.task-board-drawer-inner{height:100%;max-height:inherit;background:#ffffff;border:1px solid #dbe5f0;border-radius:0 18px 18px 0;padding:16px 16px 16px 18px;box-shadow:0 20px 48px rgba(15,23,42,.08);overflow:auto}
+.task-board-drawer-title{font-family:"Inter","Montserrat",Arial,sans-serif;font-size:75px;font-weight:400;line-height:1.6;color:rgba(255,255,255,.72);max-width:650px;margin-bottom:12px;margin-left:3px}
 .task-board-solution .task-board-step{display:flex;gap:11px;align-items:flex-start;margin-bottom:13px}
 .task-board-solution .task-board-step-num{flex-shrink:0;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#eff6ff;color:#1d4ed8;font-size:12px;font-weight:800}
 .task-board-solution .task-board-step-body{font-size:15px;line-height:1.65;color:#475569;overflow-wrap:anywhere;word-break:break-word}
@@ -726,50 +725,21 @@ body.task-board-lock{overflow:hidden}
 .task-board-solution-title{font-family:var(--fh);font-size:18px;font-weight:900;line-height:1.25;color:#1e3a8a;margin:0 0 10px}
 .task-board-static-given{border-left:4px solid #f97316;border-radius:0 12px 12px 0;background:#f8fafc;padding:12px 14px;margin-bottom:12px;font-size:15px;line-height:1.7;color:#475569}
 .task-board-static-given strong{color:#111827}
-.task-board-center{position:relative;display:block;width:100%;height:100%;min-width:100%;min-height:100%;margin:0;padding:0;overflow:visible}
-.task-board-toolbar{position:fixed;z-index:30000 !important;pointer-events:auto !important;top:16px;left:16px;width:auto;max-width:calc(100vw - 32px);display:flex;visibility:visible;opacity:1;align-items:center;justify-content:flex-start;gap:6px;flex-wrap:nowrap;overflow:visible;white-space:nowrap;padding:6px;border:1px solid rgba(219,229,240,.92);border-radius:16px;background:rgba(255,255,255,.94);box-shadow:0 12px 34px rgba(15,23,42,.18);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);user-select:none}
+.task-board-center{position:relative;display:block;width:100%;height:100%;min-width:100%;min-height:100%;margin:0;padding:0;overflow:hidden}
+.task-board-toolbar{position:absolute;left:54px;top:20px;right:20px;z-index:25;display:flex;align-items:center;justify-content:flex-start;gap:8px;flex-wrap:nowrap;overflow:visible;white-space:nowrap;background:rgba(255,255,255,.94);border:1px solid #dbe5f0;border-radius:18px;padding:10px 12px;box-shadow:0 14px 36px rgba(15,23,42,.08)}
 .task-board-toolbar::-webkit-scrollbar{display:none}
-.task-board-toolbar-drag{width:26px;height:34px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;border:0;border-radius:12px;background:rgba(241,245,249,.86);color:#64748b;font-size:18px;font-weight:900;line-height:1;cursor:grab;touch-action:none;user-select:none;font-family:var(--fb)}
-.task-board-toolbar-drag:hover{background:#e0f2fe;color:#1d4ed8}
-.task-board-toolbar-drag:active,.task-board-toolbar.dragging .task-board-toolbar-drag{cursor:grabbing;background:#dbeafe;color:#1d4ed8}
-.task-board-dropdown{position:relative;z-index:30010 !important;pointer-events:auto !important;flex:0 0 auto}
-.task-board-dropdown-toggle,.task-board-close-btn{position:relative;z-index:20090;pointer-events:auto;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 10px;border-radius:12px;border:1px solid #cbd5e1;background:#fff;color:#0f172a;font-size:13px;font-weight:800;cursor:pointer;transition:all .18s;font-family:var(--fb);box-shadow:0 10px 24px rgba(15,23,42,.05);white-space:nowrap}
+.task-board-dropdown{position:relative;flex:0 0 auto}
+.task-board-dropdown-toggle,.task-board-close-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 12px;border-radius:12px;border:1px solid #cbd5e1;background:#fff;color:#0f172a;font-size:13px;font-weight:800;cursor:pointer;transition:all .18s;font-family:var(--fb);box-shadow:0 10px 24px rgba(15,23,42,.05)}
 .task-board-dropdown-toggle:hover,.task-board-close-btn:hover{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8;box-shadow:0 0 18px rgba(37,99,235,.16);transform:translateY(-1px)}
-.task-board-close-btn{margin-left:0;color:#dc2626;border-color:#fecaca}
+.task-board-close-btn{margin-left:auto;color:#dc2626;border-color:#fecaca}
 .task-board-close-btn:hover{background:#fff7ed;border-color:#fdba74;color:#c2410c}
-.task-board-dropdown-menu{position:absolute;top:calc(100% + 8px);left:0;min-width:220px;max-width:calc(100vw - 16px);display:none;flex-direction:column;gap:6px;padding:10px;background:rgba(255,255,255,.98);border:1px solid #dbe5f0;border-radius:14px;box-shadow:0 18px 46px rgba(15,23,42,.16);z-index:30020 !important;pointer-events:auto !important;white-space:normal}
-.task-board-dropdown.align-right .task-board-dropdown-menu{left:auto;right:0}
+.task-board-dropdown-menu{position:absolute;top:calc(100% + 8px);left:0;min-width:220px;display:none;flex-direction:column;gap:6px;padding:10px;background:rgba(255,255,255,.98);border:1px solid #dbe5f0;border-radius:14px;box-shadow:0 18px 46px rgba(15,23,42,.16);z-index:100;white-space:normal}
 .task-board-dropdown.open .task-board-dropdown-menu{display:flex}
-.task-board-dropdown-menu button,.task-board-toolbar button,.task-board-toolbar input{pointer-events:auto !important;cursor:pointer}
-.task-board-toolbar button,
-.task-board-toolbar input,
-.task-board-dropdown-toggle,
-.task-board-close-btn{
-  pointer-events:auto !important;
-  cursor:pointer;
-  touch-action:manipulation;
-  position:relative;
-  z-index:30030 !important;
-}
-
-.task-board-dropdown-menu button{
-  pointer-events:auto !important;
-  cursor:pointer;
-  touch-action:manipulation;
-  position:relative;
-  z-index:30030 !important;
-}
-.task-board-canvas-wrap,
-.task-board-canvas,
-.task-board-object-layer,
-.task-board-lasso-layer{
-  z-index:1;
-}
 .task-board-materials-menu{min-width:190px}
 .task-board-menu-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 4px}
 .task-board-menu-label{font-size:12px;font-weight:800;color:#334155}
 .task-board-toolbar-label{font-size:12px;font-weight:700;color:#334155}
-.task-board-tool{pointer-events:auto;display:flex;align-items:center;justify-content:flex-start;gap:7px;width:100%;padding:8px 10px;border-radius:10px;border:1px solid #cbd5e1;background:#fff;color:#334155;font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb);text-align:left}
+.task-board-tool{display:flex;align-items:center;justify-content:flex-start;gap:7px;width:100%;padding:8px 10px;border-radius:10px;border:1px solid #cbd5e1;background:#fff;color:#334155;font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb);text-align:left}
 .task-board-tool:hover{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8;box-shadow:0 0 18px rgba(37,99,235,.16);transform:translateY(-1px)}
 .task-board-tool.active{background:#dbeafe;border-color:#60a5fa;color:#1d4ed8}
 .task-board-tool:disabled,.task-board-clear:disabled{opacity:.45;cursor:not-allowed}
@@ -779,23 +749,15 @@ body.task-board-lock{overflow:hidden}
 .task-board-color.active{transform:scale(1.08);box-shadow:0 0 0 3px rgba(37,99,235,.18);border-color:#fff}
 .task-board-size-input{accent-color:#2563eb;max-width:120px}
 .task-board-size{font-size:11px;color:#475569;min-width:36px;text-align:right;font-weight:700}
-.task-board-clear{pointer-events:auto;display:flex;align-items:center;justify-content:flex-start;gap:7px;width:100%;padding:8px 10px;border-radius:10px;border:1px solid #cbd5e1;background:#fff;color:#0f172a;font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb);text-align:left}
+.task-board-clear{display:flex;align-items:center;justify-content:flex-start;gap:7px;width:100%;padding:8px 10px;border-radius:10px;border:1px solid #cbd5e1;background:#fff;color:#0f172a;font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb);text-align:left}
 .task-board-clear:hover{background:#fff7ed;border-color:#fdba74;color:#c2410c;box-shadow:0 0 16px rgba(249,115,22,.16);transform:translateY(-1px)}
-.task-board-canvas-wrap{position:absolute;z-index:1;inset:0;width:100%;height:100%;min-width:100%;min-height:100%;margin:0;padding:0;border-radius:0;border:0;background-color:#fff;background-image:linear-gradient(to right,rgba(148,163,184,.14) 1px,transparent 1px),linear-gradient(to bottom,rgba(148,163,184,.14) 1px,transparent 1px);background-size:36px 36px;overflow:hidden;box-shadow:none}
+.task-board-canvas-wrap{position:absolute;inset:0;width:100%;height:100%;min-width:100%;min-height:100%;margin:0;padding:0;border-radius:0;border:0;background-color:#fff;background-image:linear-gradient(to right,rgba(148,163,184,.14) 1px,transparent 1px),linear-gradient(to bottom,rgba(148,163,184,.14) 1px,transparent 1px);background-size:36px 36px;overflow:hidden;box-shadow:none}
 .task-board-canvas-wrap.pen-mode{cursor:crosshair}
-.task-board-canvas-wrap.pointer-mode{cursor:none}
 .task-board-canvas-wrap.erase-mode{cursor:cell}
 .task-board-canvas-wrap.pan-mode{cursor:grab}
-.task-board-canvas-wrap.lasso-mode{cursor:crosshair}
 .task-board-canvas-wrap.dragging{cursor:grabbing}
 .task-board-canvas{position:absolute;inset:0;width:100%;height:100%;min-width:100%;min-height:100%;display:block;touch-action:none;z-index:1}
-.task-board-object-layer{position:absolute;inset:0;z-index:1;pointer-events:none;transform-origin:0 0;touch-action:none}
-.task-board-lasso-layer{position:absolute;inset:0;z-index:1;pointer-events:none}
-.task-board-laser-pointer{position:absolute;width:18px;height:18px;border-radius:50%;background:rgba(255,0,0,.95);box-shadow:0 0 12px rgba(255,0,0,.95),0 0 28px rgba(255,0,0,.75),0 0 48px rgba(255,0,0,.45);transform:translate(-50%,-50%);pointer-events:none;z-index:20040;display:none;opacity:0;transition:left .06s linear,top .06s linear,opacity .12s ease}
-.task-board-laser-pointer::after{content:"";position:absolute;inset:-8px;border:2px solid rgba(255,0,0,.45);border-radius:50%;box-shadow:0 0 18px rgba(255,0,0,.35);animation:taskBoardLaserPulse 1.15s ease-out infinite}
-.task-board-laser-pointer.active{display:block;opacity:1}
-@keyframes taskBoardLaserPulse{0%{transform:scale(.72);opacity:.9}100%{transform:scale(1.45);opacity:0}}
-.task-board-lasso-path{fill:rgba(37,99,235,.08);stroke:#2563eb;stroke-width:2;stroke-dasharray:8 6;vector-effect:non-scaling-stroke;filter:drop-shadow(0 2px 4px rgba(37,99,235,.18))}
+.task-board-object-layer{position:absolute;inset:0;z-index:3;pointer-events:none;transform-origin:0 0;touch-action:none}
 .task-board-image-object{position:absolute;left:0;top:0;box-sizing:border-box;border:2px solid transparent;border-radius:10px;background:rgba(255,255,255,.02);pointer-events:auto;user-select:none;touch-action:none;cursor:grab}
 .task-board-image-object.selected{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.18),0 14px 34px rgba(15,23,42,.12)}
 .task-board-image-object.dragging{cursor:grabbing}
@@ -804,28 +766,16 @@ body.task-board-lock{overflow:hidden}
 .task-board-image-object.selected .task-board-image-delete{display:flex}
 .task-board-image-resize{position:absolute;right:-7px;bottom:-7px;width:14px;height:14px;border-radius:4px;background:#2563eb;border:2px solid #fff;display:none;cursor:nwse-resize;box-shadow:0 6px 14px rgba(15,23,42,.2);z-index:3}
 .task-board-image-object.selected .task-board-image-resize{display:block}
-.task-board-text-object{position:absolute;left:0;top:0;box-sizing:border-box;min-width:24px;max-width:620px;padding:4px 6px;border:2px solid transparent;border-radius:8px;background:rgba(255,255,255,.72);color:#0f172a;font-weight:700;line-height:1.25;white-space:pre-wrap;overflow-wrap:anywhere;pointer-events:auto;user-select:none;touch-action:none;cursor:grab;text-shadow:0 1px 0 rgba(255,255,255,.75)}
-.task-board-text-object.selected{border-color:#2563eb;background:rgba(239,246,255,.9);box-shadow:0 0 0 3px rgba(37,99,235,.18),0 12px 28px rgba(15,23,42,.1)}
-.task-board-text-object.dragging{cursor:grabbing}
-.task-board-text-input{position:absolute;left:0;top:0;box-sizing:border-box;min-width:180px;min-height:38px;padding:6px 8px;border:2px solid #2563eb;border-radius:9px;background:#fff;color:#0f172a;font-family:var(--fb);font-weight:700;line-height:1.25;resize:none;outline:none;box-shadow:0 0 0 3px rgba(37,99,235,.18),0 14px 32px rgba(15,23,42,.14);z-index:6;pointer-events:auto}
 .task-board-zoom-controls{position:absolute;right:20px;bottom:20px;display:flex;flex-direction:column;gap:8px;z-index:40}
 .task-board-zoom-btn{width:38px;height:38px;border-radius:10px;border:1px solid #cbd5e1;background:rgba(255,255,255,.96);color:#0f172a;font-size:22px;line-height:1;cursor:pointer;box-shadow:0 10px 24px rgba(15,23,42,.12);transition:all .15s;font-family:var(--fb)}
 .task-board-zoom-btn:hover{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8}
 .task-board-graph svg{display:block;width:100%;height:auto}
 .task-board-problem-graph{overflow:hidden}
-.task-board-float{position:absolute;top:16px;left:16px;z-index:32;width:min(560px,calc(100% - 32px));background:#fff;border:1px solid #dbe5f0;border-radius:16px;box-shadow:0 18px 46px rgba(15,23,42,.12);pointer-events:auto}
-.task-board-float-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-bottom:1px solid #e2e8f0;background:#f8fafc;cursor:grab;user-select:none;touch-action:none}
-.task-board-float.dragging .task-board-float-head,.task-board-float-head:active{cursor:grabbing}
-.task-board-float-body{padding:12px;pointer-events:auto}
+.task-board-float{position:absolute;top:16px;left:16px;z-index:32;width:min(560px,calc(100% - 32px));background:#fff;border:1px solid #dbe5f0;border-radius:16px;box-shadow:0 18px 46px rgba(15,23,42,.12)}
+.task-board-float-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-bottom:1px solid #e2e8f0;background:#f8fafc;cursor:grab}
+.task-board-float-head:active{cursor:grabbing}
+.task-board-float-body{padding:12px}
 .task-board-float-close{padding:4px 10px;border:1px solid #cbd5e1;background:#fff;border-radius:10px;cursor:pointer;font-weight:700}
-.task-board-condition-drawer{position:absolute;left:16px;top:16px;width:380px;max-width:calc(100% - 32px);max-height:calc(100% - 32px);overflow:auto;background:rgba(255,255,255,.96);border:1px solid #d8e5f5;border-radius:18px;box-shadow:0 18px 50px rgba(15,23,42,.16);z-index:32;padding:0;pointer-events:auto;display:none;transform:none;transition:none}
-.task-board-condition-drawer.open{display:block;pointer-events:auto;transform:none}
-.task-board-condition-head{display:flex;align-items:center;gap:10px;margin-bottom:0}
-.task-board-condition-drag{cursor:grab;user-select:none;width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;background:#eef6ff;color:#64748b;font-weight:800}
-.task-board-condition-drag:active{cursor:grabbing}
-.task-board-condition{font-size:16px;line-height:1.55;color:#334155}
-.task-board-condition-drawer .task-board-condition{font-size:16px;line-height:1.55;color:#334155;margin-bottom:0}
-@media(max-width:700px){.task-board-condition-drawer{left:10px;top:88px;width:min(380px,calc(100vw - 20px));max-width:calc(100vw - 20px)}}
 .task-board-popup{position:fixed;inset:12px;display:none;flex-direction:column;gap:12px;padding:18px 22px 22px;background:rgba(255,255,255,.997);border:1px solid #dbe5f0;border-radius:26px;box-shadow:0 28px 90px rgba(15,23,42,.18);z-index:10030;overflow:auto}
 .task-board-popup.open{display:flex}
 .task-board-popup-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:0;position:sticky;top:0;background:rgba(255,255,255,.97);padding-bottom:4px;z-index:2}
@@ -856,9 +806,6 @@ body.task-board-lock{overflow:hidden}
 .task-board-sim-btn.active{background:#dbeafe;border-color:#60a5fa;color:#1d4ed8}
 @media(max-width:1080px){.task-board-problem-main{padding-right:0;padding-top:62px}.task-board-problem-graph{top:12px;left:16px;right:auto;width:calc(100% - 32px);max-width:220px}.task-board-problem-graph.graph-open{left:0;right:0;width:100%;max-width:none;top:calc(100% + 10px)}.task-board-popup{inset:10px;padding:14px 16px 16px}.task-board-sim-panel{grid-template-columns:repeat(2,minmax(0,1fr))}.task-board-sim-speed{margin-left:0;min-width:0;justify-content:flex-start}.task-board-sim-canvas-wrap{min-height:clamp(320px,52vh,640px)}.task-board-sim-canvas{height:clamp(320px,52vh,640px)}}
 @media(max-width:820px){.task-board-shell{padding:10px}.task-board-title{font-size:20px}.task-board-condition{font-size:14px}.task-board-given{font-size:14px}.task-board-solution .task-board-step-body,.task-board-manual .task-board-step-body,.task-board-manual .task-board-step-body .sr-fml{font-size:14px;line-height:1.6}.task-board-drawer{width:288px}.task-board-popup{inset:8px;padding:12px 12px 14px;border-radius:18px}.task-board-popup-title{font-size:20px}.task-board-sim-canvas-wrap{min-height:clamp(280px,44vh,420px)}.task-board-sim-canvas{height:clamp(280px,44vh,420px)}.task-board-sim-panel{grid-template-columns:1fr}.task-board-sim-controls{align-items:stretch}.task-board-sim-play,.task-board-sim-reset,.task-board-popup-close{justify-content:center}.task-board-sim-speed{width:100%;justify-content:flex-start}}
-.task-board-overlay.solution-workspace-mode .task-board-condition-drawer,.task-board-condition-drawer.task-board-drawer{position:absolute;left:16px;top:16px;bottom:auto;width:380px;max-width:calc(100% - 32px);max-height:calc(100% - 32px);transform:none;z-index:32}
-.task-board-overlay.solution-workspace-mode .task-board-condition-drawer.open{transform:none;pointer-events:auto}
-@media(max-width:700px){.task-board-overlay.solution-workspace-mode .task-board-condition-drawer,.task-board-condition-drawer.task-board-drawer{left:10px;top:10px;width:min(380px,calc(100% - 20px));max-width:calc(100% - 20px)}}
 /* Platform sim cards */
 .ps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
 .ps-card{background:var(--bg3);border:1px solid var(--border);border-radius:13px;padding:16px;display:flex;flex-direction:column;gap:9px;transition:border-color .2s,transform .2s}
@@ -2492,7 +2439,7 @@ const COURSES={
   ]}
 };
 
-let AC=null,CM=0,CL=0,CTAB='theory',EMODE=true;
+let AC=null,CM=0,CL=0,EMODE=true;
 const LD={};
 function lk(){return AC+'_'+CM+'_'+CL}
 function gld(){if(!LD[lk()])LD[lk()]={videos:[],questions:[{text:'',type:'choice',opts:['','','',''],correct:0,answer:''}],files:[]};return LD[lk()]}
@@ -2610,7 +2557,6 @@ function hideAll(){
   const taskBoardOverlay = document.getElementById('taskBoardOverlay');
   if(taskBoardOverlay){
     taskBoardOverlay.classList.remove('open');
-    taskBoardOverlay.setAttribute('aria-hidden', 'true');
     taskBoardOverlay.style.display = 'none';
     taskBoardOverlay.style.pointerEvents = 'none';
   }
@@ -3063,7 +3009,6 @@ function parseCourseRoute(hash){
   const courseKey = parts[0] ? safeDecodeRoutePart(parts[0]) : '';
   let moduleIndex = null;
   let lessonIndex = null;
-  let tabId = null;
 
   for(let i = 1; i < parts.length; i += 1){
     if(parts[i] === 'm'){
@@ -3072,14 +3017,10 @@ function parseCourseRoute(hash){
     } else if(parts[i] === 'l'){
       lessonIndex = parseOptionalRouteIndex(parts[i + 1]);
       i += 1;
-    } else if(parts[i] === 't'){
-      const parsedTabId = parts[i + 1] ? safeDecodeRoutePart(parts[i + 1]) : '';
-      tabId = isValidCourseTab(parsedTabId) ? parsedTabId : null;
-      i += 1;
     }
   }
 
-  return {courseKey, moduleIndex, lessonIndex, tabId};
+  return {courseKey, moduleIndex, lessonIndex};
 }
 function ensureRouteMessagePage(){
   let page = document.getElementById('route-message-page');
@@ -3128,8 +3069,8 @@ function handleRoute(){
   if(hash === '#simulators') return showSimulatorsPage();
 
   if(hash.startsWith('#course/')){
-    const {courseKey, moduleIndex, lessonIndex, tabId} = parseCourseRoute(hash);
-    return openCourse(courseKey, moduleIndex, lessonIndex, tabId);
+    const {courseKey, moduleIndex, lessonIndex} = parseCourseRoute(hash);
+    return openCourse(courseKey, moduleIndex, lessonIndex);
   }
 
   if(hash === '#tests/topic'){
@@ -3303,18 +3244,6 @@ function openSim(key){
   window.scrollTo(0,0);
 }
 const LAST_COURSE_LESSON_STORAGE_KEY = 'fizmat_last_course_lesson';
-const COURSE_TABS = ['theory','tasks','sims','lab','video','tests','hw'];
-function isValidCourseTab(tabId){
-  return COURSE_TABS.includes(tabId);
-}
-function getCourseTabActiveClass(tabId){
-  const activeClasses = {tasks:'active-ptasks', sims:'active-psims', lab:'active-plab'};
-  return activeClasses[tabId] || 'active';
-}
-function getCourseRoute(courseKey,moduleIndex,lessonIndex,tabId){
-  const safeTabId = isValidCourseTab(tabId) ? tabId : 'theory';
-  return `#course/${encodeURIComponent(courseKey)}/m/${moduleIndex}/l/${lessonIndex}/t/${safeTabId}`;
-}
 function readLastCourseLessons(){
   try{
     const raw = localStorage.getItem(LAST_COURSE_LESSON_STORAGE_KEY);
@@ -3324,13 +3253,11 @@ function readLastCourseLessons(){
     return {};
   }
 }
-function saveLastCourseLesson(courseKey,moduleIndex,lessonIndex,tabId){
+function saveLastCourseLesson(courseKey,moduleIndex,lessonIndex){
   if(!courseKey) return;
   try{
     const data = readLastCourseLessons();
-    const previous = data[courseKey] && typeof data[courseKey] === 'object' ? data[courseKey] : {};
-    const tab = isValidCourseTab(tabId) ? tabId : 'theory';
-    data[courseKey] = {...previous, module:moduleIndex, lesson:lessonIndex, tab};
+    data[courseKey] = {module:moduleIndex, lesson:lessonIndex};
     localStorage.setItem(LAST_COURSE_LESSON_STORAGE_KEY, JSON.stringify(data));
   }catch(err){
     console.warn('Не удалось сохранить последний урок курса:', err);
@@ -3344,40 +3271,28 @@ function getSavedCourseLesson(courseKey,c){
   if(!saved) return null;
   const moduleIndex = Number(saved.module);
   const lessonIndex = Number(saved.lesson);
-  const tabId = isValidCourseTab(saved.tab) ? saved.tab : null;
-  return isValidCourseLesson(c,moduleIndex,lessonIndex) ? {moduleIndex,lessonIndex,tabId} : null;
+  return isValidCourseLesson(c,moduleIndex,lessonIndex) ? {moduleIndex,lessonIndex} : null;
 }
-function resolveCourseLesson(courseKey,c,moduleIndex,lessonIndex,tabId){
-  const saved = getSavedCourseLesson(courseKey,c);
-  let selected;
+function resolveCourseLesson(courseKey,c,moduleIndex,lessonIndex){
   if(isValidCourseLesson(c,moduleIndex,lessonIndex)){
-    selected = {moduleIndex,lessonIndex};
-  } else if(saved){
-    selected = {moduleIndex:saved.moduleIndex, lessonIndex:saved.lessonIndex};
-  } else {
-    selected = {moduleIndex:0, lessonIndex:0};
+    return {moduleIndex,lessonIndex};
   }
-
-  const savedMatchesLesson = saved && saved.moduleIndex === selected.moduleIndex && saved.lessonIndex === selected.lessonIndex;
-  selected.tabId = isValidCourseTab(tabId) ? tabId : (savedMatchesLesson && saved.tabId ? saved.tabId : 'theory');
-  return selected;
+  const saved = getSavedCourseLesson(courseKey,c);
+  if(saved) return saved;
+  return {moduleIndex:0,lessonIndex:0};
 }
-function openCourse(key,moduleIndex,lessonIndex,tabId){
+function openCourse(key,moduleIndex,lessonIndex){
   if(!COURSES || !COURSES[key]){
     console.warn('Курс не найден:', key);
     return showCourseNotFound();
   }
 
   const c = COURSES[key];
-  const selected = resolveCourseLesson(key,c,moduleIndex,lessonIndex,tabId);
+  const selected = resolveCourseLesson(key,c,moduleIndex,lessonIndex);
   AC = key;
   CM = selected.moduleIndex;
   CL = selected.lessonIndex;
-  CTAB = selected.tabId || 'theory';
-  saveLastCourseLesson(AC,CM,CL,CTAB);
-  if(window.location.hash !== getCourseRoute(AC,CM,CL,CTAB)){
-    history.replaceState(null,'',getCourseRoute(AC,CM,CL,CTAB));
-  }
+  saveLastCourseLesson(AC,CM,CL);
 
   hideAll();
 
@@ -3486,7 +3401,7 @@ function lDl(e){e.currentTarget.classList.remove('dov')}
 function lDd(e,tmi,tli){if(!dLs)return;e.preventDefault();const{mi:smi,li:sli}=dLs;if(smi===tmi&&sli===tli)return;const c=COURSES[AC];const[mv]=c.modules[smi].lessons.splice(sli,1);const a=(smi===tmi&&sli<tli)?tli-1:tli;c.modules[tmi].lessons.splice(a,0,mv);if(CM===smi&&CL===sli){CM=tmi;CL=a}dLs=null;renderSb()}
 
 /* EDIT ACTIONS */
-function selL(e,mi,li){if(e.target.tagName==='INPUT'||e.target.tagName==='BUTTON')return;CM=mi;CL=li;CTAB='theory';saveLastCourseLesson(AC,CM,CL,CTAB);history.replaceState(null,'',getCourseRoute(AC,CM,CL,CTAB));renderSb();renderContent()}
+function selL(e,mi,li){if(e.target.tagName==='INPUT'||e.target.tagName==='BUTTON')return;CM=mi;CL=li;saveLastCourseLesson(AC,CM,CL);history.replaceState(null,'',`#course/${AC}/m/${CM}/l/${CL}`);renderSb();renderContent()}
 function togM(mi){COURSES[AC].modules[mi].open=!COURSES[AC].modules[mi].open;renderSb()}
 function addModule(){COURSES[AC].modules.push({name:'Новый модуль',open:true,lessons:['Урок 1']});CM=COURSES[AC].modules.length-1;CL=0;renderSb();renderContent()}
 function delM(mi){const c=COURSES[AC];if(c.modules.length<=1){alert('Нельзя удалить единственный модуль');return}if(!confirm('Удалить модуль «'+c.modules[mi].name+'»?'))return;c.modules.splice(mi,1);CM=Math.min(CM,c.modules.length-1);CL=0;renderSb();renderContent()}
@@ -3494,15 +3409,7 @@ function addL(mi){COURSES[AC].modules[mi].lessons.push('Новый урок');CM
 function delL(mi,li){const m=COURSES[AC].modules[mi];if(m.lessons.length<=1){alert('Должен быть хотя бы 1 урок');return}m.lessons.splice(li,1);if(CM===mi&&CL>=m.lessons.length)CL=m.lessons.length-1;renderSb();renderContent()}
 
 /* ============ CONTENT ============ */
-function courseTabButtonClass(tabId,activeClass){
-  if(CTAB !== tabId) return 'cpt';
-  return 'cpt ' + (activeClass || getCourseTabActiveClass(tabId));
-}
-function coursePanelClass(tabId){
-  return CTAB === tabId ? 'cp-panel active' : 'cp-panel';
-}
 function renderContent(){
-  if(!isValidCourseTab(CTAB)) CTAB='theory';
   const c=COURSES[AC],name=c.modules[CM].lessons[CL],ld=gld();
   const topHint=document.getElementById('topHint');
   if(topHint)topHint.textContent=EMODE?'✏️ Кликните для переименования · ⠿ Перетащите для смены порядка':'👁 Режим просмотра';
@@ -3519,34 +3426,27 @@ function renderContent(){
       <div class="cps"><div class="cpsv">${ld.files.length}</div><div class="cpsl">работ сдано</div></div>
     </div>
     <div class="cp-tabs">
-      <button class="${courseTabButtonClass('theory')}" onclick="showTab('theory',this)">📖 Теория</button>
-      <button class="${courseTabButtonClass('tasks','active-ptasks')}" onclick="showTab('tasks',this,'active-ptasks')">📋 Задачи</button>
-      <button class="${courseTabButtonClass('sims','active-psims')}" onclick="showTab('sims',this,'active-psims')">⚡ Симуляторы</button>
-      <button class="${courseTabButtonClass('lab','active-plab')}" onclick="showTab('lab',this,'active-plab')">🔬 Лабораторные</button>
-      <button class="${courseTabButtonClass('video')}" onclick="showTab('video',this)">▶ Видео</button>
-      <button class="${courseTabButtonClass('tests')}" onclick="showTab('tests',this)">✏️ Тесты</button>
-      <button class="${courseTabButtonClass('hw')}" onclick="showTab('hw',this)">📎 Домашнее задание</button>
+      <button class="cpt active" onclick="showTab('theory',this)">📖 Теория</button>
+      <button class="cpt" onclick="showTab('tasks',this,'active-ptasks')">📋 Задачи</button>
+      <button class="cpt" onclick="showTab('sims',this,'active-psims')">⚡ Симуляторы</button>
+      <button class="cpt" onclick="showTab('lab',this,'active-plab')">🔬 Лабораторные</button>
+      <button class="cpt" onclick="showTab('video',this)">▶ Видео</button>
+      <button class="cpt" onclick="showTab('tests',this)">✏️ Тесты</button>
+      <button class="cpt" onclick="showTab('hw',this)">📎 Домашнее задание</button>
     </div>
-    <div id="pan-theory" class="${coursePanelClass('theory')}">${renderTheory()}</div>
-    <div id="pan-tasks"  class="${coursePanelClass('tasks')}">${renderPTasks(name)}</div>
-    <div id="pan-sims"   class="${coursePanelClass('sims')}">${renderPSims(name)}</div>
-    <div id="pan-lab"    class="${coursePanelClass('lab')}">${renderPLab(name)}</div>
-    <div id="pan-video"  class="${coursePanelClass('video')}">${renderVideo(ld)}</div>
-    <div id="pan-tests"  class="${coursePanelClass('tests')}">${renderTests(ld)}</div>
-    <div id="pan-hw"     class="${coursePanelClass('hw')}">${renderHW(ld)}</div>`;
+    <div id="pan-theory" class="cp-panel active">${renderTheory()}</div>
+    <div id="pan-tasks"  class="cp-panel">${renderPTasks(name)}</div>
+    <div id="pan-sims"   class="cp-panel">${renderPSims(name)}</div>
+    <div id="pan-lab"    class="cp-panel">${renderPLab(name)}</div>
+    <div id="pan-video"  class="cp-panel">${renderVideo(ld)}</div>
+    <div id="pan-tests"  class="cp-panel">${renderTests(ld)}</div>
+    <div id="pan-hw"     class="cp-panel">${renderHW(ld)}</div>`;
 }
 function showTab(id,btn,colorClass){
-  if(!isValidCourseTab(id)) id='theory';
   document.querySelectorAll('.cp-panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.cpt').forEach(t=>{t.classList.remove('active','active-ptasks','active-psims','active-plab');});
-  const panel = document.getElementById('pan-'+id);
-  if(panel) panel.classList.add('active');
-  if(btn) btn.classList.add(colorClass||getCourseTabActiveClass(id));
-  CTAB = id;
-  saveLastCourseLesson(AC,CM,CL,CTAB);
-  if(AC !== null && AC !== undefined){
-    history.replaceState(null,'',getCourseRoute(AC,CM,CL,CTAB));
-  }
+  document.getElementById('pan-'+id).classList.add('active');
+  btn.classList.add(colorClass||'active');
 }
 
 /* ============ THEORY RENDERING ============ */
@@ -5541,45 +5441,9 @@ function renderPTasks(name){
     const cond=t.cond?String(t.cond):(isBlank&&EMODE?'<div class="pt-empty-text">Пустой блок задачи. Условие будет добавлено через Codex.</div>':'');
     const steps=(t.steps||[]).map((s,j)=>`<div class="sr-step"><div class="sr-snum">${j+1}</div><div class="sr-sbody">${s}</div></div>`).join('');
     const extra=t.extraHtml?`<div class="pt-extra">${t.extraHtml}</div>`:'';
-    const taskId=String(t.id||t.boardMode||`${AC||'course'}-m${CM}-l${CL}-task-${i+1}`);
-    const boardMode=String(t.boardMode||taskId);
-    TASK_BOARD_RUNTIME_TASKS[taskId]={
-      id:taskId,
-      boardMode:boardMode,
-      title:t.title||`Задача ${i+1}`,
-      num:Number(t.num)||i+1,
-      level:t.level||2,
-      exam:t.exam||'',
-      points:t.points||'',
-      cond:t.cond||t.condition||t.text||'',
-      condition:t.condition||t.cond||t.text||'',
-      text:t.text||t.cond||t.condition||'',
-      given:t.given||'',
-      ans:t.ans||'',
-      steps:t.steps||[],
-      extraHtml:t.extraHtml||'',
-      solutionHtml:t.solutionHtml||'',
-      solutionImage:t.solutionImage||'',
-      solutionTitle:t.solutionTitle||'',
-      solution:t.solution||null,
-      graphLabel:t.graphLabel||'Схема',
-      hasAnimation:!!t.hasAnimation
-    };
-    TASK_BOARD_RUNTIME_TASKS[boardMode]=TASK_BOARD_RUNTIME_TASKS[taskId];
-    const boardBtn=`
-      <div class="pt-side-actions">
-        <button
-          type="button"
-          class="pt-board-btn"
-          data-task-id="${escapeHtml(taskId)}"
-          data-board-mode="${escapeHtml(boardMode)}"
-          onclick="return taskBoardButtonClick(event,this)"
-          onpointerup="return taskBoardButtonClick(event,this)"
-        >🧑‍🏫 Доска</button>
-        ${taskId==='lesson12-task07'
-          ? `<button type="button" class="pt-board-btn task07-card-anim-btn" onclick="openTaskAnimation('lesson12-task07')">▶ Анимация процесса</button>`
-          : ''}
-      </div>`;
+    const taskId=String(t.id||'');
+    const boardModeSafe=String(t.boardMode||'').replace(/'/g,"\\'");
+    const boardBtn=t.boardMode?`<div class="pt-side-actions"><button class="pt-board-btn" onclick="openTaskBoard('${boardModeSafe}',true)">⤢ На весь экран</button>${taskId==='lesson12-task07'?`<button class="pt-board-btn task07-card-anim-btn" onclick="openTaskAnimation('lesson12-task07')">▶ Анимация процесса</button>`:''}</div>`:'';
     const hasAnswer=String(t.ans||'').trim();
     const answerCard=hasAnswer?`<div class="sr-ans"><div style="font-size:18px">✓</div><div><div class="sr-ans-l">Ответ</div><div class="sr-ans-v" style="color:var(--orange)">${t.ans}</div></div></div>`:'';
     const hasStructuredSolution=hasFilledTaskSolution(t)||hasLegacyTaskTextSolution(t);
@@ -5747,10 +5611,7 @@ function impulseCarsDraw(demo){
 
 
 var taskBoardState=null;
-const TASK_BOARD_RUNTIME_TASKS = {};
 const TASK_BOARD_STORAGE_PREFIX='physoge_task_board_state_';
-const TASK_BOARD_TOOLBAR_POSITION_KEY='fizmat_task_board_toolbar_position';
-const TASK_BOARD_TOOLBAR_DEFAULT_POSITION={x:16,y:16};
 function cloneTaskBoardStrokes(strokes){return JSON.parse(JSON.stringify(strokes||[]));}
 function cloneTaskBoardObjects(objects){return JSON.parse(JSON.stringify(objects||[]));}
 function taskBoardSnapshot(){
@@ -5759,13 +5620,9 @@ function taskBoardSnapshot(){
 }
 function taskBoardApplySnapshot(snapshot){
   const state=ensureTaskBoardOverlay();
-  if(state.textInput&&state.textInput.parentNode) state.textInput.parentNode.removeChild(state.textInput);
-  state.textInput=null;
   state.strokes=cloneTaskBoardStrokes(snapshot&&snapshot.strokes);
   state.boardObjects=cloneTaskBoardObjects(snapshot&&snapshot.objects);
-  const validIds=taskBoardGetSelectedObjectIds().filter(function(id){return state.boardObjects.some(function(obj){return obj.id===id;});});
-  state.selectedObjectIds=validIds;
-  state.selectedObjectId=validIds[0]||null;
+  if(!state.boardObjects.some(function(obj){return obj.id===state.selectedObjectId;})) state.selectedObjectId=null;
   taskBoardDraw();
   renderBoardObjects();
 }
@@ -5776,7 +5633,7 @@ function taskBoardSaveState(showNotice){
   const data={drawing:cloneTaskBoardStrokes(state.strokes),objects:cloneTaskBoardObjects(state.boardObjects)};
   try{
     localStorage.setItem(taskBoardStorageKey(state.mode),JSON.stringify(data));
-    if(showNotice) alert('Доска сохранена вместе с объектами.');
+    if(showNotice) alert('Доска сохранена вместе с картинками.');
   }catch(err){
     console.warn('Не удалось сохранить состояние доски:',err);
     if(showNotice) alert('Не удалось сохранить доску: возможно, изображения слишком большие для localStorage.');
@@ -5863,115 +5720,33 @@ function renderBoardObjects(){
   const state=ensureTaskBoardOverlay();
   if(!state.objectLayer) return;
   state.objectLayer.style.transform='translate('+state.viewX+'px,'+state.viewY+'px) scale('+(state.viewScale||1)+')';
-  if(state.textInput&&state.textInput.parentNode) return;
   state.objectLayer.innerHTML='';
-  const selectedIds=taskBoardGetSelectedObjectIds();
   state.boardObjects.forEach(function(obj){
-    if(!obj) return;
+    if(!obj||obj.type!=='image') return;
     const el=document.createElement('div');
+    el.className='task-board-image-object'+(obj.id===state.selectedObjectId?' selected':'');
     el.dataset.id=obj.id;
     el.style.left=(Number(obj.x)||0)+'px';
     el.style.top=(Number(obj.y)||0)+'px';
-    if(obj.type==='image'){
-      el.className='task-board-image-object'+(obj.id===state.selectedObjectId?' selected':'');
-      el.style.width=Math.max(24,Number(obj.width)||120)+'px';
-      el.style.height=Math.max(24,Number(obj.height)||90)+'px';
-      const img=document.createElement('img');
-      img.src=obj.src;
-      img.alt='Изображение на доске';
-      const del=document.createElement('button');
-      del.type='button';
-      del.className='task-board-image-delete';
-      del.textContent='×';
-      del.setAttribute('aria-label','Удалить картинку');
-      const resize=document.createElement('div');
-      resize.className='task-board-image-resize';
-      el.appendChild(img);el.appendChild(del);el.appendChild(resize);
-    }else if(obj.type==='text'){
-      el.className='task-board-text-object'+(obj.id===state.selectedObjectId?' selected':'');
-      el.style.color=obj.color||state.color||'#0f172a';
-      el.style.fontSize=Math.max(12,Number(obj.fontSize)||22)+'px';
-      el.textContent=String(obj.text||'');
-      el.title='Двойной клик — редактировать текст';
-    }else return;
+    el.style.width=Math.max(24,Number(obj.width)||120)+'px';
+    el.style.height=Math.max(24,Number(obj.height)||90)+'px';
+    const img=document.createElement('img');
+    img.src=obj.src;
+    img.alt='Изображение на доске';
+    const del=document.createElement('button');
+    del.type='button';
+    del.className='task-board-image-delete';
+    del.textContent='×';
+    del.setAttribute('aria-label','Удалить картинку');
+    const resize=document.createElement('div');
+    resize.className='task-board-image-resize';
+    el.appendChild(img);el.appendChild(del);el.appendChild(resize);
     state.objectLayer.appendChild(el);
   });
-}
-function taskBoardCreateTextObject(text,x,y,color,fontSize){
-  return {id:'text-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),type:'text',text:String(text||''),x:Math.round(Number(x)||0),y:Math.round(Number(y)||0),color:color||'#0f172a',fontSize:Math.max(12,Number(fontSize)||22)};
-}
-function taskBoardAutosizeTextInput(input){
-  if(!input) return;
-  input.style.height='auto';
-  input.style.width=Math.max(180,Math.min(620,input.scrollWidth+6))+'px';
-  input.style.height=Math.max(38,input.scrollHeight+4)+'px';
-}
-function taskBoardStartTextInput(world,obj){
-  const state=ensureTaskBoardOverlay();
-  if(!state.objectLayer) return;
-  if(state.textInput&&state.textInput.parentNode) state.textInput.blur();
-  const isEdit=!!(obj&&obj.id);
-  if(isEdit) selectBoardObject(obj.id); else selectBoardObject(null);
-  const input=document.createElement('textarea');
-  input.className='task-board-text-input';
-  input.rows=1;
-  input.value=isEdit?String(obj.text||''):'';
-  input.placeholder='Введите текст';
-  input.style.left=(Number(isEdit?obj.x:world.x)||0)+'px';
-  input.style.top=(Number(isEdit?obj.y:world.y)||0)+'px';
-  input.style.color=isEdit?(obj.color||state.color):(state.color||'#0f172a');
-  input.style.fontSize=Math.max(12,Number(isEdit?obj.fontSize:22)||22)+'px';
-  state.textInput=input;
-  state.objectLayer.appendChild(input);
-  const finish=function(save){
-    if(state.textInput!==input) return;
-    state.textInput=null;
-    const text=String(input.value||'').trim();
-    if(input.parentNode) input.parentNode.removeChild(input);
-    if(save&&text){
-      if(isEdit){
-        obj.text=text;
-        obj.color=obj.color||state.color;
-        obj.fontSize=Math.max(12,Number(obj.fontSize)||22);
-        selectBoardObject(obj.id);
-      }else{
-        const textObj=taskBoardCreateTextObject(text,world.x,world.y,state.color,22);
-        state.boardObjects.push(textObj);
-        selectBoardObject(textObj.id);
-      }
-      renderBoardObjects();
-      taskBoardPushHistory();
-      taskBoardSaveState(false);
-    }else if(save&&isEdit&&!text){
-      state.boardObjects=state.boardObjects.filter(function(item){return item.id!==obj.id;});
-      state.selectedObjectId=null;
-      renderBoardObjects();
-      taskBoardPushHistory();
-      taskBoardSaveState(false);
-    }else{
-      renderBoardObjects();
-    }
-  };
-  input.addEventListener('keydown',function(e){
-    if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();finish(true);}
-    else if(e.key==='Escape'){e.preventDefault();finish(false);}
-  });
-  input.addEventListener('input',function(){taskBoardAutosizeTextInput(input);});
-  input.addEventListener('blur',function(){finish(true);});
-  setTimeout(function(){input.focus();input.select();taskBoardAutosizeTextInput(input);},0);
 }
 function selectBoardObject(id){
   const state=ensureTaskBoardOverlay();
   state.selectedObjectId=id||null;
-  state.selectedObjectIds=id?[id]:[];
-  renderBoardObjects();
-}
-function selectBoardObjects(ids){
-  const state=ensureTaskBoardOverlay();
-  const unique=[];
-  (ids||[]).forEach(function(id){if(id&&unique.indexOf(id)===-1) unique.push(id);});
-  state.selectedObjectIds=unique;
-  state.selectedObjectId=unique[0]||null;
   renderBoardObjects();
 }
 function findBoardObject(id){
@@ -5990,22 +5765,14 @@ function resizeBoardObject(id,width,height){
 }
 function deleteSelectedBoardObject(){
   const state=ensureTaskBoardOverlay();
-  const selectedIds=taskBoardGetSelectedObjectIds();
-  if(!selectedIds.length) return;
+  if(!state.selectedObjectId) return;
   const before=state.boardObjects.length;
-  state.boardObjects=state.boardObjects.filter(function(obj){return selectedIds.indexOf(obj.id)===-1;});
+  state.boardObjects=state.boardObjects.filter(function(obj){return obj.id!==state.selectedObjectId;});
   state.selectedObjectId=null;
-  state.selectedObjectIds=[];
   if(state.boardObjects.length!==before){renderBoardObjects();taskBoardPushHistory();taskBoardSaveState(false);}
 }
 function taskBoardObjectPointerDown(e){
   const state=ensureTaskBoardOverlay();
-  if(state.tool==='pointer'){
-    taskBoardLaserPointerMove(e);
-    e.preventDefault();
-    e.stopPropagation();
-    return;
-  }
   const objectEl=e.target.closest('.task-board-image-object');
   if(!objectEl) return;
   const id=objectEl.dataset.id;
@@ -6014,63 +5781,26 @@ function taskBoardObjectPointerDown(e){
   e.preventDefault();
   e.stopPropagation();
   selectBoardObject(id);
-  if(e.detail>=2&&obj.type==='text'){taskBoardStartTextInput({x:obj.x,y:obj.y},obj);return;}
   if(e.target.closest('.task-board-image-delete')){deleteSelectedBoardObject();return;}
   const scale=state.viewScale||1;
-  const selectedIds=taskBoardGetSelectedObjectIds();
-  const dragIds=selectedIds.indexOf(id)!==-1?selectedIds:[id];
-  const start={
-    x:e.clientX,
-    y:e.clientY,
-    objX:obj.x,
-    objY:obj.y,
-    width:obj.width,
-    height:obj.height,
-    moved:false,
-    objects:dragIds.map(function(dragId){
-      const dragObj=findBoardObject(dragId);
-      return dragObj?{id:dragObj.id,x:Number(dragObj.x)||0,y:Number(dragObj.y)||0}:null;
-    }).filter(Boolean)
-  };
-  const isResize=obj.type==='image'&&!!e.target.closest('.task-board-image-resize');
+  const start={x:e.clientX,y:e.clientY,objX:obj.x,objY:obj.y,width:obj.width,height:obj.height};
+  const isResize=!!e.target.closest('.task-board-image-resize');
   objectEl.classList.add('dragging');
   const move=function(ev){
     const dx=(ev.clientX-start.x)/scale;
     const dy=(ev.clientY-start.y)/scale;
-    if(Math.abs(dx)>0.5||Math.abs(dy)>0.5) start.moved=true;
     if(isResize) resizeBoardObject(id,start.width+dx,start.height+dy);
-    else{
-      start.objects.forEach(function(item){
-        const dragObj=findBoardObject(item.id);
-        if(dragObj){dragObj.x=Math.round(item.x+dx);dragObj.y=Math.round(item.y+dy);}
-      });
-    }
+    else{obj.x=Math.round(start.objX+dx);obj.y=Math.round(start.objY+dy);}
     renderBoardObjects();
   };
   const up=function(){
     window.removeEventListener('pointermove',move);
     window.removeEventListener('pointerup',up);
-    window.removeEventListener('pointercancel',up);
-    objectEl.classList.remove('dragging');
-    if(start.moved||(isResize&&(obj.width!==start.width||obj.height!==start.height))){
-      taskBoardPushHistory();
-      taskBoardSaveState(false);
-    }else{
-      renderBoardObjects();
-    }
+    taskBoardPushHistory();
+    taskBoardSaveState(false);
   };
   window.addEventListener('pointermove',move);
   window.addEventListener('pointerup',up,{once:true});
-  window.addEventListener('pointercancel',up,{once:true});
-}
-function taskBoardObjectDblClick(e){
-  const objectEl=e.target.closest('.task-board-text-object');
-  if(!objectEl) return;
-  const obj=findBoardObject(objectEl.dataset.id);
-  if(!obj||obj.type!=='text') return;
-  e.preventDefault();
-  e.stopPropagation();
-  taskBoardStartTextInput({x:obj.x,y:obj.y},obj);
 }
 function getTaskBoardData(mode){
   if(String(mode||'').indexOf('blank-task-')===0){
@@ -6095,24 +5825,6 @@ function getTaskBoardData(mode){
     if(found)return found;
   }
   return null;
-}
-function createTaskBoardFallbackData(mode,taskId){
-  const label=String(taskId||mode||'').trim();
-  return {
-    title:label?'Интерактивная доска: '+label:'Интерактивная доска',
-    cond:'<p>Пустая рабочая доска. Данные задачи не найдены, но доска доступна для работы.</p>',
-    given:'',
-    ans:'',
-    steps:[],
-    solutionHtml:'',
-    solutionImage:'',
-    solution:{idea:'',formulas:[],steps:[],answer:'',tutorHint:''},
-    boardMode:mode||'',
-    id:taskId||'',
-    isFallback:true,
-    hasAnimation:false,
-    graphLabel:'Схема'
-  };
 }
 function getTaskBoardGraph(mode){
   if(mode==='impulseCars') return `
@@ -6537,59 +6249,52 @@ function ensureTaskBoardOverlay(){
           </div>
           <div class="task-board-center">
             <div class="task-board-toolbar" id="taskBoardToolbar">
-              <button type="button" class="task-board-toolbar-drag" id="taskBoardToolbarDrag" aria-label="Перетащить панель доски" title="Перетащить панель доски">⋮⋮</button>
-              <div class="task-board-dropdown" data-dropdown-name="tools">
-                <button type="button" class="task-board-dropdown-toggle" data-task-board-dropdown="tools" onclick="taskBoardToggleDropdown('tools'); return false;" aria-haspopup="true" aria-expanded="false">🧰 Инструменты ▼</button>
+              <div class="task-board-dropdown" data-task-board-dropdown="tools">
+                <button type="button" class="task-board-dropdown-toggle" onclick="taskBoardToggleDropdown('tools')" aria-haspopup="true" aria-expanded="false">🧰 Инструменты ▼</button>
                 <div class="task-board-dropdown-menu">
-                  <button type="button" class="task-board-tool active" data-board-action="tool" data-tool="pen" data-board-tool="pen" onclick="taskBoardSetTool('pen'); taskBoardCloseDropdowns(); return false;">✏️ Карандаш</button>
-                  <button type="button" class="task-board-tool" data-board-action="tool" data-tool="eraser" data-board-tool="eraser" onclick="taskBoardSetTool('eraser'); taskBoardCloseDropdowns(); return false;">⌫ Ластик</button>
-                  <button type="button" class="task-board-tool" data-board-action="tool" data-tool="lasso" data-board-tool="lasso" onclick="taskBoardSetTool('lasso'); taskBoardCloseDropdowns(); return false;">⛶ Лассо</button>
-                  <button type="button" class="task-board-tool" data-board-action="tool" data-tool="move" data-board-tool="move" onclick="taskBoardSetTool('move'); taskBoardCloseDropdowns(); return false;">✋ Перемещение</button>
-                  <button type="button" class="task-board-tool" data-board-action="tool" data-tool="mouse" data-board-tool="mouse" onclick="taskBoardSetTool('mouse'); taskBoardCloseDropdowns(); return false;">🖱 Мышь</button>
-                  <button type="button" class="task-board-tool" data-board-action="tool" data-tool="text" data-board-tool="text" onclick="taskBoardSetTool('text'); taskBoardCloseDropdowns(); return false;">T Текст</button>
-                  <button type="button" class="task-board-tool" data-board-action="tool" data-tool="pointer" data-board-tool="pointer" onclick="taskBoardSetTool('pointer'); taskBoardCloseDropdowns(); return false;">☝ Указка</button>
-                  <button
-                    type="button"
-                    class="task-board-tool task-board-colors-toggle"
-                    data-board-action="colors"
-                  >
-                    🎨 Цвета <span id="taskBoardColorDot" class="task-board-color-dot" aria-hidden="true"></span>
-                  </button>
+                  <button type="button" class="task-board-tool active" data-board-tool="pen" onclick="taskBoardSetTool('pen')">✏️ Карандаш</button>
+                  <button type="button" class="task-board-tool" data-board-tool="eraser" onclick="taskBoardSetTool('eraser')">⌫ Ластик</button>
+                  <button type="button" class="task-board-tool" data-board-tool="lasso" onclick="taskBoardSetTool('lasso')">⛶ Лассо</button>
+                  <button type="button" class="task-board-tool" data-board-tool="pan" onclick="taskBoardSetTool('pan')">✋ Перемещение</button>
+                  <button type="button" class="task-board-tool" data-board-tool="mouse" onclick="taskBoardSetTool('mouse')">🖱 Мышь</button>
+                  <button type="button" class="task-board-tool" data-board-tool="text" onclick="taskBoardSetTool('text')">T Текст</button>
+                  <button type="button" class="task-board-tool" data-board-tool="pointer" onclick="taskBoardSetTool('pointer')">☝ Указка</button>
+                  <button type="button" class="task-board-tool task-board-colors-toggle" onclick="taskBoardToggleColors()">🎨 Цвета <span id="taskBoardColorDot" class="task-board-color-dot" aria-hidden="true"></span></button>
                   <div class="task-board-color-palette" aria-label="Палитра доски">
-                    <button type="button" class="task-board-color active" data-board-color="#0f172a" style="--sw:#0f172a" onclick="taskBoardSetColor('#0f172a'); return false;" aria-label="Чёрный цвет" title="Чёрный"></button>
-                    <button type="button" class="task-board-color" data-board-color="#2563eb" style="--sw:#2563eb" onclick="taskBoardSetColor('#2563eb'); return false;" aria-label="Синий цвет" title="Синий"></button>
-                    <button type="button" class="task-board-color" data-board-color="#dc2626" style="--sw:#dc2626" onclick="taskBoardSetColor('#dc2626'); return false;" aria-label="Красный цвет" title="Красный"></button>
-                    <button type="button" class="task-board-color" data-board-color="#16a34a" style="--sw:#16a34a" onclick="taskBoardSetColor('#16a34a'); return false;" aria-label="Зелёный цвет" title="Зелёный"></button>
+                    <button type="button" class="task-board-color active" data-board-color="#0f172a" style="--sw:#0f172a" onclick="taskBoardSetColor('#0f172a')" aria-label="Чёрный цвет"></button>
+                    <button type="button" class="task-board-color" data-board-color="#1d4ed8" style="--sw:#1d4ed8" onclick="taskBoardSetColor('#1d4ed8')" aria-label="Синий цвет"></button>
+                    <button type="button" class="task-board-color" data-board-color="#dc2626" style="--sw:#dc2626" onclick="taskBoardSetColor('#dc2626')" aria-label="Красный цвет"></button>
+                    <button type="button" class="task-board-color" data-board-color="#16a34a" style="--sw:#16a34a" onclick="taskBoardSetColor('#16a34a')" aria-label="Зелёный цвет"></button>
                   </div>
                   <div class="task-board-menu-row">
                     <span class="task-board-menu-label">Толщина:</span>
-                    <input id="taskBoardSize" class="task-board-size-input" type="range" data-board-size min="1" max="20" value="4" oninput="taskBoardSetSize(this.value)">
+                    <input id="taskBoardSize" class="task-board-size-input" type="range" min="2" max="12" value="4" oninput="taskBoardSetSize(this.value)">
                     <span id="taskBoardSizeValue" class="task-board-size">4 px</span>
                   </div>
-                  <button type="button" class="task-board-clear" data-board-action="clear" onclick="taskBoardClear(); return false;">🧹 Очистить</button>
-                  <button type="button" class="task-board-tool" id="taskBoardUndoBtn" data-board-action="undo" onclick="taskBoardUndo(); return false;">↶ Назад</button>
-                  <button type="button" class="task-board-tool" id="taskBoardRedoBtn" data-board-action="redo" onclick="taskBoardRedo(); return false;">↷ Вперёд</button>
-                  <button type="button" class="task-board-tool" data-board-action="save" onclick="taskBoardSaveState(true); return false;">💾 Сохранить</button>
+                  <button type="button" class="task-board-clear" onclick="taskBoardClear()">🧹 Очистить</button>
+                  <button type="button" class="task-board-tool" id="taskBoardUndoBtn" onclick="taskBoardUndo()">↶ Назад</button>
+                  <button type="button" class="task-board-tool" id="taskBoardRedoBtn" onclick="taskBoardRedo()">↷ Вперёд</button>
+                  <button type="button" class="task-board-tool" onclick="taskBoardSaveState(true)">💾 Сохранить</button>
                 </div>
               </div>
-              <div class="task-board-dropdown" data-dropdown-name="materials">
-                <button type="button" class="task-board-dropdown-toggle" data-task-board-dropdown="materials" onclick="taskBoardToggleDropdown('materials'); return false;" aria-haspopup="true" aria-expanded="false">📂 Материалы ▼</button>
+              <div class="task-board-dropdown" data-task-board-dropdown="materials">
+                <button type="button" class="task-board-dropdown-toggle" onclick="taskBoardToggleDropdown('materials')" aria-haspopup="true" aria-expanded="false">📂 Материалы ▼</button>
                 <div class="task-board-dropdown-menu task-board-materials-menu">
-                  <button type="button" id="taskBoardConditionBtn" class="task-board-tool" data-board-material="condition" onclick="toggleTaskBoardCondition(); taskBoardCloseDropdowns(); return false;">📄 Условие</button>
-                  <button type="button" id="taskBoardGraphBtn" class="task-board-tool" data-board-material="graph" onclick="toggleTaskBoardGraph(); taskBoardCloseDropdowns(); return false;">🧩 Схема</button>
-                  <button type="button" class="task-board-tool" id="taskBoardAnimBtn" data-board-material="animation" onclick="toggleTaskBoardAnimation(); taskBoardCloseDropdowns(); return false;">▶ Анимация</button>
-                  <button type="button" class="task-board-tool" data-board-material="solution" onclick="toggleTaskBoardSolution(); taskBoardCloseDropdowns(); return false;">✅ Решение</button>
+                  <button type="button" id="taskBoardConditionBtn" class="task-board-tool" onclick="taskBoardToggleFloating('condition');taskBoardCloseDropdowns();">📄 Условие</button>
+                  <button type="button" id="taskBoardGraphBtn" class="task-board-tool" onclick="taskBoardToggleFloating('graph');taskBoardCloseDropdowns();">🧩 Схема</button>
+                  <button type="button" class="task-board-tool" id="taskBoardAnimBtn" onclick="toggleTaskBoardAnimation();taskBoardCloseDropdowns();">▶ Анимация</button>
+                  <button type="button" class="task-board-tool" onclick="toggleTaskBoardDrawer();taskBoardCloseDropdowns();">✅ Решение</button>
                 </div>
               </div>
-              <button type="button" class="task-board-close-btn" data-board-close="true" onclick="closeTaskBoard(); return false;">✕ Закрыть</button>
+              <button type="button" class="task-board-close-btn" onclick="closeTaskBoard()">✕ Закрыть</button>
             </div>
             <div id="taskBoardCanvasWrap" class="task-board-canvas-wrap pen-mode">
-              <div class="task-board-condition-drawer task-board-float open" id="taskBoardConditionDrawer">
-                <div class="task-board-condition-head task-board-float-head" data-float-drag="condition">
-                  <span class="task-board-condition-drag" title="Перетащить">⋮⋮</span>
-                  <strong>Условие</strong>
+              <div id="taskBoardConditionWrap" class="task-board-float" style="display:none">
+                <div class="task-board-float-head" data-float-drag="condition">
+                  <div class="task-board-problem-label">Условие задачи</div>
+                  <button type="button" class="task-board-float-close" onclick="taskBoardToggleFloating('condition',false)">Скрыть</button>
                 </div>
-                <div class="task-board-condition task-board-float-body" id="taskBoardCondition"></div>
+                <div class="task-board-float-body"><div id="taskBoardCondition" class="task-board-condition"></div></div>
               </div>
               <div id="taskBoardGraphWrap" class="task-board-float" style="display:none;left:auto;right:16px;width:min(420px,calc(100% - 32px));">
                 <div class="task-board-float-head" data-float-drag="graph">
@@ -6600,8 +6305,6 @@ function ensureTaskBoardOverlay(){
               </div>
               <canvas id="taskBoardCanvas" class="task-board-canvas"></canvas>
               <div id="taskBoardObjectLayer" class="task-board-object-layer"></div>
-              <svg id="taskBoardLassoLayer" class="task-board-lasso-layer" aria-hidden="true"></svg>
-              <div id="taskBoardLaserPointer" class="task-board-laser-pointer" aria-hidden="true"></div>
               <input id="taskBoardImageInput" type="file" accept="image/png,image/jpeg,image/jpg,image/webp" style="display:none">
               <div class="task-board-zoom-controls">
                 <button type="button" class="task-board-zoom-btn" onclick="taskBoardAdjustZoom(1.15)" aria-label="Увеличить доску">+</button>
@@ -6638,15 +6341,12 @@ function ensureTaskBoardOverlay(){
         </div>
       </div>
     </div>`);
-  const overlay=document.getElementById('taskBoardOverlay');
   taskBoardState={
-    overlay:overlay,
-    toolbar:overlay.querySelector('#taskBoardToolbar'),
-    toolbarDrag:document.getElementById('taskBoardToolbarDrag'),
-    title:overlay.querySelector('#taskBoardTitle'),
-    conditionDrawer:overlay.querySelector('#taskBoardConditionDrawer'),
-    condition:overlay.querySelector('#taskBoardCondition'),
-    conditionWrap:overlay.querySelector('#taskBoardConditionDrawer'),
+    overlay:document.getElementById('taskBoardOverlay'),
+    toolbar:document.getElementById('taskBoardToolbar'),
+    title:document.getElementById('taskBoardTitle'),
+    condition:document.getElementById('taskBoardCondition'),
+    conditionWrap:document.getElementById('taskBoardConditionWrap'),
     graph:document.getElementById('taskBoardGraph'),
     graphWrap:document.getElementById('taskBoardGraphWrap'),
     graphLabel:document.getElementById('taskBoardGraphLabel'),
@@ -6658,8 +6358,6 @@ function ensureTaskBoardOverlay(){
     canvasWrap:document.getElementById('taskBoardCanvasWrap'),
     canvas:document.getElementById('taskBoardCanvas'),
     objectLayer:document.getElementById('taskBoardObjectLayer'),
-    lassoLayer:document.getElementById('taskBoardLassoLayer'),
-    laserPointer:document.getElementById('taskBoardLaserPointer'),
     imageInput:document.getElementById('taskBoardImageInput'),
     ctx:document.getElementById('taskBoardCanvas').getContext('2d'),
     sizeInput:document.getElementById('taskBoardSize'),
@@ -6686,7 +6384,6 @@ function ensureTaskBoardOverlay(){
     strokes:[],
     boardObjects:[],
     selectedObjectId:null,
-    textInput:null,
     history:[{strokes:[],objects:[]}],
     historyIndex:0,
     pointer:null,
@@ -6698,19 +6395,14 @@ function ensureTaskBoardOverlay(){
   taskBoardState.canvasWrap.addEventListener('contextmenu',function(e){e.preventDefault();});
   taskBoardInitFloatDrag(taskBoardState,'condition');
   taskBoardInitFloatDrag(taskBoardState,'graph');
-  taskBoardInitToolbarDrag(taskBoardState);
-  taskBoardBindToolbarControls(taskBoardState);
   taskBoardState.canvas.addEventListener('pointerdown',taskBoardPointerDown);
   taskBoardState.canvas.addEventListener('pointermove',taskBoardPointerMove);
-  taskBoardState.canvasWrap.addEventListener('pointermove',taskBoardLaserPointerMove);
-  taskBoardState.canvasWrap.addEventListener('pointerleave',taskBoardHideLaserPointer);
   taskBoardState.objectLayer.addEventListener('pointerdown',taskBoardObjectPointerDown);
-  taskBoardState.objectLayer.addEventListener('dblclick',taskBoardObjectDblClick);
   taskBoardState.imageInput.addEventListener('change',taskBoardImageInputChange);
   document.addEventListener('paste',taskBoardPasteImage);
   window.addEventListener('pointerup',taskBoardPointerUp);
   window.addEventListener('pointercancel',taskBoardPointerUp);
-  window.addEventListener('resize',function(){taskBoardResizeCanvas();taskBoardApplyToolbarPosition();restoreTaskBoardConditionPosition();taskBoardClampOpenDropdowns();});
+  window.addEventListener('resize',taskBoardResizeCanvas);
   document.addEventListener('fullscreenchange',taskBoardResizeCanvas);
   document.addEventListener('webkitfullscreenchange',taskBoardResizeCanvas);
   document.addEventListener('msfullscreenchange',taskBoardResizeCanvas);
@@ -6722,14 +6414,12 @@ function ensureTaskBoardOverlay(){
   document.addEventListener('keydown',function(e){
     if(!taskBoardState||!taskBoardState.overlay.classList.contains('open')) return;
     if(e.key==='Escape'){
-      if(taskBoardState.textInput) return;
       e.preventDefault();
       if(taskBoardHasOpenDropdown()) taskBoardCloseDropdowns();
       else if(taskBoardState.simPopup.classList.contains('open')) toggleTaskBoardAnimation(false);
       else closeTaskBoard();
       return;
     }
-    if(taskBoardState.textInput) return;
     if((e.key==='Delete'||e.key==='Backspace')&&taskBoardState.selectedObjectId){
       e.preventDefault();
       deleteSelectedBoardObject();
@@ -6751,381 +6441,6 @@ function ensureTaskBoardOverlay(){
   taskBoardUpdateHistoryButtons();
   return taskBoardState;
 }
-function taskBoardClampToolbarPosition(pos){
-  const state=taskBoardState;
-  const toolbar=state&&state.toolbar;
-  const margin=8;
-  const fallback=TASK_BOARD_TOOLBAR_DEFAULT_POSITION;
-  const rect=toolbar?toolbar.getBoundingClientRect():{width:0,height:0};
-  const maxX=Math.max(margin,window.innerWidth-rect.width-margin);
-  const maxY=Math.max(margin,window.innerHeight-rect.height-margin);
-  const x=Number.isFinite(pos&&pos.x)?pos.x:fallback.x;
-  const y=Number.isFinite(pos&&pos.y)?pos.y:fallback.y;
-  return {x:Math.min(Math.max(x,margin),maxX),y:Math.min(Math.max(y,margin),maxY)};
-}
-function taskBoardReadToolbarPosition(){
-  try{
-    const data=JSON.parse(localStorage.getItem(TASK_BOARD_TOOLBAR_POSITION_KEY)||'null');
-    if(data&&Number.isFinite(data.x)&&Number.isFinite(data.y)) return data;
-  }catch(err){console.warn('Не удалось восстановить позицию панели доски:',err);}
-  return TASK_BOARD_TOOLBAR_DEFAULT_POSITION;
-}
-function taskBoardSaveToolbarPosition(pos){
-  try{localStorage.setItem(TASK_BOARD_TOOLBAR_POSITION_KEY,JSON.stringify({x:Math.round(pos.x),y:Math.round(pos.y)}));}
-  catch(err){console.warn('Не удалось сохранить позицию панели доски:',err);}
-}
-function taskBoardSetToolbarPosition(pos,save){
-  const state=taskBoardState;
-  if(!state||!state.toolbar) return;
-  const next=taskBoardClampToolbarPosition(pos);
-  state.toolbar.style.left=next.x+'px';
-  state.toolbar.style.top=next.y+'px';
-  state.toolbar.style.right='auto';
-  state.toolbar.style.bottom='auto';
-  if(save) taskBoardSaveToolbarPosition(next);
-}
-function taskBoardApplyToolbarPosition(){
-  taskBoardSetToolbarPosition(taskBoardReadToolbarPosition(),false);
-}
-function taskBoardResetToolbarPosition(){
-  taskBoardSetToolbarPosition(TASK_BOARD_TOOLBAR_DEFAULT_POSITION,true);
-  taskBoardClampOpenDropdowns();
-}
-function taskBoardClampOpenDropdowns(){
-  const state=taskBoardState;
-  if(!state||!state.toolbar) return;
-  state.toolbar.querySelectorAll('.task-board-dropdown.open').forEach(function(dropdown){
-    dropdown.classList.remove('align-right');
-    const menu=dropdown.querySelector('.task-board-dropdown-menu');
-    if(!menu) return;
-    const rect=menu.getBoundingClientRect();
-    dropdown.classList.toggle('align-right',rect.right>window.innerWidth-8);
-  });
-}
-function taskBoardInitToolbarDrag(state){
-  const handle=state&&state.toolbarDrag;
-  const toolbar=state&&state.toolbar;
-  if(!handle||!toolbar) return;
-  handle.addEventListener('dblclick',function(e){
-    e.preventDefault();
-    e.stopPropagation();
-    taskBoardResetToolbarPosition();
-  });
-  handle.addEventListener('pointerdown',function(e){
-    if(e.button!==undefined&&e.button!==0) return;
-    e.preventDefault();
-    e.stopPropagation();
-    taskBoardCloseDropdowns();
-    const rect=toolbar.getBoundingClientRect();
-    const start={pointerId:e.pointerId,dx:e.clientX-rect.left,dy:e.clientY-rect.top};
-    toolbar.classList.add('dragging');
-    try{handle.setPointerCapture(e.pointerId);}catch(_err){}
-    function move(ev){
-      if(ev.pointerId!==start.pointerId) return;
-      ev.preventDefault();
-      taskBoardSetToolbarPosition({x:ev.clientX-start.dx,y:ev.clientY-start.dy},false);
-    }
-    function end(ev){
-      if(ev.pointerId!==start.pointerId) return;
-      ev.preventDefault();
-      toolbar.classList.remove('dragging');
-      window.removeEventListener('pointermove',move,true);
-      window.removeEventListener('pointerup',end,true);
-      window.removeEventListener('pointercancel',end,true);
-      try{handle.releasePointerCapture(start.pointerId);}catch(_err){}
-      taskBoardSetToolbarPosition({x:ev.clientX-start.dx,y:ev.clientY-start.dy},true);
-    }
-    window.addEventListener('pointermove',move,true);
-    window.addEventListener('pointerup',end,true);
-    window.addEventListener('pointercancel',end,true);
-  });
-}
-function taskBoardBindToolbarControls(state){
-  if(!state || !state.toolbar || state.toolbar.__controlsReady) return;
-
-  const toolbar = state.toolbar;
-  state.toolbar.__controlsReady = true;
-  state.toolbar.__lastPointerToolbarAction = 0;
-
-  function getToolbarControl(target){
-    if(!target || !target.closest) return null;
-    const control = target.closest('button, input, select');
-    return control && toolbar.contains(control) ? control : null;
-  }
-
-  function markPointerToolbarAction(){
-    toolbar.__lastPointerToolbarAction = Date.now();
-  }
-
-  function handleToolbarControl(e){
-    const target = e.target;
-    if(!target || !target.closest) return false;
-
-    const dropdownToggle = target.closest('[data-task-board-dropdown]');
-    if(dropdownToggle && toolbar.contains(dropdownToggle)){
-      e.preventDefault();
-      e.stopPropagation();
-      taskBoardToggleDropdown(dropdownToggle.getAttribute('data-task-board-dropdown'));
-      return true;
-    }
-
-    const actionBtn = target.closest('[data-board-action]');
-    if(actionBtn && toolbar.contains(actionBtn)){
-      e.preventDefault();
-      e.stopPropagation();
-
-      const action = actionBtn.getAttribute('data-board-action');
-
-      if(action === 'tool'){
-        const tool =
-          actionBtn.getAttribute('data-tool') ||
-          actionBtn.getAttribute('data-board-tool') ||
-          'pen';
-        taskBoardSetTool(tool);
-        taskBoardCloseDropdowns();
-        return true;
-      }
-
-      if(action === 'colors'){
-        taskBoardToggleColors();
-        return true;
-      }
-
-      if(action === 'clear'){
-        taskBoardClear();
-        return true;
-      }
-
-      if(action === 'undo'){
-        taskBoardUndo();
-        return true;
-      }
-
-      if(action === 'redo'){
-        taskBoardRedo();
-        return true;
-      }
-
-      if(action === 'save'){
-        taskBoardSaveState(true);
-        return true;
-      }
-    }
-
-    const colorBtn = target.closest('[data-board-color]');
-    if(colorBtn && toolbar.contains(colorBtn)){
-      e.preventDefault();
-      e.stopPropagation();
-      taskBoardSetColor(colorBtn.getAttribute('data-board-color'));
-      return true;
-    }
-
-    const materialBtn = target.closest('[data-board-material]');
-    if(materialBtn && toolbar.contains(materialBtn)){
-      e.preventDefault();
-      e.stopPropagation();
-
-      const material = materialBtn.getAttribute('data-board-material');
-
-      if(material === 'condition'){
-        toggleTaskBoardCondition();
-        taskBoardCloseDropdowns();
-        return true;
-      }
-
-      if(material === 'graph'){
-        toggleTaskBoardGraph();
-        taskBoardCloseDropdowns();
-        return true;
-      }
-
-      if(material === 'animation'){
-        toggleTaskBoardAnimation();
-        taskBoardCloseDropdowns();
-        return true;
-      }
-
-      if(material === 'solution'){
-        toggleTaskBoardSolution();
-        taskBoardCloseDropdowns();
-        return true;
-      }
-    }
-
-    const closeBtn = target.closest('[data-board-close]');
-    if(closeBtn && toolbar.contains(closeBtn)){
-      e.preventDefault();
-      e.stopPropagation();
-      closeTaskBoard();
-      return true;
-    }
-
-    return false;
-  }
-
-  toolbar.addEventListener('pointerdown', function(e){
-    if(getToolbarControl(e.target)){
-      e.stopPropagation();
-    }
-  }, true);
-
-  toolbar.addEventListener('pointerup', function(e){
-    const control = getToolbarControl(e.target);
-    if(!control) return;
-
-    e.stopPropagation();
-
-    if(taskBoardWasHardToolbarPointerHandled(control)){
-      markPointerToolbarAction();
-      return;
-    }
-
-    if(handleToolbarControl(e)){
-      markPointerToolbarAction();
-    }
-  }, true);
-
-  toolbar.addEventListener('click', function(e){
-    if(!getToolbarControl(e.target)) return;
-
-    if(Date.now() - toolbar.__lastPointerToolbarAction < 700){
-      e.preventDefault();
-      e.stopPropagation();
-      return;
-    }
-
-    handleToolbarControl(e);
-  }, true);
-
-  toolbar.addEventListener('input', function(e){
-    const input = e.target && e.target.closest
-      ? e.target.closest('[data-board-size]')
-      : null;
-
-    if(!input || !toolbar.contains(input)) return;
-
-    e.stopPropagation();
-
-    const size = Number(input.value) || 4;
-    taskBoardSetSize(size);
-  }, true);
-}
-
-function taskBoardWasHardToolbarPointerHandled(control){
-  const handled = window.__taskBoardHardToolbarLastControl;
-  return !!(
-    control &&
-    handled &&
-    handled.control === control &&
-    Date.now() - handled.time < 700
-  );
-}
-function taskBoardHardHandleToolbarPointerDown(e){
-  const target = e.target;
-  if(!target || !target.closest) return;
-  const isToolbarClick = target.closest(
-    '.task-board-toolbar, .task-board-dropdown-menu, .task-board-dropdown, .task-board-close-btn'
-  );
-  if(!isToolbarClick) return;
-  const control = target.closest(
-    '[data-task-board-dropdown], [data-board-action], [data-board-material], [data-board-color], [data-board-close], input[data-board-size], button'
-  );
-  if(!control) return;
-  e.preventDefault();
-  e.stopPropagation();
-  window.__taskBoardHardToolbarLastControl = {control: control, time: Date.now()};
-  const toolbar = control.closest('.task-board-toolbar');
-  if(toolbar) toolbar.__lastPointerToolbarAction = Date.now();
-  taskBoardHandleToolbarControl(control, e);
-}
-function taskBoardHandleToolbarControl(control, e){
-  if(!control) return;
-  const dropdown = control.closest('[data-task-board-dropdown]');
-  if(dropdown){
-    const name = dropdown.getAttribute('data-task-board-dropdown');
-    taskBoardToggleDropdown(name);
-    return;
-  }
-  const closeBtn = control.closest('[data-board-close]');
-  if(closeBtn){
-    closeTaskBoard();
-    return;
-  }
-  const actionBtn = control.closest('[data-board-action]');
-  if(actionBtn){
-    const action = actionBtn.getAttribute('data-board-action');
-    if(action === 'tool'){
-      const tool = actionBtn.getAttribute('data-tool') || actionBtn.getAttribute('data-board-tool') || 'pen';
-      taskBoardSetTool(tool);
-      taskBoardCloseDropdowns();
-      return;
-    }
-    if(action === 'colors'){
-      taskBoardToggleColors();
-      return;
-    }
-    if(action === 'clear'){
-      taskBoardClear();
-      return;
-    }
-    if(action === 'undo'){
-      taskBoardUndo();
-      return;
-    }
-    if(action === 'redo'){
-      taskBoardRedo();
-      return;
-    }
-    if(action === 'save'){
-      taskBoardSaveState(true);
-      return;
-    }
-  }
-  const colorBtn = control.closest('[data-board-color]');
-  if(colorBtn){
-    const color = colorBtn.getAttribute('data-board-color');
-    taskBoardSetColor(color);
-    return;
-  }
-  const materialBtn = control.closest('[data-board-material]');
-  if(materialBtn){
-    const material = materialBtn.getAttribute('data-board-material');
-    if(material === 'condition'){
-      toggleTaskBoardCondition();
-      taskBoardCloseDropdowns();
-      return;
-    }
-    if(material === 'graph'){
-      toggleTaskBoardGraph();
-      taskBoardCloseDropdowns();
-      return;
-    }
-    if(material === 'animation'){
-      toggleTaskBoardAnimation();
-      taskBoardCloseDropdowns();
-      return;
-    }
-    if(material === 'solution'){
-      toggleTaskBoardSolution();
-      taskBoardCloseDropdowns();
-      return;
-    }
-  }
-}
-function initTaskBoardHardToolbarFix(){
-  if(window.__taskBoardHardToolbarFixReady) return;
-  window.__taskBoardHardToolbarFixReady = true;
-  window.addEventListener('pointerdown', taskBoardHardHandleToolbarPointerDown, true);
-}
-initTaskBoardHardToolbarFix();
-document.addEventListener('input', function(e){
-  const input = e.target && e.target.closest ? e.target.closest('input[data-board-size]') : null;
-  if(!input) return;
-  e.stopPropagation();
-  const size = Number(input.value) || 4;
-  taskBoardSetSize(size);
-}, true);
-
 function taskBoardHasOpenDropdown(){
   const state=taskBoardState;
   return !!(state&&state.toolbar&&state.toolbar.querySelector('.task-board-dropdown.open'));
@@ -7136,452 +6451,119 @@ function taskBoardCloseDropdowns(){
   state.toolbar.querySelectorAll('.task-board-dropdown.open').forEach(function(drop){drop.classList.remove('open');});
   state.toolbar.querySelectorAll('.task-board-dropdown-toggle[aria-expanded]').forEach(function(btn){btn.setAttribute('aria-expanded','false');});
 }
-function taskBoardIsUiTarget(target){
-  return !!(
-    target &&
-    target.closest &&
-    target.closest(
-      '.task-board-toolbar, .task-board-dropdown, .task-board-dropdown-menu, .task-board-close-btn, .task-board-condition-wrap, .task-board-condition-drawer, .task-board-float, .task-board-float-head, button, input, textarea, select'
-    )
-  );
-}
-function taskBoardIsLocalToolbarEvent(e){
-  const toolbar=e&&e.target&&e.target.closest?e.target.closest('.task-board-toolbar'):null;
-  return !!(toolbar&&toolbar.__controlsReady);
-}
-function taskBoardHandleDropdownClick(e){
-  if(taskBoardIsLocalToolbarEvent(e)) return;
-  const toggle=e.target&&e.target.closest?e.target.closest('[data-task-board-dropdown]'):null;
-  if(!toggle) return;
-  if(!toggle.closest('.task-board-toolbar')) return;
-  e.preventDefault();
-  e.stopPropagation();
-  taskBoardToggleDropdown(toggle.getAttribute('data-task-board-dropdown'));
-}
-function taskBoardHandleActionClick(e){
-  if(taskBoardIsLocalToolbarEvent(e)) return;
-  const btn=e.target&&e.target.closest?e.target.closest('[data-board-action]'):null;
-  if(!btn) return;
-  if(!btn.closest('.task-board-toolbar')) return;
-  e.preventDefault();
-  e.stopPropagation();
-  const action=btn.getAttribute('data-board-action');
-  if(action==='tool'){
-    taskBoardSetTool(btn.getAttribute('data-tool')||btn.getAttribute('data-board-tool')||'pen');
-    taskBoardCloseDropdowns();
-    return;
-  }
-  if(action==='colors'){taskBoardToggleColors();return;}
-  if(action==='clear'){taskBoardClear();return;}
-  if(action==='undo'){taskBoardUndo();return;}
-  if(action==='redo'){taskBoardRedo();return;}
-  if(action==='save'){
-    if(typeof taskBoardSaveState==='function') taskBoardSaveState(true);
-    else if(typeof saveBoardState==='function') saveBoardState(true);
-    return;
-  }
-}
-function taskBoardHandleMaterialClick(e){
-  if(taskBoardIsLocalToolbarEvent(e)) return;
-  const btn=e.target&&e.target.closest?e.target.closest('[data-board-material]'):null;
-  if(!btn) return;
-  if(!btn.closest('.task-board-toolbar')) return;
-  e.preventDefault();
-  e.stopPropagation();
-  const material=btn.getAttribute('data-board-material');
-  if(material==='condition'){toggleTaskBoardCondition();taskBoardCloseDropdowns();return;}
-  if(material==='graph'){toggleTaskBoardGraph();taskBoardCloseDropdowns();return;}
-  if(material==='animation'){toggleTaskBoardAnimation();taskBoardCloseDropdowns();return;}
-  if(material==='solution'){toggleTaskBoardSolution();taskBoardCloseDropdowns();return;}
-}
-
-function taskBoardHandleColorClick(e){
-  if(taskBoardIsLocalToolbarEvent(e)) return;
-  const btn=e.target&&e.target.closest?e.target.closest('[data-board-color]'):null;
-  if(!btn) return;
-  e.preventDefault();
-  e.stopPropagation();
-  const color=btn.getAttribute('data-board-color');
-  if(typeof taskBoardSetColor==='function') taskBoardSetColor(color);
-  else if(taskBoardState) taskBoardState.color=color;
-  document.querySelectorAll('[data-board-color]').forEach(function(item){item.classList.remove('active');});
-  btn.classList.add('active');
-}
-function taskBoardHandleSizeInput(e){
-  if(taskBoardIsLocalToolbarEvent(e)) return;
-  const input=e.target&&e.target.closest?e.target.closest('[data-board-size]'):null;
-  if(!input) return;
-  const size=Number(input.value)||4;
-  if(typeof taskBoardSetSize==='function') taskBoardSetSize(size);
-  else if(taskBoardState) taskBoardState.size=size;
-}
-function taskBoardHandleCloseClick(e){
-  if(taskBoardIsLocalToolbarEvent(e)) return;
-  const btn=e.target&&e.target.closest?e.target.closest('[data-board-close]'):null;
-  if(!btn) return;
-  e.preventDefault();
-  e.stopPropagation();
-  closeTaskBoard();
-}
-document.addEventListener('click',taskBoardHandleDropdownClick,true);
-document.addEventListener('click',taskBoardHandleActionClick,true);
-document.addEventListener('click',taskBoardHandleMaterialClick,true);
-document.addEventListener('click',taskBoardHandleColorClick,true);
-document.addEventListener('input',taskBoardHandleSizeInput,true);
-document.addEventListener('click',taskBoardHandleCloseClick,true);
 function taskBoardToggleDropdown(name){
-  const state=taskBoardState;
-  if(!state||!state.overlay) return;
-  const root=state.toolbar||state.overlay;
-  const dropdowns=root.querySelectorAll('.task-board-dropdown');
-  dropdowns.forEach(function(drop){
-    const isTarget=(drop.getAttribute('data-dropdown-name')===name)||(drop.getAttribute('data-task-board-dropdown')===name);
-    const shouldOpen=isTarget&&!drop.classList.contains('open');
-    drop.classList.toggle('open',shouldOpen);
-    const toggle=drop.querySelector('.task-board-dropdown-toggle');
-    if(toggle) toggle.setAttribute('aria-expanded',shouldOpen?'true':'false');
-  });
-  if(root.querySelector('.task-board-dropdown.open')) requestAnimationFrame(taskBoardClampOpenDropdowns);
+  const state=ensureTaskBoardOverlay();
+  if(!state.toolbar) return;
+  const dropdown=state.toolbar.querySelector('[data-task-board-dropdown="'+name+'"]');
+  if(!dropdown) return;
+  const shouldOpen=!dropdown.classList.contains('open');
+  taskBoardCloseDropdowns();
+  dropdown.classList.toggle('open',shouldOpen);
+  const toggle=dropdown.querySelector('.task-board-dropdown-toggle');
+  if(toggle) toggle.setAttribute('aria-expanded',shouldOpen?'true':'false');
 }
 function taskBoardToggleColors(){
   const state=ensureTaskBoardOverlay();
   if(!state.toolbar) return;
-  const dropdown=state.toolbar.querySelector('[data-dropdown-name="tools"], .task-board-dropdown[data-task-board-dropdown="tools"]');
+  const dropdown=state.toolbar.querySelector('[data-task-board-dropdown="tools"]');
   if(dropdown) dropdown.classList.toggle('colors-open');
 }
 function taskBoardRequestFullscreen(){
-  // Browser Fullscreen API не используем: доска остаётся fixed overlay внутри сайта.
+  const state=ensureTaskBoardOverlay();
+  const el=state&&state.overlay?state.overlay:null;
+  if(!el) return;
+  if(document.fullscreenElement||document.webkitFullscreenElement||document.msFullscreenElement) return;
+  const req=el.requestFullscreen||el.webkitRequestFullscreen||el.msRequestFullscreen;
+  if(typeof req!=='function') return;
+  try{
+    const result=req.call(el);
+    if(result&&typeof result.catch==='function') result.catch(function(){});
+  }catch(_err){}
 }
 function taskBoardExitFullscreen(){
-  // Browser Fullscreen API не используем: закрытие скрывает overlay без выхода из режима браузера.
+  const exit=document.exitFullscreen||document.webkitExitFullscreen||document.msExitFullscreen;
+  if(typeof exit!=='function') return;
+  try{
+    const result=exit.call(document);
+    if(result&&typeof result.catch==='function') result.catch(function(){});
+  }catch(_err){}
 }
-function resetTaskBoardOverlayState(state){
-  taskBoardHideLaserPointer();
-  if(state&&state.overlay){
-    state.overlay.classList.remove('open');
-    state.overlay.setAttribute('aria-hidden','true');
-    state.overlay.style.display='none';
-    state.overlay.style.pointerEvents='none';
-  }
-  document.body.classList.remove('task-board-lock');
-}
-function taskBoardGetEventElement(event){
-  const target = event && event.target;
-  if(!target) return null;
-  return target.nodeType === 1 ? target : (target.parentElement || null);
-}
-function taskBoardFindOpenButton(event){
-  const el = taskBoardGetEventElement(event);
-  return el && el.closest ? el.closest('.pt-board-btn[data-board-mode]') : null;
-}
-function taskBoardButtonClick(event, btn){
-  if(event){
-    event.preventDefault();
-    event.stopPropagation();
-    if(typeof event.stopImmediatePropagation === 'function'){
-      event.stopImmediatePropagation();
-    }
-  }
-
-  btn = btn || (event && event.currentTarget);
-
-  const mode =
-    btn?.getAttribute?.('data-board-mode') ||
-    btn?.dataset?.boardMode ||
-    'default-board';
-
-  const taskId =
-    btn?.getAttribute?.('data-task-id') ||
-    btn?.dataset?.taskId ||
-    mode;
-
-  console.info('[TaskBoard] open from task:', { mode, taskId });
-
-  openTaskBoard(mode, false, taskId);
-
-  return false;
-}
-function taskBoardOpenFromButton(btn,event){
-  return taskBoardButtonClick(event,btn);
-}
-function initTaskBoardOpenDelegation(){
-  if(document.__taskBoardOpenDelegationReady) return;
-  document.__taskBoardOpenDelegationReady = true;
-
-  function findBoardButton(event){
-    const target = event && event.target;
-    const el = target && target.nodeType === 1 ? target : target?.parentElement;
-    return el && el.closest ? el.closest('.pt-board-btn[data-board-mode]') : null;
-  }
-
-  function handle(event){
-    const btn = findBoardButton(event);
-    if(!btn || btn.disabled) return;
-    taskBoardButtonClick(event, btn);
-  }
-
-  document.addEventListener('pointerup', handle, true);
-  document.addEventListener('click', handle, true);
-}
-initTaskBoardOpenDelegation();
-function openTaskBoard(mode,requestFullscreen=false,taskId=''){
+function openTaskBoard(mode,requestFullscreen){
   const state=ensureTaskBoardOverlay();
-
-  if(!state || !state.overlay || !state.canvasWrap || !state.canvas){
-    console.error('[TaskBoard] overlay was not created correctly', state);
-    return;
+  const task=getTaskBoardData(mode);
+  if(!task) return;
+  state.mode=mode;
+  state.task=task;
+  if(state.title) state.title.textContent=task.title;
+  state.condition.innerHTML=task.cond;
+  state.graph.innerHTML=getTaskBoardGraph(mode);
+  if(state.graphLabel) state.graphLabel.textContent=task.graphLabel||'График';
+  const isPuckImpulse = mode==='puckImpulse';
+  const isExplosion = mode==='explosionFragments';
+  const isBlocks = mode==='inelasticBlocks';
+  const isMomentum = mode==='momentumSystem' || isPuckImpulse || isExplosion;
+  const isEnergyHill = mode==='energyHill';
+  const isEnergyPendulum = mode==='energyPendulum';
+  const isEnergy = isEnergyHill || isEnergyPendulum;
+  if(state.simTitle) state.simTitle.textContent=isBlocks?'Анимация столкновения брусков':(isExplosion?'Анимация взрыва снаряда':(isPuckImpulse?'Анимация удара шайб':(isMomentum?'Анимация соударения':(isEnergyPendulum?'Анимация удара и подъёма доски':(isEnergyHill?'Анимация подъёма по горке':'Анимация движения')))));
+  if(state.simNote) state.simNote.innerHTML=isBlocks
+    ? 'Покажите спуск первого бруска по наклонной плоскости, момент абсолютно неупругого удара и дальнейшее совместное движение двух брусков.'
+    : isExplosion
+    ? 'Покажите полёт снаряда до взрыва, момент разрыва и разлёт осколков в разные стороны. Кнопкой «Старт» процесс запускается заново.'
+    : (isPuckImpulse
+      ? 'Покажите движение шайб до удара, момент столкновения и направления импульсов после удара. Кнопкой «Старт» процесс запускается заново.'
+      : (isMomentum
+        ? 'Покажите сближение тел, момент удара и дальнейшее совместное движение. Кнопкой «Старт» запускается весь процесс заново.'
+        : (isEnergyPendulum
+          ? 'Покажите налёт шарика, момент прилипания и дальнейший подъём доски. Сначала используется закон сохранения импульса по горизонтали, затем — закон сохранения энергии.'
+          : (isEnergyHill
+            ? 'Покажите, как шайба поднимается по горке, теряя скорость, но сохраняя полную механическую энергию.'
+            : 'Запустите движение кнопкой «Старт», ставьте на паузу во время объяснения и при необходимости повторяйте анимацию заново.'))));
+  if(state.simBtnsWrap) state.simBtnsWrap.classList.toggle('is-hidden',isMomentum||isEnergy||isBlocks);
+  if(state.simFrameLabel) state.simFrameLabel.textContent=(isMomentum||isEnergy||isBlocks)?'Этап':'Система отсчёта';
+  if(state.simRelVLabel) state.simRelVLabel.textContent=isBlocks?'Скорость бруска':(isExplosion?'Скорость осколка 2':(isPuckImpulse?'Импульс p4':(isMomentum?'Импульс системы':(isEnergyPendulum?'u после удара':(isEnergyHill?'Скорость шайбы':'Относительная скорость')))));
+  if(state.simRelPLabel) state.simRelPLabel.textContent=isBlocks?'Кинетическая энергия':(isExplosion?'Изменение энергии':(isPuckImpulse?'Импульс p3':(isMomentum?'После удара':(isEnergyPendulum?'Высота h':(isEnergyHill?'Высота':'Импульс первого авто')))));
+  if(state.simKeyLabel) state.simKeyLabel.textContent='Ключевая мысль';
+  if(state.animBtn){
+    state.animBtn.style.display=task.hasAnimation===false?'none':'inline-flex';
+    state.animBtn.textContent='▶ Анимация';
   }
-
-  // Сначала показываем доску, чтобы пользователь сразу видел открытие.
-  state.overlay.style.display='block';
-  state.overlay.style.pointerEvents='auto';
-  state.overlay.setAttribute('aria-hidden','false');
+  const useSolutionWorkspace=!!(hasFilledTaskSolution(task)||hasLegacyTaskSolution(task));
+  state.solution.innerHTML=renderTaskBoardSolution(task);
+  state.answer.innerHTML=task.ans;
+  const answerWrap=state.answer?state.answer.closest('.task-board-answer'):null;
+  if(answerWrap) answerWrap.style.display=(task.ans&&!useSolutionWorkspace)?'':'none';
+  state.strokes=[];
+  state.boardObjects=[];
+  state.selectedObjectId=null;
+  state.history=[{strokes:[],objects:[]}];
+  state.historyIndex=0;
+  state.pointer=null;
+  state.viewX=0;
+  state.viewY=0;
+  state.viewScale=1;
+  restoreBoardState();
+  const showStaticBoardContent=mode==='task07-pendulum-impact';
+  state.overlay.classList.toggle('solution-workspace-mode',useSolutionWorkspace);
+  state.drawer.classList.toggle('open',showStaticBoardContent||useSolutionWorkspace);
+  taskBoardToggleFloating('condition',showStaticBoardContent);
+  taskBoardToggleFloating('graph',false);
   state.overlay.classList.add('open');
   document.body.classList.add('task-board-lock');
-
-  try{
-    let task=
-      TASK_BOARD_RUNTIME_TASKS[taskId] ||
-      TASK_BOARD_RUNTIME_TASKS[mode] ||
-      getTaskBoardData(mode);
-
-    if(!task){
-      console.warn('[TaskBoard] task not found:', {mode, taskId});
-      task = {
-        title:'Доска',
-        cond:'<p>Условие задачи не найдено.</p>',
-        condition:'<p>Условие задачи не найдено.</p>',
-        text:'',
-        given:'',
-        ans:'',
-        steps:[],
-        solutionHtml:'',
-        solutionImage:'',
-        solution:null,
-        boardMode:mode||'default-board',
-        id:taskId||'',
-        isFallback:true,
-        hasAnimation:false,
-        graphLabel:'Схема'
-      };
-    }
-    state.mode=mode||'default-board';
-    state.task=task;
-    if(state.title) state.title.textContent=task.title||'Доска';
-    const conditionHtml=
-      task.cond ||
-      task.condition ||
-      task.text ||
-      '<p>Условие задачи не найдено.</p>';
-    if(state.condition){
-      state.condition.innerHTML=conditionHtml;
-    }
-    if(task.given&&state.condition){
-      state.condition.innerHTML+=`<div class="task-board-given">${task.given}</div>`;
-    }
-    if(state.conditionWrap){
-      state.conditionWrap.style.display='block';
-      state.conditionWrap.style.pointerEvents='auto';
-      if(typeof state.conditionWrap.__restoreFloatPosition==='function'){
-        state.conditionWrap.__restoreFloatPosition();
-      }
-    }
-    if(state.graph) state.graph.innerHTML=getTaskBoardGraph(mode)||'';
-    if(state.graphLabel) state.graphLabel.textContent=task.graphLabel||'Схема';
-    const isPuckImpulse = mode==='puckImpulse';
-    const isExplosion = mode==='explosionFragments';
-    const isBlocks = mode==='inelasticBlocks';
-    const isMomentum = mode==='momentumSystem' || isPuckImpulse || isExplosion;
-    const isEnergyHill = mode==='energyHill';
-    const isEnergyPendulum = mode==='energyPendulum';
-    const isEnergy = isEnergyHill || isEnergyPendulum;
-    if(state.simTitle) state.simTitle.textContent=isBlocks?'Анимация столкновения брусков':(isExplosion?'Анимация взрыва снаряда':(isPuckImpulse?'Анимация удара шайб':(isMomentum?'Анимация соударения':(isEnergyPendulum?'Анимация удара и подъёма доски':(isEnergyHill?'Анимация подъёма по горке':'Анимация движения')))));
-    if(state.simNote) state.simNote.innerHTML=isBlocks
-      ? 'Покажите спуск первого бруска по наклонной плоскости, момент абсолютно неупругого удара и дальнейшее совместное движение двух брусков.'
-      : isExplosion
-      ? 'Покажите полёт снаряда до взрыва, момент разрыва и разлёт осколков в разные стороны. Кнопкой «Старт» процесс запускается заново.'
-      : (isPuckImpulse
-        ? 'Покажите движение шайб до удара, момент столкновения и направления импульсов после удара. Кнопкой «Старт» процесс запускается заново.'
-        : (isMomentum
-          ? 'Покажите сближение тел, момент удара и дальнейшее совместное движение. Кнопкой «Старт» запускается весь процесс заново.'
-          : (isEnergyPendulum
-            ? 'Покажите налёт шарика, момент прилипания и дальнейший подъём доски. Сначала используется закон сохранения импульса по горизонтали, затем — закон сохранения энергии.'
-            : (isEnergyHill
-              ? 'Покажите, как шайба поднимается по горке, теряя скорость, но сохраняя полную механическую энергию.'
-              : 'Запустите движение кнопкой «Старт», ставьте на паузу во время объяснения и при необходимости повторяйте анимацию заново.'))));
-    if(state.simBtnsWrap) state.simBtnsWrap.classList.toggle('is-hidden',isMomentum||isEnergy||isBlocks);
-    if(state.simFrameLabel) state.simFrameLabel.textContent=(isMomentum||isEnergy||isBlocks)?'Этап':'Система отсчёта';
-    if(state.simRelVLabel) state.simRelVLabel.textContent=isBlocks?'Скорость бруска':(isExplosion?'Скорость осколка 2':(isPuckImpulse?'Импульс p4':(isMomentum?'Импульс системы':(isEnergyPendulum?'u после удара':(isEnergyHill?'Скорость шайбы':'Относительная скорость')))));
-    if(state.simRelPLabel) state.simRelPLabel.textContent=isBlocks?'Кинетическая энергия':(isExplosion?'Изменение энергии':(isPuckImpulse?'Импульс p3':(isMomentum?'После удара':(isEnergyPendulum?'Высота h':(isEnergyHill?'Высота':'Импульс первого авто')))));
-    if(state.simKeyLabel) state.simKeyLabel.textContent='Ключевая мысль';
-    if(state.animBtn){
-      state.animBtn.style.display=task.hasAnimation===false?'none':'inline-flex';
-      state.animBtn.textContent='▶ Анимация';
-    }
-    const useSolutionWorkspace=!!(hasFilledTaskSolution(task)||hasLegacyTaskSolution(task));
-    if(state.solution) state.solution.innerHTML=renderTaskBoardSolution(task);
-    if(state.answer) state.answer.innerHTML=task.ans||'';
-    const answerWrap=state.answer?state.answer.closest('.task-board-answer'):null;
-    if(answerWrap) answerWrap.style.display=(task.ans&&!useSolutionWorkspace)?'':'none';
-    state.strokes=[];
-    state.boardObjects=[];
-    state.selectedObjectId=null;
-    state.selectedObjectIds=[];
-    taskBoardClearLasso();
-    state.history=[{strokes:[],objects:[]}];
-    state.historyIndex=0;
-    state.pointer=null;
-    taskBoardHideLaserPointer();
-    state.selectedObjectIds=[];
-    taskBoardClearLasso();
-    state.viewX=0;
-    state.viewY=0;
-    state.viewScale=1;
-    restoreBoardState();
-    const showStaticBoardContent=mode==='task07-pendulum-impact';
-    state.overlay.classList.toggle('solution-workspace-mode',useSolutionWorkspace);
-    if(state.drawer) state.drawer.classList.toggle('open',showStaticBoardContent||useSolutionWorkspace);
-    taskBoardToggleFloating('condition',false);
-    taskBoardToggleFloating('graph',false);
-    // Browser Fullscreen API не используем. Доска открывается как fixed overlay.
-    taskBoardApplyToolbarPosition();
-    taskBoardCloseDropdowns();
-    taskBoardSetTool('pen');
-    taskBoardUpdateCanvasSurface();
-    taskBoardUpdateHistoryButtons();
-    taskBoardResizeCanvas();
-    toggleTaskBoardAnimation(false);
-    if(state.graphWrap&&typeof state.graphWrap.__restoreFloatPosition==='function'){
-      state.graphWrap.__restoreFloatPosition();
-    }
-    showTaskBoardCondition();
-  }catch(err){
-    console.error('[TaskBoard] open failed after overlay was shown:', err);
-
-    // ВАЖНО: не закрывать overlay полностью.
-    // Показываем пустую доску с сообщением об ошибке.
-    if(state.condition){
-      state.condition.innerHTML=
-        '<p>Пустая рабочая доска. Данные задачи не найдены, но доска доступна для работы.</p>';
-      showTaskBoardCondition();
-    }
-    if(state.solution){
-      state.solution.innerHTML=
-        '<div class="pt-empty-text">Решение не загрузилось из-за ошибки в данных задачи.</div>';
-    }
-  }
+  if(requestFullscreen) taskBoardRequestFullscreen();
+  taskBoardCloseDropdowns();
+  taskBoardSetTool('pen');
+  taskBoardUpdateCanvasSurface();
+  taskBoardUpdateHistoryButtons();
+  taskBoardResizeCanvas();
+  toggleTaskBoardAnimation(false);
 }
-
-function initTaskBoardConditionDrag(){
-  const state = taskBoardState;
-  if(!state || !state.conditionDrawer || state.conditionDragReady) return;
-
-  const drawer = state.conditionDrawer;
-  const handle = drawer.querySelector('.task-board-condition-drag');
-  if(!handle) return;
-
-  state.conditionDragReady = true;
-
-  let dragging = false;
-  let startX = 0;
-  let startY = 0;
-  let startLeft = 0;
-  let startTop = 0;
-
-  handle.addEventListener('pointerdown', function(e){
-    e.preventDefault();
-    e.stopPropagation();
-
-    dragging = true;
-    handle.setPointerCapture?.(e.pointerId);
-
-    const rect = drawer.getBoundingClientRect();
-    startX = e.clientX;
-    startY = e.clientY;
-    startLeft = rect.left;
-    startTop = rect.top;
-  });
-
-  handle.addEventListener('pointermove', function(e){
-    if(!dragging) return;
-
-    const dx = e.clientX - startX;
-    const dy = e.clientY - startY;
-
-    let nextLeft = startLeft + dx;
-    let nextTop = startTop + dy;
-
-    const maxLeft = window.innerWidth - drawer.offsetWidth - 8;
-    const maxTop = window.innerHeight - drawer.offsetHeight - 8;
-
-    nextLeft = Math.max(8, Math.min(nextLeft, maxLeft));
-    nextTop = Math.max(8, Math.min(nextTop, maxTop));
-
-    drawer.style.left = nextLeft + 'px';
-    drawer.style.top = nextTop + 'px';
-    drawer.style.right = 'auto';
-  });
-
-  handle.addEventListener('pointerup', function(e){
-    if(!dragging) return;
-    dragging = false;
-
-    const rect = drawer.getBoundingClientRect();
-    localStorage.setItem('fizmat_task_board_condition_position', JSON.stringify({
-      x: rect.left,
-      y: rect.top
-    }));
-  });
-
-  handle.addEventListener('dblclick', function(){
-    drawer.style.left = '16px';
-    drawer.style.top = '96px';
-    drawer.style.right = 'auto';
-    localStorage.removeItem('fizmat_task_board_condition_position');
-  });
-}
-function restoreTaskBoardConditionPosition(){
-  const state=taskBoardState;
-  if(!state||!state.conditionWrap) return;
-  if(typeof state.conditionWrap.__restoreFloatPosition==='function'){
-    state.conditionWrap.__restoreFloatPosition();
-    return;
-  }
-
-  try{
-    const raw=localStorage.getItem('fizmat_task_board_condition_position');
-    if(!raw) return;
-
-    const pos=JSON.parse(raw);
-    const left=Number.isFinite(pos.left)?pos.left:pos.x;
-    const top=Number.isFinite(pos.top)?pos.top:pos.y;
-    if(!Number.isFinite(left)||!Number.isFinite(top)) return;
-
-    const wrap=state.conditionWrap;
-    const parent=state.canvasWrap||document.documentElement;
-    const parentRect=parent.getBoundingClientRect();
-    const maxLeft=Math.max(8,parentRect.width-wrap.offsetWidth-8);
-    const maxTop=Math.max(8,parentRect.height-wrap.offsetHeight-8);
-
-    wrap.style.left=Math.max(8,Math.min(left,maxLeft))+'px';
-    wrap.style.top=Math.max(8,Math.min(top,maxTop))+'px';
-    wrap.style.right='auto';
-  }catch(e){}
-}
-
 function closeTaskBoard(){
   const state=ensureTaskBoardOverlay();
-  if(state.textInput&&state.textInput.parentNode) state.textInput.parentNode.removeChild(state.textInput);
-  state.textInput=null;
   state.overlay.classList.remove('open');
-  state.overlay.setAttribute('aria-hidden','true');
-  state.overlay.style.display='none';
-  state.overlay.style.pointerEvents='none';
   state.overlay.classList.remove('solution-workspace-mode');
   state.drawer.classList.remove('open');
   state.pointer=null;
-  taskBoardHideLaserPointer();
-  taskBoardClearLasso();
   document.body.classList.remove('task-board-lock');
   taskBoardExitFullscreen();
   taskBoardToggleFloating('condition',false);
@@ -7589,47 +6571,8 @@ function closeTaskBoard(){
   toggleTaskBoardAnimation(false);
   taskBoardCloseDropdowns();
 }
-function showTaskBoardCondition(){
-  const state=taskBoardState;
-  if(!state||!state.conditionDrawer) return;
-  state.conditionDrawer.classList.add('open');
-  state.conditionDrawer.style.display='block';
-  state.conditionDrawer.style.pointerEvents='auto';
-  if(state.conditionBtn) state.conditionBtn.classList.add('active');
-}
-function toggleTaskBoardCondition(){
-  const state=taskBoardState;
-  const wrap=state&&state.conditionWrap;
-  if(!state||!wrap) return;
-
-  const isOpen=wrap.classList.contains('open');
-
-  if(isOpen){
-    wrap.classList.remove('open');
-    wrap.style.display='none';
-    wrap.style.pointerEvents='none';
-    if(state.conditionBtn) state.conditionBtn.classList.remove('active');
-  } else {
-    wrap.classList.add('open');
-    wrap.style.display='block';
-    wrap.style.pointerEvents='auto';
-    if(state.conditionBtn) state.conditionBtn.classList.add('active');
-  }
-}
 function taskBoardToggleFloating(kind,force){
   const state=ensureTaskBoardOverlay();
-  if(kind==='condition'){
-    const wrap=state.conditionWrap;
-    const shouldOpen=typeof force==='boolean'?force:!(wrap&&wrap.classList.contains('open'));
-    if(shouldOpen) showTaskBoardCondition();
-    else if(wrap){
-      wrap.classList.remove('open');
-      wrap.style.display='none';
-      wrap.style.pointerEvents='none';
-      if(state.conditionBtn) state.conditionBtn.classList.remove('active');
-    }
-    return;
-  }
   const isGraph=kind==='graph';
   const wrap=isGraph?state.graphWrap:state.conditionWrap;
   const btn=isGraph?state.graphBtn:state.conditionBtn;
@@ -7640,177 +6583,38 @@ function taskBoardToggleFloating(kind,force){
 }
 function taskBoardInitFloatDrag(state,kind){
   const wrap=kind==='graph'?state.graphWrap:state.conditionWrap;
-  if(!wrap || wrap.__dragReady) return;
-
+  if(!wrap) return;
   const head=wrap.querySelector('[data-float-drag="'+kind+'"]');
   if(!head) return;
-
-  wrap.__dragReady=true;
-
-  const storageKey=kind==='condition'
-    ? 'fizmat_task_board_condition_position'
-    : 'fizmat_task_board_graph_position';
-
-  function clampPosition(left,top){
-    const parent=state.canvasWrap||document.documentElement;
-    const parentRect=parent.getBoundingClientRect();
-    const maxLeft=Math.max(8,parentRect.width-wrap.offsetWidth-8);
-    const maxTop=Math.max(8,parentRect.height-wrap.offsetHeight-8);
-
-    return {
-      left:Math.max(8,Math.min(left,maxLeft)),
-      top:Math.max(8,Math.min(top,maxTop))
-    };
-  }
-
-  function savePosition(){
-    try{
-      localStorage.setItem(storageKey,JSON.stringify({
-        left:parseFloat(wrap.style.left)||16,
-        top:parseFloat(wrap.style.top)||16
-      }));
-    }catch(e){}
-  }
-
-  function restorePosition(){
-    try{
-      const parent=state.canvasWrap||document.documentElement;
-      const parentRect=parent.getBoundingClientRect();
-      if(parentRect.width<=0||parentRect.height<=0) return;
-      const raw=localStorage.getItem(storageKey);
-      if(!raw) return;
-      const pos=JSON.parse(raw);
-      if(!Number.isFinite(pos.left)||!Number.isFinite(pos.top)) return;
-      const next=clampPosition(pos.left,pos.top);
-      wrap.style.left=next.left+'px';
-      wrap.style.top=next.top+'px';
-      wrap.style.right='auto';
-    }catch(e){}
-  }
-
-  wrap.__restoreFloatPosition=restorePosition;
-
   head.addEventListener('pointerdown',function(e){
-    if(e.button!==undefined && e.button!==0) return;
-    if(kind==='condition'&&!e.target.closest('.task-board-condition-drag')) return;
     if(e.target.closest('button')) return;
-
-    e.preventDefault();
-    e.stopPropagation();
-
-    const parentRect=state.canvasWrap.getBoundingClientRect();
+    const startX=e.clientX,startY=e.clientY;
     const rect=wrap.getBoundingClientRect();
-
-    const start={
-      pointerId:e.pointerId,
-      x:e.clientX,
-      y:e.clientY,
-      left:rect.left-parentRect.left,
-      top:rect.top-parentRect.top
-    };
-
-    wrap.classList.add('dragging');
-    try{head.setPointerCapture(e.pointerId);}catch(_err){}
-
-    function move(ev){
-      if(ev.pointerId!==start.pointerId) return;
-
-      ev.preventDefault();
-      ev.stopPropagation();
-
-      const next=clampPosition(
-        start.left+ev.clientX-start.x,
-        start.top+ev.clientY-start.y
-      );
-
-      wrap.style.left=next.left+'px';
-      wrap.style.top=next.top+'px';
+    const parentRect=state.canvasWrap.getBoundingClientRect();
+    const offsetX=rect.left-parentRect.left,offsetY=rect.top-parentRect.top;
+    const move=function(ev){
+      wrap.style.left=Math.max(8,offsetX+(ev.clientX-startX))+'px';
+      wrap.style.top=Math.max(8,offsetY+(ev.clientY-startY))+'px';
       wrap.style.right='auto';
-    }
-
-    function end(ev){
-      if(ev.pointerId!==start.pointerId) return;
-
-      ev.preventDefault();
-      ev.stopPropagation();
-
-      wrap.classList.remove('dragging');
-
-      window.removeEventListener('pointermove',move,true);
-      window.removeEventListener('pointerup',end,true);
-      window.removeEventListener('pointercancel',end,true);
-
-      try{head.releasePointerCapture(start.pointerId);}catch(_err){}
-
-      savePosition();
-    }
-
-    window.addEventListener('pointermove',move,true);
-    window.addEventListener('pointerup',end,true);
-    window.addEventListener('pointercancel',end,true);
+    };
+    const up=function(){
+      window.removeEventListener('pointermove',move);
+      window.removeEventListener('pointerup',up);
+    };
+    window.addEventListener('pointermove',move);
+    window.addEventListener('pointerup',up);
   });
-
-  head.addEventListener('dblclick',function(e){
-    e.preventDefault();
-    e.stopPropagation();
-
-    wrap.style.left='16px';
-    wrap.style.top='16px';
-    wrap.style.right='auto';
-
-    try{localStorage.removeItem(storageKey);}catch(_err){}
-  });
-
-  restorePosition();
 }
-
 function toggleTaskBoardDrawer(force){
   const state=ensureTaskBoardOverlay();
   const shouldOpen=typeof force==='boolean'?force:!state.drawer.classList.contains('open');
   state.drawer.classList.toggle('open',shouldOpen);
 }
-function toggleTaskBoardGraph(force){
-  taskBoardToggleFloating('graph',force);
-}
-function toggleTaskBoardSolution(force){
-  toggleTaskBoardDrawer(force);
-}
 function taskBoardSetTool(tool){
   const state=ensureTaskBoardOverlay();
-  const requestedTool=tool||'pen';
-  const actualTool=requestedTool==='move'?'pan':requestedTool;
-  state.tool=actualTool;
-  if(actualTool!=='pointer') taskBoardHideLaserPointer();
-  document.querySelectorAll('[data-board-tool]').forEach(function(btn){
-    const buttonTool=btn.getAttribute('data-board-tool');
-    btn.classList.toggle('active',buttonTool===requestedTool||buttonTool===actualTool);
-  });
+  state.tool=tool;
+  document.querySelectorAll('[data-board-tool]').forEach(function(btn){btn.classList.toggle('active',btn.getAttribute('data-board-tool')===tool);});
   taskBoardUpdateCanvasSurface();
-}
-function taskBoardLaserPointerMove(e){
-  const state=ensureTaskBoardOverlay();
-  if(state.tool!=='pointer'||!state.overlay.classList.contains('open')){
-    taskBoardHideLaserPointer();
-    return;
-  }
-  taskBoardShowLaserPointer(e);
-}
-function taskBoardShowLaserPointer(e){
-  const state=ensureTaskBoardOverlay();
-  if(!state.laserPointer||!state.canvasWrap) return;
-  const rect=state.canvasWrap.getBoundingClientRect();
-  const x=e.clientX-rect.left;
-  const y=e.clientY-rect.top;
-  if(x<0||y<0||x>rect.width||y>rect.height){
-    taskBoardHideLaserPointer();
-    return;
-  }
-  state.laserPointer.style.left=x+'px';
-  state.laserPointer.style.top=y+'px';
-  state.laserPointer.classList.add('active');
-}
-function taskBoardHideLaserPointer(){
-  if(taskBoardState&&taskBoardState.laserPointer) taskBoardState.laserPointer.classList.remove('active');
 }
 function taskBoardSetColor(color){
   const state=ensureTaskBoardOverlay();
@@ -7820,18 +6624,16 @@ function taskBoardSetColor(color){
 }
 function taskBoardSetSize(value){
   const state=ensureTaskBoardOverlay();
-  state.size=Math.max(1,Math.min(20,Number(value)||4));
+  state.size=Math.max(2,Math.min(12,Number(value)||4));
   if(state.sizeInput) state.sizeInput.value=state.size;
   if(state.sizeValue) state.sizeValue.textContent=state.size+' px';
 }
 function taskBoardUpdateCanvasSurface(){
   const state=ensureTaskBoardOverlay();
   state.canvasWrap.style.backgroundPosition=state.viewX+'px '+state.viewY+'px';
-  state.canvasWrap.classList.toggle('pen-mode',state.tool==='pen'||state.tool==='text');
-  state.canvasWrap.classList.toggle('pointer-mode',state.tool==='pointer');
+  state.canvasWrap.classList.toggle('pen-mode',state.tool==='pen'||state.tool==='text'||state.tool==='pointer');
   state.canvasWrap.classList.toggle('erase-mode',state.tool==='eraser');
-  state.canvasWrap.classList.toggle('pan-mode',state.tool==='pan');
-  state.canvasWrap.classList.toggle('lasso-mode',state.tool==='lasso');
+  state.canvasWrap.classList.toggle('pan-mode',state.tool==='pan'||state.tool==='lasso');
   state.canvasWrap.classList.toggle('dragging',!!state.pointer&&state.pointer.type==='pan');
 }
 function taskBoardAdjustZoom(multiplier){
@@ -7882,14 +6684,11 @@ function taskBoardRedo(){
 }
 function taskBoardClear(){
   const state=ensureTaskBoardOverlay();
-  if(state.textInput&&state.textInput.parentNode) state.textInput.parentNode.removeChild(state.textInput);
-  state.textInput=null;
   if(!state.strokes.length&&!state.boardObjects.length) return;
+  if(!confirm('Очистить рисунок и все вставленные картинки?')) return;
   state.strokes=[];
   state.boardObjects=[];
   state.selectedObjectId=null;
-  state.selectedObjectIds=[];
-  taskBoardClearLasso();
   renderBoardObjects();
   taskBoardPushHistory();
   taskBoardDraw();
@@ -7941,119 +6740,25 @@ function taskBoardEraseAt(clientX,clientY){
   }
   return false;
 }
-
-function taskBoardLassoScreenPoint(e){
-  const state=ensureTaskBoardOverlay();
-  const rect=state.canvas.getBoundingClientRect();
-  return {x:e.clientX-rect.left,y:e.clientY-rect.top};
-}
-function taskBoardRenderLasso(){
-  const state=ensureTaskBoardOverlay();
-  if(!state.lassoLayer) return;
-  const points=state.lassoPoints||[];
-  if(points.length<2){state.lassoLayer.innerHTML='';return;}
-  const rect=state.canvas.getBoundingClientRect();
-  state.lassoLayer.setAttribute('viewBox','0 0 '+Math.max(1,rect.width)+' '+Math.max(1,rect.height));
-  state.lassoLayer.setAttribute('width',Math.max(1,rect.width));
-  state.lassoLayer.setAttribute('height',Math.max(1,rect.height));
-  const d=points.map(function(pt,index){return (index?'L':'M')+pt.x+' '+pt.y;}).join(' ')+(points.length>2?' Z':'');
-  state.lassoLayer.innerHTML='<path class="task-board-lasso-path" d="'+d+'"></path>';
-}
-function taskBoardStartLasso(e){
-  const state=ensureTaskBoardOverlay();
-  const screen=taskBoardLassoScreenPoint(e);
-  const world=taskBoardClientToWorld(e.clientX,e.clientY);
-  state.lassoPoints=[screen];
-  state.pointer={type:'lasso',lastScreen:screen,worldPoints:[world]};
-  taskBoardRenderLasso();
-  taskBoardUpdateCanvasSurface();
-}
-function taskBoardMoveLasso(e){
-  const state=ensureTaskBoardOverlay();
-  if(!state.pointer||state.pointer.type!=='lasso') return;
-  const screen=taskBoardLassoScreenPoint(e);
-  if(state.pointer.lastScreen&&taskBoardDistance(screen,state.pointer.lastScreen)<2) return;
-  state.lassoPoints.push(screen);
-  state.pointer.worldPoints.push(taskBoardClientToWorld(e.clientX,e.clientY));
-  state.pointer.lastScreen=screen;
-  taskBoardRenderLasso();
-}
-function taskBoardEndLasso(e){
-  const state=ensureTaskBoardOverlay();
-  if(state.pointer&&state.pointer.type==='lasso'&&e){
-    const screen=taskBoardLassoScreenPoint(e);
-    if(!state.pointer.lastScreen||taskBoardDistance(screen,state.pointer.lastScreen)>=2){
-      state.lassoPoints.push(screen);
-      state.pointer.worldPoints.push(taskBoardClientToWorld(e.clientX,e.clientY));
-    }
-    taskBoardSelectObjectsInsideLasso(state.pointer.worldPoints||[]);
-  }
-  taskBoardClearLasso();
-}
-function taskBoardClearLasso(){
-  if(!taskBoardState) return;
-  taskBoardState.lassoPoints=[];
-  if(taskBoardState.lassoLayer) taskBoardState.lassoLayer.innerHTML='';
-}
-function taskBoardPointInPolygon(point,polygon){
-  let inside=false;
-  for(let i=0,j=polygon.length-1;i<polygon.length;j=i++){
-    const xi=polygon[i].x,yi=polygon[i].y,xj=polygon[j].x,yj=polygon[j].y;
-    const intersect=((yi>point.y)!==(yj>point.y))&&(point.x<(xj-xi)*(point.y-yi)/((yj-yi)||0.000001)+xi);
-    if(intersect) inside=!inside;
-  }
-  return inside;
-}
-function taskBoardObjectPoints(obj){
-  const x=Number(obj.x)||0,y=Number(obj.y)||0,w=Math.max(1,Number(obj.width)||0),h=Math.max(1,Number(obj.height)||0);
-  return [{x:x+w/2,y:y+h/2},{x:x,y:y},{x:x+w,y:y},{x:x+w,y:y+h},{x:x,y:y+h}];
-}
-function taskBoardSelectObjectsInsideLasso(points){
-  const state=ensureTaskBoardOverlay();
-  const polygon=(points||[]).filter(function(pt){return pt&&Number.isFinite(pt.x)&&Number.isFinite(pt.y);});
-  if(polygon.length<3){selectBoardObjects([]);return;}
-  const selected=state.boardObjects.filter(function(obj){
-    if(!obj||obj.type!=='image') return false;
-    return taskBoardObjectPoints(obj).some(function(pt){return taskBoardPointInPolygon(pt,polygon);});
-  }).map(function(obj){return obj.id;});
-  selectBoardObjects(selected);
-}
 function taskBoardPointerDown(e){
   const state=ensureTaskBoardOverlay();
   if(!state.overlay.classList.contains('open')) return;
-  if(taskBoardIsUiTarget(e.target)) return;
-  if(state.tool==='pointer'){
-    taskBoardLaserPointerMove(e);
-    if(e.button===0) e.preventDefault();
-    return;
-  }
-  if(e.target===state.canvas&&taskBoardGetSelectedObjectIds().length) selectBoardObject(null);
-  if(e.button===2||state.tool==='pan'){
+  if(e.target===state.canvas&&state.selectedObjectId) selectBoardObject(null);
+  if(e.button===2||state.tool==='pan'||state.tool==='lasso'){
     state.pointer={type:'pan',x:e.clientX,y:e.clientY};
     taskBoardUpdateCanvasSurface();
-  }else if(e.button===0&&state.tool==='lasso'){
-    taskBoardStartLasso(e);
   }else if(state.tool==='eraser'){
     state.pointer={type:'eraser',changed:false};
     state.pointer.changed=taskBoardEraseAt(e.clientX,e.clientY)||state.pointer.changed;
-  }else if(e.button===0&&state.tool==='text'){
-    const world=taskBoardClientToWorld(e.clientX,e.clientY);
-    taskBoardStartTextInput(world);
-    e.preventDefault();
-    return;
-  }else if(e.button===0&&state.tool==='pen'){
+  }else if(e.button===0&&(state.tool==='pen'||state.tool==='text'||state.tool==='pointer')){
     const world=taskBoardClientToWorld(e.clientX,e.clientY);
     state.pointer={type:'draw',start:world,last:world,changed:false};
-  }else if(e.button===0&&state.tool==='pointer'){
-    taskBoardShowLaserPointer(e);
-    state.pointer={type:'laser'};
   }else return;
   if(state.canvas.setPointerCapture) state.canvas.setPointerCapture(e.pointerId);
   e.preventDefault();
 }
 function taskBoardPointerMove(e){
   const state=ensureTaskBoardOverlay();
-  if(taskBoardIsUiTarget(e.target)) return;
   if(!state.pointer) return;
   if(state.pointer.type==='pan'){
     state.viewX+=e.clientX-state.pointer.x;
@@ -8065,10 +6770,6 @@ function taskBoardPointerMove(e){
   }
   if(state.pointer.type==='eraser'){
     state.pointer.changed=taskBoardEraseAt(e.clientX,e.clientY)||state.pointer.changed;
-    return;
-  }
-  if(state.pointer.type==='lasso'){
-    taskBoardMoveLasso(e);
     return;
   }
   if(state.pointer.type==='draw'){
@@ -8093,8 +6794,6 @@ function taskBoardPointerUp(e){
   }else if(state.pointer.type==='eraser'&&state.pointer.changed){
     taskBoardPushHistory();
     taskBoardSaveState(false);
-  }else if(state.pointer.type==='lasso'){
-    taskBoardEndLasso(e);
   }
   state.pointer=null;
   taskBoardUpdateCanvasSurface();
