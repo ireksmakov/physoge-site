@@ -789,6 +789,11 @@ body.task-board-lock header,body.task-board-lock .topbar,body.task-board-lock .s
 .task-board-float-head:active{cursor:grabbing}
 .task-board-float-body{padding:12px}
 .task-board-float-close{padding:4px 10px;border:1px solid #cbd5e1;background:#fff;border-radius:10px;cursor:pointer;font-weight:700}
+.task-board-solution-wrap{position:absolute;left:420px;top:96px;width:420px;max-width:calc(100vw - 32px);max-height:calc(100vh - 140px);overflow:auto;background:rgba(255,255,255,.97);border:1px solid #d8e5f5;border-radius:18px;box-shadow:0 18px 50px rgba(15,23,42,.16);z-index:20020;pointer-events:auto}
+.task-board-solution-wrap .task-board-float-head{cursor:grab;user-select:none;touch-action:none}
+.task-board-solution-wrap.dragging .task-board-float-head,.task-board-solution-wrap .task-board-float-head:active{cursor:grabbing}
+.task-board-solution{padding:14px 16px;font-size:16px;line-height:1.55;color:#334155}
+.task-board-float-drag{font-weight:900;color:#94a3b8;letter-spacing:-3px;line-height:1}
 .task-board-popup{position:fixed;inset:12px;display:none;flex-direction:column;gap:12px;padding:18px 22px 22px;background:rgba(255,255,255,.997);border:1px solid #dbe5f0;border-radius:26px;box-shadow:0 28px 90px rgba(15,23,42,.18);z-index:10030;overflow:auto}
 .task-board-popup.open{display:flex}
 .task-board-popup-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:0;position:sticky;top:0;background:rgba(255,255,255,.97);padding-bottom:4px;z-index:2}
@@ -6582,11 +6587,10 @@ function ensureTaskBoardOverlay(){
       <div class="task-board-shell">
         <div class="task-board-layout">
           <div id="taskBoardDrawer" class="task-board-drawer">
-            <button type="button" class="task-board-drawer-tab" onclick="toggleTaskBoardDrawer()">Решение</button>
+            <button type="button" class="task-board-drawer-tab" onclick="toggleTaskBoardSolution()">Решение</button>
             <div class="task-board-drawer-inner">
               <div class="task-board-drawer-title">Пошаговый разбор</div>
-              <div id="taskBoardSolution" class="task-board-solution"></div>
-              <div class="task-board-answer">
+              <div class="task-board-answer" style="display:none">
                 <div class="task-board-answer-label">Ответ</div>
                 <div id="taskBoardAnswer" class="task-board-answer-value"></div>
               </div>
@@ -6639,7 +6643,7 @@ function ensureTaskBoardOverlay(){
                   <button type="button" id="taskBoardConditionBtn" class="task-board-tool" onclick="taskBoardToggleFloating('condition');taskBoardCloseDropdowns();">📄 Условие</button>
                   <button type="button" id="taskBoardGraphBtn" class="task-board-tool" onclick="taskBoardToggleFloating('graph');taskBoardCloseDropdowns();">🧩 Схема</button>
                   <button type="button" class="task-board-tool" id="taskBoardAnimBtn" onclick="toggleTaskBoardAnimation();taskBoardCloseDropdowns();">▶ Анимация</button>
-                  <button type="button" class="task-board-tool" onclick="toggleTaskBoardDrawer();taskBoardCloseDropdowns();">✅ Решение</button>
+                  <button type="button" class="task-board-tool" onclick="toggleTaskBoardSolution();taskBoardCloseDropdowns();">✅ Решение</button>
                 </div>
               </div>
               <button type="button" class="task-board-close-btn" onclick="closeTaskBoard()">✕ Закрыть</button>
@@ -6658,6 +6662,13 @@ function ensureTaskBoardOverlay(){
                   <button type="button" class="task-board-float-close" onclick="taskBoardToggleFloating('graph',false)">Скрыть</button>
                 </div>
                 <div class="task-board-float-body"><div id="taskBoardGraph" class="task-board-graph"></div></div>
+              </div>
+              <div class="task-board-float task-board-solution-wrap" id="taskBoardSolutionWrap" style="display:none">
+                <div class="task-board-float-head" data-float-drag="solution">
+                  <span class="task-board-float-drag">⋮⋮</span>
+                  <strong>Решение</strong>
+                </div>
+                <div class="task-board-float-body task-board-solution" id="taskBoardSolution"></div>
               </div>
               <canvas id="taskBoardCanvas" class="task-board-canvas"></canvas>
               <div id="taskBoardObjectLayer" class="task-board-object-layer"></div>
@@ -6710,6 +6721,7 @@ function ensureTaskBoardOverlay(){
     graphBtn:document.getElementById('taskBoardGraphBtn'),
     conditionBtn:document.getElementById('taskBoardConditionBtn'),
     drawer:document.getElementById('taskBoardDrawer'),
+    solutionWrap:document.getElementById('taskBoardSolutionWrap'),
     solution:document.getElementById('taskBoardSolution'),
     answer:document.getElementById('taskBoardAnswer'),
     canvasWrap:document.getElementById('taskBoardCanvasWrap'),
@@ -6762,6 +6774,7 @@ function ensureTaskBoardOverlay(){
   taskBoardEnsureLaserPointer();
   taskBoardInitFloatDrag(taskBoardState,'condition');
   taskBoardInitFloatDrag(taskBoardState,'graph');
+  taskBoardInitFloatDrag(taskBoardState,'solution');
   taskBoardState.canvas.addEventListener('pointerdown',taskBoardPointerDown);
   taskBoardState.canvas.addEventListener('pointermove',taskBoardPointerMove);
   taskBoardState.objectLayer.addEventListener('pointerdown',taskBoardObjectPointerDown);
@@ -6962,7 +6975,8 @@ function openTaskBoard(mode,requestFullscreen){
   restoreBoardState();
   const showStaticBoardContent=mode==='task07-pendulum-impact';
   state.overlay.classList.toggle('solution-workspace-mode',useSolutionWorkspace);
-  state.drawer.classList.toggle('open',showStaticBoardContent||useSolutionWorkspace);
+  state.drawer.classList.toggle('open',false);
+  toggleTaskBoardSolution(showStaticBoardContent||useSolutionWorkspace);
   taskBoardToggleFloating('condition',showStaticBoardContent);
   taskBoardToggleFloating('graph',false);
   document.body.classList.add('task-board-lock');
@@ -6995,6 +7009,7 @@ function closeTaskBoard(){
   taskBoardExitFullscreen();
   taskBoardToggleFloating('condition',false);
   taskBoardToggleFloating('graph',false);
+  toggleTaskBoardSolution(false);
   toggleTaskBoardAnimation(false);
   taskBoardCloseDropdowns();
 }
@@ -7009,33 +7024,86 @@ function taskBoardToggleFloating(kind,force){
   if(btn) btn.classList.toggle('active',shouldOpen);
 }
 function taskBoardInitFloatDrag(state,kind){
-  const wrap=kind==='graph'?state.graphWrap:state.conditionWrap;
+  const wrap=
+    kind==='graph'?state.graphWrap:
+    kind==='solution'?state.solutionWrap:
+    state.conditionWrap;
   if(!wrap) return;
   const head=wrap.querySelector('[data-float-drag="'+kind+'"]');
   if(!head) return;
+  const storageKey=
+    kind==='graph'
+      ? 'fizmat_task_board_graph_position'
+      : kind==='solution'
+        ? 'fizmat_task_board_solution_position'
+        : 'fizmat_task_board_condition_position';
+  const defaultLeft=kind==='solution'?420:16;
+  const defaultTop=96;
+  if(!wrap.dataset.floatPositionRestored){
+    try{
+      const saved=JSON.parse(localStorage.getItem(storageKey)||'null');
+      if(saved&&Number.isFinite(saved.left)&&Number.isFinite(saved.top)){
+        wrap.style.left=saved.left+'px';
+        wrap.style.top=saved.top+'px';
+        wrap.style.right='auto';
+      }
+    }catch(e){}
+    wrap.dataset.floatPositionRestored='1';
+  }
+  if(wrap.dataset.floatDragReady==='1') return;
+  wrap.dataset.floatDragReady='1';
+  head.addEventListener('dblclick',function(e){
+    if(e.target.closest('button')) return;
+    wrap.style.left=defaultLeft+'px';
+    wrap.style.top=defaultTop+'px';
+    wrap.style.right='auto';
+    localStorage.removeItem(storageKey);
+  });
   head.addEventListener('pointerdown',function(e){
     if(e.target.closest('button')) return;
     const startX=e.clientX,startY=e.clientY;
     const rect=wrap.getBoundingClientRect();
     const parentRect=state.canvasWrap.getBoundingClientRect();
     const offsetX=rect.left-parentRect.left,offsetY=rect.top-parentRect.top;
+    wrap.classList.add('dragging');
+    if(head.setPointerCapture) head.setPointerCapture(e.pointerId);
     const move=function(ev){
-      wrap.style.left=Math.max(8,offsetX+(ev.clientX-startX))+'px';
-      wrap.style.top=Math.max(8,offsetY+(ev.clientY-startY))+'px';
+      const nextLeft=Math.max(8,offsetX+(ev.clientX-startX));
+      const nextTop=Math.max(8,offsetY+(ev.clientY-startY));
+      wrap.style.left=nextLeft+'px';
+      wrap.style.top=nextTop+'px';
       wrap.style.right='auto';
     };
     const up=function(){
+      wrap.classList.remove('dragging');
       window.removeEventListener('pointermove',move);
       window.removeEventListener('pointerup',up);
+      const left=parseFloat(wrap.style.left);
+      const top=parseFloat(wrap.style.top);
+      if(Number.isFinite(left)&&Number.isFinite(top)){
+        localStorage.setItem(storageKey,JSON.stringify({left:left,top:top}));
+      }
     };
     window.addEventListener('pointermove',move);
     window.addEventListener('pointerup',up);
   });
 }
+function toggleTaskBoardSolution(force){
+  const state=taskBoardState||ensureTaskBoardOverlay();
+  if(!state||!state.solutionWrap) return;
+  const isHidden=
+    typeof force==='boolean'
+      ? force
+      : (state.solutionWrap.style.display==='none'||!state.solutionWrap.classList.contains('open'));
+  state.solutionWrap.classList.toggle('open',isHidden);
+  state.solutionWrap.style.display=isHidden?'block':'none';
+  state.solutionWrap.style.pointerEvents=isHidden?'auto':'none';
+  if(isHidden){
+    taskBoardInitFloatDrag(state,'solution');
+  }
+}
 function toggleTaskBoardDrawer(force){
-  const state=ensureTaskBoardOverlay();
-  const shouldOpen=typeof force==='boolean'?force:!state.drawer.classList.contains('open');
-  state.drawer.classList.toggle('open',shouldOpen);
+  toggleTaskBoardSolution(force);
 }
 function taskBoardEnsureLaserPointer(){
   const state=taskBoardState;
