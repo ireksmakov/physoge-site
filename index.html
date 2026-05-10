@@ -5701,6 +5701,10 @@ function taskBoardApplySnapshot(snapshot){
   const state=ensureTaskBoardOverlay();
   state.strokes=cloneTaskBoardStrokes(snapshot&&snapshot.strokes);
   state.boardObjects=cloneTaskBoardObjects(snapshot&&snapshot.objects);
+  state.selectedStrokeIds=[];
+  state.selectedObjectIds=[];
+  state.lassoPoints=[];
+  state.isLassoDrawing=false;
   if(!state.boardObjects.some(function(obj){return obj.id===state.selectedObjectId;})) state.selectedObjectId=null;
   taskBoardDraw();
   renderBoardObjects();
@@ -5727,6 +5731,9 @@ function restoreBoardState(){
   state.boardObjects=cloneTaskBoardObjects(data&&data.objects);
   state.selectedObjectId=null;
   state.selectedObjectIds=[];
+  state.selectedStrokeIds=[];
+  state.lassoPoints=[];
+  state.isLassoDrawing=false;
   state.history=[taskBoardSnapshot()];
   state.historyIndex=0;
   renderBoardObjects();
@@ -5804,7 +5811,8 @@ function renderBoardObjects(){
   state.boardObjects.forEach(function(obj){
     if(!obj||obj.type!=='image') return;
     const el=document.createElement('div');
-    el.className='task-board-image-object'+(obj.id===state.selectedObjectId?' selected':'');
+    const isSelected=obj.id===state.selectedObjectId||(state.selectedObjectIds||[]).includes(obj.id);
+    el.className='task-board-image-object'+(isSelected?' selected':'');
     el.dataset.id=obj.id;
     el.style.left=(Number(obj.x)||0)+'px';
     el.style.top=(Number(obj.y)||0)+'px';
@@ -6335,6 +6343,7 @@ function ensureTaskBoardOverlay(){
                   <button type="button" class="task-board-tool active" data-board-tool="pen" onclick="taskBoardSetTool('pen')">✏️ Карандаш</button>
                   <button type="button" class="task-board-tool" data-board-tool="eraser" onclick="taskBoardSetTool('eraser')">⌫ Ластик</button>
                   <button type="button" class="task-board-tool" data-board-tool="lasso" onclick="taskBoardSetTool('lasso')">⛶ Лассо</button>
+                  <button type="button" class="task-board-tool" data-board-action="delete-selection">🗑 Удалить выделенное</button>
                   <button type="button" class="task-board-tool" data-board-tool="pan" onclick="taskBoardSetTool('pan')">✋ Перемещение</button>
                   <button type="button" class="task-board-tool" data-board-tool="mouse" onclick="taskBoardSetTool('mouse')">🖱 Мышь</button>
                   <button type="button" class="task-board-tool" data-board-tool="text" onclick="taskBoardSetTool('text')">T Текст</button>
@@ -6471,6 +6480,9 @@ function ensureTaskBoardOverlay(){
     boardObjects:[],
     selectedObjectId:null,
     selectedObjectIds:[],
+    selectedStrokeIds:[],
+    lassoPoints:[],
+    isLassoDrawing:false,
     history:[{strokes:[],objects:[]}],
     historyIndex:0,
     pointer:null,
@@ -6494,13 +6506,21 @@ function ensureTaskBoardOverlay(){
   document.addEventListener('webkitfullscreenchange',taskBoardResizeCanvas);
   document.addEventListener('msfullscreenchange',taskBoardResizeCanvas);
   document.addEventListener('click',function(e){
-    const clearBtn=e.target&&e.target.closest?e.target.closest('[data-board-action="clear"]'):null;
-    if(!clearBtn) return;
+    const actionBtn=e.target&&e.target.closest?e.target.closest('[data-board-action]'):null;
+    if(!actionBtn) return;
     if(!taskBoardState||!taskBoardState.overlay||!taskBoardState.overlay.classList.contains('open')) return;
+    const action=actionBtn.getAttribute('data-board-action');
     e.preventDefault();
     e.stopPropagation();
     if(e.stopImmediatePropagation) e.stopImmediatePropagation();
-    taskBoardClear();
+    if(action==='clear'){
+      taskBoardClear();
+      return;
+    }
+    if(action==='delete-selection'){
+      taskBoardDeleteSelection();
+      return;
+    }
   });
   document.addEventListener('click',function(e){
     if(!taskBoardState||!taskBoardState.overlay.classList.contains('open')) return;
@@ -6516,10 +6536,17 @@ function ensureTaskBoardOverlay(){
       else closeTaskBoard();
       return;
     }
-    if((e.key==='Delete'||e.key==='Backspace')&&taskBoardState.selectedObjectId){
-      e.preventDefault();
-      deleteSelectedBoardObject();
-      return;
+    if(e.key==='Delete'||e.key==='Backspace'){
+      if(taskBoardState.selectedStrokeIds?.length||taskBoardState.selectedObjectIds?.length){
+        e.preventDefault();
+        taskBoardDeleteSelection();
+        return;
+      }
+      if(taskBoardState.selectedObjectId){
+        e.preventDefault();
+        deleteSelectedBoardObject();
+        return;
+      }
     }
     if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){
       e.preventDefault();
@@ -6633,6 +6660,9 @@ function openTaskBoard(mode,requestFullscreen){
   state.boardObjects=[];
   state.selectedObjectId=null;
   state.selectedObjectIds=[];
+  state.selectedStrokeIds=[];
+  state.lassoPoints=[];
+  state.isLassoDrawing=false;
   state.history=[{strokes:[],objects:[]}];
   state.historyIndex=0;
   state.pointer=null;
@@ -6801,6 +6831,9 @@ function taskBoardClear(){
   state.boardObjects=[];
   state.selectedObjectId=null;
   state.selectedObjectIds=[];
+  state.selectedStrokeIds=[];
+  state.lassoPoints=[];
+  state.isLassoDrawing=false;
   if(typeof taskBoardClearLasso==='function') taskBoardClearLasso();
   if(typeof taskBoardHideLaserPointer==='function') taskBoardHideLaserPointer();
   taskBoardPushHistory();
@@ -6840,13 +6873,126 @@ function taskBoardPointToSegmentDistance(px,py,x1,y1,x2,y2){
   dx=px-sx;dy=py-sy;
   return Math.sqrt(dx*dx+dy*dy);
 }
+function taskBoardStrokeId(){
+  return 'stroke-'+Date.now()+'-'+Math.random().toString(36).slice(2);
+}
+function taskBoardEnsureStrokeId(stroke){
+  if(stroke&&!stroke.id) stroke.id=taskBoardStrokeId();
+  return stroke?stroke.id:null;
+}
+function taskBoardNormalizeStrokePoint(p){
+  if(!p) return null;
+  if(typeof p.x==='number'&&typeof p.y==='number') return {x:p.x,y:p.y};
+  if(Array.isArray(p)) return {x:Number(p[0])||0,y:Number(p[1])||0};
+  return null;
+}
+function taskBoardStrokePoints(stroke){
+  if(!stroke) return [];
+  if(stroke.kind==='dot') return [{x:Number(stroke.x)||0,y:Number(stroke.y)||0}];
+  const source=Array.isArray(stroke.points)?stroke.points:(Array.isArray(stroke.path)?stroke.path:[]);
+  return source.map(taskBoardNormalizeStrokePoint).filter(Boolean);
+}
+function taskBoardDrawStrokePath(ctx,stroke){
+  const points=taskBoardStrokePoints(stroke);
+  if(stroke.kind==='dot'||points.length===1){
+    const point=points[0];
+    if(!point) return false;
+    ctx.beginPath();
+    ctx.arc(point.x,point.y,Math.max(1.3,(Number(stroke.size)||4)/2),0,Math.PI*2);
+    return true;
+  }
+  if(points.length<2) return false;
+  ctx.beginPath();
+  ctx.moveTo(points[0].x,points[0].y);
+  for(let i=1;i<points.length;i++) ctx.lineTo(points[i].x,points[i].y);
+  return true;
+}
+function taskBoardPointInPolygon(point,polygon){
+  let inside=false;
+  for(let i=0,j=polygon.length-1;i<polygon.length;j=i++){
+    const xi=polygon[i].x,yi=polygon[i].y;
+    const xj=polygon[j].x,yj=polygon[j].y;
+    const intersect=((yi>point.y)!==(yj>point.y))&&(point.x<(xj-xi)*(point.y-yi)/((yj-yi)||0.00001)+xi);
+    if(intersect) inside=!inside;
+  }
+  return inside;
+}
+function taskBoardPointOnSegment(point,a,b){
+  const cross=(point.y-a.y)*(b.x-a.x)-(point.x-a.x)*(b.y-a.y);
+  if(Math.abs(cross)>0.00001) return false;
+  return point.x>=Math.min(a.x,b.x)-0.00001&&point.x<=Math.max(a.x,b.x)+0.00001&&point.y>=Math.min(a.y,b.y)-0.00001&&point.y<=Math.max(a.y,b.y)+0.00001;
+}
+function taskBoardSegmentDirection(a,b,c){
+  return (c.x-a.x)*(b.y-a.y)-(b.x-a.x)*(c.y-a.y);
+}
+function taskBoardSegmentsIntersect(a,b,c,d){
+  const d1=taskBoardSegmentDirection(c,d,a);
+  const d2=taskBoardSegmentDirection(c,d,b);
+  const d3=taskBoardSegmentDirection(a,b,c);
+  const d4=taskBoardSegmentDirection(a,b,d);
+  if(((d1>0&&d2<0)||(d1<0&&d2>0))&&((d3>0&&d4<0)||(d3<0&&d4>0))) return true;
+  return (Math.abs(d1)<=0.00001&&taskBoardPointOnSegment(a,c,d))||
+    (Math.abs(d2)<=0.00001&&taskBoardPointOnSegment(b,c,d))||
+    (Math.abs(d3)<=0.00001&&taskBoardPointOnSegment(c,a,b))||
+    (Math.abs(d4)<=0.00001&&taskBoardPointOnSegment(d,a,b));
+}
+function taskBoardStrokeIntersectsPolygon(strokePoints,polygon){
+  if(!strokePoints.length||polygon.length<3) return false;
+  if(strokePoints.some(function(point){return taskBoardPointInPolygon(point,polygon);})) return true;
+  for(let i=1;i<strokePoints.length;i++){
+    const a=strokePoints[i-1],b=strokePoints[i];
+    for(let j=0;j<polygon.length;j++){
+      const c=polygon[j],d=polygon[(j+1)%polygon.length];
+      if(taskBoardSegmentsIntersect(a,b,c,d)) return true;
+    }
+  }
+  return false;
+}
+function taskBoardSelectInsideLasso(points){
+  const state=taskBoardState;
+  if(!state) return;
+  state.selectedStrokeIds=[];
+  state.selectedObjectIds=state.selectedObjectIds||[];
+  state.selectedObjectId=null;
+  state.strokes.forEach(function(stroke){
+    taskBoardEnsureStrokeId(stroke);
+    const isInside=taskBoardStrokeIntersectsPolygon(taskBoardStrokePoints(stroke),points);
+    if(isInside) state.selectedStrokeIds.push(stroke.id);
+  });
+  taskBoardRedraw();
+  renderBoardObjects();
+}
+function taskBoardDeleteSelection(){
+  const state=taskBoardState;
+  if(!state) return;
+  const selectedStrokeIds=new Set(state.selectedStrokeIds||[]);
+  const selectedObjectIds=new Set(state.selectedObjectIds||[]);
+  if(selectedStrokeIds.size){
+    state.strokes=state.strokes.filter(function(stroke){return !selectedStrokeIds.has(stroke.id);});
+  }
+  if(selectedObjectIds.size&&Array.isArray(state.boardObjects)){
+    state.boardObjects=state.boardObjects.filter(function(obj){return !selectedObjectIds.has(obj.id);});
+  }
+  state.selectedStrokeIds=[];
+  state.selectedObjectIds=[];
+  state.selectedObjectId=null;
+  taskBoardPushHistory?.();
+  taskBoardRedraw?.();
+  renderBoardObjects?.();
+  taskBoardSaveState?.(false);
+}
+function taskBoardRedraw(){taskBoardDraw();}
 function taskBoardEraseAt(clientX,clientY){
   const state=ensureTaskBoardOverlay();
   const world=taskBoardClientToWorld(clientX,clientY);
   const radius=Math.max(12,state.size*4);
   const filtered=state.strokes.filter(function(stroke){
-    if(stroke.kind==='dot') return taskBoardDistance({x:stroke.x,y:stroke.y},world)>radius;
-    return taskBoardPointToSegmentDistance(world.x,world.y,stroke.points[0].x,stroke.points[0].y,stroke.points[1].x,stroke.points[1].y)>radius;
+    const points=taskBoardStrokePoints(stroke);
+    if(points.length<2) return !points[0]||taskBoardDistance(points[0],world)>radius;
+    for(let i=1;i<points.length;i++){
+      if(taskBoardPointToSegmentDistance(world.x,world.y,points[i-1].x,points[i-1].y,points[i].x,points[i].y)<=radius) return false;
+    }
+    return true;
   });
   if(filtered.length!==state.strokes.length){
     state.strokes=filtered;
@@ -6859,7 +7005,16 @@ function taskBoardPointerDown(e){
   const state=ensureTaskBoardOverlay();
   if(!state.overlay.classList.contains('open')) return;
   if(e.target===state.canvas&&state.selectedObjectId) selectBoardObject(null);
-  if(e.button===2||state.tool==='pan'||state.tool==='lasso'){
+  if(e.button===0&&state.tool==='lasso'){
+    const world=taskBoardClientToWorld(e.clientX,e.clientY);
+    state.selectedStrokeIds=[];
+    state.selectedObjectIds=[];
+    state.selectedObjectId=null;
+    state.isLassoDrawing=true;
+    state.lassoPoints=[world];
+    state.pointer={type:'lasso'};
+    taskBoardDraw();
+  }else if(e.button===2||state.tool==='pan'){
     state.pointer={type:'pan',x:e.clientX,y:e.clientY};
     taskBoardUpdateCanvasSurface();
   }else if(state.tool==='eraser'){
@@ -6875,6 +7030,15 @@ function taskBoardPointerDown(e){
 function taskBoardPointerMove(e){
   const state=ensureTaskBoardOverlay();
   if(!state.pointer) return;
+  if(state.pointer.type==='lasso'){
+    const world=taskBoardClientToWorld(e.clientX,e.clientY);
+    const last=state.lassoPoints[state.lassoPoints.length-1];
+    if(!last||taskBoardDistance(world,last)>=0.6){
+      state.lassoPoints.push(world);
+      taskBoardDraw();
+    }
+    return;
+  }
   if(state.pointer.type==='pan'){
     state.viewX+=e.clientX-state.pointer.x;
     state.viewY+=e.clientY-state.pointer.y;
@@ -6890,7 +7054,8 @@ function taskBoardPointerMove(e){
   if(state.pointer.type==='draw'){
     const world=taskBoardClientToWorld(e.clientX,e.clientY);
     if(taskBoardDistance(world,state.pointer.last)<0.6) return;
-    state.strokes.push({kind:'segment',color:state.color,size:state.size,points:[{x:state.pointer.last.x,y:state.pointer.last.y},{x:world.x,y:world.y}]});
+    state.selectedStrokeIds=[];
+    state.strokes.push({id:taskBoardStrokeId(),kind:'segment',color:state.color,size:state.size,points:[{x:state.pointer.last.x,y:state.pointer.last.y},{x:world.x,y:world.y}]});
     state.pointer.last=world;
     state.pointer.changed=true;
     taskBoardDraw();
@@ -6901,12 +7066,21 @@ function taskBoardPointerUp(e){
   const state=taskBoardState;
   if(state.pointer.type==='draw'){
     if(!state.pointer.changed){
-      state.strokes.push({kind:'dot',color:state.color,size:state.size,x:state.pointer.start.x,y:state.pointer.start.y});
+      state.selectedStrokeIds=[];
+      state.strokes.push({id:taskBoardStrokeId(),kind:'dot',color:state.color,size:state.size,x:state.pointer.start.x,y:state.pointer.start.y});
       taskBoardDraw();
     }
     taskBoardPushHistory();
     taskBoardSaveState(false);
+  }else if(state.pointer.type==='lasso'){
+    state.isLassoDrawing=false;
+    if(state.lassoPoints&&state.lassoPoints.length>2){
+      taskBoardSelectInsideLasso(state.lassoPoints);
+    }
+    state.lassoPoints=[];
+    taskBoardDraw();
   }else if(state.pointer.type==='eraser'&&state.pointer.changed){
+    state.selectedStrokeIds=[];
     taskBoardPushHistory();
     taskBoardSaveState(false);
   }
@@ -6929,20 +7103,42 @@ function taskBoardDraw(){
   ctx.lineCap='round';
   ctx.lineJoin='round';
   state.strokes.forEach(function(stroke){
-    ctx.strokeStyle=stroke.color;
-    ctx.fillStyle=stroke.color;
-    ctx.lineWidth=stroke.size;
-    if(stroke.kind==='dot'){
-      ctx.beginPath();
-      ctx.arc(stroke.x,stroke.y,Math.max(1.3,stroke.size/2),0,Math.PI*2);
-      ctx.fill();
-    }else{
-      ctx.beginPath();
-      ctx.moveTo(stroke.points[0].x,stroke.points[0].y);
-      ctx.lineTo(stroke.points[1].x,stroke.points[1].y);
-      ctx.stroke();
+    taskBoardEnsureStrokeId(stroke);
+    const strokeSize=Number(stroke.size)||4;
+    const isSelected=(state.selectedStrokeIds||[]).includes(stroke.id);
+    if(isSelected){
+      ctx.save();
+      ctx.strokeStyle='rgba(37,99,235,0.35)';
+      ctx.fillStyle='rgba(37,99,235,0.35)';
+      ctx.lineWidth=strokeSize+8;
+      if(taskBoardDrawStrokePath(ctx,stroke)){
+        if(stroke.kind==='dot') ctx.fill();
+        else ctx.stroke();
+      }
+      ctx.restore();
+    }
+    ctx.strokeStyle=stroke.color||'#0f172a';
+    ctx.fillStyle=stroke.color||'#0f172a';
+    ctx.lineWidth=strokeSize;
+    if(taskBoardDrawStrokePath(ctx,stroke)){
+      if(stroke.kind==='dot') ctx.fill();
+      else ctx.stroke();
     }
   });
+  if(state.tool==='lasso'&&state.lassoPoints&&state.lassoPoints.length>1){
+    ctx.save();
+    ctx.setLineDash([8,6]);
+    ctx.strokeStyle='#2563eb';
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    state.lassoPoints.forEach(function(point,index){
+      if(index===0) ctx.moveTo(point.x,point.y);
+      else ctx.lineTo(point.x,point.y);
+    });
+    if(!state.isLassoDrawing&&state.lassoPoints.length>2) ctx.closePath();
+    ctx.stroke();
+    ctx.restore();
+  }
   ctx.restore();
   taskBoardUpdateCanvasSurface();
   renderBoardObjects();
