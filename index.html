@@ -787,7 +787,10 @@ body.task-board-lock header,body.task-board-lock .topbar,body.task-board-lock .s
 .task-board-float-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-bottom:1px solid #e2e8f0;background:#f8fafc;cursor:grab}
 .task-board-float-head:active{cursor:grabbing}
 .task-board-float-body{padding:12px}
+.task-board-float-head strong{flex:1}
 .task-board-float-close{padding:4px 10px;border:1px solid #cbd5e1;background:#fff;border-radius:10px;cursor:pointer;font-weight:700}
+.task-board-float-hide{margin-left:auto;border:1px solid #cfe0f5;background:#fff;color:#0f172a;border-radius:10px;padding:6px 10px;font-weight:800;cursor:pointer;pointer-events:auto}
+.task-board-float-hide:hover{background:#eff6ff;border-color:#93c5fd}
 .task-board-solution-wrap{position:absolute;left:420px;top:96px;width:420px;resize:none;min-width:320px;min-height:220px;max-width:calc(100vw - 40px);max-height:calc(100vh - 120px);overflow:auto;background:rgba(255,255,255,.97);border:1px solid #d8e5f5;border-radius:18px;box-shadow:0 18px 50px rgba(15,23,42,.16);z-index:20020;pointer-events:auto}
 .task-board-resize-handle{position:absolute;right:8px;bottom:8px;width:22px;height:22px;border-radius:8px;cursor:nwse-resize;z-index:5;background:linear-gradient(135deg,transparent 45%,rgba(37,99,235,.35) 45%,rgba(37,99,235,.35) 55%,transparent 55%),linear-gradient(135deg,transparent 62%,rgba(37,99,235,.55) 62%,rgba(37,99,235,.55) 72%,transparent 72%)}
 .task-board-resize-handle:hover{background-color:rgba(37,99,235,.08)}
@@ -6670,6 +6673,13 @@ function ensureTaskBoardOverlay(){
                 <div class="task-board-float-head" data-float-drag="solution">
                   <span class="task-board-float-drag">⋮⋮</span>
                   <strong>Решение</strong>
+                  <button
+                    type="button"
+                    class="task-board-float-hide"
+                    data-board-hide-float="solution"
+                  >
+                    Скрыть
+                  </button>
                 </div>
                 <div class="task-board-float-body task-board-solution" id="taskBoardSolution"></div>
                 <div class="task-board-resize-handle" data-float-resize="solution" title="Изменить размер"></div>
@@ -7020,6 +7030,26 @@ function closeTaskBoard(){
   toggleTaskBoardAnimation(false);
   taskBoardCloseDropdowns();
 }
+function taskBoardHideFloating(kind){
+  const state=taskBoardState||ensureTaskBoardOverlay();
+  if(!state) return;
+  let wrap=null;
+  let btn=null;
+  if(kind==='solution'){
+    wrap=state.solutionWrap;
+  }else if(kind==='graph'){
+    wrap=state.graphWrap;
+    btn=state.graphBtn;
+  }else if(kind==='condition'){
+    wrap=state.conditionWrap;
+    btn=state.conditionBtn;
+  }
+  if(!wrap) return;
+  wrap.classList.remove('open');
+  wrap.style.display='none';
+  wrap.style.pointerEvents='none';
+  if(btn) btn.classList.remove('active');
+}
 function taskBoardToggleFloating(kind,force){
   const state=ensureTaskBoardOverlay();
   const isGraph=kind==='graph';
@@ -7027,9 +7057,24 @@ function taskBoardToggleFloating(kind,force){
   const btn=isGraph?state.graphBtn:state.conditionBtn;
   if(!wrap) return;
   const shouldOpen=typeof force==='boolean'?force:(wrap.style.display==='none'||!wrap.style.display);
-  wrap.style.display=shouldOpen?'block':'none';
-  if(btn) btn.classList.toggle('active',shouldOpen);
+  if(!shouldOpen){
+    taskBoardHideFloating(kind);
+    return;
+  }
+  wrap.classList.add('open');
+  wrap.style.display='block';
+  wrap.style.pointerEvents='auto';
+  if(btn) btn.classList.add('active');
 }
+document.addEventListener('click',function(e){
+  const btn=e.target.closest('[data-board-hide-float]');
+  if(!btn) return;
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  taskBoardHideFloating(btn.getAttribute('data-board-hide-float'));
+},true);
 function taskBoardInitFloatDrag(state,kind){
   const wrap=
     kind==='graph'?state.graphWrap:
