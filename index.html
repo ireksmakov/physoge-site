@@ -727,24 +727,25 @@ body.task-board-lock{overflow:hidden}
 .task-board-static-given{border-left:4px solid #f97316;border-radius:0 12px 12px 0;background:#f8fafc;padding:12px 14px;margin-bottom:12px;font-size:15px;line-height:1.7;color:#475569}
 .task-board-static-given strong{color:#111827}
 .task-board-center{position:relative;display:block;width:100%;height:100%;min-width:100%;min-height:100%;margin:0;padding:0;overflow:visible}
-.task-board-toolbar{position:fixed;z-index:20020;top:16px;left:16px;width:auto;max-width:calc(100vw - 32px);display:flex;visibility:visible;opacity:1;align-items:center;justify-content:flex-start;gap:6px;flex-wrap:nowrap;overflow:visible;white-space:nowrap;padding:6px;border:1px solid rgba(219,229,240,.92);border-radius:16px;background:rgba(255,255,255,.94);box-shadow:0 12px 34px rgba(15,23,42,.18);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);user-select:none}
+.task-board-toolbar{position:fixed;z-index:20080;pointer-events:auto;top:16px;left:16px;width:auto;max-width:calc(100vw - 32px);display:flex;visibility:visible;opacity:1;align-items:center;justify-content:flex-start;gap:6px;flex-wrap:nowrap;overflow:visible;white-space:nowrap;padding:6px;border:1px solid rgba(219,229,240,.92);border-radius:16px;background:rgba(255,255,255,.94);box-shadow:0 12px 34px rgba(15,23,42,.18);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);user-select:none}
 .task-board-toolbar::-webkit-scrollbar{display:none}
 .task-board-toolbar-drag{width:26px;height:34px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;border:0;border-radius:12px;background:rgba(241,245,249,.86);color:#64748b;font-size:18px;font-weight:900;line-height:1;cursor:grab;touch-action:none;user-select:none;font-family:var(--fb)}
 .task-board-toolbar-drag:hover{background:#e0f2fe;color:#1d4ed8}
 .task-board-toolbar-drag:active,.task-board-toolbar.dragging .task-board-toolbar-drag{cursor:grabbing;background:#dbeafe;color:#1d4ed8}
-.task-board-dropdown{position:relative;flex:0 0 auto}
-.task-board-dropdown-toggle,.task-board-close-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 10px;border-radius:12px;border:1px solid #cbd5e1;background:#fff;color:#0f172a;font-size:13px;font-weight:800;cursor:pointer;transition:all .18s;font-family:var(--fb);box-shadow:0 10px 24px rgba(15,23,42,.05);white-space:nowrap}
+.task-board-dropdown{position:relative;z-index:20090;pointer-events:auto;flex:0 0 auto}
+.task-board-dropdown-toggle,.task-board-close-btn{position:relative;z-index:20090;pointer-events:auto;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 10px;border-radius:12px;border:1px solid #cbd5e1;background:#fff;color:#0f172a;font-size:13px;font-weight:800;cursor:pointer;transition:all .18s;font-family:var(--fb);box-shadow:0 10px 24px rgba(15,23,42,.05);white-space:nowrap}
 .task-board-dropdown-toggle:hover,.task-board-close-btn:hover{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8;box-shadow:0 0 18px rgba(37,99,235,.16);transform:translateY(-1px)}
 .task-board-close-btn{margin-left:0;color:#dc2626;border-color:#fecaca}
 .task-board-close-btn:hover{background:#fff7ed;border-color:#fdba74;color:#c2410c}
-.task-board-dropdown-menu{position:absolute;top:calc(100% + 8px);left:0;min-width:220px;max-width:calc(100vw - 16px);display:none;flex-direction:column;gap:6px;padding:10px;background:rgba(255,255,255,.98);border:1px solid #dbe5f0;border-radius:14px;box-shadow:0 18px 46px rgba(15,23,42,.16);z-index:20030;white-space:normal}
+.task-board-dropdown-menu{position:absolute;top:calc(100% + 8px);left:0;min-width:220px;max-width:calc(100vw - 16px);display:none;flex-direction:column;gap:6px;padding:10px;background:rgba(255,255,255,.98);border:1px solid #dbe5f0;border-radius:14px;box-shadow:0 18px 46px rgba(15,23,42,.16);z-index:20100;pointer-events:auto;white-space:normal}
 .task-board-dropdown.align-right .task-board-dropdown-menu{left:auto;right:0}
 .task-board-dropdown.open .task-board-dropdown-menu{display:flex}
+.task-board-dropdown-menu button{pointer-events:auto;cursor:pointer}
 .task-board-materials-menu{min-width:190px}
 .task-board-menu-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 4px}
 .task-board-menu-label{font-size:12px;font-weight:800;color:#334155}
 .task-board-toolbar-label{font-size:12px;font-weight:700;color:#334155}
-.task-board-tool{display:flex;align-items:center;justify-content:flex-start;gap:7px;width:100%;padding:8px 10px;border-radius:10px;border:1px solid #cbd5e1;background:#fff;color:#334155;font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb);text-align:left}
+.task-board-tool{pointer-events:auto;display:flex;align-items:center;justify-content:flex-start;gap:7px;width:100%;padding:8px 10px;border-radius:10px;border:1px solid #cbd5e1;background:#fff;color:#334155;font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb);text-align:left}
 .task-board-tool:hover{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8;box-shadow:0 0 18px rgba(37,99,235,.16);transform:translateY(-1px)}
 .task-board-tool.active{background:#dbeafe;border-color:#60a5fa;color:#1d4ed8}
 .task-board-tool:disabled,.task-board-clear:disabled{opacity:.45;cursor:not-allowed}
@@ -754,9 +755,9 @@ body.task-board-lock{overflow:hidden}
 .task-board-color.active{transform:scale(1.08);box-shadow:0 0 0 3px rgba(37,99,235,.18);border-color:#fff}
 .task-board-size-input{accent-color:#2563eb;max-width:120px}
 .task-board-size{font-size:11px;color:#475569;min-width:36px;text-align:right;font-weight:700}
-.task-board-clear{display:flex;align-items:center;justify-content:flex-start;gap:7px;width:100%;padding:8px 10px;border-radius:10px;border:1px solid #cbd5e1;background:#fff;color:#0f172a;font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb);text-align:left}
+.task-board-clear{pointer-events:auto;display:flex;align-items:center;justify-content:flex-start;gap:7px;width:100%;padding:8px 10px;border-radius:10px;border:1px solid #cbd5e1;background:#fff;color:#0f172a;font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb);text-align:left}
 .task-board-clear:hover{background:#fff7ed;border-color:#fdba74;color:#c2410c;box-shadow:0 0 16px rgba(249,115,22,.16);transform:translateY(-1px)}
-.task-board-canvas-wrap{position:absolute;inset:0;width:100%;height:100%;min-width:100%;min-height:100%;margin:0;padding:0;border-radius:0;border:0;background-color:#fff;background-image:linear-gradient(to right,rgba(148,163,184,.14) 1px,transparent 1px),linear-gradient(to bottom,rgba(148,163,184,.14) 1px,transparent 1px);background-size:36px 36px;overflow:hidden;box-shadow:none}
+.task-board-canvas-wrap{position:absolute;z-index:1;inset:0;width:100%;height:100%;min-width:100%;min-height:100%;margin:0;padding:0;border-radius:0;border:0;background-color:#fff;background-image:linear-gradient(to right,rgba(148,163,184,.14) 1px,transparent 1px),linear-gradient(to bottom,rgba(148,163,184,.14) 1px,transparent 1px);background-size:36px 36px;overflow:hidden;box-shadow:none}
 .task-board-canvas-wrap.pen-mode{cursor:crosshair}
 .task-board-canvas-wrap.pointer-mode{cursor:none}
 .task-board-canvas-wrap.erase-mode{cursor:cell}
@@ -764,8 +765,8 @@ body.task-board-lock{overflow:hidden}
 .task-board-canvas-wrap.lasso-mode{cursor:crosshair}
 .task-board-canvas-wrap.dragging{cursor:grabbing}
 .task-board-canvas{position:absolute;inset:0;width:100%;height:100%;min-width:100%;min-height:100%;display:block;touch-action:none;z-index:1}
-.task-board-object-layer{position:absolute;inset:0;z-index:3;pointer-events:none;transform-origin:0 0;touch-action:none}
-.task-board-lasso-layer{position:absolute;inset:0;z-index:4;pointer-events:none}
+.task-board-object-layer{position:absolute;inset:0;z-index:1;pointer-events:none;transform-origin:0 0;touch-action:none}
+.task-board-lasso-layer{position:absolute;inset:0;z-index:1;pointer-events:none}
 .task-board-laser-pointer{position:absolute;width:18px;height:18px;border-radius:50%;background:rgba(255,0,0,.95);box-shadow:0 0 12px rgba(255,0,0,.95),0 0 28px rgba(255,0,0,.75),0 0 48px rgba(255,0,0,.45);transform:translate(-50%,-50%);pointer-events:none;z-index:20040;display:none;opacity:0;transition:left .06s linear,top .06s linear,opacity .12s ease}
 .task-board-laser-pointer::after{content:"";position:absolute;inset:-8px;border:2px solid rgba(255,0,0,.45);border-radius:50%;box-shadow:0 0 18px rgba(255,0,0,.35);animation:taskBoardLaserPulse 1.15s ease-out infinite}
 .task-board-laser-pointer.active{display:block;opacity:1}
@@ -6513,16 +6514,16 @@ function ensureTaskBoardOverlay(){
           <div class="task-board-center">
             <div class="task-board-toolbar" id="taskBoardToolbar">
               <button type="button" class="task-board-toolbar-drag" id="taskBoardToolbarDrag" aria-label="Перетащить панель доски" title="Перетащить панель доски">⋮⋮</button>
-              <div class="task-board-dropdown" data-task-board-dropdown="tools">
-                <button type="button" class="task-board-dropdown-toggle" onclick="taskBoardToggleDropdown('tools')" aria-haspopup="true" aria-expanded="false">🧰 Инструменты ▼</button>
+              <div class="task-board-dropdown" data-dropdown-name="tools">
+                <button type="button" class="task-board-dropdown-toggle" data-task-board-dropdown="tools" onclick="taskBoardToggleDropdown('tools')" aria-haspopup="true" aria-expanded="false">🧰 Инструменты ▼</button>
                 <div class="task-board-dropdown-menu">
-                  <button type="button" class="task-board-tool active" data-board-tool="pen" onclick="taskBoardSetTool('pen')">✏️ Карандаш</button>
-                  <button type="button" class="task-board-tool" data-board-tool="eraser" onclick="taskBoardSetTool('eraser')">⌫ Ластик</button>
-                  <button type="button" class="task-board-tool" data-board-tool="lasso" onclick="taskBoardSetTool('lasso')">⛶ Лассо</button>
-                  <button type="button" class="task-board-tool" data-board-tool="pan" onclick="taskBoardSetTool('pan')">✋ Перемещение</button>
-                  <button type="button" class="task-board-tool" data-board-tool="mouse" onclick="taskBoardSetTool('mouse')">🖱 Мышь</button>
-                  <button type="button" class="task-board-tool" data-board-tool="text" onclick="taskBoardSetTool('text')">T Текст</button>
-                  <button type="button" class="task-board-tool" data-board-tool="pointer" onclick="taskBoardSetTool('pointer')">☝ Указка</button>
+                  <button type="button" class="task-board-tool active" data-board-action="tool" data-tool="pen" data-board-tool="pen" onclick="taskBoardSetTool('pen')">✏️ Карандаш</button>
+                  <button type="button" class="task-board-tool" data-board-action="tool" data-tool="eraser" data-board-tool="eraser" onclick="taskBoardSetTool('eraser')">⌫ Ластик</button>
+                  <button type="button" class="task-board-tool" data-board-action="tool" data-tool="lasso" data-board-tool="lasso" onclick="taskBoardSetTool('lasso')">⛶ Лассо</button>
+                  <button type="button" class="task-board-tool" data-board-action="tool" data-tool="move" data-board-tool="pan" onclick="taskBoardSetTool('pan')">✋ Перемещение</button>
+                  <button type="button" class="task-board-tool" data-board-action="tool" data-tool="mouse" data-board-tool="mouse" onclick="taskBoardSetTool('mouse')">🖱 Мышь</button>
+                  <button type="button" class="task-board-tool" data-board-action="tool" data-tool="text" data-board-tool="text" onclick="taskBoardSetTool('text')">T Текст</button>
+                  <button type="button" class="task-board-tool" data-board-action="tool" data-tool="pointer" data-board-tool="pointer" onclick="taskBoardSetTool('pointer')">☝ Указка</button>
                   <button type="button" class="task-board-tool task-board-colors-toggle" onclick="taskBoardToggleColors()">🎨 Цвета <span id="taskBoardColorDot" class="task-board-color-dot" aria-hidden="true"></span></button>
                   <div class="task-board-color-palette" aria-label="Палитра доски">
                     <button type="button" class="task-board-color active" data-board-color="#0f172a" style="--sw:#0f172a" onclick="taskBoardSetColor('#0f172a')" aria-label="Чёрный цвет"></button>
@@ -6535,22 +6536,22 @@ function ensureTaskBoardOverlay(){
                     <input id="taskBoardSize" class="task-board-size-input" type="range" min="2" max="12" value="4" oninput="taskBoardSetSize(this.value)">
                     <span id="taskBoardSizeValue" class="task-board-size">4 px</span>
                   </div>
-                  <button type="button" class="task-board-clear" onclick="taskBoardClear()">🧹 Очистить</button>
-                  <button type="button" class="task-board-tool" id="taskBoardUndoBtn" onclick="taskBoardUndo()">↶ Назад</button>
-                  <button type="button" class="task-board-tool" id="taskBoardRedoBtn" onclick="taskBoardRedo()">↷ Вперёд</button>
-                  <button type="button" class="task-board-tool" onclick="taskBoardSaveState(true)">💾 Сохранить</button>
+                  <button type="button" class="task-board-clear" data-board-action="clear" onclick="taskBoardClear()">🧹 Очистить</button>
+                  <button type="button" class="task-board-tool" id="taskBoardUndoBtn" data-board-action="undo" onclick="taskBoardUndo()">↶ Назад</button>
+                  <button type="button" class="task-board-tool" id="taskBoardRedoBtn" data-board-action="redo" onclick="taskBoardRedo()">↷ Вперёд</button>
+                  <button type="button" class="task-board-tool" data-board-action="save" onclick="taskBoardSaveState(true)">💾 Сохранить</button>
                 </div>
               </div>
-              <div class="task-board-dropdown" data-task-board-dropdown="materials">
-                <button type="button" class="task-board-dropdown-toggle" onclick="taskBoardToggleDropdown('materials')" aria-haspopup="true" aria-expanded="false">📂 Материалы ▼</button>
+              <div class="task-board-dropdown" data-dropdown-name="materials">
+                <button type="button" class="task-board-dropdown-toggle" data-task-board-dropdown="materials" onclick="taskBoardToggleDropdown('materials')" aria-haspopup="true" aria-expanded="false">📂 Материалы ▼</button>
                 <div class="task-board-dropdown-menu task-board-materials-menu">
-                  <button type="button" id="taskBoardConditionBtn" class="task-board-tool" onclick="toggleTaskBoardCondition();taskBoardCloseDropdowns();">📄 Условие</button>
-                  <button type="button" id="taskBoardGraphBtn" class="task-board-tool" onclick="taskBoardToggleFloating('graph');taskBoardCloseDropdowns();">🧩 Схема</button>
-                  <button type="button" class="task-board-tool" id="taskBoardAnimBtn" onclick="toggleTaskBoardAnimation();taskBoardCloseDropdowns();">▶ Анимация</button>
-                  <button type="button" class="task-board-tool" onclick="toggleTaskBoardDrawer();taskBoardCloseDropdowns();">✅ Решение</button>
+                  <button type="button" id="taskBoardConditionBtn" class="task-board-tool" data-board-material="condition" onclick="toggleTaskBoardCondition();taskBoardCloseDropdowns();">📄 Условие</button>
+                  <button type="button" id="taskBoardGraphBtn" class="task-board-tool" data-board-material="graph" onclick="taskBoardToggleFloating('graph');taskBoardCloseDropdowns();">🧩 Схема</button>
+                  <button type="button" class="task-board-tool" id="taskBoardAnimBtn" data-board-material="animation" onclick="toggleTaskBoardAnimation();taskBoardCloseDropdowns();">▶ Анимация</button>
+                  <button type="button" class="task-board-tool" data-board-material="solution" onclick="toggleTaskBoardDrawer();taskBoardCloseDropdowns();">✅ Решение</button>
                 </div>
               </div>
-              <button type="button" class="task-board-close-btn" onclick="closeTaskBoard()">✕ Закрыть</button>
+              <button type="button" class="task-board-close-btn" data-board-close="true" onclick="closeTaskBoard()">✕ Закрыть</button>
             </div>
             <div id="taskBoardCanvasWrap" class="task-board-canvas-wrap pen-mode">
               <div class="task-board-condition-drawer task-board-float open" id="taskBoardConditionDrawer">
@@ -6818,22 +6819,80 @@ function taskBoardCloseDropdowns(){
   state.toolbar.querySelectorAll('.task-board-dropdown.open').forEach(function(drop){drop.classList.remove('open');});
   state.toolbar.querySelectorAll('.task-board-dropdown-toggle[aria-expanded]').forEach(function(btn){btn.setAttribute('aria-expanded','false');});
 }
-function taskBoardToggleDropdown(name){
-  const state=ensureTaskBoardOverlay();
-  if(!state.toolbar) return;
-  const dropdown=state.toolbar.querySelector('[data-task-board-dropdown="'+name+'"]');
-  if(!dropdown) return;
-  const shouldOpen=!dropdown.classList.contains('open');
+function taskBoardIsUiTarget(target){
+  return !!(
+    target &&
+    target.closest &&
+    target.closest(
+      '.task-board-toolbar, .task-board-dropdown-menu, .task-board-dropdown, .task-board-condition-wrap, .task-board-condition-drawer, .task-board-float, .task-board-float-head, button, input, textarea, select'
+    )
+  );
+}
+function taskBoardHandleDropdownClick(e){
+  const toggle=e.target&&e.target.closest?e.target.closest('[data-task-board-dropdown]'):null;
+  if(!toggle) return;
+  if(!toggle.closest('.task-board-toolbar')) return;
+  e.preventDefault();
+  e.stopPropagation();
+  taskBoardToggleDropdown(toggle.getAttribute('data-task-board-dropdown'));
+}
+function taskBoardHandleActionClick(e){
+  const btn=e.target&&e.target.closest?e.target.closest('[data-board-action]'):null;
+  if(!btn) return;
+  if(!btn.closest('.task-board-toolbar')) return;
+  e.preventDefault();
+  e.stopPropagation();
+  const action=btn.getAttribute('data-board-action');
+  if(action==='tool') taskBoardSetTool(btn.getAttribute('data-tool')==='move'?'pan':btn.getAttribute('data-tool'));
+  if(action==='clear') taskBoardClear();
+  if(action==='undo') taskBoardUndo();
+  if(action==='redo') taskBoardRedo();
+  if(action==='save') taskBoardSaveState(true);
+  if(action!=='save') taskBoardCloseDropdowns();
+}
+function taskBoardHandleMaterialClick(e){
+  const btn=e.target&&e.target.closest?e.target.closest('[data-board-material]'):null;
+  if(!btn) return;
+  if(!btn.closest('.task-board-toolbar')) return;
+  e.preventDefault();
+  e.stopPropagation();
+  const material=btn.getAttribute('data-board-material');
+  if(material==='condition') toggleTaskBoardCondition();
+  if(material==='graph') taskBoardToggleFloating('graph');
+  if(material==='animation') toggleTaskBoardAnimation();
+  if(material==='solution') toggleTaskBoardDrawer();
   taskBoardCloseDropdowns();
-  dropdown.classList.toggle('open',shouldOpen);
-  const toggle=dropdown.querySelector('.task-board-dropdown-toggle');
-  if(toggle) toggle.setAttribute('aria-expanded',shouldOpen?'true':'false');
-  if(shouldOpen) requestAnimationFrame(taskBoardClampOpenDropdowns);
+}
+function taskBoardHandleCloseClick(e){
+  const btn=e.target&&e.target.closest?e.target.closest('[data-board-close]'):null;
+  if(!btn) return;
+  if(!btn.closest('.task-board-toolbar')) return;
+  e.preventDefault();
+  e.stopPropagation();
+  closeTaskBoard();
+}
+document.addEventListener('click',taskBoardHandleDropdownClick,true);
+document.addEventListener('click',taskBoardHandleActionClick,true);
+document.addEventListener('click',taskBoardHandleMaterialClick,true);
+document.addEventListener('click',taskBoardHandleCloseClick,true);
+function taskBoardToggleDropdown(name){
+  const state=taskBoardState;
+  if(!state||!state.overlay) return;
+  const root=state.toolbar||state.overlay;
+  const dropdowns=root.querySelectorAll('.task-board-dropdown');
+  dropdowns.forEach(function(drop){
+    const isTarget=(drop.getAttribute('data-dropdown-name')===name)||(drop.getAttribute('data-task-board-dropdown')===name);
+    const shouldOpen=isTarget&&!drop.classList.contains('open');
+    drop.classList.toggle('open',shouldOpen);
+    const toggle=drop.querySelector('.task-board-dropdown-toggle');
+    if(toggle) toggle.setAttribute('aria-expanded',shouldOpen?'true':'false');
+  });
+  if(root.querySelector('.task-board-dropdown.open')) requestAnimationFrame(taskBoardClampOpenDropdowns);
 }
 function taskBoardToggleColors(){
   const state=ensureTaskBoardOverlay();
   if(!state.toolbar) return;
-  const dropdown=state.toolbar.querySelector('[data-task-board-dropdown="tools"]');
+  const dropdown=state.toolbar.querySelector('[data-dropdown-name="tools"], .task-board-dropdown[data-task-board-dropdown="tools"]');
   if(dropdown) dropdown.classList.toggle('colors-open');
 }
 function taskBoardRequestFullscreen(){
@@ -7279,6 +7338,7 @@ function taskBoardInitFloatDrag(state,kind){
 
   head.addEventListener('pointerdown',function(e){
     if(e.button!==undefined && e.button!==0) return;
+    if(kind==='condition'&&!e.target.closest('.task-board-condition-drag')) return;
     if(e.target.closest('button')) return;
 
     e.preventDefault();
@@ -7596,6 +7656,7 @@ function taskBoardSelectObjectsInsideLasso(points){
 function taskBoardPointerDown(e){
   const state=ensureTaskBoardOverlay();
   if(!state.overlay.classList.contains('open')) return;
+  if(taskBoardIsUiTarget(e.target)) return;
   if(state.tool==='pointer'){
     taskBoardLaserPointerMove(e);
     if(e.button===0) e.preventDefault();
