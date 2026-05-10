@@ -727,14 +727,20 @@ body.task-board-lock header,body.task-board-lock .topbar,body.task-board-lock .s
 .task-board-static-given{border-left:4px solid #f97316;border-radius:0 12px 12px 0;background:#f8fafc;padding:12px 14px;margin-bottom:12px;font-size:15px;line-height:1.7;color:#475569}
 .task-board-static-given strong{color:#111827}
 .task-board-center{position:relative;display:block;width:100%;height:100%;min-width:100%;min-height:100%;margin:0;padding:0;overflow:hidden}
-.task-board-toolbar{position:fixed;left:54px;top:20px;right:20px;z-index:2147483100;pointer-events:auto;display:flex;align-items:center;justify-content:flex-start;gap:8px;flex-wrap:nowrap;overflow:visible;white-space:nowrap;background:rgba(255,255,255,.94);border:1px solid #dbe5f0;border-radius:18px;padding:10px 12px;box-shadow:0 14px 36px rgba(15,23,42,.08)}
+.task-board-toolbar{position:fixed!important;left:48px;top:24px;width:auto!important;max-width:calc(100vw - 32px);display:inline-flex!important;align-items:center;justify-content:flex-start;gap:8px;padding:8px 10px;border:1px solid #d8e5f5;border-radius:18px;background:rgba(255,255,255,.96);box-shadow:0 16px 45px rgba(15,23,42,.16);z-index:2147483100!important;pointer-events:auto!important;user-select:none;overflow:visible;white-space:nowrap}
 .task-board-toolbar::-webkit-scrollbar{display:none}
-.task-board-dropdown{position:relative;flex:0 0 auto}
-.task-board-dropdown-toggle,.task-board-close-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 12px;border-radius:12px;border:1px solid #cbd5e1;background:#fff;color:#0f172a;font-size:13px;font-weight:800;cursor:pointer;transition:all .18s;font-family:var(--fb);box-shadow:0 10px 24px rgba(15,23,42,.05)}
+.task-board-toolbar.compact{width:max-content!important}
+.task-board-toolbar-drag{width:34px;height:38px;border:0;border-radius:12px;background:#f1f5f9;color:#64748b;font-size:18px;font-weight:900;cursor:grab;pointer-events:auto}
+.task-board-toolbar-drag:active{cursor:grabbing}
+.task-board-toolbar.dragging{opacity:.92;cursor:grabbing}
+.task-board-dropdown,.task-board-close-btn{flex:0 0 auto}
+.task-board-dropdown{position:relative}
+.task-board-dropdown-toggle,.task-board-close-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 12px;border-radius:12px;border:1px solid #cbd5e1;background:#fff;color:#0f172a;font-size:13px;font-weight:800;cursor:pointer;transition:all .18s;font-family:var(--fb);box-shadow:0 10px 24px rgba(15,23,42,.05);white-space:nowrap}
 .task-board-dropdown-toggle:hover,.task-board-close-btn:hover{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8;box-shadow:0 0 18px rgba(37,99,235,.16);transform:translateY(-1px)}
-.task-board-close-btn{margin-left:auto;color:#dc2626;border-color:#fecaca}
+.task-board-close-btn{color:#dc2626;border-color:#fecaca}
 .task-board-close-btn:hover{background:#fff7ed;border-color:#fdba74;color:#c2410c}
 .task-board-dropdown-menu{position:absolute;top:calc(100% + 8px);left:0;min-width:220px;display:none;flex-direction:column;gap:6px;padding:10px;background:rgba(255,255,255,.98);border:1px solid #dbe5f0;border-radius:14px;box-shadow:0 18px 46px rgba(15,23,42,.16);z-index:2147483200;pointer-events:auto;white-space:normal}
+.task-board-dropdown[data-dropdown-name="materials"] .task-board-dropdown-menu{left:0}
 .task-board-dropdown.open .task-board-dropdown-menu{display:flex}
 .task-board-materials-menu{min-width:190px}
 .task-board-menu-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 4px}
@@ -6637,8 +6643,16 @@ function ensureTaskBoardOverlay(){
             </div>
           </div>
           <div class="task-board-center">
-            <div class="task-board-toolbar" id="taskBoardToolbar">
-              <div class="task-board-dropdown" data-task-board-dropdown="tools">
+            <div class="task-board-toolbar compact" id="taskBoardToolbar">
+              <button
+                type="button"
+                class="task-board-toolbar-drag"
+                title="Перетащить панель"
+                aria-label="Перетащить панель"
+              >
+                ⋮⋮
+              </button>
+              <div class="task-board-dropdown" data-dropdown-name="tools">
                 <button type="button" class="task-board-dropdown-toggle" onclick="taskBoardToggleDropdown('tools')" aria-haspopup="true" aria-expanded="false">🧰 Инструменты ▼</button>
                 <div class="task-board-dropdown-menu">
                   <button type="button" class="task-board-tool active" data-board-tool="pen" onclick="taskBoardSetTool('pen')">✏️ Карандаш</button>
@@ -6677,7 +6691,7 @@ function ensureTaskBoardOverlay(){
                   >💾 Сохранить</button>
                 </div>
               </div>
-              <div class="task-board-dropdown" data-task-board-dropdown="materials">
+              <div class="task-board-dropdown" data-dropdown-name="materials">
                 <button type="button" class="task-board-dropdown-toggle" onclick="taskBoardToggleDropdown('materials')" aria-haspopup="true" aria-expanded="false">📂 Материалы ▼</button>
                 <div class="task-board-dropdown-menu task-board-materials-menu">
                   <button type="button" id="taskBoardConditionBtn" class="task-board-tool" onclick="taskBoardToggleFloating('condition');taskBoardCloseDropdowns();">📄 Условие</button>
@@ -6686,7 +6700,7 @@ function ensureTaskBoardOverlay(){
                   <button type="button" class="task-board-tool" onclick="toggleTaskBoardSolution();taskBoardCloseDropdowns();">✅ Решение</button>
                 </div>
               </div>
-              <button type="button" class="task-board-close-btn" onclick="closeTaskBoard()">✕ Закрыть</button>
+              <button type="button" class="task-board-close-btn" data-board-close="true" onclick="closeTaskBoard()">✕ Закрыть</button>
             </div>
             <div id="taskBoardCanvasWrap" class="task-board-canvas-wrap pen-mode">
               <div id="taskBoardConditionWrap" class="task-board-float" style="display:none">
@@ -6828,6 +6842,7 @@ function ensureTaskBoardOverlay(){
   taskBoardInitFloatResize(taskBoardState,'condition');
   taskBoardInitFloatResize(taskBoardState,'graph');
   taskBoardInitFloatResize(taskBoardState,'solution');
+  taskBoardInitToolbarDrag(taskBoardState);
   taskBoardState.canvas.addEventListener('pointerdown',taskBoardPointerDown);
   taskBoardState.canvas.addEventListener('pointermove',taskBoardPointerMove);
   taskBoardState.objectLayer.addEventListener('pointerdown',taskBoardObjectPointerDown);
@@ -6937,6 +6952,131 @@ function ensureTaskBoardOverlay(){
   taskBoardUpdateHistoryButtons();
   return taskBoardState;
 }
+function taskBoardIsUiTarget(target){
+  return !!(target&&target.closest&&target.closest('.task-board-toolbar,.task-board-toolbar-drag,.task-board-dropdown,.task-board-dropdown-menu,.task-board-close-btn,button,input,textarea,select'));
+}
+function taskBoardInitToolbarDrag(state){
+  if(!state||!state.toolbar||state.toolbar.__dragReady) return;
+
+  const toolbar=state.toolbar;
+  const handle=toolbar.querySelector('.task-board-toolbar-drag');
+  if(!handle) return;
+
+  state.toolbar.__dragReady=true;
+
+  const storageKey='fizmat_task_board_toolbar_position';
+
+  function clampPosition(left,top){
+    const maxLeft=Math.max(8,window.innerWidth-toolbar.offsetWidth-8);
+    const maxTop=Math.max(8,window.innerHeight-toolbar.offsetHeight-8);
+
+    return {
+      left:Math.max(8,Math.min(left,maxLeft)),
+      top:Math.max(8,Math.min(top,maxTop))
+    };
+  }
+
+  function savePosition(){
+    try{
+      localStorage.setItem(storageKey,JSON.stringify({
+        left:parseFloat(toolbar.style.left)||48,
+        top:parseFloat(toolbar.style.top)||24
+      }));
+    }catch(e){}
+  }
+
+  function restorePosition(){
+    try{
+      const raw=localStorage.getItem(storageKey);
+      if(!raw) return;
+
+      const pos=JSON.parse(raw);
+      if(!Number.isFinite(pos.left)||!Number.isFinite(pos.top)) return;
+
+      const next=clampPosition(pos.left,pos.top);
+      toolbar.style.left=next.left+'px';
+      toolbar.style.top=next.top+'px';
+      toolbar.style.right='auto';
+    }catch(e){}
+  }
+
+  handle.addEventListener('pointerdown',function(e){
+    if(e.button!==undefined&&e.button!==0) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const rect=toolbar.getBoundingClientRect();
+
+    const start={
+      pointerId:e.pointerId,
+      x:e.clientX,
+      y:e.clientY,
+      left:rect.left,
+      top:rect.top
+    };
+
+    toolbar.classList.add('dragging');
+
+    try{
+      handle.setPointerCapture(e.pointerId);
+    }catch(_err){}
+
+    function move(ev){
+      if(ev.pointerId!==start.pointerId) return;
+
+      ev.preventDefault();
+      ev.stopPropagation();
+
+      const next=clampPosition(
+        start.left+ev.clientX-start.x,
+        start.top+ev.clientY-start.y
+      );
+
+      toolbar.style.left=next.left+'px';
+      toolbar.style.top=next.top+'px';
+      toolbar.style.right='auto';
+    }
+
+    function end(ev){
+      if(ev.pointerId!==start.pointerId) return;
+
+      ev.preventDefault();
+      ev.stopPropagation();
+
+      toolbar.classList.remove('dragging');
+
+      window.removeEventListener('pointermove',move,true);
+      window.removeEventListener('pointerup',end,true);
+      window.removeEventListener('pointercancel',end,true);
+
+      try{
+        handle.releasePointerCapture(start.pointerId);
+      }catch(_err){}
+
+      savePosition();
+    }
+
+    window.addEventListener('pointermove',move,true);
+    window.addEventListener('pointerup',end,true);
+    window.addEventListener('pointercancel',end,true);
+  });
+
+  handle.addEventListener('dblclick',function(e){
+    e.preventDefault();
+    e.stopPropagation();
+
+    toolbar.style.left='48px';
+    toolbar.style.top='24px';
+    toolbar.style.right='auto';
+
+    try{
+      localStorage.removeItem(storageKey);
+    }catch(_err){}
+  });
+
+  restorePosition();
+}
 function taskBoardHasOpenDropdown(){
   const state=taskBoardState;
   return !!(state&&state.toolbar&&state.toolbar.querySelector('.task-board-dropdown.open'));
@@ -6950,18 +7090,32 @@ function taskBoardCloseDropdowns(){
 function taskBoardToggleDropdown(name){
   const state=ensureTaskBoardOverlay();
   if(!state.toolbar) return;
-  const dropdown=state.toolbar.querySelector('[data-task-board-dropdown="'+name+'"]');
+  const dropdown=state.toolbar.querySelector('[data-dropdown-name="'+name+'"],[data-task-board-dropdown="'+name+'"]');
   if(!dropdown) return;
   const shouldOpen=!dropdown.classList.contains('open');
   taskBoardCloseDropdowns();
   dropdown.classList.toggle('open',shouldOpen);
+  const menu=dropdown.querySelector('.task-board-dropdown-menu');
+  if(menu){
+    menu.style.left='0';
+    menu.style.right='auto';
+  }
   const toggle=dropdown.querySelector('.task-board-dropdown-toggle');
   if(toggle) toggle.setAttribute('aria-expanded',shouldOpen?'true':'false');
+  if(shouldOpen&&menu){
+    requestAnimationFrame(function(){
+      const rect=menu.getBoundingClientRect();
+      if(rect.right>window.innerWidth-8){
+        menu.style.left='auto';
+        menu.style.right='0';
+      }
+    });
+  }
 }
 function taskBoardToggleColors(){
   const state=ensureTaskBoardOverlay();
   if(!state.toolbar) return;
-  const dropdown=state.toolbar.querySelector('[data-task-board-dropdown="tools"]');
+  const dropdown=state.toolbar.querySelector('[data-dropdown-name="tools"],[data-task-board-dropdown="tools"]');
   if(dropdown) dropdown.classList.toggle('colors-open');
 }
 function taskBoardRequestFullscreen(){
@@ -7646,6 +7800,7 @@ function taskBoardEraseAt(clientX,clientY){
 function taskBoardPointerDown(e){
   const state=ensureTaskBoardOverlay();
   if(!state.overlay.classList.contains('open')) return;
+  if(taskBoardIsUiTarget(e.target)) return;
   if(state.tool==='pointer'){
     const point=taskBoardGetPoint(e);
     taskBoardShowLaserPointer(point);
