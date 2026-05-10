@@ -740,7 +740,7 @@ body.task-board-lock{overflow:hidden}
 .task-board-dropdown-menu{position:absolute;top:calc(100% + 8px);left:0;min-width:220px;max-width:calc(100vw - 16px);display:none;flex-direction:column;gap:6px;padding:10px;background:rgba(255,255,255,.98);border:1px solid #dbe5f0;border-radius:14px;box-shadow:0 18px 46px rgba(15,23,42,.16);z-index:20100;pointer-events:auto;white-space:normal}
 .task-board-dropdown.align-right .task-board-dropdown-menu{left:auto;right:0}
 .task-board-dropdown.open .task-board-dropdown-menu{display:flex}
-.task-board-dropdown-menu button,.task-board-toolbar button{pointer-events:auto;cursor:pointer}
+.task-board-dropdown-menu button,.task-board-toolbar button,.task-board-toolbar input{pointer-events:auto;cursor:pointer}
 .task-board-materials-menu{min-width:190px}
 .task-board-menu-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 4px}
 .task-board-menu-label{font-size:12px;font-weight:800;color:#334155}
@@ -6524,7 +6524,13 @@ function ensureTaskBoardOverlay(){
                   <button type="button" class="task-board-tool" data-board-action="tool" data-tool="mouse" data-board-tool="mouse">🖱 Мышь</button>
                   <button type="button" class="task-board-tool" data-board-action="tool" data-tool="text" data-board-tool="text">T Текст</button>
                   <button type="button" class="task-board-tool" data-board-action="tool" data-tool="pointer" data-board-tool="pointer">☝ Указка</button>
-                  <button type="button" class="task-board-tool task-board-colors-toggle" onclick="taskBoardToggleColors()">🎨 Цвета <span id="taskBoardColorDot" class="task-board-color-dot" aria-hidden="true"></span></button>
+                  <button
+                    type="button"
+                    class="task-board-tool task-board-colors-toggle"
+                    data-board-action="colors"
+                  >
+                    🎨 Цвета <span id="taskBoardColorDot" class="task-board-color-dot" aria-hidden="true"></span>
+                  </button>
                   <div class="task-board-color-palette" aria-label="Палитра доски">
                     <button type="button" class="task-board-color active" data-board-color="#0f172a" style="--sw:#0f172a" aria-label="Чёрный цвет" title="Чёрный"></button>
                     <button type="button" class="task-board-color" data-board-color="#2563eb" style="--sw:#2563eb" aria-label="Синий цвет" title="Синий"></button>
@@ -6669,6 +6675,7 @@ function ensureTaskBoardOverlay(){
   taskBoardInitFloatDrag(taskBoardState,'condition');
   taskBoardInitFloatDrag(taskBoardState,'graph');
   taskBoardInitToolbarDrag(taskBoardState);
+  taskBoardBindToolbarControls(taskBoardState);
   taskBoardState.canvas.addEventListener('pointerdown',taskBoardPointerDown);
   taskBoardState.canvas.addEventListener('pointermove',taskBoardPointerMove);
   taskBoardState.canvasWrap.addEventListener('pointermove',taskBoardLaserPointerMove);
@@ -6819,6 +6826,159 @@ function taskBoardCloseDropdowns(){
   state.toolbar.querySelectorAll('.task-board-dropdown.open').forEach(function(drop){drop.classList.remove('open');});
   state.toolbar.querySelectorAll('.task-board-dropdown-toggle[aria-expanded]').forEach(function(btn){btn.setAttribute('aria-expanded','false');});
 }
+function taskBoardBindToolbarControls(state){
+  if(!state || !state.toolbar || state.toolbar.__controlsReady) return;
+  state.toolbar.__controlsReady = true;
+
+  const toolbar = state.toolbar;
+
+  toolbar.addEventListener('pointerdown', function(e){
+    const ui = e.target && e.target.closest
+      ? e.target.closest('button, input, textarea, select, .task-board-dropdown-menu, .task-board-dropdown-toggle')
+      : null;
+
+    if(!ui) return;
+
+    // Не даём canvas/drag-слоям перехватить нажатие по кнопкам панели.
+    e.stopPropagation();
+  }, true);
+
+  toolbar.addEventListener('pointerup', function(e){
+    const ui = e.target && e.target.closest
+      ? e.target.closest('button, input, textarea, select, .task-board-dropdown-menu, .task-board-dropdown-toggle')
+      : null;
+
+    if(!ui) return;
+
+    e.stopPropagation();
+  }, true);
+
+  toolbar.addEventListener('click', function(e){
+    const target = e.target;
+
+    if(!target || !target.closest) return;
+
+    const dropdownToggle = target.closest('[data-task-board-dropdown]');
+    if(dropdownToggle){
+      e.preventDefault();
+      e.stopPropagation();
+
+      const name = dropdownToggle.getAttribute('data-task-board-dropdown');
+      taskBoardToggleDropdown(name);
+      return;
+    }
+
+    const actionBtn = target.closest('[data-board-action]');
+    if(actionBtn){
+      e.preventDefault();
+      e.stopPropagation();
+
+      const action = actionBtn.getAttribute('data-board-action');
+
+      if(action === 'tool'){
+        const tool = actionBtn.getAttribute('data-tool') || actionBtn.getAttribute('data-board-tool') || 'pen';
+        taskBoardSetTool(tool);
+        taskBoardCloseDropdowns();
+        return;
+      }
+
+      if(action === 'colors'){
+        taskBoardToggleColors();
+        return;
+      }
+
+      if(action === 'clear'){
+        taskBoardClear();
+        return;
+      }
+
+      if(action === 'undo'){
+        taskBoardUndo();
+        return;
+      }
+
+      if(action === 'redo'){
+        taskBoardRedo();
+        return;
+      }
+
+      if(action === 'save'){
+        taskBoardSaveState(true);
+        return;
+      }
+    }
+
+    const materialBtn = target.closest('[data-board-material]');
+    if(materialBtn){
+      e.preventDefault();
+      e.stopPropagation();
+
+      const material = materialBtn.getAttribute('data-board-material');
+
+      if(material === 'condition'){
+        toggleTaskBoardCondition();
+        taskBoardCloseDropdowns();
+        return;
+      }
+
+      if(material === 'graph'){
+        toggleTaskBoardGraph();
+        taskBoardCloseDropdowns();
+        return;
+      }
+
+      if(material === 'animation'){
+        toggleTaskBoardAnimation();
+        taskBoardCloseDropdowns();
+        return;
+      }
+
+      if(material === 'solution'){
+        toggleTaskBoardSolution();
+        taskBoardCloseDropdowns();
+        return;
+      }
+    }
+
+    const colorBtn = target.closest('[data-board-color]');
+    if(colorBtn){
+      e.preventDefault();
+      e.stopPropagation();
+
+      const color = colorBtn.getAttribute('data-board-color');
+      taskBoardSetColor(color);
+
+      toolbar.querySelectorAll('[data-board-color]').forEach(function(btn){
+        btn.classList.remove('active');
+      });
+
+      colorBtn.classList.add('active');
+      return;
+    }
+
+    const closeBtn = target.closest('[data-board-close]');
+    if(closeBtn){
+      e.preventDefault();
+      e.stopPropagation();
+
+      closeTaskBoard();
+      return;
+    }
+  }, true);
+
+  toolbar.addEventListener('input', function(e){
+    const sizeInput = e.target && e.target.closest
+      ? e.target.closest('[data-board-size]')
+      : null;
+
+    if(!sizeInput) return;
+
+    e.stopPropagation();
+
+    const size = Number(sizeInput.value) || 4;
+    taskBoardSetSize(size);
+  }, true);
+}
 function taskBoardIsUiTarget(target){
   return !!(
     target &&
@@ -6828,7 +6988,12 @@ function taskBoardIsUiTarget(target){
     )
   );
 }
+function taskBoardIsLocalToolbarEvent(e){
+  const toolbar=e&&e.target&&e.target.closest?e.target.closest('.task-board-toolbar'):null;
+  return !!(toolbar&&toolbar.__controlsReady);
+}
 function taskBoardHandleDropdownClick(e){
+  if(taskBoardIsLocalToolbarEvent(e)) return;
   const toggle=e.target&&e.target.closest?e.target.closest('[data-task-board-dropdown]'):null;
   if(!toggle) return;
   if(!toggle.closest('.task-board-toolbar')) return;
@@ -6837,6 +7002,7 @@ function taskBoardHandleDropdownClick(e){
   taskBoardToggleDropdown(toggle.getAttribute('data-task-board-dropdown'));
 }
 function taskBoardHandleActionClick(e){
+  if(taskBoardIsLocalToolbarEvent(e)) return;
   const btn=e.target&&e.target.closest?e.target.closest('[data-board-action]'):null;
   if(!btn) return;
   if(!btn.closest('.task-board-toolbar')) return;
@@ -6858,6 +7024,7 @@ function taskBoardHandleActionClick(e){
   }
 }
 function taskBoardHandleMaterialClick(e){
+  if(taskBoardIsLocalToolbarEvent(e)) return;
   const btn=e.target&&e.target.closest?e.target.closest('[data-board-material]'):null;
   if(!btn) return;
   if(!btn.closest('.task-board-toolbar')) return;
@@ -6871,6 +7038,7 @@ function taskBoardHandleMaterialClick(e){
 }
 
 function taskBoardHandleColorClick(e){
+  if(taskBoardIsLocalToolbarEvent(e)) return;
   const btn=e.target&&e.target.closest?e.target.closest('[data-board-color]'):null;
   if(!btn) return;
   e.preventDefault();
@@ -6882,6 +7050,7 @@ function taskBoardHandleColorClick(e){
   btn.classList.add('active');
 }
 function taskBoardHandleSizeInput(e){
+  if(taskBoardIsLocalToolbarEvent(e)) return;
   const input=e.target&&e.target.closest?e.target.closest('[data-board-size]'):null;
   if(!input) return;
   const size=Number(input.value)||4;
@@ -6889,6 +7058,7 @@ function taskBoardHandleSizeInput(e){
   else if(taskBoardState) taskBoardState.size=size;
 }
 function taskBoardHandleCloseClick(e){
+  if(taskBoardIsLocalToolbarEvent(e)) return;
   const btn=e.target&&e.target.closest?e.target.closest('[data-board-close]'):null;
   if(!btn) return;
   e.preventDefault();
