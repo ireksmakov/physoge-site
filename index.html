@@ -3244,6 +3244,7 @@ function openSim(key){
   window.scrollTo(0,0);
 }
 const LAST_COURSE_LESSON_STORAGE_KEY = 'fizmat_last_course_lesson';
+const COURSE_SCROLL_STORAGE_KEY = 'fizmat_course_scroll_positions';
 const COURSE_TABS = ['theory','tasks','sims','lab','video','tests','hw'];
 function isValidCourseTab(tabId){
   return COURSE_TABS.includes(tabId);
@@ -3259,6 +3260,47 @@ function getCourseRoute(courseKey,moduleIndex,lessonIndex,tabId){
   const safeTabId = isValidCourseTab(tabId) ? tabId : 'theory';
   return `#course/${safeCourseKey}/m/${moduleIndex}/l/${lessonIndex}/t/${safeTabId}`;
 }
+function isSameCourseRouteBeforeRender(key,moduleIndex,lessonIndex,tabId){
+  const current = window.location.hash;
+  const next = getCourseRoute(key,moduleIndex,lessonIndex,tabId);
+  return current === next;
+}
+function getCourseScrollKey(){
+  return window.location.hash || '';
+}
+function saveCourseScrollPosition(){
+  if(!window.location.hash.startsWith('#course/')) return;
+
+  try{
+    const raw = sessionStorage.getItem(COURSE_SCROLL_STORAGE_KEY);
+    const data = raw ? JSON.parse(raw) : {};
+    data[getCourseScrollKey()] = {
+      x: window.scrollX || 0,
+      y: window.scrollY || 0,
+      time: Date.now()
+    };
+    sessionStorage.setItem(COURSE_SCROLL_STORAGE_KEY, JSON.stringify(data));
+  }catch(e){}
+}
+function restoreCourseScrollPosition(){
+  if(!window.location.hash.startsWith('#course/')) return;
+
+  try{
+    const raw = sessionStorage.getItem(COURSE_SCROLL_STORAGE_KEY);
+    const data = raw ? JSON.parse(raw) : {};
+    const saved = data[getCourseScrollKey()];
+
+    if(!saved) return;
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        window.scrollTo(saved.x || 0, saved.y || 0);
+      });
+    });
+  }catch(e){}
+}
+window.addEventListener('beforeunload', saveCourseScrollPosition);
+window.addEventListener('pagehide', saveCourseScrollPosition);
 function restoreTaskBoardAfterRefresh(){
   if(window.__taskBoardRestoreAttempted) return;
   window.__taskBoardRestoreAttempted = true;
@@ -3344,18 +3386,40 @@ function getSavedCourseTabForLesson(courseKey,moduleIndex,lessonIndex){
   return savedModuleIndex === moduleIndex && savedLessonIndex === lessonIndex && isValidCourseTab(saved.tab) ? saved.tab : null;
 }
 function resolveCourseLesson(courseKey,c,moduleIndex,lessonIndex,tabId){
+  const saved = getSavedCourseLesson(courseKey,c);
+
   let selected;
+
   if(isValidCourseLesson(c,moduleIndex,lessonIndex)){
-    selected = {moduleIndex,lessonIndex};
+    selected = {
+      moduleIndex: moduleIndex,
+      lessonIndex: lessonIndex
+    };
+  } else if(saved){
+    selected = {
+      moduleIndex: saved.moduleIndex,
+      lessonIndex: saved.lessonIndex
+    };
   } else {
-    selected = getSavedCourseLesson(courseKey,c) || {moduleIndex:0,lessonIndex:0};
+    selected = {
+      moduleIndex: 0,
+      lessonIndex: 0
+    };
   }
 
-  const selectedTabId = isValidCourseTab(tabId)
-    ? tabId
-    : (getSavedCourseTabForLesson(courseKey,selected.moduleIndex,selected.lessonIndex) || 'theory');
+  // tabId from the URL always has priority over localStorage.
+  if(isValidCourseTab(tabId)){
+    selected.tabId = tabId;
+  } else {
+    const savedMatchesLesson =
+      saved &&
+      saved.moduleIndex === selected.moduleIndex &&
+      saved.lessonIndex === selected.lessonIndex;
 
-  return {...selected, tabId:selectedTabId};
+    selected.tabId = savedMatchesLesson && saved.tabId ? saved.tabId : 'theory';
+  }
+
+  return selected;
 }
 function openCourse(key,moduleIndex,lessonIndex,tabId){
   if(!COURSES || !COURSES[key]){
@@ -3369,11 +3433,15 @@ function openCourse(key,moduleIndex,lessonIndex,tabId){
   CM = selected.moduleIndex;
   CL = selected.lessonIndex;
   CTAB = selected.tabId || 'theory';
-  saveLastCourseLesson(AC,CM,CL,CTAB);
 
-  const normalizedRoute = getCourseRoute(AC,CM,CL,CTAB);
-  if(window.location.hash !== normalizedRoute){
-    history.replaceState(null,'',normalizedRoute);
+  const sameRoute = isSameCourseRouteBeforeRender(AC, CM, CL, CTAB);
+
+  saveLastCourseLesson(AC, CM, CL, CTAB);
+
+  const route = getCourseRoute(AC, CM, CL, CTAB);
+
+  if(window.location.hash !== route){
+    history.replaceState(null, '', route);
   }
 
   hideAll();
@@ -3401,13 +3469,16 @@ function openCourse(key,moduleIndex,lessonIndex,tabId){
   if(typeof renderTopbar === 'function') renderTopbar();
   if(typeof renderSb === 'function') renderSb();
   if(typeof renderContent === 'function') renderContent();
+  restoreCourseScrollPosition();
   if(typeof initSidebarResize === 'function') initSidebarResize();
 
   if(typeof updateActiveNav === 'function'){
     updateActiveNav('#courses');
   }
 
-  window.scrollTo(0,0);
+  if(!sameRoute){
+    window.scrollTo(0,0);
+  }
 }
 function fc(cat,btn){
   document.querySelectorAll('.tb').forEach(b=>b.classList.remove('active'));
