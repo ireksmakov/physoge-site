@@ -5188,8 +5188,7 @@ const LESSON_SPECIAL_TESTS={
 
 const LESSON_SIMS={
 'Равноускоренное движение':[
-  {icon:'⚙️',name:'РУПД — задачи с симулятором',desc:'Анимация движения с постоянным ускорением. Графики V(t). Список задач с разбором.',btn:'open',action:'openRupd()'},
-  {icon:'🔬',name:'Виртуальная лабораторная',desc:'Шар на наклонной плоскости. Секундомер. Таблица результатов. Проверка a=g·sinα.',btn:'open',action:'openLab()'}
+  {icon:'⚙️',name:'РУПД — задачи с симулятором',desc:'Анимация движения с постоянным ускорением. Графики V(t). Список задач с разбором.',btn:'open',action:'openRupd()'}
 ],
 'Импульс. Закон сохранения':[
   {icon:'💥',name:'Разрыв снаряда (ЗСИ)',desc:'Анимация взрыва. Векторная диаграмма импульсов. Нахождение угла осколка через ЗСИ.',btn:'open',action:'openZsi()'}
@@ -5206,10 +5205,10 @@ const LESSON_SIMS={
 
 const LESSON_LABS={
 'Равноускоренное движение':[{
-  icon:'🧪',name:'РУПД без начальной скорости',badge:'Виртуальная',
-  desc:'Шар скатывается по наклонной плоскости. Измерение a=2S/t², сравнение с g·sinα.',
-  steps:['Установить угол α (10–45°) и длину S','Нажать «Пуск» — шар скатывается','Зафиксировать t → «Записать»','Повторить для 4 разных углов','Сравнить a=2S/t² с g·sinα'],
-  btn:'open',action:'openLab()'
+  icon:'🧪',name:'Движение из покоя с постоянным ускорением',badge:'Виртуальная',
+  desc:'Виртуальная лабораторная работа: шар на наклонной плоскости. Измерение пути и времени, построение таблицы результатов и проверка зависимости s = at²/2.',
+  steps:['Установить угол α (10–45°) и длину S','Нажать «Пуск» — шар скатывается','Зафиксировать t → «Записать»','Повторить для 4 разных углов','Сравнить s = at²/2 с результатами измерений'],
+  btn:'open',action:'openLab()',buttonText:'▶ Открыть лабораторную'
 }],
 'Свободное падение':[{icon:'🔴',name:'Измерение g',badge:'Скоро',desc:'Падение с разных высот. Определение g из h=gt²/2.',steps:['Задать h','Запустить','Записать t','Вычислить g=2h/t²'],btn:'soon'}],
 'Законы Ньютона':[{icon:'⚖️',name:'Второй закон Ньютона',badge:'Скоро',desc:'Тело на горизонтальной поверхности. Зависимость a от F и m.',steps:['Изменять F → измерять a','Изменять m → измерять a','Построить a(F) и a(1/m)'],btn:'soon'}],
@@ -9325,7 +9324,7 @@ function renderPLab(name){
   labs.forEach(l=>{
     const isSoon=l.btn==='soon';
     const steps=l.steps.map((s,i)=>`<div class="pl-step"><div class="pl-snum">${i+1}</div><div>${s}</div></div>`).join('');
-    h+=`<div class="pl-card"><div class="pl-head"><div class="pl-icon">${l.icon}</div><div class="pl-title">${l.name}</div><div class="pl-badge">${l.badge}</div></div><div class="pl-desc">${l.desc}</div><div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#a855f7;margin-bottom:8px">Ход работы</div><div class="pl-steps">${steps}</div>${isSoon?`<button class="pl-btn pl-btn-dis" disabled>🔒 Скоро</button>`:`<button class="pl-btn" onclick="${l.action}">🔬 Открыть лабораторную</button>`}</div>`;
+    h+=`<div class="pl-card"><div class="pl-head"><div class="pl-icon">${l.icon}</div><div class="pl-title">${l.name}</div><div class="pl-badge">${l.badge}</div></div><div class="pl-desc">${l.desc}</div><div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#a855f7;margin-bottom:8px">Ход работы</div><div class="pl-steps">${steps}</div>${isSoon?`<button class="pl-btn pl-btn-dis" disabled>🔒 Скоро</button>`:`<button class="pl-btn" onclick="${l.action}">${l.buttonText||'🔬 Открыть лабораторную'}</button>`}</div>`;
   });
   return h;
 }
