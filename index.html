@@ -3245,6 +3245,7 @@ function openSim(key){
 }
 const LAST_COURSE_LESSON_STORAGE_KEY = 'fizmat_last_course_lesson';
 const COURSE_SCROLL_STORAGE_KEY = 'fizmat_course_scroll_positions';
+const ACTIVE_LAB_STORAGE_KEY = 'fizmat_active_lab_state';
 const COURSE_TABS = ['theory','tasks','sims','lab','video','tests','hw'];
 function isValidCourseTab(tabId){
   return COURSE_TABS.includes(tabId);
@@ -3259,6 +3260,54 @@ function getCourseRoute(courseKey,moduleIndex,lessonIndex,tabId){
   const safeCourseKey = encodeURIComponent(courseKey || '');
   const safeTabId = isValidCourseTab(tabId) ? tabId : 'theory';
   return `#course/${safeCourseKey}/m/${moduleIndex}/l/${lessonIndex}/t/${safeTabId}`;
+}
+function getCurrentCourseRoute(){
+  return window.location.hash || '';
+}
+function saveActiveLabState(labId){
+  try{
+    sessionStorage.setItem(ACTIVE_LAB_STORAGE_KEY, JSON.stringify({
+      open: true,
+      route: getCurrentCourseRoute(),
+      course: AC,
+      moduleIndex: CM,
+      lessonIndex: CL,
+      tabId: CTAB,
+      labId: labId || 'incline-motion',
+      time: Date.now()
+    }));
+  }catch(e){}
+}
+function clearActiveLabState(){
+  try{
+    sessionStorage.removeItem(ACTIVE_LAB_STORAGE_KEY);
+  }catch(e){}
+}
+function getActiveLabState(){
+  try{
+    return JSON.parse(sessionStorage.getItem(ACTIVE_LAB_STORAGE_KEY) || 'null');
+  }catch(e){
+    return null;
+  }
+}
+function shouldRestoreActiveLab(){
+  const saved = getActiveLabState();
+  if(!saved || !saved.open) return false;
+
+  if(saved.route && saved.route !== getCurrentCourseRoute()) return false;
+
+  if(saved.course !== AC) return false;
+  if(Number(saved.moduleIndex) !== Number(CM)) return false;
+  if(Number(saved.lessonIndex) !== Number(CL)) return false;
+  if((saved.tabId || 'lab') !== 'lab') return false;
+
+  return true;
+}
+function clearActiveLabStateIfRouteChanged(currentRoute){
+  const savedLab = getActiveLabState();
+  if(savedLab && savedLab.route && savedLab.route !== currentRoute){
+    clearActiveLabState();
+  }
 }
 function isSameCourseRouteBeforeRender(key,moduleIndex,lessonIndex,tabId){
   const current = window.location.hash;
@@ -3439,6 +3488,7 @@ function openCourse(key,moduleIndex,lessonIndex,tabId){
   saveLastCourseLesson(AC, CM, CL, CTAB);
 
   const route = getCourseRoute(AC, CM, CL, CTAB);
+  clearActiveLabStateIfRouteChanged(route);
 
   if(window.location.hash !== route){
     history.replaceState(null, '', route);
@@ -3526,7 +3576,9 @@ function selL(e,mi,li){
   CTAB='theory';
 
   saveLastCourseLesson(AC,CM,CL,CTAB);
-  history.replaceState(null,'',getCourseRoute(AC,CM,CL,CTAB));
+  const currentRoute = getCourseRoute(AC,CM,CL,CTAB);
+  history.replaceState(null,'',currentRoute);
+  clearActiveLabStateIfRouteChanged(currentRoute);
 
   renderSb();
   renderContent();
@@ -3566,6 +3618,10 @@ function renderContent(){
 }
 function showTab(id,btn,colorClass){
   if(!isValidCourseTab(id)) id='theory';
+
+  if(id !== 'lab'){
+    clearActiveLabState();
+  }
 
   document.querySelectorAll('.cp-panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.cpt').forEach(t=>{
@@ -4423,7 +4479,7 @@ function srReset(){
         </div>
       </div>
 
-      <div style="text-align:center;margin-top:24px"><button onclick="goBack()" style="background:transparent;border:1px solid var(--border);color:var(--gray);padding:10px 20px;border-radius:8px;font-size:13px;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--gray)'">← Назад</button></div>
+      <div style="text-align:center;margin-top:24px"><button onclick="closeActiveLabToCard()" style="background:transparent;border:1px solid var(--border);color:var(--gray);padding:10px 20px;border-radius:8px;font-size:13px;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--gray)'">← Назад</button></div>
     </div>
   </div>
 </div>
@@ -4915,7 +4971,20 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
 function openRupd(){openCourse_back=true;simPrevPage='platform';openSim('rupd');}
 function openZsi() {openCourse_back=true;simPrevPage='platform';openSim('zsi');}
 function openLens(){openCourse_back=true;simPrevPage='platform';openSim('lens');}
-function openLab() {openCourse_back=true;simPrevPage='platform';openSim('rupd');setTimeout(function(){rupdSwitchTab&&rupdSwitchTab('lab');},300);}
+function openLab(labId, options) {
+  saveActiveLabState(labId || 'incline-motion');
+  openCourse_back=true;
+  simPrevPage='platform';
+  openSim('rupd');
+  setTimeout(function(){rupdSwitchTab&&rupdSwitchTab('lab');},300);
+}
+function closeActiveLabToCard(){
+  clearActiveLabState();
+  goBack();
+  if(AC !== null && AC !== undefined && typeof renderContent === 'function'){
+    renderContent();
+  }
+}
 
 /* ═══ PLATFORM TABS DATA ═══ */
 const LESSON_TASKS={
@@ -9381,6 +9450,11 @@ function renderPSims(name){
 }
 
 function renderPLab(name){
+  if(shouldRestoreActiveLab()){
+    setTimeout(function(){openLab('incline-motion',{restored:true});},0);
+    return '';
+  }
+
   const labs=LESSON_LABS[name];
   if(!labs||!labs.length) return`<div style="text-align:center;padding:40px 20px;color:var(--gray)"><div style="font-size:32px;margin-bottom:12px">🔬</div><div style="font-family:var(--fh);font-size:14px;font-weight:700;color:var(--white);margin-bottom:6px">Лабораторная в разработке</div><div style="font-size:13px">Виртуальная лаборатория для темы <strong style="color:#a855f7">"${name}"</strong> появится в ближайшее время.</div></div>`;
   let h='';
