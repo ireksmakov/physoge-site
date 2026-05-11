@@ -4459,7 +4459,7 @@ function srReset(){
             </div>
             <div class="vlab-ctrl">
               <button class="vlab-btn vlab-btn-play" id="vlPlayBtn" onclick="vlToggle()">▶ Пуск</button>
-              <button class="vlab-btn vlab-btn-reset" onclick="vlReset()" style="border:1px solid var(--border)">↺ Сброс</button>
+              <button class="vlab-btn vlab-btn-reset" onclick="vlReset(true)" style="border:1px solid var(--border)">↺ Сброс</button>
               <button class="vlab-btn vlab-btn-save" onclick="vlSaveRow()" style="border:1px solid rgba(0,229,255,.3)">📊 Записать</button>
               <div style="font-size:12px;color:var(--gray)" id="vlStatus">Готово к запуску</div>
             </div>
@@ -4496,7 +4496,7 @@ function srReset(){
       <input type="range" id="vlSFs" min="1" max="5" step="0.5" value="3" oninput="document.getElementById('vlS').value=this.value;vlSVal.textContent=(+this.value).toFixed(1)+' м';document.getElementById('vlSFsV').textContent=(+this.value).toFixed(1)+' м';vlUpdateCalc()" style="-webkit-appearance:none;height:4px;background:var(--border);border-radius:2px;width:90px;cursor:pointer;outline:none">
       <span style="font-family:var(--fh);font-size:13px;color:var(--green);min-width:40px" id="vlSFsV">3.0 м</span>
       <button class="vlab-btn vlab-btn-play" id="vlPlayBtnFs" onclick="vlToggle()" style="padding:7px 14px">▶ Пуск</button>
-      <button class="vlab-btn vlab-btn-reset" onclick="vlReset()" style="padding:7px 14px;border:1px solid var(--border)">↺ Сброс</button>
+      <button class="vlab-btn vlab-btn-reset" onclick="vlReset(true)" style="padding:7px 14px;border:1px solid var(--border)">↺ Сброс</button>
       <button class="vlab-btn vlab-btn-save" onclick="vlSaveRow()" style="padding:7px 14px;border:1px solid rgba(0,229,255,.3)">📊 Записать</button>
       <button class="vlab-fs-close" onclick="vlCloseFs()">✕ Свернуть</button>
     </div>
@@ -4613,7 +4613,7 @@ function vlInit(){
 }
 
 function vlToggle(){
-  if(vlFinished){vlReset();return;}
+  if(vlFinished){vlReset(false);return;}
   if(vlRunning){
     vlRunning=false;cancelAnimationFrame(vlRaf);
     document.getElementById('vlPlayBtn').textContent='▶ Продолжить';
@@ -4646,13 +4646,14 @@ function vlStep(ts){
   }
 }
 
-function vlReset(){
+function vlReset(clearMeasurements){
   vlRunning=false;cancelAnimationFrame(vlRaf);vlT=0;vlLastTS=null;vlFinished=false;
   document.getElementById('vlPlayBtn').textContent='▶ Пуск';
   if(document.getElementById('vlPlayBtnFs'))document.getElementById('vlPlayBtnFs').textContent='▶ Пуск';
   document.getElementById('vlStatus').textContent='Готово к запуску';
   vlUpdateMetrics(0,vlGetParams());
   vlDrawScene(0);vlDrawStopwatch(0);
+  if(clearMeasurements)vlClearTable();
 }
 
 function vlUpdateMetrics(t,p){
@@ -4880,17 +4881,27 @@ document.addEventListener('fullscreenchange',function(){
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&vlFsMode&&!document.fullscreenElement)vlCloseFs();});
 
 /* ── Таблица ── */
+function getLabMeasuredTime(tIdeal){
+  var relativeError=0.04;
+  var random=(Math.random()*2-1)*relativeError;
+  var measured=tIdeal*(1+random);
+  return Math.max(0.01,measured);
+}
 function vlSaveRow(){
   var p=vlGetParams();
   if(!vlFinished&&vlT<0.1){alert('Сначала запустите эксперимент!');return;}
+  var tIdeal=Math.sqrt(2*p.S/p.a);
+  var tMeasured=getLabMeasuredTime(tIdeal);
+  var aExp=2*p.S/(tMeasured*tMeasured);
+  var vFinal=aExp*tMeasured;
   vlRowNum++;
-  var measT=vlT.toFixed(2);
-  var measA=(vlT>0?(2*p.S/(vlT*vlT)).toFixed(2):'—');
+  var measT=tMeasured.toFixed(2);
+  var measA=aExp.toFixed(2);
   var theorA=p.a.toFixed(2);
-  var measV=(p.a*vlT).toFixed(2);
+  var measV=vFinal.toFixed(2);
   var tbody=document.getElementById('vlTableBody');
   if(vlRowNum===1)tbody.innerHTML='';
-  var match=Math.abs(parseFloat(measA)-parseFloat(theorA))<0.35;
+  var match=Math.abs(aExp-p.a)<0.35;
   var row=document.createElement('tr');
   row.innerHTML='<td>'+vlRowNum+'</td><td>'+p.angle+'</td><td>'+p.S.toFixed(1)+'</td><td class="measured">'+measT+'</td><td class="measured" style="color:'+(match?'var(--green)':'var(--orange)')+'">'+measA+'</td><td>'+theorA+'</td><td class="measured">'+measV+'</td>';
   tbody.appendChild(row);
