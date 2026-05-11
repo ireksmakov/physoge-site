@@ -4631,7 +4631,8 @@ function vlDrawSceneOn(canvasId,t,fullscreen){
   if(topX>W-28){var f2=(W-28-botX)/(topX-botX);rampLen=Math.round(rampLen*f2);topX=W-28;topY=botY-Math.round(rampLen*Math.sin(ang));}
 
   var ux=(topX-botX)/rampLen,uy=(topY-botY)/rampLen;
-  var nx=-uy,ny=ux; /* нормаль: наружу от поверхности доски */
+  var nx=-uy,ny=ux; /* нижняя нормаль для толщины доски */
+  var railNx=uy,railNy=-ux; /* верхняя нормаль: шар лежит на поверхности рейки */
 
   /* Стойка у верхнего конца */
   var supH=floorY-topY+6;
@@ -4672,19 +4673,22 @@ function vlDrawSceneOn(canvasId,t,fullscreen){
   }
   ctx.restore();
 
-  /* Шар: стартует сверху, едет вниз */
+  /* Шар: стартует сверху, едет вниз строго по верхней поверхности рейки */
   var bR=12;
-  var ballX=topX-(topX-botX)*progress;
-  var ballY=topY-(topY-botY)*progress;
-  /* Смещение на нормаль (выше поверхности) */
-  ballX+=nx*bR;ballY+=ny*bR;
+  var ballSurfaceOffset=bR+thick/2-1;
+  var trackX=topX-(topX-botX)*progress;
+  var trackY=topY-(topY-botY)*progress;
+  var startBallX=topX+railNx*ballSurfaceOffset;
+  var startBallY=topY+railNy*ballSurfaceOffset;
+  var ballX=trackX+railNx*ballSurfaceOffset;
+  var ballY=trackY+railNy*ballSurfaceOffset;
 
   /* Трейл */
   if(progress>0.015){
-    var tG=ctx.createLinearGradient(topX+nx*bR,topY+ny*bR,ballX,ballY);
+    var tG=ctx.createLinearGradient(startBallX,startBallY,ballX,ballY);
     tG.addColorStop(0,'rgba(0,229,255,0)');tG.addColorStop(1,'rgba(0,229,255,0.15)');
     ctx.strokeStyle=tG;ctx.lineWidth=3;ctx.setLineDash([]);
-    ctx.beginPath();ctx.moveTo(topX+nx*bR,topY+ny*bR);ctx.lineTo(ballX,ballY);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(startBallX,startBallY);ctx.lineTo(ballX,ballY);ctx.stroke();
   }
 
   /* Шар */
@@ -4695,28 +4699,16 @@ function vlDrawSceneOn(canvasId,t,fullscreen){
   ctx.fillStyle='rgba(255,255,255,0.55)';ctx.beginPath();ctx.arc(ballX-bR*0.28,ballY-bR*0.28,bR*0.26,0,Math.PI*2);ctx.fill();
   ctx.restore();
 
-  /* Вектор ускорения (вдоль доски вниз от шара) */
-  if(progress>0.02&&progress<0.97){
-    var aLen=42;
-    /* -ux,-uy — направление вниз по доске */
-    var avX=ballX-ux*aLen,avY=ballY-uy*aLen;
-    ctx.save();ctx.shadowColor='rgba(57,255,20,0.4)';ctx.shadowBlur=6;
-    ctx.strokeStyle='#39ff14';ctx.fillStyle='#39ff14';ctx.lineWidth=1.8;ctx.setLineDash([3,3]);
-    ctx.beginPath();ctx.moveTo(ballX,ballY);ctx.lineTo(avX,avY);ctx.stroke();ctx.setLineDash([]);
-    /* Стрелка */
-    ctx.beginPath();ctx.moveTo(avX,avY);
-    ctx.lineTo(avX+7*(-ux)+4*(-uy),avY+7*(-uy)+4*ux);
-    ctx.lineTo(avX+7*(-ux)-4*(-uy),avY+7*(-uy)-4*ux);
-    ctx.closePath();ctx.fill();
-    ctx.restore();
-  }
-
-  /* Угол α — только маленькая дуга и подпись */
-  ctx.strokeStyle='rgba(255,140,0,0.7)';ctx.lineWidth=1.5;ctx.setLineDash([]);
-  ctx.beginPath();ctx.arc(botX,botY,32,-Math.PI,-Math.PI+ang);ctx.stroke();
-  ctx.fillStyle='#ff8c00';ctx.font='bold 11px Golos Text,sans-serif';ctx.textAlign='center';
-  var mAng=-Math.PI+ang/2;
-  ctx.fillText('α='+p.angle+'°',botX+Math.cos(mAng)*48,botY+Math.sin(mAng)*48);
+  /* Угол α — индикатор под нижней частью рейки, рядом с основанием */
+  var angleR=34;
+  ctx.strokeStyle='rgba(255,140,0,0.42)';ctx.lineWidth=1;ctx.setLineDash([4,4]);
+  ctx.beginPath();ctx.moveTo(botX,botY);ctx.lineTo(botX+angleR+24,botY);ctx.stroke();
+  ctx.strokeStyle='rgba(255,140,0,0.85)';ctx.lineWidth=1.6;ctx.setLineDash([]);
+  ctx.beginPath();ctx.arc(botX,botY,angleR,-ang,0);ctx.stroke();
+  ctx.fillStyle='#ff8c00';ctx.font='bold 11px Golos Text,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  var mAng=-ang/2;
+  ctx.fillText('α='+p.angle+'°',botX+Math.cos(mAng)*(angleR+24),botY+Math.sin(mAng)*(angleR+24)+12);
+  ctx.textBaseline='alphabetic';
 }
 
 /* ── Fullscreen ── */
