@@ -802,6 +802,10 @@ body.task-board-lock header,body.task-board-lock .topbar,body.task-board-lock .s
 .task-board-popup-close{padding:9px 14px;border-radius:12px;border:1px solid #cbd5e1;background:#fff;color:#334155;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--fb);flex-shrink:0}
 .task-board-popup-close:hover{background:#eff6ff;border-color:#93c5fd;color:#1d4ed8}
 .task-board-sim-note{font-size:13px;line-height:1.62;color:#64748b;max-width:none;overflow-wrap:anywhere;word-break:break-word}
+.task-animation-condition{margin:14px 0 18px;padding:14px 16px;border:1px solid #d8e5f5;border-radius:16px;background:#f8fbff;color:#334155;max-width:1100px}
+.task-animation-condition-title{font-size:13px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#2563eb;margin-bottom:8px}
+.task-animation-condition-text{font-size:16px;line-height:1.55;font-weight:600}
+.task-animation-condition-text strong{color:#0f172a;font-weight:900}
 .task-board-sim-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-start}
 .task-board-sim-play{display:flex;align-items:center;gap:6px;background:#0f172a;color:#fff;font-family:var(--fh);font-size:12px;font-weight:700;padding:10px 18px;border-radius:10px;border:none;cursor:pointer;transition:transform .15s,box-shadow .2s}
 .task-board-sim-play:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(15,23,42,.15)}
@@ -6275,6 +6279,44 @@ function taskBoardObjectPointerDown(e){
   window.addEventListener('pointermove',move);
   window.addEventListener('pointerup',up,{once:true});
 }
+function findTaskById(taskId){
+  if(!taskId) return null;
+  const needle=String(taskId);
+  for(const lessonName in LESSON_TASKS){
+    const found=(LESSON_TASKS[lessonName]||[]).find(function(t){return t&&(String(t.id||'')===needle||String(t.boardMode||'')===needle);});
+    if(found) return found;
+  }
+  try{
+    const store=loadBlankTaskBlocks();
+    for(const lessonName in store){
+      const list=Array.isArray(store[lessonName])?store[lessonName]:[];
+      const found=list.find(function(t){return t&&(String(t.id||'')===needle||String(t.boardMode||'')===needle);});
+      if(found) return normalizeBlankTaskBlock(found,0);
+    }
+  }catch(err){}
+  return null;
+}
+function getTaskConditionHtml(task){
+  if(!task) return 'Условие задачи не найдено.';
+
+  const parts=[];
+
+  if(task.title){
+    parts.push(`<strong>${task.title}</strong>`);
+  }
+
+  if(task.cond){
+    parts.push(String(task.cond));
+  }
+
+  if(task.given){
+    parts.push(String(task.given));
+  }
+
+  const html=parts.join('<br>');
+
+  return html||'Условие задачи не найдено.';
+}
 function getTaskBoardData(mode){
   if(String(mode||'').indexOf('blank-task-')===0){
     const store=loadBlankTaskBlocks();
@@ -6820,10 +6862,16 @@ function ensureTaskBoardOverlay(){
               </div>
               <div id="taskBoardSimPopup" class="task-board-popup">
                 <div class="task-board-popup-head">
-                  <div id="taskBoardSimTitle" class="task-board-popup-title">Анимация движения</div>
+                  <div>
+                    <div id="taskBoardSimTitle" class="task-board-popup-title task-animation-title">Анимация движения</div>
+                    <div class="task-animation-condition">
+                      <div class="task-animation-condition-title">Условие задачи</div>
+                      <div id="taskBoardSimCondition" class="task-animation-condition-text">Условие задачи не найдено.</div>
+                    </div>
+                  </div>
                   <button type="button" class="task-board-popup-close" onclick="toggleTaskBoardAnimation(false)">Скрыть</button>
                 </div>
-                <div id="taskBoardSimNote" class="task-board-sim-note">Запустите движение кнопкой «Старт», ставьте на паузу во время объяснения и при необходимости повторяйте анимацию заново.</div>
+                <div id="taskBoardSimNote" class="task-board-sim-note task-animation-description">Запустите движение кнопкой «Старт», ставьте на паузу во время объяснения и при необходимости повторяйте анимацию заново.</div>
                 <div class="task-board-sim-controls">
                   <button type="button" class="task-board-sim-play" id="taskBoardSimToggleBtn" onclick="taskBoardSimToggle()">▶ Старт</button>
                   <button type="button" class="task-board-sim-reset" onclick="taskBoardSimReset()">↺ Сброс</button>
@@ -6877,6 +6925,7 @@ function ensureTaskBoardOverlay(){
     animBtn:document.getElementById('taskBoardAnimBtn'),
     simPopup:document.getElementById('taskBoardSimPopup'),
     simTitle:document.getElementById('taskBoardSimTitle'),
+    simCondition:document.getElementById('taskBoardSimCondition'),
     simNote:document.getElementById('taskBoardSimNote'),
     simBtnsWrap:document.getElementById('taskBoardSimBtns'),
     simFrameLabel:document.getElementById('taskBoardSimFrameLabel'),
@@ -7233,6 +7282,7 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
   const isEnergyPendulum = mode==='energyPendulum';
   const isEnergy = isEnergyHill || isEnergyPendulum;
   if(state.simTitle) state.simTitle.textContent=isBlocks?'Анимация столкновения брусков':(isExplosion?'Анимация взрыва снаряда':(isPuckImpulse?'Анимация удара шайб':(isMomentum?'Анимация соударения':(isEnergyPendulum?'Анимация удара и подъёма доски':(isEnergyHill?'Анимация подъёма по горке':'Анимация движения')))));
+  if(state.simCondition) state.simCondition.innerHTML=getTaskConditionHtml(task);
   if(state.simNote) state.simNote.innerHTML=isBlocks
     ? 'Покажите спуск первого бруска по наклонной плоскости, момент абсолютно неупругого удара и дальнейшее совместное движение двух брусков.'
     : isExplosion
@@ -8038,6 +8088,7 @@ function taskBoardDraw(){
 let task07AnimationState=null;
 function openTaskAnimation(taskId){
   if(taskId!=='lesson12-task07') return;
+  const task=findTaskById(taskId)||taskBoardState?.task||findTaskById(taskBoardState?.taskId);
   const overlay=ensureTask07AnimationOverlay();
   const hasOpenBoard=!!(taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
   overlay.dataset.keepTaskBoard=hasOpenBoard?'true':'false';
@@ -8053,6 +8104,8 @@ function openTaskAnimation(taskId){
   overlay.classList.add('open');
   overlay.setAttribute('aria-hidden','false');
   document.body.classList.add('task07-anim-lock');
+  const condition=overlay.querySelector('[data-task-animation-condition-text]');
+  if(condition) condition.innerHTML=getTaskConditionHtml(task);
   renderTask07Animation(overlay.querySelector('[data-task07-stage]'));
   resetTask07Animation();
   playTask07Animation();
@@ -8066,8 +8119,12 @@ function ensureTask07AnimationOverlay(){
         <div class="task07-anim-head">
           <div>
             <div class="task07-anim-kicker">ЕГЭ · Физика · Урок 12 · Задача 07</div>
-            <div id="task07AnimTitle" class="task07-anim-title">Маятник после удара</div>
-            <div class="task07-anim-sub">Живая схема: налёт малого тела, удар, падение тела вниз и подъём груза маятника до α = 90°.</div>
+            <div id="task07AnimTitle" class="task07-anim-title task-animation-title">Маятник после удара</div>
+            <div class="task-animation-condition">
+              <div class="task-animation-condition-title">Условие задачи</div>
+              <div class="task-animation-condition-text" data-task-animation-condition-text>Условие задачи не найдено.</div>
+            </div>
+            <div class="task07-anim-sub task-animation-description">Живая схема: налёт малого тела, удар, падение тела вниз и подъём груза маятника до α = 90°.</div>
           </div>
           <button
             type="button"
