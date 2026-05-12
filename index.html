@@ -129,6 +129,23 @@ footer{border-top:1px solid var(--border);padding:28px 24px}
 .btn-orange{background:var(--orange);color:#000}
 .btn-orange:hover{background:#e07000}
 
+
+/* DIRECTION CHOICE */
+.directions-section{padding-top:58px;padding-bottom:34px}
+.direction-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.direction-card{position:relative;overflow:hidden;background:var(--panel);border:1px solid var(--border);border-radius:22px;padding:30px;min-height:280px;display:flex;flex-direction:column;align-items:flex-start;box-shadow:var(--panel-shadow);transition:transform .2s,border-color .2s,box-shadow .2s}
+.direction-card::before{content:'';position:absolute;inset:-35% -20% auto auto;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(8,216,255,.16),transparent 68%);pointer-events:none}
+.direction-math::before{background:radial-gradient(circle,rgba(255,140,0,.16),transparent 68%)}
+.direction-card:hover{transform:translateY(-5px);border-color:rgba(8,216,255,.46);box-shadow:0 24px 56px rgba(0,229,255,.12)}
+.direction-math:hover{border-color:rgba(255,140,0,.46);box-shadow:0 24px 56px rgba(255,140,0,.1)}
+.direction-icon{font-size:34px;margin-bottom:18px}
+.direction-card h3{font-family:var(--fh);font-size:clamp(20px,2.3vw,28px);line-height:1.15;margin-bottom:14px}
+.direction-card p{color:var(--gray);font-size:15px;line-height:1.7;margin-bottom:24px;max-width:520px;flex:1}
+.direction-btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 20px;border-radius:9px;font-family:var(--fh);font-size:12px;font-weight:700;transition:transform .15s,filter .2s}
+.direction-btn:hover{transform:translateY(-2px);filter:brightness(1.05)}
+.direction-placeholder{padding-top:34px;padding-bottom:34px}
+.direction-placeholder .ssub{max-width:760px;margin-bottom:0}
+
 /* FORMULA CARD BADGE */
 .platform-badge{margin-top:20px;font-family:var(--fh);font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--cyan);opacity:.6;text-transform:uppercase}
 
@@ -1160,7 +1177,7 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 .fbadge{padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;background:rgba(0,229,255,.12);color:var(--cyan)}
 
 
-@media(max-width:900px){.hero{grid-template-columns:1fr;min-height:auto;padding:58px 24px 20px}.hero-media{transform:translateY(-6px)}.fbox{display:none}.cgrid{grid-template-columns:1fr 1fr}.how-g{grid-template-columns:1fr 1fr}.how-step{border-right:none;border-bottom:1px solid var(--border)}.cp-layout{--sbw:210px}}
+@media(max-width:900px){.hero{grid-template-columns:1fr;min-height:auto;padding:58px 24px 20px}.hero-media{transform:translateY(-6px)}.fbox{display:none}.cgrid{grid-template-columns:1fr 1fr}.direction-grid{grid-template-columns:1fr}.how-g{grid-template-columns:1fr 1fr}.how-step{border-right:none;border-bottom:1px solid var(--border)}.cp-layout{--sbw:210px}}
 @media(max-width:600px){.nav-subj{display:none}.cgrid{grid-template-columns:1fr}.how-g{grid-template-columns:1fr}.stats-grid{grid-template-columns:1fr 1fr}.cp-sb,.cp-resizer{display:none}}
 
 /* ── SIMULATORS HUB PAGE ── */
@@ -1436,6 +1453,8 @@ img,svg,canvas,video,iframe{max-width:100%}
     <a href="#home" class="logo">ФИЗ<span>МАТ</span></a>
     <div class="nav-subj">
       <a href="#courses" class="active">Курсы</a>
+      <a href="#physics">Физика</a>
+      <a href="#math">Математика</a>
       <a href="#tests">Конструктор тестов</a>
       <a href="#students">Ученикам</a>
       <a href="#bank">Банк задач</a>
@@ -1462,32 +1481,50 @@ img,svg,canvas,video,iframe{max-width:100%}
   <section>
     <div class="hero">
       <div>
-        <div class="hero-label">Современная образовательная онлайн-платформа</div>
-        <h1>Физика и математика<br>для <span class="acc">ОГЭ и ЕГЭ</span></h1>
-        <p class="section-subtitle">Платформа для школьников и учителей — структурированные курсы, конструктор тестов, банк задач, симулятор экзамена и виртуальная лаборатория в одном месте.</p>
-        <div class="dual-cta">
-          <div class="cta-card cta-student">
-            <a href="#students" class="cta-card-btn btn-cyan">Начать →</a>
-            <div class="cta-card-row">
-              <div class="cta-card-icon">🎓</div>
-              <div class="cta-card-title">Я ученик</div>
-            </div>
-            <div class="cta-card-sub">Готовлюсь к ОГЭ / ЕГЭ</div>
-          </div>
-          <div class="cta-card cta-teacher">
-            <a href="#for-teachers" class="cta-card-btn btn-orange">Инструменты →</a>
-            <div class="cta-card-row">
-              <div class="cta-card-icon">📋</div>
-              <div class="cta-card-title">Я учитель</div>
-            </div>
-            <div class="cta-card-sub">Создаю уроки и тесты</div>
-          </div>
+        <div class="hero-label">Подготовка к ОГЭ и ЕГЭ</div>
+        <h1><span class="acc">ФИЗМАТ</span> — подготовка к ОГЭ и ЕГЭ по физике и математике</h1>
+        <p class="section-subtitle">Онлайн-платформа с короткими уроками, задачами по алгоритмам, тестами с автопроверкой и контролем прогресса ученика.</p>
+        <div class="hero-cta">
+          <a href="#directions" class="btn-p">Начать подготовку</a>
+          <a href="#directions" class="btn-s">Выбрать направление <span class="arr">↓</span></a>
         </div>
       </div>
       <div class="hero-media">
         <img class="hero-shot" src="images/hero-physics.svg" alt="Главный экран платформы ФИЗМАТ">
       </div>
     </div>
+  </section>
+
+  <!-- ===== ВЫБОР НАПРАВЛЕНИЯ ===== -->
+  <div class="divider"></div>
+  <section id="directions" class="section directions-section">
+    <div class="slbl">Выбор направления</div>
+    <h2 class="stitle">С чего начнём подготовку?</h2>
+    <p class="ssub">Выберите предмет и экзамен: физика или математика для ОГЭ и ЕГЭ.</p>
+    <div class="direction-grid">
+      <article class="direction-card direction-physics">
+        <div class="direction-icon">⚡</div>
+        <h3>Физика ОГЭ/ЕГЭ</h3>
+        <p>Подготовка к экзаменам по физике через короткую теорию, алгоритмы решения задач, тренировки, тесты и разбор ошибок.</p>
+        <a href="#physics" class="direction-btn btn-cyan">Перейти к физике</a>
+      </article>
+      <article class="direction-card direction-math">
+        <div class="direction-icon">📐</div>
+        <h3>Математика ОГЭ/ЕГЭ</h3>
+        <p>Подготовка к экзаменам по математике через пошаговые разборы, практику, тесты с автопроверкой и контроль прогресса.</p>
+        <a href="#math" class="direction-btn btn-orange">Перейти к математике</a>
+      </article>
+    </div>
+  </section>
+
+  <section id="physics" class="section direction-placeholder">
+    <h2 class="stitle">Физика ОГЭ и ЕГЭ</h2>
+    <p class="ssub">Отдельная траектория подготовки по физике: ОГЭ для 8–9 классов и ЕГЭ для 10–11 классов.</p>
+  </section>
+
+  <section id="math" class="section direction-placeholder">
+    <h2 class="stitle">Математика ОГЭ и ЕГЭ</h2>
+    <p class="ssub">Отдельная траектория подготовки по математике: ОГЭ для 8–9 классов и ЕГЭ для 10–11 классов.</p>
   </section>
 
   <!-- ===== ДЛЯ УЧЕНИКОВ ===== -->
@@ -3077,6 +3114,9 @@ function handleRoute(){
   try{
   if(hash === '#home') return showLanding();
   if(hash === '#courses') return showCoursesPage();
+  if(hash === '#directions') return showLanding('#directions');
+  if(hash === '#physics') return showLanding('#physics');
+  if(hash === '#math') return showLanding('#math');
   if(hash === '#tests') return showTestsPage();
   if(hash === '#for-teachers') return showLanding('#for-teachers');
   if(hash === '#students') return showStudentsPage ? showStudentsPage() : showLanding('#students');
