@@ -641,7 +641,6 @@ body.edit-mode .et{display:inline}
 .task07-anim-controls{display:flex;gap:9px;flex-wrap:wrap;align-items:center;padding:0 20px 18px}
 .task07-anim-btn{padding:10px 14px;border-radius:12px;border:1px solid rgba(0,229,255,.2);background:rgba(0,229,255,.08);color:var(--cyan);font:800 13px var(--fb);cursor:pointer;transition:all .18s}.task07-anim-btn:hover{background:rgba(0,229,255,.16);color:var(--white);transform:translateY(-1px)}
 .task07-anim-progress{flex:1;min-width:160px;height:8px;border-radius:999px;background:rgba(107,122,141,.24);overflow:hidden}.task07-anim-progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--orange));border-radius:inherit;transition:width .08s linear}
-.task07-card-anim-btn{margin-top:8px;background:rgba(255,140,0,.08);border-color:rgba(255,140,0,.24);color:var(--orange)}.task07-card-anim-btn:hover{background:rgba(255,140,0,.16);border-color:rgba(255,140,0,.42);color:var(--white)}
 @media(max-width:900px){.task07-anim-overlay{padding:8px}.task07-anim-body{grid-template-columns:1fr;overflow:auto}.task07-anim-stage{min-height:360px}.task07-anim-svg{min-height:360px}.task07-anim-side{display:grid;grid-template-columns:1fr}.task07-anim-modal{height:100%;border-radius:18px}.task07-anim-head{padding:14px 14px 0}.task07-anim-body{padding:0 14px 14px}.task07-anim-controls{padding:0 14px 14px}}
 
 /* ===== BLANK TASK BLOCKS ===== */
@@ -5665,7 +5664,7 @@ function renderPTasks(name){
     const taskId=String(t.id||'');
     const boardModeSafe=String(t.boardMode||'').replace(/'/g,"\\'");
     const taskIdSafe=taskId.replace(/'/g,"\\'");
-    const boardBtn=t.boardMode?`<div class="pt-side-actions"><button class="pt-board-btn" onclick="openTaskBoard('${boardModeSafe}',true,'${taskIdSafe}')">⤢ Доска</button>${taskId==='lesson12-task07'?`<button class="pt-board-btn task07-card-anim-btn" onclick="openTaskAnimation('lesson12-task07')">▶ Анимация процесса</button>`:''}</div>`:'';
+    const boardBtn=t.boardMode?`<div class="pt-side-actions"><button class="pt-board-btn" onclick="openTaskBoard('${boardModeSafe}',true,'${taskIdSafe}')">⤢ Доска</button></div>`:'';
     const hasAnswer=String(t.ans||'').trim();
     const answerCard=hasAnswer?`<div class="sr-ans"><div style="font-size:18px">✓</div><div><div class="sr-ans-l">Ответ</div><div class="sr-ans-v" style="color:var(--orange)">${t.ans}</div></div></div>`:'';
     const hasStructuredSolution=hasFilledTaskSolution(t)||hasLegacyTaskTextSolution(t);
@@ -6814,8 +6813,13 @@ function ensureTaskBoardOverlay(){
                 <div class="task-board-dropdown-menu task-board-materials-menu">
                   <button type="button" id="taskBoardConditionBtn" class="task-board-tool" onclick="taskBoardToggleFloating('condition');taskBoardCloseDropdowns();">📄 Условие</button>
                   <button type="button" id="taskBoardGraphBtn" class="task-board-tool" onclick="taskBoardToggleFloating('graph');taskBoardCloseDropdowns();">🧩 Схема</button>
-                  <button type="button" class="task-board-tool" id="taskBoardAnimBtn" onclick="toggleTaskBoardAnimation();taskBoardCloseDropdowns();">▶ Анимация</button>
                   <button type="button" class="task-board-tool" onclick="toggleTaskBoardSolution();taskBoardCloseDropdowns();">✅ Решение</button>
+                </div>
+              </div>
+              <div class="task-board-dropdown" id="taskBoardAnimMenu" data-dropdown-name="animations">
+                <button type="button" class="task-board-dropdown-toggle" onclick="taskBoardToggleDropdown('animations')" aria-haspopup="true" aria-expanded="false">🎬 Анимации ▼</button>
+                <div class="task-board-dropdown-menu">
+                  <button type="button" class="task-board-tool" id="taskBoardAnimBtn" onclick="toggleTaskBoardAnimation();taskBoardCloseDropdowns();">▶ Анимация процесса</button>
                 </div>
               </div>
               <button type="button" class="task-board-close-btn" data-board-close="true" onclick="closeTaskBoard()">✕ Закрыть</button>
@@ -6923,6 +6927,7 @@ function ensureTaskBoardOverlay(){
     undoBtn:document.getElementById('taskBoardUndoBtn'),
     redoBtn:document.getElementById('taskBoardRedoBtn'),
     animBtn:document.getElementById('taskBoardAnimBtn'),
+    animMenu:document.getElementById('taskBoardAnimMenu'),
     simPopup:document.getElementById('taskBoardSimPopup'),
     simTitle:document.getElementById('taskBoardSimTitle'),
     simCondition:document.getElementById('taskBoardSimCondition'),
@@ -7301,9 +7306,11 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
   if(state.simRelVLabel) state.simRelVLabel.textContent=isBlocks?'Скорость бруска':(isExplosion?'Скорость осколка 2':(isPuckImpulse?'Импульс p4':(isMomentum?'Импульс системы':(isEnergyPendulum?'u после удара':(isEnergyHill?'Скорость шайбы':'Относительная скорость')))));
   if(state.simRelPLabel) state.simRelPLabel.textContent=isBlocks?'Кинетическая энергия':(isExplosion?'Изменение энергии':(isPuckImpulse?'Импульс p3':(isMomentum?'После удара':(isEnergyPendulum?'Высота h':(isEnergyHill?'Высота':'Импульс первого авто')))));
   if(state.simKeyLabel) state.simKeyLabel.textContent='Ключевая мысль';
+  const hasAnimationSection=task.hasAnimation!==false;
+  if(state.animMenu) state.animMenu.style.display=hasAnimationSection?'':'none';
   if(state.animBtn){
-    state.animBtn.style.display=task.hasAnimation===false?'none':'inline-flex';
-    state.animBtn.textContent='▶ Анимация';
+    state.animBtn.style.display=hasAnimationSection?'inline-flex':'none';
+    state.animBtn.textContent='▶ Анимация процесса';
   }
   const useSolutionWorkspace=!!(hasFilledTaskSolution(task)||hasLegacyTaskSolution(task));
   state.solution.innerHTML=renderTaskBoardSolution(task);
@@ -8372,13 +8379,13 @@ function toggleTaskBoardAnimation(force){
     state.drawer.classList.remove('anim-hidden');
     const btn=document.getElementById('taskBoardSimToggleBtn');
     if(btn) btn.textContent='▶ Старт';
-    if(state.animBtn) state.animBtn.textContent='▶ Анимация';
+    if(state.animBtn) state.animBtn.textContent='▶ Анимация процесса';
     return;
   }
   const open=typeof force==='boolean'?force:!state.simPopup.classList.contains('open');
   state.simPopup.classList.toggle('open',open);
   state.drawer.classList.toggle('anim-hidden',open);
-  if(state.animBtn) state.animBtn.textContent=open?'✕ Анимация':'▶ Анимация';
+  if(state.animBtn) state.animBtn.textContent=open?'✕ Анимация процесса':'▶ Анимация процесса';
   if(open){
     if(taskBoardState){
       try{
