@@ -5454,6 +5454,39 @@ const LESSON_TASKS={
       `Если <span class="fml">cos α = 0</span>, то максимальный угол отклонения маятника от вертикали равен <span class="fml">90°</span>.`
     ],
     ans:'α = 90°'
+  },
+  {
+    id:'lesson12-task08',
+    num:8,level:3,exam:'ЕГЭ (2 балла)',points:2,title:'Пробирка с каплей эфира',
+    boardMode:'etherCork',graphLabel:'Схема',hasAnimation:true,
+    tags:['импульс','энергия','движение по окружности','ЕГЭ','сложный'],
+    cond:'Пробирка с каплей эфира подвешена на нити длиной <strong>1 м</strong>. С какой скоростью должна вылететь пробка после нагревания эфира, чтобы пробирка сделала полный оборот в вертикальной плоскости? Масса пробирки <strong>100 г</strong>, а пробки — <strong>20 г</strong>.',
+    given:'L = 1 м<br>M = 100 г = 0,10 кг — масса пробирки<br>m = 20 г = 0,020 кг — масса пробки<br>g = 9,8 м/с² ≈ 10 м/с²<br><span class="pt-find">Найти: v — скорость вылета пробки</span>',
+    solutionImage:'images/zsi12_08.png',
+    solutionTitle:'Решение задачи 08. Пробирка с каплей эфира',
+    steps:[
+      `После нагревания эфир выталкивает пробку, а пробирка получает скорость отдачи <span class="fml">u</span> в противоположную сторону. За короткое время вылета пробки внешним импульсом пренебрегаем, поэтому применяем закон сохранения импульса:<div class="sr-fml">m v = M u</div>`,
+      `Чтобы пробирка совершила полный оборот на нити длиной <span class="fml">L</span>, минимальная скорость в нижней точке должна удовлетворять условию вертикальной окружности:<div class="sr-fml">u_{min} = ${mSqrt('5gL')}</div>`,
+      `Это условие получается из энергии и минимального натяжения нити в верхней точке: <span class="fml">u^2 = v_{top}^2 + 4gL</span>, а при предельном полном обороте <span class="fml">v_{top}^2 = gL</span>.`,
+      `Подставляем длину нити:<div class="sr-fml">u_{min} = ${mSqrt('5 · 9,8 · 1')} = ${mSqrt('49')} = 7 м/с</div>`,
+      `Из закона сохранения импульса выражаем скорость пробки:<div class="sr-fml">v = ${mFrac('M','m')}u = ${mFrac('0,10','0,020')} · 7 = 35 м/с</div>`,
+      `Следовательно, пробка должна вылететь со скоростью не меньше <span class="fml">35 м/с</span>.`
+    ],
+    boardSolutionHtml:`
+      <div class="task-board-manual">
+        <div class="task-board-step"><div class="task-board-step-num">1</div><div class="task-board-step-body"><strong>Короткий вылет пробки — это отдача.</strong> Система «пробирка + пробка» сначала покоится, поэтому импульсы после вылета равны по модулю и противоположны по направлению:
+          <div class="sr-fml">m v = M u</div>
+        </div></div>
+        <div class="task-board-step"><div class="task-board-step-num">2</div><div class="task-board-step-body"><strong>Минимальная скорость пробирки внизу для полного оборота</strong> находится по условию вертикальной окружности:
+          <div class="sr-fml">u_{min} = ${mSqrt('5gL')} = ${mSqrt('5·9,8·1')} = 7 м/с</div>
+        </div></div>
+        <div class="task-board-step"><div class="task-board-step-num">3</div><div class="task-board-step-body"><strong>Находим скорость пробки.</strong>
+          <div class="sr-fml">v = ${mFrac('M','m')}u = ${mFrac('0,10','0,020')}·7 = 35 м/с</div>
+        </div></div>
+        <div class="task-board-step"><div class="task-board-step-num">4</div><div class="task-board-step-body"><strong>Ответ:</strong> пробка должна вылететь со скоростью не меньше <strong>35 м/с</strong>.</div></div>
+      </div>`,
+    hideAnswer:true,
+    ans:'v ≥ 35 м/с'
   }],
 
 'Закон сохранения энергии и изменения энергии':[
@@ -6565,6 +6598,7 @@ function getTaskBoardData(mode){
   if(mode==='explosionFragments') return (LESSON_TASKS['Закон сохранения импульса и изменения импульса']||[]).find(function(t){return t.boardMode===mode;})||null;
   if(mode==='inelasticBlocks') return (LESSON_TASKS['Закон сохранения импульса и изменения импульса']||[]).find(function(t){return t.boardMode===mode;})||null;
   if(mode==='cartStone') return (LESSON_TASKS['Закон сохранения импульса и изменения импульса']||[]).find(function(t){return t.boardMode===mode;})||null;
+  if(mode==='etherCork') return (LESSON_TASKS['Закон сохранения импульса и изменения импульса']||[]).find(function(t){return t.boardMode===mode;})||null;
   for(const lessonName in LESSON_TASKS){
     const found=(LESSON_TASKS[lessonName]||[]).find(function(t){return t&&t.boardMode===mode;});
     if(found)return found;
@@ -6703,6 +6737,29 @@ function getTaskBoardGraph(mode){
       <text x="108" y="104" fill="#0f172a" font-size="12">α = 60°</text>
       <text x="206" y="118" fill="#0f172a" font-size="12">тележка покоится</text>
       <text x="24" y="208" fill="#0284c7" font-size="13" font-weight="700">p = mvcosα = 20 кг·м/с</text>
+    </svg>`;
+  if(mode==='etherCork') return `
+    <svg viewBox="0 0 360 230" aria-label="Пробирка с пробкой на нити">
+      <defs>
+        <marker id="etherArrow" markerWidth="6" markerHeight="6" refX="5.3" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#0284c7"></path></marker>
+        <marker id="etherArrowOrange" markerWidth="6" markerHeight="6" refX="5.3" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#f97316"></path></marker>
+      </defs>
+      <rect x="0" y="0" width="360" height="230" rx="16" fill="#f8fafc"></rect>
+      <text x="22" y="26" fill="#1d4ed8" font-size="13" font-weight="700">Отдача пробирки после вылета пробки</text>
+      <path d="M180 42V154" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6 5"></path>
+      <circle cx="180" cy="42" r="5" fill="#0f172a"></circle>
+      <path d="M180 42A112 112 0 1 1 179 42" fill="none" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="5 5"></path>
+      <g transform="translate(166 138) rotate(-90 14 14)">
+        <rect x="8" y="-16" width="12" height="58" rx="6" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"></rect>
+        <circle cx="14" cy="42" r="7" fill="#dbeafe" stroke="#2563eb" stroke-width="2"></circle>
+      </g>
+      <rect x="94" y="148" width="30" height="14" rx="5" fill="#fdba74" stroke="#f97316" stroke-width="2"></rect>
+      <path d="M128 155H164" stroke="#f97316" stroke-width="3" marker-end="url(#etherArrowOrange)"></path>
+      <path d="M176 155H132" stroke="#0284c7" stroke-width="3" marker-end="url(#etherArrow)"></path>
+      <text x="74" y="142" fill="#f97316" font-size="12" font-weight="700">пробка: v</text>
+      <text x="184" y="170" fill="#0284c7" font-size="12" font-weight="700">пробирка: u</text>
+      <text x="24" y="196" fill="#0f172a" font-size="13" font-weight="700">m v = M u,  uₘᵢₙ = √(5gL)</text>
+      <text x="24" y="214" fill="#0284c7" font-size="13" font-weight="700">v = (M/m)·7 = 35 м/с</text>
     </svg>`;
   if(mode==='puckImpulse') return `
     <svg viewBox="0 0 360 230" aria-label="Схема импульсов шайб до и после удара">
@@ -7518,9 +7575,12 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
   const isEnergyPendulum = mode==='energyPendulum';
   const isEnergy = isEnergyHill || isEnergyPendulum;
   const isCartStone = mode==='cartStone';
-  if(state.simTitle) state.simTitle.textContent=isBlocks?'Анимация столкновения брусков':(isExplosion?'Анимация взрыва снаряда':(isPuckImpulse?'Анимация удара шайб':(isMomentum?'Анимация соударения':(isEnergyPendulum?'Анимация удара и подъёма доски':(isEnergyHill?'Анимация подъёма по горке':(isCartStone?'Анимация падения камня':'Анимация движения'))))));
+  const isEtherCork = mode==='etherCork';
+  if(state.simTitle) state.simTitle.textContent=isEtherCork?'Анимация отдачи пробирки':(isBlocks?'Анимация столкновения брусков':(isExplosion?'Анимация взрыва снаряда':(isPuckImpulse?'Анимация удара шайб':(isMomentum?'Анимация соударения':(isEnergyPendulum?'Анимация удара и подъёма доски':(isEnergyHill?'Анимация подъёма по горке':(isCartStone?'Анимация падения камня':'Анимация движения')))))));
   if(state.simCondition) state.simCondition.innerHTML=getTaskConditionHtml(task);
-  if(state.simNote) state.simNote.innerHTML=isBlocks
+  if(state.simNote) state.simNote.innerHTML=isEtherCork
+    ? 'Покажите вылет пробки, отдачу пробирки и дальнейшее движение пробирки по вертикальной окружности. Сначала используется ЗСИ, затем условие полного оборота.'
+    : isBlocks
     ? 'Покажите спуск первого бруска по наклонной плоскости, момент абсолютно неупругого удара и дальнейшее совместное движение двух брусков.'
     : isExplosion
     ? 'Покажите полёт снаряда до взрыва, момент разрыва и разлёт осколков в разные стороны. Кнопкой «Старт» процесс запускается заново.'
@@ -7535,10 +7595,10 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
             : (isCartStone
               ? 'Покажите падение камня в тележку и дальнейшее движение тележки по рельсам после удара.'
               : 'Запустите движение кнопкой «Старт», ставьте на паузу во время объяснения и при необходимости повторяйте анимацию заново.')))));
-  if(state.simBtnsWrap) state.simBtnsWrap.classList.toggle('is-hidden',isMomentum||isEnergy||isBlocks||isCartStone);
-  if(state.simFrameLabel) state.simFrameLabel.textContent=(isMomentum||isEnergy||isBlocks||isCartStone)?'Этап':'Система отсчёта';
-  if(state.simRelVLabel) state.simRelVLabel.textContent=isBlocks?'Скорость бруска':(isExplosion?'Скорость осколка 2':(isPuckImpulse?'Импульс p4':(isMomentum?'Импульс системы':(isEnergyPendulum?'u после удара':(isEnergyHill?'Скорость шайбы':(isCartStone?'Горизонтальный импульс':'Относительная скорость'))))));
-  if(state.simRelPLabel) state.simRelPLabel.textContent=isBlocks?'Кинетическая энергия':(isExplosion?'Изменение энергии':(isPuckImpulse?'Импульс p3':(isMomentum?'После удара':(isEnergyPendulum?'Высота h':(isEnergyHill?'Высота':(isCartStone?'Расчёт':'Импульс первого авто'))))));
+  if(state.simBtnsWrap) state.simBtnsWrap.classList.toggle('is-hidden',isMomentum||isEnergy||isBlocks||isCartStone||isEtherCork);
+  if(state.simFrameLabel) state.simFrameLabel.textContent=(isMomentum||isEnergy||isBlocks||isCartStone||isEtherCork)?'Этап':'Система отсчёта';
+  if(state.simRelVLabel) state.simRelVLabel.textContent=isEtherCork?'Скорость пробирки':(isBlocks?'Скорость бруска':(isExplosion?'Скорость осколка 2':(isPuckImpulse?'Импульс p4':(isMomentum?'Импульс системы':(isEnergyPendulum?'u после удара':(isEnergyHill?'Скорость шайбы':(isCartStone?'Горизонтальный импульс':'Относительная скорость')))))));
+  if(state.simRelPLabel) state.simRelPLabel.textContent=isEtherCork?'Скорость пробки':(isBlocks?'Кинетическая энергия':(isExplosion?'Изменение энергии':(isPuckImpulse?'Импульс p3':(isMomentum?'После удара':(isEnergyPendulum?'Высота h':(isEnergyHill?'Высота':(isCartStone?'Расчёт':'Импульс первого авто')))))));
   if(state.simKeyLabel) state.simKeyLabel.textContent='Ключевая мысль';
   const hasAnimationSection=task.hasAnimation!==false;
   if(state.animMenu) state.animMenu.style.display=hasAnimationSection?'':'none';
@@ -8730,7 +8790,7 @@ function taskBoardSimReset(resetFrame){
   sim.t=0;
   sim.last=0;
   sim.finished=false;
-  sim.duration=(state.mode==='momentumSystem'||state.mode==='puckImpulse'||state.mode==='explosionFragments')?6.0:(state.mode==='inelasticBlocks'?6.8:(state.mode==='energyPendulum'?7.0:(state.mode==='energyHill'?6.4:6.2)));
+  sim.duration=(state.mode==='momentumSystem'||state.mode==='puckImpulse'||state.mode==='explosionFragments')?6.0:(state.mode==='inelasticBlocks'?6.8:(state.mode==='energyPendulum'?7.0:(state.mode==='etherCork'?7.0:(state.mode==='energyHill'?6.4:6.2))));
   if(resetFrame) sim.frame='earth';
   document.querySelectorAll('[data-frame-btn]').forEach(function(btn){btn.classList.toggle('active',btn.getAttribute('data-frame-btn')===sim.frame);});
   const btn=document.getElementById('taskBoardSimToggleBtn');
@@ -8747,6 +8807,20 @@ function taskBoardSimSync(){
   const key=document.getElementById('taskBoardSimKey');
   const stateBox=document.getElementById('taskBoardSimState');
   const progress=sim.duration?Math.min(sim.t/sim.duration,1):0;
+  if(state.mode==='etherCork'){
+    const tKick=0.26, tLoop=0.86;
+    const phase=progress<tKick?'Вылет пробки':(progress<tLoop?'Движение по окружности':'Полный оборот');
+    if(frame) frame.textContent=phase;
+    if(relV) relV.textContent='u = 7 м/с';
+    if(relP) relP.textContent='v = 35 м/с';
+    if(key) key.innerHTML='m v = M u; u<sub>min</sub> = √(5gL)';
+    if(stateBox) stateBox.innerHTML=phase==='Вылет пробки'
+      ? '<strong>Идея:</strong> пробка вылетает в одну сторону, а пробирка получает отдачу в другую. В короткий момент вылета применяем <span class="fml">m v = M u</span>.'
+      : (phase==='Движение по окружности'
+        ? '<strong>Идея:</strong> чтобы нить не провисла в верхней точке, скорости пробирки внизу должно хватить на полный оборот: <span class="fml">u<sub>min</sub> = √(5gL) = 7 м/с</span>.'
+        : '<strong>Идея:</strong> по ЗСИ скорость пробки в <span class="fml">M/m = 5</span> раз больше скорости отдачи пробирки: <span class="fml">v = 35 м/с</span>.');
+    return;
+  }
   if(state.mode==='inelasticBlocks'){
     const tSlope=0.30, tImpact=0.52;
     const phaseText=progress<tSlope?'Спуск':(progress<tImpact?'Перед ударом':'После удара');
@@ -9097,6 +9171,84 @@ function taskBoardSimDraw(){
   ctx.clearRect(0,0,W,H);
   ctx.fillStyle='#ffffff';
   ctx.fillRect(0,0,W,H);
+  if(state.mode==='etherCork'){
+    const tKick=0.26;
+    const tLoopEnd=0.88;
+    const phase=progress<tKick?'Вылет пробки':(progress<tLoopEnd?'Полный оборот пробирки':'Минимальная скорость найдена');
+    const pivotX=Math.round(W*0.54);
+    const pivotY=64;
+    const L=Math.max(92,Math.min(138,H-168));
+    const restX=pivotX, restY=pivotY+L;
+    const kickA=Math.min(progress/tKick,1);
+    const loopA=progress<tKick?0:Math.min((progress-tKick)/(tLoopEnd-tKick),1);
+    const theta=loopA*Math.PI*2;
+    const tubeX=progress<tKick?taskBoardSimLerp(restX,restX+42,kickA):pivotX+Math.sin(theta)*L;
+    const tubeY=progress<tKick?restY:pivotY+Math.cos(theta)*L;
+    const corkX=progress<tKick?taskBoardSimLerp(restX-18,Math.max(54,restX-130),kickA):Math.max(44,restX-132-48*loopA);
+    const corkY=restY+6;
+
+    ctx.fillStyle='#0f172a';
+    ctx.font='bold 15px Golos Text,sans-serif';
+    ctx.textAlign='left';
+    ctx.fillText('Пробирка с каплей эфира: отдача и полный оборот',topLeft,30);
+    ctx.fillStyle='#64748b';
+    ctx.font='12px Golos Text,sans-serif';
+    ctx.fillText('Пробка вылетает влево, пробирка получает скорость отдачи вправо и должна пройти вертикальную окружность.',topLeft,50);
+
+    ctx.strokeStyle='rgba(148,163,184,.55)';
+    ctx.lineWidth=1.8;
+    ctx.setLineDash([6,5]);
+    ctx.beginPath();ctx.arc(pivotX,pivotY,L,0,Math.PI*2);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(pivotX,pivotY);ctx.lineTo(pivotX,restY);ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.strokeStyle='#0f172a';ctx.lineWidth=2.6;
+    ctx.beginPath();ctx.moveTo(pivotX-52,pivotY-12);ctx.lineTo(pivotX+52,pivotY-12);ctx.stroke();
+    ctx.strokeStyle='#94a3b8';ctx.lineWidth=1.4;
+    for(let i=0;i<5;i++){const hx=pivotX-42+i*21;ctx.beginPath();ctx.moveTo(hx,pivotY-24);ctx.lineTo(hx-12,pivotY-12);ctx.stroke();}
+    ctx.fillStyle='#0f172a';ctx.beginPath();ctx.arc(pivotX,pivotY,5,0,Math.PI*2);ctx.fill();
+
+    ctx.strokeStyle='#2563eb';ctx.lineWidth=2.6;
+    ctx.beginPath();ctx.moveTo(pivotX,pivotY);ctx.lineTo(tubeX,tubeY);ctx.stroke();
+
+    ctx.save();
+    ctx.translate(tubeX,tubeY);
+    ctx.rotate(theta+Math.PI/2);
+    ctx.fillStyle='#bfdbfe';ctx.strokeStyle='#2563eb';ctx.lineWidth=2;
+    ctx.beginPath();ctx.roundRect(-12,-34,24,68,9);ctx.fill();ctx.stroke();
+    ctx.fillStyle='rgba(14,165,233,.22)';ctx.fillRect(-8,-8,16,30);
+    ctx.fillStyle='#0f172a';ctx.font='700 11px Golos Text,sans-serif';ctx.textAlign='center';ctx.fillText('M',0,4);
+    ctx.restore();
+
+    ctx.fillStyle='#fdba74';ctx.strokeStyle='#f97316';ctx.lineWidth=2;
+    ctx.beginPath();ctx.roundRect(corkX-16,corkY-8,32,16,5);ctx.fill();ctx.stroke();
+    ctx.fillStyle='#0f172a';ctx.font='700 11px Golos Text,sans-serif';ctx.textAlign='center';ctx.fillText('m',corkX,corkY+4);
+
+    if(progress<tKick){
+      taskBoardSimArrow(ctx,restX-18,restY+22,corkX-26,corkY+22,'#f97316',7,2.5);
+      taskBoardSimArrow(ctx,restX+18,restY-28,restX+76,restY-28,'#0284c7',7,2.5);
+      ctx.fillStyle='#f97316';ctx.font='700 12px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('v пробки',Math.max(18,corkX-38),corkY+42);
+      ctx.fillStyle='#0284c7';ctx.fillText('u пробирки',restX+54,restY-38);
+      taskBoardSimDrawBurst(ctx,restX,restY,1+kickA*0.7);
+    }else{
+      const tx=tubeX+Math.cos(theta)*34;
+      const ty=tubeY-Math.sin(theta)*34;
+      taskBoardSimArrow(ctx,tubeX,tubeY,tx,ty,'#0284c7',7,2.3);
+      ctx.fillStyle='#0284c7';ctx.font='700 12px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('u = 7 м/с',Math.min(W-118,tx+8),Math.max(28,ty));
+    }
+
+    ctx.fillStyle='#2563eb';ctx.font='700 12px Golos Text,sans-serif';ctx.textAlign='left';
+    ctx.fillText('L = 1 м',pivotX+12,(pivotY+restY)/2);
+
+    const bw=Math.min(315,Math.max(248,W*0.36)),bh=116,bx=W-bw-22,by=20;
+    ctx.fillStyle='rgba(255,255,255,.98)';ctx.fillRect(bx,by,bw,bh);
+    ctx.strokeStyle='rgba(37,99,235,.18)';ctx.strokeRect(bx,by,bw,bh);
+    ctx.fillStyle='#64748b';ctx.font='11px Golos Text,sans-serif';ctx.fillText('Решение',bx+12,by+18);
+    ctx.fillStyle='#111827';ctx.font='bold 16px Golos Text,sans-serif';ctx.fillText('Фаза: '+phase,bx+12,by+42);
+    ctx.fillText('uₘᵢₙ = √(5gL) = 7 м/с',bx+12,by+64);
+    ctx.fillStyle='#0284c7';ctx.font='700 12px Golos Text,sans-serif';ctx.fillText('m v = M u',bx+12,by+86);
+    ctx.fillText('v = (0,10 / 0,020) · 7 = 35 м/с',bx+12,by+104);
+    return;
+  }
   if(state.mode==='inelasticBlocks'){
     const tSlope=0.30, tImpact=0.52;
     const phase = progress<tSlope ? 'Спуск' : (progress<tImpact ? 'Перед ударом' : 'После удара');
