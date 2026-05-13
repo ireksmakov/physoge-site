@@ -2396,21 +2396,115 @@ const THEORY = {
 };
 
 /* DEFAULT theory for new lessons */
-function defaultTheory(){return[
-  {type:'text',label:'📌 Определение',title:'Основное понятие',text:'Введите определение и описание темы...'},
-  {type:'formula',f:'F = ma',sub:'основная формула'},
-  {type:'text',label:'🔢 Алгоритм решения',title:'Алгоритм',text:'1. Шаг первый\n2. Шаг второй\n3. Шаг третий'}
+function defaultTheory(title,description){return[
+  {type:'text',label:'📌 Тема',title:title||'Основное понятие',text:description||'Введите определение и описание темы...'},
+  {type:'text',label:'🧭 План урока',title:'Что разобрать',text:'1. Повторить ключевые определения и формулы\n2. Разобрать типовые задания ОГЭ\n3. Закрепить тему задачами, тестами и домашней работой'},
+  {type:'text',label:'📝 Заглушка',title:'Материалы в подготовке',text:'Подробная теория, задачи, симуляторы, лабораторные, видео, тесты и домашнее задание будут добавлены в этот урок.'}
 ]}
+function makeLesson(title,description,theory){return{title,description,theory:theory||title,tasks:[],simulators:[],labs:[],video:[],tests:[],homework:[]}}
+function getLessonObject(courseKey,moduleIndex,lessonIndex){
+  const c=COURSES&&COURSES[courseKey];
+  const raw=c&&c.modules&&c.modules[moduleIndex]&&c.modules[moduleIndex].lessons?c.modules[moduleIndex].lessons[lessonIndex]:null;
+  if(raw&&typeof raw==='object')return raw;
+  return{title:raw||'',description:'',theory:raw||'',tasks:[],simulators:[],labs:[],video:[],tests:[],homework:[]};
+}
+function lessonTitle(lesson){return lesson&&typeof lesson==='object'?lesson.title:lesson}
+function lessonDescription(lesson){return lesson&&typeof lesson==='object'?lesson.description||'':''}
 
 /* ============================================================
    COURSES DATA
    ============================================================ */
 const COURSES={
-  'oge-phy':{name:'ОГЭ · Физика',tag:'Физика',cls:'tp',type:'phy',modules:[
-    {name:'Механика',open:true,lessons:['Система отсчёта','Равномерное движение','Равноускоренное движение','Свободное падение','Законы Ньютона','Импульс. Закон сохранения','Работа и мощность','Энергия. ЗСЭ']},
-    {name:'Тепловые явления',open:true,lessons:['Основы МКТ','Уравнение Менделеева-Клапейрона','Изопроцессы','Первый закон термодинамики','КПД тепловых машин']},
-    {name:'Электромагнетизм',open:true,lessons:['Закон Кулона','Закон Ома. Цепи','Магнитное поле']},
-    {name:'Оптика',open:true,lessons:['Закон отражения','Закон преломления','Линзы','Фотоэффект']}
+  'oge-phy':{name:'ОГЭ · Физика',tag:'Физика',cls:'tp',type:'phy',exam:'ОГЭ',subject:'Физика',modules:[
+    {name:'Старт ОГЭ',open:true,lessons:[
+      makeLesson('Как устроен ОГЭ по физике','Формат экзамена, типы заданий, баллы, основные разделы физики.'),
+      makeLesson('Единицы СИ, формулы, графики и оформление задач','Перевод единиц, работа с формулами, чтение графиков, оформление расчётных задач.')
+    ]},
+    {name:'Механика',open:true,lessons:[
+      makeLesson('Система отсчёта, путь, перемещение, скорость','Тело отсчёта, система координат, время, траектория, путь, перемещение, скорость.','Система отсчёта'),
+      makeLesson('Равномерное движение и графики движения','Равномерное прямолинейное движение, формула скорости, графики координаты, пути и скорости.','Равномерное движение'),
+      makeLesson('Равноускоренное движение и свободное падение','Ускорение, начальная и конечная скорость, движение с постоянным ускорением, свободное падение.','Равноускоренное движение'),
+      makeLesson('Движение по окружности','Период, частота, скорость движения по окружности, центростремительное ускорение.'),
+      makeLesson('Масса, плотность, сила','Масса тела, плотность вещества, сила как векторная величина, сложение сил.'),
+      makeLesson('Законы Ньютона и силы в природе','Инерция, первый, второй и третий законы Ньютона, взаимодействие тел.','Законы Ньютона'),
+      makeLesson('Трение, упругость, сила тяжести и вес тела','Сила трения, сила упругости, закон Гука, сила тяжести, вес тела, невесомость.'),
+      makeLesson('Импульс и закон сохранения импульса','Импульс тела, импульс системы тел, замкнутая система, реактивное движение.','Импульс. Закон сохранения'),
+      makeLesson('Работа, мощность и энергия','Механическая работа, мощность, кинетическая и потенциальная энергия.','Работа и мощность'),
+      makeLesson('Закон сохранения механической энергии','Превращение энергии, сохранение энергии без трения, потери энергии при наличии трения.','Энергия. ЗСЭ'),
+      makeLesson('Простые механизмы: рычаг, блоки, КПД','Рычаг, момент силы, неподвижный и подвижный блок, золотое правило механики, КПД.'),
+      makeLesson('Давление, закон Паскаля и гидравлический пресс','Давление твёрдых тел, давление жидкости и газа, атмосферное давление, закон Паскаля.'),
+      makeLesson('Архимедова сила и плавание тел','Выталкивающая сила, условие плавания тел, плавание судов и воздухоплавание.'),
+      makeLesson('Колебания, волны и звук','Амплитуда, период, частота, механические волны, звук, инфразвук и ультразвук.'),
+      makeLesson('Обобщение по механике в формате ОГЭ','Типовые задания ОГЭ по механике, разбор ошибок, тренировка.')
+    ]},
+    {name:'Тепловые явления',open:true,lessons:[
+      makeLesson('Строение вещества и агрегатные состояния','Молекулы, твёрдые тела, жидкости, газы, модели строения вещества.','Основы МКТ'),
+      makeLesson('Температура, тепловое движение и диффузия','Связь температуры со скоростью движения частиц, броуновское движение, диффузия.'),
+      makeLesson('Внутренняя энергия и способы её изменения','Внутренняя энергия, работа, теплопередача.'),
+      makeLesson('Виды теплопередачи','Теплопроводность, конвекция, излучение, примеры из жизни и техники.'),
+      makeLesson('Количество теплоты и удельная теплоёмкость','Нагревание и охлаждение тел, формула Q = cmΔt.'),
+      makeLesson('Тепловой баланс','Закон сохранения энергии в тепловых процессах, уравнение теплового баланса.'),
+      makeLesson('Плавление, кристаллизация, испарение и кипение','Фазовые переходы, удельная теплота плавления, удельная теплота парообразования.'),
+      makeLesson('Влажность воздуха','Испарение, конденсация, влажность воздуха, практические примеры.'),
+      makeLesson('Топливо, тепловые двигатели и КПД','Удельная теплота сгорания топлива, тепловые машины, КПД теплового двигателя.','КПД тепловых машин'),
+      makeLesson('Графики тепловых процессов','Графики нагревания, плавления, кипения, охлаждения и кристаллизации.'),
+      makeLesson('Обобщение по тепловым явлениям в формате ОГЭ','Типовые задания ОГЭ по тепловым явлениям.')
+    ]},
+    {name:'Электричество',open:true,lessons:[
+      makeLesson('Электризация, заряд и электрическое поле','Электризация тел, два вида зарядов, взаимодействие зарядов, электрическое поле.','Закон Кулона'),
+      makeLesson('Проводники, диэлектрики и электрический ток','Носители заряда, условия существования тока, действия электрического тока.'),
+      makeLesson('Сила тока, напряжение и сопротивление','Основные величины электрической цепи, амперметр, вольтметр, резистор.'),
+      makeLesson('Закон Ома для участка цепи','Зависимость силы тока от напряжения и сопротивления, расчётные задачи.','Закон Ома. Цепи'),
+      makeLesson('Последовательное и параллельное соединение проводников','Правила для силы тока, напряжения и сопротивления при разных соединениях.'),
+      makeLesson('Работа и мощность электрического тока','Формулы работы и мощности тока, электрическая энергия, расчёты.'),
+      makeLesson('Закон Джоуля–Ленца','Тепловое действие тока, количество теплоты в проводнике.'),
+      makeLesson('Расчёт электрических цепей в ОГЭ','Смешанные соединения, схемы, таблицы, типовые задачи ОГЭ.')
+    ]},
+    {name:'Магнитные явления',open:true,lessons:[
+      makeLesson('Магнитное поле и постоянные магниты','Магнитные полюса, взаимодействие магнитов, линии магнитного поля.','Магнитное поле'),
+      makeLesson('Магнитное поле тока. Опыт Эрстеда','Магнитное поле прямого проводника с током, направление линий магнитного поля.'),
+      makeLesson('Действие магнитного поля на проводник с током','Сила, действующая на проводник с током в магнитном поле, применение в технике.'),
+      makeLesson('Электромагнитная индукция. Опыты Фарадея','Возникновение индукционного тока, изменение магнитного поля, правило Ленца.'),
+      makeLesson('Электромагнитные волны','Электромагнитные волны, шкала электромагнитных волн, применение.')
+    ]},
+    {name:'Оптика',open:true,lessons:[
+      makeLesson('Световой луч и прямолинейное распространение света','Лучевая модель света, тень, полутень, источники света.'),
+      makeLesson('Отражение света. Плоское зеркало','Закон отражения света, построение изображения в плоском зеркале.','Закон отражения'),
+      makeLesson('Преломление света','Переход света из одной среды в другую, закон преломления, показатель преломления.','Закон преломления'),
+      makeLesson('Дисперсия света','Разложение белого света, спектр, примеры дисперсии.'),
+      makeLesson('Линзы и построение изображений','Собирающая и рассеивающая линзы, фокус, фокусное расстояние, оптическая сила.','Линзы'),
+      makeLesson('Глаз и оптические приборы','Глаз как оптическая система, очки, лупа, фотоаппарат, микроскоп.'),
+      makeLesson('Обобщение по оптике в формате ОГЭ','Типовые задания ОГЭ по оптике.')
+    ]},
+    {name:'Квантовые явления',open:true,lessons:[
+      makeLesson('Радиоактивность. Альфа-, бета-, гамма-излучения','Виды радиоактивного излучения, свойства излучений.'),
+      makeLesson('Атом, ядро и изотопы','Опыты Резерфорда, планетарная модель атома, состав ядра, изотопы.'),
+      makeLesson('Ядерные реакции и законы сохранения','Альфа- и бета-распад, сохранение массового и зарядового чисел.'),
+      makeLesson('Период полураспада','Смысл периода полураспада, простые расчёты и графики.'),
+      makeLesson('Обобщение по квантовым явлениям','Задания ОГЭ по квантовым явлениям.')
+    ]},
+    {name:'Эксперимент ОГЭ',open:true,lessons:[
+      makeLesson('Измерительные приборы и цена деления','Линейка, мензурка, весы, динамометр, термометр, амперметр, вольтметр.'),
+      makeLesson('Механические лабораторные работы','Измерение плотности, архимедовой силы, жёсткости пружины, коэффициента трения.'),
+      makeLesson('Электрические лабораторные работы','Измерение сопротивления, мощности тока, исследование закона Ома.'),
+      makeLesson('Оптические лабораторные работы','Измерение фокусного расстояния и оптической силы собирающей линзы.'),
+      makeLesson('Задания 15–17 ОГЭ','Работа с приборами, анализ эксперимента, оформление экспериментального задания.')
+    ]},
+    {name:'Работа с текстом и качественные задачи',open:true,lessons:[
+      makeLesson('Как читать физический текст','Выделение главной информации, причинно-следственные связи, физические термины.'),
+      makeLesson('Как объяснять физические явления','Структура ответа: явление, причина, закон, вывод.'),
+      makeLesson('Качественные задачи по механике и тепловым явлениям','Объяснение процессов без сложных расчётов.'),
+      makeLesson('Качественные задачи по электричеству, магнетизму и оптике','Объяснение электромагнитных и оптических явлений.'),
+      makeLesson('Задания 18–19 ОГЭ','Работа с текстом физического содержания и развёрнутые качественные ответы.')
+    ]},
+    {name:'Итоговая подготовка',open:true,lessons:[
+      makeLesson('Разбор демоверсии ОГЭ','Структура варианта, стратегия выполнения, распределение времени.'),
+      makeLesson('Типовые ошибки на ОГЭ по физике','Ошибки в единицах, формулах, графиках, расчётах и объяснениях.'),
+      makeLesson('Варианты Камзеевой 1–10','Тренировка на первых десяти вариантах.'),
+      makeLesson('Варианты Камзеевой 11–20','Тренировка на вариантах среднего блока.'),
+      makeLesson('Варианты Камзеевой 21–30','Итоговая тренировка по вариантам.'),
+      makeLesson('Финальный пробник','Полный вариант ОГЭ с проверкой и разбором.')
+    ]}
   ]},
   'ege-phy':{name:'ЕГЭ · Физика',tag:'Физика',cls:'tp',type:'phy',modules:[
         {name:'Кинематика',open:true,lessons:['Система отсчёта','Равномерное движение','Равноускоренное движение','Свободное падение','Относительность движения','Движение по окружности']},
@@ -2460,8 +2554,14 @@ function gld(){if(!LD[lk()])LD[lk()]={videos:[],questions:[{text:'',type:'choice
 const TH={};
 function getTH(){
   if(!TH[lk()]){
-    const name=COURSES[AC].modules[CM].lessons[CL];
-    TH[lk()]=THEORY[name]?JSON.parse(JSON.stringify(THEORY[name])):defaultTheory();
+    const lesson=getLessonObject(AC,CM,CL);
+    const name=lessonTitle(lesson);
+    const desc=lessonDescription(lesson);
+    let source=null;
+    if(Array.isArray(lesson.theory)) source=lesson.theory;
+    else if(typeof lesson.theory==='string'&&THEORY[lesson.theory]) source=THEORY[lesson.theory];
+    else if(THEORY[name]) source=THEORY[name];
+    TH[lk()]=source?JSON.parse(JSON.stringify(source)):defaultTheory(name,desc);
   }
   return TH[lk()];
 }
@@ -2920,7 +3020,7 @@ function normalizeLessonTaskToConstructorQuestion(t,meta){const answer=t&&t.ans!
 function normalizeLessonQuestionToConstructorQuestion(q,meta){if((q?.type||'')==='choice'){return {id:'course-task-'+Math.random().toString(36).slice(2,9),exam:meta.exam,subject:meta.subject,section:meta.section,contentTopic:meta.contentTopic,lessonTitle:meta.lessonTitle,sourceType:'lesson-test',type:'single',text:q.text||'',points:1,difficulty:'Базовый',options:(q.opts||[]).map((o,i)=>({id:'o'+(i+1),text:o||'',correct:Number(q.correct)===i})),correctAnswer:null,explanation:q.explanation||'',source:`Курс ФИЗМАТ · Тесты · ${meta.lessonTitle}`,imageUrl:q.imageUrl||'',courseMeta:meta};}
 const ans=q?.answer??''; const t=toQuestionTypeByAnswer(ans); return {id:'course-task-'+Math.random().toString(36).slice(2,9),exam:meta.exam,subject:meta.subject,section:meta.section,contentTopic:meta.contentTopic,lessonTitle:meta.lessonTitle,sourceType:'lesson-test',type:t,text:q?.text||'',points:1,difficulty:'Базовый',options:[],correctAnswer:t==='number'?{value:String(ans),tolerance:''}:{value:String(ans),caseSensitive:false},explanation:q?.explanation||'',source:`Курс ФИЗМАТ · Тесты · ${meta.lessonTitle}`,imageUrl:q?.imageUrl||'',courseMeta:meta};}
 function normalizeSpecialTestToConstructorQuestion(item,meta){if(!item||!item.prompt||!Array.isArray(item.variants)) return null; return {id:'course-task-'+Math.random().toString(36).slice(2,9),exam:meta.exam,subject:meta.subject,section:meta.section,contentTopic:meta.contentTopic,lessonTitle:meta.lessonTitle,sourceType:'special-test',type:'single',text:item.prompt,points:1,difficulty:'Базовый',options:item.variants.map((v,i)=>({id:'o'+(i+1),text:(v&&v.text)||String(v||''),correct:Number(item.correct)===i})),correctAnswer:null,explanation:item.explanation||'',source:`Курс ФИЗМАТ · Спецтест · ${meta.lessonTitle}`,imageUrl:item.imageUrl||'',courseMeta:meta};}
-function buildCourseTaskBank(){const bank=[]; Object.entries(COURSES||{}).forEach(([courseKey,c])=>{(c.modules||[]).forEach((m,mi)=>{(m.lessons||[]).forEach((ld,li)=>{const meta={courseKey,moduleIndex:mi,lessonIndex:li,sourceType:'lesson-task',exam:c.exam||'ЕГЭ',subject:c.subject||'Физика',section:m.name||'Раздел',contentTopic:ld.title||'Тема',lessonTitle:ld.title||'Тема'}; (ld.tasks||[]).forEach(t=>bank.push(normalizeLessonTaskToConstructorQuestion(t,meta))); (ld.questions||[]).forEach(q=>bank.push(normalizeLessonQuestionToConstructorQuestion(q,{...meta,sourceType:'lesson-test'}))); (ld.specialTests||[]).forEach(st=>{const n=normalizeSpecialTestToConstructorQuestion(st,{...meta,sourceType:'special-test'}); if(n) bank.push(n);});});});}); return bank;}
+function buildCourseTaskBank(){const bank=[]; Object.entries(COURSES||{}).forEach(([courseKey,c])=>{(c.modules||[]).forEach((m,mi)=>{(m.lessons||[]).forEach((ld,li)=>{const meta={courseKey,moduleIndex:mi,lessonIndex:li,sourceType:'lesson-task',exam:c.exam||'ЕГЭ',subject:c.subject||'Физика',section:m.name||'Раздел',contentTopic:lessonTitle(ld)||'Тема',lessonTitle:lessonTitle(ld)||'Тема'}; (ld.tasks||[]).forEach(t=>bank.push(normalizeLessonTaskToConstructorQuestion(t,meta))); (ld.questions||[]).forEach(q=>bank.push(normalizeLessonQuestionToConstructorQuestion(q,{...meta,sourceType:'lesson-test'}))); (ld.specialTests||[]).forEach(st=>{const n=normalizeSpecialTestToConstructorQuestion(st,{...meta,sourceType:'special-test'}); if(n) bank.push(n);});});});}); return bank;}
 function renderGeneratorTopicRows(){const mount=document.getElementById('generatorTopicRows'); if(!mount) return; const f=generatorState.filters; const grouped={}; generatorState.courseBank.filter(x=>(!f.exam||x.exam===f.exam)&&(!f.subject||x.subject===f.subject)&&(!f.section||x.section===f.section)&&((f.source==='all')||(f.source==='tasks'&&x.sourceType==='lesson-task')||(f.source==='tests'&&x.sourceType!=='lesson-task'))).forEach(x=>{const k=[x.exam,x.subject,x.section,x.contentTopic].join('|'); (grouped[k]||(grouped[k]={exam:x.exam,subject:x.subject,section:x.section,topic:x.contentTopic,items:[]})).items.push(x);}); const keys=Object.keys(grouped); if(!keys.length){mount.innerHTML='<div class="generator-empty">В выбранном разделе пока нет заданий для генерации.</div>'; updateGeneratorSummary(); return;} mount.innerHTML=keys.map(k=>{const g=grouped[k],avail=g.items.length,sel=Math.min(generatorState.selection[k]||0,avail); generatorState.selection[k]=sel; return `<div class="generator-topic-row"><div class="generator-topic-main"><div class="generator-topic-title">${escapeHtml(g.topic)}</div><div class="generator-topic-meta">${escapeHtml(g.exam+' · '+g.subject+' · '+g.section)} · Доступно: ${avail} заданий</div></div><div class="generator-count"><button class="generator-minus" ${avail? '':'disabled'} onclick="updateGeneratorTopicCount('${k}',-1)">-</button><input value="${sel}" style="width:44px;text-align:center" readonly><button class="generator-plus" ${avail? '':'disabled'} onclick="updateGeneratorTopicCount('${k}',1)">+</button></div></div>`;}).join(''); updateGeneratorSummary(); }
 function updateGeneratorTopicCount(k,d){const max=(document.querySelectorAll('.generator-topic-row').length, (()=>{const [exam,subject,section,topic]=k.split('|'); return generatorState.courseBank.filter(x=>x.exam===exam&&x.subject===subject&&x.section===section&&x.contentTopic===topic).length;})()); const cur=generatorState.selection[k]||0; generatorState.selection[k]=Math.max(0,Math.min(max,cur+d)); renderGeneratorTopicRows();}
 function selectOneFromEveryTopic(){Object.keys(generatorState.selection).forEach(k=>generatorState.selection[k]=Math.max(1,generatorState.selection[k]||0)); renderGeneratorTopicRows();}
@@ -3017,7 +3117,7 @@ function parseCourseRoute(hash){
     } else if(parts[i] === 't'){
       hasTab = true;
       const parsedTab = parts[i + 1] ? safeDecodeRoutePart(parts[i + 1]) : '';
-      tabId = isValidCourseTab(parsedTab) ? parsedTab : null;
+      tabId = isValidCourseTab(parsedTab) ? normalizeCourseTab(parsedTab) : null;
       i += 1;
     }
   }
@@ -3250,10 +3350,13 @@ const LAST_COURSE_LESSON_STORAGE_KEY = 'fizmat_last_course_lesson';
 const COURSE_SCROLL_STORAGE_KEY = 'fizmat_course_scroll_positions';
 const ACTIVE_LAB_STORAGE_KEY = 'fizmat_active_lab_state';
 const COURSE_TABS = ['theory','tasks','sims','lab','video','tests','hw'];
+const COURSE_TAB_ALIASES = {simulators:'sims',labs:'lab',laboratory:'lab',homework:'hw'};
+function normalizeCourseTab(tabId){return COURSE_TAB_ALIASES[tabId]||tabId;}
 function isValidCourseTab(tabId){
-  return COURSE_TABS.includes(tabId);
+  return COURSE_TABS.includes(normalizeCourseTab(tabId));
 }
 function getCourseTabActiveClass(tabId){
+  tabId=normalizeCourseTab(tabId);
   if(tabId === 'tasks') return 'active-ptasks';
   if(tabId === 'sims') return 'active-psims';
   if(tabId === 'lab') return 'active-plab';
@@ -3261,7 +3364,7 @@ function getCourseTabActiveClass(tabId){
 }
 function getCourseRoute(courseKey,moduleIndex,lessonIndex,tabId){
   const safeCourseKey = encodeURIComponent(courseKey || '');
-  const safeTabId = isValidCourseTab(tabId) ? tabId : 'theory';
+  const safeTabId = isValidCourseTab(tabId) ? normalizeCourseTab(tabId) : 'theory';
   return `#course/${safeCourseKey}/m/${moduleIndex}/l/${lessonIndex}/t/${safeTabId}`;
 }
 function getCurrentCourseRoute(){
@@ -3412,7 +3515,7 @@ function saveLastCourseLesson(courseKey,moduleIndex,lessonIndex,tabId){
   if(!courseKey) return;
   try{
     const data = readLastCourseLessons();
-    data[courseKey] = {module:moduleIndex, lesson:lessonIndex, tab:isValidCourseTab(tabId) ? tabId : 'theory'};
+    data[courseKey] = {module:moduleIndex, lesson:lessonIndex, tab:isValidCourseTab(tabId) ? normalizeCourseTab(tabId) : 'theory'};
     localStorage.setItem(LAST_COURSE_LESSON_STORAGE_KEY, JSON.stringify(data));
   }catch(err){
     console.warn('Не удалось сохранить последний урок курса:', err);
@@ -3426,7 +3529,7 @@ function getSavedCourseLesson(courseKey,c){
   if(!saved) return null;
   const moduleIndex = Number(saved.module);
   const lessonIndex = Number(saved.lesson);
-  const tabId = isValidCourseTab(saved.tab) ? saved.tab : null;
+  const tabId = isValidCourseTab(saved.tab) ? normalizeCourseTab(saved.tab) : null;
   return isValidCourseLesson(c,moduleIndex,lessonIndex) ? {moduleIndex,lessonIndex,tabId} : null;
 }
 function getSavedCourseTabForLesson(courseKey,moduleIndex,lessonIndex){
@@ -3435,7 +3538,7 @@ function getSavedCourseTabForLesson(courseKey,moduleIndex,lessonIndex){
   if(!saved) return null;
   const savedModuleIndex = Number(saved.module);
   const savedLessonIndex = Number(saved.lesson);
-  return savedModuleIndex === moduleIndex && savedLessonIndex === lessonIndex && isValidCourseTab(saved.tab) ? saved.tab : null;
+  return savedModuleIndex === moduleIndex && savedLessonIndex === lessonIndex && isValidCourseTab(saved.tab) ? normalizeCourseTab(saved.tab) : null;
 }
 function resolveCourseLesson(courseKey,c,moduleIndex,lessonIndex,tabId){
   const saved = getSavedCourseLesson(courseKey,c);
@@ -3461,7 +3564,7 @@ function resolveCourseLesson(courseKey,c,moduleIndex,lessonIndex,tabId){
 
   // tabId from the URL always has priority over localStorage.
   if(isValidCourseTab(tabId)){
-    selected.tabId = tabId;
+    selected.tabId = normalizeCourseTab(tabId);
   } else {
     const savedMatchesLesson =
       saved &&
@@ -3553,10 +3656,10 @@ function renderSb(){
   h=`<div class="sb-top"><span class="sb-lbl">Содержание</span></div>`;
   c.modules.forEach((m,mi)=>{
     let lh=m.open?m.lessons.map((l,li)=>{
-      const act=mi===CM&&li===CL,idx=n++;
+      const act=mi===CM&&li===CL,idx=n++,title=lessonTitle(l);
       return`<div class="lli${act?' active':''}" data-mi="${mi}" data-li="${li}" onclick="selL(event,${mi},${li})">
         <span class="lnum">${idx}</span>
-        <span class="lni">${l}</span>
+        <span class="lni">${title}</span>
       </div>`;
     }).join(''):'';
     if(!m.open)n+=m.lessons.length;
@@ -3590,12 +3693,13 @@ function togM(mi){COURSES[AC].modules[mi].open=!COURSES[AC].modules[mi].open;ren
 
 /* ============ CONTENT ============ */
 function renderContent(){
-  const c=COURSES[AC],name=c.modules[CM].lessons[CL],ld=gld();
+  const c=COURSES[AC],lesson=getLessonObject(AC,CM,CL),name=lessonTitle(lesson),desc=lessonDescription(lesson),ld=gld();
   document.getElementById('cpCon').innerHTML=`
     <div class="lt-row">
       <div class="lt-inp">${name}</div>
     </div>
     <div class="lmeta">${c.modules[CM].name} · ${c.name}</div>
+    ${desc?`<div style="margin:8px 0 18px;color:var(--gray);font-size:14px;line-height:1.6">${desc}</div>`:''}
     <div class="cp-stats">
       <div class="cps"><div class="cpsv">${ld.videos.length}</div><div class="cpsl">видео</div></div>
       <div class="cps"><div class="cpsv">${ld.questions.length}</div><div class="cpsl">вопросов</div></div>
@@ -3621,6 +3725,7 @@ function renderContent(){
 }
 function showTab(id,btn,colorClass){
   if(!isValidCourseTab(id)) id='theory';
+  id=normalizeCourseTab(id);
 
   if(id !== 'lab'){
     clearActiveLabState();
@@ -3727,7 +3832,7 @@ function delVid(i){gld().videos.splice(i,1);reTab('video')}
 
 /* ============ TESTS ============ */
 function renderTests(ld){
-  const lessonName=COURSES[AC].modules[CM].lessons[CL];
+  const lessonName=lessonTitle(getLessonObject(AC,CM,CL));
   const special=renderSpecialLessonTests(lessonName);
   if(!EMODE){
     return special || '<div class="emp">Тесты для этого урока пока не добавлены</div>';
@@ -3817,7 +3922,7 @@ function specialTestHide(btn){
 
 /* ============ HW ============ */
 function renderHW(ld){
-  const lessonName=COURSES[AC].modules[CM].lessons[CL];
+  const lessonName=lessonTitle(getLessonObject(AC,CM,CL));
   const items=LESSON_HOMEWORK[lessonName]||[];
   const cards=items.length?`<div style="font-size:12px;color:var(--gray);margin-bottom:14px">Ниже размещена карточка домашнего задания для учеников. После выполнения можно сразу загрузить работу.</div>${items.map(function(item,index){
     const sid='hwCard_'+index;
@@ -5388,7 +5493,7 @@ function saveBlankTaskBlocks(store){
   catch(err){console.warn('Не удалось сохранить пустые блоки задач в localStorage:',err);}
 }
 function lessonTaskDomId(id){return String(id||'').replace(/[^a-zA-Z0-9_-]/g,'_');}
-function lessonTaskCurrentName(){try{return COURSES[AC].modules[CM].lessons[CL];}catch(err){return'';}}
+function lessonTaskCurrentName(){try{return lessonTitle(getLessonObject(AC,CM,CL));}catch(err){return'';}}
 function normalizeBlankTaskBlock(task,i){
   const t=Object.assign({},task||{});
   t.num=Number(t.num)||i+1;
