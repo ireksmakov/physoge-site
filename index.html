@@ -5734,6 +5734,21 @@ function renderSolutionImageHtml(path,alt,cls){
   const wrapClass=cls==='task-board'?'task-board-photo-wrap':'pt-photo-wrap';
   return `<div class="${wrapClass}"><img class="${imgClass}" src="${safePath}" alt="${safeAlt}" onerror="handleSolutionImageError(this)"><div class="pt-img-fallback">Изображение решения пока не найдено</div></div>`;
 }
+function getFirstSolutionImageFromHtml(html){
+  const source=String(html||'');
+  if(!source.trim()) return null;
+  const match=source.match(/<img\b[^>]*\bsrc=["']([^"']+)["'][^>]*>/i);
+  if(!match||!match[1]) return null;
+  const altMatch=match[0].match(/\balt=["']([^"']*)["']/i);
+  return {src:match[1],alt:altMatch?altMatch[1]:''};
+}
+function getTaskCardSolutionImage(task){
+  if(!task) return null;
+  if(task.solutionImage){
+    return {src:String(task.solutionImage),alt:String(task.solutionTitle||task.title||'Решение задачи')};
+  }
+  return getFirstSolutionImageFromHtml(task.solutionHtml);
+}
 
 
 
@@ -6947,13 +6962,19 @@ function getEmbeddedSolutionHtml(task){
   return task.solutionHtml||'';
 }
 function renderTaskBoardSolution(task){
-  const embeddedRaw=(hasFilledTaskSolution(task)||hasLegacyTaskTextSolution(task))?renderTaskSolutionPanel(task,'task-board'):(task.boardSolutionHtml || task.solutionHtml || getEmbeddedSolutionHtml(task));
-  const embedded=String(embeddedRaw||'').trim();
-  if(embedded){
-    return `<div class="task-board-rich">${embedded}</div>`;
+  const cardImage=getTaskCardSolutionImage(task);
+  if(cardImage&&cardImage.src){
+    return renderSolutionImageHtml(cardImage.src,cardImage.alt||task.title||'Решение задачи','task-board');
   }
-  if(task.solutionImage){
-    return renderSolutionImageHtml(task.solutionImage,task.title||'Решение задачи','task-board');
+  const hasStructuredSolution=hasFilledTaskSolution(task)||hasLegacyTaskTextSolution(task);
+  const inlineRaw=hasStructuredSolution?renderTaskSolutionPanel(task,'task-board'):(task.solutionHtml||getEmbeddedSolutionHtml(task));
+  const inline=String(inlineRaw||'').trim();
+  if(inline){
+    return `<div class="task-board-rich">${inline}</div>`;
+  }
+  const boardOnly=String(task.boardSolutionHtml||'').trim();
+  if(boardOnly){
+    return `<div class="task-board-rich">${boardOnly}</div>`;
   }
   const steps=(task.steps||[]).map(function(step,index){
     return `<div class="task-board-step"><div class="task-board-step-num">${index+1}</div><div class="task-board-step-body">${step}</div></div>`;
