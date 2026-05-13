@@ -5859,7 +5859,6 @@ function renderPTasks(name){
     const photoId='ptPhoto_'+i;
     const isBlank=!!t.isBlank;
     const cond=t.cond?String(t.cond):(isBlank&&EMODE?'<div class="pt-empty-text">Пустой блок задачи. Условие будет добавлено через Codex.</div>':'');
-    const given=t.given?`<div class="pt-given">${t.given}</div>`:'';
     const steps=(t.steps||[]).map((s,j)=>`<div class="sr-step"><div class="sr-snum">${j+1}</div><div class="sr-sbody">${s}</div></div>`).join('');
     const extra=t.extraHtml?`<div class="pt-extra">${t.extraHtml}</div>`:'';
     const taskId=String(t.id||'');
@@ -5877,7 +5876,7 @@ function renderPTasks(name){
     const fallbackSolution=!embedded&&!imageOnly&&!steps&&!extra&&!answer?'<div class="pt-empty-text">Решение пока не добавлено.</div>':'';
     const solutionInner=(embedded||imageOnly)?`${rich}${extra}${answer}`:`${steps}${extra}${answer}${fallbackSolution}`;
     const emptySolution=!String(solutionInner||'').trim();
-    return `<div class="pt-card${isBlank?' pt-blank-card':''}"><div class="pt-head"><div class="pt-num">${String(t.num).padStart(2,'0')}</div><span class="pt-level ${lvlC[t.level]||lvlC[1]}">${lvlL[t.level]||lvlL[1]}</span><span class="pt-exam">${t.exam||'ЕГЭ'}</span><span class="pt-title">${t.title||'Новая задача'}</span></div><div class="pt-body"><div class="pt-condition">${cond}${given}</div><div class="pt-side">${boardBtn}<button class="pt-sol-btn" data-empty-solution="${emptySolution?'1':'0'}" onclick="ptToggle('${sid}',this)">▶ Решение</button></div></div><div class="pt-solution" id="${sid}">${solutionInner}</div></div>`;
+    return `<div class="pt-card${isBlank?' pt-blank-card':''}"><div class="pt-head"><div class="pt-num">${String(t.num).padStart(2,'0')}</div><span class="pt-level ${lvlC[t.level]||lvlC[1]}">${lvlL[t.level]||lvlL[1]}</span><span class="pt-exam">${t.exam||'ЕГЭ'}</span><span class="pt-title">${t.title||'Новая задача'}</span></div><div class="pt-body"><div class="pt-condition">${cond}</div><div class="pt-side">${boardBtn}<button class="pt-sol-btn" data-empty-solution="${emptySolution?'1':'0'}" onclick="ptToggle('${sid}',this)">▶ Решение</button></div></div><div class="pt-solution" id="${sid}">${solutionInner}</div></div>`;
   }
   const hasGroups=tasks.some(t=>t&&t.group);
   if(hasGroups){
@@ -6526,9 +6525,6 @@ function getTaskConditionHtml(task){
     parts.push(String(task.cond));
   }
 
-  if(task.given){
-    parts.push(String(task.given));
-  }
 
   const html=parts.join('<br>');
 
