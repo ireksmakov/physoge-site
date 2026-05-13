@@ -5436,64 +5436,33 @@ const LESSON_TASKS={
   {
     id:'lesson12-task07',
     num:7,level:3,exam:'ЕГЭ (2 балла)',points:2,title:'Маятник после удара',
-    boardMode:'task07-pendulum-impact',
+    boardMode:'task07-pendulum-impact',graphLabel:'Схема',hasAnimation:true,
     tags:['импульс','энергия','маятник','ЕГЭ','сложный'],
     cond:'Маятник состоит из маленького груза массой M = 200 г и очень легкой нити подвеса длиной L = 1,25 м. Он висит в состоянии покоя в вертикальном положении. В груз ударяется небольшое тело массой m = 100 г, летевшее в горизонтальном направлении со скоростью v = 10 м/с. После удара тело останавливается и падает вертикально вниз. На какой максимальный угол α маятник отклонится от положения равновесия после удара?',
     given:'M = 200 г = 0,2 кг<br>m = 100 г = 0,1 кг<br>L = 1,25 м<br>v = 10 м/с<br>g = 10 м/с²<br>после удара малое тело останавливается<br><span class="pt-find">Найти: α — максимальный угол отклонения маятника</span>',
-    solutionImage: "images/task-07-pendulum-impact-solution-card.png",
-    schemeHtml:`
-      <section class="pt-task-scheme" aria-label="Схема задачи 07">
-        <h3 class="pt-task-scheme-title">Схема задачи</h3>
-        <p class="pt-task-scheme-caption">Сначала используем закон сохранения импульса, затем — закон сохранения энергии.</p>
-        <div class="pt-task-scheme-figure">
-          <svg class="pt-task-scheme-svg" viewBox="0 0 880 360" role="img" aria-label="Тело ударяет груз маятника, после удара груз поднимается на угол альфа">
-            <defs>
-              <marker id="arrow07" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L8,3 L0,6 Z" fill="#08d8ff"/></marker>
-              <marker id="arrow07o" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L8,3 L0,6 Z" fill="#ff8c00"/></marker>
-              <filter id="glow07"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-            </defs>
-            <rect width="880" height="360" fill="#050c16"/>
-            <path d="M40 285 H840" stroke="rgba(138,155,178,.32)" stroke-width="2" stroke-dasharray="10 8"/>
-            <text x="70" y="42" fill="#8a9bb2" font-size="15" font-weight="700">До удара</text>
-            <text x="374" y="42" fill="#8a9bb2" font-size="15" font-weight="700">Момент взаимодействия</text>
-            <text x="662" y="42" fill="#8a9bb2" font-size="15" font-weight="700">После удара</text>
-            <line x1="218" y1="70" x2="218" y2="206" stroke="#dbeafe" stroke-width="3"/>
-            <circle cx="218" cy="70" r="6" fill="#dbeafe"/>
-            <circle cx="218" cy="218" r="30" fill="#ff8c00" stroke="#ffd29a" stroke-width="3" filter="url(#glow07)"/>
-            <text x="209" y="224" fill="#020914" font-size="17" font-weight="900">M</text>
-            <circle cx="96" cy="218" r="21" fill="#08d8ff" stroke="#a7f3ff" stroke-width="3"/>
-            <text x="90" y="224" fill="#020914" font-size="16" font-weight="900">m</text>
-            <line x1="122" y1="218" x2="178" y2="218" stroke="#08d8ff" stroke-width="5" marker-end="url(#arrow07)"/>
-            <text x="136" y="198" fill="#08d8ff" font-size="18" font-weight="900">v</text>
-            <line x1="456" y1="70" x2="456" y2="206" stroke="#dbeafe" stroke-width="3"/>
-            <circle cx="456" cy="70" r="6" fill="#dbeafe"/>
-            <circle cx="456" cy="218" r="30" fill="#ff8c00" stroke="#ffd29a" stroke-width="3" filter="url(#glow07)"/>
-            <circle cx="401" cy="218" r="21" fill="#08d8ff" opacity=".95"/>
-            <path d="M423 197 L438 212 M423 239 L438 224 M441 190 L452 206 M441 246 L452 230" stroke="#fff7ed" stroke-width="3" stroke-linecap="round"/>
-            <text x="368" y="260" fill="#f2f8ff" font-size="14" font-weight="700">короткий удар</text>
-            <line x1="676" y1="70" x2="754" y2="206" stroke="#dbeafe" stroke-width="3"/>
-            <line x1="676" y1="70" x2="676" y2="236" stroke="rgba(219,234,254,.35)" stroke-width="2" stroke-dasharray="8 8"/>
-            <circle cx="676" cy="70" r="6" fill="#dbeafe"/>
-            <circle cx="754" cy="218" r="30" fill="#ff8c00" stroke="#ffd29a" stroke-width="3" filter="url(#glow07)"/>
-            <path d="M676 154 A74 74 0 0 1 716 90" fill="none" stroke="#08d8ff" stroke-width="3"/>
-            <text x="710" y="142" fill="#08d8ff" font-size="18" font-weight="900">α</text>
-            <line x1="720" y1="235" x2="762" y2="193" stroke="#ff8c00" stroke-width="5" marker-end="url(#arrow07o)"/>
-            <text x="704" y="260" fill="#ff8c00" font-size="16" font-weight="900">движение груза</text>
-            <text x="50" y="324" fill="#dbeafe" font-size="15">m = 0,1 кг, v = 10 м/с</text>
-            <text x="352" y="324" fill="#dbeafe" font-size="15">mv = Mu</text>
-            <text x="634" y="324" fill="#dbeafe" font-size="15">Mu²/2 = MgL(1−cos α)</text>
-          </svg>
-        </div>
-      </section>`,
-    solutionTitle:'Решение задачи 07. Маятник после удара',
-    steps:[
-      `Во время короткого удара учитываем горизонтальный импульс: малое тело массой <span class="fml">m</span> после удара останавливается, поэтому весь его начальный импульс получает груз маятника:<div class="sr-fml">mv = Mu</div>`,
-      `Находим скорость груза маятника сразу после удара:<div class="sr-fml">u = ${mFrac('mv','M')} = ${mFrac('0,1 · 10','0,2')} = 5 м/с</div>`,
-      `После удара механическая энергия груза маятника сохраняется: кинетическая энергия переходит в потенциальную энергию подъёма:<div class="sr-fml">${mFrac('Mu<sup>2</sup>','2')} = MgL(1 − cos α)</div>`,
-      `Сокращаем массу груза и выражаем косинус угла:<div class="sr-fml">cos α = 1 − ${mFrac('u<sup>2</sup>','2gL')}</div>`,
-      `Подставляем числа:<div class="sr-fml">cos α = 1 − ${mFrac('5<sup>2</sup>','2 · 10 · 1,25')} = 1 − ${mFrac('25','25')} = 0</div>`,
-      `Если <span class="fml">cos α = 0</span>, то максимальный угол отклонения маятника от вертикали равен <span class="fml">90°</span>.`
-    ],
+    steps:[],
+    boardSolutionHtml:`
+      <div class="task-board-manual">
+        <div class="task-board-step"><div class="task-board-step-num">1</div><div class="task-board-step-body"><strong>Во время короткого удара учитываем горизонтальный импульс.</strong> Малое тело после удара останавливается, поэтому весь его начальный импульс получает груз маятника:
+          <div class="sr-fml">mv = Mu</div>
+        </div></div>
+        <div class="task-board-step"><div class="task-board-step-num">2</div><div class="task-board-step-body"><strong>Находим скорость груза сразу после удара.</strong>
+          <div class="sr-fml">u = ${mFrac('mv','M')} = ${mFrac('0,1·10','0,2')} = 5 м/с</div>
+        </div></div>
+        <div class="task-board-step"><div class="task-board-step-num">3</div><div class="task-board-step-body"><strong>После удара механическая энергия груза сохраняется.</strong> Кинетическая энергия переходит в потенциальную энергию подъёма:
+          <div class="sr-fml">${mFrac('Mu<sup>2</sup>','2')} = MgL(1 − cos α)</div>
+        </div></div>
+        <div class="task-board-step"><div class="task-board-step-num">4</div><div class="task-board-step-body"><strong>Выражаем угол отклонения.</strong>
+          <div class="sr-fml">cos α = 1 − ${mFrac('u<sup>2</sup>','2gL')} = 1 − ${mFrac('5<sup>2</sup>','2·10·1,25')} = 0</div>
+        </div></div>
+        <div class="task-board-step"><div class="task-board-step-num">5</div><div class="task-board-step-body"><strong>Ответ:</strong> максимальный угол отклонения маятника от вертикали равен <strong>90°</strong>.</div></div>
+      </div>`,
+    solutionHtml:`
+      <div class="pt-photo-wrap">
+        <img class="pt-photo-img" src="images/07.png" alt="Маятник после удара" onerror="handleSolutionImageError(this)">
+        <div class="pt-img-fallback">Изображение решения пока не найдено</div>
+      </div>`,
+    hideAnswer:true,
     ans:'α = 90°'
   },
   {
@@ -5503,67 +5472,24 @@ const LESSON_TASKS={
     tags:['импульс','энергия','движение по окружности','ЕГЭ','сложный'],
     cond:'Пробирка с каплей эфира подвешена на нити длиной <strong>1 м</strong>. С какой скоростью должна вылететь пробка после нагревания эфира, чтобы пробирка сделала полный оборот в вертикальной плоскости? Масса пробирки <strong>100 г</strong>, а пробки — <strong>20 г</strong>.',
     given:'L = 1 м<br>M = 100 г = 0,10 кг — масса пробирки<br>m = 20 г = 0,020 кг — масса пробки<br>g = 9,8 м/с² ≈ 10 м/с²<br><span class="pt-find">Найти: v — скорость вылета пробки</span>',
-    solutionImage:'images/zsi12_08.png',
-    schemeHtml:`
-      <section class="pt-task-scheme" aria-label="Схема задачи 08">
-        <h3 class="pt-task-scheme-title">Схема задачи</h3>
-        <p class="pt-task-scheme-caption">Схема помогает выбрать закон и правильно расставить направления величин.</p>
-        <div class="pt-task-scheme-figure">
-          <svg class="pt-task-scheme-svg" viewBox="0 0 880 360" role="img" aria-label="Пробирка с пробкой на нити: отдача и полный оборот">
-            <defs>
-              <marker id="arrow08c" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L8,3 L0,6 Z" fill="#08d8ff"/></marker>
-              <marker id="arrow08o" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L8,3 L0,6 Z" fill="#ff8c00"/></marker>
-            </defs>
-            <rect width="880" height="360" fill="#050c16"/>
-            <text x="66" y="42" fill="#8a9bb2" font-size="15" font-weight="700">До вылета пробки</text>
-            <text x="360" y="42" fill="#8a9bb2" font-size="15" font-weight="700">Отдача после нагревания</text>
-            <text x="654" y="42" fill="#8a9bb2" font-size="15" font-weight="700">Условие полного оборота</text>
-            <circle cx="160" cy="78" r="6" fill="#dbeafe"/><line x1="160" y1="78" x2="160" y2="220" stroke="#dbeafe" stroke-width="3"/>
-            <rect x="120" y="218" width="80" height="32" rx="16" fill="#ff8c00" stroke="#ffd29a" stroke-width="3"/>
-            <circle cx="202" cy="234" r="12" fill="#08d8ff" stroke="#a7f3ff" stroke-width="2"/>
-            <text x="116" y="282" fill="#dbeafe" font-size="14">система покоится</text>
-            <text x="122" y="306" fill="#dbeafe" font-size="14">L = 1 м</text>
-            <circle cx="454" cy="78" r="6" fill="#dbeafe"/><line x1="454" y1="78" x2="454" y2="220" stroke="#dbeafe" stroke-width="3"/>
-            <rect x="414" y="218" width="80" height="32" rx="16" fill="#ff8c00" stroke="#ffd29a" stroke-width="3"/>
-            <circle cx="518" cy="234" r="12" fill="#08d8ff" stroke="#a7f3ff" stroke-width="2"/>
-            <line x1="410" y1="234" x2="354" y2="234" stroke="#ff8c00" stroke-width="5" marker-end="url(#arrow08o)"/>
-            <line x1="532" y1="234" x2="596" y2="234" stroke="#08d8ff" stroke-width="5" marker-end="url(#arrow08c)"/>
-            <text x="352" y="215" fill="#ff8c00" font-size="17" font-weight="900">u</text>
-            <text x="570" y="215" fill="#08d8ff" font-size="17" font-weight="900">v</text>
-            <text x="384" y="286" fill="#dbeafe" font-size="15">M = 0,10 кг</text>
-            <text x="510" y="286" fill="#dbeafe" font-size="15">m = 0,020 кг</text>
-            <text x="390" y="315" fill="#dbeafe" font-size="16" font-weight="900">mv = Mu</text>
-            <circle cx="720" cy="186" r="88" fill="none" stroke="rgba(8,216,255,.45)" stroke-width="3" stroke-dasharray="9 7"/>
-            <circle cx="720" cy="186" r="6" fill="#dbeafe"/><line x1="720" y1="186" x2="720" y2="274" stroke="#dbeafe" stroke-width="3"/>
-            <rect x="682" y="272" width="76" height="30" rx="15" fill="#ff8c00" stroke="#ffd29a" stroke-width="3"/>
-            <line x1="682" y1="287" x2="626" y2="287" stroke="#ff8c00" stroke-width="5" marker-end="url(#arrow08o)"/>
-            <text x="616" y="308" fill="#ff8c00" font-size="16" font-weight="900">uₘᵢₙ</text>
-            <text x="676" y="90" fill="#dbeafe" font-size="14">верхняя точка</text>
-            <text x="620" y="326" fill="#dbeafe" font-size="15">uₘᵢₙ = √(5gL)</text>
-          </svg>
-        </div>
-      </section>`,
-    solutionTitle:'Решение задачи 08. Пробирка с каплей эфира',
-    steps:[
-      `После нагревания эфир выталкивает пробку, а пробирка получает скорость отдачи <span class="fml">u</span> в противоположную сторону. За короткое время вылета пробки внешним импульсом пренебрегаем, поэтому применяем закон сохранения импульса:<div class="sr-fml">m v = M u</div>`,
-      `Чтобы пробирка совершила полный оборот на нити длиной <span class="fml">L</span>, минимальная скорость в нижней точке должна удовлетворять условию вертикальной окружности:<div class="sr-fml">u_{min} = ${mSqrt('5gL')}</div>`,
-      `Это условие получается из энергии и минимального натяжения нити в верхней точке: <span class="fml">u^2 = v_{top}^2 + 4gL</span>, а при предельном полном обороте <span class="fml">v_{top}^2 = gL</span>.`,
-      `Подставляем длину нити:<div class="sr-fml">u_{min} = ${mSqrt('5 · 9,8 · 1')} = ${mSqrt('49')} = 7 м/с</div>`,
-      `Из закона сохранения импульса выражаем скорость пробки:<div class="sr-fml">v = ${mFrac('M','m')}u = ${mFrac('0,10','0,020')} · 7 = 35 м/с</div>`,
-      `Следовательно, пробка должна вылететь со скоростью не меньше <span class="fml">35 м/с</span>.`
-    ],
+    steps:[],
     boardSolutionHtml:`
       <div class="task-board-manual">
         <div class="task-board-step"><div class="task-board-step-num">1</div><div class="task-board-step-body"><strong>Короткий вылет пробки — это отдача.</strong> Система «пробирка + пробка» сначала покоится, поэтому импульсы после вылета равны по модулю и противоположны по направлению:
           <div class="sr-fml">m v = M u</div>
         </div></div>
         <div class="task-board-step"><div class="task-board-step-num">2</div><div class="task-board-step-body"><strong>Минимальная скорость пробирки внизу для полного оборота</strong> находится по условию вертикальной окружности:
-          <div class="sr-fml">u_{min} = ${mSqrt('5gL')} = ${mSqrt('5·9,8·1')} = 7 м/с</div>
+          <div class="sr-fml">u<sub>min</sub> = ${mSqrt('5gL')} = ${mSqrt('5·9,8·1')} = 7 м/с</div>
         </div></div>
         <div class="task-board-step"><div class="task-board-step-num">3</div><div class="task-board-step-body"><strong>Находим скорость пробки.</strong>
           <div class="sr-fml">v = ${mFrac('M','m')}u = ${mFrac('0,10','0,020')}·7 = 35 м/с</div>
         </div></div>
         <div class="task-board-step"><div class="task-board-step-num">4</div><div class="task-board-step-body"><strong>Ответ:</strong> пробка должна вылететь со скоростью не меньше <strong>35 м/с</strong>.</div></div>
+      </div>`,
+    solutionHtml:`
+      <div class="pt-photo-wrap">
+        <img class="pt-photo-img" src="images/08.png" alt="Пробирка с каплей эфира" onerror="handleSolutionImageError(this)">
+        <div class="pt-img-fallback">Изображение решения пока не найдено</div>
       </div>`,
     hideAnswer:true,
     ans:'v ≥ 35 м/с'
@@ -5575,41 +5501,17 @@ const LESSON_TASKS={
     tags:['импульс','векторы','распад','ЕГЭ','сложный'],
     cond:'Снаряд, летящий горизонтально вправо со скоростью <strong>v<sub>0</sub></strong>, распадается на два осколка. Больший осколок после распада летит вертикально вверх со скоростью <strong>v<sub>1</sub> = v<sub>0</sub></strong>, второй осколок летит вниз-вправо со скоростью <strong>v<sub>2</sub> = 5v<sub>0</sub></strong>. Используя закон сохранения импульса, объясните, как направлены импульсы осколков после распада.',
     given:'v<sub>0</sub> — скорость снаряда до распада<br>v<sub>1</sub> = v<sub>0</sub> — скорость большего осколка вверх<br>v<sub>2</sub> = 5v<sub>0</sub> — скорость второго осколка вниз-вправо<br><span class="pt-find">Найти: векторную связь импульсов после распада</span>',
-    schemeHtml:`
-      <section class="pt-task-scheme" aria-label="Схема задачи 09">
-        <h3 class="pt-task-scheme-title">Схема задачи</h3>
-        <p class="pt-task-scheme-caption">Импульс сохраняется как векторная сумма. Поэтому важно учитывать направления скоростей.</p>
-        <div class="pt-task-scheme-figure">
-          <svg class="pt-task-scheme-svg" viewBox="0 0 880 380" role="img" aria-label="До распада снаряд летит вправо, после распада осколки летят вверх и вниз-вправо">
-            <defs>
-              <marker id="arrow09c" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L8,3 L0,6 Z" fill="#08d8ff"/></marker>
-              <marker id="arrow09g" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L8,3 L0,6 Z" fill="#39ff14"/></marker>
-              <marker id="arrow09o" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L8,3 L0,6 Z" fill="#ff8c00"/></marker>
-            </defs>
-            <rect width="880" height="380" fill="#050c16"/>
-            <path d="M46 190 H834" stroke="rgba(138,155,178,.24)" stroke-width="2" stroke-dasharray="10 8"/>
-            <text x="76" y="44" fill="#8a9bb2" font-size="15" font-weight="700">До распада</text>
-            <text x="520" y="44" fill="#8a9bb2" font-size="15" font-weight="700">После распада</text>
-            <ellipse cx="168" cy="190" rx="62" ry="28" fill="#ff8c00" stroke="#ffd29a" stroke-width="3"/>
-            <line x1="238" y1="190" x2="380" y2="190" stroke="#08d8ff" stroke-width="6" marker-end="url(#arrow09c)"/>
-            <text x="292" y="168" fill="#08d8ff" font-size="20" font-weight="900">v₀</text>
-            <text x="104" y="242" fill="#dbeafe" font-size="14">снаряд</text>
-            <circle cx="520" cy="190" r="12" fill="#f2f8ff"/>
-            <path d="M505 175 L535 205 M535 175 L505 205" stroke="#ff8c00" stroke-width="4" stroke-linecap="round"/>
-            <circle cx="520" cy="112" r="27" fill="#39ff14" stroke="#b6ff9f" stroke-width="3"/>
-            <line x1="520" y1="170" x2="520" y2="78" stroke="#39ff14" stroke-width="6" marker-end="url(#arrow09g)"/>
-            <text x="538" y="92" fill="#39ff14" font-size="18" font-weight="900">v₁ = v₀</text>
-            <text x="552" y="124" fill="#dbeafe" font-size="13">больший осколок</text>
-            <circle cx="682" cy="268" r="20" fill="#08d8ff" stroke="#a7f3ff" stroke-width="3"/>
-            <line x1="548" y1="204" x2="708" y2="286" stroke="#ff8c00" stroke-width="6" marker-end="url(#arrow09o)"/>
-            <text x="655" y="250" fill="#ff8c00" font-size="18" font-weight="900">v₂ = 5v₀</text>
-            <text x="640" y="322" fill="#dbeafe" font-size="13">второй осколок</text>
-            <rect x="76" y="300" width="388" height="48" rx="14" fill="rgba(8,216,255,.08)" stroke="rgba(8,216,255,.3)"/>
-            <text x="108" y="331" fill="#dbeafe" font-size="22" font-weight="900">p₀ = p₁ + p₂</text>
-            <path d="M492 308 h46 v-46" fill="none" stroke="rgba(57,255,20,.55)" stroke-width="2"/>
-          </svg>
-        </div>
-      </section>`,
+    steps:[],
+    boardSolutionHtml:`
+      <div class="task-board-manual">
+        <div class="task-board-step"><div class="task-board-step-num">1</div><div class="task-board-step-body"><strong>До распада.</strong> Снаряд летит вправо, поэтому начальный импульс направлен вправо:
+          <div class="sr-fml">p<sub>0</sub> = Mv<sub>0</sub></div>
+        </div></div>
+        <div class="task-board-step"><div class="task-board-step-num">2</div><div class="task-board-step-body"><strong>После распада.</strong> Больший осколок летит вверх, второй — вниз-вправо. Сумма их импульсов должна дать исходный горизонтальный импульс.</div></div>
+        <div class="task-board-step"><div class="task-board-step-num">3</div><div class="task-board-step-body"><strong>Векторная запись закона сохранения импульса:</strong>
+          <div class="sr-fml">p<sub>0</sub> = p<sub>1</sub> + p<sub>2</sub></div>
+        </div></div>
+      </div>`,
     solutionHtml:`
       <div class="pt-solution-carousel" aria-label="Карусель решения задачи 09">
         <h3 class="pt-solution-carousel-title">Решение задачи 09</h3>
@@ -5617,12 +5519,6 @@ const LESSON_TASKS={
           <div class="pt-photo-wrap"><img class="pt-photo-img" src="images/zsi_12_09-1.svg" alt="Решение задачи 09, часть 1" onerror="handleSolutionImageError(this)"><div class="pt-img-fallback">Изображение решения пока не найдено</div></div>
           <div class="pt-photo-wrap"><img class="pt-photo-img" src="images/zsi_12_09-2.svg" alt="Решение задачи 09, часть 2" onerror="handleSolutionImageError(this)"><div class="pt-img-fallback">Изображение решения пока не найдено</div></div>
         </div>
-      </div>`,
-    boardSolutionHtml:`
-      <div class="task-board-manual">
-        <div class="task-board-step"><div class="task-board-step-num">1</div><div class="task-board-step-body"><strong>До распада.</strong> Снаряд летит вправо, поэтому начальный импульс направлен вправо: <div class="sr-fml">p<sub>0</sub> = Mv<sub>0</sub></div></div></div>
-        <div class="task-board-step"><div class="task-board-step-num">2</div><div class="task-board-step-body"><strong>После распада.</strong> Больший осколок летит вверх, второй — вниз-вправо. Сумма их импульсов должна дать исходный горизонтальный импульс.</div></div>
-        <div class="task-board-step"><div class="task-board-step-num">3</div><div class="task-board-step-body"><strong>Векторная запись закона сохранения импульса:</strong><div class="sr-fml">p<sub>0</sub> = p<sub>1</sub> + p<sub>2</sub></div></div></div>
       </div>`,
     hideAnswer:true,
     ans:'p<sub>0</sub> = p<sub>1</sub> + p<sub>2</sub>; p<sub>1</sub> направлен вверх, p<sub>2</sub> — вниз-вправо.'
