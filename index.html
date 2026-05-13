@@ -7517,7 +7517,8 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
   const isEnergyHill = mode==='energyHill';
   const isEnergyPendulum = mode==='energyPendulum';
   const isEnergy = isEnergyHill || isEnergyPendulum;
-  if(state.simTitle) state.simTitle.textContent=isBlocks?'Анимация столкновения брусков':(isExplosion?'Анимация взрыва снаряда':(isPuckImpulse?'Анимация удара шайб':(isMomentum?'Анимация соударения':(isEnergyPendulum?'Анимация удара и подъёма доски':(isEnergyHill?'Анимация подъёма по горке':'Анимация движения')))));
+  const isCartStone = mode==='cartStone';
+  if(state.simTitle) state.simTitle.textContent=isBlocks?'Анимация столкновения брусков':(isExplosion?'Анимация взрыва снаряда':(isPuckImpulse?'Анимация удара шайб':(isMomentum?'Анимация соударения':(isEnergyPendulum?'Анимация удара и подъёма доски':(isEnergyHill?'Анимация подъёма по горке':(isCartStone?'Анимация падения камня':'Анимация движения'))))));
   if(state.simCondition) state.simCondition.innerHTML=getTaskConditionHtml(task);
   if(state.simNote) state.simNote.innerHTML=isBlocks
     ? 'Покажите спуск первого бруска по наклонной плоскости, момент абсолютно неупругого удара и дальнейшее совместное движение двух брусков.'
@@ -7531,11 +7532,13 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
           ? 'Покажите налёт шарика, момент прилипания и дальнейший подъём доски. Сначала используется закон сохранения импульса по горизонтали, затем — закон сохранения энергии.'
           : (isEnergyHill
             ? 'Покажите, как шайба поднимается по горке, теряя скорость, но сохраняя полную механическую энергию.'
-            : 'Запустите движение кнопкой «Старт», ставьте на паузу во время объяснения и при необходимости повторяйте анимацию заново.'))));
-  if(state.simBtnsWrap) state.simBtnsWrap.classList.toggle('is-hidden',isMomentum||isEnergy||isBlocks);
-  if(state.simFrameLabel) state.simFrameLabel.textContent=(isMomentum||isEnergy||isBlocks)?'Этап':'Система отсчёта';
-  if(state.simRelVLabel) state.simRelVLabel.textContent=isBlocks?'Скорость бруска':(isExplosion?'Скорость осколка 2':(isPuckImpulse?'Импульс p4':(isMomentum?'Импульс системы':(isEnergyPendulum?'u после удара':(isEnergyHill?'Скорость шайбы':'Относительная скорость')))));
-  if(state.simRelPLabel) state.simRelPLabel.textContent=isBlocks?'Кинетическая энергия':(isExplosion?'Изменение энергии':(isPuckImpulse?'Импульс p3':(isMomentum?'После удара':(isEnergyPendulum?'Высота h':(isEnergyHill?'Высота':'Импульс первого авто')))));
+            : (isCartStone
+              ? 'Покажите падение камня в тележку и дальнейшее движение тележки по рельсам после удара.'
+              : 'Запустите движение кнопкой «Старт», ставьте на паузу во время объяснения и при необходимости повторяйте анимацию заново.')))));
+  if(state.simBtnsWrap) state.simBtnsWrap.classList.toggle('is-hidden',isMomentum||isEnergy||isBlocks||isCartStone);
+  if(state.simFrameLabel) state.simFrameLabel.textContent=(isMomentum||isEnergy||isBlocks||isCartStone)?'Этап':'Система отсчёта';
+  if(state.simRelVLabel) state.simRelVLabel.textContent=isBlocks?'Скорость бруска':(isExplosion?'Скорость осколка 2':(isPuckImpulse?'Импульс p4':(isMomentum?'Импульс системы':(isEnergyPendulum?'u после удара':(isEnergyHill?'Скорость шайбы':(isCartStone?'Горизонтальный импульс':'Относительная скорость'))))));
+  if(state.simRelPLabel) state.simRelPLabel.textContent=isBlocks?'Кинетическая энергия':(isExplosion?'Изменение энергии':(isPuckImpulse?'Импульс p3':(isMomentum?'После удара':(isEnergyPendulum?'Высота h':(isEnergyHill?'Высота':(isCartStone?'Расчёт':'Импульс первого авто'))))));
   if(state.simKeyLabel) state.simKeyLabel.textContent='Ключевая мысль';
   const hasAnimationSection=task.hasAnimation!==false;
   if(state.animMenu) state.animMenu.style.display=hasAnimationSection?'':'none';
