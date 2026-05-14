@@ -1,14 +1,54 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 604 612" role="img" aria-labelledby="title desc">
-  <title id="title">Схема пробирки на нити для задачи 08</title>
-  <desc id="desc">Пробирка с пробкой подвешена на нити. Серым пунктиром показана вертикальная окружность полного оборота.</desc>
-  <rect width="604" height="612" fill="#ffffff"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 500" role="img" aria-labelledby="title desc">
+  <title id="title">Схема отдачи пробирки после вылета пробки</title>
+  <desc id="desc">Пробка вылетает влево со скоростью v, пробирка получает скорость отдачи u вправо; пунктиром показана вертикальная окружность полного оборота и приведён расчёт скорости пробки.</desc>
+  <defs>
+    <marker id="blueArrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M0 0 L12 6 L0 12 Z" fill="#0ea5e9"/>
+    </marker>
+    <marker id="orangeArrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M0 0 L12 6 L0 12 Z" fill="#f97316"/>
+    </marker>
+    <filter id="softShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#0f172a" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <rect width="760" height="500" rx="28" fill="#ffffff"/>
+  <rect x="32" y="30" width="696" height="440" rx="28" fill="#f7f9fc" filter="url(#softShadow)"/>
+
+  <text x="380" y="82" text-anchor="middle" fill="#1d4ed8" font-family="Golos Text, Arial, sans-serif" font-size="29" font-weight="800">
+    Отдача пробирки после вылета пробки
+  </text>
+
   <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="288" cy="291" r="278" stroke="#8d8d8d" stroke-width="2" stroke-dasharray="52 12"/>
-    <path d="M288 292V568" stroke="#202020" stroke-width="2.4"/>
-    <path d="M273 290h30" stroke="#202020" stroke-width="2.4"/>
-    <path d="M274 289l7-10M285 289l7-10M296 289l7-10" stroke="#202020" stroke-width="2.4"/>
-    <path d="M180 570h180v30H200l-20-8z" fill="#ffffff" stroke="#202020" stroke-width="2.4"/>
-    <path d="M360 570h38v29h-38z" fill="#434343" stroke="#202020" stroke-width="2.4"/>
-    <path d="M202 600h158" stroke="#202020" stroke-width="2.4"/>
+    <circle cx="380" cy="278" r="210" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="10 12"/>
+    <path d="M380 68V278" stroke="#94a3b8" stroke-width="4" stroke-dasharray="12 12"/>
+  </g>
+
+  <g aria-label="точка подвеса">
+    <circle cx="380" cy="68" r="10" fill="#111827"/>
+    <path d="M374 68H386M380 62V74" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+  </g>
+
+  <g aria-label="пробка вылетает влево">
+    <text x="182" y="248" fill="#f97316" font-family="Golos Text, Arial, sans-serif" font-size="26" font-weight="800">пробка: v</text>
+    <rect x="218" y="262" width="58" height="27" rx="9" fill="#fdba74" stroke="#f97316" stroke-width="4"/>
+    <path d="M332 276H286" stroke="#f97316" stroke-width="6" marker-end="url(#orangeArrow)"/>
+  </g>
+
+  <g aria-label="пробирка получает скорость вправо">
+    <path d="M268 276H444" stroke="#2563eb" stroke-width="5" marker-end="url(#blueArrow)"/>
+    <path d="M328 260H442" stroke="#2563eb" stroke-width="5"/>
+    <circle cx="438" cy="270" r="16" fill="#dbeafe" stroke="#2563eb" stroke-width="4"/>
+    <text x="392" y="306" fill="#0284c7" font-family="Golos Text, Arial, sans-serif" font-size="26" font-weight="800">пробирка: u</text>
+  </g>
+
+  <g aria-label="расчёт">
+    <text x="78" y="360" fill="#0f172a" font-family="Golos Text, Arial, sans-serif" font-size="26" font-weight="900">
+      m v = M u, u<tspan baseline-shift="sub" font-size="17">min</tspan> = √(5gL)
+    </text>
+    <text x="78" y="395" fill="#0284c7" font-family="Golos Text, Arial, sans-serif" font-size="28" font-weight="900">
+      v = (M/m)·7 = 35 м/с
+    </text>
   </g>
 </svg>
