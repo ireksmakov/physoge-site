@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 604 612" role="img" aria-labelledby="title desc">
+  <title id="title">Схема пробирки на нити для задачи 08</title>
+  <desc id="desc">Пробирка с пробкой подвешена на нити. Серым пунктиром показана вертикальная окружность полного оборота.</desc>
+  <rect width="604" height="612" fill="#ffffff"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="288" cy="291" r="278" stroke="#8d8d8d" stroke-width="2" stroke-dasharray="52 12"/>
+    <path d="M288 292V568" stroke="#202020" stroke-width="2.4"/>
+    <path d="M273 290h30" stroke="#202020" stroke-width="2.4"/>
+    <path d="M274 289l7-10M285 289l7-10M296 289l7-10" stroke="#202020" stroke-width="2.4"/>
+    <path d="M180 570h180v30H200l-20-8z" fill="#ffffff" stroke="#202020" stroke-width="2.4"/>
+    <path d="M360 570h38v29h-38z" fill="#434343" stroke="#202020" stroke-width="2.4"/>
+    <path d="M202 600h158" stroke="#202020" stroke-width="2.4"/>
+  </g>
+</svg>
