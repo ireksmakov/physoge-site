@@ -8845,16 +8845,16 @@ function taskBoardSimSync(){
   const progress=sim.duration?Math.min(sim.t/sim.duration,1):0;
   if(state.mode==='etherCork'){
     const tKick=0.26, tLoop=0.86;
-    const phase=progress<tKick?'Вылет пробки':(progress<tLoop?'Движение по окружности':'Полный оборот');
+    const phase=progress<tKick?'Вылет пробки':(progress<tLoop?'Подъём пробирки':'Верхняя точка');
     if(frame) frame.textContent=phase;
     if(relV) relV.textContent='u = 7 м/с';
     if(relP) relP.textContent='v = 35 м/с';
     if(key) key.innerHTML='m v = M u; u<sub>min</sub> = √(5gL)';
     if(stateBox) stateBox.innerHTML=phase==='Вылет пробки'
-      ? '<strong>Идея:</strong> пробка вылетает в одну сторону, а пробирка получает отдачу в другую. В короткий момент вылета применяем <span class="fml">m v = M u</span>.'
-      : (phase==='Движение по окружности'
-        ? '<strong>Идея:</strong> чтобы нить не провисла в верхней точке, скорости пробирки внизу должно хватить на полный оборот: <span class="fml">u<sub>min</sub> = √(5gL) = 7 м/с</span>.'
-        : '<strong>Идея:</strong> по ЗСИ скорость пробки в <span class="fml">M/m = 5</span> раз больше скорости отдачи пробирки: <span class="fml">v = 35 м/с</span>.');
+      ? '<strong>Идея:</strong> пробка вылетает вправо, а пробирка получает отдачу влево. В короткий момент вылета применяем <span class="fml">m v = M u</span>.'
+      : (phase==='Подъём пробирки'
+        ? '<strong>Идея:</strong> после вылета пробки вправо пробирка получает отдачу влево и поднимается по левой стороне окружности: <span class="fml">u<sub>min</sub> = √(5gL) = 7 м/с</span>.'
+        : '<strong>Идея:</strong> в верхней точке пробирка остановлена для акцента на требуемой вершине траектории, а по ЗСИ <span class="fml">v = 35 м/с</span>.');
     return;
   }
   if(state.mode==='inelasticFriction'){
@@ -9317,37 +9317,32 @@ function taskBoardSimDraw(){
   if(state.mode==='etherCork'){
     const tKick=0.26;
     const tLoopEnd=0.88;
-    const phase=progress<tKick?'Вылет пробки':(progress<tLoopEnd?'Полный оборот пробирки':'Минимальная скорость найдена');
-    const pivotX=Math.round(W*0.54);
-    const pivotY=64;
-    const L=Math.max(92,Math.min(138,H-168));
+    const phase=progress<tKick?'Вылет пробки':(progress<tLoopEnd?'Подъём пробирки':'Верхняя точка');
+    const pivotX=Math.round(W*0.50);
+    const pivotY=Math.round(H*0.43);
+    const L=Math.max(92,Math.min(138,H*0.24,pivotY-78,H-pivotY-78));
     const restX=pivotX, restY=pivotY+L;
     const kickA=Math.min(progress/tKick,1);
     const loopA=progress<tKick?0:Math.min((progress-tKick)/(tLoopEnd-tKick),1);
-    const theta=loopA*Math.PI*2;
-    const tubeX=progress<tKick?taskBoardSimLerp(restX,restX+42,kickA):pivotX+Math.sin(theta)*L;
+    const theta=-loopA*Math.PI;
+    const tubeX=progress<tKick?taskBoardSimLerp(restX,restX-42,kickA):pivotX+Math.sin(theta)*L;
     const tubeY=progress<tKick?restY:pivotY+Math.cos(theta)*L;
-    const corkX=progress<tKick?taskBoardSimLerp(restX-18,Math.max(54,restX-130),kickA):Math.max(44,restX-132-48*loopA);
+    const corkX=progress<tKick?taskBoardSimLerp(restX+18,Math.min(W-54,restX+150),kickA):Math.min(W-48,restX+150+36*Math.min(loopA,0.7));
     const corkY=restY+6;
 
     ctx.fillStyle='#0f172a';
     ctx.font='bold 15px Golos Text,sans-serif';
     ctx.textAlign='left';
-    ctx.fillText('Пробирка с каплей эфира: отдача и полный оборот',topLeft,30);
+    ctx.fillText('Пробирка с каплей эфира: отдача и подъём',topLeft,30);
     ctx.fillStyle='#64748b';
     ctx.font='12px Golos Text,sans-serif';
-    ctx.fillText('Пробка вылетает влево, пробирка получает скорость отдачи вправо и должна пройти вертикальную окружность.',topLeft,50);
+    ctx.fillText('Пробка вылетает вправо, пробирка получает отдачу влево и поднимается к верхней точке окружности.',topLeft,50);
 
     ctx.strokeStyle='rgba(148,163,184,.55)';
     ctx.lineWidth=1.8;
     ctx.setLineDash([6,5]);
     ctx.beginPath();ctx.arc(pivotX,pivotY,L,0,Math.PI*2);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(pivotX,pivotY);ctx.lineTo(pivotX,restY);ctx.stroke();
     ctx.setLineDash([]);
-    ctx.strokeStyle='#0f172a';ctx.lineWidth=2.6;
-    ctx.beginPath();ctx.moveTo(pivotX-52,pivotY-12);ctx.lineTo(pivotX+52,pivotY-12);ctx.stroke();
-    ctx.strokeStyle='#94a3b8';ctx.lineWidth=1.4;
-    for(let i=0;i<5;i++){const hx=pivotX-42+i*21;ctx.beginPath();ctx.moveTo(hx,pivotY-24);ctx.lineTo(hx-12,pivotY-12);ctx.stroke();}
     ctx.fillStyle='#0f172a';ctx.beginPath();ctx.arc(pivotX,pivotY,5,0,Math.PI*2);ctx.fill();
 
     ctx.strokeStyle='#2563eb';ctx.lineWidth=2.6;
@@ -9367,16 +9362,16 @@ function taskBoardSimDraw(){
     ctx.fillStyle='#0f172a';ctx.font='700 11px Golos Text,sans-serif';ctx.textAlign='center';ctx.fillText('m',corkX,corkY+4);
 
     if(progress<tKick){
-      taskBoardSimArrow(ctx,restX-18,restY+22,corkX-26,corkY+22,'#f97316',7,2.5);
-      taskBoardSimArrow(ctx,restX+18,restY-28,restX+76,restY-28,'#0284c7',7,2.5);
-      ctx.fillStyle='#f97316';ctx.font='700 12px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('v пробки',Math.max(18,corkX-38),corkY+42);
-      ctx.fillStyle='#0284c7';ctx.fillText('u пробирки',restX+54,restY-38);
+      taskBoardSimArrow(ctx,restX+18,restY+22,corkX+28,restY+22,'#f97316',7,2.5);
+      taskBoardSimArrow(ctx,restX-18,restY-28,restX-76,restY-28,'#0284c7',7,2.5);
+      ctx.fillStyle='#f97316';ctx.font='700 12px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('v пробки',Math.min(W-96,restX+54),restY+42);
+      ctx.fillStyle='#0284c7';ctx.textAlign='right';ctx.fillText('u пробирки',restX-54,restY-38);
       taskBoardSimDrawBurst(ctx,restX,restY,1+kickA*0.7);
+    }else if(loopA<0.98){
+      taskBoardSimArrow(ctx,tubeX+26,tubeY-24,tubeX-36,tubeY-24,'#0284c7',7,2.3);
+      ctx.fillStyle='#0284c7';ctx.font='700 12px Golos Text,sans-serif';ctx.textAlign='right';ctx.fillText('u пробирки',tubeX-42,tubeY-28);
     }else{
-      const tx=tubeX+Math.cos(theta)*34;
-      const ty=tubeY-Math.sin(theta)*34;
-      taskBoardSimArrow(ctx,tubeX,tubeY,tx,ty,'#0284c7',7,2.3);
-      ctx.fillStyle='#0284c7';ctx.font='700 12px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('u = 7 м/с',Math.min(W-118,tx+8),Math.max(28,ty));
+      ctx.fillStyle='#0284c7';ctx.font='700 12px Golos Text,sans-serif';ctx.textAlign='center';ctx.fillText('верхняя точка, стоп',tubeX,tubeY-22);
     }
 
     ctx.fillStyle='#2563eb';ctx.font='700 12px Golos Text,sans-serif';ctx.textAlign='left';
