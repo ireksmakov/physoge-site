@@ -9413,6 +9413,98 @@ function taskBoardSimDraw(){
     ctx.fillText('v = (0,10 / 0,020) · 7 = 35 м/с',bx+12,by+104);
     return;
   }
+  if(state.mode==='inelasticFriction'){
+    const tImpact=0.42;
+    const tStop=0.95;
+    const phase=progress<tImpact?'До удара':(progress<tStop?'Торможение':'Скорость 0,7v₀');
+    const approach=progress<tImpact?Math.pow(Math.min(progress/tImpact,1),0.92):1;
+    const brakeRaw=progress<tImpact?0:Math.min((progress-tImpact)/(tStop-tImpact),1);
+    const brake=1-Math.pow(1-brakeRaw,1.35);
+    const floorY=Math.min(H-96,270);
+    const centerX=Math.round(W*0.52);
+    const clayR=14;
+    const blockW=74, blockH=34;
+    const clayImpactX=centerX-44;
+    const blockImpactX=centerX-18;
+    const blockTravel=Math.min(86,Math.max(50,(W-220)/5));
+    const clayTravel=blockTravel*3;
+    const clayStartX=Math.max(clayR+42,clayImpactX-clayTravel);
+    const blockStartX=Math.min(W-blockW-42,blockImpactX+blockTravel);
+    const clayX=taskBoardSimLerp(clayStartX,clayImpactX,approach);
+    const blockX=taskBoardSimLerp(blockStartX,blockImpactX,approach);
+    const joinedX=taskBoardSimLerp(blockImpactX,Math.max(58,blockImpactX-130),brake);
+    const vNow=1-(0.3*brakeRaw);
+
+    ctx.fillStyle='#0f172a';
+    ctx.font='bold 15px Golos Text,sans-serif';
+    ctx.textAlign='left';
+    ctx.fillText('Абсолютно неупругое столкновение пластилина и бруска',topLeft,30);
+    ctx.fillStyle='#64748b';
+    ctx.font='12px Golos Text,sans-serif';
+    ctx.fillText('Пластилин летит вправо, брусок скользит навстречу влево; после прилипания система тормозит трением.',topLeft,50);
+
+    ctx.strokeStyle='#111827';
+    ctx.lineWidth=2.6;
+    ctx.beginPath();ctx.moveTo(34,floorY);ctx.lineTo(W-34,floorY);ctx.stroke();
+    ctx.strokeStyle='rgba(148,163,184,.38)';
+    ctx.lineWidth=1;
+    for(let x=42;x<W-40;x+=34){ctx.beginPath();ctx.moveTo(x,floorY+10);ctx.lineTo(x+18,floorY);ctx.stroke();}
+
+    function drawClay(x,y){
+      ctx.fillStyle='#38bdf8';ctx.strokeStyle='#0284c7';ctx.lineWidth=2;
+      ctx.beginPath();ctx.arc(x,y,clayR,0,Math.PI*2);ctx.fill();ctx.stroke();
+      ctx.fillStyle='#062b33';ctx.font='700 11px Golos Text,sans-serif';ctx.textAlign='center';ctx.fillText('m',x,y+4);
+    }
+    function drawBlock(x,y){
+      ctx.fillStyle='#fdba74';ctx.strokeStyle='#f97316';ctx.lineWidth=2;
+      ctx.beginPath();ctx.roundRect(x,y,blockW,blockH,6);ctx.fill();ctx.stroke();
+      ctx.fillStyle='#111827';ctx.font='700 12px Golos Text,sans-serif';ctx.textAlign='center';ctx.fillText('4m',x+blockW/2,y+21);
+    }
+
+    if(progress<tImpact){
+      drawClay(clayX,floorY-clayR);
+      drawBlock(blockX,floorY-blockH);
+      taskBoardSimArrow(ctx,clayX+18,floorY-clayR,clayX+108,floorY-clayR,'#0284c7',7,2.4);
+      ctx.fillStyle='#0284c7';ctx.font='700 12px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('vпл = 15 м/с',clayX+28,floorY-clayR-17);
+      taskBoardSimArrow(ctx,blockX-8,floorY-blockH/2,blockX-38,floorY-blockH/2,'#f97316',7,2.4);
+      ctx.fillStyle='#f97316';ctx.font='700 12px Golos Text,sans-serif';ctx.textAlign='right';ctx.fillText('vбр = 5 м/с',blockX-12,floorY-blockH/2-16);
+    }else{
+      drawBlock(joinedX,floorY-blockH);
+      drawClay(joinedX+8,floorY-blockH/2);
+      taskBoardSimArrow(ctx,joinedX-6,floorY-blockH/2,joinedX-54*vNow,floorY-blockH/2,'#2563eb',7,2.4);
+      ctx.fillStyle='#2563eb';ctx.font='700 12px Golos Text,sans-serif';ctx.textAlign='right';ctx.fillText(brakeRaw<0.98?'v уменьшается':'0,7v₀',joinedX-16,floorY-blockH/2-18);
+      taskBoardSimArrow(ctx,joinedX+blockW+8,floorY-9,joinedX+blockW+58,floorY-9,'#ef4444',7,2.2);
+      ctx.fillStyle='#ef4444';ctx.textAlign='left';ctx.fillText('Fтр',joinedX+blockW+14,floorY-22);
+    }
+
+    if(progress>=tImpact&&progress<0.52){
+      taskBoardSimDrawBurst(ctx,centerX-8,floorY-blockH/2,1+(progress-tImpact)/0.10);
+      ctx.fillStyle='#ca8a04';ctx.font='700 13px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('прилипание',centerX+18,floorY-54);
+    }
+
+    const startMark=blockImpactX+blockW/2;
+    const endMark=joinedX+blockW/2;
+    if(progress>=tImpact){
+      ctx.save();
+      ctx.strokeStyle='rgba(37,99,235,.36)';ctx.lineWidth=2;ctx.setLineDash([5,5]);
+      ctx.beginPath();ctx.moveTo(startMark,floorY+22);ctx.lineTo(endMark,floorY+22);ctx.stroke();
+      ctx.setLineDash([]);ctx.fillStyle='#2563eb';ctx.font='700 12px Golos Text,sans-serif';ctx.textAlign='center';ctx.fillText('s', (startMark+endMark)/2, floorY+42);
+      ctx.restore();
+    }
+
+    const bw=Math.min(322,Math.max(246,W*0.35));
+    const bh=124;
+    const bx=W-bw-22;
+    const by=20;
+    ctx.fillStyle='rgba(255,255,255,.98)';ctx.fillRect(bx,by,bw,bh);
+    ctx.strokeStyle='rgba(37,99,235,.18)';ctx.strokeRect(bx,by,bw,bh);
+    ctx.fillStyle='#64748b';ctx.font='11px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('Ключевые этапы',bx+12,by+18);
+    ctx.fillStyle='#111827';ctx.font='bold 16px Golos Text,sans-serif';ctx.fillText('Фаза: '+phase,bx+12,by+42);
+    ctx.fillText(progress<tImpact?'v₀ после удара = 1 м/с':'v = '+vNow.toFixed(2).replace('.',',')+' м/с',bx+12,by+64);
+    ctx.fillText('s = (v₀² − (0,7v₀)²) / 2μg',bx+12,by+86);
+    ctx.fillStyle='#0284c7';ctx.font='700 12px Golos Text,sans-serif';ctx.fillText('Ответ: s = 0,15 м',bx+12,by+108);
+    return;
+  }
   if(state.mode==='inelasticBlocks'){
     const tSlope=0.30, tImpact=0.52;
     const phase = progress<tSlope ? 'Спуск' : (progress<tImpact ? 'Перед ударом' : 'После удара');
