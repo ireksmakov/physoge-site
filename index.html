@@ -9559,6 +9559,45 @@ function taskBoardSimDrawVectorText(ctx,parts,x,y,options){
   ctx.restore();
 }
 
+
+function taskBoardSimVectorTextWidth(ctx,parts,options){
+  const opt=options||{};
+  const fontSize=opt.fontSize||12;
+  const weight=opt.weight||'700';
+  const family=opt.family||'Golos Text,sans-serif';
+  ctx.save();
+  function setMain(){ctx.font=weight+' '+fontSize+'px '+family;}
+  function setSub(){ctx.font=weight+' '+Math.round(fontSize*0.68)+'px '+family;}
+  function partWidth(part){
+    if(typeof part==='string'){setMain();return ctx.measureText(part).width;}
+    setMain();
+    const baseW=ctx.measureText(part.base||'').width;
+    setSub();
+    return baseW+(part.sub?ctx.measureText(String(part.sub)).width+1:0);
+  }
+  function vectorTextGap(spaceWidth){return Math.max(fontSize*0.65,spaceWidth);}
+  let total=0;
+  let widthPreviousPartWasVector=false;
+  parts.forEach(function(part){
+    if(typeof part==='string'){
+      setMain();
+      const text=String(part);
+      const leading=text.match(/^\s+/);
+      if(widthPreviousPartWasVector&&leading){
+        total+=vectorTextGap(ctx.measureText(leading[0]).width)+ctx.measureText(text.slice(leading[0].length)).width;
+      }else{
+        total+=ctx.measureText(text).width;
+      }
+      widthPreviousPartWasVector=false;
+    }else{
+      total+=partWidth(part);
+      widthPreviousPartWasVector=true;
+    }
+  });
+  ctx.restore();
+  return total;
+}
+
 function taskBoardSimDrawBurst(ctx,x,y,scale){
   ctx.save();
   [1,0.72,0.46].forEach(function(k,i){
@@ -10139,7 +10178,14 @@ function taskBoardSimDraw(){
       ctx.fillText('второй осколок',secondLabelX,secondTextY);
       taskBoardSimDrawVectorText(ctx,[{base:'v',sub:'2'},' = 5',{base:'v',sub:'0'},' вниз-вправо'],secondLabelX,secondTextY+19,{color:'#ea580c',fontSize:12,weight:'700'});
       ctx.fillStyle='rgba(37,99,235,.95)';ctx.font='700 12px Golos Text,sans-serif';ctx.textAlign='center';
-      taskBoardSimDrawVectorText(ctx,[{base:'p',sub:'0'},' вправо'],taskBoardSimLerp(explosionX,downX,0.48),cy-14,{color:'rgba(37,99,235,.95)',fontSize:12,weight:'700',align:'center'});
+      const p0RightLabelX=taskBoardSimLerp(explosionX,downX,0.48);
+      const p0RightFont={color:'rgba(37,99,235,.95)',fontSize:12,weight:'700'};
+      const p0RightBaseParts=[{base:'p',sub:'0'}];
+      const p0RightFullWidth=taskBoardSimVectorTextWidth(ctx,[{base:'p',sub:'0'},' вправо'],p0RightFont);
+      const p0RightBaseWidth=taskBoardSimVectorTextWidth(ctx,p0RightBaseParts,p0RightFont);
+      const p0RightStart=p0RightLabelX-p0RightFullWidth/2;
+      taskBoardSimDrawVectorText(ctx,p0RightBaseParts,p0RightStart,cy-14,{color:'rgba(37,99,235,.95)',fontSize:12,weight:'700',align:'left'});
+      taskBoardSimDrawVectorText(ctx,['вправо'],p0RightStart+p0RightBaseWidth+18,cy-14,{color:'rgba(37,99,235,.95)',fontSize:12,weight:'700',align:'left'});
       taskBoardSimDrawVectorText(ctx,[{base:'p',sub:'2x'},' = ',{base:'p',sub:'0'}],taskBoardSimLerp(explosionX,downX,0.58),cy+20,{color:'rgba(37,99,235,.95)',fontSize:12,weight:'700',align:'center'});
       const compLabelX=Math.max(topLeft+180,Math.min(W-360,explosionX+120));
       const compLabelY=Math.max(76,Math.min(cy-78,92));
