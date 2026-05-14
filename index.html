@@ -1434,6 +1434,9 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 .sr-fml .sqrt .root-sign,.sr-sbody .fml .sqrt .root-sign,.task-board-solution .task-board-step-body .sr-fml .sqrt .root-sign,.task-board-sim-state .fml .sqrt .root-sign{font-size:1.08em;line-height:1;transform:translateY(.04em)}
 .sr-fml .sqrt .root-body,.sr-sbody .fml .sqrt .root-body,.task-board-solution .task-board-step-body .sr-fml .sqrt .root-body,.task-board-sim-state .fml .sqrt .root-body{border-top:1.6px solid currentColor;padding:0 .16em 0 .18em;margin-left:-.10em}
 .sr-fml .fv{color:var(--cyan)}
+.vec{display:inline-block;position:relative;font-style:italic;line-height:1;padding-top:.18em;margin:0 .035em;overflow:visible}
+.vec::after{content:"→";position:absolute;left:50%;top:-.46em;transform:translateX(-50%);font-size:.72em;font-style:normal;font-family:var(--fb);font-weight:700;line-height:1}
+.task-condition .vec,.pt-given .vec,.task-board-condition .vec,.task-board-given .vec{font-style:italic}
 .sr-fdesc{font-size:11px;color:var(--gray);text-align:right;max-width:110px;line-height:1.4}
 
 /* Content overflow guards */
@@ -5525,17 +5528,17 @@ const LESSON_TASKS={
     num:9,level:3,exam:'ЕГЭ (2 балла)',points:2,title:'Распад снаряда на два осколка',
     boardMode:'explosionFragmentsVector',graphLabel:'Схема',hasAnimation:true,
     tags:['импульс','векторы','распад','ЕГЭ','сложный'],
-    cond:'Снаряд, летящий горизонтально вправо со скоростью <strong>v⃗<sub>0</sub></strong>, распадается на два осколка. Больший осколок после распада летит вертикально вверх со скоростью <strong>v⃗<sub>1</sub> = v⃗<sub>0</sub></strong>, второй осколок летит вниз-вправо со скоростью <strong>v⃗<sub>2</sub> = 5v⃗<sub>0</sub></strong>. Используя закон сохранения импульса, объясните, как направлены импульсы осколков после распада.',
-    given:'v⃗<sub>0</sub> — скорость снаряда до распада<br>v⃗<sub>1</sub> = v⃗<sub>0</sub> — скорость большего осколка вверх<br>v⃗<sub>2</sub> = 5v⃗<sub>0</sub> — скорость второго осколка вниз-вправо<br><span class="pt-find">Найти: векторную связь импульсов после распада</span>',
+    cond:'Снаряд, летящий горизонтально вправо со скоростью <strong><span class="vec">v</span><sub>0</sub></strong>, распадается на два осколка. Больший осколок после распада летит вертикально вверх со скоростью <strong><span class="vec">v</span><sub>1</sub> = <span class="vec">v</span><sub>0</sub></strong>, второй осколок летит вниз-вправо со скоростью <strong><span class="vec">v</span><sub>2</sub> = 5<span class="vec">v</span><sub>0</sub></strong>. Используя закон сохранения импульса, объясните, как направлены импульсы осколков после распада.',
+    given:'<span class="vec">v</span><sub>0</sub> — скорость снаряда до распада<br><span class="vec">v</span><sub>1</sub> = <span class="vec">v</span><sub>0</sub> — скорость большего осколка вверх<br><span class="vec">v</span><sub>2</sub> = 5<span class="vec">v</span><sub>0</sub> — скорость второго осколка вниз-вправо<br><span class="pt-find">Найти: векторную связь импульсов после распада</span>',
     steps:[],
     boardSolutionHtml:`
       <div class="task-board-manual">
         <div class="task-board-step"><div class="task-board-step-num">1</div><div class="task-board-step-body"><strong>До распада.</strong> Снаряд летит вправо, поэтому начальный импульс направлен вправо:
-          <div class="sr-fml">p⃗<sub>0</sub> = Mv⃗<sub>0</sub></div>
+          <div class="sr-fml"><span class="vec">p</span><sub>0</sub> = M<span class="vec">v</span><sub>0</sub></div>
         </div></div>
         <div class="task-board-step"><div class="task-board-step-num">2</div><div class="task-board-step-body"><strong>После распада.</strong> Больший осколок летит вверх, второй — вниз-вправо. Сумма их импульсов должна дать исходный горизонтальный импульс.</div></div>
         <div class="task-board-step"><div class="task-board-step-num">3</div><div class="task-board-step-body"><strong>Векторная запись закона сохранения импульса:</strong>
-          <div class="sr-fml">p⃗<sub>0</sub> = p⃗<sub>1</sub> + p⃗<sub>2</sub></div>
+          <div class="sr-fml"><span class="vec">p</span><sub>0</sub> = <span class="vec">p</span><sub>1</sub> + <span class="vec">p</span><sub>2</sub></div>
         </div></div>
       </div>`,
     solutionHtml:`
@@ -5547,7 +5550,7 @@ const LESSON_TASKS={
         </div>
       </div>`,
     hideAnswer:true,
-    ans:'p⃗<sub>0</sub> = p⃗<sub>1</sub> + p⃗<sub>2</sub>; p⃗<sub>1</sub> направлен вверх, p⃗<sub>2</sub> — вниз-вправо.'
+    ans:'<span class="vec">p</span><sub>0</sub> = <span class="vec">p</span><sub>1</sub> + <span class="vec">p</span><sub>2</sub>; <span class="vec">p</span><sub>1</sub> направлен вверх, <span class="vec">p</span><sub>2</sub> — вниз-вправо.'
   },
   {
     id:'lesson12-task10',
@@ -9251,14 +9254,14 @@ function taskBoardSimSync(){
     const t1=0.42,t2=0.54;
     const phase=progress<t1?'До распада':(progress<t2?'Распад':'После распада');
     if(frame) frame.textContent=phase;
-    if(relV) relV.innerHTML=phase==='После распада'?'v⃗<sub>2</sub> = 5v⃗<sub>0</sub>':'v⃗<sub>0</sub> вправо';
-    if(relP) relP.innerHTML=phase==='После распада'?'v⃗<sub>1</sub> = v⃗<sub>0</sub>':'p⃗<sub>0</sub> вправо';
-    if(key) key.innerHTML='p⃗<sub>0</sub> = p⃗<sub>1</sub> + p⃗<sub>2</sub>';
+    if(relV) relV.innerHTML=phase==='После распада'?'<span class="vec">v</span><sub>2</sub> = 5<span class="vec">v</span><sub>0</sub>':'<span class="vec">v</span><sub>0</sub> вправо';
+    if(relP) relP.innerHTML=phase==='После распада'?'<span class="vec">v</span><sub>1</sub> = <span class="vec">v</span><sub>0</sub>':'<span class="vec">p</span><sub>0</sub> вправо';
+    if(key) key.innerHTML='<span class="vec">p</span><sub>0</sub> = <span class="vec">p</span><sub>1</sub> + <span class="vec">p</span><sub>2</sub>';
     if(stateBox) stateBox.innerHTML=phase==='До распада'
-      ? '<strong>Идея:</strong> до распада снаряд летит горизонтально вправо, поэтому начальный импульс <span class="fml">p⃗<sub>0</sub></span> направлен вправо.'
+      ? '<strong>Идея:</strong> до распада снаряд летит горизонтально вправо, поэтому начальный импульс <span class="fml"><span class="vec">p</span><sub>0</sub></span> направлен вправо.'
       : (phase==='Распад'
         ? '<strong>Идея:</strong> в короткий момент распада внешним импульсом пренебрегаем, поэтому сумма импульсов осколков должна остаться горизонтальной.'
-        : '<strong>Идея:</strong> больший осколок движется строго вверх со скоростью <span class="fml">v⃗<sub>1</sub>=v⃗<sub>0</sub></span>, а второй — вниз-вправо со скоростью <span class="fml">v⃗<sub>2</sub>=5v⃗<sub>0</sub></span>. Вертикальные проекции импульсов компенсируются, горизонтальная проекция второго осколка даёт <span class="fml">p⃗<sub>0</sub></span>.');
+        : '<strong>Идея:</strong> больший осколок движется строго вверх со скоростью <span class="fml"><span class="vec">v</span><sub>1</sub>=<span class="vec">v</span><sub>0</sub></span>, а второй — вниз-вправо со скоростью <span class="fml"><span class="vec">v</span><sub>2</sub>=5<span class="vec">v</span><sub>0</sub></span>. Вертикальные проекции импульсов компенсируются, горизонтальная проекция второго осколка даёт <span class="fml"><span class="vec">p</span><sub>0</sub></span>.');
     return;
   }
   if(state.mode==='explosionFragments'){
@@ -10014,7 +10017,7 @@ function taskBoardSimDraw(){
       drawShellVector(shellX,cy,0,1);
       taskBoardSimArrow(ctx,shellX+48,cy-18,shellX+118,cy-18,'#08d8ff',7,2.5);
       ctx.fillStyle='#0891b2';ctx.font='700 12px Golos Text,sans-serif';
-      ctx.fillText('v⃗₀ вправо',shellX+56,cy-30);
+      ctx.fillText('v₀→ вправо',shellX+56,cy-30);
     }else if(progress<t2){
       drawShellVector(explosionX,cy,0,1);
       taskBoardSimDrawBurst(ctx,explosionX,cy,1+(progress-t1)/(t2-t1));
@@ -10042,25 +10045,25 @@ function taskBoardSimDraw(){
       taskBoardSimArrow(ctx,explosionX,cy,Math.min(W-120,explosionX+154),cy,'#08d8ff',8,3.2);
       ctx.fillStyle='#16a34a';ctx.font='700 12px Golos Text,sans-serif';ctx.textAlign='right';
       ctx.fillText('больший осколок',explosionX-12,upY-8);
-      ctx.fillText('v⃗₁ = v⃗₀ вверх',explosionX-12,upY+8);
-      ctx.fillText('p⃗₁ ↑',explosionX-18,Math.max(64,cy-96));
+      ctx.fillText('v₁→ = v₀→ вверх',explosionX-12,upY+8);
+      ctx.fillText('p₁→ ↑',explosionX-18,Math.max(64,cy-96));
       ctx.fillStyle='#ea580c';ctx.textAlign='left';
       const secondLabelX=Math.min(W-230,downX+58);
       ctx.fillText('второй осколок',secondLabelX,downY-8);
-      ctx.fillText('v⃗₂ = 5v⃗₀ вниз-вправо',secondLabelX,downY+8);
-      ctx.fillText('p⃗₂ ↘',Math.min(W-92,explosionX+190),Math.min(H-64,cy+64));
+      ctx.fillText('v₂→ = 5v₀→ вниз-вправо',secondLabelX,downY+8);
+      ctx.fillText('p₂→ ↘',Math.min(W-92,explosionX+190),Math.min(H-64,cy+64));
       ctx.fillStyle='rgba(37,99,235,.95)';ctx.font='700 12px Golos Text,sans-serif';ctx.textAlign='center';
-      ctx.fillText('p⃗₀ вправо',Math.min(W-148,explosionX+118),cy-12);
-      ctx.fillText('p⃗₂x = p⃗₀',taskBoardSimLerp(explosionX,downX,0.55),cy+18);
-      ctx.fillText('p⃗₁ и p⃗₂y компенсируются',Math.min(W-150,explosionX+140),Math.max(78,cy-72));
+      ctx.fillText('p₀→ вправо',Math.min(W-148,explosionX+118),cy-12);
+      ctx.fillText('p₂→x = p₀→',taskBoardSimLerp(explosionX,downX,0.55),cy+18);
+      ctx.fillText('p₁→ и p₂→y компенсируются',Math.min(W-150,explosionX+140),Math.max(78,cy-72));
     }
     const bw=Math.min(330,Math.max(236,W*0.38)),bh=104,bx=W-bw-22,by=20;
     ctx.fillStyle='rgba(255,255,255,.98)';ctx.fillRect(bx,by,bw,bh);
     ctx.strokeStyle='rgba(37,99,235,.18)';ctx.strokeRect(bx,by,bw,bh);
     ctx.fillStyle='#64748b';ctx.font='11px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('Ключевой вывод',bx+12,by+18);
-    ctx.fillStyle='#111827';ctx.font='bold 16px Golos Text,sans-serif';ctx.fillText('p⃗₀ = p⃗₁ + p⃗₂',bx+12,by+44);
-    ctx.fillStyle='#16a34a';ctx.font='700 12px Golos Text,sans-serif';ctx.fillText('p⃗₁: вертикально вверх',bx+12,by+66);
-    ctx.fillStyle='#ea580c';ctx.fillText('p⃗₂: вниз-вправо',bx+12,by+86);
+    ctx.fillStyle='#111827';ctx.font='bold 16px Golos Text,sans-serif';ctx.fillText('p₀→ = p₁→ + p₂→',bx+12,by+44);
+    ctx.fillStyle='#16a34a';ctx.font='700 12px Golos Text,sans-serif';ctx.fillText('p₁→: вертикально вверх',bx+12,by+66);
+    ctx.fillStyle='#ea580c';ctx.fillText('p₂→: вниз-вправо',bx+12,by+86);
     return;
   }
   if(state.mode==='explosionFragments'){
