@@ -5589,7 +5589,7 @@ const LESSON_TASKS={
   {
     id:'lesson12-task10',
     num:10,level:3,exam:'ЕГЭ (2 балла)',points:2,title:'Маятник после удара',
-    boardMode:'task07-pendulum-impact',graphLabel:'Схема',hasAnimation:true,
+    boardMode:'task10-pendulum-impact',graphLabel:'Схема',hasAnimation:true,
     tags:['импульс','энергия','маятник','ЕГЭ','сложный'],
     cond:'Маятник состоит из маленького груза массой M = 200 г и очень легкой нити подвеса длиной L = 1,25 м. Он висит в состоянии покоя в вертикальном положении. В груз ударяется небольшое тело массой m = 100 г, летевшее в горизонтальном направлении со скоростью v = 10 м/с. После удара тело останавливается и падает вертикально вниз. На какой максимальный угол α маятник отклонится от положения равновесия после удара?',
     given:'M = 200 г = 0,2 кг<br>m = 100 г = 0,1 кг<br>L = 1,25 м<br>v = 10 м/с<br>g = 10 м/с²<br>после удара малое тело останавливается<br><span class="pt-find">Найти: α — максимальный угол отклонения маятника</span>',
@@ -6799,7 +6799,11 @@ function getTaskConditionHtml(task){
 
   return html||'Условие задачи не найдено.';
 }
+function isTask10PendulumImpactMode(mode){
+  return mode==='task10-pendulum-impact'||mode==='task07-pendulum-impact';
+}
 function getTaskBoardData(mode){
+  if(mode==='task07-pendulum-impact') mode='task10-pendulum-impact';
   if(String(mode||'').indexOf('blank-task-')===0){
     const store=loadBlankTaskBlocks();
     for(const lessonName in store){
@@ -7800,11 +7804,11 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
   const isMomentum = resolvedMode==='momentumSystem' || isPuckImpulse || isExplosion;
   const isEnergyHill = resolvedMode==='energyHill';
   const isEnergyPendulum = resolvedMode==='energyPendulum';
-  const isPendulumImpact = resolvedMode==='task07-pendulum-impact';
+  const isPendulumImpact = isTask10PendulumImpactMode(resolvedMode);
   const isEnergy = isEnergyHill || isEnergyPendulum || isPendulumImpact;
   const isCartStone = resolvedMode==='cartStone';
   const isEtherCork = resolvedMode==='etherCork';
-  if(state.simTitle) state.simTitle.textContent=isInelasticFriction?'Анимация пластилина и бруска':(isEtherCork?'Анимация отдачи пробирки':(isBlocks?'Анимация столкновения брусков':(isExplosionVector?'Анимация распада снаряда':(isExplosion?'Анимация взрыва снаряда':(isPuckImpulse?'Анимация удара шайб':(isMomentum?'Анимация соударения':(isPendulumImpact?'Анимация удара малого тела о маятник':(isEnergyPendulum?'Анимация удара и подъёма доски':(isEnergyHill?'Анимация подъёма по горке':(isCartStone?'Анимация падения камня':'Анимация движения'))))))))));
+  if(state.simTitle) state.simTitle.textContent=isInelasticFriction?'Анимация пластилина и бруска':(isEtherCork?'Анимация отдачи пробирки':(isBlocks?'Анимация столкновения брусков':(isExplosionVector?'Анимация распада снаряда':(isExplosion?'Анимация взрыва снаряда':(isPuckImpulse?'Анимация удара шайб':(isMomentum?'Анимация соударения':(isPendulumImpact?'Анимация задачи 10: удар малого тела о маятник':(isEnergyPendulum?'Анимация удара и подъёма доски':(isEnergyHill?'Анимация подъёма по горке':(isCartStone?'Анимация падения камня':'Анимация движения'))))))))));
   if(state.simCondition) state.simCondition.innerHTML=getTaskConditionHtml(task);
   if(state.simNote) state.simNote.innerHTML=isInelasticFriction
     ? 'Покажите встречное движение пластилина и бруска, абсолютно неупругий удар и последующее замедление слипшейся системы силой трения до 70% начальной скорости.'
@@ -7863,7 +7867,7 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
   state.viewY=0;
   state.viewScale=1;
   restoreBoardState();
-  const showStaticBoardContent=resolvedMode==='task07-pendulum-impact';
+  const showStaticBoardContent=isTask10PendulumImpactMode(resolvedMode);
   state.overlay.classList.toggle('solution-workspace-mode',useSolutionWorkspace);
   state.drawer.classList.toggle('open',false);
   toggleTaskBoardSolution(false);
@@ -7912,7 +7916,7 @@ function closeTaskBoard(){
   taskBoardToggleFloating('condition',false);
   taskBoardToggleFloating('graph',false);
   toggleTaskBoardSolution(false);
-  if(state.task&&state.mode==='task07-pendulum-impact'){
+  if(state.task&&isTask10PendulumImpactMode(state.mode)){
     const anim=document.getElementById('taskBoardAnimationOverlay')||document.getElementById('task07AnimationOverlay')||document.querySelector('.task-board-animation-overlay')||document.querySelector('.task-animation-overlay');
     if(task07AnimationState){ task07AnimationState.running=false; cancelAnimationFrame(task07AnimationState.raf); task07AnimationState.last=0; }
     if(anim){
@@ -8627,7 +8631,7 @@ function taskBoardDraw(){
 let task07AnimationState=null;
 function openTaskAnimation(taskId){
   const task=findTaskById(taskId)||taskBoardState?.task||findTaskById(taskBoardState?.taskId);
-  if(!task||task.boardMode!=='task07-pendulum-impact') return;
+  if(!task||!isTask10PendulumImpactMode(task.boardMode)) return;
   const overlay=ensureTask07AnimationOverlay();
   const hasOpenBoard=!!(taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
   overlay.dataset.keepTaskBoard=hasOpenBoard?'true':'false';
@@ -8852,6 +8856,26 @@ function updateTask07Animation(progress){
 
 function toggleTaskBoardAnimation(force){
   const state=ensureTaskBoardOverlay();
+  if(state.task&&isTask10PendulumImpactMode(state.mode)){
+    if(force===false){
+      if(task07AnimationState){
+        task07AnimationState.running=false;
+        cancelAnimationFrame(task07AnimationState.raf);
+        task07AnimationState.last=0;
+      }
+      const overlay=document.getElementById('task07AnimationOverlay');
+      if(overlay){
+        overlay.classList.remove('open');
+        overlay.style.display='none';
+        overlay.style.pointerEvents='none';
+        overlay.setAttribute('aria-hidden','true');
+      }
+      document.body.classList.remove('task07-anim-lock');
+      return;
+    }
+    openTaskAnimation(state.task.id||state.taskId||state.mode);
+    return;
+  }
   if(!state.task||state.task.hasAnimation===false){
     if(state.sim){
       state.sim.running=false;
@@ -8980,7 +9004,7 @@ function taskBoardSimReset(resetFrame){
   sim.t=0;
   sim.last=0;
   sim.finished=false;
-  sim.duration=(state.mode==='momentumSystem'||state.mode==='puckImpulse'||state.mode==='explosionFragments'||state.mode==='explosionFragmentsVector')?6.0:(state.mode==='inelasticBlocks'?6.8:(state.mode==='inelasticFriction'?6.6:(state.mode==='task07-pendulum-impact'?7.2:(state.mode==='energyPendulum'?7.0:(state.mode==='etherCork'?7.0:(state.mode==='energyHill'?6.4:6.2))))));
+  sim.duration=(state.mode==='momentumSystem'||state.mode==='puckImpulse'||state.mode==='explosionFragments'||state.mode==='explosionFragmentsVector')?6.0:(state.mode==='inelasticBlocks'?6.8:(state.mode==='inelasticFriction'?6.6:(isTask10PendulumImpactMode(state.mode)?7.2:(state.mode==='energyPendulum'?7.0:(state.mode==='etherCork'?7.0:(state.mode==='energyHill'?6.4:6.2))))));
   if(resetFrame) sim.frame='earth';
   document.querySelectorAll('[data-frame-btn]').forEach(function(btn){btn.classList.toggle('active',btn.getAttribute('data-frame-btn')===sim.frame);});
   const btn=document.getElementById('taskBoardSimToggleBtn');
@@ -9608,7 +9632,7 @@ function taskBoardSimDraw(){
   ctx.clearRect(0,0,W,H);
   ctx.fillStyle='#ffffff';
   ctx.fillRect(0,0,W,H);
-  if(state.mode==='task07-pendulum-impact'){
+  if(isTask10PendulumImpactMode(state.mode)){
     const impactP=0.38, releaseP=0.48, topP=0.88;
     const clamp=function(v,a,b){return Math.max(a,Math.min(b,v));};
     const smooth=function(t){t=clamp(t,0,1);return t*t*(3-2*t);};
