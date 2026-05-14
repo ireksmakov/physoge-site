@@ -10098,9 +10098,11 @@ function taskBoardSimDraw(){
       taskBoardSimArrow(ctx,explosionX,cy,explosionX,Math.max(58,cy-104),'#16a34a',8,3.2);
       taskBoardSimArrow(ctx,explosionX,cy,Math.min(W-96,explosionX+168),Math.min(H-58,cy+74),'#ea580c',8,3.2);
       ctx.fillStyle='#16a34a';ctx.font='700 12px Golos Text,sans-serif';ctx.textAlign='right';
-      ctx.fillText('больший осколок',explosionX-12,upY-54);
-      taskBoardSimDrawVectorText(ctx,[{base:'v',sub:'1'},' = ',{base:'v',sub:'0'},' вверх'],explosionX-12,upY-38,{color:'#16a34a',fontSize:12,weight:'700',align:'right'});
-      taskBoardSimDrawVectorText(ctx,[{base:'p',sub:'1'},' ↑'],explosionX-18,Math.max(64,cy-96),{color:'#16a34a',fontSize:12,weight:'700',align:'right'});
+      const upperLabelX=explosionX-46;
+      const upperLabelY=Math.max(42,upY-32);
+      ctx.fillText('больший осколок',upperLabelX,upperLabelY);
+      taskBoardSimDrawVectorText(ctx,[{base:'v',sub:'1'},' = ',{base:'v',sub:'0'},' вверх'],upperLabelX,upperLabelY+24,{color:'#16a34a',fontSize:12,weight:'700',align:'right'});
+      taskBoardSimDrawVectorText(ctx,[{base:'p',sub:'1'}],explosionX-18,Math.max(64,cy-96),{color:'#16a34a',fontSize:12,weight:'700',align:'right'});
       ctx.fillStyle='#ea580c';ctx.textAlign='left';
       const secondLabelX=Math.min(W-230,downX+58);
       const secondTextY=Math.max(72,downY-54);
