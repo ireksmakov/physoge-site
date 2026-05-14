@@ -666,7 +666,7 @@ body.edit-mode .et{display:inline}
 .task07-anim-kicker{font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:var(--cyan);margin-bottom:5px}
 .task07-anim-title{font-family:var(--fh);font-size:clamp(22px,2.8vw,34px);line-height:1.05;font-weight:800;color:var(--white)}
 .task07-anim-sub{font-size:13px;color:var(--gray);margin-top:7px;line-height:1.55}
-.task07-anim-close{flex-shrink:0;padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.04);color:var(--white);font:800 13px var(--fb);cursor:pointer;transition:all .18s}
+.task07-anim-close{position:relative;z-index:3;pointer-events:auto;flex-shrink:0;padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.04);color:var(--white);font:800 13px var(--fb);cursor:pointer;transition:all .18s}
 .task07-anim-close:hover{border-color:rgba(255,140,0,.5);color:var(--orange);background:rgba(255,140,0,.08)}
 .task07-anim-body{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:14px;padding:0 20px 20px;min-height:0;flex:1}
 .task07-anim-stage{position:relative;min-height:420px;border:1px solid rgba(107,122,141,.24);border-radius:20px;background:linear-gradient(180deg,#08111f,#050914);overflow:hidden;box-shadow:inset 0 0 46px rgba(0,229,255,.05)}
@@ -8716,7 +8716,17 @@ function ensureTask07AnimationOverlay(){
       </div>
     </div>`);
   overlay=document.getElementById('task07AnimationOverlay');
-  overlay.addEventListener('click',function(e){ if(e.target===overlay) closeTask07Animation(); });
+  overlay.addEventListener('click',function(e){
+    const closeBtn=e.target&&e.target.closest?e.target.closest('[data-close-task-animation]'):null;
+    if(closeBtn){
+      e.preventDefault();
+      e.stopPropagation();
+      if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+      closeTask07Animation();
+      return;
+    }
+    if(e.target===overlay) closeTask07Animation();
+  },true);
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&overlay.classList.contains('open')) closeTask07Animation(); });
   return overlay;
 }
