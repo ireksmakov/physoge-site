@@ -4482,7 +4482,7 @@ function srReset(){
           <div class="task-body">
             <div class="task-condition">Снаряд массой <strong>2 кг</strong>, летящий горизонтально со скоростью <strong>100 м/с</strong>, разрывается на два осколка. Первый осколок массой <strong>1 кг</strong> летит <strong>перпендикулярно</strong> к первоначальному направлению. Второй осколок массой <strong>1 кг</strong> летит со скоростью <strong>400 м/с</strong>. Под каким углом к первоначальному направлению полетит <strong>второй осколок</strong>?</div>
             <div>
-              <div class="task-given">m=2 кг, v₀=100 м/с; m₁=m₂=1 кг, α₁=90°, v₂=400 м/с<br><span class="tg-find">Найти: α₂</span><br><span style="font-family:Georgia,serif;font-size:12px;color:#a855f7">p̄₀ = p̄₁ + p̄₂</span></div>
+              <div class="task-given">m=2 кг, v₀=100 м/с; m₁=m₂=1 кг, α₁=90°, v₂=400 м/с<br><span class="tg-find">Найти: α₂</span><br><span style="font-family:Georgia,serif;font-size:12px;color:#a855f7"><span class="vec">p</span><sub>0</sub> = <span class="vec">p</span><sub>1</sub> + <span class="vec">p</span><sub>2</sub></span></div>
               <button class="task-run-btn" id="tbtn2" onclick="rupdOpenSim(2)" style="background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff">▶ Запустить симулятор</button>
             </div>
           </div>
@@ -4491,7 +4491,7 @@ function srReset(){
           <div class="rupd-sim-box" style="border-color:rgba(168,85,247,.5)">
             <div class="rupd-sim-header"><div class="rupd-sim-task-label" style="color:#a855f7">Симулятор · Задача 2 · ЗСИ</div><button class="rupd-sim-close" onclick="rupdCloseSim()">✕ Свернуть</button></div>
             <div class="sr-formula-strip" style="margin-bottom:16px">
-              <div class="sr-fi"><div class="fm" style="color:#a855f7">p̄₀=p̄₁+p̄₂</div><div class="fd">ЗАКОН СОХРАНЕНИЯ ИМПУЛЬСА</div></div>
+              <div class="sr-fi"><div class="fm" style="color:#a855f7"><span class="vec">p</span><sub>0</sub>=<span class="vec">p</span><sub>1</sub>+<span class="vec">p</span><sub>2</sub></div><div class="fd">ЗАКОН СОХРАНЕНИЯ ИМПУЛЬСА</div></div>
               <div style="width:1px;background:var(--border)"></div>
               <div class="sr-fi"><div class="fm"><span style="color:#a855f7">p=mv</span></div><div class="fd">ИМПУЛЬС ТЕЛА</div></div>
               <div style="width:1px;background:var(--border)"></div>
@@ -4520,7 +4520,7 @@ function srReset(){
                   <div class="sr-sec">Решение задачи</div>
                   <div class="sr-task">m=2 кг, v₀=100 м/с; m₁=m₂=1 кг, ⊥, v₂=400 м/с<br><strong style="color:#a855f7">Найти: α₂</strong></div>
                   <div class="sr-step"><div class="sr-snum">1</div><div class="sr-sbody">p₀=mv₀:<br><span class="fml">p₀=2·100=200</span></div></div>
-                  <div class="sr-step"><div class="sr-snum">2</div><div class="sr-sbody">ЗСИ (вектор):<br><span class="fml">p̄₀=p̄₁+p̄₂</span></div></div>
+                  <div class="sr-step"><div class="sr-snum">2</div><div class="sr-sbody">ЗСИ (вектор):<br><span class="fml"><span class="vec">p</span><sub>0</sub>=<span class="vec">p</span><sub>1</sub>+<span class="vec">p</span><sub>2</sub></span></div></div>
                   <div class="sr-step"><div class="sr-snum">3</div><div class="sr-sbody">Проекция X:<br><span class="fml">p₀=p₂·cosα</span></div></div>
                   <div class="sr-step"><div class="sr-snum">4</div><div class="sr-sbody">cosα:<br><span class="fml">cosα=200/400=0.5</span></div></div>
                   <div class="sr-step"><div class="sr-snum">5</div><div class="sr-sbody">Угол:<br><span class="fml">α=arccos(0.5)=60°</span></div></div>
@@ -4528,7 +4528,7 @@ function srReset(){
                 </div>
                 <div class="sr-fcard">
                   <div class="sr-sec">Формулы (ЗСИ)</div>
-                  <div class="sr-frow"><div class="sr-fml"><span style="color:#a855f7">p̄₀=p̄₁+p̄₂</span></div><div class="sr-fdesc">ЗСИ вектор</div></div>
+                  <div class="sr-frow"><div class="sr-fml"><span style="color:#a855f7"><span class="vec">p</span><sub>0</sub>=<span class="vec">p</span><sub>1</sub>+<span class="vec">p</span><sub>2</sub></span></div><div class="sr-fdesc">ЗСИ вектор</div></div>
                   <div class="sr-frow"><div class="sr-fml"><span style="color:#a855f7">p=mv</span></div><div class="sr-fdesc">Импульс</div></div>
                   <div class="sr-frow"><div class="sr-fml">cosα=p₀/p₂</div><div class="sr-fdesc">X-проекция</div></div>
                 </div>
@@ -4730,7 +4730,7 @@ if(t<SIM2_T1){var p=t/SIM2_T1,sx=28+(cx-28)*p;ctx.fillStyle='#00e5ff';ctx.beginP
 else if(t<SIM2_T2){var ep=(t-SIM2_T1)/(SIM2_T2-SIM2_T1),r=ep*52;[0.9,0.6,0.35].forEach(function(sc,i){var ri=r*sc;ctx.strokeStyle='rgba(255,'+(170-i*40)+',0,'+(1-ep*0.85)+')';ctx.lineWidth=2-i*0.4;ctx.beginPath();ctx.arc(cx,cy,ri,0,Math.PI*2);ctx.stroke();});var g=ctx.createRadialGradient(cx,cy,0,cx,cy,r*0.45);g.addColorStop(0,'rgba(255,240,100,'+(1-ep*1.3)+')');g.addColorStop(1,'rgba(255,140,0,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,cy,r*0.45,0,Math.PI*2);ctx.fill();ctx.fillStyle='rgba(255,220,0,'+(1-ep)+')';ctx.font='bold 14px Golos Text,sans-serif';ctx.textAlign='center';ctx.fillText('ВЗРЫВ!',cx,cy-r-10);}
 else{var fp=Math.min((t-SIM2_T2)/(SIM2_TEND-SIM2_T2),1),ep2=1-Math.pow(1-fp,2);var f1y=cy-ep2*108;ctx.strokeStyle='rgba(57,255,20,0.18)';ctx.lineWidth=1.5;ctx.setLineDash([3,4]);ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx,f1y);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#39ff14';ctx.beginPath();ctx.arc(cx,f1y,9,0,Math.PI*2);ctx.fill();if(f1y<cy-18){s2a(ctx,cx,f1y,cx,f1y-26,'#39ff14',1.5);ctx.fillStyle='#39ff14';ctx.font='11px Golos Text,sans-serif';ctx.textAlign='right';ctx.fillText('m₁=1 кг, ⊥',cx-12,f1y+4);}var ang=Math.PI/3,fd=ep2*120,f2x=cx+fd*Math.cos(ang),f2y=cy+fd*Math.sin(ang);ctx.strokeStyle='rgba(255,140,0,0.18)';ctx.setLineDash([3,4]);ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(f2x,f2y);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#ff8c00';ctx.beginPath();ctx.arc(f2x,f2y,9,0,Math.PI*2);ctx.fill();if(fp>0.1){s2a(ctx,f2x,f2y,f2x+22*Math.cos(ang),f2y+22*Math.sin(ang),'#ff8c00',1.5);ctx.fillStyle='#ff8c00';ctx.font='11px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('m₂, v₂=400',f2x+12,f2y-4);}ctx.fillStyle='rgba(255,200,0,0.7)';ctx.beginPath();ctx.arc(cx,cy,5,0,Math.PI*2);ctx.fill();if(fp>0.6){var aa=Math.min((fp-0.6)/0.3,1);ctx.strokeStyle='rgba(255,255,255,'+aa*0.7+')';ctx.lineWidth=1.5;ctx.setLineDash([]);ctx.beginPath();ctx.arc(cx,cy,38,0,ang);ctx.stroke();if(aa>0.5){ctx.fillStyle='rgba(255,255,255,'+aa+')';ctx.font='bold 13px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('α=60°',cx+42,cy+14);}}if(fp>0.92){ctx.fillStyle='rgba(168,85,247,'+(Math.min((fp-0.92)/0.08,1))+')';ctx.font='bold 13px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('Ответ: α₂=60°',12,20);}}}
 function s2a(ctx,x1,y1,x2,y2,col,lw){var dx=x2-x1,dy=y2-y1,L=Math.sqrt(dx*dx+dy*dy);if(L<2)return;var ux=dx/L,uy=dy/L,h=7;ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=lw||2;ctx.setLineDash([]);ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-h*ux+h*0.45*uy,y2-h*uy-h*0.45*ux);ctx.lineTo(x2-h*ux-h*0.45*uy,y2-h*uy+h*0.45*ux);ctx.closePath();ctx.fill();}
-function sim2DrawVec(){var cv=document.getElementById('sim2VecCanvas');if(!cv)return;var dpr=window.devicePixelRatio||1,W=cv.offsetWidth||500,H=150;cv.width=W*dpr;cv.height=H*dpr;cv.style.height=H+'px';var ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);var sc=0.42,p0=200*sc,p1=346*sc,p2=400*sc,ox=30,oy=H-26,ang=Math.PI/3;ctx.strokeStyle='rgba(107,122,141,0.2)';ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(ox,oy);ctx.lineTo(ox+180,oy);ctx.stroke();ctx.beginPath();ctx.moveTo(ox,oy);ctx.lineTo(ox,oy-140);ctx.stroke();ctx.setLineDash([]);s2a(ctx,ox,oy,ox+p0,oy,'#00e5ff',2.2);ctx.fillStyle='#00e5ff';ctx.font='bold 11px Golos Text,sans-serif';ctx.textAlign='center';ctx.fillText('p₀=200',ox+p0/2,oy+14);s2a(ctx,ox,oy,ox,oy-p1,'#39ff14',2.2);ctx.fillStyle='#39ff14';ctx.textAlign='right';ctx.fillText('p₁≈346',ox-6,oy-p1/2);var p2x=p2*Math.cos(ang),p2y=p2*Math.sin(ang);s2a(ctx,ox,oy,ox+p2x,oy+p2y,'#ff8c00',2.2);ctx.fillStyle='#ff8c00';ctx.textAlign='left';ctx.fillText('p₂=400',ox+p2x+8,oy+p2y/2+4);ctx.strokeStyle='rgba(255,255,255,0.5)';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(ox,oy,26,0,ang);ctx.stroke();ctx.fillStyle='white';ctx.font='bold 11px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('60°',ox+29,oy+16);var sq=7;ctx.strokeStyle='rgba(57,255,20,0.5)';ctx.lineWidth=1;ctx.strokeRect(ox,oy-sq,sq,sq);}
+function sim2DrawVec(){var cv=document.getElementById('sim2VecCanvas');if(!cv)return;var dpr=window.devicePixelRatio||1,W=cv.offsetWidth||500,H=150;cv.width=W*dpr;cv.height=H*dpr;cv.style.height=H+'px';var ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);var sc=0.42,p0=200*sc,p1=346*sc,p2=400*sc,ox=30,oy=H-26,ang=Math.PI/3;ctx.strokeStyle='rgba(107,122,141,0.2)';ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(ox,oy);ctx.lineTo(ox+180,oy);ctx.stroke();ctx.beginPath();ctx.moveTo(ox,oy);ctx.lineTo(ox,oy-140);ctx.stroke();ctx.setLineDash([]);s2a(ctx,ox,oy,ox+p0,oy,'#00e5ff',2.2);ctx.fillStyle='#00e5ff';ctx.font='bold 11px Golos Text,sans-serif';ctx.textAlign='center';taskBoardSimDrawVectorText(ctx,[{base:'p',sub:'0'},'=200'],ox+p0/2,oy+14,{color:'#00e5ff',fontSize:11,weight:'bold',align:'center'});s2a(ctx,ox,oy,ox,oy-p1,'#39ff14',2.2);ctx.fillStyle='#39ff14';ctx.textAlign='right';taskBoardSimDrawVectorText(ctx,[{base:'p',sub:'1'},'≈346'],ox-6,oy-p1/2,{color:'#39ff14',fontSize:11,weight:'bold',align:'right'});var p2x=p2*Math.cos(ang),p2y=p2*Math.sin(ang);s2a(ctx,ox,oy,ox+p2x,oy+p2y,'#ff8c00',2.2);ctx.fillStyle='#ff8c00';ctx.textAlign='left';taskBoardSimDrawVectorText(ctx,[{base:'p',sub:'2'},'=400'],ox+p2x+8,oy+p2y/2+4,{color:'#ff8c00',fontSize:11,weight:'bold'});ctx.strokeStyle='rgba(255,255,255,0.5)';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(ox,oy,26,0,ang);ctx.stroke();ctx.fillStyle='white';ctx.font='bold 11px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('60°',ox+29,oy+16);var sq=7;ctx.strokeStyle='rgba(57,255,20,0.5)';ctx.lineWidth=1;ctx.strokeRect(ox,oy-sq,sq,sq);}
 
 /* ════════════════════════════════════════
    ВИРТУАЛЬНАЯ ЛАБОРАТОРНАЯ
@@ -5075,7 +5075,7 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
       <p class="sr-desc">Снаряд массой <strong style="color:var(--white)">2 кг</strong> со скоростью <strong style="color:var(--white)">100 м/с</strong> разрывается на два осколка по <strong style="color:var(--cyan)">1 кг</strong>. Первый летит перпендикулярно, второй — со скоростью <strong style="color:var(--cyan)">400 м/с</strong>. Найдите угол второго осколка.</p>
     </div>
     <div class="sr-formula-strip">
-      <div class="sr-fi"><div class="fm" style="color:#a855f7">p̄₀ = p̄₁ + p̄₂</div><div class="fd">ЗАКОН СОХРАНЕНИЯ ИМПУЛЬСА</div></div>
+      <div class="sr-fi"><div class="fm" style="color:#a855f7"><span class="vec">p</span><sub>0</sub> = <span class="vec">p</span><sub>1</sub> + <span class="vec">p</span><sub>2</sub></div><div class="fd">ЗАКОН СОХРАНЕНИЯ ИМПУЛЬСА</div></div>
       <div style="width:1px;background:var(--border)"></div>
       <div class="sr-fi"><div class="fm"><span style="color:#a855f7">p = mv</span></div><div class="fd">ИМПУЛЬС ТЕЛА</div></div>
       <div style="width:1px;background:var(--border)"></div>
@@ -5113,7 +5113,7 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
           <div class="sr-sec">Решение задачи</div>
           <div class="sr-task">m=2 кг, v₀=100 м/с; m₁=m₂=1 кг, α₁=90°, v₂=400 м/с<br><strong style="color:#a855f7">Найти: α₂</strong></div>
           <div class="sr-step"><div class="sr-snum">1</div><div class="sr-sbody">Начальный импульс:<br><span class="fml" style="color:#a855f7">p₀ = 2·100 = 200 кг·м/с</span></div></div>
-          <div class="sr-step"><div class="sr-snum">2</div><div class="sr-sbody">ЗСИ (вектор):<br><span class="fml" style="color:#a855f7">p̄₀ = p̄₁ + p̄₂</span></div></div>
+          <div class="sr-step"><div class="sr-snum">2</div><div class="sr-sbody">ЗСИ (вектор):<br><span class="fml" style="color:#a855f7"><span class="vec">p</span><sub>0</sub> = <span class="vec">p</span><sub>1</sub> + <span class="vec">p</span><sub>2</sub></span></div></div>
           <div class="sr-step"><div class="sr-snum">3</div><div class="sr-sbody">Проекция X (p₁⊥X):<br><span class="fml" style="color:#a855f7">p₀ = p₂·cosα</span></div></div>
           <div class="sr-step"><div class="sr-snum">4</div><div class="sr-sbody">cosα:<br><span class="fml" style="color:#a855f7">cosα = 200/400 = 0.5</span></div></div>
           <div class="sr-step"><div class="sr-snum">5</div><div class="sr-sbody">Угол:<br><span class="fml" style="color:#a855f7">α = arccos(0.5) = 60°</span></div></div>
@@ -5122,7 +5122,7 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
         </div>
         <div class="sr-fcard">
           <div class="sr-sec" style="color:#a855f7">Формулы (ЗСИ)</div>
-          <div class="sr-frow"><div class="sr-fml"><span style="color:#a855f7">p̄₀=p̄₁+p̄₂</span></div><div class="sr-fdesc">ЗСИ вектор</div></div>
+          <div class="sr-frow"><div class="sr-fml"><span style="color:#a855f7"><span class="vec">p</span><sub>0</sub>=<span class="vec">p</span><sub>1</sub>+<span class="vec">p</span><sub>2</sub></span></div><div class="sr-fdesc">ЗСИ вектор</div></div>
           <div class="sr-frow"><div class="sr-fml"><span style="color:#a855f7">p=mv</span></div><div class="sr-fdesc">Импульс тела</div></div>
           <div class="sr-frow"><div class="sr-fml">cosα=p₀/p₂</div><div class="sr-fdesc">X-проекция</div></div>
           <div class="sr-frow"><div class="sr-fml">p₁=p₂·sinα</div><div class="sr-fdesc">Y-проекция</div></div>
@@ -5304,7 +5304,7 @@ const LESSON_TASKS={
   {num:1,level:2,title:'Разрыв снаряда',
    cond:'Снаряд <strong>2 кг</strong> летит со скоростью <strong>100 м/с</strong>. Разрывается на два осколка по 1 кг. Первый летит перпендикулярно, второй — со скоростью <strong>400 м/с</strong>. Найдите угол второго осколка.',
    given:'m=2 кг, v₀=100; m₁=m₂=1 кг, ⊥, v₂=400 м/с<br><span class="pt-find">Найти: α₂</span>',
-   steps:['p₀=mv₀=200 кг·м/с','ЗСИ: p̄₀=p̄₁+p̄₂','Ось X: p₀=p₂·cosα','cosα=200/400=0.5','α=arccos(0.5)=60°'],ans:'α₂=60°'}
+   steps:['p₀=mv₀=200 кг·м/с','ЗСИ: p→₀=p→₁+p→₂','Ось X: p₀=p₂·cosα','cosα=200/400=0.5','α=arccos(0.5)=60°'],ans:'α₂=60°'}
 ],
 
 'Закон сохранения импульса и изменения импульса':[
@@ -6833,18 +6833,18 @@ function getTaskBoardGraph(mode){
       <text x="362" y="132" fill="#64748b" font-size="11">x</text>
       <text x="84" y="40" fill="#64748b" font-size="11">y</text>
       <line x1="92" y1="128" x2="206" y2="128" stroke="#08d8ff" stroke-width="5" stroke-linecap="round" marker-end="url(#fragVectorArrow)"></line>
-      <text x="132" y="118" fill="#0891b2" font-size="13" font-weight="700">p₀ вправо</text>
+      <text x="132" y="118" fill="#0891b2" font-size="13" font-weight="700">p→₀ вправо</text>
       <line x1="92" y1="128" x2="92" y2="58" stroke="#22c55e" stroke-width="5" stroke-linecap="round" marker-end="url(#fragVectorArrow)"></line>
-      <text x="44" y="82" fill="#16a34a" font-size="13" font-weight="700">p₁, v₁=v₀</text>
+      <text x="44" y="82" fill="#16a34a" font-size="13" font-weight="700">p→₁, v→₁=v→₀</text>
       <line x1="92" y1="128" x2="250" y2="198" stroke="#ff8c00" stroke-width="5" stroke-linecap="round" marker-end="url(#fragVectorArrow)"></line>
-      <text x="204" y="184" fill="#ea580c" font-size="13" font-weight="700">p₂, v₂=5v₀</text>
+      <text x="204" y="184" fill="#ea580c" font-size="13" font-weight="700">p→₂, v→₂=5v→₀</text>
       <path d="M250 198V128H92" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5 4"></path>
-      <text x="258" y="164" fill="#2563eb" font-size="11">p₂y вниз</text>
-      <text x="160" y="142" fill="#2563eb" font-size="11">p₂x = p₀</text>
+      <text x="258" y="164" fill="#2563eb" font-size="11">p→₂y вниз</text>
+      <text x="160" y="142" fill="#2563eb" font-size="11">p→₂x = p→₀</text>
       <rect x="218" y="42" width="154" height="72" rx="12" fill="#eff6ff" stroke="#bfdbfe" stroke-width="2"></rect>
-      <text x="232" y="68" fill="#0f172a" font-size="12" font-weight="700">p₀ = p₁ + p₂</text>
-      <text x="232" y="89" fill="#0f172a" font-size="11">p₁ — вверх</text>
-      <text x="232" y="106" fill="#0f172a" font-size="11">p₂ — вниз-вправо</text>
+      <text x="232" y="68" fill="#0f172a" font-size="12" font-weight="700">p→₀ = p→₁ + p→₂</text>
+      <text x="232" y="89" fill="#0f172a" font-size="11">p→₁ — вверх</text>
+      <text x="232" y="106" fill="#0f172a" font-size="11">p→₂ — вниз-вправо</text>
     </svg>`;
   if(mode==='explosionFragments') return `
     <svg viewBox="0 0 400 230" aria-label="Схема движения осколков после взрыва">
@@ -9472,6 +9472,63 @@ function taskBoardSimDrawIndexLabel(ctx,base,sub,x,y,color){
   ctx.fillText(String(sub),x+w+1,y+4);
   ctx.restore();
 }
+
+function taskBoardSimDrawVectorText(ctx,parts,x,y,options){
+  const opt=options||{};
+  const fontSize=opt.fontSize||12;
+  const weight=opt.weight||'700';
+  const family=opt.family||'Golos Text,sans-serif';
+  const color=opt.color||ctx.fillStyle;
+  const align=opt.align||ctx.textAlign||'left';
+  const baseline=ctx.textBaseline||'alphabetic';
+  ctx.save();
+  ctx.fillStyle=color;
+  ctx.strokeStyle=color;
+  ctx.lineCap='round';
+  ctx.lineJoin='round';
+  ctx.textBaseline='alphabetic';
+  function setMain(){ctx.font=weight+' '+fontSize+'px '+family;}
+  function setSub(){ctx.font=weight+' '+Math.round(fontSize*0.68)+'px '+family;}
+  function partWidth(part){
+    if(typeof part==='string'){setMain();return ctx.measureText(part).width;}
+    setMain();
+    const baseW=ctx.measureText(part.base||'').width;
+    setSub();
+    return baseW+(part.sub?ctx.measureText(String(part.sub)).width+1:0);
+  }
+  const total=parts.reduce((sum,part)=>sum+partWidth(part),0);
+  let cx=x;
+  if(align==='center') cx-=total/2;
+  else if(align==='right'||align==='end') cx-=total;
+  parts.forEach(function(part){
+    if(typeof part==='string'){
+      setMain();
+      ctx.fillText(part,cx,y);
+      cx+=ctx.measureText(part).width;
+      return;
+    }
+    setMain();
+    const base=part.base||'';
+    ctx.fillText(base,cx,y);
+    const baseW=ctx.measureText(base).width;
+    const ay=y-fontSize*0.92;
+    const ax1=cx+Math.max(1,fontSize*0.08);
+    const ax2=cx+baseW-Math.max(1,fontSize*0.08);
+    ctx.lineWidth=Math.max(1,fontSize*0.11);
+    ctx.beginPath();ctx.moveTo(ax1,ay);ctx.lineTo(ax2,ay);ctx.stroke();
+    const head=Math.max(2,fontSize*0.22);
+    ctx.beginPath();ctx.moveTo(ax2,ay);ctx.lineTo(ax2-head,ay-head*0.45);ctx.moveTo(ax2,ay);ctx.lineTo(ax2-head,ay+head*0.45);ctx.stroke();
+    cx+=baseW;
+    if(part.sub){
+      setSub();
+      ctx.fillText(String(part.sub),cx+1,y+fontSize*0.28);
+      cx+=ctx.measureText(String(part.sub)).width+1;
+    }
+  });
+  ctx.textBaseline=baseline;
+  ctx.restore();
+}
+
 function taskBoardSimDrawBurst(ctx,x,y,scale){
   ctx.save();
   [1,0.72,0.46].forEach(function(k,i){
@@ -10017,7 +10074,7 @@ function taskBoardSimDraw(){
       drawShellVector(shellX,cy,0,1);
       taskBoardSimArrow(ctx,shellX+48,cy-18,shellX+118,cy-18,'#08d8ff',7,2.5);
       ctx.fillStyle='#0891b2';ctx.font='700 12px Golos Text,sans-serif';
-      ctx.fillText('v⃗₀ вправо',shellX+56,cy-30);
+      taskBoardSimDrawVectorText(ctx,[{base:'v',sub:'0'},' вправо'],shellX+56,cy-30,{color:'#0891b2',fontSize:12,weight:'700'});
     }else if(progress<t2){
       drawShellVector(explosionX,cy,0,1);
       taskBoardSimDrawBurst(ctx,explosionX,cy,1+(progress-t1)/(t2-t1));
@@ -10045,25 +10102,25 @@ function taskBoardSimDraw(){
       taskBoardSimArrow(ctx,explosionX,cy,Math.min(W-120,explosionX+154),cy,'#08d8ff',8,3.2);
       ctx.fillStyle='#16a34a';ctx.font='700 12px Golos Text,sans-serif';ctx.textAlign='right';
       ctx.fillText('больший осколок',explosionX-12,upY-8);
-      ctx.fillText('v⃗₁ = v⃗₀ вверх',explosionX-12,upY+8);
-      ctx.fillText('p⃗₁ ↑',explosionX-18,Math.max(64,cy-96));
+      taskBoardSimDrawVectorText(ctx,[{base:'v',sub:'1'},' = ',{base:'v',sub:'0'},' вверх'],explosionX-12,upY+8,{color:'#16a34a',fontSize:12,weight:'700',align:'right'});
+      taskBoardSimDrawVectorText(ctx,[{base:'p',sub:'1'},' ↑'],explosionX-18,Math.max(64,cy-96),{color:'#16a34a',fontSize:12,weight:'700',align:'right'});
       ctx.fillStyle='#ea580c';ctx.textAlign='left';
       const secondLabelX=Math.min(W-230,downX+58);
       ctx.fillText('второй осколок',secondLabelX,downY-8);
-      ctx.fillText('v⃗₂ = 5v⃗₀ вниз-вправо',secondLabelX,downY+8);
-      ctx.fillText('p⃗₂ ↘',Math.min(W-92,explosionX+190),Math.min(H-64,cy+64));
+      taskBoardSimDrawVectorText(ctx,[{base:'v',sub:'2'},' = 5',{base:'v',sub:'0'},' вниз-вправо'],secondLabelX,downY+8,{color:'#ea580c',fontSize:12,weight:'700'});
+      taskBoardSimDrawVectorText(ctx,[{base:'p',sub:'2'},' ↘'],Math.min(W-92,explosionX+190),Math.min(H-64,cy+64),{color:'#ea580c',fontSize:12,weight:'700'});
       ctx.fillStyle='rgba(37,99,235,.95)';ctx.font='700 12px Golos Text,sans-serif';ctx.textAlign='center';
-      ctx.fillText('p⃗₀ вправо',Math.min(W-148,explosionX+118),cy-12);
-      ctx.fillText('p⃗₂x = p⃗₀',taskBoardSimLerp(explosionX,downX,0.55),cy+18);
-      ctx.fillText('p⃗₁ и p⃗₂y компенсируются',Math.min(W-150,explosionX+140),Math.max(78,cy-72));
+      taskBoardSimDrawVectorText(ctx,[{base:'p',sub:'0'},' вправо'],Math.min(W-148,explosionX+118),cy-12,{color:'rgba(37,99,235,.95)',fontSize:12,weight:'700',align:'center'});
+      taskBoardSimDrawVectorText(ctx,[{base:'p',sub:'2x'},' = ',{base:'p',sub:'0'}],taskBoardSimLerp(explosionX,downX,0.55),cy+18,{color:'rgba(37,99,235,.95)',fontSize:12,weight:'700',align:'center'});
+      taskBoardSimDrawVectorText(ctx,[{base:'p',sub:'1'},' и ',{base:'p',sub:'2y'},' компенсируются'],Math.min(W-150,explosionX+140),Math.max(78,cy-72),{color:'rgba(37,99,235,.95)',fontSize:12,weight:'700',align:'center'});
     }
     const bw=Math.min(330,Math.max(236,W*0.38)),bh=104,bx=W-bw-22,by=20;
     ctx.fillStyle='rgba(255,255,255,.98)';ctx.fillRect(bx,by,bw,bh);
     ctx.strokeStyle='rgba(37,99,235,.18)';ctx.strokeRect(bx,by,bw,bh);
     ctx.fillStyle='#64748b';ctx.font='11px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('Ключевой вывод',bx+12,by+18);
-    ctx.fillStyle='#111827';ctx.font='bold 16px Golos Text,sans-serif';ctx.fillText('p⃗₀ = p⃗₁ + p⃗₂',bx+12,by+44);
-    ctx.fillStyle='#16a34a';ctx.font='700 12px Golos Text,sans-serif';ctx.fillText('p⃗₁: вертикально вверх',bx+12,by+66);
-    ctx.fillStyle='#ea580c';ctx.fillText('p⃗₂: вниз-вправо',bx+12,by+86);
+    ctx.fillStyle='#111827';ctx.font='bold 16px Golos Text,sans-serif';taskBoardSimDrawVectorText(ctx,[{base:'p',sub:'0'},' = ',{base:'p',sub:'1'},' + ',{base:'p',sub:'2'}],bx+12,by+44,{color:'#111827',fontSize:16,weight:'bold'});
+    ctx.fillStyle='#16a34a';ctx.font='700 12px Golos Text,sans-serif';taskBoardSimDrawVectorText(ctx,[{base:'p',sub:'1'},': вертикально вверх'],bx+12,by+66,{color:'#16a34a',fontSize:12,weight:'700'});
+    ctx.fillStyle='#ea580c';taskBoardSimDrawVectorText(ctx,[{base:'p',sub:'2'},': вниз-вправо'],bx+12,by+86,{color:'#ea580c',fontSize:12,weight:'700'});
     return;
   }
   if(state.mode==='explosionFragments'){
@@ -10436,7 +10493,7 @@ if(t<ZSI_T1){var p=t/ZSI_T1,sx=28+(cx-28)*p;ctx.fillStyle='#00e5ff';ctx.beginPat
 else if(t<ZSI_T2){var ep=(t-ZSI_T1)/(ZSI_T2-ZSI_T1),r=ep*60;[1.0,0.72,0.46].forEach(function(sc,i){var ri=r*sc;ctx.strokeStyle='rgba(255,'+(160-i*40)+',0,'+(0.9-ep*0.7)+')';ctx.lineWidth=2.5-i*0.6;ctx.beginPath();ctx.arc(cx,cy,ri,0,Math.PI*2);ctx.stroke();});var fG=ctx.createRadialGradient(cx,cy,0,cx,cy,r*0.5);fG.addColorStop(0,'rgba(255,240,80,'+(1-ep*1.2)+')');fG.addColorStop(0.6,'rgba(255,140,0,'+(0.6-ep*0.5)+')');fG.addColorStop(1,'rgba(255,80,0,0)');ctx.fillStyle=fG;ctx.beginPath();ctx.arc(cx,cy,r*0.5,0,Math.PI*2);ctx.fill();ctx.fillStyle='rgba(255,220,0,'+(1-ep)+')';ctx.font='bold 15px Golos Text,sans-serif';ctx.textAlign='center';ctx.fillText('ВЗРЫВ!',cx,cy-r-14);}
 else{var fp=Math.min((t-ZSI_T2)/(ZSI_TEND-ZSI_T2),1),ease=1-Math.pow(1-fp,2);var f1y=cy-ease*115;ctx.strokeStyle='rgba(57,255,20,0.15)';ctx.lineWidth=2;ctx.setLineDash([3,4]);ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx,f1y);ctx.stroke();ctx.setLineDash([]);var bG1=ctx.createRadialGradient(cx-4,f1y-4,1,cx,f1y,10);bG1.addColorStop(0,'#80ff80');bG1.addColorStop(1,'#1a8c1a');ctx.save();ctx.shadowColor='rgba(57,255,20,0.4)';ctx.shadowBlur=12;ctx.fillStyle=bG1;ctx.beginPath();ctx.arc(cx,f1y,10,0,Math.PI*2);ctx.fill();ctx.restore();if(f1y<cy-20){zaA(ctx,cx,f1y,cx,f1y-32,'#39ff14',1.8);}ctx.fillStyle='#39ff14';ctx.font='11px Golos Text,sans-serif';ctx.textAlign='right';if(fp>0.2){ctx.fillText('m₁=1 кг',cx-14,f1y+4);ctx.fillText('⊥ к v₀',cx-14,f1y+17);}var ang=Math.PI/3,f2d=ease*125,f2x=cx+f2d*Math.cos(ang),f2y=cy+f2d*Math.sin(ang);ctx.strokeStyle='rgba(255,140,0,0.15)';ctx.setLineDash([3,4]);ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(f2x,f2y);ctx.stroke();ctx.setLineDash([]);var bG2=ctx.createRadialGradient(f2x-4,f2y-4,1,f2x,f2y,10);bG2.addColorStop(0,'#ffcc66');bG2.addColorStop(1,'#a05000');ctx.save();ctx.shadowColor='rgba(255,140,0,0.4)';ctx.shadowBlur=12;ctx.fillStyle=bG2;ctx.beginPath();ctx.arc(f2x,f2y,10,0,Math.PI*2);ctx.fill();ctx.restore();if(fp>0.1){zaA(ctx,f2x,f2y,f2x+28*Math.cos(ang),f2y+28*Math.sin(ang),'#ff8c00',1.8);}ctx.fillStyle='#ff8c00';ctx.font='11px Golos Text,sans-serif';ctx.textAlign='left';if(fp>0.2){ctx.fillText('m₂=1 кг',f2x+13,f2y-7);ctx.fillText('v₂=400 м/с',f2x+13,f2y+6);}ctx.fillStyle='rgba(255,200,60,0.8)';ctx.beginPath();ctx.arc(cx,cy,5,0,Math.PI*2);ctx.fill();if(fp>0.55){var aa=Math.min((fp-0.55)/0.3,1);ctx.strokeStyle='rgba(255,255,255,'+aa*0.75+')';ctx.lineWidth=1.5;ctx.setLineDash([]);ctx.beginPath();ctx.arc(cx,cy,42,0,ang);ctx.stroke();ctx.strokeStyle='rgba(255,255,255,'+aa*0.25+')';ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+55,cy);ctx.stroke();ctx.setLineDash([]);if(aa>0.5){ctx.fillStyle='rgba(255,255,255,'+aa+')';ctx.font='bold 14px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('α = 60°',cx+46,cy+18);}}if(fp>0.9){ctx.fillStyle='rgba(168,85,247,'+Math.min((fp-0.9)/0.1,1)+')';ctx.font='bold 14px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('Ответ: α₂ = 60°',14,22);}}}
 function zaA(ctx,x1,y1,x2,y2,col,lw){var dx=x2-x1,dy=y2-y1,L=Math.sqrt(dx*dx+dy*dy);if(L<2)return;var ux=dx/L,uy=dy/L,h=8;ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=lw||2;ctx.setLineDash([]);ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-h*ux+h*0.45*uy,y2-h*uy-h*0.45*ux);ctx.lineTo(x2-h*ux-h*0.45*uy,y2-h*uy+h*0.45*ux);ctx.closePath();ctx.fill();}
-function zsiDrawVec(){var cv=document.getElementById('zsiVecCanvas');if(!cv)return;var dpr=window.devicePixelRatio||1,W=cv.offsetWidth||500,H=160;cv.width=W*dpr;cv.height=H*dpr;cv.style.height=H+'px';var ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);ctx.fillStyle='#080f18';ctx.fillRect(0,0,W,H);var sc=0.44,p0=200*sc,p1=346*sc,p2=400*sc,ox=36,oy=H-30,ang=Math.PI/3;ctx.strokeStyle='rgba(107,122,141,0.2)';ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(ox,oy);ctx.lineTo(ox+190,oy);ctx.stroke();ctx.beginPath();ctx.moveTo(ox,oy);ctx.lineTo(ox,oy-145);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='rgba(107,122,141,0.5)';ctx.font='10px Golos Text,sans-serif';ctx.textAlign='center';ctx.fillText('X →',ox+190,oy+12);ctx.fillText('↑ Y',ox,oy-148);zaA(ctx,ox,oy,ox+p0,oy,'#00e5ff',2.5);ctx.fillStyle='#00e5ff';ctx.font='bold 11px Golos Text,sans-serif';ctx.textAlign='center';ctx.fillText('p₀=200',ox+p0/2,oy+14);zaA(ctx,ox,oy,ox,oy-p1,'#39ff14',2.5);ctx.fillStyle='#39ff14';ctx.textAlign='right';ctx.fillText('p₁≈346',ox-8,oy-p1/2);var p2x=p2*Math.cos(ang),p2y=p2*Math.sin(ang);zaA(ctx,ox,oy,ox+p2x,oy+p2y,'#ff8c00',2.5);ctx.fillStyle='#ff8c00';ctx.textAlign='left';ctx.fillText('p₂=400',ox+p2x+8,oy+p2y/2+4);ctx.strokeStyle='rgba(255,255,255,0.55)';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(ox,oy,30,0,ang);ctx.stroke();ctx.fillStyle='white';ctx.font='bold 11px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('60°',ox+33,oy+18);var sq=7;ctx.strokeStyle='rgba(57,255,20,0.55)';ctx.lineWidth=1;ctx.strokeRect(ox,oy-sq,sq,sq);ctx.strokeStyle='rgba(255,140,0,0.3)';ctx.lineWidth=1;ctx.setLineDash([3,4]);ctx.beginPath();ctx.moveTo(ox+p2x,oy+p2y);ctx.lineTo(ox+p2x,oy);ctx.stroke();ctx.beginPath();ctx.moveTo(ox+p2x,oy+p2y);ctx.lineTo(ox,oy+p2y);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='rgba(255,140,0,0.65)';ctx.font='10px Golos Text,sans-serif';ctx.textAlign='center';ctx.fillText('p₀',ox+p2x/2,oy+12);ctx.fillStyle='rgba(168,85,247,0.9)';ctx.font='bold 11px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('cosα = p₀/p₂ = 200/400 = 0.5  →  α = 60°',ox,16);}
+function zsiDrawVec(){var cv=document.getElementById('zsiVecCanvas');if(!cv)return;var dpr=window.devicePixelRatio||1,W=cv.offsetWidth||500,H=160;cv.width=W*dpr;cv.height=H*dpr;cv.style.height=H+'px';var ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);ctx.fillStyle='#080f18';ctx.fillRect(0,0,W,H);var sc=0.44,p0=200*sc,p1=346*sc,p2=400*sc,ox=36,oy=H-30,ang=Math.PI/3;ctx.strokeStyle='rgba(107,122,141,0.2)';ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(ox,oy);ctx.lineTo(ox+190,oy);ctx.stroke();ctx.beginPath();ctx.moveTo(ox,oy);ctx.lineTo(ox,oy-145);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='rgba(107,122,141,0.5)';ctx.font='10px Golos Text,sans-serif';ctx.textAlign='center';ctx.fillText('X →',ox+190,oy+12);ctx.fillText('↑ Y',ox,oy-148);zaA(ctx,ox,oy,ox+p0,oy,'#00e5ff',2.5);ctx.fillStyle='#00e5ff';ctx.font='bold 11px Golos Text,sans-serif';ctx.textAlign='center';taskBoardSimDrawVectorText(ctx,[{base:'p',sub:'0'},'=200'],ox+p0/2,oy+14,{color:'#00e5ff',fontSize:11,weight:'bold',align:'center'});zaA(ctx,ox,oy,ox,oy-p1,'#39ff14',2.5);ctx.fillStyle='#39ff14';ctx.textAlign='right';taskBoardSimDrawVectorText(ctx,[{base:'p',sub:'1'},'≈346'],ox-8,oy-p1/2,{color:'#39ff14',fontSize:11,weight:'bold',align:'right'});var p2x=p2*Math.cos(ang),p2y=p2*Math.sin(ang);zaA(ctx,ox,oy,ox+p2x,oy+p2y,'#ff8c00',2.5);ctx.fillStyle='#ff8c00';ctx.textAlign='left';taskBoardSimDrawVectorText(ctx,[{base:'p',sub:'2'},'=400'],ox+p2x+8,oy+p2y/2+4,{color:'#ff8c00',fontSize:11,weight:'bold'});ctx.strokeStyle='rgba(255,255,255,0.55)';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(ox,oy,30,0,ang);ctx.stroke();ctx.fillStyle='white';ctx.font='bold 11px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('60°',ox+33,oy+18);var sq=7;ctx.strokeStyle='rgba(57,255,20,0.55)';ctx.lineWidth=1;ctx.strokeRect(ox,oy-sq,sq,sq);ctx.strokeStyle='rgba(255,140,0,0.3)';ctx.lineWidth=1;ctx.setLineDash([3,4]);ctx.beginPath();ctx.moveTo(ox+p2x,oy+p2y);ctx.lineTo(ox+p2x,oy);ctx.stroke();ctx.beginPath();ctx.moveTo(ox+p2x,oy+p2y);ctx.lineTo(ox,oy+p2y);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='rgba(255,140,0,0.65)';ctx.font='10px Golos Text,sans-serif';ctx.textAlign='center';taskBoardSimDrawVectorText(ctx,[{base:'p',sub:'0'}],ox+p2x/2,oy+12,{color:'rgba(255,140,0,0.65)',fontSize:10,weight:'400',align:'center'});ctx.fillStyle='rgba(168,85,247,0.9)';ctx.font='bold 11px Golos Text,sans-serif';ctx.textAlign='left';taskBoardSimDrawVectorText(ctx,['cosα = ',{base:'p',sub:'0'},'/',{base:'p',sub:'2'},' = 200/400 = 0.5  →  α = 60°'],ox,16,{color:'rgba(168,85,247,0.9)',fontSize:11,weight:'bold'});}
 
 function enlargeSmallNonClickableText(){
   var nodes=document.querySelectorAll('body *');
