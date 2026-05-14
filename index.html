@@ -553,6 +553,18 @@ body.edit-mode .et{display:inline}
 .pt-given strong{color:var(--white)}.pt-find{color:var(--orange);font-weight:700}
 .pt-sol-btn{width:100%;padding:8px;background:rgba(255,140,0,.06);border:1px solid rgba(255,140,0,.25);border-radius:7px;color:var(--orange);font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;font-family:var(--fb)}
 .pt-sol-btn:hover{background:rgba(255,140,0,.14);box-shadow:0 0 18px rgba(255,140,0,.22);transform:translateY(-1px)}
+.pt-sol-btn:disabled,.pt-sol-btn.is-disabled{cursor:not-allowed;opacity:.45;filter:saturate(.65);transform:none;box-shadow:none}
+.pt-sol-btn:disabled:hover,.pt-sol-btn.is-disabled:hover{background:rgba(255,140,0,.06);box-shadow:none;transform:none}
+.hw-answer-gate{display:flex;flex-direction:column;gap:9px;background:var(--bg2);border:1px solid rgba(255,140,0,.18);border-left:3px solid var(--orange);border-radius:0 10px 10px 0;padding:12px 13px;box-shadow:inset 0 0 18px rgba(255,140,0,.025)}
+.hw-answer-label{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--gray)}
+.hw-answer-input{width:100%;min-width:0;background:rgba(4,12,22,.78);border:1px solid rgba(8,216,255,.22);border-radius:8px;color:var(--white);padding:9px 10px;font-family:var(--fb);font-size:13px;outline:none;transition:border-color .18s,box-shadow .18s,background .18s}
+.hw-answer-input::placeholder{color:rgba(148,163,184,.65)}
+.hw-answer-input:focus{border-color:rgba(8,216,255,.72);box-shadow:0 0 0 3px rgba(8,216,255,.1);background:rgba(6,18,32,.92)}
+.hw-answer-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.hw-answer-message{min-height:18px;margin:0;font-size:12px;line-height:1.45;color:var(--gray)}
+.hw-answer-message.ok{color:var(--green)}
+.hw-answer-message.err{color:#ff8c00}
+@media(max-width:680px){.hw-answer-actions{grid-template-columns:1fr}.hw-answer-gate{max-width:260px;width:100%}}
 .pt-solution{display:none;margin-top:10px;padding:14px;background:var(--bg2);border:1px solid var(--border);border-radius:9px;scroll-margin-top:18px}
 .pt-solution.open{display:block;animation:ptSlideDown .3s ease both}
 .pt-solution-title{font-family:var(--fh);font-size:17px;font-weight:800;color:var(--white);margin:0 0 10px}
@@ -3997,7 +4009,12 @@ function renderHW(ld){
   const items=LESSON_HOMEWORK[lessonName]||[];
   const cards=items.length?`<div style="font-size:12px;color:var(--gray);margin-bottom:14px">Ниже размещена карточка домашнего задания для учеников. После выполнения можно сразу загрузить работу.</div>${items.map(function(item,index){
     const sid='hwCard_'+index;
-    return `<div class="pt-card"><div class="pt-head"><div class="pt-num">${String(item.num).padStart(2,'0')}</div><span class="pt-level pt-l2">${item.level}</span><span class="pt-exam">${item.badge}</span><span class="pt-title">${item.title}</span></div><div class="pt-body"><div class="pt-condition">${item.cond}</div><div><div class="pt-given">${item.given}</div><button class="pt-sol-btn" onclick="hwToggle('${sid}',this)">▶ Карточка</button></div></div><div class="pt-solution" id="${sid}"><div class="pt-rich-card"><div class="pt-photo-wrap" data-solution-zoom="true"><img class="pt-photo-img" src="${item.image}" alt="${item.title}"></div></div></div></div>`;
+    const hasAnswer=item.answer!=null&&String(item.answer).trim()!=='';
+    const safeAnswer=escapeHtml(String(item.answer||''));
+    const side=hasAnswer
+      ? `<div class="hw-answer-gate" data-answer="${safeAnswer}"><label class="hw-answer-label" for="${sid}_answer">Введите ответ, м/с</label><input class="hw-answer-input" id="${sid}_answer" type="text" inputmode="decimal" autocomplete="off" placeholder="Например: 900" onkeydown="hwAnswerKey(event,this)"><div class="hw-answer-actions"><button class="pt-sol-btn hw-check-btn" type="button" onclick="hwCheckAnswer(this)">Проверить</button><button class="pt-sol-btn hw-card-btn is-disabled" type="button" data-hw-target="${sid}" disabled onclick="hwToggle('${sid}',this)">▶ Карточка</button></div><p class="hw-answer-message" aria-live="polite"></p></div>`
+      : `${item.given?`<div class="pt-given">${item.given}</div>`:''}<button class="pt-sol-btn" type="button" onclick="hwToggle('${sid}',this)">▶ Карточка</button>`;
+    return `<div class="pt-card"><div class="pt-head"><div class="pt-num">${String(item.num).padStart(2,'0')}</div><span class="pt-level pt-l2">${item.level}</span><span class="pt-exam">${item.badge}</span><span class="pt-title">${item.title}</span></div><div class="pt-body"><div class="pt-condition">${item.cond}</div><div class="pt-side">${side}</div></div><div class="pt-solution" id="${sid}"><div class="pt-rich-card"><div class="pt-photo-wrap" data-solution-zoom="true"><img class="pt-photo-img" src="${item.image}" alt="${item.title}"></div></div></div></div>`;
   }).join('')}`:'';
   return`${cards}<label class="hwd" for="hwi"><div class="hwi">📎</div><p>Нажмите или перетащите файл сюда</p>
     <small>PDF, DOC, JPG, PNG — до 20 МБ</small>
@@ -4008,7 +4025,43 @@ function renderHW(ld){
     <div style="font-size:11px;color:var(--gray)">${f.size} · ${f.date}</div></div>
     <span class="fbadge">новое</span><button class="db" onclick="delF(${i})">✕</button></div>`).join('')||'<div class="emp">Работы не сданы</div>'}`;
 }
+function normalizeHWAnswerValue(value){
+  return String(value||'')
+    .toLowerCase()
+    .replace(/,/g,'.')
+    .replace(/\s+/g,'')
+    .replace(/м\/с|м\/c|m\/s/g,'');
+}
+function hwCheckAnswer(btn){
+  const gate=btn?btn.closest('.hw-answer-gate'):null;
+  if(!gate)return;
+  const input=gate.querySelector('.hw-answer-input');
+  const cardBtn=gate.querySelector('.hw-card-btn');
+  const message=gate.querySelector('.hw-answer-message');
+  const expected=Number(normalizeHWAnswerValue(gate.dataset.answer));
+  const actual=Number(normalizeHWAnswerValue(input?input.value:''));
+  const ok=Number.isFinite(expected)&&Number.isFinite(actual)&&Math.abs(actual-expected)<=0.01;
+  if(ok){
+    if(message){message.className='hw-answer-message ok';message.textContent='Верно. Теперь можно открыть карточку.';}
+    if(cardBtn){cardBtn.disabled=false;cardBtn.classList.remove('is-disabled');}
+  }else{
+    if(message){message.className='hw-answer-message err';message.textContent='Пока неверно. Проверь закон сохранения импульса и энергии.';}
+    if(cardBtn){cardBtn.disabled=true;cardBtn.classList.add('is-disabled');}
+    const solution=cardBtn&&cardBtn.dataset.hwTarget?document.getElementById(cardBtn.dataset.hwTarget):null;
+    if(solution)solution.classList.remove('open');
+    if(cardBtn)cardBtn.textContent='▶ Карточка';
+  }
+}
+function hwAnswerKey(event,input){
+  if(event&&event.key==='Enter'){
+    event.preventDefault();
+    const gate=input?input.closest('.hw-answer-gate'):null;
+    const btn=gate?gate.querySelector('.hw-check-btn'):null;
+    if(btn)hwCheckAnswer(btn);
+  }
+}
 function hwToggle(id,btn){
+  if(btn&&btn.disabled)return;
   const el=document.getElementById(id);
   if(!el)return;
   const open=el.classList.toggle('open');
@@ -5691,7 +5744,7 @@ const LESSON_HOMEWORK={
       level:'Домашняя',
       badge:'Для ученика',
       cond:'Снаряд массой <strong>4 кг</strong>, летящий со скоростью <strong>400 м/с</strong>, разрывается на две равные части, одна из которых летит в направлении движения снаряда, а другая — в противоположную сторону. В момент разрыва суммарная кинетическая энергия осколков увеличилась на величину <strong>ΔE = 0,5 МДж</strong>. Определите скорость осколка, летящего по направлению движения снаряда.',
-      given:'<strong>Что нужно сделать:</strong> оформить полное решение в тетради или файле, затем загрузить фото, PDF или документ ниже.',
+      answer:'900',
       image:'images/impulse-homework-05.jpg'
     }
   ]
