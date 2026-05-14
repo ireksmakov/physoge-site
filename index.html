@@ -9003,10 +9003,12 @@ function taskBoardSimSync(){
     const centerX=Math.round(W*0.52);
     const clayR=14;
     const blockW=74, blockH=34;
-    const clayStartX=Math.max(64,centerX-260);
-    const blockStartX=Math.min(W-140,centerX+170);
     const clayImpactX=centerX-44;
     const blockImpactX=centerX-18;
+    const blockTravel=Math.min(86,Math.max(50,(W-220)/5));
+    const clayTravel=blockTravel*3;
+    const clayStartX=Math.max(clayR+42,clayImpactX-clayTravel);
+    const blockStartX=Math.min(W-blockW-42,blockImpactX+blockTravel);
     const clayX=taskBoardSimLerp(clayStartX,clayImpactX,approach);
     const blockX=taskBoardSimLerp(blockStartX,blockImpactX,approach);
     const joinedX=taskBoardSimLerp(blockImpactX,Math.max(58,blockImpactX-130),brake);
@@ -9018,7 +9020,7 @@ function taskBoardSimSync(){
     ctx.fillText('Абсолютно неупругое столкновение пластилина и бруска',topLeft,30);
     ctx.fillStyle='#64748b';
     ctx.font='12px Golos Text,sans-serif';
-    ctx.fillText('Пластилин летит вправо, брусок скользит влево; после прилипания система движется влево и тормозит трением.',topLeft,50);
+    ctx.fillText('Пластилин летит вправо в 3 раза быстрее бруска; после прилипания система движется влево и тормозит трением.',topLeft,50);
 
     ctx.strokeStyle='#111827';
     ctx.lineWidth=2.6;
@@ -9041,17 +9043,16 @@ function taskBoardSimSync(){
     if(progress<tImpact){
       drawClay(clayX,floorY-clayR);
       drawBlock(blockX,floorY-blockH);
-      taskBoardSimArrow(ctx,clayX+18,floorY-clayR,clayX+76,floorY-clayR,'#0284c7',7,2.4);
+      taskBoardSimArrow(ctx,clayX+18,floorY-clayR,clayX+108,floorY-clayR,'#0284c7',7,2.4);
       ctx.fillStyle='#0284c7';ctx.font='700 12px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('vпл = 15 м/с',clayX+28,floorY-clayR-17);
-      taskBoardSimArrow(ctx,blockX-8,floorY-blockH/2,blockX-58,floorY-blockH/2,'#f97316',7,2.4);
+      taskBoardSimArrow(ctx,blockX-8,floorY-blockH/2,blockX-38,floorY-blockH/2,'#f97316',7,2.4);
       ctx.fillStyle='#f97316';ctx.font='700 12px Golos Text,sans-serif';ctx.textAlign='right';ctx.fillText('vбр = 5 м/с',blockX-12,floorY-blockH/2-16);
     }else{
       drawBlock(joinedX,floorY-blockH);
       drawClay(joinedX+8,floorY-blockH/2);
       taskBoardSimArrow(ctx,joinedX-6,floorY-blockH/2,joinedX-54*vNow,floorY-blockH/2,'#2563eb',7,2.4);
       ctx.fillStyle='#2563eb';ctx.font='700 12px Golos Text,sans-serif';ctx.textAlign='right';ctx.fillText(brakeRaw<0.98?'v уменьшается':'0,7v₀',joinedX-16,floorY-blockH/2-18);
-      ctx.strokeStyle='rgba(239,68,68,.72)';ctx.lineWidth=2;ctx.setLineDash([5,4]);
-      ctx.beginPath();ctx.moveTo(joinedX+blockW+8,floorY-9);ctx.lineTo(joinedX+blockW+58,floorY-9);ctx.stroke();ctx.setLineDash([]);
+      taskBoardSimArrow(ctx,joinedX+blockW+8,floorY-9,joinedX+blockW+58,floorY-9,'#ef4444',7,2.2);
       ctx.fillStyle='#ef4444';ctx.textAlign='left';ctx.fillText('Fтр',joinedX+blockW+14,floorY-22);
     }
 
