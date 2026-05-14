@@ -614,7 +614,7 @@ body.edit-mode .et{display:inline}
 .pt-imp-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:999px;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.18);font-size:10px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;color:var(--cyan);margin-bottom:10px}
 .pt-imp-line{font-size:13px;color:var(--gray);line-height:1.7;margin-bottom:8px}
 .pt-imp-line strong{color:var(--white)}
-.pt-imp-line .accent{color:var(--orange);font-family:var(--fh);font-size:16px;font-weight:700;line-height:1.35;overflow-wrap:anywhere;word-break:break-word}.fx-root{display:inline-flex;align-items:flex-start;gap:3px;vertical-align:middle;max-width:100%}.fx-root-sign{font-size:1.2em;line-height:1;transform:translateY(2px)}.fx-root-body{display:inline-block;border-top:2px solid currentColor;padding:0.16em 0 0 0.24em;line-height:1.2}.sr-fml .fx-root{margin:0 .08em .02em .02em}.task-board-graph svg{display:block;width:100%;height:auto;overflow:visible}.task-board-graph text{font-family:'Golos Text',sans-serif}.task-board-problem-graph{overflow:hidden}.task-board-sim-btns.is-hidden{display:none}
+.pt-imp-line .accent{color:var(--orange);font-family:var(--fh);font-size:16px;font-weight:700;line-height:1.35;overflow-wrap:anywhere;word-break:break-word}.fx-root{display:inline-flex;align-items:flex-start;gap:3px;vertical-align:middle;max-width:100%}.fx-root-sign{font-size:1.2em;line-height:1;transform:translateY(2px)}.fx-root-body{display:inline-block;border-top:2px solid currentColor;padding:0.16em 0 0 0.24em;line-height:1.2}.sr-fml .fx-root{margin:0 .08em .02em .02em}.task-board-graph svg,.task-board-graph img{display:block;width:100%;height:auto;overflow:visible}.task-board-graph text{font-family:'Golos Text',sans-serif}.task-board-problem-graph{overflow:hidden}.task-board-sim-btns.is-hidden{display:none}
 .pt-demo-box{padding:14px 15px}
 .pt-demo-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:12px}
 .pt-demo-title{font-family:var(--fh);font-size:14px;font-weight:700;color:var(--white)}
@@ -6790,28 +6790,7 @@ function getTaskBoardGraph(mode){
       <text x="24" y="208" fill="#0284c7" font-size="13" font-weight="700">p = mvcosα = 20 кг·м/с</text>
     </svg>`;
   if(mode==='etherCork') return `
-    <svg viewBox="0 0 360 230" aria-label="Пробирка с пробкой на нити">
-      <defs>
-        <marker id="etherArrow" markerWidth="6" markerHeight="6" refX="5.3" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#0284c7"></path></marker>
-        <marker id="etherArrowOrange" markerWidth="6" markerHeight="6" refX="5.3" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#f97316"></path></marker>
-      </defs>
-      <rect x="0" y="0" width="360" height="230" rx="16" fill="#f8fafc"></rect>
-      <text x="22" y="26" fill="#1d4ed8" font-size="13" font-weight="700">Отдача пробирки после вылета пробки</text>
-      <path d="M180 42V154" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6 5"></path>
-      <circle cx="180" cy="42" r="5" fill="#0f172a"></circle>
-      <path d="M180 42A112 112 0 1 1 179 42" fill="none" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="5 5"></path>
-      <g transform="translate(166 138) rotate(-90 14 14)">
-        <rect x="8" y="-16" width="12" height="58" rx="6" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"></rect>
-        <circle cx="14" cy="42" r="7" fill="#dbeafe" stroke="#2563eb" stroke-width="2"></circle>
-      </g>
-      <rect x="94" y="148" width="30" height="14" rx="5" fill="#fdba74" stroke="#f97316" stroke-width="2"></rect>
-      <path d="M128 155H164" stroke="#f97316" stroke-width="3" marker-end="url(#etherArrowOrange)"></path>
-      <path d="M176 155H132" stroke="#0284c7" stroke-width="3" marker-end="url(#etherArrow)"></path>
-      <text x="74" y="142" fill="#f97316" font-size="12" font-weight="700">пробка: v</text>
-      <text x="184" y="170" fill="#0284c7" font-size="12" font-weight="700">пробирка: u</text>
-      <text x="24" y="196" fill="#0f172a" font-size="13" font-weight="700">m v = M u,  uₘᵢₙ = √(5gL)</text>
-      <text x="24" y="214" fill="#0284c7" font-size="13" font-weight="700">v = (M/m)·7 = 35 м/с</text>
-    </svg>`;
+    <img src="images/lesson12-task08-board-scheme.svg" alt="Схема к задаче 08: пробирка с пробкой на нити и траектория полного оборота">`;
   if(mode==='puckImpulse') return `
     <svg viewBox="0 0 360 230" aria-label="Схема импульсов шайб до и после удара">
       <defs>
