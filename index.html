@@ -5435,35 +5435,39 @@ const LESSON_TASKS={
   },
   {
     id:'lesson12-task07',
-    num:7,level:3,exam:'ЕГЭ (2 балла)',points:2,title:'Маятник после удара',
-    boardMode:'task07-pendulum-impact',graphLabel:'Схема',hasAnimation:true,
-    tags:['импульс','энергия','маятник','ЕГЭ','сложный'],
-    cond:'Маятник состоит из маленького груза массой M = 200 г и очень легкой нити подвеса длиной L = 1,25 м. Он висит в состоянии покоя в вертикальном положении. В груз ударяется небольшое тело массой m = 100 г, летевшее в горизонтальном направлении со скоростью v = 10 м/с. После удара тело останавливается и падает вертикально вниз. На какой максимальный угол α маятник отклонится от положения равновесия после удара?',
-    given:'M = 200 г = 0,2 кг<br>m = 100 г = 0,1 кг<br>L = 1,25 м<br>v = 10 м/с<br>g = 10 м/с²<br>после удара малое тело останавливается<br><span class="pt-find">Найти: α — максимальный угол отклонения маятника</span>',
+    num:7,level:3,exam:'ЕГЭ (2 балла)',points:2,title:'Абсолютно неупругое столкновение пластилина и бруска',
+    boardMode:'inelasticFriction',graphLabel:'Схема',
+    tags:['импульс','трение','неупругое столкновение','ЕГЭ','сложный'],
+    cond:'Кусок пластилина сталкивается со скользящим навстречу по горизонтальной поверхности стола бруском и прилипает к нему. Скорости пластилина и бруска перед ударом направлены противоположно и равны <strong>v<sub>пл</sub> = 15 м/с</strong> и <strong>v<sub>бр</sub> = 5 м/с</strong>. Масса бруска в <strong>4</strong> раза больше массы пластилина. Коэффициент трения скольжения между бруском и столом <strong>μ = 0,17</strong>. На какое расстояние переместятся слипшиеся брусок с пластилином к моменту, когда их скорость уменьшится на <strong>30%</strong>?',
+    given:'m<sub>пл</sub> = m<br>m<sub>бр</sub> = 4m<br>v<sub>пл</sub> = 15 м/с<br>v<sub>бр</sub> = 5 м/с<br>μ = 0,17<br>g ≈ 10 м/с²<br>стол горизонтальный, после удара тела движутся вместе<br><span class="pt-find">Найти: s — путь до уменьшения скорости на 30%</span>',
     steps:[],
     boardSolutionHtml:`
       <div class="task-board-manual">
-        <div class="task-board-step"><div class="task-board-step-num">1</div><div class="task-board-step-body"><strong>Во время короткого удара учитываем горизонтальный импульс.</strong> Малое тело после удара останавливается, поэтому весь его начальный импульс получает груз маятника:
-          <div class="sr-fml">mv = Mu</div>
+        <div class="task-board-step"><div class="task-board-step-num">1</div><div class="task-board-step-body"><strong>Выбираем положительное направление.</strong> Направим ось <strong>x</strong> влево — по направлению движения бруска. Тогда скорость бруска положительна, а скорость пластилина отрицательна:
+          <div class="sr-fml">v<sub>бр</sub> = +5 м/с, &nbsp; v<sub>пл</sub> = -15 м/с</div>
         </div></div>
-        <div class="task-board-step"><div class="task-board-step-num">2</div><div class="task-board-step-body"><strong>Находим скорость груза сразу после удара.</strong>
-          <div class="sr-fml">u = ${mFrac('mv','M')} = ${mFrac('0,1·10','0,2')} = 5 м/с</div>
+        <div class="task-board-step"><div class="task-board-step-num">2</div><div class="task-board-step-body"><strong>Применяем закон сохранения импульса при абсолютно неупругом ударе.</strong>
+          <div class="sr-fml">m(-15) + 4m·5 = (m + 4m)v</div>
+          <div class="sr-fml">-15m + 20m = 5m·v, &nbsp; v = 1 м/с</div>
         </div></div>
-        <div class="task-board-step"><div class="task-board-step-num">3</div><div class="task-board-step-body"><strong>После удара механическая энергия груза сохраняется.</strong> Кинетическая энергия переходит в потенциальную энергию подъёма:
-          <div class="sr-fml">${mFrac('Mu<sup>2</sup>','2')} = MgL(1 − cos α)</div>
+        <div class="task-board-step"><div class="task-board-step-num">3</div><div class="task-board-step-body"><strong>После удара действует сила трения.</strong> Замедление системы:
+          <div class="sr-fml">a = μg = 0,17·10 = 1,7 м/с²</div>
         </div></div>
-        <div class="task-board-step"><div class="task-board-step-num">4</div><div class="task-board-step-body"><strong>Выражаем угол отклонения.</strong>
-          <div class="sr-fml">cos α = 1 − ${mFrac('u<sup>2</sup>','2gL')} = 1 − ${mFrac('5<sup>2</sup>','2·10·1,25')} = 0</div>
+        <div class="task-board-step"><div class="task-board-step-num">4</div><div class="task-board-step-body"><strong>Скорость уменьшилась на 30%.</strong> Значит конечная скорость равна:
+          <div class="sr-fml">v<sub>к</sub> = 0,7v<sub>0</sub> = 0,7·1 = 0,7 м/с</div>
         </div></div>
-        <div class="task-board-step"><div class="task-board-step-num">5</div><div class="task-board-step-body"><strong>Ответ:</strong> максимальный угол отклонения маятника от вертикали равен <strong>90°</strong>.</div></div>
+        <div class="task-board-step"><div class="task-board-step-num">5</div><div class="task-board-step-body"><strong>Находим путь при равнозамедленном движении.</strong>
+          <div class="sr-fml">s = ${mFrac('v<sub>0</sub><sup>2</sup> − v<sub>к</sub><sup>2</sup>','2a')} = ${mFrac('1<sup>2</sup> − 0,7<sup>2</sup>','2·1,7')} = ${mFrac('0,51','3,4')} = 0,15 м</div>
+        </div></div>
+        <div class="task-board-step"><div class="task-board-step-num">6</div><div class="task-board-step-body"><strong>Ответ:</strong> слипшиеся пластилин и брусок пройдут <strong>0,15 м</strong>.</div></div>
       </div>`,
     solutionHtml:`
       <div class="pt-photo-wrap">
-        <img class="pt-photo-img" src="images/07.png" alt="Маятник после удара" onerror="handleSolutionImageError(this)">
+        <img class="pt-photo-img" src="images/07.png" alt="Абсолютно неупругое столкновение пластилина и бруска" onerror="handleSolutionImageError(this)">
         <div class="pt-img-fallback">Изображение решения пока не найдено</div>
       </div>`,
     hideAnswer:true,
-    ans:'α = 90°'
+    ans:'s = 0,15 м'
   },
   {
     id:'lesson12-task08',
@@ -5522,6 +5526,38 @@ const LESSON_TASKS={
       </div>`,
     hideAnswer:true,
     ans:'p<sub>0</sub> = p<sub>1</sub> + p<sub>2</sub>; p<sub>1</sub> направлен вверх, p<sub>2</sub> — вниз-вправо.'
+  },
+  {
+    id:'lesson12-task10',
+    num:10,level:3,exam:'ЕГЭ (2 балла)',points:2,title:'Маятник после удара',
+    boardMode:'task07-pendulum-impact',graphLabel:'Схема',hasAnimation:true,
+    tags:['импульс','энергия','маятник','ЕГЭ','сложный'],
+    cond:'Маятник состоит из маленького груза массой M = 200 г и очень легкой нити подвеса длиной L = 1,25 м. Он висит в состоянии покоя в вертикальном положении. В груз ударяется небольшое тело массой m = 100 г, летевшее в горизонтальном направлении со скоростью v = 10 м/с. После удара тело останавливается и падает вертикально вниз. На какой максимальный угол α маятник отклонится от положения равновесия после удара?',
+    given:'M = 200 г = 0,2 кг<br>m = 100 г = 0,1 кг<br>L = 1,25 м<br>v = 10 м/с<br>g = 10 м/с²<br>после удара малое тело останавливается<br><span class="pt-find">Найти: α — максимальный угол отклонения маятника</span>',
+    steps:[],
+    boardSolutionHtml:`
+      <div class="task-board-manual">
+        <div class="task-board-step"><div class="task-board-step-num">1</div><div class="task-board-step-body"><strong>Во время короткого удара учитываем горизонтальный импульс.</strong> Малое тело после удара останавливается, поэтому весь его начальный импульс получает груз маятника:
+          <div class="sr-fml">mv = Mu</div>
+        </div></div>
+        <div class="task-board-step"><div class="task-board-step-num">2</div><div class="task-board-step-body"><strong>Находим скорость груза сразу после удара.</strong>
+          <div class="sr-fml">u = ${mFrac('mv','M')} = ${mFrac('0,1·10','0,2')} = 5 м/с</div>
+        </div></div>
+        <div class="task-board-step"><div class="task-board-step-num">3</div><div class="task-board-step-body"><strong>После удара механическая энергия груза сохраняется.</strong> Кинетическая энергия переходит в потенциальную энергию подъёма:
+          <div class="sr-fml">${mFrac('Mu<sup>2</sup>','2')} = MgL(1 − cos α)</div>
+        </div></div>
+        <div class="task-board-step"><div class="task-board-step-num">4</div><div class="task-board-step-body"><strong>Выражаем угол отклонения.</strong>
+          <div class="sr-fml">cos α = 1 − ${mFrac('u<sup>2</sup>','2gL')} = 1 − ${mFrac('5<sup>2</sup>','2·10·1,25')} = 0</div>
+        </div></div>
+        <div class="task-board-step"><div class="task-board-step-num">5</div><div class="task-board-step-body"><strong>Ответ:</strong> максимальный угол отклонения маятника от вертикали равен <strong>90°</strong>.</div></div>
+      </div>`,
+    solutionHtml:`
+      <div class="pt-photo-wrap">
+        <img class="pt-photo-img" src="images/task-07-pendulum-impact-solution-card.png" alt="Решение задачи 10: маятник после удара" onerror="handleSolutionImageError(this)">
+        <div class="pt-img-fallback">Изображение решения пока не найдено</div>
+      </div>`,
+    hideAnswer:true,
+    ans:'α = 90°'
   }],
 
 'Закон сохранения энергии и изменения энергии':[
@@ -7687,7 +7723,7 @@ function closeTaskBoard(){
   taskBoardToggleFloating('condition',false);
   taskBoardToggleFloating('graph',false);
   toggleTaskBoardSolution(false);
-  if(state.task&&(state.task.id==='lesson12-task07'||state.mode==='task07-pendulum-impact')){
+  if(state.task&&state.mode==='task07-pendulum-impact'){
     const anim=document.getElementById('taskBoardAnimationOverlay')||document.getElementById('task07AnimationOverlay')||document.querySelector('.task-board-animation-overlay')||document.querySelector('.task-animation-overlay');
     if(task07AnimationState){ task07AnimationState.running=false; cancelAnimationFrame(task07AnimationState.raf); task07AnimationState.last=0; }
     if(anim){
@@ -8401,8 +8437,8 @@ function taskBoardDraw(){
 
 let task07AnimationState=null;
 function openTaskAnimation(taskId){
-  if(taskId!=='lesson12-task07') return;
   const task=findTaskById(taskId)||taskBoardState?.task||findTaskById(taskBoardState?.taskId);
+  if(!task||task.boardMode!=='task07-pendulum-impact') return;
   const overlay=ensureTask07AnimationOverlay();
   const hasOpenBoard=!!(taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
   overlay.dataset.keepTaskBoard=hasOpenBoard?'true':'false';
@@ -8419,6 +8455,10 @@ function openTaskAnimation(taskId){
   overlay.setAttribute('aria-hidden','false');
   document.body.classList.add('task07-anim-lock');
   const condition=overlay.querySelector('[data-task-animation-condition-text]');
+  const kicker=overlay.querySelector('.task07-anim-kicker');
+  const title=overlay.querySelector('#task07AnimTitle');
+  if(kicker) kicker.textContent=`ЕГЭ · Физика · Урок 12 · Задача ${String(task.num).padStart(2,'0')}`;
+  if(title) title.textContent=task.title||'Маятник после удара';
   if(condition) condition.innerHTML=getTaskConditionHtml(task);
   renderTask07Animation(overlay.querySelector('[data-task07-stage]'));
   resetTask07Animation();
@@ -8623,7 +8663,7 @@ function updateTask07Animation(progress){
 
 function toggleTaskBoardAnimation(force){
   const state=ensureTaskBoardOverlay();
-  if(state.task&&(state.task.id==='lesson12-task07'||state.mode==='task07-pendulum-impact')){
+  if(state.task&&state.mode==='task07-pendulum-impact'){
     let anim=
       document.getElementById('taskBoardAnimationOverlay')||
       document.getElementById('task07AnimationOverlay')||
@@ -8657,7 +8697,7 @@ function toggleTaskBoardAnimation(force){
         document.body.classList.add('task-board-lock');
       }
 
-      openTaskAnimation('lesson12-task07');
+      openTaskAnimation(state.task?.id || state.taskId || 'lesson12-task10');
       anim=
         document.getElementById('taskBoardAnimationOverlay')||
         document.getElementById('task07AnimationOverlay')||
