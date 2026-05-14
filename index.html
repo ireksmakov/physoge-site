@@ -4383,7 +4383,7 @@ function srReset(){
 <!-- ═══════ СТРАНИЦА УРОКА ═══════ -->
 <div id="lesson-page">
   <div class="lp-wrap">
-    <button onclick="goBack()" style="display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border);color:var(--gray);font-size:13px;padding:8px 16px;border-radius:8px;cursor:pointer;transition:all .2s;margin-bottom:20px;font-family:var(--fb)" onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--gray)'">← Назад</button>
+    <button type="button" onclick="goBack()" style="display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border);color:var(--gray);font-size:13px;padding:8px 16px;border-radius:8px;cursor:pointer;transition:all .2s;margin-bottom:20px;font-family:var(--fb)" onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--gray)'">← Назад</button>
     <div class="lp-label" id="lp-label">Механика</div>
     <div class="lp-title" id="lp-title">Урок</div>
     <div id="lp-body"></div>
@@ -4394,7 +4394,7 @@ function srReset(){
 <div id="sim-rupd">
   <div class="sr-wrap">
     <div class="sr-top">
-      <button onclick="goBack()" style="display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border);color:var(--gray);font-size:13px;padding:8px 16px;border-radius:8px;cursor:pointer;transition:all .2s;margin-bottom:16px;font-family:var(--fb)" onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--gray)'">← Назад</button>
+      <button type="button" onclick="goBack()" style="display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border);color:var(--gray);font-size:13px;padding:8px 16px;border-radius:8px;cursor:pointer;transition:all .2s;margin-bottom:16px;font-family:var(--fb)" onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--gray)'">← Назад</button>
       <div class="sr-label">Механика · Равноускоренное движение</div>
       <div class="sr-title">Движение из покоя с <span class="acc">постоянным ускорением</span></div>
     </div>
@@ -4430,7 +4430,7 @@ function srReset(){
         </div>
         <div id="rupdSimBox1" style="display:none">
           <div class="rupd-sim-box">
-            <div class="rupd-sim-header"><div class="rupd-sim-task-label">Симулятор · Задача 1 · РУПД</div><button class="rupd-sim-close" onclick="rupdCloseSim()">✕ Свернуть</button></div>
+            <div class="rupd-sim-header"><div class="rupd-sim-task-label">Симулятор · Задача 1 · РУПД</div><button type="button" class="rupd-sim-close" data-rupd-sim-close="true" onclick="rupdCloseSim(event)">✕ Свернуть</button></div>
             <div class="sr-main">
               <div class="sr-card">
                 <div class="sr-sec">Интерактивный симулятор</div>
@@ -4467,7 +4467,7 @@ function srReset(){
                   <div class="sr-frow"><div class="sr-fml"><span class="fv">S</span>=<span class="fv">at</span>²/2</div><div class="sr-fdesc">Путь из покоя</div></div>
                   <div class="sr-frow"><div class="sr-fml"><span class="fv">a</span>=ΔV/Δt</div><div class="sr-fdesc">Ускорение</div></div>
                 </div>
-                <div style="text-align:center;margin-top:8px"><button onclick="rupdCloseSim()" style="background:transparent;border:1px solid var(--border);color:var(--gray);padding:10px 20px;border-radius:8px;font-size:13px;cursor:pointer" onmouseover="this.style.borderColor='rgba(255,60,60,.5)';this.style.color='#ff6060'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--gray)'">✕ Свернуть</button></div>
+                <div style="text-align:center;margin-top:8px"><button type="button" data-rupd-sim-close="true" onclick="rupdCloseSim(event)" style="background:transparent;border:1px solid var(--border);color:var(--gray);padding:10px 20px;border-radius:8px;font-size:13px;cursor:pointer" onmouseover="this.style.borderColor='rgba(255,60,60,.5)';this.style.color='#ff6060'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--gray)'">✕ Свернуть</button></div>
               </div>
             </div>
           </div>
@@ -4489,7 +4489,7 @@ function srReset(){
         </div>
         <div id="rupdSimBox2" style="display:none">
           <div class="rupd-sim-box" style="border-color:rgba(168,85,247,.5)">
-            <div class="rupd-sim-header"><div class="rupd-sim-task-label" style="color:#a855f7">Симулятор · Задача 2 · ЗСИ</div><button class="rupd-sim-close" onclick="rupdCloseSim()">✕ Свернуть</button></div>
+            <div class="rupd-sim-header"><div class="rupd-sim-task-label" style="color:#a855f7">Симулятор · Задача 2 · ЗСИ</div><button type="button" class="rupd-sim-close" data-rupd-sim-close="true" onclick="rupdCloseSim(event)">✕ Свернуть</button></div>
             <div class="sr-formula-strip" style="margin-bottom:16px">
               <div class="sr-fi"><div class="fm" style="color:#a855f7"><span class="vec">p</span><sub>0</sub>=<span class="vec">p</span><sub>1</sub>+<span class="vec">p</span><sub>2</sub></div><div class="fd">ЗАКОН СОХРАНЕНИЯ ИМПУЛЬСА</div></div>
               <div style="width:1px;background:var(--border)"></div>
@@ -4532,13 +4532,13 @@ function srReset(){
                   <div class="sr-frow"><div class="sr-fml"><span style="color:#a855f7">p=mv</span></div><div class="sr-fdesc">Импульс</div></div>
                   <div class="sr-frow"><div class="sr-fml">cosα=p₀/p₂</div><div class="sr-fdesc">X-проекция</div></div>
                 </div>
-                <div style="text-align:center;margin-top:8px"><button onclick="rupdCloseSim()" style="background:transparent;border:1px solid var(--border);color:var(--gray);padding:10px 20px;border-radius:8px;font-size:13px;cursor:pointer" onmouseover="this.style.borderColor='rgba(255,60,60,.5)';this.style.color='#ff6060'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--gray)'">✕ Свернуть</button></div>
+                <div style="text-align:center;margin-top:8px"><button type="button" data-rupd-sim-close="true" onclick="rupdCloseSim(event)" style="background:transparent;border:1px solid var(--border);color:var(--gray);padding:10px 20px;border-radius:8px;font-size:13px;cursor:pointer" onmouseover="this.style.borderColor='rgba(255,60,60,.5)';this.style.color='#ff6060'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--gray)'">✕ Свернуть</button></div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div style="text-align:center;margin-top:20px"><button onclick="goBack()" style="background:transparent;border:1px solid var(--border);color:var(--gray);padding:10px 20px;border-radius:8px;font-size:13px;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--gray)'">← Назад</button></div>
+      <div style="text-align:center;margin-top:20px"><button type="button" onclick="goBack()" style="background:transparent;border:1px solid var(--border);color:var(--gray);padding:10px 20px;border-radius:8px;font-size:13px;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--gray)'">← Назад</button></div>
     </div>
 
     <!-- ВИРТУАЛЬНАЯ ЛАБОРАТОРНАЯ -->
@@ -4655,7 +4655,7 @@ function srReset(){
       <button class="vlab-btn vlab-btn-play" id="vlPlayBtnFs" onclick="vlToggle()" style="padding:7px 14px">▶ Пуск</button>
       <button class="vlab-btn vlab-btn-reset" onclick="vlReset(true)" style="padding:7px 14px;border:1px solid var(--border)">↺ Сброс</button>
       <button class="vlab-btn vlab-btn-save" onclick="vlSaveRow()" style="padding:7px 14px;border:1px solid rgba(0,229,255,.3)">📊 Записать</button>
-      <button class="vlab-fs-close" onclick="vlCloseFs()">✕ Свернуть</button>
+      <button type="button" class="vlab-fs-close" onclick="vlCloseFs(event)">✕ Свернуть</button>
     </div>
   </div>
   <div class="vlab-fs-content">
@@ -4704,20 +4704,51 @@ function rupdSwitchTab(tab){
 /* ════ TASK SIMS ════ */
 var rupdActiveTask=null;
 function rupdOpenSim(n){
-  [1,2].forEach(function(i){var b=document.getElementById('tbtn'+i);if(b){b.className='task-run-btn';b.textContent='▶ Запустить симулятор';}if(i===2&&b)b.style.background='linear-gradient(135deg,#a855f7,#7c3aed)';document.getElementById('rupdSimBox'+i).style.display='none';});
+  [1,2].forEach(function(i){
+    var b=document.getElementById('tbtn'+i);
+    if(b){
+      b.className='task-run-btn';
+      b.textContent='▶ Запустить симулятор';
+      if(i===2)b.style.background='linear-gradient(135deg,#a855f7,#7c3aed)';
+    }
+    var box=document.getElementById('rupdSimBox'+i);
+    if(box)box.style.display='none';
+  });
   if(rupdActiveTask===n){rupdActiveTask=null;return;}
   rupdActiveTask=n;
   var ab=document.getElementById('tbtn'+n);if(ab){ab.className='task-run-btn active-sim';ab.textContent='▼ Симулятор открыт';}
-  document.getElementById('rupdSimBox'+n).style.display='block';
-  if(n===1){SR_A=2;SR_T1=1;SR_TEND=3.8;srRunning=false;cancelAnimationFrame(srRaf);srT=0;srLastTS=null;srChartInited=false;var pb=document.getElementById('srPlayBtn');if(pb)pb.innerHTML='▶ Старт';setTimeout(function(){initSrChart();srReset();},80);}
+  var activeBox=document.getElementById('rupdSimBox'+n);
+  if(activeBox)activeBox.style.display='block';
+  if(n===1){SR_A=2;SR_T1=1;SR_TEND=3.8;srRunning=false;if(srRaf)cancelAnimationFrame(srRaf);srT=0;srLastTS=null;srChartInited=false;var pb=document.getElementById('srPlayBtn');if(pb)pb.innerHTML='▶ Старт';setTimeout(function(){initSrChart();srReset();},80);}
   else if(n===2){sim2Reset();setTimeout(function(){sim2DrawVec();},120);}
-  setTimeout(function(){document.getElementById('rupdSimBox'+n).scrollIntoView({behavior:'smooth',block:'start'});},30);
+  setTimeout(function(){var box=document.getElementById('rupdSimBox'+n);if(box)box.scrollIntoView({behavior:'smooth',block:'start'});},30);
 }
-function rupdCloseSim(){
+function rupdCloseSim(event){
+  if(event){
+    event.preventDefault();
+    event.stopPropagation();
+  }
   rupdActiveTask=null;
-  [1,2].forEach(function(i){var b=document.getElementById('tbtn'+i);if(b){b.className='task-run-btn';b.textContent='▶ Запустить симулятор';}if(i===2&&b)b.style.background='linear-gradient(135deg,#a855f7,#7c3aed)';document.getElementById('rupdSimBox'+i).style.display='none';});
-  srRunning=false;cancelAnimationFrame(srRaf);sim2Running=false;cancelAnimationFrame(sim2Raf);
+  [1,2].forEach(function(i){
+    var b=document.getElementById('tbtn'+i);
+    if(b){
+      b.className='task-run-btn';
+      b.textContent='▶ Запустить симулятор';
+      if(i===2)b.style.background='linear-gradient(135deg,#a855f7,#7c3aed)';
+    }
+    var box=document.getElementById('rupdSimBox'+i);
+    if(box)box.style.display='none';
+  });
+  srRunning=false;
+  if(srRaf)cancelAnimationFrame(srRaf);
+  sim2Running=false;
+  if(sim2Raf)cancelAnimationFrame(sim2Raf);
 }
+document.addEventListener('click',function(event){
+  var closeBtn=event.target&&event.target.closest?event.target.closest('[data-rupd-sim-close]'):null;
+  if(!closeBtn)return;
+  rupdCloseSim(event);
+},true);
 /* ════ SIM 2 — Impulse ════ */
 var sim2T=0,sim2Running=false,sim2Raf=null,sim2LastTS=null,sim2Speed=1;
 var SIM2_T1=2.2,SIM2_T2=3.0,SIM2_TEND=7;
@@ -5021,14 +5052,17 @@ function vlOpenFs(){
     });
   }
 }
-function vlCloseFs(){
+function vlCloseFs(event){
+  if(event){
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  vlExitFsUi();
   if(document.fullscreenElement&&document.exitFullscreen){
     document.exitFullscreen().catch(function(){
       vlExitFsUi();
     });
-    return;
   }
-  vlExitFsUi();
 }
 document.addEventListener('fullscreenchange',function(){
   if(!document.fullscreenElement&&vlFsMode){
@@ -5069,7 +5103,7 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
 <div id="sim-zsi" style="display:none;min-height:100vh;padding-top:64px">
   <div class="sr-wrap">
     <div class="sr-top">
-      <button onclick="goBack()" style="display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border);color:var(--gray);font-size:13px;padding:8px 16px;border-radius:8px;cursor:pointer;transition:all .2s;margin-bottom:16px;font-family:var(--fb)" onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--gray)'">← Назад</button>
+      <button type="button" onclick="goBack()" style="display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border);color:var(--gray);font-size:13px;padding:8px 16px;border-radius:8px;cursor:pointer;transition:all .2s;margin-bottom:16px;font-family:var(--fb)" onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--gray)'">← Назад</button>
       <div class="sr-label">Механика · Закон сохранения импульса</div>
       <div class="sr-title">Разрыв снаряда: <span class="acc">нахождение угла осколка</span></div>
       <p class="sr-desc">Снаряд массой <strong style="color:var(--white)">2 кг</strong> со скоростью <strong style="color:var(--white)">100 м/с</strong> разрывается на два осколка по <strong style="color:var(--cyan)">1 кг</strong>. Первый летит перпендикулярно, второй — со скоростью <strong style="color:var(--cyan)">400 м/с</strong>. Найдите угол второго осколка.</p>
@@ -5128,7 +5162,7 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
           <div class="sr-frow"><div class="sr-fml">p₁=p₂·sinα</div><div class="sr-fdesc">Y-проекция</div></div>
           <div class="sr-frow"><div class="sr-fml">p₀²+p₁²=p₂²</div><div class="sr-fdesc">Пифагор</div></div>
         </div>
-        <div style="text-align:center;margin-top:8px"><button onclick="goBack()" style="background:transparent;border:1px solid var(--border);color:var(--gray);padding:10px 20px;border-radius:8px;font-size:13px;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--gray)'">← Назад</button></div>
+        <div style="text-align:center;margin-top:8px"><button type="button" onclick="goBack()" style="background:transparent;border:1px solid var(--border);color:var(--gray);padding:10px 20px;border-radius:8px;font-size:13px;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--gray)'">← Назад</button></div>
       </div>
     </div>
   </div>
