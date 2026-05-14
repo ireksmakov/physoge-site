@@ -660,7 +660,7 @@ body.edit-mode .et{display:inline}
 /* ===== TASK 07 PENDULUM IMPACT ANIMATION ===== */
 .task07-anim-lock{overflow:hidden}
 .task-board-animation-overlay,.task-animation-overlay,.task07-anim-overlay{position:fixed;inset:0;z-index:2147483600;display:none;pointer-events:none;background:radial-gradient(circle at 18% 12%,rgba(0,229,255,.16),transparent 34%),radial-gradient(circle at 78% 18%,rgba(255,140,0,.16),transparent 30%),rgba(2,6,23,.94);backdrop-filter:blur(10px);color:var(--white);padding:18px;box-sizing:border-box;overflow:auto}
-.task-board-animation-overlay.open,.task-animation-overlay.open,.task07-anim-overlay.open{display:block;pointer-events:auto;animation:taskBoardOverlayFade .24s ease both}
+.task-board-animation-overlay.open,.task-animation-overlay.open,.task07-anim-overlay.open{display:flex;align-items:center;justify-content:center;pointer-events:auto;animation:taskBoardOverlayFade .24s ease both}
 .task07-anim-modal{width:min(1180px,100%);height:min(820px,100%);min-height:auto;margin:auto;display:flex;flex-direction:column;gap:14px;background:linear-gradient(180deg,rgba(11,18,32,.98),rgba(5,10,20,.98));border:1px solid rgba(0,229,255,.24);border-radius:24px;box-shadow:0 34px 90px rgba(0,0,0,.52),0 0 60px rgba(0,229,255,.12);overflow:visible}
 .task07-anim-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:18px 20px 0}.task07-anim-head>div{flex:1 1 auto;min-width:0}
 .task07-anim-kicker{font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:var(--cyan);margin-bottom:5px}
@@ -8630,7 +8630,17 @@ function taskBoardDraw(){
 
 let task07AnimationState=null;
 function openTaskAnimation(taskId){
-  const task=findTaskById(taskId)||taskBoardState?.task||findTaskById(taskBoardState?.taskId);
+  let task=findTaskById(taskId)||taskBoardState?.task||findTaskById(taskBoardState?.taskId);
+  if(task&&!isTask10PendulumImpactMode(task.boardMode)){
+    const modeCandidate=String(taskId||task.boardMode||taskBoardState?.mode||taskBoardState?.taskId||'');
+    if(isTask10PendulumImpactMode(modeCandidate)) task=findTaskById('lesson12-task10')||findTaskById('task10-pendulum-impact')||task;
+  }
+  if(!task||!isTask10PendulumImpactMode(task.boardMode)){
+    const fallbackCandidate=String(taskId||taskBoardState?.mode||taskBoardState?.taskId||'');
+    if(isTask10PendulumImpactMode(fallbackCandidate)||fallbackCandidate==='lesson12-task10'){
+      task=findTaskById('lesson12-task10')||findTaskById('task10-pendulum-impact');
+    }
+  }
   if(!task||!isTask10PendulumImpactMode(task.boardMode)) return;
   const overlay=ensureTask07AnimationOverlay();
   const hasOpenBoard=!!(taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
@@ -8778,8 +8788,13 @@ function closeTaskBoardAnimation(){
   if(animState){ animState.running=false; cancelAnimationFrame(animState.raf); animState.last=0; }
 
   const anim=
-    document.getElementById('taskBoardAnimationOverlay')||
+    document.querySelector('#task07AnimationOverlay.open')||
+    document.querySelector('#taskBoardAnimationOverlay.open')||
+    document.querySelector('.task07-anim-overlay.open')||
+    document.querySelector('.task-board-animation-overlay.open')||
+    document.querySelector('.task-animation-overlay.open')||
     document.getElementById('task07AnimationOverlay')||
+    document.getElementById('taskBoardAnimationOverlay')||
     document.querySelector('.task-board-animation-overlay')||
     document.querySelector('.task-animation-overlay');
 
