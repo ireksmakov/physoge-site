@@ -6824,6 +6824,13 @@ function getTaskConditionHtml(task){
 function isTask10PendulumImpactMode(mode){
   return mode==='task10-pendulum-impact'||mode==='task07-pendulum-impact';
 }
+function getTaskBoardAnimationButtonText(isOpen){
+  const state=taskBoardState;
+  const mode=state?(state.mode||state.task?.boardMode||''):'';
+  const isTask10=isTask10PendulumImpactMode(mode);
+  if(isTask10) return isOpen?'✕ Симулятор 10':'▶ Симулятор 10';
+  return isOpen?'✕ Анимация':'▶ Анимация';
+}
 function getTaskBoardData(mode){
   if(mode==='task07-pendulum-impact') mode='task10-pendulum-impact';
   if(String(mode||'').indexOf('blank-task-')===0){
@@ -7354,7 +7361,7 @@ function ensureTaskBoardOverlay(){
               <div class="task-board-dropdown" id="taskBoardAnimMenu" data-dropdown-name="animations">
                 <button type="button" class="task-board-dropdown-toggle" onclick="taskBoardToggleDropdown('animations')" aria-haspopup="true" aria-expanded="false">🎬 Анимации ▼</button>
                 <div class="task-board-dropdown-menu">
-                  <button type="button" class="task-board-tool" id="taskBoardAnimBtn" onclick="openTaskAnimation('lesson12-task10');taskBoardCloseDropdowns();">▶ Симулятор 10</button>
+                  <button type="button" class="task-board-tool" id="taskBoardAnimBtn" onclick="toggleTaskBoardAnimation();taskBoardCloseDropdowns();">▶ Анимация</button>
                 </div>
               </div>
               <button type="button" class="task-board-quick-action task-board-quick-clear" data-board-action="clear">🧹 Очистить</button>
@@ -7868,7 +7875,7 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
   if(state.animMenu) state.animMenu.style.display=hasAnimationSection?'':'none';
   if(state.animBtn){
     state.animBtn.style.display=hasAnimationSection?'inline-flex':'none';
-    state.animBtn.textContent='▶ Симулятор 10';
+    state.animBtn.textContent=getTaskBoardAnimationButtonText(false);
   }
   const useSolutionWorkspace=!!(hasFilledTaskSolution(task)||hasLegacyTaskSolution(task));
   state.solution.innerHTML=renderTaskBoardSolution(task);
@@ -8934,13 +8941,13 @@ function toggleTaskBoardAnimation(force){
     state.drawer.classList.remove('anim-hidden');
     const btn=document.getElementById('taskBoardSimToggleBtn');
     if(btn) btn.textContent='▶ Старт';
-    if(state.animBtn) state.animBtn.textContent='▶ Симулятор 10';
+    if(state.animBtn) state.animBtn.textContent=getTaskBoardAnimationButtonText(false);
     return;
   }
   const open=typeof force==='boolean'?force:!state.simPopup.classList.contains('open');
   state.simPopup.classList.toggle('open',open);
   state.drawer.classList.toggle('anim-hidden',open);
-  if(state.animBtn) state.animBtn.textContent=open?'✕ Симулятор 10':'▶ Симулятор 10';
+  if(state.animBtn) state.animBtn.textContent=getTaskBoardAnimationButtonText(open);
   if(open){
     if(taskBoardState){
       try{
