@@ -550,12 +550,22 @@ body.edit-mode .et{display:inline}
 .pt-photo-wrap[data-solution-zoom]::after,.task-board-photo-wrap[data-solution-zoom]::after,.media-zoom-wrap[data-solution-zoom]::after{content:'Нажмите, чтобы увеличить';position:absolute;right:12px;bottom:12px;padding:7px 10px;border-radius:999px;background:rgba(15,23,42,.82);color:#fff;font-size:11px;font-weight:800;line-height:1;opacity:0;transform:translateY(6px);transition:opacity .18s,transform .18s;pointer-events:none}
 .pt-photo-wrap[data-solution-zoom]:hover::after,.task-board-photo-wrap[data-solution-zoom]:hover::after,.media-zoom-wrap[data-solution-zoom]:hover::after{opacity:1;transform:translateY(0)}
 .pt-photo-img{display:block;width:100%;height:auto;background:#fff}
-.solution-photo-lightbox{position:fixed;inset:0;z-index:2147483600;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(2,9,20,.92);backdrop-filter:blur(8px);cursor:zoom-out}
+.solution-photo-lightbox{position:fixed;inset:0;z-index:2147483600;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(2,9,20,.92);backdrop-filter:blur(8px);cursor:zoom-out;touch-action:none}
 .solution-photo-lightbox.open{display:flex;animation:solutionPhotoFade .18s ease both}
-.solution-photo-lightbox img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;border-radius:18px;background:#fff;box-shadow:0 28px 90px rgba(0,0,0,.55);object-fit:contain}
-.solution-photo-lightbox-hint{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);padding:9px 13px;border-radius:999px;background:rgba(255,255,255,.92);color:#0f172a;font-size:12px;font-weight:800;pointer-events:none;box-shadow:0 12px 34px rgba(0,0,0,.22)}
+.solution-photo-lightbox-stage{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:hidden}
+.solution-photo-lightbox img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;border-radius:18px;background:#fff;box-shadow:0 28px 90px rgba(0,0,0,.55);object-fit:contain;cursor:default;transition:opacity .16s ease,transform .16s ease}
+.solution-photo-lightbox img.switching{opacity:.28;transform:scale(.985)}
+.solution-photo-lightbox-btn{position:fixed;z-index:2;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.55);background:rgba(255,255,255,.92);color:#0f172a;border-radius:999px;font-family:var(--fh);font-weight:900;box-shadow:0 18px 44px rgba(0,0,0,.28);cursor:pointer;transition:transform .15s,background .15s,border-color .15s}
+.solution-photo-lightbox-btn:hover{transform:translateY(-1px);background:#fff;border-color:#fff}
+.solution-photo-lightbox-btn[hidden]{display:none}
+.solution-photo-lightbox-prev,.solution-photo-lightbox-next{top:50%;width:48px;height:48px;font-size:28px;line-height:1;transform:translateY(-50%)}
+.solution-photo-lightbox-prev:hover,.solution-photo-lightbox-next:hover{transform:translateY(calc(-50% - 1px))}
+.solution-photo-lightbox-prev{left:24px}.solution-photo-lightbox-next{right:24px}
+.solution-photo-lightbox-close{top:22px;right:22px;width:42px;height:42px;font-size:24px}
+.solution-photo-lightbox-counter{position:fixed;top:24px;left:50%;transform:translateX(-50%);padding:8px 13px;border-radius:999px;background:rgba(255,255,255,.92);color:#0f172a;font-size:12px;font-weight:900;box-shadow:0 12px 34px rgba(0,0,0,.22);pointer-events:none}
+.solution-photo-lightbox-hint{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);padding:9px 13px;border-radius:999px;background:rgba(255,255,255,.92);color:#0f172a;font-size:12px;font-weight:800;pointer-events:none;box-shadow:0 12px 34px rgba(0,0,0,.22);text-align:center}
 @keyframes solutionPhotoFade{from{opacity:0}to{opacity:1}}
-@media(max-width:680px){.solution-photo-lightbox{padding:10px}.solution-photo-lightbox img{border-radius:12px}.pt-photo-wrap[data-solution-zoom]::after,.task-board-photo-wrap[data-solution-zoom]::after,.media-zoom-wrap[data-solution-zoom]::after{opacity:1;transform:none;font-size:10px}}
+@media(max-width:680px){.solution-photo-lightbox{padding:10px}.solution-photo-lightbox img{border-radius:12px}.solution-photo-lightbox-prev,.solution-photo-lightbox-next{width:40px;height:40px;font-size:24px}.solution-photo-lightbox-prev{left:10px}.solution-photo-lightbox-next{right:10px}.solution-photo-lightbox-close{top:10px;right:10px;width:38px;height:38px}.solution-photo-lightbox-counter{top:12px;font-size:11px}.solution-photo-lightbox-hint{bottom:12px;max-width:calc(100% - 20px);font-size:11px}.pt-photo-wrap[data-solution-zoom]::after,.task-board-photo-wrap[data-solution-zoom]::after,.media-zoom-wrap[data-solution-zoom]::after{opacity:1;transform:none;font-size:10px}}
 .pt-rich-card,.task-board-rich{background:#fff;border:1px solid #dbe5f0;border-radius:18px;padding:16px;box-shadow:0 14px 34px rgba(15,23,42,.08)}
 
 /* ===== TASK EDUCATIONAL SCHEMES ===== */
@@ -5843,25 +5853,87 @@ function handleSolutionImageError(img,path){
   const fallback=wrap?wrap.querySelector('.pt-img-fallback'):null;
   if(fallback) fallback.style.display='block';
 }
+const solutionPhotoLightboxState={images:[],index:0,touchStartX:0,touchStartY:0};
 function ensureSolutionPhotoLightbox(){
   let box=document.getElementById('solutionPhotoLightbox');
   if(box) return box;
-  document.body.insertAdjacentHTML('beforeend','<div id="solutionPhotoLightbox" class="solution-photo-lightbox" role="dialog" aria-modal="true" aria-label="Увеличенное изображение решения"><img alt=""><div class="solution-photo-lightbox-hint">Нажмите ещё раз, чтобы закрыть</div></div>');
+  document.body.insertAdjacentHTML('beforeend','<div id="solutionPhotoLightbox" class="solution-photo-lightbox" role="dialog" aria-modal="true" aria-label="Увеличенная карусель изображений решения"><button type="button" class="solution-photo-lightbox-btn solution-photo-lightbox-close" aria-label="Закрыть увеличенное изображение">×</button><button type="button" class="solution-photo-lightbox-btn solution-photo-lightbox-prev" aria-label="Предыдущее изображение">‹</button><div class="solution-photo-lightbox-stage"><img alt=""></div><button type="button" class="solution-photo-lightbox-btn solution-photo-lightbox-next" aria-label="Следующее изображение">›</button><div class="solution-photo-lightbox-counter" aria-live="polite"></div><div class="solution-photo-lightbox-hint">Листайте стрелками, колесом мыши или свайпом. Esc — закрыть</div></div>');
   box=document.getElementById('solutionPhotoLightbox');
-  box.addEventListener('click',closeSolutionPhotoLightbox);
+  box.addEventListener('click',function(e){if(e.target===box) closeSolutionPhotoLightbox();});
+  box.querySelector('.solution-photo-lightbox-close').addEventListener('click',closeSolutionPhotoLightbox);
+  box.querySelector('.solution-photo-lightbox-prev').addEventListener('click',function(e){e.stopPropagation();showSolutionPhotoLightboxImage(solutionPhotoLightboxState.index-1,true);});
+  box.querySelector('.solution-photo-lightbox-next').addEventListener('click',function(e){e.stopPropagation();showSolutionPhotoLightboxImage(solutionPhotoLightboxState.index+1,true);});
+  box.addEventListener('wheel',function(e){
+    if(!box.classList.contains('open')||solutionPhotoLightboxState.images.length<2) return;
+    e.preventDefault();
+    showSolutionPhotoLightboxImage(solutionPhotoLightboxState.index+(e.deltaY>0||e.deltaX>0?1:-1),true);
+  },{passive:false});
+  box.addEventListener('touchstart',function(e){
+    const t=e.touches&&e.touches[0];
+    if(!t) return;
+    solutionPhotoLightboxState.touchStartX=t.clientX;
+    solutionPhotoLightboxState.touchStartY=t.clientY;
+  },{passive:true});
+  box.addEventListener('touchend',function(e){
+    const t=e.changedTouches&&e.changedTouches[0];
+    if(!t||solutionPhotoLightboxState.images.length<2) return;
+    const dx=t.clientX-solutionPhotoLightboxState.touchStartX;
+    const dy=t.clientY-solutionPhotoLightboxState.touchStartY;
+    if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.4){
+      showSolutionPhotoLightboxImage(solutionPhotoLightboxState.index+(dx<0?1:-1),true);
+    }
+  },{passive:true});
   return box;
+}
+function isSolutionZoomImageVisible(img){
+  if(!img||img.style.display==='none') return false;
+  if(!img.getClientRects||!img.getClientRects().length) return false;
+  return true;
+}
+function getSolutionZoomImages(){
+  return Array.from(document.querySelectorAll('.pt-photo-wrap[data-solution-zoom] img,.task-board-photo-wrap[data-solution-zoom] img,.media-zoom-wrap[data-solution-zoom] img')).filter(function(img){
+    return isSolutionZoomImageVisible(img)&&(img.currentSrc||img.getAttribute('src'));
+  }).map(function(img){
+    return {src:img.currentSrc||img.getAttribute('src'),alt:img.getAttribute('alt')||'Увеличенное изображение решения',node:img};
+  });
+}
+function showSolutionPhotoLightboxImage(index,animate){
+  const box=ensureSolutionPhotoLightbox();
+  const items=solutionPhotoLightboxState.images;
+  if(!items.length) return;
+  const nextIndex=(index+items.length)%items.length;
+  solutionPhotoLightboxState.index=nextIndex;
+  const item=items[nextIndex];
+  const full=box.querySelector('.solution-photo-lightbox-stage img');
+  if(full){
+    if(animate) full.classList.add('switching');
+    window.setTimeout(function(){
+      full.src=item.src;
+      full.alt=item.alt;
+      full.classList.remove('switching');
+    },animate?80:0);
+  }
+  const hasMany=items.length>1;
+  const prev=box.querySelector('.solution-photo-lightbox-prev');
+  const next=box.querySelector('.solution-photo-lightbox-next');
+  const counter=box.querySelector('.solution-photo-lightbox-counter');
+  if(prev) prev.hidden=!hasMany;
+  if(next) next.hidden=!hasMany;
+  if(counter){
+    counter.hidden=!hasMany;
+    counter.textContent=hasMany?(nextIndex+1)+' / '+items.length:'';
+  }
 }
 function openSolutionPhotoLightbox(img){
   if(!img||!img.getAttribute) return;
   const src=img.currentSrc||img.getAttribute('src');
   if(!src) return;
   const box=ensureSolutionPhotoLightbox();
-  const full=box.querySelector('img');
-  if(full){
-    full.src=src;
-    full.alt=img.getAttribute('alt')||'Увеличенное изображение решения';
-  }
+  const images=getSolutionZoomImages();
+  const startIndex=Math.max(0,images.findIndex(function(item){return item.node===img||item.src===src;}));
+  solutionPhotoLightboxState.images=images.length?images:[{src:src,alt:img.getAttribute('alt')||'Увеличенное изображение решения',node:img}];
   box.classList.add('open');
+  showSolutionPhotoLightboxImage(startIndex,false);
   document.body.style.overflow='hidden';
 }
 function closeSolutionPhotoLightbox(){
@@ -5880,7 +5952,12 @@ document.addEventListener('click',function(e){
   openSolutionPhotoLightbox(img);
 });
 document.addEventListener('keydown',function(e){
+  const box=document.getElementById('solutionPhotoLightbox');
+  const isOpen=!!(box&&box.classList.contains('open'));
   if(e.key==='Escape') closeSolutionPhotoLightbox();
+  if(!isOpen||solutionPhotoLightboxState.images.length<2) return;
+  if(e.key==='ArrowLeft'){e.preventDefault();showSolutionPhotoLightboxImage(solutionPhotoLightboxState.index-1,true);}
+  if(e.key==='ArrowRight'){e.preventDefault();showSolutionPhotoLightboxImage(solutionPhotoLightboxState.index+1,true);}
 });
 function renderSolutionImageHtml(path,alt,cls){
   const safePath=escapeHtml(String(path||''));
