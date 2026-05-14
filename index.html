@@ -544,7 +544,16 @@ body.edit-mode .et{display:inline}
 .pt-solution-title{font-family:var(--fh);font-size:17px;font-weight:800;color:var(--white);margin:0 0 10px}
 .pt-img-fallback{display:none;margin-top:10px;border:1px dashed rgba(148,163,184,.45);border-radius:14px;padding:16px;text-align:center;color:#64748b;background:#f8fafc;font-weight:700}
 .pt-photo-wrap{position:relative;margin-top:4px;border-radius:18px;overflow:hidden;background:#fff;border:1px solid rgba(148,163,184,.24);box-shadow:0 14px 34px rgba(15,23,42,.08)}
+.pt-photo-wrap[data-solution-zoom]{cursor:zoom-in}
+.pt-photo-wrap[data-solution-zoom]::after{content:'Нажмите, чтобы увеличить';position:absolute;right:12px;bottom:12px;padding:7px 10px;border-radius:999px;background:rgba(15,23,42,.82);color:#fff;font-size:11px;font-weight:800;line-height:1;opacity:0;transform:translateY(6px);transition:opacity .18s,transform .18s;pointer-events:none}
+.pt-photo-wrap[data-solution-zoom]:hover::after{opacity:1;transform:translateY(0)}
 .pt-photo-img{display:block;width:100%;height:auto;background:#fff}
+.solution-photo-lightbox{position:fixed;inset:0;z-index:2147483600;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(2,9,20,.92);backdrop-filter:blur(8px);cursor:zoom-out}
+.solution-photo-lightbox.open{display:flex;animation:solutionPhotoFade .18s ease both}
+.solution-photo-lightbox img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;border-radius:18px;background:#fff;box-shadow:0 28px 90px rgba(0,0,0,.55);object-fit:contain}
+.solution-photo-lightbox-hint{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);padding:9px 13px;border-radius:999px;background:rgba(255,255,255,.92);color:#0f172a;font-size:12px;font-weight:800;pointer-events:none;box-shadow:0 12px 34px rgba(0,0,0,.22)}
+@keyframes solutionPhotoFade{from{opacity:0}to{opacity:1}}
+@media(max-width:680px){.solution-photo-lightbox{padding:10px}.solution-photo-lightbox img{border-radius:12px}.pt-photo-wrap[data-solution-zoom]::after{opacity:1;transform:none;font-size:10px}}
 .pt-rich-card,.task-board-rich{background:#fff;border:1px solid #dbe5f0;border-radius:18px;padding:16px;box-shadow:0 14px 34px rgba(15,23,42,.08)}
 
 /* ===== TASK EDUCATIONAL SCHEMES ===== */
@@ -5491,7 +5500,7 @@ const LESSON_TASKS={
         <div class="task-board-step"><div class="task-board-step-num">4</div><div class="task-board-step-body"><strong>Ответ:</strong> пробка должна вылететь со скоростью не меньше <strong>35 м/с</strong>.</div></div>
       </div>`,
     solutionHtml:`
-      <div class="pt-photo-wrap">
+      <div class="pt-photo-wrap" data-solution-zoom="true">
         <img class="pt-photo-img" src="images/zsi12_08.png" alt="Пробирка с каплей эфира" onerror="handleSolutionImageError(this)">
         <div class="pt-img-fallback">Изображение решения пока не найдено</div>
       </div>`,
@@ -5831,6 +5840,45 @@ function handleSolutionImageError(img,path){
   const fallback=wrap?wrap.querySelector('.pt-img-fallback'):null;
   if(fallback) fallback.style.display='block';
 }
+function ensureSolutionPhotoLightbox(){
+  let box=document.getElementById('solutionPhotoLightbox');
+  if(box) return box;
+  document.body.insertAdjacentHTML('beforeend','<div id="solutionPhotoLightbox" class="solution-photo-lightbox" role="dialog" aria-modal="true" aria-label="Увеличенное изображение решения"><img alt=""><div class="solution-photo-lightbox-hint">Нажмите ещё раз, чтобы закрыть</div></div>');
+  box=document.getElementById('solutionPhotoLightbox');
+  box.addEventListener('click',closeSolutionPhotoLightbox);
+  return box;
+}
+function openSolutionPhotoLightbox(img){
+  if(!img||!img.getAttribute) return;
+  const src=img.currentSrc||img.getAttribute('src');
+  if(!src) return;
+  const box=ensureSolutionPhotoLightbox();
+  const full=box.querySelector('img');
+  if(full){
+    full.src=src;
+    full.alt=img.getAttribute('alt')||'Увеличенное изображение решения';
+  }
+  box.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeSolutionPhotoLightbox(){
+  const box=document.getElementById('solutionPhotoLightbox');
+  if(!box) return;
+  box.classList.remove('open');
+  document.body.style.overflow='';
+}
+document.addEventListener('click',function(e){
+  const zoomWrap=e.target&&e.target.closest?e.target.closest('.pt-photo-wrap[data-solution-zoom]'):null;
+  if(!zoomWrap) return;
+  const img=zoomWrap.querySelector('img');
+  if(!img||img.style.display==='none') return;
+  e.preventDefault();
+  e.stopPropagation();
+  openSolutionPhotoLightbox(img);
+});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape') closeSolutionPhotoLightbox();
+});
 function renderSolutionImageHtml(path,alt,cls){
   const safePath=escapeHtml(String(path||''));
   const safeAlt=escapeHtml(String(alt||'Решение задачи'));
