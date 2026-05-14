@@ -7800,10 +7800,11 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
   const isMomentum = resolvedMode==='momentumSystem' || isPuckImpulse || isExplosion;
   const isEnergyHill = resolvedMode==='energyHill';
   const isEnergyPendulum = resolvedMode==='energyPendulum';
-  const isEnergy = isEnergyHill || isEnergyPendulum;
+  const isPendulumImpact = resolvedMode==='task07-pendulum-impact';
+  const isEnergy = isEnergyHill || isEnergyPendulum || isPendulumImpact;
   const isCartStone = resolvedMode==='cartStone';
   const isEtherCork = resolvedMode==='etherCork';
-  if(state.simTitle) state.simTitle.textContent=isInelasticFriction?'Анимация пластилина и бруска':(isEtherCork?'Анимация отдачи пробирки':(isBlocks?'Анимация столкновения брусков':(isExplosionVector?'Анимация распада снаряда':(isExplosion?'Анимация взрыва снаряда':(isPuckImpulse?'Анимация удара шайб':(isMomentum?'Анимация соударения':(isEnergyPendulum?'Анимация удара и подъёма доски':(isEnergyHill?'Анимация подъёма по горке':(isCartStone?'Анимация падения камня':'Анимация движения')))))))));
+  if(state.simTitle) state.simTitle.textContent=isInelasticFriction?'Анимация пластилина и бруска':(isEtherCork?'Анимация отдачи пробирки':(isBlocks?'Анимация столкновения брусков':(isExplosionVector?'Анимация распада снаряда':(isExplosion?'Анимация взрыва снаряда':(isPuckImpulse?'Анимация удара шайб':(isMomentum?'Анимация соударения':(isPendulumImpact?'Анимация удара малого тела о маятник':(isEnergyPendulum?'Анимация удара и подъёма доски':(isEnergyHill?'Анимация подъёма по горке':(isCartStone?'Анимация падения камня':'Анимация движения'))))))))));
   if(state.simCondition) state.simCondition.innerHTML=getTaskConditionHtml(task);
   if(state.simNote) state.simNote.innerHTML=isInelasticFriction
     ? 'Покажите встречное движение пластилина и бруска, абсолютно неупругий удар и последующее замедление слипшейся системы силой трения до 70% начальной скорости.'
@@ -7819,17 +7820,19 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
       ? 'Покажите движение шайб до удара, момент столкновения и направления импульсов после удара. Кнопкой «Старт» процесс запускается заново.'
       : (isMomentum
         ? 'Покажите сближение тел, момент удара и дальнейшее совместное движение. Кнопкой «Старт» запускается весь процесс заново.'
-        : (isEnergyPendulum
+        : (isPendulumImpact
+          ? 'Покажите налёт малого тела, передачу импульса грузу маятника, вертикальное падение тела и подъём груза до максимального угла α = 90°. Анимация встроена прямо в меню доски.'
+          : (isEnergyPendulum
           ? 'Покажите налёт шарика, момент прилипания и дальнейший подъём доски. Сначала используется закон сохранения импульса по горизонтали, затем — закон сохранения энергии.'
           : (isEnergyHill
             ? 'Покажите, как шайба поднимается по горке, теряя скорость, но сохраняя полную механическую энергию.'
             : (isCartStone
               ? 'Покажите падение камня в тележку и дальнейшее движение тележки по рельсам после удара.'
-              : 'Запустите движение кнопкой «Старт», ставьте на паузу во время объяснения и при необходимости повторяйте анимацию заново.')))));
+              : 'Запустите движение кнопкой «Старт», ставьте на паузу во время объяснения и при необходимости повторяйте анимацию заново.'))))));
   if(state.simBtnsWrap) state.simBtnsWrap.classList.toggle('is-hidden',isMomentum||isEnergy||isBlocks||isInelasticFriction||isCartStone||isEtherCork);
   if(state.simFrameLabel) state.simFrameLabel.textContent=(isMomentum||isEnergy||isBlocks||isInelasticFriction||isCartStone||isEtherCork)?'Этап':'Система отсчёта';
-  if(state.simRelVLabel) state.simRelVLabel.textContent=isInelasticFriction?'Скорость системы':(isEtherCork?'Скорость пробирки':(isBlocks?'Скорость бруска':(isExplosion?'Скорость осколка 2':(isPuckImpulse?'Импульс p4':(isMomentum?'Импульс системы':(isEnergyPendulum?'u после удара':(isEnergyHill?'Скорость шайбы':(isCartStone?'Горизонтальный импульс':'Относительная скорость'))))))));
-  if(state.simRelPLabel) state.simRelPLabel.textContent=isInelasticFriction?'Путь после удара':(isEtherCork?'Скорость пробки':(isBlocks?'Кинетическая энергия':(isExplosion?'Изменение энергии':(isPuckImpulse?'Импульс p3':(isMomentum?'После удара':(isEnergyPendulum?'Высота h':(isEnergyHill?'Высота':(isCartStone?'Расчёт':'Импульс первого авто'))))))));
+  if(state.simRelVLabel) state.simRelVLabel.textContent=isInelasticFriction?'Скорость системы':(isEtherCork?'Скорость пробирки':(isBlocks?'Скорость бруска':(isExplosion?'Скорость осколка 2':(isPuckImpulse?'Импульс p4':(isMomentum?'Импульс системы':(isPendulumImpact?'Скорость груза V':(isEnergyPendulum?'u после удара':(isEnergyHill?'Скорость шайбы':(isCartStone?'Горизонтальный импульс':'Относительная скорость')))))))));
+  if(state.simRelPLabel) state.simRelPLabel.textContent=isInelasticFriction?'Путь после удара':(isEtherCork?'Скорость пробки':(isBlocks?'Кинетическая энергия':(isExplosion?'Изменение энергии':(isPuckImpulse?'Импульс p3':(isMomentum?'После удара':(isPendulumImpact?'Угол α':(isEnergyPendulum?'Высота h':(isEnergyHill?'Высота':(isCartStone?'Расчёт':'Импульс первого авто'))))))))); 
   if(isExplosionVector){
     if(state.simRelVLabel) state.simRelVLabel.textContent='Скорость осколка 2';
     if(state.simRelPLabel) state.simRelPLabel.textContent='Скорость осколка 1';
@@ -8849,58 +8852,6 @@ function updateTask07Animation(progress){
 
 function toggleTaskBoardAnimation(force){
   const state=ensureTaskBoardOverlay();
-  if(state.task&&state.mode==='task07-pendulum-impact'){
-    let anim=
-      document.getElementById('taskBoardAnimationOverlay')||
-      document.getElementById('task07AnimationOverlay')||
-      document.querySelector('.task-board-animation-overlay')||
-      document.querySelector('.task-animation-overlay');
-    const isOpen=!!(anim&&anim.classList.contains('open'));
-    const shouldOpen=typeof force==='boolean'?force:!isOpen;
-
-    if(shouldOpen){
-      if(taskBoardState){
-        try{
-          sessionStorage.setItem('fizmat_task_board_open', JSON.stringify({
-            isOpen: true,
-            route: window.location.hash,
-            mode: taskBoardState.mode || taskBoardState.boardMode || 'default-board',
-            taskId: taskBoardState.taskId || '',
-            time: Date.now(),
-            restoreToBoardOnly: true
-          }));
-        }catch(err){
-          console.warn('Не удалось сохранить состояние доски перед открытием анимации:', err);
-        }
-      }
-
-      // Доску НЕ закрывать: анимация открывается поверх неё.
-      if(state&&state.overlay){
-        state.overlay.style.display='block';
-        state.overlay.style.pointerEvents='auto';
-        state.overlay.classList.add('open');
-        state.overlay.setAttribute('aria-hidden','false');
-        document.body.classList.add('task-board-lock');
-      }
-
-      openTaskAnimation(state.task?.id || state.taskId || 'lesson12-task10');
-      anim=
-        document.getElementById('taskBoardAnimationOverlay')||
-        document.getElementById('task07AnimationOverlay')||
-        document.querySelector('.task-board-animation-overlay')||
-        document.querySelector('.task-animation-overlay');
-      if(anim){
-        anim.style.display='block';
-        anim.style.pointerEvents='auto';
-        anim.classList.add('open');
-        anim.setAttribute('aria-hidden','false');
-      }
-      return;
-    }
-
-    closeTaskBoardAnimation();
-    return;
-  }
   if(!state.task||state.task.hasAnimation===false){
     if(state.sim){
       state.sim.running=false;
@@ -9029,7 +8980,7 @@ function taskBoardSimReset(resetFrame){
   sim.t=0;
   sim.last=0;
   sim.finished=false;
-  sim.duration=(state.mode==='momentumSystem'||state.mode==='puckImpulse'||state.mode==='explosionFragments'||state.mode==='explosionFragmentsVector')?6.0:(state.mode==='inelasticBlocks'?6.8:(state.mode==='inelasticFriction'?6.6:(state.mode==='energyPendulum'?7.0:(state.mode==='etherCork'?7.0:(state.mode==='energyHill'?6.4:6.2)))));
+  sim.duration=(state.mode==='momentumSystem'||state.mode==='puckImpulse'||state.mode==='explosionFragments'||state.mode==='explosionFragmentsVector')?6.0:(state.mode==='inelasticBlocks'?6.8:(state.mode==='inelasticFriction'?6.6:(state.mode==='task07-pendulum-impact'?7.2:(state.mode==='energyPendulum'?7.0:(state.mode==='etherCork'?7.0:(state.mode==='energyHill'?6.4:6.2))))));
   if(resetFrame) sim.frame='earth';
   document.querySelectorAll('[data-frame-btn]').forEach(function(btn){btn.classList.toggle('active',btn.getAttribute('data-frame-btn')===sim.frame);});
   const btn=document.getElementById('taskBoardSimToggleBtn');
@@ -9657,6 +9608,95 @@ function taskBoardSimDraw(){
   ctx.clearRect(0,0,W,H);
   ctx.fillStyle='#ffffff';
   ctx.fillRect(0,0,W,H);
+  if(state.mode==='task07-pendulum-impact'){
+    const impactP=0.38, releaseP=0.48, topP=0.88;
+    const clamp=function(v,a,b){return Math.max(a,Math.min(b,v));};
+    const smooth=function(t){t=clamp(t,0,1);return t*t*(3-2*t);};
+    const fly=smooth(progress/impactP);
+    const fall=smooth((progress-impactP)/(0.70-impactP));
+    const rise=smooth((progress-releaseP)/(topP-releaseP));
+    const theta=(Math.PI/2)*rise;
+    const pivotX=Math.max(260,Math.min(W-230,W*0.52));
+    const pivotY=Math.max(76,Math.min(122,H*0.18));
+    const L=Math.max(170,Math.min(260,H*0.58,pivotX-58,W-pivotX-64));
+    const bobR=Math.max(21,Math.min(32,L*0.12));
+    const restX=pivotX, restY=pivotY+L;
+    const bobX=pivotX+Math.sin(theta)*L;
+    const bobY=pivotY+Math.cos(theta)*L;
+    const startX=Math.max(62,pivotX-L*0.95);
+    const impactX=restX-bobR-18;
+    let ballX=taskBoardSimLerp(startX,impactX,fly);
+    let ballY=restY;
+    if(progress>=impactP){ ballX=impactX; ballY=restY+Math.min(128,H-restY-42)*fall; }
+    const phase=progress<0.16?'Подлёт':(progress<impactP?'Перед ударом':(progress<releaseP?'Удар':(progress<0.70?'Падение m':(progress<topP?'Подъём M':'α = 90°'))));
+    if(frame) frame.textContent=phase;
+    if(relV) relV.innerHTML=progress<releaseP?'V = 5 м/с':'V уменьшается';
+    if(relP) relP.innerHTML=progress<topP?'α → 90°':'α = 90°';
+    if(key) key.innerHTML=progress<releaseP?'mv = MV':`${mFrac('MV<sup>2</sup>','2')} = MgL(1 − cosα)`;
+    if(stateBox) stateBox.innerHTML=progress<releaseP
+      ? '<strong>Импульс:</strong> за короткое время удара малое тело останавливается, поэтому груз маятника получает скорость <span class="fml">V = mv/M = 5 м/с</span>.'
+      : (progress<topP
+        ? '<strong>Энергия:</strong> после удара кинетическая энергия груза переходит в потенциальную энергию подъёма маятника.'
+        : '<strong>Ответ:</strong> из <span class="fml">cos α = 1 − V²/(2gL) = 0</span> получаем максимальное отклонение <span class="fml">α = 90°</span>.');
+
+    ctx.fillStyle='#0f172a';
+    ctx.font='bold 16px Golos Text,sans-serif';
+    ctx.textAlign='left';
+    ctx.fillText('Задача 10: удар малого тела о маятник',topLeft,30);
+    ctx.fillStyle='#64748b';
+    ctx.font='12px Golos Text,sans-serif';
+    ctx.fillText('m летит горизонтально, останавливается после удара, M получает скорость и поднимается по дуге.',topLeft,50);
+
+    ctx.strokeStyle='rgba(148,163,184,.55)';
+    ctx.lineWidth=1.6;
+    ctx.setLineDash([7,6]);
+    ctx.beginPath();ctx.moveTo(pivotX,pivotY);ctx.lineTo(restX,restY);ctx.stroke();
+    ctx.beginPath();ctx.arc(pivotX,pivotY,L,Math.PI/2,Math.PI);ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.strokeStyle='#0f172a';ctx.lineWidth=5;ctx.lineCap='round';
+    ctx.beginPath();ctx.moveTo(pivotX-78,pivotY-10);ctx.lineTo(pivotX+88,pivotY-10);ctx.stroke();
+    ctx.strokeStyle='#94a3b8';ctx.lineWidth=2;
+    for(let i=0;i<6;i++){const hx=pivotX-66+i*27;ctx.beginPath();ctx.moveTo(hx,pivotY-26);ctx.lineTo(hx-16,pivotY-10);ctx.stroke();}
+    ctx.fillStyle='#0f172a';ctx.beginPath();ctx.arc(pivotX,pivotY,6,0,Math.PI*2);ctx.fill();
+
+    ctx.strokeStyle='rgba(14,165,233,.45)';ctx.lineWidth=3;ctx.setLineDash([9,8]);
+    ctx.beginPath();ctx.arc(pivotX,pivotY,L,Math.PI/2,Math.PI/2-theta,true);ctx.stroke();ctx.setLineDash([]);
+
+    ctx.strokeStyle='#334155';ctx.lineWidth=3;
+    ctx.beginPath();ctx.moveTo(pivotX,pivotY);ctx.lineTo(bobX,bobY);ctx.stroke();
+    ctx.fillStyle='#fb923c';ctx.strokeStyle='#c2410c';ctx.lineWidth=2.5;
+    ctx.beginPath();ctx.arc(bobX,bobY,bobR,0,Math.PI*2);ctx.fill();ctx.stroke();
+    ctx.fillStyle='#111827';ctx.font='bold 16px Golos Text,sans-serif';ctx.textAlign='center';ctx.fillText('M',bobX,bobY+5);
+
+    ctx.fillStyle='#22d3ee';ctx.strokeStyle='#0891b2';ctx.lineWidth=2.5;
+    ctx.beginPath();ctx.arc(ballX,ballY,bobR*0.62,0,Math.PI*2);ctx.fill();ctx.stroke();
+    ctx.fillStyle='#06313a';ctx.font='bold 13px Golos Text,sans-serif';ctx.textAlign='center';ctx.fillText('m',ballX,ballY+4);
+    if(progress<impactP){
+      taskBoardSimArrow(ctx,ballX+bobR*0.72,ballY,ballX+bobR*3.1,ballY,'#0284c7',5,2.2);
+      ctx.fillStyle='#0284c7';ctx.font='bold 14px Golos Text,sans-serif';ctx.fillText('v = 10 м/с',ballX+bobR*2.5,ballY-12);
+    }
+    if(progress>=releaseP&&progress<topP){
+      const tx=bobX+Math.cos(theta)*78, ty=bobY-Math.sin(theta)*78;
+      taskBoardSimArrow(ctx,bobX+Math.cos(theta)*bobR,bobY-Math.sin(theta)*bobR,tx,ty,'#f97316',5,2.2);
+      ctx.fillStyle='#f97316';ctx.font='bold 14px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('V',tx+8,ty-8);
+    }
+    if(progress>impactP&&progress<releaseP){ taskBoardSimDrawBurst(ctx,restX,restY,1+(progress-impactP)/(releaseP-impactP)); }
+    if(progress>releaseP){
+      const arcR=Math.max(46,L*0.25);
+      ctx.strokeStyle='#f97316';ctx.lineWidth=3;ctx.beginPath();ctx.arc(pivotX,pivotY,arcR,Math.PI/2,Math.PI/2-theta,true);ctx.stroke();
+      if(progress>0.76){ctx.fillStyle='#f97316';ctx.font='bold 17px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('α = 90°',pivotX+arcR*0.72,pivotY+arcR*0.56);}
+    }
+    ctx.fillStyle='rgba(15,23,42,.82)';ctx.font='12px Golos Text,sans-serif';ctx.textAlign='left';
+    ctx.fillText('L = 1,25 м',pivotX-82,(pivotY+restY)/2);
+    const bx=Math.min(W-316,Math.max(18,W-342)), by=70, bw=318, bh=128;
+    ctx.fillStyle='rgba(255,255,255,.96)';ctx.fillRect(bx,by,bw,bh);ctx.strokeStyle='rgba(37,99,235,.18)';ctx.strokeRect(bx,by,bw,bh);
+    ctx.fillStyle='#64748b';ctx.font='11px Golos Text,sans-serif';ctx.fillText('Логика решения',bx+12,by+20);
+    ctx.fillStyle='#111827';ctx.font='bold 15px Golos Text,sans-serif';ctx.fillText('1) mv = MV  →  V = 5 м/с',bx+12,by+46);
+    ctx.fillText('2) MV²/2 = MgL(1 − cosα)',bx+12,by+72);
+    ctx.fillStyle='#0284c7';ctx.font='bold 14px Golos Text,sans-serif';ctx.fillText('cosα = 0  →  α = 90°',bx+12,by+101);
+    return;
+  }
   if(state.mode==='etherCork'){
     const tKick=0.26;
     const tLoopEnd=0.88;
