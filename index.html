@@ -544,16 +544,16 @@ body.edit-mode .et{display:inline}
 .pt-solution-title{font-family:var(--fh);font-size:17px;font-weight:800;color:var(--white);margin:0 0 10px}
 .pt-img-fallback{display:none;margin-top:10px;border:1px dashed rgba(148,163,184,.45);border-radius:14px;padding:16px;text-align:center;color:#64748b;background:#f8fafc;font-weight:700}
 .pt-photo-wrap{position:relative;margin-top:4px;border-radius:18px;overflow:hidden;background:#fff;border:1px solid rgba(148,163,184,.24);box-shadow:0 14px 34px rgba(15,23,42,.08)}
-.pt-photo-wrap[data-solution-zoom]{cursor:zoom-in}
-.pt-photo-wrap[data-solution-zoom]::after{content:'Нажмите, чтобы увеличить';position:absolute;right:12px;bottom:12px;padding:7px 10px;border-radius:999px;background:rgba(15,23,42,.82);color:#fff;font-size:11px;font-weight:800;line-height:1;opacity:0;transform:translateY(6px);transition:opacity .18s,transform .18s;pointer-events:none}
-.pt-photo-wrap[data-solution-zoom]:hover::after{opacity:1;transform:translateY(0)}
+.pt-photo-wrap[data-solution-zoom],.task-board-photo-wrap[data-solution-zoom]{cursor:zoom-in}
+.pt-photo-wrap[data-solution-zoom]::after,.task-board-photo-wrap[data-solution-zoom]::after{content:'Нажмите, чтобы увеличить';position:absolute;right:12px;bottom:12px;padding:7px 10px;border-radius:999px;background:rgba(15,23,42,.82);color:#fff;font-size:11px;font-weight:800;line-height:1;opacity:0;transform:translateY(6px);transition:opacity .18s,transform .18s;pointer-events:none}
+.pt-photo-wrap[data-solution-zoom]:hover::after,.task-board-photo-wrap[data-solution-zoom]:hover::after{opacity:1;transform:translateY(0)}
 .pt-photo-img{display:block;width:100%;height:auto;background:#fff}
 .solution-photo-lightbox{position:fixed;inset:0;z-index:2147483600;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(2,9,20,.92);backdrop-filter:blur(8px);cursor:zoom-out}
 .solution-photo-lightbox.open{display:flex;animation:solutionPhotoFade .18s ease both}
 .solution-photo-lightbox img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;border-radius:18px;background:#fff;box-shadow:0 28px 90px rgba(0,0,0,.55);object-fit:contain}
 .solution-photo-lightbox-hint{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);padding:9px 13px;border-radius:999px;background:rgba(255,255,255,.92);color:#0f172a;font-size:12px;font-weight:800;pointer-events:none;box-shadow:0 12px 34px rgba(0,0,0,.22)}
 @keyframes solutionPhotoFade{from{opacity:0}to{opacity:1}}
-@media(max-width:680px){.solution-photo-lightbox{padding:10px}.solution-photo-lightbox img{border-radius:12px}.pt-photo-wrap[data-solution-zoom]::after{opacity:1;transform:none;font-size:10px}}
+@media(max-width:680px){.solution-photo-lightbox{padding:10px}.solution-photo-lightbox img{border-radius:12px}.pt-photo-wrap[data-solution-zoom]::after,.task-board-photo-wrap[data-solution-zoom]::after{opacity:1;transform:none;font-size:10px}}
 .pt-rich-card,.task-board-rich{background:#fff;border:1px solid #dbe5f0;border-radius:18px;padding:16px;box-shadow:0 14px 34px rgba(15,23,42,.08)}
 
 /* ===== TASK EDUCATIONAL SCHEMES ===== */
@@ -734,12 +734,12 @@ body.task-board-lock header,body.task-board-lock .topbar,body.task-board-lock .s
 .task-board-manual .task-board-step-body{font-family:var(--fb);font-size:15px;font-weight:700;line-height:1.65;color:#111827}
 .task-board-manual .task-board-step-body strong{font-weight:800;color:#111827}
 .task-board-manual .task-board-step-body .sr-fml{font-family:var(--fb);font-size:15px;font-weight:800;line-height:1.65;color:#111827;margin-top:8px}
-.task-board-photo-wrap{background:#fff;border:1px solid #dbe5f0;border-radius:16px;overflow:auto;box-shadow:0 14px 32px rgba(15,23,42,.06)}
+.task-board-photo-wrap{position:relative;background:#fff;border:1px solid #dbe5f0;border-radius:16px;overflow:auto;box-shadow:0 14px 32px rgba(15,23,42,.06)}
 .task-board-photo-img{display:block;width:100%;height:auto;background:#fff}
 .task-board-answer{margin-top:16px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:15px;padding:13px 14px;font-size:16px;color:#1e3a8a}
 .task-board-answer-label{font-size:10px;font-weight:700;letter-spacing:1.25px;text-transform:uppercase;color:#2563eb;margin-bottom:4px}
 .task-board-answer-value{font-family:var(--fb);font-size:20px;font-weight:800;line-height:1.45;color:#111827}
-.task-board-photo-wrap{border-radius:16px;overflow:hidden;background:#fff;border:1px solid rgba(148,163,184,.28);box-shadow:0 14px 34px rgba(15,23,42,.08);margin-top:10px}
+.task-board-photo-wrap{position:relative;border-radius:16px;overflow:hidden;background:#fff;border:1px solid rgba(148,163,184,.28);box-shadow:0 14px 34px rgba(15,23,42,.08);margin-top:10px}
 .task-board-photo-img{display:block;width:100%;height:auto;background:#fff}
 .task-board-solution-title{font-family:var(--fh);font-size:18px;font-weight:900;line-height:1.25;color:#1e3a8a;margin:0 0 10px}
 .task-board-static-given{border-left:4px solid #f97316;border-radius:0 12px 12px 0;background:#f8fafc;padding:12px 14px;margin-bottom:12px;font-size:15px;line-height:1.7;color:#475569}
@@ -3907,7 +3907,7 @@ function renderSpecialLessonTests(lessonName){
     const cols=(item.columns||[]).map(function(title,colIndex){
       return `<div class="stc-col"><div class="stc-col-title">${title}</div><div class="stc-picks">${['1','2','3'].map(function(v){return `<button class="stc-pick" type="button" data-value="${v}" onclick="specialTestPick(this,${colIndex},'${v}')">${v}</button>`;}).join('')}</div></div>`;
     }).join('');
-    return `<div class="stc-card" data-special-test data-correct="${(item.correct||[]).join(',')}"><div class="stc-head"><div class="stc-num">${String(item.num||index+1).padStart(2,'0')}</div><span class="stc-badge">${item.badge||'Тест'}</span><span class="stc-title">${item.title}</span></div><div class="stc-condition"><div class="stc-text">${item.prompt}</div><div class="stc-note">${item.note||''}</div><div class="stc-variants">${(item.variants||[]).map(function(v){return `<span>${v}</span>`;}).join('')}</div></div><div class="stc-grid">${cols}</div><div class="stc-actions"><button class="pt-sol-btn stc-check" type="button" onclick="specialTestCheck(this)">Проверить ответ</button><div class="stc-feedback" data-special-feedback>Выберите цифру 1, 2 или 3 для каждой величины, затем нажмите «Проверить ответ».</div></div><div class="pt-solution" data-special-solution><div class="pt-photo-wrap"><img class="pt-photo-img" src="${item.image}" alt="${item.title}"></div><div class="stc-solution-actions"><button class="pt-sol-btn stc-hide" type="button" onclick="specialTestHide(this)">Скрыть</button></div></div></div>`;
+    return `<div class="stc-card" data-special-test data-correct="${(item.correct||[]).join(',')}"><div class="stc-head"><div class="stc-num">${String(item.num||index+1).padStart(2,'0')}</div><span class="stc-badge">${item.badge||'Тест'}</span><span class="stc-title">${item.title}</span></div><div class="stc-condition"><div class="stc-text">${item.prompt}</div><div class="stc-note">${item.note||''}</div><div class="stc-variants">${(item.variants||[]).map(function(v){return `<span>${v}</span>`;}).join('')}</div></div><div class="stc-grid">${cols}</div><div class="stc-actions"><button class="pt-sol-btn stc-check" type="button" onclick="specialTestCheck(this)">Проверить ответ</button><div class="stc-feedback" data-special-feedback>Выберите цифру 1, 2 или 3 для каждой величины, затем нажмите «Проверить ответ».</div></div><div class="pt-solution" data-special-solution><div class="pt-photo-wrap" data-solution-zoom="true"><img class="pt-photo-img" src="${item.image}" alt="${item.title}"></div><div class="stc-solution-actions"><button class="pt-sol-btn stc-hide" type="button" onclick="specialTestHide(this)">Скрыть</button></div></div></div>`;
   }).join('');
 }
 function specialTestPick(btn,index,value){
@@ -3959,7 +3959,7 @@ function renderHW(ld){
   const items=LESSON_HOMEWORK[lessonName]||[];
   const cards=items.length?`<div style="font-size:12px;color:var(--gray);margin-bottom:14px">Ниже размещена карточка домашнего задания для учеников. После выполнения можно сразу загрузить работу.</div>${items.map(function(item,index){
     const sid='hwCard_'+index;
-    return `<div class="pt-card"><div class="pt-head"><div class="pt-num">${String(item.num).padStart(2,'0')}</div><span class="pt-level pt-l2">${item.level}</span><span class="pt-exam">${item.badge}</span><span class="pt-title">${item.title}</span></div><div class="pt-body"><div class="pt-condition">${item.cond}</div><div><div class="pt-given">${item.given}</div><button class="pt-sol-btn" onclick="hwToggle('${sid}',this)">▶ Карточка</button></div></div><div class="pt-solution" id="${sid}"><div class="pt-rich-card"><div class="pt-photo-wrap"><img class="pt-photo-img" src="${item.image}" alt="${item.title}"></div></div></div></div>`;
+    return `<div class="pt-card"><div class="pt-head"><div class="pt-num">${String(item.num).padStart(2,'0')}</div><span class="pt-level pt-l2">${item.level}</span><span class="pt-exam">${item.badge}</span><span class="pt-title">${item.title}</span></div><div class="pt-body"><div class="pt-condition">${item.cond}</div><div><div class="pt-given">${item.given}</div><button class="pt-sol-btn" onclick="hwToggle('${sid}',this)">▶ Карточка</button></div></div><div class="pt-solution" id="${sid}"><div class="pt-rich-card"><div class="pt-photo-wrap" data-solution-zoom="true"><img class="pt-photo-img" src="${item.image}" alt="${item.title}"></div></div></div></div>`;
   }).join('')}`:'';
   return`${cards}<label class="hwd" for="hwi"><div class="hwi">📎</div><p>Нажмите или перетащите файл сюда</p>
     <small>PDF, DOC, JPG, PNG — до 20 МБ</small>
@@ -5332,7 +5332,7 @@ const LESSON_TASKS={
     given:'p<sub>1</sub> = 2 кг·м/с, p<sub>2</sub> = 3,5 кг·м/с, p<sub>3</sub> = 2 кг·м/с (вверх по оси y)<br><span class="pt-find">Найти: модуль импульса первой шайбы после удара p<sub>4</sub> и её направление</span>',
     steps:[],
     solutionHtml:`
-      <div class="pt-photo-wrap">
+      <div class="pt-photo-wrap" data-solution-zoom="true">
         <img class="pt-photo-img" src="images/03.jpg" alt="Импульс шайб после удара">
       </div>`,
     boardSolutionHtml:`
@@ -5362,7 +5362,7 @@ const LESSON_TASKS={
     given:'M = 4 кг, v<sub>0</sub> = 400 м/с, m<sub>1</sub> = m<sub>2</sub> = 2 кг, v<sub>1</sub> = 900 м/с, второй осколок движется в противоположную сторону<br><span class="pt-find">Найти: ΔE</span>',
     steps:[],
     solutionHtml:`
-      <div class="pt-photo-wrap">
+      <div class="pt-photo-wrap" data-solution-zoom="true">
         <img class="pt-photo-img" src="images/04.jpg" alt="Куда направлены осколки после взрыва?">
       </div>`,
     boardSolutionHtml:`
@@ -5395,7 +5395,7 @@ const LESSON_TASKS={
     given:'m<sub>1</sub> = 0,5 кг, m<sub>2</sub> = 0,3 кг, h = 0,8 м, g ≈ 10 м/с², столкновение абсолютно неупругое<br><span class="pt-find">Найти: E<sub>к</sub> после столкновения</span>',
     steps:[],
     solutionHtml:`
-      <div class="pt-photo-wrap">
+      <div class="pt-photo-wrap" data-solution-zoom="true">
         <img class="pt-photo-img" src="images/06.png" alt="Абсолютно неупругое столкновение брусков">
       </div>`,
     boardSolutionHtml:`
@@ -5436,7 +5436,7 @@ const LESSON_TASKS={
         <div class="task-board-step"><div class="task-board-step-num">3</div><div class="task-board-step-body"><strong>После падения</strong> камень и тележка движутся вместе по горизонтали, поэтому импульс системы равен найденной проекции: <strong>p = 20 кг·м/с</strong>.</div></div>
       </div>`,
     solutionHtml:`
-      <div class="pt-photo-wrap">
+      <div class="pt-photo-wrap" data-solution-zoom="true">
         <img class="pt-photo-img" src="images/12_06image.png" alt="Импульс тележки после падения камня">
       </div>`,
     hideAnswer:true,
@@ -5471,7 +5471,7 @@ const LESSON_TASKS={
         <div class="task-board-step"><div class="task-board-step-num">6</div><div class="task-board-step-body"><strong>Ответ:</strong> слипшиеся пластилин и брусок пройдут <strong>0,15 м</strong>.</div></div>
       </div>`,
     solutionHtml:`
-      <div class="pt-photo-wrap">
+      <div class="pt-photo-wrap" data-solution-zoom="true">
         <img class="pt-photo-img" src="images/07.png" alt="Абсолютно неупругое столкновение пластилина и бруска" onerror="handleSolutionImageError(this)">
         <div class="pt-img-fallback">Изображение решения пока не найдено</div>
       </div>`,
@@ -5529,8 +5529,8 @@ const LESSON_TASKS={
       <div class="pt-solution-carousel" aria-label="Карусель решения задачи 09">
         <h3 class="pt-solution-carousel-title">Решение задачи 09</h3>
         <div class="pt-solution-carousel-track">
-          <div class="pt-photo-wrap"><img class="pt-photo-img" src="images/zsi_12_09-1.svg" alt="Решение задачи 09, часть 1" onerror="handleSolutionImageError(this)"><div class="pt-img-fallback">Изображение решения пока не найдено</div></div>
-          <div class="pt-photo-wrap"><img class="pt-photo-img" src="images/zsi_12_09-2.svg" alt="Решение задачи 09, часть 2" onerror="handleSolutionImageError(this)"><div class="pt-img-fallback">Изображение решения пока не найдено</div></div>
+          <div class="pt-photo-wrap" data-solution-zoom="true"><img class="pt-photo-img" src="images/zsi_12_09-1.svg" alt="Решение задачи 09, часть 1" onerror="handleSolutionImageError(this)"><div class="pt-img-fallback">Изображение решения пока не найдено</div></div>
+          <div class="pt-photo-wrap" data-solution-zoom="true"><img class="pt-photo-img" src="images/zsi_12_09-2.svg" alt="Решение задачи 09, часть 2" onerror="handleSolutionImageError(this)"><div class="pt-img-fallback">Изображение решения пока не найдено</div></div>
         </div>
       </div>`,
     hideAnswer:true,
@@ -5561,7 +5561,7 @@ const LESSON_TASKS={
         <div class="task-board-step"><div class="task-board-step-num">5</div><div class="task-board-step-body"><strong>Ответ:</strong> максимальный угол отклонения маятника от вертикали равен <strong>90°</strong>.</div></div>
       </div>`,
     solutionHtml:`
-      <div class="pt-photo-wrap">
+      <div class="pt-photo-wrap" data-solution-zoom="true">
         <img class="pt-photo-img" src="images/task-07-pendulum-impact-solution-card.png" alt="Решение задачи 10: маятник после удара" onerror="handleSolutionImageError(this)">
         <div class="pt-img-fallback">Изображение решения пока не найдено</div>
       </div>`,
@@ -5868,7 +5868,7 @@ function closeSolutionPhotoLightbox(){
   document.body.style.overflow='';
 }
 document.addEventListener('click',function(e){
-  const zoomWrap=e.target&&e.target.closest?e.target.closest('.pt-photo-wrap[data-solution-zoom]'):null;
+  const zoomWrap=e.target&&e.target.closest?e.target.closest('.pt-photo-wrap[data-solution-zoom],.task-board-photo-wrap[data-solution-zoom]'):null;
   if(!zoomWrap) return;
   const img=zoomWrap.querySelector('img');
   if(!img||img.style.display==='none') return;
@@ -5884,7 +5884,7 @@ function renderSolutionImageHtml(path,alt,cls){
   const safeAlt=escapeHtml(String(alt||'Решение задачи'));
   const imgClass=cls==='task-board'?'task-board-photo-img':'pt-photo-img';
   const wrapClass=cls==='task-board'?'task-board-photo-wrap':'pt-photo-wrap';
-  return `<div class="${wrapClass}"><img class="${imgClass}" src="${safePath}" alt="${safeAlt}" onerror="handleSolutionImageError(this)"><div class="pt-img-fallback">Изображение решения пока не найдено</div></div>`;
+  return `<div class="${wrapClass}" data-solution-zoom="true"><img class="${imgClass}" src="${safePath}" alt="${safeAlt}" onerror="handleSolutionImageError(this)"><div class="pt-img-fallback">Изображение решения пока не найдено</div></div>`;
 }
 function getFirstSolutionImageFromHtml(html){
   const source=String(html||'');
