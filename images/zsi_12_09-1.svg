@@ -2,15 +2,15 @@
   <rect width="1200" height="760" fill="#ffffff"/>
   <text x="70" y="82" fill="#1e3a8a" font-family="Arial, sans-serif" font-size="42" font-weight="700">Задача 09. Распад снаряда на два осколка</text>
   <text x="70" y="145" fill="#0f172a" font-family="Arial, sans-serif" font-size="28">1) До распада снаряд летит горизонтально вправо:</text>
-  <text x="120" y="210" fill="#0f172a" font-family="Arial, sans-serif" font-size="30">p₀ = Mv₀</text>
+  <text x="120" y="210" fill="#0f172a" font-family="Arial, sans-serif" font-size="30">p⃗₀ = Mv⃗₀</text>
   <line x1="300" y1="250" x2="720" y2="250" stroke="#08d8ff" stroke-width="12" stroke-linecap="round"/>
   <path d="M720 250 L675 225 L675 275 Z" fill="#08d8ff"/>
   <ellipse cx="255" cy="250" rx="82" ry="44" fill="#ff8c00" stroke="#1e293b" stroke-width="5"/>
-  <text x="455" y="228" fill="#0891b2" font-family="Arial, sans-serif" font-size="32" font-weight="700">v₀</text>
+  <text x="455" y="228" fill="#0891b2" font-family="Arial, sans-serif" font-size="32" font-weight="700">v⃗₀</text>
   <text x="70" y="345" fill="#0f172a" font-family="Arial, sans-serif" font-size="28">2) После распада импульс сохраняется как вектор:</text>
-  <text x="120" y="410" fill="#1e3a8a" font-family="Arial, sans-serif" font-size="34" font-weight="700">p₀ = p₁ + p₂</text>
-  <text x="70" y="495" fill="#334155" font-family="Arial, sans-serif" font-size="26">Больший осколок летит вверх со скоростью v₁ = v₀.</text>
-  <text x="70" y="545" fill="#334155" font-family="Arial, sans-serif" font-size="26">Второй осколок летит вниз-вправо со скоростью v₂ = 5v₀.</text>
+  <text x="120" y="410" fill="#1e3a8a" font-family="Arial, sans-serif" font-size="34" font-weight="700">p⃗₀ = p⃗₁ + p⃗₂</text>
+  <text x="70" y="495" fill="#334155" font-family="Arial, sans-serif" font-size="26">Больший осколок летит вверх со скоростью v⃗₁ = v⃗₀.</text>
+  <text x="70" y="545" fill="#334155" font-family="Arial, sans-serif" font-size="26">Второй осколок летит вниз-вправо со скоростью v⃗₂ = 5v⃗₀.</text>
   <rect x="70" y="610" width="1060" height="88" rx="22" fill="#eff6ff" stroke="#bfdbfe" stroke-width="3"/>
   <text x="110" y="665" fill="#0f172a" font-family="Arial, sans-serif" font-size="28" font-weight="700">Главное: складываем не числа, а векторы импульса.</text>
 </svg>
