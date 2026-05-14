@@ -9496,15 +9496,44 @@ function taskBoardSimDrawVectorText(ctx,parts,x,y,options){
     setSub();
     return baseW+(part.sub?ctx.measureText(String(part.sub)).width+1:0);
   }
-  const total=parts.reduce((sum,part)=>sum+partWidth(part),0);
-  let cx=x;
-  if(align==='center') cx-=total/2;
-  else if(align==='right'||align==='end') cx-=total;
+  function vectorTextGap(spaceWidth){return Math.max(fontSize*0.65,spaceWidth);}
+  let total=0;
+  let widthPreviousPartWasVector=false;
   parts.forEach(function(part){
     if(typeof part==='string'){
       setMain();
-      ctx.fillText(part,cx,y);
-      cx+=ctx.measureText(part).width;
+      const text=String(part);
+      const leading=text.match(/^\s+/);
+      if(widthPreviousPartWasVector&&leading){
+        total+=vectorTextGap(ctx.measureText(leading[0]).width)+ctx.measureText(text.slice(leading[0].length)).width;
+      }else{
+        total+=ctx.measureText(text).width;
+      }
+      widthPreviousPartWasVector=false;
+    }else{
+      total+=partWidth(part);
+      widthPreviousPartWasVector=true;
+    }
+  });
+  let cx=x;
+  if(align==='center') cx-=total/2;
+  else if(align==='right'||align==='end') cx-=total;
+  let previousPartWasVector=false;
+  parts.forEach(function(part){
+    if(typeof part==='string'){
+      setMain();
+      const text=String(part);
+      const leading=text.match(/^\s+/);
+      if(previousPartWasVector&&leading){
+        cx+=vectorTextGap(ctx.measureText(leading[0]).width);
+        const trimmed=text.slice(leading[0].length);
+        ctx.fillText(trimmed,cx,y);
+        cx+=ctx.measureText(trimmed).width;
+      }else{
+        ctx.fillText(text,cx,y);
+        cx+=ctx.measureText(text).width;
+      }
+      previousPartWasVector=false;
       return;
     }
     setMain();
@@ -9524,6 +9553,7 @@ function taskBoardSimDrawVectorText(ctx,parts,x,y,options){
       ctx.fillText(String(part.sub),cx+1,y+fontSize*0.28);
       cx+=ctx.measureText(String(part.sub)).width+1;
     }
+    previousPartWasVector=true;
   });
   ctx.textBaseline=baseline;
   ctx.restore();
