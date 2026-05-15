@@ -7757,12 +7757,13 @@ function ensureTaskBoardOverlay(){
                   <button type="button" class="task-board-tool" onclick="toggleTaskBoardSolution();taskBoardCloseDropdowns();">✅ Решение</button>
                 </div>
               </div>
-              <div class="task-board-dropdown" id="taskBoardAnimMenu" data-dropdown-name="animations">
-                <button type="button" class="task-board-dropdown-toggle" onclick="taskBoardToggleDropdown('animations')" aria-haspopup="true" aria-expanded="false">🎬 Анимации ▼</button>
-                <div class="task-board-dropdown-menu">
-                  <button type="button" class="task-board-tool" id="taskBoardAnimBtn" data-board-animation-button="true" onclick="return handleTaskBoardAnimationButtonClick(event)">▶ Анимация</button>
-                </div>
-              </div>
+              <button
+                type="button"
+                class="task-board-quick-action task-board-animation-action"
+                id="taskBoardAnimBtn"
+                data-board-animation-button="true"
+                onclick="return handleTaskBoardAnimationButtonClick(event)"
+              >▶ Анимация</button>
               <button type="button" class="task-board-quick-action task-board-quick-clear" data-board-action="clear">🧹 Очистить</button>
               <button type="button" class="task-board-quick-action" id="taskBoardUndoBtn" onclick="taskBoardUndo()">↶ Назад</button>
               <button type="button" class="task-board-quick-action" id="taskBoardRedoBtn" onclick="taskBoardRedo()">↷ Вперёд</button>
@@ -7871,7 +7872,6 @@ function ensureTaskBoardOverlay(){
     undoBtn:document.getElementById('taskBoardUndoBtn'),
     redoBtn:document.getElementById('taskBoardRedoBtn'),
     animBtn:document.getElementById('taskBoardAnimBtn'),
-    animMenu:document.getElementById('taskBoardAnimMenu'),
     simPopup:document.getElementById('taskBoardSimPopup'),
     simTitle:document.getElementById('taskBoardSimTitle'),
     simCondition:document.getElementById('taskBoardSimCondition'),
@@ -8286,7 +8286,6 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
   }
   if(state.simKeyLabel) state.simKeyLabel.textContent='Ключевая мысль';
   const hasAnimationSection=task.hasAnimation!==false;
-  if(state.animMenu) state.animMenu.style.display=hasAnimationSection?'':'none';
   if(state.animBtn){
     state.animBtn.style.display=hasAnimationSection?'inline-flex':'none';
     state.animBtn.textContent=getTaskBoardAnimationButtonText(false);
