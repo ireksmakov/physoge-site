@@ -5598,8 +5598,14 @@ function makeEmptyWorkingTask(num, template){
       answer: '',
       tutorHint: ''
     },
+    solutionTextHtml: '',
+    solutionFormulas: [],
+    tutorHints: [],
+    boardSolutionHtml: '',
+    hideAnswer: false,
 
     extraHtml: '',
+    schemeHtml: '',
     graphLabel: '',
     hasAnimation: false,
     isBlank: true
@@ -7685,6 +7691,7 @@ function renderTaskBoardSolution(task){
   const steps=(task.steps||[]).map(function(step,index){
     return `<div class="task-board-step"><div class="task-board-step-num">${index+1}</div><div class="task-board-step-body">${step}</div></div>`;
   }).join('');
+  if(task.isBlank) return '<div class="pt-blank-solution-space"></div>';
   return steps||'<div class="pt-empty-text">Решение пока не добавлено.</div>';
 }
 function ensureTaskBoardOverlay(){
