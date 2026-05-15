@@ -5633,10 +5633,12 @@ const LESSON_TASKS={
 'Варианты Камзеевой 11–20':KAMZEEVA_1120_TASKS,
 'Законы Ньютона':[
   {num:1,level:1,title:'Сила и ускорение',
+   boardMode:'newtonForceAcceleration',graphLabel:'Схема',hasAnimation:true,
    cond:'На тело массой <strong>5 кг</strong> действует сила <strong>20 Н</strong>. Трение отсутствует. Найдите ускорение.',
    given:'m=5 кг, F=20 Н<br><span class="pt-find">Найти: a</span>',
    steps:['II закон Ньютона: F=ma','a=F/m=20/5=4 м/с²'],ans:'a=4 м/с²'},
   {num:2,level:2,title:'Наклонная плоскость с трением',
+   boardMode:'newtonInclineFriction',graphLabel:'Схема',hasAnimation:true,
    cond:'Тело массой <strong>2 кг</strong> на наклонной плоскости α=30°, μ=0.2. Найдите ускорение. g=10 м/с².',
    given:'m=2 кг, α=30°, μ=0.2<br><span class="pt-find">Найти: a</span>',
    steps:['a=g(sinα−μcosα)','a=10(0.5−0.2·0.866)≈3.27 м/с²'],ans:'a≈3.27 м/с²'}
@@ -7214,6 +7216,41 @@ function getTaskBoardData(mode){
   return null;
 }
 function getTaskBoardGraph(mode){
+  if(mode==='newtonForceAcceleration') return `
+    <svg viewBox="0 0 360 230" aria-label="Схема к задаче: сила сообщает телу ускорение">
+      <rect x="0" y="0" width="360" height="230" rx="16" fill="#f8fafc"></rect>
+      <defs><marker id="newtonArrowOrange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#f97316"></path></marker><marker id="newtonArrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#16a34a"></path></marker></defs>
+      <path d="M24 168H336" stroke="#0f172a" stroke-width="2.4"></path>
+      <rect x="112" y="116" width="86" height="52" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5"></rect>
+      <text x="135" y="147" fill="#1e3a8a" font-size="17" font-weight="900">m = 5 кг</text>
+      <path d="M198 142H292" stroke="#f97316" stroke-width="5" marker-end="url(#newtonArrowOrange)"></path>
+      <text x="218" y="128" fill="#ea580c" font-size="17" font-weight="900">F = 20 Н</text>
+      <path d="M156 102H238" stroke="#16a34a" stroke-width="3" marker-end="url(#newtonArrowGreen)"></path>
+      <text x="164" y="92" fill="#15803d" font-size="15" font-weight="800">a = F/m</text>
+      <rect x="34" y="28" width="292" height="44" rx="12" fill="#ffffff" stroke="#bfdbfe" stroke-width="2"></rect>
+      <text x="54" y="55" fill="#1d4ed8" font-size="17" font-weight="900">II закон Ньютона: F = ma</text>
+      <text x="78" y="204" fill="#334155" font-size="14" font-weight="700">Трение отсутствует → равнодействующая равна F</text>
+    </svg>`;
+  if(mode==='newtonInclineFriction') return `
+    <svg viewBox="0 0 360 230" aria-label="Схема к задаче: движение по наклонной плоскости с трением">
+      <rect x="0" y="0" width="360" height="230" rx="16" fill="#f8fafc"></rect>
+      <defs><marker id="newtonInclineArrowOrange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#f97316"></path></marker><marker id="newtonInclineArrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#16a34a"></path></marker></defs>
+      <path d="M42 176L270 62" stroke="#0f172a" stroke-width="3" stroke-linecap="round"></path>
+      <path d="M42 176H308" stroke="#0f172a" stroke-width="2"></path>
+      <g transform="translate(148 111) rotate(-26.6)">
+        <rect x="-31" y="-18" width="62" height="36" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2.4"></rect>
+        <text x="-19" y="6" fill="#1e3a8a" font-size="14" font-weight="900">m=2</text>
+        <path d="M34 0H92" stroke="#16a34a" stroke-width="4" marker-end="url(#newtonInclineArrowGreen)"></path>
+        <text x="45" y="-12" fill="#15803d" font-size="13" font-weight="900">mg sinα</text>
+        <path d="M-34 0H-82" stroke="#f97316" stroke-width="4" marker-end="url(#newtonInclineArrowOrange)"></path>
+        <text x="-96" y="-12" fill="#ea580c" font-size="13" font-weight="900">Fтр</text>
+      </g>
+      <path d="M82 176A54 54 0 0 1 130 151" fill="none" stroke="#f97316" stroke-width="2.5"></path>
+      <text x="107" y="169" fill="#ea580c" font-size="15" font-weight="900">30°</text>
+      <rect x="46" y="26" width="268" height="46" rx="12" fill="#ffffff" stroke="#bfdbfe" stroke-width="2"></rect>
+      <text x="62" y="46" fill="#1d4ed8" font-size="14" font-weight="900">ma = mg sinα − μmg cosα</text>
+      <text x="62" y="63" fill="#1d4ed8" font-size="13" font-weight="700">a = g(sinα − μcosα)</text>
+    </svg>`;
   if(mode==='impulseCars') return `
     <svg viewBox="0 0 320 220" aria-label="График зависимости импульса от скорости">
       <rect x="0" y="0" width="320" height="220" rx="16" fill="#f8fafc"></rect>
@@ -8198,9 +8235,14 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
   const isEnergy = isEnergyHill || isEnergyPendulum || isPendulumImpact;
   const isCartStone = resolvedMode==='cartStone';
   const isEtherCork = resolvedMode==='etherCork';
-  if(state.simTitle) state.simTitle.textContent=isInelasticFriction?'Анимация пластилина и бруска':(isEtherCork?'Анимация отдачи пробирки':(isBlocks?'Анимация столкновения брусков':(isExplosionVector?'Анимация распада снаряда':(isExplosion?'Анимация взрыва снаряда':(isPuckImpulse?'Анимация удара шайб':(isMomentum?'Анимация соударения':(isPendulumImpact?'Анимация задачи 10: удар малого тела о маятник':(isEnergyPendulum?'Анимация удара и подъёма доски':(isEnergyHill?'Анимация подъёма по горке':(isCartStone?'Анимация падения камня':'Анимация движения'))))))))));
+  const isNewton = resolvedMode==='newtonForceAcceleration'||resolvedMode==='newtonInclineFriction';
+  if(state.simTitle) state.simTitle.textContent=isNewton?(resolvedMode==='newtonInclineFriction'?'Анимация движения по наклонной':'Анимация второго закона Ньютона'):(isInelasticFriction?'Анимация пластилина и бруска':(isEtherCork?'Анимация отдачи пробирки':(isBlocks?'Анимация столкновения брусков':(isExplosionVector?'Анимация распада снаряда':(isExplosion?'Анимация взрыва снаряда':(isPuckImpulse?'Анимация удара шайб':(isMomentum?'Анимация соударения':(isPendulumImpact?'Анимация задачи 10: удар малого тела о маятник':(isEnergyPendulum?'Анимация удара и подъёма доски':(isEnergyHill?'Анимация подъёма по горке':(isCartStone?'Анимация падения камня':'Анимация движения')))))))))));
   if(state.simCondition) state.simCondition.innerHTML=getTaskConditionHtml(task);
-  if(state.simNote) state.simNote.innerHTML=isInelasticFriction
+  if(state.simNote) state.simNote.innerHTML=isNewton
+    ? (resolvedMode==='newtonInclineFriction'
+      ? 'Покажите разложение силы тяжести на наклонной плоскости, направление силы трения и ускорение тела вниз по плоскости.'
+      : 'Покажите, как постоянная сила сообщает телу постоянное ускорение: скорость растёт, а путь увеличивается быстрее с каждой секундой.')
+    : isInelasticFriction
     ? 'Покажите встречное движение пластилина и бруска, абсолютно неупругий удар и последующее замедление слипшейся системы силой трения до 70% начальной скорости.'
     : isEtherCork
     ? 'Покажите вылет пробки, отдачу пробирки и дальнейшее движение пробирки по вертикальной окружности. Сначала используется ЗСИ, затем условие полного оборота.'
@@ -8223,13 +8265,17 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
             : (isCartStone
               ? 'Покажите падение камня в тележку и дальнейшее движение тележки по рельсам после удара.'
               : 'Запустите движение кнопкой «Старт», ставьте на паузу во время объяснения и при необходимости повторяйте анимацию заново.'))))));
-  if(state.simBtnsWrap) state.simBtnsWrap.classList.toggle('is-hidden',isMomentum||isEnergy||isBlocks||isInelasticFriction||isCartStone||isEtherCork);
-  if(state.simFrameLabel) state.simFrameLabel.textContent=(isMomentum||isEnergy||isBlocks||isInelasticFriction||isCartStone||isEtherCork)?'Этап':'Система отсчёта';
+  if(state.simBtnsWrap) state.simBtnsWrap.classList.toggle('is-hidden',isMomentum||isEnergy||isBlocks||isInelasticFriction||isCartStone||isEtherCork||isNewton);
+  if(state.simFrameLabel) state.simFrameLabel.textContent=(isMomentum||isEnergy||isBlocks||isInelasticFriction||isCartStone||isEtherCork||isNewton)?'Этап':'Система отсчёта';
   if(state.simRelVLabel) state.simRelVLabel.textContent=isInelasticFriction?'Скорость системы':(isEtherCork?'Скорость пробирки':(isBlocks?'Скорость бруска':(isExplosion?'Скорость осколка 2':(isPuckImpulse?'Импульс p4':(isMomentum?'Импульс системы':(isPendulumImpact?'Скорость груза V':(isEnergyPendulum?'u после удара':(isEnergyHill?'Скорость шайбы':(isCartStone?'Горизонтальный импульс':'Относительная скорость')))))))));
   if(state.simRelPLabel) state.simRelPLabel.textContent=isInelasticFriction?'Путь после удара':(isEtherCork?'Скорость пробки':(isBlocks?'Кинетическая энергия':(isExplosion?'Изменение энергии':(isPuckImpulse?'Импульс p3':(isMomentum?'После удара':(isPendulumImpact?'Угол α':(isEnergyPendulum?'Высота h':(isEnergyHill?'Высота':(isCartStone?'Расчёт':'Импульс первого авто'))))))))); 
   if(isExplosionVector){
     if(state.simRelVLabel) state.simRelVLabel.textContent='Скорость осколка 2';
     if(state.simRelPLabel) state.simRelPLabel.textContent='Скорость осколка 1';
+  }
+  if(isNewton){
+    if(state.simRelVLabel) state.simRelVLabel.textContent=resolvedMode==='newtonInclineFriction'?'Ускорение':'Скорость';
+    if(state.simRelPLabel) state.simRelPLabel.textContent=resolvedMode==='newtonInclineFriction'?'Равнодействующая':'Ускорение';
   }
   if(state.simKeyLabel) state.simKeyLabel.textContent='Ключевая мысль';
   const hasAnimationSection=task.hasAnimation!==false;
@@ -9458,6 +9504,18 @@ function taskBoardSimSync(){
   const key=document.getElementById('taskBoardSimKey');
   const stateBox=document.getElementById('taskBoardSimState');
   const progress=sim.duration?Math.min(sim.t/sim.duration,1):0;
+  if(state.mode==='newtonForceAcceleration'||state.mode==='newtonInclineFriction'){
+    const isIncline=state.mode==='newtonInclineFriction';
+    const phase=progress<0.08?'Старт':(progress<0.72?'Разгон':'Расчёт');
+    if(frame) frame.textContent=phase;
+    if(relV) relV.innerHTML=isIncline?'a ≈ 3,27 м/с²':('v = '+(4*progress*3).toFixed(1).replace('.',',')+' м/с');
+    if(relP) relP.innerHTML=isIncline?'F<sub>рез</sub> ≈ 6,54 Н':'a = 4 м/с²';
+    if(key) key.innerHTML=isIncline?'ma = mg sinα − μmg cosα':'F = ma';
+    if(stateBox) stateBox.innerHTML=isIncline
+      ? '<strong>Идея:</strong> вдоль наклонной плоскости тело разгоняет составляющая <span class="fml">mg sinα</span>, а сила трения <span class="fml">μmg cosα</span> направлена против движения.'
+      : '<strong>Идея:</strong> при постоянной равнодействующей силе ускорение постоянно: <span class="fml">a = F/m = 20/5 = 4 м/с²</span>.';
+    return;
+  }
   if(state.mode==='etherCork'){
     const tKick=0.26, tLoop=0.86;
     const phase=progress<tKick?'Вылет пробки':(progress<tLoop?'Подъём пробирки':'Верхняя точка');
@@ -10065,10 +10123,61 @@ function taskBoardSimDraw(){
   const ctx=sim.ctx;
   const progress=sim.duration?Math.min(sim.t/sim.duration,1):0;
   const topLeft=26;
+  const frame=document.getElementById('taskBoardSimFrame');
+  const relV=document.getElementById('taskBoardSimRelV');
+  const relP=document.getElementById('taskBoardSimRelP');
+  const key=document.getElementById('taskBoardSimKey');
+  const stateBox=document.getElementById('taskBoardSimState');
   ctx.setTransform(sim.dpr,0,0,sim.dpr,0,0);
   ctx.clearRect(0,0,W,H);
   ctx.fillStyle='#ffffff';
   ctx.fillRect(0,0,W,H);
+  if(state.mode==='newtonForceAcceleration'||state.mode==='newtonInclineFriction'){
+    const isIncline=state.mode==='newtonInclineFriction';
+    const smooth=function(t){t=Math.max(0,Math.min(1,t));return t*t*(3-2*t);};
+    const run=smooth(progress);
+    const phase=progress<0.08?'Старт':(progress<0.72?'Разгон':'Расчёт');
+    if(frame) frame.textContent=phase;
+    if(relV) relV.innerHTML=isIncline?'a ≈ 3,27 м/с²':('v = '+(12*run).toFixed(1).replace('.',',')+' м/с');
+    if(relP) relP.innerHTML=isIncline?'F<sub>рез</sub> ≈ 6,54 Н':'a = 4 м/с²';
+    if(key) key.innerHTML=isIncline?'ma = mg sinα − μmg cosα':'F = ma';
+
+    ctx.fillStyle='#0f172a';ctx.font='bold 16px Golos Text,sans-serif';ctx.textAlign='left';
+    ctx.fillText(isIncline?'Наклонная плоскость с трением':'II закон Ньютона: сила и ускорение',topLeft,30);
+    ctx.fillStyle='#64748b';ctx.font='12px Golos Text,sans-serif';
+    ctx.fillText(isIncline?'Составляющая силы тяжести тянет тело вниз, сила трения направлена вверх по плоскости.':'Постоянная сила даёт постоянное ускорение: скорость тела постепенно растёт.',topLeft,50);
+
+    if(isIncline){
+      const baseY=H-72, left=Math.max(48,W*0.14), right=Math.min(W-58,W*0.72), topY=Math.max(92,H*0.28);
+      ctx.strokeStyle='#334155';ctx.lineWidth=4;ctx.lineCap='round';
+      ctx.beginPath();ctx.moveTo(left,baseY);ctx.lineTo(right,topY);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(left,baseY);ctx.lineTo(Math.min(W-36,right+80),baseY);ctx.stroke();
+      const bx=taskBoardSimLerp(right-50,left+90,run), by=taskBoardSimLerp(topY+25,baseY-25,run);
+      ctx.save();ctx.translate(bx,by);ctx.rotate(-Math.atan2(baseY-topY,right-left));
+      ctx.fillStyle='#dbeafe';ctx.strokeStyle='#2563eb';ctx.lineWidth=2.5;ctx.beginPath();ctx.roundRect(-30,-18,60,36,8);ctx.fill();ctx.stroke();
+      ctx.fillStyle='#1e3a8a';ctx.font='bold 14px Golos Text,sans-serif';ctx.textAlign='center';ctx.fillText('m',0,5);
+      taskBoardSimArrow(ctx,34,0,95,0,'#16a34a');
+      taskBoardSimArrow(ctx,-34,0,-88,0,'#f97316');
+      ctx.fillStyle='#15803d';ctx.font='bold 12px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('mg sinα',42,-11);
+      ctx.fillStyle='#ea580c';ctx.textAlign='right';ctx.fillText('Fтр',-43,-11);
+      ctx.restore();
+      ctx.strokeStyle='#f97316';ctx.lineWidth=2;ctx.beginPath();ctx.arc(left+38,baseY,34,-0.47,0);ctx.stroke();
+      ctx.fillStyle='#ea580c';ctx.font='bold 14px Golos Text,sans-serif';ctx.fillText('α=30°',left+58,baseY-8);
+      ctx.fillStyle='#111827';ctx.font='bold 15px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('a = 10(0,5 − 0,2·0,866) ≈ 3,27 м/с²',topLeft,H-24);
+    }else{
+      const ground=H-72;
+      ctx.strokeStyle='#94a3b8';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(36,ground);ctx.lineTo(W-36,ground);ctx.stroke();
+      const start=74, end=Math.max(start+40,W-170), x=taskBoardSimLerp(start,end,run);
+      ctx.fillStyle='#dbeafe';ctx.strokeStyle='#2563eb';ctx.lineWidth=2.5;ctx.beginPath();ctx.roundRect(x,ground-48,90,48,10);ctx.fill();ctx.stroke();
+      ctx.fillStyle='#1e3a8a';ctx.font='bold 15px Golos Text,sans-serif';ctx.textAlign='center';ctx.fillText('m = 5 кг',x+45,ground-19);
+      taskBoardSimArrow(ctx,x+92,ground-25,x+178,ground-25,'#f97316');
+      ctx.fillStyle='#ea580c';ctx.font='bold 14px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('F = 20 Н',x+112,ground-38);
+      taskBoardSimArrow(ctx,x+44,ground-62,x+44+48+run*44,ground-62,'#16a34a');
+      ctx.fillStyle='#15803d';ctx.font='bold 13px Golos Text,sans-serif';ctx.fillText('v растёт',x+48,ground-74);
+      ctx.fillStyle='#111827';ctx.font='bold 18px Golos Text,sans-serif';ctx.fillText('a = F/m = 20/5 = 4 м/с²',topLeft,H-24);
+    }
+    return;
+  }
   if(isTask10PendulumImpactMode(state.mode)){
     const impactP=0.38, releaseP=0.48, topP=0.88;
     const clamp=function(v,a,b){return Math.max(a,Math.min(b,v));};
