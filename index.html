@@ -546,7 +546,9 @@ body.edit-mode .et{display:inline}
 .pt-exam{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.18);color:var(--cyan);font-size:10px;font-weight:700;white-space:nowrap}
 .pt-body{display:grid;grid-template-columns:minmax(0,1fr) 160px;gap:14px;align-items:start}
 .pt-side{display:flex;flex-direction:column;gap:10px;align-items:stretch}
-@media(max-width:680px){.pt-body{grid-template-columns:1fr}.pt-side{max-width:260px;width:100%}}
+.hw-card .pt-body{grid-template-columns:1fr}
+.hw-card .pt-side{width:min(320px,100%);max-width:100%}
+@media(max-width:680px){.pt-body{grid-template-columns:1fr}.pt-side{max-width:260px;width:100%}.hw-card .pt-side{max-width:100%}}
 .pt-condition{font-size:14px;color:var(--gray);line-height:1.82}
 .pt-condition strong{color:var(--white)}
 .pt-given{background:var(--bg2);border-left:3px solid var(--orange);border-radius:0 7px 7px 0;padding:10px 13px;font-size:13px;line-height:1.82;color:var(--gray)}
@@ -4014,7 +4016,7 @@ function renderHW(ld){
     const side=hasAnswer
       ? `<div class="hw-answer-gate" data-answer="${safeAnswer}"><label class="hw-answer-label" for="${sid}_answer">Введите ответ, м/с</label><input class="hw-answer-input" id="${sid}_answer" type="text" inputmode="decimal" autocomplete="off" placeholder="Например: 900" onkeydown="hwAnswerKey(event,this)"><div class="hw-answer-actions"><button class="pt-sol-btn hw-check-btn" type="button" onclick="hwCheckAnswer(this)">Проверить</button><button class="pt-sol-btn hw-card-btn is-disabled" type="button" data-hw-target="${sid}" disabled onclick="hwToggle('${sid}',this)">▶ Карточка</button></div><p class="hw-answer-message" aria-live="polite"></p></div>`
       : `${item.given?`<div class="pt-given">${item.given}</div>`:''}<button class="pt-sol-btn" type="button" onclick="hwToggle('${sid}',this)">▶ Карточка</button>`;
-    return `<div class="pt-card"><div class="pt-head"><div class="pt-num">${String(item.num).padStart(2,'0')}</div><span class="pt-level pt-l2">${item.level}</span><span class="pt-exam">${item.badge}</span><span class="pt-title">${item.title}</span></div><div class="pt-body"><div class="pt-condition">${item.cond}</div><div class="pt-side">${side}</div></div><div class="pt-solution" id="${sid}"><div class="pt-rich-card"><div class="pt-photo-wrap" data-solution-zoom="true"><img class="pt-photo-img" src="${item.image}" alt="${item.title}"></div></div></div></div>`;
+    return `<div class="pt-card hw-card"><div class="pt-head"><div class="pt-num">${String(item.num).padStart(2,'0')}</div><span class="pt-level pt-l2">${item.level}</span><span class="pt-exam">${item.badge}</span><span class="pt-title">${item.title}</span></div><div class="pt-body"><div class="pt-condition">${item.cond}</div><div class="pt-side">${side}</div></div><div class="pt-solution" id="${sid}"><div class="pt-rich-card"><div class="pt-photo-wrap" data-solution-zoom="true"><img class="pt-photo-img" src="${item.image}" alt="${item.title}"></div></div></div></div>`;
   }).join('')}`:'';
   return`${cards}<label class="hwd" for="hwi"><div class="hwi">📎</div><p>Нажмите или перетащите файл сюда</p>
     <small>PDF, DOC, JPG, PNG — до 20 МБ</small>
