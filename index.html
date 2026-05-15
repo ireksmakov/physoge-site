@@ -678,9 +678,11 @@ body.edit-mode .et{display:inline}
 .pt-demo-btn{padding:8px 12px;border-radius:8px;border:1px solid rgba(0,229,255,.15);background:rgba(0,229,255,.05);color:var(--gray);font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb)}
 .pt-demo-btn:hover{color:var(--white);border-color:rgba(0,229,255,.35)}
 .pt-demo-btn.active{background:rgba(0,229,255,.14);color:var(--cyan);border-color:rgba(0,229,255,.35)}
-.pt-side-actions{margin:0}
-.pt-board-btn{width:100%;padding:9px 12px;border-radius:8px;border:1px solid rgba(0,229,255,.22);background:rgba(0,229,255,.08);color:var(--cyan);font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb)}
-.pt-board-btn:hover{background:rgba(0,229,255,.16);border-color:rgba(0,229,255,.38);color:var(--white);box-shadow:0 0 18px rgba(0,229,255,.2);transform:translateY(-1px)}
+.pt-side-actions{display:flex;flex-direction:column;gap:8px;margin:0}
+.pt-board-btn,.pt-animation-btn{width:100%;padding:9px 12px;border-radius:8px;border:1px solid rgba(0,229,255,.22);background:rgba(0,229,255,.08);color:var(--cyan);font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb)}
+.pt-board-btn:hover,.pt-animation-btn:hover{background:rgba(0,229,255,.16);border-color:rgba(0,229,255,.38);color:var(--white);box-shadow:0 0 18px rgba(0,229,255,.2);transform:translateY(-1px)}
+.pt-animation-btn{border-color:rgba(57,255,20,.28);background:rgba(57,255,20,.08);color:var(--green)}
+.pt-animation-btn:hover{background:rgba(57,255,20,.15);border-color:rgba(57,255,20,.42);box-shadow:0 0 18px rgba(57,255,20,.18)}
 
 
 /* ===== TASK 07 PENDULUM IMPACT ANIMATION ===== */
@@ -5536,7 +5538,7 @@ function createKamzeeva1120Tasks(){
         given:`<strong>Блок варианта:</strong> ${block.label}<br><span class="pt-find">Найти: величины, указанные в условии; оформить решение по шагам.</span>`,
         steps:solved.steps,
         ans:solved.ans,
-        extraHtml:'<div class="pt-mini-anim"><strong>Анимация и доска:</strong> нажмите «⤢ Доска», затем в меню доски откройте «Анимация процесса» и используйте сетку для записи формул, рисунка и ответа.</div>'
+        extraHtml:''
       });
     });
   }
@@ -6529,7 +6531,7 @@ function renderPTasks(name){
     const taskId=String(t.id||'');
     const boardModeSafe=String(t.boardMode||'').replace(/'/g,"\\'");
     const taskIdSafe=taskId.replace(/'/g,"\\'");
-    const boardBtn=t.boardMode?`<div class="pt-side-actions"><button class="pt-board-btn" onclick="openTaskBoard('${boardModeSafe}',true,'${taskIdSafe}')">⤢ Доска</button></div>`:'';
+    const boardBtn=t.boardMode?`<div class="pt-side-actions"><button class="pt-board-btn" onclick="openTaskBoard('${boardModeSafe}',true,'${taskIdSafe}')">⤢ Доска</button>${t.hasAnimation!==false?`<button class="pt-animation-btn" onclick="openTaskBoardAnimation('${boardModeSafe}','${taskIdSafe}')">▶ Анимация</button>`:''}</div>`:'';
     const hasStructuredSolution=hasFilledTaskSolution(t)||hasLegacyTaskTextSolution(t);
     const embeddedRaw=hasStructuredSolution?renderTaskSolutionPanel(t,'pt'):(t.solutionHtml||getEmbeddedSolutionHtml(t));
     const embedded=String(embeddedRaw||'').trim();
@@ -8217,6 +8219,14 @@ function taskBoardExitFullscreen(){
     const result=exit.call(document);
     if(result&&typeof result.catch==='function') result.catch(function(){});
   }catch(_err){}
+}
+function openTaskBoardAnimation(mode,taskId=''){
+  openTaskBoard(mode,true,taskId);
+  requestAnimationFrame(function(){
+    const state=taskBoardState;
+    if(!state||!state.animBtn||state.animBtn.style.display==='none') return;
+    handleTaskBoardAnimationButtonClick();
+  });
 }
 function openTaskBoard(mode,requestFullscreen=false,taskId=''){
   const state=ensureTaskBoardOverlay();
