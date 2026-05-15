@@ -29,8 +29,8 @@
   <circle cx="750" cy="310" r="10" fill="#38e8ff"/>
 
   <g fill="#bfefff" font-family="Georgia, serif" font-style="italic">
-    <text x="840" y="220" font-size="110">F = ma</text>
-    <text x="840" y="345" font-size="78" opacity="0.9">E = mc²</text>
+    <text x="805" y="245" font-size="96">F = ma</text>
+    <text x="815" y="325" font-size="72" opacity="0.9">E = mc²</text>
     <text x="855" y="438" font-size="84" opacity="0.85">a² + b² = c²</text>
   </g>
 
