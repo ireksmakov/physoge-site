@@ -715,6 +715,7 @@ body.edit-mode .et{display:inline}
 .pt-blank-card{border-style:dashed;border-color:rgba(0,229,255,.34);background:linear-gradient(180deg,rgba(0,229,255,.035),rgba(255,140,0,.025))}
 .pt-blank-card:hover{border-color:rgba(0,229,255,.62)}
 .pt-empty-text{color:rgba(107,122,141,.78);font-style:italic;border:1px dashed rgba(0,229,255,.25);border-radius:10px;padding:12px;background:rgba(0,229,255,.035)}
+.pt-blank-solution-space{min-height:90px;border:1px dashed rgba(8,216,255,.22);border-radius:12px;background:rgba(8,216,255,.025)}
 .pt-blank-add-wrap{display:none;margin:18px 0 4px}
 body.edit-mode .pt-blank-add-wrap{display:block}
 body.view-mode .pt-blank-add-wrap{display:none}
@@ -5542,6 +5543,68 @@ function createKamzeeva1120Tasks(){
   return tasks;
 }
 const KAMZEEVA_1120_TASKS=createKamzeeva1120Tasks();
+function getCourseLessonNameByFlatNumber(courseKey, flatNumber){
+  const course = COURSES && COURSES[courseKey];
+  if(!course || !Array.isArray(course.modules)) return '';
+
+  let count = 0;
+
+  for(const module of course.modules){
+    const lessons = Array.isArray(module.lessons) ? module.lessons : [];
+
+    for(const lesson of lessons){
+      count++;
+
+      if(count === flatNumber){
+        if(typeof lesson === 'string') return lesson;
+        if(lesson && typeof lesson === 'object') return lesson.name || lesson.title || '';
+        return '';
+      }
+    }
+  }
+
+  return '';
+}
+
+function makeEmptyWorkingTask(num, template){
+  const n = Number(num) || 1;
+  const id = 'lesson07-empty-task-' + String(n).padStart(2,'0');
+
+  return {
+    ...(template || {}),
+
+    id: id,
+    boardMode: id,
+    num: n,
+
+    level: template && template.level ? template.level : 2,
+    exam: template && template.exam ? template.exam : 'ЕГЭ',
+
+    title: '',
+    cond: '',
+    condition: '',
+    text: '',
+    given: '',
+    ans: '',
+
+    steps: [],
+    solutionHtml: '',
+    solutionImage: '',
+    solutionTitle: '',
+    solution: {
+      idea: '',
+      formulas: [],
+      steps: [],
+      answer: '',
+      tutorHint: ''
+    },
+
+    extraHtml: '',
+    graphLabel: '',
+    hasAnimation: false,
+    isBlank: true
+  };
+}
 const LESSON_TASKS={
 'Равноускоренное движение':[
   {num:1,level:1,title:'Скорость ×3 за 2 с',
@@ -5944,6 +6007,25 @@ const LESSON_TASKS={
 ]
 };
 
+(function setupLesson07EmptyTasks(){
+  const targetLessonName = getCourseLessonNameByFlatNumber('ege-phy', 7);
+  const sourceLessonName = getCourseLessonNameByFlatNumber('ege-phy', 24);
+
+  if(!targetLessonName) return;
+
+  const sourceTasks = Array.isArray(LESSON_TASKS[sourceLessonName])
+    ? LESSON_TASKS[sourceLessonName]
+    : [];
+
+  const template =
+    sourceTasks.find(function(task){ return Number(task && task.num) === 5; }) ||
+    sourceTasks[4] ||
+    {};
+
+  LESSON_TASKS[targetLessonName] = Array.from({length:19}, function(_, index){
+    return makeEmptyWorkingTask(index + 1, template);
+  });
+})();
 
 const LESSON_HOMEWORK={
   'Закон сохранения импульса и изменения импульса':[
@@ -6415,8 +6497,9 @@ function renderTaskSolutionWorkspace(task,cls){
 }
 
 function renderPTasks(name){
-  const baseTasks=Array.isArray(LESSON_TASKS[name])?LESSON_TASKS[name].map(t=>Object.assign({},t,{isBlank:false})):[];
-  const blankTasks=normalizeBlankTaskNumbers(name);
+  const baseTasks=Array.isArray(LESSON_TASKS[name])?LESSON_TASKS[name].map(t=>Object.assign({},t,{isBlank:!!(t&&t.isBlank)})):[];
+  const lesson07Name=getCourseLessonNameByFlatNumber('ege-phy', 7);
+  const blankTasks=name===lesson07Name?[]:normalizeBlankTaskNumbers(name);
   const tasks=baseTasks.concat(blankTasks).map((t,i)=>Object.assign({},t,{num:Number(t.num)||i+1}));
   const empty=`<div style="text-align:center;padding:40px 20px;color:var(--gray)"><div style="font-size:32px;margin-bottom:12px">📋</div><div style="font-family:var(--fh);font-size:14px;font-weight:700;color:var(--white);margin-bottom:6px">Задачи в разработке</div><div style="font-size:13px">Задачи для темы <strong style="color:var(--orange)">"${escapeHtml(name||'')}"</strong> появятся в ближайшее время.</div></div>`;
   const lvlL=['','Базовый','Средний','Сложный'],lvlC=['','pt-l1','pt-l2','pt-l3'];
@@ -6426,7 +6509,12 @@ function renderPTasks(name){
   function renderOneTask(t,i){
     const sid='ptS_'+lessonTaskDomId((t.id||t.boardMode||i)+'_'+i);
     const isBlank=!!t.isBlank;
-    const cond=t.cond?String(t.cond):(isBlank&&EMODE?'<div class="pt-empty-text">Пустой блок задачи. Условие будет добавлено через Codex.</div>':'');
+    const titleText=isBlank
+      ? ''
+      : (t.title||'Новая задача');
+    const cond=t.cond
+      ? String(t.cond)
+      : '';
     const steps=(t.steps||[]).map((s,j)=>`<div class="sr-step"><div class="sr-snum">${j+1}</div><div class="sr-sbody">${s}</div></div>`).join('');
     const extra=t.extraHtml?`<div class="pt-extra">${t.extraHtml}</div>`:'';
     const scheme=t.schemeHtml?String(t.schemeHtml):'';
@@ -6439,10 +6527,15 @@ function renderPTasks(name){
     const embedded=String(embeddedRaw||'').trim();
     const imageOnly=!embedded&&t.solutionImage?renderSolutionImageHtml(t.solutionImage,t.solutionTitle||t.title||'Решение задачи','pt'):'';
     const rich=(embedded||imageOnly)?`<div class="pt-rich-card">${embedded||imageOnly}</div>`:'';
-    const fallbackSolution=!embedded&&!imageOnly&&!steps&&!extra?'<div class="pt-empty-text">Решение пока не добавлено.</div>':'';
+    const answer=t.ans?String(t.ans):'';
+    const fallbackSolution=!embedded&&!imageOnly&&!steps&&!extra&&!answer
+      ? (isBlank
+          ? '<div class="pt-blank-solution-space"></div>'
+          : '<div class="pt-empty-text">Решение пока не добавлено.</div>')
+      : '';
     const solutionInner=(embedded||imageOnly)?`${rich}${extra}`:`${steps}${extra}${fallbackSolution}`;
     const emptySolution=!String(solutionInner||'').trim();
-    return `<div class="pt-card${isBlank?' pt-blank-card':''}"><div class="pt-head"><div class="pt-num">${String(t.num).padStart(2,'0')}</div><span class="pt-level ${lvlC[t.level]||lvlC[1]}">${lvlL[t.level]||lvlL[1]}</span><span class="pt-exam">${t.exam||'ЕГЭ'}</span><span class="pt-title">${t.title||'Новая задача'}</span></div><div class="pt-body"><div class="pt-condition">${cond}</div>${scheme}<div class="pt-side">${boardBtn}<button class="pt-sol-btn" data-empty-solution="${emptySolution?'1':'0'}" onclick="ptToggle('${sid}',this)">▶ Решение</button></div></div><div class="pt-solution" id="${sid}">${solutionInner}</div></div>`;
+    return `<div class="pt-card${isBlank?' pt-blank-card':''}"><div class="pt-head"><div class="pt-num">${String(t.num).padStart(2,'0')}</div><span class="pt-level ${lvlC[t.level]||lvlC[1]}">${lvlL[t.level]||lvlL[1]}</span><span class="pt-exam">${t.exam||'ЕГЭ'}</span><span class="pt-title">${titleText}</span></div><div class="pt-body"><div class="pt-condition">${cond}</div>${scheme}<div class="pt-side">${boardBtn}<button class="pt-sol-btn" data-empty-solution="${emptySolution?'1':'0'}" onclick="ptToggle('${sid}',this)">▶ Решение</button></div></div><div class="pt-solution" id="${sid}">${solutionInner}</div></div>`;
   }
   const hasGroups=tasks.some(t=>t&&t.group);
   if(hasGroups){
