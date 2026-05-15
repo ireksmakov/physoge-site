@@ -43,17 +43,15 @@ header{position:fixed;top:0;left:0;right:0;z-index:10000;background:rgba(2,9,20,
 #landing{display:block}
 .hero{min-height:92vh;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;max-width:1280px;margin:0 auto;padding:52px 24px 20px;gap:36px}.hero-shot{width:100%;display:block;border-radius:24px;border:1px solid var(--border-strong);box-shadow:0 34px 88px rgba(0,0,0,.58);position:relative;z-index:2}.hero-media{display:flex;align-items:center;justify-content:center;position:relative;transform:translateY(-35px);isolation:isolate;overflow:hidden;border-radius:24px}.hero-media::before{content:'';position:absolute;width:120%;height:120%;background:radial-gradient(circle,rgba(8,216,255,.18),transparent 62%);z-index:-1}
 .hero-animation{position:absolute;inset:50% auto auto 50%;width:min(520px,82vw);aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none;z-index:3;filter:drop-shadow(0 0 18px rgba(8,216,255,.26))}
-.hero-animation::before,.hero-animation::after{content:'';position:absolute;inset:12%;border:1px solid rgba(8,216,255,.24);border-radius:50%;transform:rotateX(64deg) rotateZ(-18deg);animation:heroRingA 12s linear infinite}
-.hero-animation::after{inset:22%;border-color:rgba(255,140,0,.22);transform:rotateX(66deg) rotateZ(24deg);animation:heroRingB 16s linear infinite reverse}
-.hero-orbit{position:absolute;inset:0;border-radius:50%;animation:heroOrbit 9s linear infinite}
-.hero-orbit:nth-child(2){inset:11%;animation-duration:13s;animation-direction:reverse;transform-origin:center}.hero-orbit:nth-child(3){inset:20%;animation-duration:17s}
-.hero-particle{position:absolute;top:50%;left:50%;width:13px;height:13px;margin:-6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 18px rgba(8,216,255,.95),0 0 34px rgba(8,216,255,.42);transform:translateX(calc(var(--r)*1px))}
-.hero-orbit:nth-child(2) .hero-particle{width:10px;height:10px;background:var(--orange);box-shadow:0 0 18px rgba(255,140,0,.85);transform:translateX(calc(var(--r)*-1px))}.hero-orbit:nth-child(3) .hero-particle{width:8px;height:8px;background:var(--green);box-shadow:0 0 16px rgba(57,255,20,.8);transform:translateY(calc(var(--r)*1px))}
+.hero-animation::before{content:'';position:absolute;top:50%;left:50%;width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 34% 32%,#fff6b3 0 8%,#ffd25a 28%,var(--orange) 63%,rgba(255,140,0,.35) 100%);box-shadow:0 0 22px rgba(255,210,90,.95),0 0 58px rgba(255,140,0,.4);transform:translate(-50%,-50%);z-index:2}
+.hero-animation::after{content:'';position:absolute;top:50%;left:50%;width:82px;height:82px;border-radius:50%;background:radial-gradient(circle,rgba(255,210,90,.16),transparent 68%);transform:translate(-50%,-50%);z-index:1}
+.hero-orbit{--orbit-size:92%;--orbit-speed:12s;--orbit-tilt:.46;--planet-counter-tilt:2.17;--orbit-angle:-18deg;--planet-size:13px;--planet-color:var(--cyan);--planet-glow:rgba(8,216,255,.95);--planet-glow-soft:rgba(8,216,255,.42);position:absolute;top:50%;left:50%;width:var(--orbit-size);aspect-ratio:1;border-radius:50%;border:1px solid rgba(8,216,255,.24);transform:translate(-50%,-50%) rotateZ(var(--orbit-angle)) scaleY(var(--orbit-tilt));transform-origin:center;animation:heroOrbit var(--orbit-speed) linear infinite}
+.hero-orbit:nth-child(2){--orbit-size:70%;--orbit-speed:18s;--orbit-tilt:.5;--planet-counter-tilt:2;--orbit-angle:24deg;--planet-size:10px;--planet-color:var(--orange);--planet-glow:rgba(255,140,0,.85);--planet-glow-soft:rgba(255,140,0,.38);border-color:rgba(255,140,0,.22);animation-direction:reverse}
+.hero-orbit:nth-child(3){--orbit-size:50%;--orbit-speed:8s;--orbit-tilt:.42;--planet-counter-tilt:2.38;--orbit-angle:8deg;--planet-size:8px;--planet-color:var(--green);--planet-glow:rgba(57,255,20,.8);--planet-glow-soft:rgba(57,255,20,.34);border-color:rgba(57,255,20,.2)}
+.hero-particle{position:absolute;top:50%;left:100%;width:var(--planet-size);height:var(--planet-size);border-radius:50%;background:var(--planet-color);box-shadow:0 0 18px var(--planet-glow),0 0 34px var(--planet-glow-soft);transform:translate(-50%,-50%) scaleY(var(--planet-counter-tilt));transform-origin:center}
 .hero-formula{position:absolute;padding:5px 10px;border:1px solid rgba(8,216,255,.32);border-radius:999px;background:rgba(2,9,20,.72);backdrop-filter:blur(8px);color:var(--cyan);font-family:var(--fh);font-size:12px;letter-spacing:.5px;animation:heroFloat 5.4s ease-in-out infinite;box-shadow:0 10px 26px rgba(0,0,0,.28)}
 .hero-formula.f1{top:17%;left:10%}.hero-formula.f2{right:7%;top:15%;color:var(--orange);border-color:rgba(255,140,0,.3);animation-delay:-1.4s}.hero-formula.f3{left:7%;bottom:18%;color:var(--green);border-color:rgba(57,255,20,.26);animation-delay:-2.6s}
-@keyframes heroOrbit{to{transform:rotate(360deg)}}
-@keyframes heroRingA{to{transform:rotateX(64deg) rotateZ(342deg)}}
-@keyframes heroRingB{to{transform:rotateX(66deg) rotateZ(384deg)}}
+@keyframes heroOrbit{from{transform:translate(-50%,-50%) rotateZ(var(--orbit-angle)) scaleY(var(--orbit-tilt)) rotate(0deg)}to{transform:translate(-50%,-50%) rotateZ(var(--orbit-angle)) scaleY(var(--orbit-tilt)) rotate(360deg)}}
 @keyframes heroFloat{0%,100%{transform:translate3d(0,0,0);opacity:.8}50%{transform:translate3d(0,-14px,0);opacity:1}}
 @media (prefers-reduced-motion:reduce){.hero-animation,.hero-animation::before,.hero-animation::after,.hero-orbit,.hero-formula{animation:none!important}}
 .hero-label{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--cyan);margin-bottom:24px}
@@ -1547,9 +1545,9 @@ img,svg,canvas,video,iframe{max-width:100%}
       <div class="hero-media">
         <img class="hero-shot" src="images/hero-physics.svg" alt="Главный экран платформы ФИЗМАТ">
         <div class="hero-animation" aria-hidden="true">
-          <span class="hero-orbit" style="--r:255"><span class="hero-particle"></span></span>
-          <span class="hero-orbit" style="--r:190"><span class="hero-particle"></span></span>
-          <span class="hero-orbit" style="--r:130"><span class="hero-particle"></span></span>
+          <span class="hero-orbit"><span class="hero-particle"></span></span>
+          <span class="hero-orbit"><span class="hero-particle"></span></span>
+          <span class="hero-orbit"><span class="hero-particle"></span></span>
           <span class="hero-formula f1">F = ma</span>
           <span class="hero-formula f2">E = mc²</span>
           <span class="hero-formula f3">p = mv</span>
