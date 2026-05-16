@@ -6101,6 +6101,14 @@ const LESSON_TASKS={
 
   if(!targetLessonName) return;
 
+  const existingTargetTasks = Array.isArray(LESSON_TASKS[targetLessonName])
+    ? LESSON_TASKS[targetLessonName]
+    : [];
+
+  if(existingTargetTasks.some(function(task){ return task && String(task.cond || '').trim(); })){
+    return;
+  }
+
   const sourceTasks = Array.isArray(LESSON_TASKS[sourceLessonName])
     ? LESSON_TASKS[sourceLessonName]
     : [];
