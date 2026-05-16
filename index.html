@@ -662,6 +662,15 @@ body.edit-mode .et{display:inline}
 .pt-imp-line{font-size:13px;color:var(--gray);line-height:1.7;margin-bottom:8px}
 .pt-imp-line strong{color:var(--white)}
 .pt-imp-line .accent{color:var(--orange);font-family:var(--fh);font-size:16px;font-weight:700;line-height:1.35;overflow-wrap:anywhere;word-break:break-word}.fx-root{display:inline-flex;align-items:flex-start;gap:3px;vertical-align:middle;max-width:100%}.fx-root-sign{font-size:1.2em;line-height:1;transform:translateY(2px)}.fx-root-body{display:inline-block;border-top:2px solid currentColor;padding:0.16em 0 0 0.24em;line-height:1.2}.sr-fml .fx-root{margin:0 .08em .02em .02em}.task-board-graph svg,.task-board-graph img{display:block;width:100%;height:auto;overflow:visible}.task-board-graph text{font-family:'Golos Text',sans-serif}.task-board-problem-graph{overflow:hidden}.task-board-sim-btns.is-hidden{display:none}
+.task-board-schema-image-wrap,
+.task-board-graph-image-wrap,
+.pt-task-schema-image-wrap{width:100%;max-width:100%;overflow:hidden;border-radius:14px;border:1px solid rgba(8,216,255,.18);background:rgba(255,255,255,.04);padding:10px;box-sizing:border-box}
+.task-board-schema-image,
+.task-board-graph-image,
+.pt-task-schema-image{display:block;width:100%;max-width:100%;height:auto;object-fit:contain;border-radius:10px}
+.task-board-float-body,
+.task-board-graph-body,
+.task-board-schema-body{overflow:auto}
 .pt-demo-box{padding:14px 15px}
 .pt-demo-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:12px}
 .pt-demo-title{font-family:var(--fh);font-size:14px;font-weight:700;color:var(--white)}
@@ -718,6 +727,7 @@ body.edit-mode .et{display:inline}
 .task07-anim-controls{display:flex;gap:9px;flex-wrap:wrap;align-items:center;padding:0 20px 18px}
 .task07-anim-btn{padding:10px 14px;border-radius:12px;border:1px solid rgba(0,229,255,.2);background:rgba(0,229,255,.08);color:var(--cyan);font:800 13px var(--fb);cursor:pointer;transition:all .18s}.task07-anim-btn:hover{background:rgba(0,229,255,.16);color:var(--white);transform:translateY(-1px)}
 .task07-anim-progress{flex:1;min-width:160px;height:8px;border-radius:999px;background:rgba(107,122,141,.24);overflow:hidden}.task07-anim-progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--orange));border-radius:inherit;transition:width .08s linear}
+@keyframes task07Progress{0%{width:0}100%{width:100%}}
 @media(max-width:900px){.task07-anim-overlay{padding:8px}.task07-anim-body{grid-template-columns:1fr;overflow:auto}.task07-anim-stage{min-height:360px}.task07-anim-svg{min-height:360px}.task07-anim-side{display:grid;grid-template-columns:1fr}.task07-anim-modal{height:100%;border-radius:18px}.task07-anim-head{padding:14px 14px 0}.task07-anim-body{padding:0 14px 14px}.task07-anim-controls{padding:0 14px 14px}}
 
 /* ===== BLANK TASK BLOCKS ===== */
@@ -6029,25 +6039,57 @@ const LESSON_TASKS={
 ]
 };
 
-(function setupLesson07EmptyTasks(){
-  const targetLessonName = getCourseLessonNameByFlatNumber('ege-phy', 7);
-  const sourceLessonName = getCourseLessonNameByFlatNumber('ege-phy', 24);
 
-  if(!targetLessonName) return;
+function makeNewtonLawTask(num, cond, schemaImage){
+  const n=String(num).padStart(2,'0');
+  return {
+    id:'newton-task-'+n,
+    num:num,
+    level:num<=8?1:(num<=16?2:3),
+    exam:'ЕГЭ · Физика',
+    title:'Задача '+num,
+    cond:cond,
+    given:'',
+    schemaImage:schemaImage||'',
+    graphImage:'',
+    graphLabel:'Схема',
+    boardMode:'newton-task-'+n,
+    hasAnimation:true,
+    animationId:'newton-task-'+n,
+    solutionHtml:'',
+    solutionImage:'',
+    steps:[],
+    ans:'',
+    solution:{idea:'',formulas:[],steps:[],answer:'',tutorHint:''}
+  };
+}
 
-  const sourceTasks = Array.isArray(LESSON_TASKS[sourceLessonName])
-    ? LESSON_TASKS[sourceLessonName]
-    : [];
-
-  const template =
-    sourceTasks.find(function(task){ return Number(task && task.num) === 5; }) ||
-    sourceTasks[4] ||
-    {};
-
-  LESSON_TASKS[targetLessonName] = Array.from({length:19}, function(_, index){
-    return makeEmptyWorkingTask(index + 1, template);
-  });
+(function setupLesson07NewtonTasks(){
+  const targetLessonName = getCourseLessonNameByFlatNumber('ege-phy', 7) || 'Законы Ньютона';
+  const img=function(n){return 'images/tasks/newton/task-'+String(n).padStart(2,'0')+'.png';};
+  LESSON_TASKS[targetLessonName] = [
+    makeNewtonLawTask(1,'Мяч брошен под углом к горизонту (см. рисунок). Сопротивление воздуха пренебрежимо мало. Какому из векторов 1–4 сонаправлена равнодействующая сил, действующих на мяч в точке A?',img(1)),
+    makeNewtonLawTask(2,'В инерциальной системе отсчёта брусок из состояния покоя начинает скользить с ускорением вниз по наклонной плоскости (см. рисунок). Какому из векторов 1–4 сонаправлена равнодействующая сил, действующих на брусок?',img(2)),
+    makeNewtonLawTask(3,'Какое ускорение приобретёт тело массой <strong>500 г</strong> под действием силы <strong>0,2 Н</strong>?',''),
+    makeNewtonLawTask(4,'Одна и та же горизонтальная сила <strong>F</strong> действует вначале на тело 1 массой <strong>0,5 кг</strong>, а затем на тело 2 массой <strong>3 кг</strong>. Оба тела до начала действия силы покоились на гладком горизонтальном столе. С каким по модулю ускорением будет двигаться тело 2 под действием силы <strong>F</strong>, если тело 1 движется с ускорением, модуль которого равен <strong>1,8 м/с²</strong>?',''),
+    makeNewtonLawTask(5,'На рисунке приведён график зависимости модуля скорости прямолинейно движущегося тела массой <strong>1 кг</strong> от времени (относительно Земли). Чему равен модуль равнодействующей всех сил, действующих на тело в четвёртую секунду движения?',img(5)),
+    makeNewtonLawTask(6,'Мальчик и девочка тянут верёвку за противоположные концы. Девочка может тянуть с силой не более <strong>50 Н</strong>, а мальчик — с силой <strong>150 Н</strong>. С какой силой они могут натянуть верёвку, не сдвигаясь с места?',''),
+    makeNewtonLawTask(7,'Масса ученика равна <strong>40 кг</strong>. Чему равна сила, с которой этот ученик притягивает к себе Землю?',''),
+    makeNewtonLawTask(8,'Груз массой <strong>100 г</strong> подвесили на упругую пружину жёсткостью <strong>40 Н/м</strong>. Чему при этом равно растяжение пружины? Ответ дайте в см.',''),
+    makeNewtonLawTask(9,'На тело действуют три силы, модули и направления которых показаны на рисунке. Чему равен модуль равнодействующей этих трёх сил?',img(9)),
+    makeNewtonLawTask(10,'На рисунке представлен график зависимости силы трения скольжения от силы нормального давления для двух брусков, скользящих по поверхности стола. Во сколько раз коэффициент трения скольжения второго бруска меньше, чем первого?',img(10)),
+    makeNewtonLawTask(11,'Свинцовые шары взаимодействуют силами всемирного тяготения. Во сколько раз увеличится модуль сил тяготения, если массу каждого из шаров увеличить в <strong>3 раза</strong>, а расстояние между их центрами увеличить в <strong>2 раза</strong>?',''),
+    makeNewtonLawTask(12,'Свинцовые шары взаимодействуют силами всемирного тяготения. Во сколько раз увеличится модуль сил тяготения, если массу каждого из шаров увеличить в <strong>3 раза</strong>, а расстояние между их центрами уменьшить в <strong>2 раза</strong>?',''),
+    makeNewtonLawTask(13,'На горизонтальной плоскости находится брусок массой <strong>1 кг</strong>. Если к бруску прикладывают горизонтальную силу <strong>F</strong>, как показано на рисунке а, то он движется по плоскости с ускорением. Коэффициент трения между поверхностью бруска и плоскостью равен <strong>0,5</strong>. Как изменятся вес бруска и модуль действующей на брусок силы трения, если, не изменяя модуля силы, изменить её направление так, как показано на рисунке б? Для каждой величины определите характер изменения: 1) увеличится; 2) уменьшится; 3) не изменится. Запишите в таблицу выбранные цифры для каждой физической величины. Цифры в ответе могут повторяться.',img(13)),
+    makeNewtonLawTask(14,'На покоящееся тело, находящееся на гладкой горизонтальной плоскости, начинают действовать две горизонтальные силы, лежащие на одной прямой (см. рисунок). Определите, как изменяются со временем модуль ускорения тела и модуль скорости тела. Для каждой величины определите характер изменения: 1) увеличится; 2) уменьшится; 3) не изменится.',img(14)),
+    makeNewtonLawTask(15,'Космический корабль, движущийся по круговой орбите вокруг Земли, сместился на другую круговую орбиту, меньшего радиуса. Как при этом изменились сила тяготения, действующая на корабль со стороны Земли, и модуль скорости корабля? 1) увеличится; 2) уменьшится; 3) не изменится. Запишите в таблицу выбранные цифры для каждой физической величины. Цифры в ответе могут повторяться.',''),
+    makeNewtonLawTask(16,'Космический корабль, движущийся по круговой орбите вокруг Земли, сместился на другую круговую орбиту, меньшего радиуса. Как при этом изменились модуль скорости корабля и период обращения корабля вокруг Земли? 1) увеличится; 2) уменьшится; 3) не изменится. Запишите в таблицу выбранные цифры для каждой физической величины. Цифры в ответе могут повторяться.',''),
+    makeNewtonLawTask(17,'Под действием силы тяги, приложенной через динамометр, брусок равномерно передвигают по горизонтальной поверхности стола (см. рисунок). Используя данные рисунка, выберите из предложенного перечня два верных утверждения. Укажите их номера. 1) В вертикальном направлении сила тяжести компенсируется силой упругости, действующей на брусок со стороны стола. 2) Сила трения скольжения равна 1,75 Н. 3) В вертикальном направлении на брусок не действуют никакие силы. 4) Сила тяги F равна 1,5 Н. 5) Сила трения скольжения пренебрежимо мала.',img(17)),
+    makeNewtonLawTask(18,'Ученик провёл эксперимент по изучению силы упругости, возникающей при подвешивании грузов разной массы к резиновым шнурам разных длины и толщины. Результаты экспериментальных прямых измерений и косвенные измерения коэффициента жёсткости представлены в таблице. Из предложенного перечня выберите два утверждения, соответствующих проведённым опытам. Укажите их номера. 1) При увеличении длины шнура его жёсткость увеличивается. 2) При увеличении толщины шнура его жёсткость увеличивается. 3) Удлинение шнура не зависит от его первоначальной длины. 4) Жёсткость шнура не зависит от массы подвешиваемого груза. 5) Удлинение шнура зависит от упругих свойств материала, из которого изготовлен исследуемый образец.',img(18)),
+    makeNewtonLawTask(19,'Ученик провёл исследование силы трения скольжения, действующей на деревянные бруски (в опытах используются одинаковые деревянные бруски массой <strong>250 г</strong> каждый) при скольжении по поверхности стола. На рисунках представлены схемы проведённых опытов и результаты измерения силы трения скольжения. Опыт 1: равномерное движение деревянного бруска по поверхности стола. Опыт 2: равномерное движение двух деревянных брусков по поверхности стола. Выберите из предложенного перечня два утверждения, которые соответствуют результатам проведённых опытов. Укажите их номера. 1) Сила трения скольжения зависит от качества обработки поверхности. 2) Сила трения скольжения не зависит от скорости движения бруска по поверхности скольжения. 3) При увеличении массы скользящего тела в 2 раза сила трения скольжения также увеличилась в 2 раза. 4) Сила трения скольжения зависит от материала обеих трущихся плоскостей. 5) Сила трения скольжения во втором опыте равна 1 Н.',img(19))
+  ];
 })();
+
 
 const LESSON_HOMEWORK={
   'Закон сохранения импульса и изменения импульса':[
@@ -6765,7 +6807,6 @@ function closeTaskAnimationPlaceholder(){
 function ptToggle(id,btn){
   const el=document.getElementById(id);
   if(!el)return;
-  if(btn&&btn.dataset&&btn.dataset.emptySolution==='1'&&!EMODE)return;
   const o=el.classList.toggle('open');
   btn.textContent=o?'▼ Скрыть':'▶ Решение';
   if(o)requestAnimationFrame(function(){el.scrollIntoView({block:'nearest',behavior:'smooth'});});
@@ -7413,6 +7454,22 @@ function getTaskBoardData(mode){
     if(found)return found;
   }
   return null;
+}
+function renderTaskBoardImageHtml(path,alt,type){
+  const safePath=escapeHtml(String(path||''));
+  if(!safePath) return '';
+  const label=escapeHtml(String(alt||'Схема задачи'));
+  const wrapClass=type==='graph'?'task-board-graph-image-wrap':'task-board-schema-image-wrap';
+  const imgClass=type==='graph'?'task-board-graph-image':'task-board-schema-image';
+  return `<div class="${wrapClass}"><img class="${imgClass}" src="${safePath}" alt="${label}"></div>`;
+}
+function getTaskBoardSchemaImage(task){
+  if(!task) return '';
+  const schema=String(task.schemaImage||'').trim();
+  const graph=String(task.graphImage||'').trim();
+  if(schema) return renderTaskBoardImageHtml(schema,task.title||'Схема задачи','schema');
+  if(graph) return renderTaskBoardImageHtml(graph,task.title||'График задачи','graph');
+  return '';
 }
 function getTaskBoardGraph(mode){
   if(mode==='newtonForceAcceleration') return `
@@ -8428,7 +8485,7 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
   state.taskId=taskId||'';
   if(state.title) state.title.textContent=task.title;
   state.condition.innerHTML=hasRealContent(task.cond)?task.cond:'';
-  state.graph.innerHTML=getTaskBoardGraph(resolvedMode);
+  state.graph.innerHTML=getTaskBoardSchemaImage(task)||getTaskBoardGraph(resolvedMode);
   if(state.graphLabel) state.graphLabel.textContent=task.graphLabel||'График';
   const isPuckImpulse = resolvedMode==='puckImpulse';
   const isExplosion = resolvedMode==='explosionFragments'||resolvedMode==='explosionFragmentsVector';
@@ -9271,7 +9328,124 @@ function taskBoardDraw(){
 }
 
 let task07AnimationState=null;
+function isNewtonTaskAnimationId(taskId){
+  return /^newton-task-(0[1-9]|1[0-9])$/.test(String(taskId||''));
+}
+function getNewtonMiniAnimationScene(animationId){
+  const n=Number(String(animationId||'').replace('newton-task-',''))||1;
+  const scenes={
+    1:{name:'Полёт мяча',note:'В точке A сопротивлением воздуха пренебрегаем: действует только сила тяжести, поэтому равнодействующая направлена вниз.',formula:'Fрез = mg ↓',kind:'projectile'},
+    2:{name:'Брусок на наклонной',note:'Равнодействующая сонаправлена ускорению: вниз вдоль наклонной плоскости.',formula:'ma = mg sinα − Fтр',kind:'incline'},
+    3:{name:'Сила сообщает ускорение',note:'При той же силе ускорение определяется вторым законом Ньютона.',formula:'a = F / m',kind:'force'},
+    4:{name:'Одинаковая сила и разные массы',note:'Чем больше масса тела, тем меньше ускорение при одной и той же силе.',formula:'a₂ = F / m₂',kind:'twoMass'},
+    5:{name:'Четвёртая секунда по графику',note:'На выделенном участке скорость меняется линейно, а равнодействующая связана с ускорением.',formula:'Fрез = m·Δv/Δt',kind:'graph'},
+    6:{name:'Натяжение верёвки',note:'Верёвка не может быть натянута сильнее, чем позволяет меньшая из двух сил.',formula:'T ≤ 50 Н',kind:'rope'},
+    7:{name:'Ученик и Земля',note:'Силы взаимодействия равны по модулю и противоположны по направлению.',formula:'F₁₂ = F₂₁',kind:'earth'},
+    8:{name:'Груз на пружине',note:'В равновесии сила упругости пружины компенсирует силу тяжести груза.',formula:'kx = mg',kind:'spring'},
+    9:{name:'Сложение трёх сил',note:'Равнодействующая находится как векторная сумма трёх сил.',formula:'Fрез = F₁ + F₂ + F₃',kind:'vectors'},
+    10:{name:'Коэффициент трения',note:'Наклон графика Fтр(N) равен коэффициенту трения скольжения.',formula:'μ = Fтр / N',kind:'frictionGraph'},
+    11:{name:'Массы ↑, расстояние ↑',note:'Сила тяготения растёт с произведением масс и уменьшается с квадратом расстояния.',formula:'F = Gm₁m₂/r²',kind:'gravityOut'},
+    12:{name:'Массы ↑, расстояние ↓',note:'Если массы увеличить, а расстояние уменьшить, гравитационное взаимодействие резко усиливается.',formula:'F = Gm₁m₂/r²',kind:'gravityIn'},
+    13:{name:'Сила под углом',note:'При наклонной тяге меняются нормальная реакция опоры и сила трения.',formula:'Fтр = μN',kind:'anglePull'},
+    14:{name:'Две горизонтальные силы',note:'Постоянная равнодействующая даёт постоянное ускорение, скорость при этом растёт.',formula:'Fрез = F₂ − F₁',kind:'opposite'},
+    15:{name:'Переход на меньшую орбиту',note:'На меньшем радиусе сила тяготения больше, а орбитальная скорость возрастает.',formula:'F ∼ 1/r², v = √(GM/r)',kind:'orbitIn'},
+    16:{name:'Меньшая орбита и период',note:'На меньшей орбите скорость больше, а период обращения меньше.',formula:'T = 2πr / v',kind:'orbitPeriod'},
+    17:{name:'Равномерное движение бруска',note:'При равномерном движении сила тяги динамометра равна силе трения.',formula:'Fтяги = Fтр',kind:'dynamometer'},
+    18:{name:'Резиновые шнуры',note:'Опыт сравнивает, как жёсткость зависит от длины и толщины шнура.',formula:'Fупр = kx',kind:'rubber'},
+    19:{name:'Трение и масса',note:'При увеличении массы растёт нормальная реакция, поэтому сила трения скольжения увеличивается.',formula:'Fтр = μN',kind:'frictionMass'}
+  };
+  return scenes[n]||scenes[1];
+}
+function ensureNewtonMiniAnimationOverlay(){
+  let overlay=document.getElementById('newtonMiniAnimationOverlay');
+  if(overlay) return overlay;
+  document.body.insertAdjacentHTML('beforeend',`
+    <div id="newtonMiniAnimationOverlay" class="task07-anim-overlay task-board-animation-overlay" aria-hidden="true">
+      <div class="task07-anim-modal" role="dialog" aria-modal="true" aria-labelledby="newtonMiniAnimTitle">
+        <div class="task07-anim-head">
+          <div>
+            <div class="task07-anim-kicker" data-newton-animation-kicker>ЕГЭ · Физика · Динамика · Законы Ньютона</div>
+            <div id="newtonMiniAnimTitle" class="task07-anim-title task-animation-title">Задача</div>
+            <div class="task-animation-condition">
+              <div class="task-animation-condition-title">Условие задачи</div>
+              <div class="task-animation-condition-text" data-newton-animation-condition></div>
+            </div>
+          </div>
+          <button type="button" class="task07-anim-close task-board-animation-close" data-close-task-animation="true">✕</button>
+        </div>
+        <div class="task07-anim-stage" data-newton-animation-stage></div>
+        <div class="task07-anim-controls">
+          <button type="button" class="task07-anim-btn" onclick="replayNewtonMiniAnimation()">↺ Повторить</button>
+          <button type="button" class="task07-anim-btn task-board-animation-close" data-close-task-animation="true">✕ Закрыть</button>
+          <div class="task07-anim-progress" aria-hidden="true"><span class="newton-mini-progress"></span></div>
+        </div>
+      </div>
+    </div>`);
+  overlay=document.getElementById('newtonMiniAnimationOverlay');
+  overlay.addEventListener('click',function(e){
+    const closeBtn=e.target&&e.target.closest?e.target.closest('[data-close-task-animation]'):null;
+    if(closeBtn){e.preventDefault();e.stopPropagation();closeTaskBoardAnimation();return;}
+    if(e.target===overlay) closeTaskBoardAnimation();
+  },true);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&overlay.classList.contains('open')) closeTaskBoardAnimation();});
+  return overlay;
+}
+function newtonMiniSceneSvg(task,animationId){
+  const scene=getNewtonMiniAnimationScene(animationId);
+  const marker='newtonMiniArrow';
+  const title=escapeHtml(scene.name);
+  const note=escapeHtml(scene.note);
+  const formula=escapeHtml(scene.formula);
+  const kind=scene.kind;
+  const commonDefs=`<defs><marker id="${marker}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="currentColor"/></marker><linearGradient id="newtonBlockGrad" x1="0" x2="1"><stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#2563eb"/></linearGradient></defs>`;
+  const labelBox=`<rect x="34" y="26" width="832" height="72" rx="18" fill="rgba(15,23,42,.78)" stroke="rgba(0,229,255,.28)"/><text x="58" y="58" fill="#e2e8f0" font-size="24" font-weight="900">${title}</text><text x="58" y="84" fill="#94a3b8" font-size="15">${note}</text><rect x="620" y="42" width="220" height="38" rx="14" fill="rgba(255,140,0,.14)" stroke="rgba(255,140,0,.35)"/><text x="638" y="67" fill="#fed7aa" font-size="18" font-weight="900">${formula}</text>`;
+  let body='';
+  if(kind==='projectile') body=`<path d="M90 445 C245 140 450 120 720 370" fill="none" stroke="rgba(0,229,255,.45)" stroke-width="4" stroke-dasharray="10 10"/><circle r="18" fill="#fb923c" stroke="#fed7aa" stroke-width="3"><animateMotion dur="4.5s" repeatCount="indefinite" path="M90 445 C245 140 450 120 720 370"/></circle><line x1="470" y1="210" x2="470" y2="320" stroke="#ff8c00" stroke-width="6" marker-end="url(#${marker})"/><text x="492" y="278" fill="#fed7aa" font-size="22" font-weight="900">mg и Fрез</text><text x="452" y="194" fill="#e2e8f0" font-size="20" font-weight="900">A</text>`;
+  else if(kind==='incline') body=`<path d="M120 430L690 185" stroke="#e2e8f0" stroke-width="8" stroke-linecap="round"/><g><animateTransform attributeName="transform" type="translate" values="0 0;170 72;0 0" dur="4.2s" repeatCount="indefinite"/><g transform="translate(320 315) rotate(-23)"><rect x="-48" y="-28" width="96" height="56" rx="12" fill="url(#newtonBlockGrad)"/><line x1="56" y1="0" x2="160" y2="0" stroke="#22c55e" stroke-width="6" marker-end="url(#${marker})"/><text x="68" y="-16" fill="#bbf7d0" font-size="18" font-weight="900">a, Fрез</text></g></g>`;
+  else if(kind==='twoMass') body=`<rect x="96" y="370" width="240" height="24" fill="#475569"/><rect x="520" y="370" width="240" height="24" fill="#475569"/><g><animateTransform attributeName="transform" type="translate" values="0 0;130 0;0 0" dur="4s" repeatCount="indefinite"/><rect x="130" y="300" width="90" height="70" rx="12" fill="#38bdf8"/><text x="150" y="342" fill="#082f49" font-size="20" font-weight="900">0,5 кг</text></g><g><animateTransform attributeName="transform" type="translate" values="0 0;45 0;0 0" dur="4s" repeatCount="indefinite"/><rect x="555" y="282" width="130" height="88" rx="12" fill="#60a5fa"/><text x="580" y="332" fill="#0f172a" font-size="22" font-weight="900">3 кг</text></g><line x1="230" y1="334" x2="310" y2="334" stroke="#ff8c00" stroke-width="6" marker-end="url(#${marker})"/><line x1="690" y1="326" x2="770" y2="326" stroke="#ff8c00" stroke-width="6" marker-end="url(#${marker})"/>`;
+  else if(kind==='graph'||kind==='frictionGraph') body=`<path d="M130 430H760M130 430V150" stroke="#e2e8f0" stroke-width="4"/><g stroke="rgba(148,163,184,.25)"><path d="M130 360H760M130 290H760M130 220H760M260 150V430M390 150V430M520 150V430M650 150V430"/></g><path d="M135 390L730 185" stroke="#22c55e" stroke-width="6" fill="none"/><path d="M135 410L730 300" stroke="#38bdf8" stroke-width="6" fill="none"/><rect x="390" y="145" width="120" height="285" fill="rgba(255,140,0,.13)"><animate attributeName="x" values="210;390;520;390;210" dur="4s" repeatCount="indefinite"/></rect><text x="190" y="132" fill="#e2e8f0" font-size="19" font-weight="800">наклон графика показывает искомую величину</text>`;
+  else if(kind==='rope') body=`<circle cx="230" cy="320" r="44" fill="#38bdf8"/><circle cx="670" cy="320" r="44" fill="#f97316"/><line x1="276" y1="320" x2="624" y2="320" stroke="#e2e8f0" stroke-width="8"/><line x1="420" y1="320" x2="330" y2="320" stroke="#22c55e" stroke-width="5" marker-end="url(#${marker})"/><line x1="480" y1="320" x2="570" y2="320" stroke="#22c55e" stroke-width="5" marker-end="url(#${marker})"/><text x="336" y="284" fill="#bbf7d0" font-size="22" font-weight="900">T = 50 Н</text>`;
+  else if(kind==='earth') body=`<circle cx="450" cy="320" r="116" fill="#2563eb" stroke="#93c5fd" stroke-width="5"/><circle cx="260" cy="245" r="24" fill="#facc15"/><line x1="292" y1="255" x2="382" y2="292" stroke="#ff8c00" stroke-width="5" marker-end="url(#${marker})"/><line x1="408" y1="302" x2="316" y2="264" stroke="#22c55e" stroke-width="5" marker-end="url(#${marker})"/><text x="520" y="325" fill="#dbeafe" font-size="24" font-weight="900">Земля</text>`;
+  else if(kind==='spring'||kind==='rubber') body=`<path d="M450 135V180 q-35 15 0 30 q35 15 0 30 q-35 15 0 30 q35 15 0 30 V350" fill="none" stroke="#e2e8f0" stroke-width="6"/><rect x="390" y="350" width="120" height="80" rx="16" fill="#38bdf8"><animate attributeName="y" values="330;370;330" dur="3.2s" repeatCount="indefinite"/></rect><line x1="540" y1="365" x2="540" y2="445" stroke="#ff8c00" stroke-width="6" marker-end="url(#${marker})"/><line x1="360" y1="390" x2="360" y2="300" stroke="#22c55e" stroke-width="6" marker-end="url(#${marker})"/><text x="562" y="410" fill="#fed7aa" font-size="20" font-weight="900">mg</text><text x="250" y="315" fill="#bbf7d0" font-size="20" font-weight="900">Fупр</text>`;
+  else if(kind==='vectors') body=`<g transform="translate(410 320)"><line x1="0" y1="0" x2="135" y2="0" stroke="#38bdf8" stroke-width="7" marker-end="url(#${marker})"/><line x1="0" y1="0" x2="-80" y2="-95" stroke="#22c55e" stroke-width="7" marker-end="url(#${marker})"/><line x1="0" y1="0" x2="-55" y2="110" stroke="#f97316" stroke-width="7" marker-end="url(#${marker})"/><line x1="0" y1="0" x2="0" y2="150" stroke="#facc15" stroke-width="5" marker-end="url(#${marker})"><animate attributeName="y2" values="80;150;80" dur="3s" repeatCount="indefinite"/></line></g><text x="505" y="305" fill="#bae6fd" font-size="21" font-weight="900">F₁</text><text x="275" y="210" fill="#bbf7d0" font-size="21" font-weight="900">F₂</text><text x="292" y="455" fill="#fed7aa" font-size="21" font-weight="900">F₃</text>`;
+  else if(kind==='gravityOut'||kind==='gravityIn') body=`<circle cx="310" cy="320" r="58" fill="#94a3b8"/><circle cx="590" cy="320" r="58" fill="#cbd5e1"><animate attributeName="cx" values="${kind==='gravityIn'?'640;520;640':'520;680;520'}" dur="4s" repeatCount="indefinite"/></circle><line x1="368" y1="320" x2="500" y2="320" stroke="#ff8c00" stroke-width="6" marker-end="url(#${marker})"/><line x1="532" y1="320" x2="400" y2="320" stroke="#22c55e" stroke-width="6" marker-end="url(#${marker})"/><text x="384" y="260" fill="#e2e8f0" font-size="20" font-weight="900">r меняется</text>`;
+  else if(kind==='orbitIn'||kind==='orbitPeriod') body=`<circle cx="450" cy="315" r="76" fill="#2563eb"/><circle cx="450" cy="315" r="190" fill="none" stroke="rgba(148,163,184,.35)" stroke-width="3" stroke-dasharray="8 8"/><circle cx="450" cy="315" r="126" fill="none" stroke="rgba(0,229,255,.65)" stroke-width="4"/><circle r="18" fill="#f97316"><animateMotion dur="4s" repeatCount="indefinite" path="M 576 315 A 126 126 0 1 1 324 315 A 126 126 0 1 1 576 315"/></circle><line x1="576" y1="315" x2="492" y2="315" stroke="#22c55e" stroke-width="5" marker-end="url(#${marker})"/><text x="600" y="220" fill="#bae6fd" font-size="19" font-weight="900">меньший радиус</text>`;
+  else body=`<rect x="110" y="385" width="670" height="22" fill="#64748b"/><g><animateTransform attributeName="transform" type="translate" values="0 0;170 0;0 0" dur="4s" repeatCount="indefinite"/><rect x="310" y="310" width="150" height="75" rx="14" fill="url(#newtonBlockGrad)"/><line x1="465" y1="345" x2="565" y2="345" stroke="#ff8c00" stroke-width="6" marker-end="url(#${marker})"/><line x1="305" y1="362" x2="215" y2="362" stroke="#22c55e" stroke-width="6" marker-end="url(#${marker})"/></g><text x="535" y="330" fill="#fed7aa" font-size="20" font-weight="900">тяга</text><text x="180" y="342" fill="#bbf7d0" font-size="20" font-weight="900">трение</text>`;
+  return `<svg class="task07-anim-svg" viewBox="0 0 900 560" aria-label="${title}">${commonDefs}<rect width="900" height="560" fill="transparent"/>${labelBox}<g color="#ff8c00">${body}</g><text x="42" y="526" fill="#e2e8f0" font-size="18" font-weight="800">Мини-анимация показывает ключевую идею задачи и направление равнодействующей/изменения величин.</text></svg>`;
+}
+function renderNewtonMiniAnimation(task,animationId){
+  const overlay=ensureNewtonMiniAnimationOverlay();
+  const title=overlay.querySelector('#newtonMiniAnimTitle');
+  const kicker=overlay.querySelector('[data-newton-animation-kicker]');
+  const condition=overlay.querySelector('[data-newton-animation-condition]');
+  const stage=overlay.querySelector('[data-newton-animation-stage]');
+  if(title) title.textContent=task?.title||'Задача';
+  if(kicker) kicker.textContent='ЕГЭ · Физика · Динамика · Законы Ньютона';
+  if(condition) condition.innerHTML=getTaskConditionHtml(task||{});
+  if(stage) stage.innerHTML=newtonMiniSceneSvg(task,animationId);
+  const bar=overlay.querySelector('.newton-mini-progress');
+  if(bar){bar.style.animation='none';bar.offsetHeight;bar.style.animation='task07Progress 4.5s linear infinite';}
+  overlay.dataset.keepTaskBoard=taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open')?'true':'false';
+  overlay.style.display='block';
+  overlay.style.pointerEvents='auto';
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden','false');
+  document.body.classList.add('task07-anim-lock');
+}
+function replayNewtonMiniAnimation(){
+  const overlay=document.getElementById('newtonMiniAnimationOverlay');
+  if(!overlay) return;
+  const stage=overlay.querySelector('[data-newton-animation-stage]');
+  if(stage){stage.innerHTML=stage.innerHTML;}
+  const bar=overlay.querySelector('.newton-mini-progress');
+  if(bar){bar.style.animation='none';bar.offsetHeight;bar.style.animation='task07Progress 4.5s linear infinite';}
+}
 function openTaskAnimation(taskId){
+  if(isNewtonTaskAnimationId(taskId)){
+    const task=findTaskById(taskId)||taskBoardState?.task||findTaskById(taskBoardState?.taskId)||{};
+    renderNewtonMiniAnimation(task,taskId);
+    return;
+  }
   let task=findTaskById(taskId)||taskBoardState?.task||findTaskById(taskBoardState?.taskId);
   if(task&&!isTask10PendulumImpactMode(task.boardMode)){
     const modeCandidate=String(taskId||task.boardMode||taskBoardState?.mode||taskBoardState?.taskId||'');
@@ -9450,6 +9624,8 @@ function closeTaskBoardAnimation(){
     document.querySelector('.task-board-animation-overlay')||
     document.querySelector('.task-animation-overlay');
 
+  const shouldRestoreBoard=!!(anim&&anim.dataset&&anim.dataset.keepTaskBoard==='true');
+
   if(anim){
     anim.classList.remove('open');
     anim.style.display='none';
@@ -9460,8 +9636,8 @@ function closeTaskBoardAnimation(){
   document.body.classList.remove('task07-anim-lock');
   if(state&&state.animBtn) state.animBtn.textContent='▶ Анимация';
 
-  // ВАЖНО: вернуть пользователя на доску, не меняя маршрут и не закрывая доску.
-  if(state&&state.overlay){
+  // ВАЖНО: вернуть пользователя на доску, только если анимация была открыта из доски.
+  if(state&&state.overlay&&shouldRestoreBoard){
     state.overlay.style.display='block';
     state.overlay.style.pointerEvents='auto';
     state.overlay.classList.add('open');
