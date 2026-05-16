@@ -683,6 +683,17 @@ body.edit-mode .et{display:inline}
 .pt-board-btn:hover,.pt-animation-btn:hover{background:rgba(0,229,255,.16);border-color:rgba(0,229,255,.38);color:var(--white);box-shadow:0 0 18px rgba(0,229,255,.2);transform:translateY(-1px)}
 .pt-animation-btn{border-color:rgba(57,255,20,.28);background:rgba(57,255,20,.08);color:var(--green)}
 .pt-animation-btn:hover{background:rgba(57,255,20,.15);border-color:rgba(57,255,20,.42);box-shadow:0 0 18px rgba(57,255,20,.18)}
+.pt-anim-btn{width:100%;padding:9px 12px;border-radius:8px;border:1px solid rgba(57,255,20,.26);background:rgba(57,255,20,.08);color:var(--green);font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb)}
+.pt-anim-btn:hover{background:rgba(57,255,20,.16);border-color:rgba(57,255,20,.48);color:#fff;box-shadow:0 0 18px rgba(57,255,20,.18);transform:translateY(-1px)}
+.task-animation-placeholder-overlay{position:fixed;inset:0;z-index:2147483600;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(2,9,20,.82);backdrop-filter:blur(8px)}
+.task-animation-placeholder-overlay.open{display:flex}
+.task-animation-placeholder-modal{position:relative;width:min(900px,100%);max-height:90vh;overflow:auto;border-radius:22px;background:#fff;color:#0f172a;padding:28px;box-shadow:0 28px 90px rgba(0,0,0,.35)}
+.task-animation-placeholder-close{position:absolute;top:18px;right:18px;border:1px solid #cbd5e1;background:#fff;color:#334155;border-radius:12px;padding:8px 14px;font-weight:800;cursor:pointer}
+.task-animation-placeholder-title{font-family:var(--fh);font-size:34px;font-weight:900;margin:0 0 16px}
+.task-animation-placeholder-condition{margin:12px 0 18px;padding:14px 16px;border:1px solid #d8e5f5;border-radius:16px;background:#f8fbff}
+.task-animation-placeholder-label{font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#2563eb;margin-bottom:8px}
+.task-animation-placeholder-text{font-size:14px;line-height:1.45;font-weight:600;color:#334155}
+.task-animation-placeholder-empty{min-height:260px;border:1px dashed #cbd5e1;border-radius:18px;background:#f8fafc;display:flex;align-items:center;justify-content:center;text-align:center;color:#64748b;font-size:18px;font-weight:800}
 
 
 /* ===== TASK 07 PENDULUM IMPACT ANIMATION ===== */
@@ -6508,7 +6519,10 @@ function renderTaskSolutionWorkspace(task,cls){
 
 function renderPTasks(name){
   const baseTasks=Array.isArray(LESSON_TASKS[name])?LESSON_TASKS[name].map(t=>Object.assign({},t,{isBlank:!!(t&&t.isBlank)})):[];
-  const lesson07Name=getCourseLessonNameByFlatNumber('ege-phy', 7);
+  const lesson07Name=typeof getCourseLessonNameByFlatNumber==='function'
+    ? getCourseLessonNameByFlatNumber('ege-phy', 7)
+    : 'Законы Ньютона';
+  const isNewtonLessonTasks=name===lesson07Name||name==='Законы Ньютона';
   const blankTasks=name===lesson07Name?[]:normalizeBlankTaskNumbers(name);
   const tasks=baseTasks.concat(blankTasks).map((t,i)=>Object.assign({},t,{num:Number(t.num)||i+1}));
   const empty=`<div style="text-align:center;padding:40px 20px;color:var(--gray)"><div style="font-size:32px;margin-bottom:12px">📋</div><div style="font-family:var(--fh);font-size:14px;font-weight:700;color:var(--white);margin-bottom:6px">Задачи в разработке</div><div style="font-size:13px">Задачи для темы <strong style="color:var(--orange)">"${escapeHtml(name||'')}"</strong> появятся в ближайшее время.</div></div>`;
@@ -6528,11 +6542,14 @@ function renderPTasks(name){
     const steps=(t.steps||[]).map((s,j)=>`<div class="sr-step"><div class="sr-snum">${j+1}</div><div class="sr-sbody">${s}</div></div>`).join('');
     const extra=t.extraHtml?`<div class="pt-extra">${t.extraHtml}</div>`:'';
     const scheme=t.schemeHtml?String(t.schemeHtml):'';
-    const taskId=String(t.id||'');
+    const taskId=String(t.id||t.boardMode||'');
     const boardModeSafe=String(t.boardMode||'').replace(/'/g,"\\'");
     const taskIdSafe=taskId.replace(/'/g,"\\'");
     const boardBtn=t.boardMode?`<button class="pt-board-btn" onclick="openTaskBoard('${boardModeSafe}',true,'${taskIdSafe}')">⤢ Доска</button>`:'';
-    const animationBtn=t.boardMode&&t.hasAnimation!==false?`<button class="pt-animation-btn" onclick="openTaskBoardAnimation('${boardModeSafe}','${taskIdSafe}')">▶ Анимация</button>`:'';
+    const animationAction=t.boardMode&&t.hasAnimation!==false
+      ? `openTaskBoardAnimation('${boardModeSafe}','${taskIdSafe}')`
+      : `openTaskAnimationPlaceholder('${taskIdSafe}')`;
+    const animationBtn=isNewtonLessonTasks?`<button type="button" class="pt-anim-btn" data-task-animation="${taskIdSafe}" onclick="${animationAction}">▶ Анимация</button>`:(t.boardMode&&t.hasAnimation!==false?`<button class="pt-animation-btn" onclick="openTaskBoardAnimation('${boardModeSafe}','${taskIdSafe}')">▶ Анимация</button>`:'');
     const hasStructuredSolution=hasFilledTaskSolution(t)||hasLegacyTaskTextSolution(t);
     const embeddedRaw=hasStructuredSolution?renderTaskSolutionPanel(t,'pt'):(t.solutionHtml||getEmbeddedSolutionHtml(t));
     const embedded=String(embeddedRaw||'').trim();
@@ -6566,6 +6583,57 @@ function renderPTasks(name){
     tasks.forEach((t,i)=>{h+=renderOneTask(t,i);});
   }
   return h+renderBlankTaskAddButton(name);
+}
+
+function openTaskAnimationPlaceholder(taskId){
+  const runtimeTasks=window.TASK_BOARD_RUNTIME_TASKS||{};
+  const task=runtimeTasks[taskId]||(typeof findTaskById==='function'?findTaskById(taskId):null)||null;
+  const condition=task?.cond||task?.condition||task?.text||'';
+  const overlayId='taskAnimationPlaceholderOverlay';
+
+  let overlay=document.getElementById(overlayId);
+
+  if(!overlay){
+    overlay=document.createElement('div');
+    overlay.id=overlayId;
+    overlay.className='task-animation-placeholder-overlay';
+
+    overlay.innerHTML=`
+      <div class="task-animation-placeholder-modal">
+        <button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder()">Скрыть</button>
+
+        <h2 class="task-animation-placeholder-title">Анимация</h2>
+
+        <div class="task-animation-placeholder-condition">
+          <div class="task-animation-placeholder-label">Условие задачи</div>
+          <div class="task-animation-placeholder-text"></div>
+        </div>
+
+        <div class="task-animation-placeholder-empty">
+          Анимация для этой задачи будет добавлена позже.
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+  }
+
+  const textEl=overlay.querySelector('.task-animation-placeholder-text');
+  if(textEl){
+    textEl.innerHTML=condition||'';
+  }
+
+  overlay.classList.add('open');
+  overlay.style.display='flex';
+}
+
+function closeTaskAnimationPlaceholder(){
+  const overlay=document.getElementById('taskAnimationPlaceholderOverlay');
+
+  if(overlay){
+    overlay.classList.remove('open');
+    overlay.style.display='none';
+  }
 }
 
 function ptToggle(id,btn){
