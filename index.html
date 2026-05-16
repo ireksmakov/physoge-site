@@ -6531,7 +6531,8 @@ function renderPTasks(name){
     const taskId=String(t.id||'');
     const boardModeSafe=String(t.boardMode||'').replace(/'/g,"\\'");
     const taskIdSafe=taskId.replace(/'/g,"\\'");
-    const boardBtn=t.boardMode?`<div class="pt-side-actions"><button class="pt-board-btn" onclick="openTaskBoard('${boardModeSafe}',true,'${taskIdSafe}')">⤢ Доска</button>${t.hasAnimation!==false?`<button class="pt-animation-btn" onclick="openTaskBoardAnimation('${boardModeSafe}','${taskIdSafe}')">▶ Анимация</button>`:''}</div>`:'';
+    const boardBtn=t.boardMode?`<button class="pt-board-btn" onclick="openTaskBoard('${boardModeSafe}',true,'${taskIdSafe}')">⤢ Доска</button>`:'';
+    const animationBtn=t.boardMode&&t.hasAnimation!==false?`<button class="pt-animation-btn" onclick="openTaskBoardAnimation('${boardModeSafe}','${taskIdSafe}')">▶ Анимация</button>`:'';
     const hasStructuredSolution=hasFilledTaskSolution(t)||hasLegacyTaskTextSolution(t);
     const embeddedRaw=hasStructuredSolution?renderTaskSolutionPanel(t,'pt'):(t.solutionHtml||getEmbeddedSolutionHtml(t));
     const embedded=String(embeddedRaw||'').trim();
@@ -6545,7 +6546,7 @@ function renderPTasks(name){
       : '';
     const solutionInner=(embedded||imageOnly)?`${rich}${extra}`:`${steps}${extra}${fallbackSolution}`;
     const emptySolution=!String(solutionInner||'').trim();
-    return `<div class="pt-card${isBlank?' pt-blank-card':''}"><div class="pt-head"><div class="pt-num">${String(t.num).padStart(2,'0')}</div><span class="pt-level ${lvlC[t.level]||lvlC[1]}">${lvlL[t.level]||lvlL[1]}</span><span class="pt-exam">${t.exam||'ЕГЭ'}</span><span class="pt-title">${titleText}</span></div><div class="pt-body"><div class="pt-condition">${cond}</div>${scheme}<div class="pt-side">${boardBtn}<button class="pt-sol-btn" data-empty-solution="${emptySolution?'1':'0'}" onclick="ptToggle('${sid}',this)">▶ Решение</button></div></div><div class="pt-solution" id="${sid}">${solutionInner}</div></div>`;
+    return `<div class="pt-card${isBlank?' pt-blank-card':''}"><div class="pt-head"><div class="pt-num">${String(t.num).padStart(2,'0')}</div><span class="pt-level ${lvlC[t.level]||lvlC[1]}">${lvlL[t.level]||lvlL[1]}</span><span class="pt-exam">${t.exam||'ЕГЭ'}</span><span class="pt-title">${titleText}</span></div><div class="pt-body"><div class="pt-condition">${cond}</div>${scheme}<div class="pt-side">${boardBtn}${animationBtn}<button class="pt-sol-btn" data-empty-solution="${emptySolution?'1':'0'}" onclick="ptToggle('${sid}',this)">▶ Решение</button></div></div><div class="pt-solution" id="${sid}">${solutionInner}</div></div>`;
   }
   const hasGroups=tasks.some(t=>t&&t.group);
   if(hasGroups){
