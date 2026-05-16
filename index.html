@@ -679,10 +679,8 @@ body.edit-mode .et{display:inline}
 .pt-demo-btn:hover{color:var(--white);border-color:rgba(0,229,255,.35)}
 .pt-demo-btn.active{background:rgba(0,229,255,.14);color:var(--cyan);border-color:rgba(0,229,255,.35)}
 .pt-side-actions{display:flex;flex-direction:column;gap:8px;margin:0}
-.pt-board-btn,.pt-animation-btn{width:100%;padding:9px 12px;border-radius:8px;border:1px solid rgba(0,229,255,.22);background:rgba(0,229,255,.08);color:var(--cyan);font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb)}
-.pt-board-btn:hover,.pt-animation-btn:hover{background:rgba(0,229,255,.16);border-color:rgba(0,229,255,.38);color:var(--white);box-shadow:0 0 18px rgba(0,229,255,.2);transform:translateY(-1px)}
-.pt-animation-btn{border-color:rgba(57,255,20,.28);background:rgba(57,255,20,.08);color:var(--green)}
-.pt-animation-btn:hover{background:rgba(57,255,20,.15);border-color:rgba(57,255,20,.42);box-shadow:0 0 18px rgba(57,255,20,.18)}
+.pt-board-btn{width:100%;padding:9px 12px;border-radius:8px;border:1px solid rgba(0,229,255,.22);background:rgba(0,229,255,.08);color:var(--cyan);font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb)}
+.pt-board-btn:hover{background:rgba(0,229,255,.16);border-color:rgba(0,229,255,.38);color:var(--white);box-shadow:0 0 18px rgba(0,229,255,.2);transform:translateY(-1px)}
 .pt-anim-btn{width:100%;padding:9px 12px;border-radius:8px;border:1px solid rgba(57,255,20,.26);background:rgba(57,255,20,.08);color:var(--green);font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb)}
 .pt-anim-btn:hover{background:rgba(57,255,20,.16);border-color:rgba(57,255,20,.48);color:#fff;box-shadow:0 0 18px rgba(57,255,20,.18);transform:translateY(-1px)}
 .task-animation-placeholder-overlay{position:fixed;inset:0;z-index:2147483600;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(2,9,20,.82);backdrop-filter:blur(8px)}
@@ -809,6 +807,9 @@ body.task-board-lock header,body.task-board-lock .topbar,body.task-board-lock .s
 .task-board-dropdown-toggle:hover,.task-board-quick-action:hover,.task-board-close-btn:hover{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8;box-shadow:0 0 18px rgba(37,99,235,.16);transform:translateY(-1px)}
 .task-board-quick-action:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:0 10px 24px rgba(15,23,42,.05)}
 .task-board-quick-action.task-board-quick-clear:hover{background:#fff7ed;border-color:#fdba74;color:#c2410c}
+.task-board-quick-animation{border-color:rgba(57,255,20,.32);background:rgba(57,255,20,.08);color:var(--green)}
+.task-board-quick-animation:hover{background:rgba(57,255,20,.16);border-color:rgba(57,255,20,.55);color:#fff;box-shadow:0 0 18px rgba(57,255,20,.18);transform:translateY(-1px)}
+.task-board-quick-animation:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
 .task-board-close-btn{color:#dc2626;border-color:#fecaca}
 .task-board-close-btn:hover{background:#fff7ed;border-color:#fdba74;color:#c2410c}
 .task-board-dropdown-menu{position:absolute;top:calc(100% + 8px);left:0;min-width:220px;display:none;flex-direction:column;gap:6px;padding:10px;background:rgba(255,255,255,.98);border:1px solid #dbe5f0;border-radius:14px;box-shadow:0 18px 46px rgba(15,23,42,.16);z-index:2147483200;pointer-events:auto;white-space:normal}
@@ -6543,13 +6544,22 @@ function renderPTasks(name){
     const extra=t.extraHtml?`<div class="pt-extra">${t.extraHtml}</div>`:'';
     const scheme=t.schemeHtml?String(t.schemeHtml):'';
     const taskId=String(t.id||t.boardMode||'');
-    const boardModeSafe=String(t.boardMode||'').replace(/'/g,"\\'");
+    const boardMode=String(t.boardMode||t.mode||taskId);
+    const boardModeSafe=boardMode.replace(/'/g,"\\'");
     const taskIdSafe=taskId.replace(/'/g,"\\'");
-    const boardBtn=t.boardMode?`<button class="pt-board-btn" onclick="openTaskBoard('${boardModeSafe}',true,'${taskIdSafe}')">⤢ Доска</button>`:'';
-    const animationAction=t.boardMode&&t.hasAnimation!==false
-      ? `openTaskBoardAnimation('${boardModeSafe}','${taskIdSafe}')`
-      : `openTaskAnimationPlaceholder('${taskIdSafe}')`;
-    const animationBtn=isNewtonLessonTasks?`<button type="button" class="pt-anim-btn" data-task-animation="${taskIdSafe}" onclick="${animationAction}">▶ Анимация</button>`:(t.boardMode&&t.hasAnimation!==false?`<button class="pt-animation-btn" onclick="openTaskBoardAnimation('${boardModeSafe}','${taskIdSafe}')">▶ Анимация</button>`:'');
+    window.TASK_BOARD_RUNTIME_TASKS=window.TASK_BOARD_RUNTIME_TASKS||{};
+    window.TASK_BOARD_RUNTIME_TASKS[taskId]={
+      ...t,
+      id:taskId,
+      boardMode:boardMode,
+      mode:boardMode,
+      canOpenTaskBoard:!!(t.boardMode||t.mode),
+      hasAnimation:true,
+      animationId:t.animationId||t.animId||'',
+      animId:t.animId||t.animationId||''
+    };
+    const boardBtn=t.boardMode?`<button type="button" class="pt-board-btn" data-task-id="${escapeHtml(taskId)}" data-board-mode="${escapeHtml(boardMode)}" onclick="return openTaskBoard('${boardModeSafe}',true,'${taskIdSafe}')">🧑‍🏫 Доска</button>`:'';
+    const animationBtn=`<button type="button" class="pt-anim-btn" data-task-animation="${escapeHtml(taskId)}" onclick="return openUnifiedTaskAnimation('${taskIdSafe}', {fromBoard:false})">▶ Анимация</button>`;
     const hasStructuredSolution=hasFilledTaskSolution(t)||hasLegacyTaskTextSolution(t);
     const embeddedRaw=hasStructuredSolution?renderTaskSolutionPanel(t,'pt'):(t.solutionHtml||getEmbeddedSolutionHtml(t));
     const embedded=String(embeddedRaw||'').trim();
@@ -6585,6 +6595,98 @@ function renderPTasks(name){
   return h+renderBlankTaskAddButton(name);
 }
 
+var TASK_BOARD_RUNTIME_TASKS=window.TASK_BOARD_RUNTIME_TASKS=window.TASK_BOARD_RUNTIME_TASKS||{};
+
+function taskHasAnyAnimation(task){
+  if(!task) return false;
+
+  if(task.hasAnimation===true) return true;
+  if(task.animationId) return true;
+  if(task.animId) return true;
+
+  const id=String(task.id||'');
+  const mode=String(task.boardMode||task.mode||'');
+
+  const value=`${id} ${mode}`.toLowerCase();
+
+  return (
+    value.includes('pendulum')||
+    value.includes('impact')||
+    value.includes('collision')||
+    value.includes('impulse')||
+    value.includes('momentum')||
+    value.includes('energy')||
+    value.includes('blocks')||
+    value.includes('cork')||
+    value.includes('cart')||
+    value.includes('friction')||
+    value.includes('newton')||
+    value.includes('task07')||
+    value.includes('task10')
+  );
+}
+
+function openUnifiedTaskAnimation(taskId,options){
+  options=options||{};
+
+  const runtimeTasks=window.TASK_BOARD_RUNTIME_TASKS||{};
+  const task=
+    runtimeTasks[taskId]||
+    runtimeTasks[String(taskId)]||
+    (typeof findTaskById==='function'?findTaskById(taskId):null)||
+    null;
+
+  if(!task){
+    openTaskAnimationPlaceholder(taskId);
+    return false;
+  }
+
+  const realId=task.id||taskId;
+  const canOpenTaskBoard=task.canOpenTaskBoard!==false;
+  const hasBoardMode=canOpenTaskBoard&&!!(task.boardMode||task.mode);
+  const boardMode=task.boardMode||task.mode||realId;
+
+  // Специальные готовые анимации не ломать.
+  if(realId==='lesson12-task07'||boardMode==='task07-pendulum-impact'){
+    if(taskBoardState&&taskBoardState.animBtn) taskBoardState.animBtn.textContent='✕ Анимация';
+    openTaskAnimation('lesson12-task07');
+    return false;
+  }
+
+  if(realId==='lesson12-task10'||boardMode==='task10-pendulum-impact'){
+    if(taskBoardState&&taskBoardState.animBtn) taskBoardState.animBtn.textContent='✕ Анимация';
+    openTaskAnimation('lesson12-task10');
+    return false;
+  }
+
+  if(task.animationId||task.animId){
+    if(taskBoardState&&taskBoardState.animBtn) taskBoardState.animBtn.textContent='✕ Анимация';
+    openTaskAnimation(task.animationId||task.animId);
+    return false;
+  }
+
+  if(!hasBoardMode||!taskHasAnyAnimation(task)){
+    openTaskAnimationPlaceholder(realId);
+    return false;
+  }
+
+  if(!options.fromBoard){
+    openTaskBoard(boardMode,false,realId);
+
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        toggleTaskBoardAnimation(true);
+      });
+    });
+
+    return false;
+  }
+
+  toggleTaskBoardAnimation();
+
+  return false;
+}
+
 function openTaskAnimationPlaceholder(taskId){
   const runtimeTasks=window.TASK_BOARD_RUNTIME_TASKS||{};
   const task=runtimeTasks[taskId]||(typeof findTaskById==='function'?findTaskById(taskId):null)||null;
@@ -6600,7 +6702,7 @@ function openTaskAnimationPlaceholder(taskId){
 
     overlay.innerHTML=`
       <div class="task-animation-placeholder-modal">
-        <button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder()">Скрыть</button>
+        <button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder(); return false;">Скрыть</button>
 
         <h2 class="task-animation-placeholder-title">Анимация</h2>
 
@@ -6625,6 +6727,8 @@ function openTaskAnimationPlaceholder(taskId){
 
   overlay.classList.add('open');
   overlay.style.display='flex';
+
+  return false;
 }
 
 function closeTaskAnimationPlaceholder(){
@@ -6634,6 +6738,8 @@ function closeTaskAnimationPlaceholder(){
     overlay.classList.remove('open');
     overlay.style.display='none';
   }
+
+  return false;
 }
 
 function ptToggle(id,btn){
@@ -7259,10 +7365,6 @@ function isTask10PendulumImpactMode(mode){
   return mode==='task10-pendulum-impact'||mode==='task07-pendulum-impact';
 }
 function getTaskBoardAnimationButtonText(isOpen){
-  const state=taskBoardState;
-  const mode=state?(state.mode||state.task?.boardMode||''):'';
-  const isTask10=isTask10PendulumImpactMode(mode);
-  if(isTask10) return isOpen?'✕ Симулятор 10':'▶ Симулятор 10';
   return isOpen?'✕ Анимация':'▶ Анимация';
 }
 function getTaskBoardData(mode){
@@ -7830,7 +7932,7 @@ function ensureTaskBoardOverlay(){
               </div>
               <button
                 type="button"
-                class="task-board-quick-action task-board-animation-action"
+                class="task-board-quick-action task-board-quick-animation"
                 id="taskBoardAnimBtn"
                 data-board-animation-button="true"
                 onclick="return handleTaskBoardAnimationButtonClick(event)"
@@ -8364,10 +8466,10 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
     if(state.simRelPLabel) state.simRelPLabel.textContent=resolvedMode==='newtonInclineFriction'?'Равнодействующая':'Ускорение';
   }
   if(state.simKeyLabel) state.simKeyLabel.textContent='Ключевая мысль';
-  const hasAnimationSection=task.hasAnimation!==false;
   if(state.animBtn){
-    state.animBtn.style.display=hasAnimationSection?'inline-flex':'none';
-    state.animBtn.textContent=getTaskBoardAnimationButtonText(false);
+    state.animBtn.style.display='inline-flex';
+    state.animBtn.disabled=false;
+    state.animBtn.textContent='▶ Анимация';
   }
   const useSolutionWorkspace=!!(hasFilledTaskSolution(task)||hasLegacyTaskSolution(task));
   state.solution.innerHTML=renderTaskBoardSolution(task);
@@ -9337,6 +9439,7 @@ function closeTaskBoardAnimation(){
   }
 
   document.body.classList.remove('task07-anim-lock');
+  if(state&&state.animBtn) state.animBtn.textContent='▶ Анимация';
 
   // ВАЖНО: вернуть пользователя на доску, не меняя маршрут и не закрывая доску.
   if(state&&state.overlay){
@@ -9406,20 +9509,18 @@ function handleTaskBoardAnimationButtonClick(event){
     event.stopPropagation();
     if(event.stopImmediatePropagation) event.stopImmediatePropagation();
   }
+
   const state=ensureTaskBoardOverlay();
+
   taskBoardCloseDropdowns();
-  if(state&&isTask10PendulumImpactMode(state.mode)){
-    const task=findTaskById('lesson12-task10')||state.task||getTaskBoardData('task10-pendulum-impact');
-    if(task){
-      state.task=task;
-      state.taskId=task.id||'lesson12-task10';
-      state.mode=task.boardMode||'task10-pendulum-impact';
-    }
-    openTaskAnimation('lesson12-task10');
+
+  if(!state||!state.task){
     return false;
   }
-  toggleTaskBoardAnimation();
-  return false;
+
+  return openUnifiedTaskAnimation(state.task.id||state.taskId||state.mode,{
+    fromBoard:true
+  });
 }
 
 function toggleTaskBoardAnimation(force){
@@ -9439,8 +9540,10 @@ function toggleTaskBoardAnimation(force){
         overlay.setAttribute('aria-hidden','true');
       }
       document.body.classList.remove('task07-anim-lock');
+      if(state.animBtn) state.animBtn.textContent='▶ Анимация';
       return;
     }
+    if(state.animBtn) state.animBtn.textContent='✕ Анимация';
     openTaskAnimation(state.task.id||state.taskId||state.mode);
     return;
   }
