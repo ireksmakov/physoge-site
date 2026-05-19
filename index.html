@@ -4265,7 +4265,7 @@ function normalizeSpecialTestItem(item,index){
   const out=Object.assign({},template,item||{});
   out.num=Number(out.num)||index+1;
   out.prompt=out.prompt!=null?out.prompt:(out.condition||'');
-  out.condition=out.condition!=null?out.condition:(out.prompt||'');
+  out.condition=(out.condition!=null&&String(out.condition).trim())?out.condition:(out.prompt||'');
   out.variants=Array.isArray(out.variants)?out.variants:(Array.isArray(out.options)?out.options:[]);
   out.options=Array.isArray(out.options)?out.options:out.variants.slice();
   out.correctAnswer=out.correctAnswer!=null?String(out.correctAnswer):String(out.answer||'');
