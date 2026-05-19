@@ -4178,10 +4178,19 @@ function renderSpecialLessonTests(lessonName){
   const items=LESSON_SPECIAL_TESTS[lessonName]||[];
   if(!items.length)return '';
   return items.map(function(item,index){
+    const testType=item.testType||'matrix';
+    const choiceValues=(item.choiceValues||['1','2','3']).map(String);
+    const variantsHtml=(item.variants||[]).map(function(v){return `<span>${v}</span>`;}).join('');
     const cols=(item.columns||[]).map(function(title,colIndex){
-      return `<div class="stc-col"><div class="stc-col-title">${title}</div><div class="stc-picks">${['1','2','3'].map(function(v){return `<button class="stc-pick" type="button" data-value="${v}" onclick="specialTestPick(this,${colIndex},'${v}')">${v}</button>`;}).join('')}</div></div>`;
+      return `<div class="stc-col"><div class="stc-col-title">${title}</div><div class="stc-picks">${choiceValues.map(function(v){return `<button class="stc-pick" type="button" data-value="${v}" onclick="specialTestPick(this,${colIndex},'${v}')">${v}</button>`;}).join('')}</div></div>`;
     }).join('');
-    return `<div class="stc-card" data-special-test data-correct="${(item.correct||[]).join(',')}"><div class="stc-head"><div class="stc-num">${String(item.num||index+1).padStart(2,'0')}</div><span class="stc-badge">${item.badge||'Тест'}</span><span class="stc-title">${item.title}</span></div><div class="stc-condition"><div class="stc-text">${item.prompt}</div><div class="stc-note">${item.note||''}</div><div class="stc-variants">${(item.variants||[]).map(function(v){return `<span>${v}</span>`;}).join('')}</div></div><div class="stc-grid">${cols}</div><div class="stc-actions"><button class="pt-sol-btn stc-check" type="button" onclick="specialTestCheck(this)">Проверить ответ</button><div class="stc-feedback" data-special-feedback>Выберите цифру 1, 2 или 3 для каждой величины, затем нажмите «Проверить ответ».</div></div><div class="pt-solution" data-special-solution><div class="pt-photo-wrap" data-solution-zoom="true"><img class="pt-photo-img" src="${item.image}" alt="${item.title}"></div><div class="stc-solution-actions"><button class="pt-sol-btn stc-hide" type="button" onclick="specialTestHide(this)">Скрыть</button></div></div></div>`;
+    const interaction=testType==='open'
+      ? `<div class="stc-open-wrap"><label class="hw-answer-label" for="special_input_${index}">Введите ответ</label><input class="hw-answer-input stc-open-input" id="special_input_${index}" type="text" inputmode="numeric" autocomplete="off" onkeydown="specialTestInputKey(event,this)"></div>`
+      : `<div class="stc-grid">${cols}</div>`;
+    const feedbackText=testType==='open'
+      ? 'Введите последовательность цифр и нажмите «Проверить ответ».'
+      : `Выберите цифру ${choiceValues.join(', ')} для каждой величины, затем нажмите «Проверить ответ».`;
+    return `<div class="stc-card" data-special-test data-test-type="${testType}" data-correct="${testType==='open'?String(item.correctAnswer||''):(item.correct||[]).join(',')}"><div class="stc-head"><div class="stc-num">${String(item.num||index+1).padStart(2,'0')}</div><span class="stc-badge">${item.badge||'Тест'}</span><span class="stc-title">${item.title}</span></div><div class="stc-condition"><div class="stc-text">${item.prompt}</div><div class="stc-note">${item.note||''}</div><div class="stc-variants">${variantsHtml}</div></div>${interaction}<div class="stc-actions"><button class="pt-sol-btn stc-check" type="button" onclick="specialTestCheck(this)">Проверить ответ</button><button class="pt-sol-btn stc-check" type="button" onclick="specialTestToggleSolution(this)">Показать решение</button><div class="stc-feedback" data-special-feedback>${feedbackText}</div></div><div class="pt-solution" data-special-solution><div class="pt-photo-wrap" data-solution-zoom="true"><img class="pt-photo-img" src="${item.image}" alt="${item.solutionAlt||item.title}" loading="lazy" onerror="this.closest('[data-special-solution]').classList.add('stc-solution-missing')"></div><div class="stc-solution-actions"><button class="pt-sol-btn stc-hide" type="button" onclick="specialTestHide(this)">Скрыть</button></div></div></div>`;
   }).join('');
 }
 function specialTestPick(btn,index,value){
@@ -4200,23 +4209,52 @@ function specialTestPick(btn,index,value){
 function specialTestCheck(btn){
   const card=btn.closest('[data-special-test]');
   if(!card)return;
+  const testType=card.dataset.testType||'matrix';
+  if(testType==='open'){
+    const feedback=card.querySelector('[data-special-feedback]');
+    const input=card.querySelector('.stc-open-input');
+    const value=String((input&&input.value)||'').replace(/\s+/g,'');
+    const correct=String(card.dataset.correct||'').replace(/\s+/g,'');
+    if(!value){
+      if(feedback){feedback.className='stc-feedback bad';feedback.textContent='Введите ответ перед проверкой.';}
+      return;
+    }
+    if(value===correct){
+      if(feedback){feedback.className='stc-feedback ok';feedback.textContent='Верно: ответ принят.';}
+    }else{
+      if(feedback){feedback.className='stc-feedback bad';feedback.textContent='Неверно. Попробуйте ещё раз.';}
+    }
+    return;
+  }
   const correct=(card.dataset.correct||'').split(',');
   const answers=correct.map(function(_,i){return card.dataset['a'+i]||'';});
   const feedback=card.querySelector('[data-special-feedback]');
-  const solution=card.querySelector('[data-special-solution]');
   if(answers.some(function(v){return !v;})){
-    if(feedback){feedback.className='stc-feedback bad';feedback.textContent='Сначала выберите ответы для всех трёх величин.';}
-    if(solution)solution.classList.remove('open');
+    if(feedback){feedback.className='stc-feedback bad';feedback.textContent='Сначала выберите ответы для всех величин.';}
     return;
   }
   const ok=answers.every(function(v,i){return v===correct[i];});
   if(ok){
-    if(feedback){feedback.className='stc-feedback ok';feedback.textContent='Верно: ответ 1 2 2. Карточка решения открыта.';}
-    if(solution){solution.classList.add('open');requestAnimationFrame(function(){solution.scrollIntoView({block:'nearest',behavior:'smooth'});});}
+    if(feedback){feedback.className='stc-feedback ok';feedback.textContent='Верно: ответ принят.';}
   }else{
-    if(feedback){feedback.className='stc-feedback bad';feedback.textContent='Пока не совпадает. Подумайте ещё раз о том, как меняются импульс, скорость и угол отклонения.';}
-    if(solution)solution.classList.remove('open');
+    if(feedback){feedback.className='stc-feedback bad';feedback.textContent='Пока не совпадает. Подумайте ещё раз.';}
   }
+}
+function specialTestInputKey(event,input){
+  if(event&&event.key==='Enter'){
+    event.preventDefault();
+    const card=input?input.closest('[data-special-test]'):null;
+    const btn=card?card.querySelector('.stc-check'):null;
+    if(btn)specialTestCheck(btn);
+  }
+}
+function specialTestToggleSolution(btn){
+  const card=btn.closest('[data-special-test]');
+  if(!card)return;
+  const solution=card.querySelector('[data-special-solution]');
+  if(!solution)return;
+  const open=solution.classList.toggle('open');
+  btn.textContent=open?'Скрыть решение':'Показать решение';
 }
 function specialTestHide(btn){
   const solution=btn.closest('[data-special-solution]');
@@ -6155,6 +6193,27 @@ const LESSON_SPECIAL_TESTS={
       ],
       correct:['1','2','2'],
       image:'images/08.png'
+    }
+  ],
+  'Финальный пробник':[
+    {
+      id:'lesson64FipiTask1',
+      num:1,
+      testType:'open',
+      title:'Задание 1. Физические понятия и примеры',
+      badge:'ФИПИ ОГЭ · тестовое задание',
+      prompt:'Установите соответствие между физическими понятиями и примерами этих понятий. К каждой позиции первого столбца подберите соответствующую позицию из второго столбца.',
+      variants:[
+        'Физические понятия: А) физическая величина; Б) единица физической величины; В) прибор для измерения физической величины.',
+        'Примеры: 1) мензурка; 2) плотность; 3) килограмм; 4) секундомер; 5) вещество.',
+        'Ответ запишите в виде последовательности цифр без пробелов и других символов.',
+        'Источник: ФИПИ ОГЭ · открытый банк заданий.',
+        'Уровень: ОГЭ.',
+        'Раздел: Первоначальные сведения о строении вещества / физические величины, единицы, приборы.'
+      ],
+      correctAnswer:'234',
+      image:'images/oge-lesson64-fipi-task01-solution.png',
+      solutionAlt:'Решение задания 1 ФИПИ ОГЭ по физике'
     }
   ]
 };
