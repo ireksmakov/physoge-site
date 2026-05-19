@@ -4221,24 +4221,26 @@ function setC(qi,oi){gld().questions[qi].correct=oi}
 function setA(qi,v){gld().questions[qi].answer=v}
 function addO(qi){gld().questions[qi].opts.push('');reTab('tests')}
 
-function getBlankSpecialTestTask01(){
+function getBlankSpecialTestTask01(examType){
+  const isOge=String(examType||'').toUpperCase()==='ОГЭ';
   return {
     id:'blankTask01Template',
     num:1,
-    title:'Задание 01',
+    title:'',
     source:'',
     type:'Тестовое задание',
     testType:'open',
-    badge:'Тестовое задание',
+    badge:isOge?'ОГЭ · выбор ответа':'ЕГЭ · выбор ответа',
     condition:'',
     prompt:'',
-    note:'<!-- Текст задания будет добавлен позже -->',
-    options:[],
-    variants:[],
+    note:'Для каждой величины определите соответствующий характер изменения:<br>1 — увеличится<br>2 — уменьшится<br>3 — не изменится<br><br>Ответ запишите в виде последовательности трёх цифр без пробелов.',
+    options:['1. Увеличится.','2. Уменьшится.','3. Не изменится.'],
+    variants:['1. Увеличится.','2. Уменьшится.','3. Не изменится.'],
     answer:'',
     correctAnswer:'',
-    solutionImage:'images/test-task-01-solution.png',
-    image:'images/test-task-01-solution.png',
+    solutionText:'',
+    solutionImage:'',
+    image:'',
     solutionAlt:'Решение задания 01'
   };
 }
@@ -4262,7 +4264,9 @@ function buildSpecialLessonTestsList(lessonName){
   const source=Array.isArray(LESSON_SPECIAL_TESTS[lessonName])?LESSON_SPECIAL_TESTS[lessonName]:[];
   const hasTask01=source.some(function(item){return Number(item&&item.num)===1;});
   const prepared=source.map(function(item,index){return normalizeSpecialTestItem(item,index);});
-  return hasTask01?prepared:[normalizeSpecialTestItem(getBlankSpecialTestTask01(),0)].concat(prepared);
+  const activeCourse=(COURSES&&COURSES[AC])||null;
+  const activeExam=activeCourse&&activeCourse.exam?activeCourse.exam:'';
+  return hasTask01?prepared:[normalizeSpecialTestItem(getBlankSpecialTestTask01(activeExam),0)].concat(prepared);
 }
 
 function renderSpecialLessonTests(lessonName){
@@ -4280,18 +4284,18 @@ function renderSpecialLessonTests(lessonName){
     const isBlankTask01=Number(item.num)===1&&!String(item.prompt||'').trim()&&!String(item.correctAnswer||'').trim()&&!(Array.isArray(item.variants)&&item.variants.some(function(v){return String(v||'').trim();}));
     const isOgeCourse=activeExam==='ОГЭ'||String(AC||'').indexOf('oge-')===0;
     const isEgeCourse=activeExam==='ЕГЭ'||String(AC||'').indexOf('ege-')===0;
-    const blankButtons=isBlankTask01?`<div class="stc-grid"><div class="stc-col"><div class="stc-picks">${['','',''].map(function(){return '<button class="stc-pick" type="button" disabled>&nbsp;</button>';}).join('')}</div></div></div>`:'';
+    const blankButtons='';
     const interaction=testType==='open'
       ? `<div class="stc-open-wrap"><label class="hw-answer-label" for="special_input_${index}">Введите ответ</label><input class="hw-answer-input stc-open-input" id="special_input_${index}" type="text" inputmode="numeric" autocomplete="off" onkeydown="specialTestInputKey(event,this)"></div>`
       : `<div class="stc-grid">${cols}</div>`;
     const feedbackText=testType==='open'
       ? 'Введите последовательность цифр и нажмите «Проверить ответ».'
       : `Выберите цифру ${choiceValues.join(', ')} для каждой величины, затем нажмите «Проверить ответ».`;
-    const badgeText=isBlankTask01?(isOgeCourse?'Тест ОГЭ · выбор ответа':(isEgeCourse?'Тест ЕГЭ · выбор ответа':(item.badge||'Тест'))):(item.badge||'Тест');
+    const badgeText=isBlankTask01?(isOgeCourse?'ОГЭ · выбор ответа':(isEgeCourse?'ЕГЭ · выбор ответа':(item.badge||'Тест'))):(item.badge||'Тест');
     const titleText=isBlankTask01?'':(item.title||'');
     const tableImageHtml=item.tableImage?`<div class="pt-photo-wrap"><img class="pt-photo-img" src="${item.tableImage}" alt="Таблица выбора ответа: импульс, скорость, угол отклонения нити" loading="lazy" onerror="this.style.display='none';"></div>`:'';
     const solutionTextHtml=item.solutionText?`<div class="stc-solution-text">${item.solutionText}</div>`:'';
-    return `<div class="stc-card" data-special-test data-test-type="${testType}" data-correct="${testType==='open'?String(item.correctAnswer||''):(item.correct||[]).join(',')}"><div class="stc-head"><div class="stc-num">${String(item.num||index+1).padStart(2,'0')}</div><span class="stc-badge">${badgeText}</span><span class="stc-title">${titleText}</span></div><div class="stc-condition"><div class="stc-text">${item.prompt}</div>${tableImageHtml}<div class="stc-note">${item.note||''}</div><div class="stc-variants">${variantsHtml}</div>${blankButtons}</div>${interaction}<div class="stc-actions"><button class="pt-sol-btn stc-check" type="button" onclick="specialTestCheck(this)">Проверить ответ</button><button class="pt-sol-btn stc-check" type="button" onclick="specialTestToggleSolution(this)">Показать решение</button><div class="stc-feedback" data-special-feedback>${feedbackText}</div></div><div class="pt-solution" data-special-solution>${solutionTextHtml}<div class="pt-photo-wrap" data-solution-zoom="true"><img class="pt-photo-img" src="${item.image}" alt="${item.solutionAlt||item.title}" loading="lazy" onerror="this.closest('[data-special-solution]').classList.add('stc-solution-missing')"></div><div class="stc-solution-actions"><button class="pt-sol-btn stc-hide" type="button" onclick="specialTestHide(this)">Скрыть</button></div></div></div>`;
+    return `<div class="stc-card" data-special-test data-test-type="${testType}" data-correct="${testType==='open'?String(item.correctAnswer||''):(item.correct||[]).join(',')}"><div class="stc-head"><div class="stc-num">${String(item.num||index+1).padStart(2,'0')}</div><span class="stc-badge">${badgeText}</span><span class="stc-title">${titleText}</span></div><div class="stc-condition"><div class="stc-text">${item.prompt}</div>${tableImageHtml}<div class="stc-note">${item.note||''}</div><div class="stc-variants">${variantsHtml}</div>${blankButtons}</div>${interaction}<div class="stc-actions"><button class="pt-sol-btn stc-check" type="button" onclick="specialTestCheck(this)">Проверить ответ</button><button class="pt-sol-btn stc-check" type="button" onclick="specialTestToggleSolution(this)">Показать решение</button><div class="stc-feedback" data-special-feedback>${feedbackText}</div></div><div class="pt-solution" data-special-solution>${solutionTextHtml}${item.image?`<div class="pt-photo-wrap" data-solution-zoom="true"><img class="pt-photo-img" src="${item.image}" alt="${item.solutionAlt||item.title}" loading="lazy" onerror="this.closest('[data-special-solution]').classList.add('stc-solution-missing')"></div>`:''}<div class="stc-solution-actions"><button class="pt-sol-btn stc-hide" type="button" onclick="specialTestHide(this)">Скрыть</button></div></div></div>`;
   }).join('');
 }
 function specialTestPick(btn,index,value){
@@ -4320,6 +4324,10 @@ function specialTestCheck(btn){
     };
     const value=normalizeOpenAnswer((input&&input.value)||'');
     const correct=normalizeOpenAnswer(card.dataset.correct||'');
+    if(!correct){
+      if(feedback){feedback.className='stc-feedback';feedback.textContent='Ответ для этой карточки ещё не задан.';}
+      return;
+    }
     if(!value){
       if(feedback){feedback.className='stc-feedback bad';feedback.textContent='Введите ответ перед проверкой.';}
       return;
@@ -4362,6 +4370,12 @@ function specialTestToggleSolution(btn){
   if(!card)return;
   const solution=card.querySelector('[data-special-solution]');
   if(!solution)return;
+  const feedback=card.querySelector('[data-special-feedback]');
+  const hasSolution=(solution.querySelector('.stc-solution-text')&&solution.querySelector('.stc-solution-text').textContent.trim())||solution.querySelector('img');
+  if(!hasSolution){
+    if(feedback){feedback.className='stc-feedback';feedback.textContent='Решение будет добавлено позже.';}
+    return;
+  }
   const open=solution.classList.toggle('open');
   btn.textContent=open?'Скрыть решение':'Показать решение';
 }
