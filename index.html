@@ -1211,6 +1211,9 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 .stc-note{margin-top:14px;color:#cbd5e1}
 .stc-variants{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0 0}
 .stc-variants span{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;background:rgba(2,132,199,.08);border:1px solid rgba(56,189,248,.18);color:#e2e8f0;font-size:13px;font-weight:700}
+.choice-table-toggle{display:inline-flex;align-items:center;justify-content:center;margin:18px 0 14px;padding:10px 18px;border-radius:12px;border:1px solid rgba(8,216,255,0.35);background:rgba(8,216,255,0.07);color:var(--cyan);font-weight:800;cursor:pointer;transition:background .2s,border-color .2s,transform .15s}
+.choice-table-toggle:hover{background:rgba(8,216,255,0.13);border-color:var(--cyan);transform:translateY(-1px)}
+.test-choice-table-wrap.is-hidden{display:none}
 .stc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:18px}
 .stc-col{background:linear-gradient(180deg,rgba(15,23,42,.92) 0%,rgba(15,23,42,.74) 100%);border:1px solid rgba(56,189,248,.18);border-radius:20px;padding:18px 18px 16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
 .stc-col-title{font-size:16px;line-height:1.55;color:var(--white);font-weight:800;min-height:108px}
@@ -4308,7 +4311,7 @@ function renderSpecialLessonTests(lessonName){
     const blankButtons='';
     const interaction=testType==='open'
       ? `<div class="stc-open-wrap"><label class="hw-answer-label" for="special_input_${index}">Введите ответ</label><input class="hw-answer-input stc-open-input" id="special_input_${index}" type="text" inputmode="numeric" autocomplete="off" onkeydown="specialTestInputKey(event,this)"></div>`
-      : `<div class="stc-grid">${cols}</div>`;
+      : `<button type="button" class="choice-table-toggle" data-choice-table-toggle>Раскрыть таблицу выбора</button><div class="test-choice-table-wrap is-hidden" data-choice-table-wrap><div class="stc-grid">${cols}</div></div>`;
     const feedbackText=testType==='open'
       ? 'Введите последовательность цифр и нажмите «Проверить ответ».'
       : `Выберите цифру ${choiceValues.join(', ')} для каждой величины, затем нажмите «Проверить ответ».`;
@@ -4391,6 +4394,16 @@ function specialTestInputKey(event,input){
     if(btn)specialTestCheck(btn);
   }
 }
+document.addEventListener('click',function(event){
+  const toggle=event.target&&event.target.closest?event.target.closest('[data-choice-table-toggle]'):null;
+  if(!toggle)return;
+  const card=toggle.closest('[data-special-test]');
+  if(!card)return;
+  const wrap=card.querySelector('[data-choice-table-wrap]');
+  if(!wrap)return;
+  const isHidden=wrap.classList.toggle('is-hidden');
+  toggle.textContent=isHidden?'Раскрыть таблицу выбора':'Скрыть таблицу выбора';
+});
 function specialTestToggleSolution(btn){
   const card=btn.closest('[data-special-test]');
   if(!card)return;
