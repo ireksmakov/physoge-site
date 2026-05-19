@@ -4314,8 +4314,12 @@ function specialTestCheck(btn){
   if(testType==='open'){
     const feedback=card.querySelector('[data-special-feedback]');
     const input=card.querySelector('.stc-open-input');
-    const value=String((input&&input.value)||'').replace(/\s+/g,'');
-    const correct=String(card.dataset.correct||'').replace(/\s+/g,'');
+    const normalizeOpenAnswer=function(raw){
+      const trimmed=String(raw==null?'':raw).trim();
+      return trimmed.replace(/^\"(.*)\"$/, '$1').trim();
+    };
+    const value=normalizeOpenAnswer((input&&input.value)||'');
+    const correct=normalizeOpenAnswer(card.dataset.correct||'');
     if(!value){
       if(feedback){feedback.className='stc-feedback bad';feedback.textContent='Введите ответ перед проверкой.';}
       return;
@@ -6286,6 +6290,7 @@ const LESSON_SPECIAL_TESTS={
     {
       id:'lesson12BulletBall',
       num:1,
+      testType:'open',
       title:'',
       badge:'ЕГЭ · выбор ответа',
       prompt:'Шарик висит на нити. В нем застревает пуля, летящая горизонтально, в результате чего нить отклоняется на некоторый угол. Как изменятся при увеличении массы шарика следующие три величины: импульс, полученный шариком в результате попадания в него пули; скорость, которая будет у шарика тотчас после удара; угол отклонения нити? Пуля застревает очень быстро.',
@@ -6297,6 +6302,8 @@ const LESSON_SPECIAL_TESTS={
         'Угол отклонения нити'
       ],
       correct:['1','2','2'],
+      correctAnswer:'122',
+      acceptedAnswers:['122'],
       tableImage:'images/ege-lesson24-task01-table.png',
       image:'images/08.png',
       solutionText:'<strong>Решение:</strong><br><br>Пуля застревает в шарике очень быстро, поэтому за время удара натяжение нити и сила тяжести практически не успевают изменить горизонтальный импульс системы.<br><br>1. Импульс, полученный шариком от пули, равен импульсу системы сразу после удара. При увеличении массы шарика шарик с пулей отклоняется на меньший угол, но за время короткого удара шарик получает больший импульс от пули. Поэтому первая величина увеличится.<br><br>2. Скорость шарика сразу после удара уменьшается, потому что при большей массе шарика тот же удар разгоняет более массивную систему до меньшей скорости.<br><br>3. Угол отклонения нити уменьшается, так как после удара кинетическая энергия переходит в потенциальную энергию подъёма. Если скорость после удара меньше, то высота подъёма меньше, значит и угол отклонения нити меньше.<br><br><strong>Ответ: 122.</strong>'
