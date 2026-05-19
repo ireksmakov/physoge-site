@@ -4289,7 +4289,9 @@ function renderSpecialLessonTests(lessonName){
       : `Выберите цифру ${choiceValues.join(', ')} для каждой величины, затем нажмите «Проверить ответ».`;
     const badgeText=isBlankTask01?(isOgeCourse?'Тест ОГЭ · выбор ответа':(isEgeCourse?'Тест ЕГЭ · выбор ответа':(item.badge||'Тест'))):(item.badge||'Тест');
     const titleText=isBlankTask01?'':(item.title||'');
-    return `<div class="stc-card" data-special-test data-test-type="${testType}" data-correct="${testType==='open'?String(item.correctAnswer||''):(item.correct||[]).join(',')}"><div class="stc-head"><div class="stc-num">${String(item.num||index+1).padStart(2,'0')}</div><span class="stc-badge">${badgeText}</span><span class="stc-title">${titleText}</span></div><div class="stc-condition"><div class="stc-text">${item.prompt}</div><div class="stc-note">${item.note||''}</div><div class="stc-variants">${variantsHtml}</div>${blankButtons}</div>${interaction}<div class="stc-actions"><button class="pt-sol-btn stc-check" type="button" onclick="specialTestCheck(this)">Проверить ответ</button><button class="pt-sol-btn stc-check" type="button" onclick="specialTestToggleSolution(this)">Показать решение</button><div class="stc-feedback" data-special-feedback>${feedbackText}</div></div><div class="pt-solution" data-special-solution><div class="pt-photo-wrap" data-solution-zoom="true"><img class="pt-photo-img" src="${item.image}" alt="${item.solutionAlt||item.title}" loading="lazy" onerror="this.closest('[data-special-solution]').classList.add('stc-solution-missing')"></div><div class="stc-solution-actions"><button class="pt-sol-btn stc-hide" type="button" onclick="specialTestHide(this)">Скрыть</button></div></div></div>`;
+    const tableImageHtml=item.tableImage?`<div class="pt-photo-wrap"><img class="pt-photo-img" src="${item.tableImage}" alt="Таблица выбора ответа: импульс, скорость, угол отклонения нити" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><div class="pt-empty-text" style="display:none">Изображение таблицы будет добавлено позже</div></div>`:'';
+    const solutionTextHtml=item.solutionText?`<div class="stc-solution-text">${item.solutionText}</div>`:'';
+    return `<div class="stc-card" data-special-test data-test-type="${testType}" data-correct="${testType==='open'?String(item.correctAnswer||''):(item.correct||[]).join(',')}"><div class="stc-head"><div class="stc-num">${String(item.num||index+1).padStart(2,'0')}</div><span class="stc-badge">${badgeText}</span><span class="stc-title">${titleText}</span></div><div class="stc-condition"><div class="stc-text">${item.prompt}</div>${tableImageHtml}<div class="stc-note">${item.note||''}</div><div class="stc-variants">${variantsHtml}</div>${blankButtons}</div>${interaction}<div class="stc-actions"><button class="pt-sol-btn stc-check" type="button" onclick="specialTestCheck(this)">Проверить ответ</button><button class="pt-sol-btn stc-check" type="button" onclick="specialTestToggleSolution(this)">Показать решение</button><div class="stc-feedback" data-special-feedback>${feedbackText}</div></div><div class="pt-solution" data-special-solution>${solutionTextHtml}<div class="pt-photo-wrap" data-solution-zoom="true"><img class="pt-photo-img" src="${item.image}" alt="${item.solutionAlt||item.title}" loading="lazy" onerror="this.closest('[data-special-solution]').classList.add('stc-solution-missing')"></div><div class="stc-solution-actions"><button class="pt-sol-btn stc-hide" type="button" onclick="specialTestHide(this)">Скрыть</button></div></div></div>`;
   }).join('');
 }
 function specialTestPick(btn,index,value){
@@ -4319,7 +4321,9 @@ function specialTestCheck(btn){
       return;
     }
     if(value===correct){
-      if(feedback){feedback.className='stc-feedback ok';feedback.textContent='Верно: ответ принят.';}
+      if(feedback){feedback.className='stc-feedback ok';feedback.textContent='Верно!';}
+      const solution=card.querySelector('[data-special-solution]');
+      if(solution)solution.classList.add('open');
     }else{
       if(feedback){feedback.className='stc-feedback bad';feedback.textContent='Неверно. Попробуйте ещё раз.';}
     }
@@ -4334,9 +4338,11 @@ function specialTestCheck(btn){
   }
   const ok=answers.every(function(v,i){return v===correct[i];});
   if(ok){
-    if(feedback){feedback.className='stc-feedback ok';feedback.textContent='Верно: ответ принят.';}
+    if(feedback){feedback.className='stc-feedback ok';feedback.textContent='Верно!';}
+      const solution=card.querySelector('[data-special-solution]');
+      if(solution)solution.classList.add('open');
   }else{
-    if(feedback){feedback.className='stc-feedback bad';feedback.textContent='Пока не совпадает. Подумайте ещё раз.';}
+    if(feedback){feedback.className='stc-feedback bad';feedback.textContent='Неверно. Попробуйте ещё раз.';}
   }
 }
 function specialTestInputKey(event,input){
@@ -6280,18 +6286,20 @@ const LESSON_SPECIAL_TESTS={
     {
       id:'lesson12BulletBall',
       num:1,
-      title:'Определите характер изменения величин',
+      title:'',
       badge:'ЕГЭ · выбор ответа',
-      prompt:'Шарик висит на нити. В нем застревает пуля, летящая горизонтально, в результате чего нить отклоняется на некоторый угол. Как изменятся при увеличении массы шарика следующие три величины: импульс, полученный шариком в результате попадания в него пули; скорость, которая будет у шарика тотчас после удара; угол отклонения нити?',
+      prompt:'Шарик висит на нити. В нем застревает пуля, летящая горизонтально, в результате чего нить отклоняется на некоторый угол. Как изменятся при увеличении массы шарика следующие три величины: импульс, полученный шариком в результате попадания в него пули; скорость, которая будет у шарика тотчас после удара; угол отклонения нити? Пуля застревает очень быстро.',
       variants:['1. Увеличится.','2. Уменьшится.','3. Не изменится.'],
-      note:'Пуля застревает очень быстро. Запишите в таблицу выбранные цифры для каждой физической величины. Цифры в ответе могут повторяться.',
+      note:'Для каждой величины определите соответствующий характер изменения:<br>1 — увеличится<br>2 — уменьшится<br>3 — не изменится<br><br>Ответ запишите в виде последовательности трёх цифр без пробелов.',
       columns:[
         'Импульс, полученный шариком в результате попадания в него пули',
         'Скорость, которая будет у шарика тотчас после удара',
         'Угол отклонения нити'
       ],
       correct:['1','2','2'],
-      image:'images/08.png'
+      tableImage:'images/ege-lesson24-task01-table.png',
+      image:'images/08.png',
+      solutionText:'<strong>Решение:</strong><br><br>Пуля застревает в шарике очень быстро, поэтому за время удара натяжение нити и сила тяжести практически не успевают изменить горизонтальный импульс системы.<br><br>1. Импульс, полученный шариком от пули, равен импульсу системы сразу после удара. При увеличении массы шарика шарик с пулей отклоняется на меньший угол, но за время короткого удара шарик получает больший импульс от пули. Поэтому первая величина увеличится.<br><br>2. Скорость шарика сразу после удара уменьшается, потому что при большей массе шарика тот же удар разгоняет более массивную систему до меньшей скорости.<br><br>3. Угол отклонения нити уменьшается, так как после удара кинетическая энергия переходит в потенциальную энергию подъёма. Если скорость после удара меньше, то высота подъёма меньше, значит и угол отклонения нити меньше.<br><br><strong>Ответ: 122.</strong>'
     }
   ],
   'Финальный пробник':[
