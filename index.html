@@ -4174,8 +4174,52 @@ function setC(qi,oi){gld().questions[qi].correct=oi}
 function setA(qi,v){gld().questions[qi].answer=v}
 function addO(qi){gld().questions[qi].opts.push('');reTab('tests')}
 
+function getBlankSpecialTestTask01(){
+  return {
+    id:'blankTask01Template',
+    num:1,
+    title:'Задание 01',
+    source:'',
+    type:'Тестовое задание',
+    testType:'open',
+    badge:'Тестовое задание',
+    condition:'',
+    prompt:'',
+    note:'<!-- Текст задания будет добавлен позже -->',
+    options:[],
+    variants:[],
+    answer:'',
+    correctAnswer:'',
+    solutionImage:'images/test-task-01-solution.png',
+    image:'images/test-task-01-solution.png',
+    solutionAlt:'Решение задания 01'
+  };
+}
+
+function normalizeSpecialTestItem(item,index){
+  const template=getBlankSpecialTestTask01();
+  const out=Object.assign({},template,item||{});
+  out.num=Number(out.num)||index+1;
+  out.prompt=out.prompt!=null?out.prompt:(out.condition||'');
+  out.condition=out.condition!=null?out.condition:(out.prompt||'');
+  out.variants=Array.isArray(out.variants)?out.variants:(Array.isArray(out.options)?out.options:[]);
+  out.options=Array.isArray(out.options)?out.options:out.variants.slice();
+  out.correctAnswer=out.correctAnswer!=null?String(out.correctAnswer):String(out.answer||'');
+  out.answer=out.answer!=null?String(out.answer):String(out.correctAnswer||'');
+  out.image=out.image||out.solutionImage||template.solutionImage;
+  out.solutionImage=out.solutionImage||out.image;
+  return out;
+}
+
+function buildSpecialLessonTestsList(lessonName){
+  const source=Array.isArray(LESSON_SPECIAL_TESTS[lessonName])?LESSON_SPECIAL_TESTS[lessonName]:[];
+  const hasTask01=source.some(function(item){return Number(item&&item.num)===1;});
+  const prepared=source.map(function(item,index){return normalizeSpecialTestItem(item,index);});
+  return hasTask01?prepared:[normalizeSpecialTestItem(getBlankSpecialTestTask01(),0)].concat(prepared);
+}
+
 function renderSpecialLessonTests(lessonName){
-  const items=LESSON_SPECIAL_TESTS[lessonName]||[];
+  const items=buildSpecialLessonTestsList(lessonName);
   if(!items.length)return '';
   return items.map(function(item,index){
     const testType=item.testType||'matrix';
