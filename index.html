@@ -576,6 +576,18 @@ body.edit-mode .et{display:inline}
 .pt-photo-wrap[data-solution-zoom]::after,.task-board-photo-wrap[data-solution-zoom]::after,.media-zoom-wrap[data-solution-zoom]::after{content:'Нажмите, чтобы увеличить';position:absolute;right:12px;bottom:12px;padding:7px 10px;border-radius:999px;background:rgba(15,23,42,.82);color:#fff;font-size:11px;font-weight:800;line-height:1;opacity:0;transform:translateY(6px);transition:opacity .18s,transform .18s;pointer-events:none}
 .pt-photo-wrap[data-solution-zoom]:hover::after,.task-board-photo-wrap[data-solution-zoom]:hover::after,.media-zoom-wrap[data-solution-zoom]:hover::after{opacity:1;transform:translateY(0)}
 .pt-photo-img{display:block;width:100%;height:auto;background:#fff}
+
+.image-pinch-lightbox{position:fixed;inset:0;z-index:2147483600;display:none;align-items:center;justify-content:center;padding:74px 12px 12px;background:rgba(2,9,20,.94);backdrop-filter:blur(8px)}
+.image-pinch-lightbox.open{display:flex}
+.image-pinch-toolbar{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:3;display:flex;gap:8px;padding:8px;border-radius:14px;background:rgba(5,17,31,.94);border:1px solid rgba(8,216,255,.28);box-shadow:0 18px 44px rgba(0,0,0,.35)}
+.image-pinch-btn{min-width:42px;min-height:38px;border-radius:10px;border:1px solid rgba(8,216,255,.3);background:rgba(8,216,255,.08);color:var(--white);font-weight:800;cursor:pointer}
+.image-pinch-btn:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(8,216,255,.14)}
+.image-pinch-stage{width:100%;height:100%;overflow:hidden;display:flex;align-items:center;justify-content:center;touch-action:none}
+.image-pinch-img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;border-radius:18px;background:#fff;box-shadow:0 28px 90px rgba(0,0,0,.55);object-fit:contain;transform:translate3d(0px,0px,0) scale(1);transform-origin:center center;user-select:none;-webkit-user-drag:none;cursor:grab;will-change:transform}
+.image-pinch-img.dragging{cursor:grabbing}
+body.image-pinch-lock{overflow:hidden}
+img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card img,.pt-rich-card img,.task-board-rich img,.task-board-photo-wrap img,.media-zoom-wrap img,.pt-task-scheme img,.pt-condition img,.pt-solution img{cursor:zoom-in}
+@media(max-width:680px){.image-pinch-lightbox{padding:78px 8px 8px}.image-pinch-toolbar{width:calc(100% - 16px);justify-content:center;flex-wrap:wrap}.image-pinch-btn{flex:1 1 auto}}
 .solution-photo-lightbox{position:fixed;inset:0;z-index:2147483600;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(2,9,20,.92);backdrop-filter:blur(8px);cursor:zoom-out;touch-action:none}
 .solution-photo-lightbox.open{display:flex;animation:solutionPhotoFade .18s ease both}
 .solution-photo-lightbox-stage{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:hidden}
@@ -6593,112 +6605,66 @@ function handleSolutionImageError(img,path){
   const fallback=wrap?wrap.querySelector('.pt-img-fallback'):null;
   if(fallback) fallback.style.display='block';
 }
-const solutionPhotoLightboxState={images:[],index:0,touchStartX:0,touchStartY:0};
+const solutionPhotoLightboxState={images:[],index:0};
 function ensureSolutionPhotoLightbox(){
-  let box=document.getElementById('solutionPhotoLightbox');
+  let box=document.getElementById('imagePinchLightbox');
   if(box) return box;
-  document.body.insertAdjacentHTML('beforeend','<div id="solutionPhotoLightbox" class="solution-photo-lightbox" role="dialog" aria-modal="true" aria-label="Увеличенная карусель изображений решения"><button type="button" class="solution-photo-lightbox-btn solution-photo-lightbox-close" aria-label="Закрыть увеличенное изображение">×</button><button type="button" class="solution-photo-lightbox-btn solution-photo-lightbox-prev" aria-label="Предыдущее изображение">‹</button><div class="solution-photo-lightbox-stage"><img alt=""></div><button type="button" class="solution-photo-lightbox-btn solution-photo-lightbox-next" aria-label="Следующее изображение">›</button><div class="solution-photo-lightbox-counter" aria-live="polite"></div><div class="solution-photo-lightbox-hint">Листайте стрелками, колесом мыши или свайпом. Esc — закрыть</div></div>');
-  box=document.getElementById('solutionPhotoLightbox');
-  box.addEventListener('click',function(e){if(e.target===box) closeSolutionPhotoLightbox();});
-  box.querySelector('.solution-photo-lightbox-close').addEventListener('click',closeSolutionPhotoLightbox);
-  box.querySelector('.solution-photo-lightbox-prev').addEventListener('click',function(e){e.stopPropagation();showSolutionPhotoLightboxImage(solutionPhotoLightboxState.index-1,true);});
-  box.querySelector('.solution-photo-lightbox-next').addEventListener('click',function(e){e.stopPropagation();showSolutionPhotoLightboxImage(solutionPhotoLightboxState.index+1,true);});
-  box.addEventListener('wheel',function(e){
-    if(!box.classList.contains('open')||solutionPhotoLightboxState.images.length<2) return;
-    e.preventDefault();
-    showSolutionPhotoLightboxImage(solutionPhotoLightboxState.index+(e.deltaY>0||e.deltaX>0?1:-1),true);
-  },{passive:false});
-  box.addEventListener('touchstart',function(e){
-    const t=e.touches&&e.touches[0];
-    if(!t) return;
-    solutionPhotoLightboxState.touchStartX=t.clientX;
-    solutionPhotoLightboxState.touchStartY=t.clientY;
-  },{passive:true});
-  box.addEventListener('touchend',function(e){
-    const t=e.changedTouches&&e.changedTouches[0];
-    if(!t||solutionPhotoLightboxState.images.length<2) return;
-    const dx=t.clientX-solutionPhotoLightboxState.touchStartX;
-    const dy=t.clientY-solutionPhotoLightboxState.touchStartY;
-    if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.4){
-      showSolutionPhotoLightboxImage(solutionPhotoLightboxState.index+(dx<0?1:-1),true);
-    }
-  },{passive:true});
-  return box;
+  document.body.insertAdjacentHTML('beforeend','<div class="image-pinch-lightbox" id="imagePinchLightbox" aria-hidden="true"><div class="image-pinch-toolbar"><button type="button" class="image-pinch-btn" data-pinch-zoom-out>−</button><button type="button" class="image-pinch-btn" data-pinch-zoom-reset>Сброс</button><button type="button" class="image-pinch-btn" data-pinch-zoom-in>+</button><button type="button" class="image-pinch-btn" data-pinch-zoom-close>×</button></div><div class="image-pinch-stage"><img class="image-pinch-img" src="" alt=""></div></div>');
+  return document.getElementById('imagePinchLightbox');
 }
-function isSolutionZoomImageVisible(img){
-  if(!img||img.style.display==='none') return false;
-  if(!img.getClientRects||!img.getClientRects().length) return false;
-  return true;
-}
-function getSolutionZoomImages(){
-  return Array.from(document.querySelectorAll('.pt-photo-wrap[data-solution-zoom] img,.task-board-photo-wrap[data-solution-zoom] img,.media-zoom-wrap[data-solution-zoom] img')).filter(function(img){
-    return isSolutionZoomImageVisible(img)&&(img.currentSrc||img.getAttribute('src'));
-  }).map(function(img){
-    return {src:img.currentSrc||img.getAttribute('src'),alt:img.getAttribute('alt')||'Увеличенное изображение решения',node:img};
+(function setupPinchImageZoom(){
+  const lightbox=ensureSolutionPhotoLightbox();
+  const stage=lightbox.querySelector('.image-pinch-stage');
+  const img=lightbox.querySelector('.image-pinch-img');
+  let scale=1,x=0,y=0,isDragging=false,startX=0,startY=0,baseX=0,baseY=0;
+  let activePointers=new Map(),initialPinchDistance=0,initialPinchScale=1;
+  const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
+  const applyTransform=()=>{img.style.transform=`translate3d(${x}px, ${y}px, 0) scale(${scale})`;};
+  const resetZoom=()=>{scale=1;x=0;y=0;applyTransform();};
+  const zoomBy=(delta)=>{scale=clamp(+(scale+delta).toFixed(2),1,5);if(scale===1){x=0;y=0;}applyTransform();};
+  const getDistance=(p1,p2)=>Math.hypot(p1.clientX-p2.clientX,p1.clientY-p2.clientY);
+  function getSolutionZoomImages(){return Array.from(document.querySelectorAll('.pt-photo-wrap[data-solution-zoom] img,.task-board-photo-wrap[data-solution-zoom] img,.media-zoom-wrap[data-solution-zoom] img,img[data-image-zoom="true"]')).filter(img=>img&&img.style.display!=='none'&&img.getClientRects&&img.getClientRects().length&&(img.currentSrc||img.getAttribute('src'))).map(img=>({src:img.currentSrc||img.getAttribute('src'),alt:img.getAttribute('alt')||'Увеличенное изображение',node:img}));}
+  function openZoom(sourceImg){
+    const images=getSolutionZoomImages();
+    const src=sourceImg.currentSrc||sourceImg.src;
+    const startIndex=Math.max(0,images.findIndex(it=>it.node===sourceImg||it.src===src));
+    solutionPhotoLightboxState.images=images.length?images:[{src:src,alt:sourceImg.alt||'',node:sourceImg}];
+    solutionPhotoLightboxState.index=startIndex;
+    const item=solutionPhotoLightboxState.images[startIndex];
+    img.src=item.src; img.alt=item.alt||'';
+    resetZoom();
+    lightbox.classList.add('open');
+    lightbox.setAttribute('aria-hidden','false');
+    document.body.classList.add('image-pinch-lock');
+  }
+  function closeZoom(){
+    lightbox.classList.remove('open');
+    lightbox.setAttribute('aria-hidden','true');
+    document.body.classList.remove('image-pinch-lock');
+    activePointers.clear();
+    img.src='';
+    resetZoom();
+  }
+  document.addEventListener('click',function(event){
+    const sourceImg=event.target.closest('img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card img,.pt-rich-card img,.task-board-rich img,.task-board-photo-wrap img,.media-zoom-wrap img,.pt-task-scheme img,.pt-condition img,.pt-solution img');
+    if(!sourceImg) return;
+    if(sourceImg.closest('header,.nav-inner,.logo,.hero,.hero-media')) return;
+    event.preventDefault();
+    event.stopPropagation();
+    openZoom(sourceImg);
   });
-}
-function showSolutionPhotoLightboxImage(index,animate){
-  const box=ensureSolutionPhotoLightbox();
-  const items=solutionPhotoLightboxState.images;
-  if(!items.length) return;
-  const nextIndex=(index+items.length)%items.length;
-  solutionPhotoLightboxState.index=nextIndex;
-  const item=items[nextIndex];
-  const full=box.querySelector('.solution-photo-lightbox-stage img');
-  if(full){
-    if(animate) full.classList.add('switching');
-    window.setTimeout(function(){
-      full.src=item.src;
-      full.alt=item.alt;
-      full.classList.remove('switching');
-    },animate?80:0);
-  }
-  const hasMany=items.length>1;
-  const prev=box.querySelector('.solution-photo-lightbox-prev');
-  const next=box.querySelector('.solution-photo-lightbox-next');
-  const counter=box.querySelector('.solution-photo-lightbox-counter');
-  if(prev) prev.hidden=!hasMany;
-  if(next) next.hidden=!hasMany;
-  if(counter){
-    counter.hidden=!hasMany;
-    counter.textContent=hasMany?(nextIndex+1)+' / '+items.length:'';
-  }
-}
-function openSolutionPhotoLightbox(img){
-  if(!img||!img.getAttribute) return;
-  const src=img.currentSrc||img.getAttribute('src');
-  if(!src) return;
-  const box=ensureSolutionPhotoLightbox();
-  const images=getSolutionZoomImages();
-  const startIndex=Math.max(0,images.findIndex(function(item){return item.node===img||item.src===src;}));
-  solutionPhotoLightboxState.images=images.length?images:[{src:src,alt:img.getAttribute('alt')||'Увеличенное изображение решения',node:img}];
-  box.classList.add('open');
-  showSolutionPhotoLightboxImage(startIndex,false);
-  document.body.style.overflow='hidden';
-}
-function closeSolutionPhotoLightbox(){
-  const box=document.getElementById('solutionPhotoLightbox');
-  if(!box) return;
-  box.classList.remove('open');
-  document.body.style.overflow='';
-}
-document.addEventListener('click',function(e){
-  const zoomWrap=e.target&&e.target.closest?e.target.closest('.pt-photo-wrap[data-solution-zoom],.task-board-photo-wrap[data-solution-zoom],.media-zoom-wrap[data-solution-zoom]'):null;
-  if(!zoomWrap) return;
-  const img=zoomWrap.querySelector('img');
-  if(!img||img.style.display==='none') return;
-  e.preventDefault();
-  e.stopPropagation();
-  openSolutionPhotoLightbox(img);
-});
-document.addEventListener('keydown',function(e){
-  const box=document.getElementById('solutionPhotoLightbox');
-  const isOpen=!!(box&&box.classList.contains('open'));
-  if(e.key==='Escape') closeSolutionPhotoLightbox();
-  if(!isOpen||solutionPhotoLightboxState.images.length<2) return;
-  if(e.key==='ArrowLeft'){e.preventDefault();showSolutionPhotoLightboxImage(solutionPhotoLightboxState.index-1,true);}
-  if(e.key==='ArrowRight'){e.preventDefault();showSolutionPhotoLightboxImage(solutionPhotoLightboxState.index+1,true);}
-});
+  lightbox.querySelector('[data-pinch-zoom-close]').addEventListener('click',closeZoom);
+  lightbox.querySelector('[data-pinch-zoom-in]').addEventListener('click',()=>zoomBy(0.25));
+  lightbox.querySelector('[data-pinch-zoom-out]').addEventListener('click',()=>zoomBy(-0.25));
+  lightbox.querySelector('[data-pinch-zoom-reset]').addEventListener('click',resetZoom);
+  lightbox.addEventListener('click',e=>{if(e.target===lightbox||e.target===stage) closeZoom();});
+  lightbox.addEventListener('wheel',function(event){if(!lightbox.classList.contains('open')) return; event.preventDefault(); zoomBy(event.deltaY<0?0.25:-0.25);},{passive:false});
+  stage.addEventListener('pointerdown',function(event){activePointers.set(event.pointerId,event);stage.setPointerCapture(event.pointerId);if(activePointers.size===1){isDragging=scale>1;startX=event.clientX;startY=event.clientY;baseX=x;baseY=y;if(isDragging) img.classList.add('dragging');}if(activePointers.size===2){const pts=Array.from(activePointers.values());initialPinchDistance=getDistance(pts[0],pts[1]);initialPinchScale=scale;isDragging=false;img.classList.remove('dragging');}});
+  stage.addEventListener('pointermove',function(event){if(!activePointers.has(event.pointerId)) return;activePointers.set(event.pointerId,event);if(activePointers.size===2){const pts=Array.from(activePointers.values());const d=getDistance(pts[0],pts[1]);if(initialPinchDistance>0){scale=clamp(initialPinchScale*(d/initialPinchDistance),1,5);scale=+scale.toFixed(2);if(scale===1){x=0;y=0;}applyTransform();}return;}if(activePointers.size===1&&isDragging&&scale>1){x=baseX+(event.clientX-startX);y=baseY+(event.clientY-startY);applyTransform();}});
+  function endPointer(event){activePointers.delete(event.pointerId);isDragging=false;img.classList.remove('dragging');if(activePointers.size===1){const r=Array.from(activePointers.values())[0];startX=r.clientX;startY=r.clientY;baseX=x;baseY=y;isDragging=scale>1;}}
+  stage.addEventListener('pointerup',endPointer);stage.addEventListener('pointercancel',endPointer);stage.addEventListener('pointerleave',event=>{if(activePointers.has(event.pointerId)) endPointer(event);});
+  document.addEventListener('keydown',function(event){if(event.key==='Escape'&&lightbox.classList.contains('open')) closeZoom();});
+})();
 function renderSolutionImageHtml(path,alt,cls){
   const safePath=escapeHtml(String(path||''));
   const safeAlt=escapeHtml(String(alt||'Решение задачи'));
