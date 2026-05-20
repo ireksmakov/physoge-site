@@ -6382,6 +6382,29 @@ const LESSON_TASKS={
   });
 })();
 
+(function cloneLesson24TasksToLesson25(){
+  const sourceLessonName = getCourseLessonNameByFlatNumber('ege-phy', 24);
+  const targetLessonName = getCourseLessonNameByFlatNumber('ege-phy', 25);
+
+  if(!sourceLessonName || !targetLessonName) return;
+
+  const sourceTasks = Array.isArray(LESSON_TASKS[sourceLessonName])
+    ? LESSON_TASKS[sourceLessonName]
+    : [];
+
+  if(!sourceTasks.length) return;
+
+  const existingTargetTasks = Array.isArray(LESSON_TASKS[targetLessonName])
+    ? LESSON_TASKS[targetLessonName]
+    : [];
+
+  if(existingTargetTasks.some(function(task){ return task && String(task.cond || '').trim(); })){
+    return;
+  }
+
+  LESSON_TASKS[targetLessonName] = JSON.parse(JSON.stringify(sourceTasks));
+})();
+
 const LESSON_HOMEWORK={
   'Закон сохранения импульса и изменения импульса':[
     {
