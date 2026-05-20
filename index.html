@@ -6935,7 +6935,7 @@ function renderPTasks(name){
     const fallbackSolution='';
     const solutionInner=(embedded||imageOnly)?`${rich}${extra}`:`${steps}${extra}${fallbackSolution}`;
     const emptySolution=!String(solutionInner||'').trim();
-    return `<div class="pt-card${isBlank?' pt-blank-card':''}"><div class="pt-head"><div class="pt-num">${String(t.num).padStart(2,'0')}</div><span class="pt-level ${lvlC[t.level]||lvlC[1]}">${lvlL[t.level]||lvlL[1]}</span><span class="pt-exam">${t.exam||'ЕГЭ'}</span><span class="pt-title">${titleText}</span></div><div class="pt-body"><div class="pt-condition">${cond}</div>${scheme}<div class="pt-side">${boardBtn}${animationBtn}<button class="pt-sol-btn" data-empty-solution="${emptySolution?'1':'0'}" onclick="ptToggle('${sid}',this)">▶ Решение</button></div></div><div class="pt-solution" id="${sid}">${solutionInner}</div></div>`;
+    return `<div class="pt-card${isBlank?' pt-blank-card':''}"><div class="pt-head"><div class="pt-num">${String(t.num).padStart(2,'0')}</div><span class="pt-level ${lvlC[t.level]||lvlC[1]}"></span><span class="pt-exam"></span><span class="pt-title">${titleText}</span></div><div class="pt-body"><div class="pt-condition"></div>${scheme}<div class="pt-side">${boardBtn}${animationBtn}<button class="pt-sol-btn" data-empty-solution="${emptySolution?'1':'0'}" onclick="ptToggle('${sid}',this)">▶ Решение</button></div></div><div class="pt-solution" id="${sid}">${solutionInner}</div></div>`;
   }
   const hasGroups=tasks.some(t=>t&&t.group);
   if(hasGroups){
@@ -8786,7 +8786,7 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
   const isEtherCork = resolvedMode==='etherCork';
   const isNewton = resolvedMode==='newtonForceAcceleration'||resolvedMode==='newtonInclineFriction';
   if(state.simTitle) state.simTitle.textContent=isNewton?(resolvedMode==='newtonInclineFriction'?'Анимация движения по наклонной':'Анимация второго закона Ньютона'):(isInelasticFriction?'Анимация пластилина и бруска':(isEtherCork?'Анимация отдачи пробирки':(isBlocks?'Анимация столкновения брусков':(isExplosionVector?'Анимация распада снаряда':(isExplosion?'Анимация взрыва снаряда':(isPuckImpulse?'Анимация удара шайб':(isMomentum?'Анимация соударения':(isPendulumImpact?'Анимация задачи 10: удар малого тела о маятник':(isEnergyPendulum?'Анимация удара и подъёма доски':(isEnergyHill?'Анимация подъёма по горке':(isCartStone?'Анимация падения камня':'Анимация движения')))))))))));
-  if(state.simCondition) state.simCondition.innerHTML=getTaskConditionHtml(task);
+  if(state.simCondition) state.simCondition.innerHTML='';
   if(state.simNote) state.simNote.innerHTML=isNewton
     ? (resolvedMode==='newtonInclineFriction'
       ? 'Покажите разложение силы тяжести на наклонной плоскости, направление силы трения и ускорение тела вниз по плоскости.'
