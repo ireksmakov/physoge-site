@@ -2478,16 +2478,6 @@ const THEORY = {
   {type:'text',label:'📌 Преломление',title:'Закон преломления',text:'При переходе из среды с меньшим n в среду с большим n луч преломляется к нормали (угол уменьшается).\n\nc = 3·10⁸ м/с — скорость света в вакууме\n\nПолное внутреннее отражение: sinαпр = n₂/n₁ (при n₁ > n₂)'}
 ],
 
-'Работа силы тяжести. Энергия.':[
-  {num:1,level:2,title:'Задача 1',cond:'Какую по величине работу должна совершить сила трения для полной остановки тела массой 1000 кг, движущегося по горизонтальной поверхности со скоростью 10 м/с?',given:'',steps:[],ans:'',solutionHtml:'',solutionImage:'images/ege-physics/lesson-25/task-solutions/25tasks01.png',hasAnimation:true,animationId:'lesson-25-task-01',isBlank:false},
-  {num:2,level:2,title:'Задача 2',cond:'Автомобиль массой 1 т трогается с места и движется с ускорением 1,2 м/с². На первых метрах пути сила тяги совершила работу 14000 Дж. Чему равен этот путь, если сила сопротивления равна 200 Н?',given:'',steps:[],ans:'',solutionHtml:'',solutionImage:'images/ege-physics/lesson-25/task-solutions/25tasks02.png',hasAnimation:true,animationId:'lesson-25-task-02',isBlank:false},
-  {num:3,level:2,title:'Задача 3',cond:'Тело массой 2 кг падает с высоты 20 м из состояния покоя и в момент удара о Землю имеет скорость 14 м/с. Чему равен модуль работы силы сопротивления воздуха?',given:'',steps:[],ans:'',solutionHtml:'',solutionImage:'images/ege-physics/lesson-25/task-solutions/25tasks03.png',hasAnimation:true,animationId:'lesson-25-task-03',isBlank:false},
-  {num:4,level:2,title:'Задача 4',cond:'Пуля массой 9 г, движущаяся со скоростью 800 м/с, пробила доску и вылетела из доски со скоростью 200 м/с. Определите толщину доски, если средняя сила сопротивления, воздействующая на пулю в доске, равна 108 кН.',given:'',steps:[],ans:'',solutionHtml:'',solutionImage:'images/ege-physics/lesson-25/task-solutions/25tasks04.png',hasAnimation:true,animationId:'lesson-25-task-04',isBlank:false},
-  {num:5,level:2,title:'Задача 5',cond:'Тело массой 200 г брошено вертикально вверх с начальной скоростью 20 м/с. На какой высоте относительно точки бросания кинетическая энергия тела будет равна 20 Дж? Сопротивлением воздуха пренебречь.',given:'',steps:[],ans:'',solutionHtml:'',solutionImage:'images/ege-physics/lesson-25/task-solutions/25tasks05.png',hasAnimation:true,animationId:'lesson-25-task-05',isBlank:false},
-  {num:6,level:2,title:'Задача 6',cond:'С высоты 1,25 м вертикально вниз бросили шарик со скоростью 10 м/с. На какую высоту после удара он поднимется, если в процессе удара 40 % механической энергии шара теряется? Сопротивлением воздуха пренебречь.',given:'',steps:[],ans:'',solutionHtml:'',solutionImage:'images/ege-physics/lesson-25/task-solutions/25tasks06.png',hasAnimation:true,animationId:'lesson-25-task-06',isBlank:false},
-  {num:7,level:2,title:'Задача 7',cond:'Маленький свинцовый шарик объёмом 0,02 см³ равномерно падает в воде. На какой глубине оказался шарик, если в процессе его движения выделилось количество теплоты, равное 12,42 мДж?',given:'',steps:[],ans:'',solutionHtml:'',solutionImage:'images/ege-physics/lesson-25/task-solutions/25tasks07.png',hasAnimation:true,animationId:'lesson-25-task-07',isBlank:false},
-  {num:8,level:2,title:'Задача 8',cond:'Плита объёмом 1 м³ из мрамора плотностью 2700 кг/м³ полностью погружена в воду плотностью 1000 кг/м³. Какую минимальную работу нужно совершить, чтобы равномерно поднять плиту на высоту 5 м?',given:'',steps:[],ans:'',solutionHtml:'',solutionImage:'images/ege-physics/lesson-25/task-solutions/25tasks08.png',hasAnimation:true,animationId:'lesson-25-task-08',isBlank:false}
-],
 'Линзы':[
   {type:'formula',f:'1/d + 1/f = 1/F',sub:'формула тонкой линзы (d — до предмета, f — до изображения)'},
   {type:'formula',f:'D = 1/F',sub:'оптическая сила линзы [дптр], F — фокусное расстояние'},
@@ -4187,22 +4177,27 @@ function renderTheory(){
     const del=EMODE?`<div class="th-block-del" onclick="delBlock(${i})">✕</div>`:'';
     const editAttrs=EMODE?' contenteditable="true"':'';
     if(b.type==='formula'){
+      const formulaMain=(b&&b.f)||'';
+      const formulaSub=(b&&b.sub)||'';
       h+=`<div class="formula-block" style="position:relative">
         ${del}
-        <span class="formula-main-f"${editAttrs}${EMODE?` onblur="saveBlock(${i},'f',this.innerHTML)"`:''}>${b.f}</span>
-        <span class="formula-sub"${editAttrs}${EMODE?` onblur="saveBlock(${i},'sub',this.innerHTML)"`:''}>${b.sub}</span>
+        <span class="formula-main-f"${editAttrs}${EMODE?` onblur="saveBlock(${i},'f',this.innerHTML)"`:''}>${formulaMain}</span>
+        <span class="formula-sub"${editAttrs}${EMODE?` onblur="saveBlock(${i},'sub',this.innerHTML)"`:''}>${formulaSub}</span>
       </div>`;
     } else if(b.type==='html'){
+      const htmlBody=(b&&b.html)||'';
       h+=`<div class="th-html">
         ${del}
-        <div class="th-html-body"${editAttrs}${EMODE?` onblur="saveBlock(${i},'html',this.innerHTML)"`:''}>${b.html}</div>
+        <div class="th-html-body"${editAttrs}${EMODE?` onblur="saveBlock(${i},'html',this.innerHTML)"`:''}>${htmlBody}</div>
       </div>`;
     } else {
+      const blockTitle=(b&&b.title)||'';
+      const blockText=(b&&b.text)||'';
       h+=`<div class="th-block">
         ${del}
         <div class="tb-label">${b.label||'📌'}</div>
-        <div class="tb-title"${editAttrs}${EMODE?` onblur="saveBlock(${i},'title',this.innerText)"`:''}>${b.title}</div>
-        <div class="tb-text"${editAttrs}${EMODE?` onblur="saveBlock(${i},'text',this.innerText)"`:''}>${b.text}</div>
+        <div class="tb-title"${editAttrs}${EMODE?` onblur="saveBlock(${i},'title',this.innerText)"`:''}>${blockTitle}</div>
+        <div class="tb-text"${editAttrs}${EMODE?` onblur="saveBlock(${i},'text',this.innerText)"`:''}>${blockText}</div>
       </div>`;
     }
   });
