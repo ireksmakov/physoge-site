@@ -711,7 +711,38 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 .task-animation-placeholder-label{font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#2563eb;margin-bottom:8px}
 .task-animation-placeholder-text{font-size:14px;line-height:1.45;font-weight:600;color:#334155}
 .task-animation-placeholder-empty{min-height:260px;border:1px dashed #cbd5e1;border-radius:18px;background:#f8fafc;display:flex;align-items:center;justify-content:center;text-align:center;color:#64748b;font-size:18px;font-weight:800}
-
+.lesson25-anim{display:flex;flex-direction:column;gap:16px;color:#0f172a}
+.lesson25-anim-head{display:flex;justify-content:space-between;align-items:flex-start}
+.lesson25-anim-kicker{font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:#2563eb}
+.lesson25-anim-title{margin:6px 0 0;font-size:28px;line-height:1.15}
+.lesson25-anim-condition{padding:14px 16px;border:1px solid #d8e5f5;border-radius:16px;background:#f8fbff}
+.lesson25-anim-label{font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#2563eb;margin-bottom:8px}
+.lesson25-anim-condition-text{font-size:14px;line-height:1.45;color:#334155;font-weight:600}
+.lesson25-anim-formulas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.lesson25-formula-card{background:#f8fafc;border:1px solid #cbd5e1;border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.lesson25-bullet-scene{position:relative;height:340px;border-radius:20px;overflow:hidden;background:linear-gradient(180deg,#e0f2fe 0%,#f8fbff 58%,#dbeafe 100%);border:1px solid #dbeafe}
+.lesson25-board{position:absolute;left:50%;top:54px;width:130px;height:220px;transform:translateX(-50%);border-radius:10px;background:repeating-linear-gradient(90deg,#9a5b24 0 16px,#b87333 16px 32px);border:4px solid #7c3f16;box-shadow:inset 0 0 22px rgba(0,0,0,.22),0 20px 38px rgba(15,23,42,.18)}
+.lesson25-board::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.08) 0 2px,transparent 2px 24px)}
+.lesson25-board-label{position:absolute;top:-34px;left:50%;transform:translateX(-50%);padding:6px 10px;border-radius:999px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-weight:900}
+.lesson25-board-thickness{position:absolute;left:50%;bottom:-38px;transform:translateX(-50%);color:#1d4ed8;font-size:24px;font-weight:900}
+.lesson25-board-thickness::before,.lesson25-board-thickness::after{content:'';position:absolute;top:50%;width:42px;height:3px;background:#2563eb}
+.lesson25-board-thickness::before{right:calc(100% + 8px)}
+.lesson25-board-thickness::after{left:calc(100% + 8px)}
+.lesson25-bullet{position:absolute;left:34px;top:158px;width:86px;height:26px;border-radius:999px 8px 8px 999px;background:linear-gradient(90deg,#64748b,#f8fafc,#94a3b8);box-shadow:0 8px 18px rgba(15,23,42,.25);animation:lesson25BulletMove 4.8s ease-in-out infinite}
+.lesson25-bullet-tip{position:absolute;right:-22px;top:0;width:0;height:0;border-left:26px solid #475569;border-top:13px solid transparent;border-bottom:13px solid transparent}
+.lesson25-speed-label{position:absolute;padding:7px 11px;border-radius:999px;background:#eff6ff;border:1px solid #bfdbfe;color:#1d4ed8;font-size:14px;font-weight:900;z-index:3}
+.lesson25-speed-in{left:42px;top:96px}
+.lesson25-speed-out{right:48px;top:96px}
+.lesson25-resistance-force{position:absolute;left:calc(50% - 110px);top:205px;width:120px;height:5px;border-radius:999px;background:#ef4444;animation:lesson25ResistancePulse 1.4s ease-in-out infinite;z-index:4}
+.lesson25-resistance-force::before{content:'';position:absolute;left:-3px;top:50%;transform:translateY(-50%);border-right:15px solid #ef4444;border-top:10px solid transparent;border-bottom:10px solid transparent}
+.lesson25-resistance-force span{position:absolute;left:-20px;top:16px;white-space:nowrap;color:#991b1b;font-size:13px;font-weight:900}
+.lesson25-energy-strip{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);width:min(520px,calc(100% - 40px));height:16px;border-radius:999px;overflow:hidden;background:#e2e8f0;border:1px solid #cbd5e1}
+.lesson25-energy-strip::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#22c55e,#f97316,#ef4444);transform-origin:left center;animation:lesson25EnergyDrop 4.8s ease-in-out infinite}
+.lesson25-energy-strip span{position:absolute;left:50%;top:22px;transform:translateX(-50%);color:#334155;font-size:12px;font-weight:900;white-space:nowrap}
+.lesson25-task04-anim .lesson25-anim-formulas{grid-template-columns:repeat(3,minmax(0,1fr))}
+@keyframes lesson25BulletMove{0%{transform:translateX(0);filter:drop-shadow(0 0 10px rgba(37,99,235,.35))}30%{transform:translateX(calc(50vw - 180px));filter:drop-shadow(0 0 14px rgba(37,99,235,.45))}58%{transform:translateX(calc(50vw - 40px));filter:drop-shadow(0 0 10px rgba(249,115,22,.48))}82%{transform:translateX(calc(100vw - 260px));filter:drop-shadow(0 0 7px rgba(239,68,68,.34))}100%{transform:translateX(calc(100vw - 260px))}}
+@keyframes lesson25ResistancePulse{0%,100%{opacity:.65;transform:scaleX(.9)}50%{opacity:1;transform:scaleX(1.08)}}
+@keyframes lesson25EnergyDrop{0%,30%{transform:scaleX(1)}82%,100%{transform:scaleX(.32)}}
 
 /* ===== TASK 07 PENDULUM IMPACT ANIMATION ===== */
 .task07-anim-lock{overflow:hidden}
@@ -738,6 +769,7 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 .task07-anim-btn{padding:10px 14px;border-radius:12px;border:1px solid rgba(0,229,255,.2);background:rgba(0,229,255,.08);color:var(--cyan);font:800 13px var(--fb);cursor:pointer;transition:all .18s}.task07-anim-btn:hover{background:rgba(0,229,255,.16);color:var(--white);transform:translateY(-1px)}
 .task07-anim-progress{flex:1;min-width:160px;height:8px;border-radius:999px;background:rgba(107,122,141,.24);overflow:hidden}.task07-anim-progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--orange));border-radius:inherit;transition:width .08s linear}
 @media(max-width:900px){.task07-anim-overlay{padding:8px}.task07-anim-body{grid-template-columns:1fr;overflow:auto}.task07-anim-stage{min-height:360px}.task07-anim-svg{min-height:360px}.task07-anim-side{display:grid;grid-template-columns:1fr}.task07-anim-modal{height:100%;border-radius:18px}.task07-anim-head{padding:14px 14px 0}.task07-anim-body{padding:0 14px 14px}.task07-anim-controls{padding:0 14px 14px}}
+@media(max-width:760px){.lesson25-bullet-scene{height:300px}.lesson25-board{width:96px;height:190px;top:58px}.lesson25-bullet{width:68px;height:22px;top:158px}.lesson25-bullet-tip{right:-18px;border-left-width:22px;border-top-width:11px;border-bottom-width:11px}.lesson25-speed-label{font-size:12px;padding:6px 8px}.lesson25-speed-in{left:18px;top:90px}.lesson25-speed-out{right:18px;top:90px}.lesson25-resistance-force{left:calc(50% - 82px);width:86px}.lesson25-resistance-force span{left:-34px;font-size:11px}.lesson25-task04-anim .lesson25-anim-formulas{grid-template-columns:1fr}}
 
 /* ===== BLANK TASK BLOCKS ===== */
 .pt-notice{display:none;margin:0 0 12px;padding:10px 12px;border-radius:10px;border:1px solid rgba(57,255,20,.25);background:rgba(57,255,20,.08);color:var(--green);font-size:12px;font-weight:700}
@@ -9682,6 +9714,9 @@ function taskBoardDraw(){
 
 let task07AnimationState=null;
 function openTaskAnimation(taskId){
+  if(taskId==='lesson-25-task-04'){
+    return openLesson25Task04Animation(taskId);
+  }
   let task=findTaskById(taskId)||taskBoardState?.task||findTaskById(taskBoardState?.taskId);
   if(task&&!isTask10PendulumImpactMode(task.boardMode)){
     const modeCandidate=String(taskId||task.boardMode||taskBoardState?.mode||taskBoardState?.taskId||'');
@@ -9718,6 +9753,26 @@ function openTaskAnimation(taskId){
   renderTask07Animation(overlay.querySelector('[data-task07-stage]'));
   resetTask07Animation();
   playTask07Animation();
+}
+function renderLesson25Task04Animation(task){
+  const condition=task?.cond||'';
+  return `<div class="lesson25-anim lesson25-task04-anim"><div class="lesson25-anim-head"><div><div class="lesson25-anim-kicker">Урок 25 · Задача 04</div><h3 class="lesson25-anim-title">Пуля пробивает доску: работа силы сопротивления</h3></div></div><div class="lesson25-anim-condition"><div class="lesson25-anim-label">Условие</div><div class="lesson25-anim-condition-text">${condition}</div></div><div class="lesson25-bullet-scene"><div class="lesson25-speed-label lesson25-speed-in">v₁ = 800 м/с</div><div class="lesson25-speed-label lesson25-speed-out">v₂ = 200 м/с</div><div class="lesson25-board"><div class="lesson25-board-label">доска</div><div class="lesson25-board-thickness">d</div></div><div class="lesson25-bullet"><div class="lesson25-bullet-tip"></div></div><div class="lesson25-resistance-force"><span>Fсопр = 108 кН</span></div><div class="lesson25-energy-strip"><span>Кинетическая энергия уменьшается</span></div></div><div class="lesson25-anim-formulas"><div class="lesson25-formula-card"><strong>Идея:</strong><span>A<sub>сопр</sub> = ΔE<sub>к</sub></span></div><div class="lesson25-formula-card"><strong>Формула:</strong><span>F<sub>сопр</sub> · d = m(v₁² − v₂²) / 2</span></div><div class="lesson25-formula-card"><strong>Дано:</strong><span>m = 9 г = 0,009 кг, v₁ = 800 м/с, v₂ = 200 м/с, F<sub>сопр</sub> = 108 кН</span></div></div></div>`;
+}
+function openLesson25Task04Animation(taskId){
+  const task=findTaskById(taskId)||taskBoardState?.task||findTaskById('lesson-25-task-04');
+  if(!task) return false;
+  if(!document.getElementById('taskAnimationPlaceholderOverlay')) openTaskAnimationPlaceholder(taskId);
+  const overlay=document.getElementById('taskAnimationPlaceholderOverlay');
+  if(!overlay) return false;
+  const keepTaskBoard=!!(taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
+  overlay.dataset.keepTaskBoard=keepTaskBoard?'true':'false';
+  overlay.classList.add('open');
+  overlay.style.display='flex';
+  const modal=overlay.querySelector('.task-animation-placeholder-modal');
+  if(!modal) return false;
+  modal.innerHTML=`<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder(); return false;">✕ Закрыть</button>${renderLesson25Task04Animation(task)}`;
+  if(taskBoardState&&taskBoardState.animBtn) taskBoardState.animBtn.textContent='✕ Анимация';
+  return false;
 }
 function ensureTask07AnimationOverlay(){
   let overlay=document.getElementById('task07AnimationOverlay');
