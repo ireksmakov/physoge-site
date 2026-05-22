@@ -712,6 +712,10 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 .task-animation-placeholder-text{font-size:14px;line-height:1.45;font-weight:600;color:#334155}
 .task-animation-placeholder-empty{min-height:260px;border:1px dashed #cbd5e1;border-radius:18px;background:#f8fafc;display:flex;align-items:center;justify-content:center;text-align:center;color:#64748b;font-size:18px;font-weight:800}
 .lesson25-anim{display:flex;flex-direction:column;gap:16px;color:#0f172a}
+.lesson25-anim-controls{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.lesson25-anim-btn{padding:9px 14px;border-radius:12px;border:1px solid #bfdbfe;background:#eff6ff;color:#1d4ed8;font-weight:900;cursor:pointer;transition:.18s ease}
+.lesson25-anim-btn:hover{background:#dbeafe;border-color:#60a5fa}
+.lesson25-anim.is-paused *{animation-play-state:paused!important}
 .lesson25-anim-head{display:flex;justify-content:space-between;align-items:flex-start}
 .lesson25-anim-kicker{font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:#2563eb}
 .lesson25-anim-title{margin:6px 0 0;font-size:28px;line-height:1.15}
@@ -740,6 +744,10 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 .lesson25-energy-strip::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#22c55e,#f97316,#ef4444);transform-origin:left center;animation:lesson25EnergyDrop 4.8s ease-in-out infinite}
 .lesson25-energy-strip span{position:absolute;left:50%;top:22px;transform:translateX(-50%);color:#334155;font-size:12px;font-weight:900;white-space:nowrap}
 .lesson25-task04-anim .lesson25-anim-formulas{grid-template-columns:repeat(3,minmax(0,1fr))}
+.lesson25-task04-anim .lesson25-bullet,.lesson25-task04-anim .lesson25-resistance-force,.lesson25-task04-anim .lesson25-energy-strip::before{animation:none}
+.lesson25-task04-anim.is-playing .lesson25-bullet{animation:lesson25BulletMove 4.8s ease-in-out forwards}
+.lesson25-task04-anim.is-playing .lesson25-resistance-force{animation:lesson25ResistancePulse 1.4s ease-in-out infinite}
+.lesson25-task04-anim.is-playing .lesson25-energy-strip::before{animation:lesson25EnergyDrop 4.8s ease-in-out forwards}
 @keyframes lesson25BulletMove{0%{transform:translateX(0);filter:drop-shadow(0 0 10px rgba(37,99,235,.35))}30%{transform:translateX(calc(50vw - 180px));filter:drop-shadow(0 0 14px rgba(37,99,235,.45))}58%{transform:translateX(calc(50vw - 40px));filter:drop-shadow(0 0 10px rgba(249,115,22,.48))}82%{transform:translateX(calc(100vw - 260px));filter:drop-shadow(0 0 7px rgba(239,68,68,.34))}100%{transform:translateX(calc(100vw - 260px))}}
 @keyframes lesson25ResistancePulse{0%,100%{opacity:.65;transform:scaleX(.9)}50%{opacity:1;transform:scaleX(1.08)}}
 @keyframes lesson25EnergyDrop{0%,30%{transform:scaleX(1)}82%,100%{transform:scaleX(.32)}}
@@ -806,7 +814,7 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
   width:4px;
   border-radius:999px;
   background:linear-gradient(180deg,#2563eb,rgba(37,99,235,.08));
-  animation:lesson25PathDown 4.8s ease-in-out infinite;
+  animation:none;
 }
 
 .lesson25-ball-path-up{
@@ -817,7 +825,7 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
   width:4px;
   border-radius:999px;
   background:linear-gradient(0deg,#f97316,rgba(249,115,22,.08));
-  animation:lesson25PathUp 4.8s ease-in-out infinite;
+  animation:none;
 }
 
 .lesson25-ball{
@@ -829,7 +837,7 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
   border-radius:50%;
   background:radial-gradient(circle at 30% 30%,#fff,#38bdf8 36%,#1d4ed8 100%);
   box-shadow:0 12px 28px rgba(37,99,235,.36);
-  animation:lesson25BallBounce 4.8s ease-in-out infinite;
+  animation:none;
 }
 
 .lesson25-v-arrow{
@@ -840,7 +848,7 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
   height:96px;
   border-radius:999px;
   background:#2563eb;
-  animation:lesson25ArrowPulse 1.4s ease-in-out infinite;
+  animation:none;
 }
 
 .lesson25-v-arrow::after{
@@ -880,7 +888,7 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
   color:#c2410c;
   font-weight:900;
   font-size:13px;
-  animation:lesson25ImpactPulse 4.8s ease-in-out infinite;
+  animation:none;
 }
 
 .lesson25-energy-bars{
@@ -930,11 +938,27 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
   grid-template-columns:repeat(3,minmax(0,1fr));
 }
 
-@keyframes lesson25BallBounce{0%{top:60px;transform:scale(1)}42%{top:292px;transform:scale(1)}48%{top:304px;transform:scale(1.16,.78)}54%{top:284px;transform:scale(.92,1.1)}78%{top:136px;transform:scale(1)}100%{top:136px;transform:scale(1)}}
-@keyframes lesson25ImpactPulse{0%,38%{opacity:0;transform:scale(.45)}46%,58%{opacity:1;transform:scale(1)}82%,100%{opacity:0;transform:scale(.9)}}
-@keyframes lesson25ArrowPulse{0%,100%{opacity:.65;transform:scaleY(.9)}50%{opacity:1;transform:scaleY(1.08)}}
-@keyframes lesson25PathDown{0%,15%{opacity:.15}26%,48%{opacity:.9}70%,100%{opacity:.25}}
-@keyframes lesson25PathUp{0%,50%{opacity:.15}62%,82%{opacity:.9}100%{opacity:.35}}
+.lesson25-task06-anim.is-playing .lesson25-ball{animation:lesson25BallBounceOnce 4.8s ease-in-out forwards}
+.lesson25-task06-anim.is-finished .lesson25-ball{top:136px;transform:scale(1)}
+.lesson25-task06-anim.is-playing .lesson25-ball-path-down{animation:lesson25PathDownOnce 4.8s ease-in-out forwards}
+.lesson25-task06-anim.is-playing .lesson25-ball-path-up{animation:lesson25PathUpOnce 4.8s ease-in-out forwards}
+.lesson25-task06-anim.is-playing .lesson25-v-arrow{animation:lesson25ArrowPulseOnce 1.4s ease-in-out 3}
+.lesson25-task06-anim .lesson25-impact{opacity:0;animation:none}
+.lesson25-task06-anim.is-playing .lesson25-impact{animation:lesson25ImpactPulseOnce 4.8s ease-in-out forwards}
+.lesson25-task06-anim.is-finished .lesson25-impact{opacity:0}
+.lesson25-water-scene{position:relative;height:340px;border-radius:20px;overflow:hidden;background:linear-gradient(180deg,#bfdbfe 0%,#60a5fa 32%,#1d4ed8 100%);border:1px solid #93c5fd}
+.lesson25-water-surface{position:absolute;left:0;right:0;top:84px;height:4px;background:rgba(255,255,255,.95)}
+.lesson25-water-depth{position:absolute;left:44px;top:86px;width:82px;height:202px;border-left:3px dashed rgba(255,255,255,.8);border-right:3px dashed rgba(255,255,255,.8)}
+.lesson25-water-depth span{position:absolute;right:-36px;top:50%;transform:translateY(-50%);color:#eff6ff;font-weight:900}
+.lesson25-lead-ball{position:absolute;left:154px;top:86px;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 30% 28%,#f8fafc 0%,#94a3b8 58%,#334155 100%);box-shadow:0 8px 18px rgba(15,23,42,.35);animation:none}
+.lesson25-task07-anim.is-playing .lesson25-lead-ball{animation:lesson25LeadBallFallOnce 5s linear forwards}
+.lesson25-task07-anim.is-finished .lesson25-lead-ball{top:288px}
+@keyframes lesson25BallBounceOnce{0%{top:60px;transform:scale(1)}42%{top:292px;transform:scale(1)}48%{top:304px;transform:scale(1.16,.78)}54%{top:284px;transform:scale(.92,1.1)}78%{top:136px;transform:scale(1)}100%{top:136px;transform:scale(1)}}
+@keyframes lesson25ImpactPulseOnce{0%,38%{opacity:0;transform:scale(.45)}46%,58%{opacity:1;transform:scale(1)}82%,100%{opacity:0;transform:scale(.9)}}
+@keyframes lesson25ArrowPulseOnce{0%,100%{opacity:.65;transform:scaleY(.9)}50%{opacity:1;transform:scaleY(1.08)}}
+@keyframes lesson25PathDownOnce{0%,15%{opacity:.15}26%,48%{opacity:.9}70%,100%{opacity:.25}}
+@keyframes lesson25PathUpOnce{0%,50%{opacity:.15}62%,82%{opacity:.9}100%{opacity:.35}}
+@keyframes lesson25LeadBallFallOnce{0%{top:86px}100%{top:288px}}
 
 /* ===== TASK 07 PENDULUM IMPACT ANIMATION ===== */
 .task07-anim-lock{overflow:hidden}
@@ -9945,12 +9969,55 @@ function taskBoardDraw(){
 }
 
 let task07AnimationState=null;
+function bindLesson25AnimationControls(root){
+  const scope = root || document;
+  const anims = scope.querySelectorAll('.lesson25-anim');
+  anims.forEach(function(anim){
+    if(anim.dataset.controlsBound==='true') return;
+    anim.dataset.controlsBound='true';
+    const playBtn=anim.querySelector('[data-lesson25-anim-play]');
+    const pauseBtn=anim.querySelector('[data-lesson25-anim-pause]');
+    const resetBtn=anim.querySelector('[data-lesson25-anim-reset]');
+    const resetAnimation=function(){
+      anim.classList.remove('is-playing','is-paused','is-finished');
+      void anim.offsetWidth;
+    };
+    if(playBtn){
+      playBtn.addEventListener('click',function(e){
+        e.preventDefault(); e.stopPropagation();
+        if(anim.classList.contains('is-finished')) resetAnimation();
+        anim.classList.add('is-playing');
+        anim.classList.remove('is-paused','is-finished');
+      });
+    }
+    if(pauseBtn){
+      pauseBtn.addEventListener('click',function(e){
+        e.preventDefault(); e.stopPropagation();
+        if(anim.classList.contains('is-playing')) anim.classList.toggle('is-paused');
+      });
+    }
+    if(resetBtn){
+      resetBtn.addEventListener('click',function(e){
+        e.preventDefault(); e.stopPropagation(); resetAnimation();
+      });
+    }
+    anim.addEventListener('animationend',function(e){
+      if(e.target.classList.contains('lesson25-ball')||e.target.classList.contains('lesson25-lead-ball')||e.target.classList.contains('lesson25-bullet')){
+        anim.classList.remove('is-playing','is-paused');
+        anim.classList.add('is-finished');
+      }
+    });
+  });
+}
 function openTaskAnimation(taskId){
   if(taskId==='lesson-25-task-04'){
     return openLesson25Task04Animation(taskId);
   }
   if(taskId==='lesson-25-task-06'){
     return openLesson25Task06Animation(taskId);
+  }
+  if(taskId==='lesson-25-task-07'){
+    return openLesson25Task07Animation(taskId);
   }
   let task=findTaskById(taskId)||taskBoardState?.task||findTaskById(taskBoardState?.taskId);
   if(task&&!isTask10PendulumImpactMode(task.boardMode)){
@@ -9991,7 +10058,7 @@ function openTaskAnimation(taskId){
 }
 function renderLesson25Task04Animation(task){
   const condition=task?.cond||'';
-  return `<div class="lesson25-anim lesson25-task04-anim"><div class="lesson25-anim-head"><div><div class="lesson25-anim-kicker">Урок 25 · Задача 04</div><h3 class="lesson25-anim-title">Пуля пробивает доску: работа силы сопротивления</h3></div></div><div class="lesson25-anim-condition"><div class="lesson25-anim-label">Условие</div><div class="lesson25-anim-condition-text">${condition}</div></div><div class="lesson25-bullet-scene"><div class="lesson25-speed-label lesson25-speed-in">v₁ = 800 м/с</div><div class="lesson25-speed-label lesson25-speed-out">v₂ = 200 м/с</div><div class="lesson25-board"><div class="lesson25-board-label">доска</div><div class="lesson25-board-thickness">d</div></div><div class="lesson25-bullet"><div class="lesson25-bullet-tip"></div></div><div class="lesson25-resistance-force"><span>Fсопр = 108 кН</span></div><div class="lesson25-energy-strip"><span>Кинетическая энергия уменьшается</span></div></div><div class="lesson25-anim-formulas"><div class="lesson25-formula-card"><strong>Идея:</strong><span>A<sub>сопр</sub> = ΔE<sub>к</sub></span></div><div class="lesson25-formula-card"><strong>Формула:</strong><span>F<sub>сопр</sub> · d = m(v₁² − v₂²) / 2</span></div><div class="lesson25-formula-card"><strong>Дано:</strong><span>m = 9 г = 0,009 кг, v₁ = 800 м/с, v₂ = 200 м/с, F<sub>сопр</sub> = 108 кН</span></div></div></div>`;
+  return `<div class="lesson25-anim lesson25-task04-anim"><div class="lesson25-anim-head"><div><div class="lesson25-anim-kicker">Урок 25 · Задача 04</div><h3 class="lesson25-anim-title">Пуля пробивает доску: работа силы сопротивления</h3></div></div><div class="lesson25-anim-condition"><div class="lesson25-anim-label">Условие</div><div class="lesson25-anim-condition-text">${condition}</div></div><div class="lesson25-bullet-scene"><div class="lesson25-speed-label lesson25-speed-in">v₁ = 800 м/с</div><div class="lesson25-speed-label lesson25-speed-out">v₂ = 200 м/с</div><div class="lesson25-board"><div class="lesson25-board-label">доска</div><div class="lesson25-board-thickness">d</div></div><div class="lesson25-bullet"><div class="lesson25-bullet-tip"></div></div><div class="lesson25-resistance-force"><span>Fсопр = 108 кН</span></div><div class="lesson25-energy-strip"><span>Кинетическая энергия уменьшается</span></div></div><div class="lesson25-anim-controls"><button type="button" class="lesson25-anim-btn" data-lesson25-anim-play>▶ Старт</button><button type="button" class="lesson25-anim-btn" data-lesson25-anim-pause>⏸ Пауза</button><button type="button" class="lesson25-anim-btn" data-lesson25-anim-reset>↺ Сброс</button></div><div class="lesson25-anim-formulas"><div class="lesson25-formula-card"><strong>Идея:</strong><span>A<sub>сопр</sub> = ΔE<sub>к</sub></span></div><div class="lesson25-formula-card"><strong>Формула:</strong><span>F<sub>сопр</sub> · d = m(v₁² − v₂²) / 2</span></div><div class="lesson25-formula-card"><strong>Дано:</strong><span>m = 9 г = 0,009 кг, v₁ = 800 м/с, v₂ = 200 м/с, F<sub>сопр</sub> = 108 кН</span></div></div></div>`;
 }
 function renderLesson25Task06Animation(task){
   const condition = task?.cond || '';
@@ -10052,6 +10119,11 @@ function renderLesson25Task06Animation(task){
           </div>
         </div>
       </div>
+      <div class="lesson25-anim-controls">
+        <button type="button" class="lesson25-anim-btn" data-lesson25-anim-play>▶ Старт</button>
+        <button type="button" class="lesson25-anim-btn" data-lesson25-anim-pause>⏸ Пауза</button>
+        <button type="button" class="lesson25-anim-btn" data-lesson25-anim-reset>↺ Сброс</button>
+      </div>
 
       <div class="lesson25-anim-formulas">
         <div class="lesson25-formula-card">
@@ -10083,6 +10155,7 @@ function openLesson25Task04Animation(taskId){
   const modal=overlay.querySelector('.task-animation-placeholder-modal');
   if(!modal) return false;
   modal.innerHTML=`<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder(); return false;">✕ Закрыть</button>${renderLesson25Task04Animation(task)}`;
+  setTimeout(function(){ bindLesson25AnimationControls(modal); },0);
   if(taskBoardState&&taskBoardState.animBtn) taskBoardState.animBtn.textContent='✕ Анимация';
   return false;
 }
@@ -10099,6 +10172,26 @@ function openLesson25Task06Animation(taskId){
   const modal=overlay.querySelector('.task-animation-placeholder-modal');
   if(!modal) return false;
   modal.innerHTML=`<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder(); return false;">✕ Закрыть</button>${renderLesson25Task06Animation(task)}`;
+  setTimeout(function(){ bindLesson25AnimationControls(modal); },0);
+  if(taskBoardState&&taskBoardState.animBtn) taskBoardState.animBtn.textContent='✕ Анимация';
+  return false;
+}
+function renderLesson25Task07Animation(task){
+  const condition = task?.cond || '';
+  return `<div class="lesson25-anim lesson25-task07-anim"><div class="lesson25-anim-head"><div><div class="lesson25-anim-kicker">Урок 25 · Задача 07</div><h3 class="lesson25-anim-title">Падение свинцового шарика в воде</h3></div></div><div class="lesson25-anim-condition"><div class="lesson25-anim-label">Условие</div><div class="lesson25-anim-condition-text">${condition}</div></div><div class="lesson25-water-scene"><div class="lesson25-water-surface"></div><div class="lesson25-water-depth"><span>h</span></div><div class="lesson25-lead-ball"></div></div><div class="lesson25-anim-controls"><button type="button" class="lesson25-anim-btn" data-lesson25-anim-play>▶ Старт</button><button type="button" class="lesson25-anim-btn" data-lesson25-anim-pause>⏸ Пауза</button><button type="button" class="lesson25-anim-btn" data-lesson25-anim-reset>↺ Сброс</button></div><div class="lesson25-anim-formulas"><div class="lesson25-formula-card"><strong>Идея:</strong><span>Q = A<sub>тр</sub> = F<sub>тр</sub> · h</span></div><div class="lesson25-formula-card"><strong>Равномерное падение:</strong><span>mg = F<sub>Арх</sub> + F<sub>тр</sub></span></div><div class="lesson25-formula-card"><strong>Глубина:</strong><span>h = Q / (mg − F<sub>Арх</sub>)</span></div></div></div>`;
+}
+function openLesson25Task07Animation(taskId){
+  const task=findTaskById(taskId)||taskBoardState?.task||findTaskById('lesson-25-task-07');
+  if(!task) return false;
+  if(!document.getElementById('taskAnimationPlaceholderOverlay')) openTaskAnimationPlaceholder(taskId);
+  const overlay=document.getElementById('taskAnimationPlaceholderOverlay');
+  if(!overlay) return false;
+  overlay.classList.add('open');
+  overlay.style.display='flex';
+  const modal=overlay.querySelector('.task-animation-placeholder-modal');
+  if(!modal) return false;
+  modal.innerHTML=`<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder(); return false;">✕ Закрыть</button>${renderLesson25Task07Animation(task)}`;
+  setTimeout(function(){ bindLesson25AnimationControls(modal); },0);
   if(taskBoardState&&taskBoardState.animBtn) taskBoardState.animBtn.textContent='✕ Анимация';
   return false;
 }
