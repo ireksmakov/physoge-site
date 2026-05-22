@@ -7059,6 +7059,20 @@ function renderPTasks(name){
 
 var TASK_BOARD_RUNTIME_TASKS=window.TASK_BOARD_RUNTIME_TASKS=window.TASK_BOARD_RUNTIME_TASKS||{};
 
+function getCurrentTaskBoardTask(){
+  const state=window.taskBoardState||null;
+  if(state&&state.task) return state.task;
+  if(window.currentTaskBoardTask) return window.currentTaskBoardTask;
+  if(window.taskBoardCurrentTask) return window.taskBoardCurrentTask;
+  if(window.activeBoardTask) return window.activeBoardTask;
+
+  const mode=(window.currentTaskBoardMode||window.taskBoardMode||'').trim();
+  const tasks=window.TASK_BOARD_RUNTIME_TASKS||{};
+  if(mode&&tasks[mode]) return tasks[mode];
+
+  return null;
+}
+
 function taskHasAnyAnimation(task){
   if(!task) return false;
 
@@ -7088,27 +7102,33 @@ function taskHasAnyAnimation(task){
   );
 }
 
-function openUnifiedTaskAnimation(taskId,options){
+function openUnifiedTaskAnimation(taskOrId,options){
   options=options||{};
 
   const runtimeTasks=window.TASK_BOARD_RUNTIME_TASKS||{};
+  const isObj=taskOrId&&typeof taskOrId==='object';
+  const requestedId=isObj?(taskOrId.id||taskOrId.boardMode||taskOrId.mode||taskOrId.animationId||taskOrId.animId||''):taskOrId;
   const task=
-    runtimeTasks[taskId]||
-    runtimeTasks[String(taskId)]||
-    (typeof findTaskById==='function'?findTaskById(taskId):null)||
+    (isObj?taskOrId:null)||
+    runtimeTasks[requestedId]||
+    runtimeTasks[String(requestedId)]||
+    (typeof findTaskById==='function'?findTaskById(requestedId):null)||
+    getCurrentTaskBoardTask()||
     null;
+
+  const taskId=requestedId||(task&&(task.id||task.boardMode||task.mode||task.animationId||task.animId))||'';
 
   if(!task){
     openTaskAnimationPlaceholder(taskId);
     return false;
   }
 
-  const realId=task.id||taskId;
+  const animationId=task.animationId||task.animId||task.mode||task.boardMode||task.id||taskId;
   const canOpenTaskBoard=task.canOpenTaskBoard!==false;
   const hasBoardMode=canOpenTaskBoard&&!!(task.boardMode||task.mode);
-  const boardMode=task.boardMode||task.mode||realId;
+  const boardMode=task.boardMode||task.mode||task.id||taskId;
+  const realId=task.id||taskId;
 
-  // Специальные готовые анимации не ломать.
   if(realId==='lesson12-task07'||boardMode==='task07-pendulum-impact'){
     if(taskBoardState&&taskBoardState.animBtn) taskBoardState.animBtn.textContent='✕ Анимация';
     openTaskAnimation('lesson12-task07');
@@ -7123,28 +7143,26 @@ function openUnifiedTaskAnimation(taskId,options){
 
   if(task.animationId||task.animId){
     if(taskBoardState&&taskBoardState.animBtn) taskBoardState.animBtn.textContent='✕ Анимация';
-    openTaskAnimation(task.animationId||task.animId);
+    openTaskAnimation(animationId);
     return false;
   }
 
   if(!hasBoardMode||!taskHasAnyAnimation(task)){
-    openTaskAnimationPlaceholder(realId);
+    openTaskAnimationPlaceholder(realId||animationId);
     return false;
   }
 
   if(!options.fromBoard){
     openTaskBoard(boardMode,false,realId);
-
     requestAnimationFrame(function(){
       requestAnimationFrame(function(){
         toggleTaskBoardAnimation(true);
       });
     });
-
     return false;
   }
 
-  toggleTaskBoardAnimation();
+  toggleTaskBoardAnimation(true);
 
   return false;
 }
@@ -8885,6 +8903,11 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
   state.mode=resolvedMode;
   state.task=task;
   state.taskId=taskId||'';
+  window.currentTaskBoardTask=task;
+  window.taskBoardCurrentTask=task;
+  window.activeBoardTask=task;
+  window.currentTaskBoardMode=resolvedMode||task.mode||task.id||'';
+  window.taskBoardMode=window.currentTaskBoardMode;
   if(state.title) state.title.textContent=task.title;
   state.condition.innerHTML=hasRealContent(task.cond)?task.cond:'';
   state.graph.innerHTML=getTaskBoardGraph(resolvedMode);
@@ -10019,7 +10042,13 @@ function handleTaskBoardAnimationButtonClick(event){
     return false;
   }
 
-  return openUnifiedTaskAnimation(state.task.id||state.taskId||state.mode,{
+  const task=getCurrentTaskBoardTask()||state.task;
+  if(!task) return false;
+
+  const animationId=task.animationId||task.animId||task.mode||task.boardMode||task.id;
+  if(!animationId) return false;
+
+  return openUnifiedTaskAnimation(Object.assign({},task,{animationId:animationId,animId:animationId}),{
     fromBoard:true
   });
 }
