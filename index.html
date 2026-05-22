@@ -6778,8 +6778,10 @@ function resetTheoryImage(){universalImageViewerReset();}
 function renderSolutionImageHtml(path,alt,cls){
   const safePath=escapeHtml(String(path||''));
   const safeAlt=escapeHtml(String(alt||'Решение задачи'));
-  const imgClass=cls==='task-board'?'task-board-photo-img':'pt-photo-img';
-  const wrapClass=cls==='task-board'?'task-board-photo-wrap':'pt-photo-wrap';
+  const imgClass=cls==='task-board'
+    ?'task-board-solution-image task-board-photo-img pt-solution-image universal-viewable-image'
+    :'pt-solution-image universal-viewable-image pt-photo-img';
+  const wrapClass=cls==='task-board'?'task-board-photo-wrap pt-solution-image-wrap':'pt-photo-wrap pt-solution-image-wrap';
   return `<div class="${wrapClass}" data-solution-zoom="true"><img class="${imgClass}" src="${safePath}" alt="${safeAlt}" onerror="handleSolutionImageError(this)"><div class="pt-img-fallback">Изображение решения пока не найдено</div></div>`;
 }
 function getFirstSolutionImageFromHtml(html){
