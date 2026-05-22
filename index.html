@@ -7199,7 +7199,24 @@ function closeTaskAnimationPlaceholder(){
   if(overlay){
     overlay.classList.remove('open');
     overlay.style.display='none';
+
+    const shouldKeepTaskBoard=overlay.dataset&&overlay.dataset.keepTaskBoard==='true';
+
+    if(shouldKeepTaskBoard&&taskBoardState&&taskBoardState.overlay){
+      taskBoardState.overlay.style.display='block';
+      taskBoardState.overlay.style.pointerEvents='auto';
+      taskBoardState.overlay.classList.add('open');
+      taskBoardState.overlay.setAttribute('aria-hidden','false');
+      document.body.classList.add('task-board-lock');
+      requestAnimationFrame(function(){
+        taskBoardResizeCanvas?.();
+        taskBoardRedraw?.();
+        taskBoardRenderObjects?.();
+      });
+    }
   }
+
+  if(taskBoardState&&taskBoardState.animBtn) taskBoardState.animBtn.textContent='▶ Анимация';
 
   return false;
 }
