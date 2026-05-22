@@ -576,6 +576,9 @@ body.edit-mode .et{display:inline}
 .pt-photo-wrap[data-solution-zoom]::after,.task-board-photo-wrap[data-solution-zoom]::after,.media-zoom-wrap[data-solution-zoom]::after{content:'Нажмите, чтобы увеличить';position:absolute;right:12px;bottom:12px;padding:7px 10px;border-radius:999px;background:rgba(15,23,42,.82);color:#fff;font-size:11px;font-weight:800;line-height:1;opacity:0;transform:translateY(6px);transition:opacity .18s,transform .18s;pointer-events:none}
 .pt-photo-wrap[data-solution-zoom]:hover::after,.task-board-photo-wrap[data-solution-zoom]:hover::after,.media-zoom-wrap[data-solution-zoom]:hover::after{opacity:1;transform:translateY(0)}
 .pt-photo-img{display:block;width:100%;height:auto;background:#fff}
+.pt-solution-image-wrap{margin-top:14px;border-radius:16px;overflow:hidden;background:#fff;border:1px solid rgba(8,216,255,.2)}
+.pt-solution-image{display:block;width:100%;max-width:100%;height:auto;border-radius:16px}
+.task-board-solution-image{display:block;width:100%;max-width:100%;height:auto;border-radius:16px}
 
 .universal-image-viewer{position:fixed;inset:0;z-index:2147483640;background:rgba(2,9,20,.94);display:none;align-items:center;justify-content:center;overflow:hidden;pointer-events:auto}
 .universal-image-viewer.open{display:flex}
@@ -6341,6 +6344,88 @@ const LESSON_TASKS={
     ans:'v<sub>0</sub> = 15 м/с'
   },
 
+],
+'Работа силы тяжести. Энергия.':[
+  {
+    num:1,level:2,title:'Работа силы трения при остановке тела',
+    cond:'Какую по величине работу должна совершить сила трения для полной остановки тела массой 1000 кг, движущегося по горизонтальной поверхности со скоростью 10 м/с?',
+    given:'',steps:[],ans:'',
+    solutionImage:'images/ege-physics/lesson-25/task-solutions/25tasks01.png',
+    solutionHtml:'',
+    hasAnimation:true,
+    animationId:'lesson-25-task-01',
+    isBlank:false
+  },
+  {
+    num:2,level:2,title:'Работа силы тяги и путь',
+    cond:'Автомобиль массой 1 т трогается с места и движется с ускорением 1,2 м/с². На первых метрах пути сила тяги совершила работу 14000 Дж. Чему равен этот путь, если сила сопротивления равна 200 Н?',
+    given:'',steps:[],ans:'',
+    solutionImage:'images/ege-physics/lesson-25/task-solutions/25tasks02.png',
+    solutionHtml:'',
+    hasAnimation:true,
+    animationId:'lesson-25-task-02',
+    isBlank:false
+  },
+  {
+    num:3,level:2,title:'Работа силы сопротивления воздуха',
+    cond:'Тело массой 2 кг падает с высоты 20 м из состояния покоя и в момент удара о Землю имеет скорость 14 м/с. Чему равен модуль работы силы сопротивления воздуха?',
+    given:'',steps:[],ans:'',
+    solutionImage:'images/ege-physics/lesson-25/task-solutions/25tasks03.png',
+    solutionHtml:'',
+    hasAnimation:true,
+    animationId:'lesson-25-task-03',
+    isBlank:false
+  },
+  {
+    num:4,level:2,title:'Толщина доски по работе сопротивления',
+    cond:'Пуля массой 9 г, движущаяся со скоростью 800 м/с, пробила доску и вылетела из доски со скоростью 200 м/с. Определите толщину доски, если средняя сила сопротивления, воздействующая на пулю в доске, равна 108 кН.',
+    given:'',steps:[],ans:'',
+    solutionImage:'images/ege-physics/lesson-25/task-solutions/25tasks04.png',
+    solutionHtml:'',
+    hasAnimation:true,
+    animationId:'lesson-25-task-04',
+    isBlank:false
+  },
+  {
+    num:5,level:2,title:'Кинетическая энергия при броске вверх',
+    cond:'Тело массой 200 г брошено вертикально вверх с начальной скоростью 20 м/с. На какой высоте относительно точки бросания кинетическая энергия тела будет равна 20 Дж? Сопротивлением воздуха пренебречь.',
+    given:'',steps:[],ans:'',
+    solutionImage:'images/ege-physics/lesson-25/task-solutions/25tasks05.png',
+    solutionHtml:'',
+    hasAnimation:true,
+    animationId:'lesson-25-task-05',
+    isBlank:false
+  },
+  {
+    num:6,level:2,title:'Подъём после удара с потерями энергии',
+    cond:'С высоты 1,25 м вертикально вниз бросили шарик со скоростью 10 м/с. На какую высоту после удара он поднимется, если в процессе удара 40 % механической энергии шара теряется? Сопротивлением воздуха пренебречь.',
+    given:'',steps:[],ans:'',
+    solutionImage:'images/ege-physics/lesson-25/task-solutions/25tasks06.png',
+    solutionHtml:'',
+    hasAnimation:true,
+    animationId:'lesson-25-task-06',
+    isBlank:false
+  },
+  {
+    num:7,level:2,title:'Глубина падения свинцового шарика',
+    cond:'Маленький свинцовый шарик объёмом 0,02 см³ равномерно падает в воде. На какой глубине оказался шарик, если в процессе его движения выделилось количество теплоты, равное 12,42 мДж?',
+    given:'',steps:[],ans:'',
+    solutionImage:'images/ege-physics/lesson-25/task-solutions/25tasks07.png',
+    solutionHtml:'',
+    hasAnimation:true,
+    animationId:'lesson-25-task-07',
+    isBlank:false
+  },
+  {
+    num:8,level:2,title:'Минимальная работа при подъёме плиты',
+    cond:'Плита объёмом 1 м³ из мрамора плотностью 2700 кг/м³ полностью погружена в воду плотностью 1000 кг/м³. Какую минимальную работу нужно совершить, чтобы равномерно поднять плиту на высоту 5 м?',
+    given:'',steps:[],ans:'',
+    solutionImage:'images/ege-physics/lesson-25/task-solutions/25tasks08.png',
+    solutionHtml:'',
+    hasAnimation:true,
+    animationId:'lesson-25-task-08',
+    isBlank:false
+  }
 ],
 'Линзы':[
   {num:1,level:1,title:'Формула тонкой линзы',
