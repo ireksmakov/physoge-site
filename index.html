@@ -5954,7 +5954,7 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
         <div class="fc-head"><span>Механика · Свободное падение</span><strong>ФИЗМАТ</strong></div>
         <div class="fc-cond">Гонщик стартует с высоты H, вылетает под углом α и приземляется на уровне края трамплина. Найти высоту полёта h.</div>
         <div class="fc-canvas-box">
-          <svg id="fcSvg" viewBox="0 0 1080 1350" preserveAspectRatio="xMidYMid meet"></svg>
+          <canvas id="flyingCyclistCanvas"></canvas>
         </div>
       </div>
       <div class="fc-panel">
@@ -12378,10 +12378,11 @@ function initFlyingCyclistSim(){
   const cv=document.getElementById('flyingCyclistCanvas');if(!cv)return;
   flyingCyclistState={running:false,t:0,lastTs:0,speed:1,params:{H:3,alpha:50,g:9.8},values:null,raf:null};
   ['fcH','fcA','fcG'].forEach(id=>document.getElementById(id).oninput=updateFlyingCyclistParams);
-  document.getElementById('fcSpeed').oninput=e=>{if(flyingCyclistState)flyingCyclistState.speed=+e.target.value;};
+  document.getElementById('fcSpeed').oninput=e=>{if(flyingCyclistState)flyingCyclistState.speed=+e.target.value;var v=document.getElementById('fcSpeedVal');if(v)v.textContent='×'+(+e.target.value).toFixed(1);};
   updateFlyingCyclistParams();resetFlyingCyclistSim();
 }
 function playFlyingCyclistSim(){if(!flyingCyclistState)return;flyingCyclistState.running=true;flyingCyclistState.lastTs=0;flyingCyclistState.raf=requestAnimationFrame(renderFlyingCyclistScene);}
+function replayFlyingCyclistSim(){resetFlyingCyclistSim(true);}
 function pauseFlyingCyclistSim(){if(!flyingCyclistState)return;flyingCyclistState.running=false;cancelAnimationFrame(flyingCyclistState.raf);}
 function resetFlyingCyclistSim(replay){if(!flyingCyclistState)return;pauseFlyingCyclistSim();flyingCyclistState.t=0;renderFlyingCyclistScene();if(replay)playFlyingCyclistSim();}
 function renderFlyingCyclistScene(ts){
