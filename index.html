@@ -5954,8 +5954,8 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
       </div>
       <div class="fc-panel">
         <div><strong>Параметры</strong></div>
-        <div>H, м: <span id="fcHVal">4</span><input id="fcH" type="range" min="1" max="20" step="1" value="4"></div>
-        <div>α, °: <span id="fcAVal">30</span><input id="fcA" type="range" min="10" max="60" step="1" value="30"></div>
+        <div>H, м: <span id="fcHVal">10</span><input id="fcH" type="range" min="1" max="10" step="1" value="10"></div>
+        <div>α, °: <span id="fcAVal">50</span><input id="fcA" type="range" min="40" max="60" step="1" value="50"></div>
         <div>g, м/с²: <select id="fcG"><option value="9.8" selected>9.8</option><option value="10">10</option></select></div>
         <div id="fcValues" style="margin-top:8px;font-size:13px;color:var(--gray)"></div>
         <div style="margin-top:10px"><strong>Рабочие формулы</strong>
@@ -12369,7 +12369,13 @@ function calculateFlyingCyclistValues(H,alphaDeg,g){
 }
 function updateFlyingCyclistParams(){
   if(!flyingCyclistState)return;
-  const H=+document.getElementById('fcH').value, alpha=+document.getElementById('fcA').value, g=+document.getElementById('fcG').value;
+  const hInput=document.getElementById('fcH'), aInput=document.getElementById('fcA');
+  let H=+hInput.value, alpha=+aInput.value;
+  H=Math.max(1,Math.min(10,H));
+  alpha=Math.max(40,Math.min(60,alpha));
+  hInput.value=H;
+  aInput.value=alpha;
+  const g=+document.getElementById('fcG').value;
   document.getElementById('fcHVal').textContent=H;document.getElementById('fcAVal').textContent=alpha;
   flyingCyclistState.params={H,alpha,g};flyingCyclistState.values=calculateFlyingCyclistValues(H,alpha,g);
   const v=flyingCyclistState.values;
@@ -12378,7 +12384,7 @@ function updateFlyingCyclistParams(){
 }
 function initFlyingCyclistSim(){
   const cv=document.getElementById('flyingCyclistCanvas');if(!cv)return;
-  flyingCyclistState={running:false,t:0,lastTs:0,speed:1,params:{H:4,alpha:30,g:9.8},values:null,raf:null};
+  flyingCyclistState={running:false,t:0,lastTs:0,speed:1,params:{H:10,alpha:50,g:9.8},values:null,raf:null};
   ['fcH','fcA','fcG'].forEach(id=>document.getElementById(id).oninput=updateFlyingCyclistParams);
   document.getElementById('fcSpeed').oninput=e=>{if(flyingCyclistState)flyingCyclistState.speed=+e.target.value;};
   updateFlyingCyclistParams();resetFlyingCyclistSim();
