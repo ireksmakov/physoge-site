@@ -12398,7 +12398,10 @@ function renderFlyingCyclistScene(ts){
   if(s.running){if(!s.lastTs)s.lastTs=ts;const dt=Math.min((ts-s.lastTs)/1000,0.05)*s.speed;s.lastTs=ts;s.t+=dt;}
   const {H,alpha,g}=s.params,val=s.values,a=alpha*Math.PI/180;
   const horizonY=Hh*0.54,startX=W*0.09,startY=Hh*0.17,launchX=W*0.64,launchY=horizonY;
-  const baseTrack=`M ${startX} ${startY} L ${W*0.26} ${Hh*0.43} C ${W*0.34} ${Hh*0.58}, ${W*0.42} ${Hh*0.74}, ${W*0.50} ${Hh*0.73} C ${W*0.56} ${Hh*0.70}, ${W*0.60} ${Hh*0.59}, ${launchX} ${launchY}`;
+  const launchTangentLen=Math.max(30,Math.min(W*0.085,64));
+  const launchCtrlX=launchX-launchTangentLen*Math.cos(a);
+  const launchCtrlY=launchY+launchTangentLen*Math.sin(a);
+  const baseTrack=`M ${startX} ${startY} L ${W*0.26} ${Hh*0.43} C ${W*0.34} ${Hh*0.58}, ${W*0.42} ${Hh*0.74}, ${W*0.50} ${Hh*0.73} C ${W*0.56} ${Hh*0.70}, ${launchCtrlX} ${launchCtrlY}, ${launchX} ${launchY}`;
   const path2d=new Path2D(baseTrack);
   const rampPathEl=s.rampPathEl||(s.rampPathEl=document.createElementNS('http://www.w3.org/2000/svg','path'));
   rampPathEl.setAttribute('d',baseTrack);
