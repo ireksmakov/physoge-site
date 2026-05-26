@@ -12390,16 +12390,51 @@ function renderFlyingCyclistScene(ts){
   const s=flyingCyclistState,cv=document.getElementById('flyingCyclistCanvas');if(!s||!cv)return; const box=cv.parentElement, dpr=window.devicePixelRatio||1, W=box.clientWidth,Hh=box.clientHeight;
   cv.width=W*dpr;cv.height=Hh*dpr;const ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,Hh);
   if(s.running){if(!s.lastTs)s.lastTs=ts;const dt=Math.min((ts-s.lastTs)/1000,0.05)*s.speed;s.lastTs=ts;s.t+=dt;}
-  const {H,alpha}=s.params,val=s.values,a=alpha*Math.PI/180,tRamp=1.8,tFlight=val.tFlight,total=tRamp+tFlight,baseY=Hh*0.78,edgeX=W*0.38,edgeY=Hh*0.56,startX=W*0.14,startY=Hh*0.2,scaleY=(edgeY-startY)/Math.max(H,1);
-  ctx.strokeStyle='rgba(255,255,255,.2)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(startX,startY);ctx.lineTo(edgeX,edgeY);ctx.lineTo(W-30,edgeY);ctx.stroke();
-  const p=Math.min(s.t,total), phase=p<tRamp?1:2; let x=edgeX,y=edgeY;
-  if(phase===1){const k=p/tRamp;x=startX+(edgeX-startX)*k;y=startY+(edgeY-startY)*k;} else {const tp=Math.min(p-tRamp,tFlight);x=edgeX+tp*val.v*Math.cos(a)*35;y=edgeY-(tp*val.v*Math.sin(a)-0.5*s.params.g*tp*tp)*scaleY;}
-  ctx.setLineDash([5,5]);ctx.strokeStyle='rgba(0,229,255,.45)';ctx.beginPath();for(let t=0;t<=tFlight;t+=0.04){const px=edgeX+t*val.v*Math.cos(a)*35, py=edgeY-(t*val.v*Math.sin(a)-0.5*s.params.g*t*t)*scaleY; t===0?ctx.moveTo(px,py):ctx.lineTo(px,py);}ctx.stroke();ctx.setLineDash([]);
-  ctx.fillStyle='#00e5ff';ctx.beginPath();ctx.arc(x,y,10,0,Math.PI*2);ctx.fill();
-  ctx.strokeStyle='var(--orange)';ctx.beginPath();ctx.moveTo(edgeX,edgeY);ctx.lineTo(edgeX+58*Math.cos(a),edgeY-58*Math.sin(a));ctx.stroke();
-  ctx.fillStyle='#fff';ctx.fillText('α',edgeX+32,edgeY-18);ctx.fillText('v',edgeX+64*Math.cos(a),edgeY-62*Math.sin(a));
-  if(phase===2){const ty=Math.min(edgeY-(val.h*scaleY),edgeY);ctx.strokeStyle='var(--green)';ctx.beginPath();ctx.moveTo(edgeX+val.R*17/2,edgeY);ctx.lineTo(edgeX+val.R*17/2,ty);ctx.stroke();ctx.fillStyle='var(--green)';ctx.fillText('h',edgeX+val.R*17/2+6,ty+14);}
-  ctx.strokeStyle='var(--cyan)';ctx.beginPath();ctx.moveTo(startX-20,edgeY);ctx.lineTo(startX-20,startY);ctx.stroke();ctx.fillStyle='var(--cyan)';ctx.fillText('H',startX-32,(startY+edgeY)/2);
+  const {H,alpha,g}=s.params,val=s.values,a=alpha*Math.PI/180;
+  const horizonY=Hh*0.54,startX=W*0.09,startY=Hh*0.17,launchX=W*0.64,launchY=horizonY;
+  const baseTrack=`M ${startX} ${startY} L ${W*0.26} ${Hh*0.43} C ${W*0.34} ${Hh*0.58}, ${W*0.42} ${Hh*0.74}, ${W*0.50} ${Hh*0.73} C ${W*0.56} ${Hh*0.70}, ${W*0.60} ${Hh*0.59}, ${launchX} ${launchY}`;
+  const path2d=new Path2D(baseTrack);
+  const rampPathEl=s.rampPathEl||(s.rampPathEl=document.createElementNS('http://www.w3.org/2000/svg','path'));
+  rampPathEl.setAttribute('d',baseTrack);
+  const rampLen=rampPathEl.getTotalLength();
+  const tRamp=2.8,tFlight=val.tFlight,total=tRamp+tFlight;
+  const p=Math.min(s.t,total);
+  const rampProgress=Math.min(p/tRamp,1);
+  const easedRamp=Math.pow(rampProgress,1.35);
+  const arcLen=rampLen*easedRamp;
+  const ptOnRamp=rampPathEl.getPointAtLength(Math.max(0,Math.min(rampLen,arcLen)));
+  const ptAhead=rampPathEl.getPointAtLength(Math.min(rampLen,arcLen+4));
+  const tangentRamp=Math.atan2(ptAhead.y-ptOnRamp.y,ptAhead.x-ptOnRamp.x);
+  const pxPerMeter=Math.max(20,Math.min((W-launchX-34)/Math.max(val.R,0.01),34));
+  const dropScale=Math.max((horizonY-Hh*0.2)/Math.max(val.h,0.1),(Hh*0.84-horizonY)/Math.max(val.h,0.1));
+  const flightHalf=val.R/2*pxPerMeter;
+  const apexX=launchX+flightHalf,apexY=horizonY-val.h*dropScale,landX=launchX+val.R*pxPerMeter;
+  const phase=p<tRamp?1:2;
+  let x=ptOnRamp.x,y=ptOnRamp.y,rot=tangentRamp;
+  if(phase===2){
+    const tp=Math.min(p-tRamp,tFlight);
+    x=launchX+tp*val.v*Math.cos(a)*pxPerMeter;
+    y=horizonY-(tp*val.v*Math.sin(a)-0.5*g*tp*tp)*dropScale;
+    const vx=val.v*Math.cos(a),vy=val.v*Math.sin(a)-g*tp;
+    rot=Math.atan2(-vy,vx);
+  }
+  ctx.strokeStyle='rgba(255,255,255,.16)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(18,horizonY);ctx.lineTo(W-16,horizonY);ctx.stroke();
+  ctx.strokeStyle='rgba(57,255,20,.22)';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(launchX,horizonY);ctx.lineTo(Math.max(launchX+14,Math.min(landX,W-18)),horizonY);ctx.stroke();
+  ctx.strokeStyle='rgba(0,229,255,.95)';ctx.lineWidth=3.6;ctx.lineCap='round';ctx.stroke(path2d);
+  ctx.strokeStyle='rgba(0,229,255,.22)';ctx.lineWidth=9;ctx.stroke(path2d);
+  ctx.fillStyle='rgba(0,229,255,.08)';ctx.beginPath();ctx.moveTo(startX,startY);ctx.lineTo(W*0.26,Hh*0.43);ctx.lineTo(W*0.50,Hh*0.73);ctx.lineTo(launchX,launchY);ctx.lineTo(launchX,Hh*0.9);ctx.lineTo(startX,Hh*0.9);ctx.closePath();ctx.fill();
+  ctx.setLineDash([6,6]);ctx.strokeStyle='rgba(0,229,255,.55)';ctx.lineWidth=2;ctx.beginPath();
+  for(let t=0;t<=tFlight;t+=0.04){const px=launchX+t*val.v*Math.cos(a)*pxPerMeter, py=horizonY-(t*val.v*Math.sin(a)-0.5*g*t*t)*dropScale; t===0?ctx.moveTo(px,py):ctx.lineTo(px,py);}ctx.stroke();ctx.setLineDash([]);
+  ctx.strokeStyle='var(--orange)';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(launchX,launchY);ctx.lineTo(launchX+66*Math.cos(a),launchY-66*Math.sin(a));ctx.stroke();
+  ctx.beginPath();ctx.arc(launchX,launchY,28,0,-a,true);ctx.strokeStyle='rgba(255,255,255,.65)';ctx.lineWidth=1.2;ctx.stroke();
+  ctx.fillStyle='#fff';ctx.font='bold 13px Golos Text,sans-serif';ctx.fillText('α',launchX+24,launchY-12);
+  zaA(ctx,launchX,launchY,launchX+78*Math.cos(a),launchY-78*Math.sin(a),'#ff8c00',2.2);
+  ctx.fillStyle='#ffb86b';ctx.fillText('v',launchX+82*Math.cos(a),launchY-82*Math.sin(a));
+  ctx.strokeStyle='var(--cyan)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(startX-20,horizonY);ctx.lineTo(startX-20,startY);ctx.stroke();ctx.fillStyle='var(--cyan)';ctx.fillText('H',startX-34,(startY+horizonY)/2);
+  ctx.strokeStyle='var(--green)';ctx.beginPath();ctx.moveTo(apexX,horizonY);ctx.lineTo(apexX,apexY);ctx.stroke();ctx.fillStyle='var(--green)';ctx.fillText('h',apexX+6,(apexY+horizonY)/2);
+  ctx.fillStyle='rgba(255,255,255,.62)';ctx.font='11px Golos Text,sans-serif';ctx.fillText('уровень края трамплина',launchX+8,horizonY-8);
+  ctx.fillStyle='#00e5ff';
+  ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.beginPath();ctx.arc(0,0,8,0,Math.PI*2);ctx.fill();ctx.fillRect(-12,-5,17,3);ctx.beginPath();ctx.arc(-7,6,4,0,Math.PI*2);ctx.arc(8,6,4,0,Math.PI*2);ctx.fill();ctx.restore();
   if(s.running&&p<total){s.raf=requestAnimationFrame(renderFlyingCyclistScene);}else if(p>=total){s.running=false;}
 }
 
