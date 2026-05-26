@@ -1528,7 +1528,9 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 .fc-head{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border);font-size:11px;color:var(--gray)}
 .fc-cond{padding:8px 12px;font-size:12px;color:var(--white);border-bottom:1px solid var(--border)}
 .fc-canvas-box{flex:1;min-height:0;padding:8px}
-#flyingCyclistCanvas{width:100%;height:100%;display:block;background:linear-gradient(180deg,rgba(8,15,24,.95),rgba(5,12,18,.95));border-radius:10px}
+.fc-animation-placeholder{height:100%;min-height:260px;background:linear-gradient(180deg,rgba(8,15,24,.95),rgba(5,12,18,.95));border:1px dashed rgba(0,229,255,.35);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
+.fc-animation-placeholder h3{font-family:var(--fh);font-size:20px;color:var(--white);margin-bottom:10px}
+.fc-animation-placeholder p{max-width:520px;font-size:13px;line-height:1.5;color:var(--gray)}
 .fc-panel{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px}
 .fc-ctrl{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .fc-btn{border:1px solid var(--border);background:var(--bg);color:var(--white);border-radius:10px;padding:8px 12px;cursor:pointer}
@@ -5950,7 +5952,12 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
       <div class="cyclist-record-frame">
         <div class="fc-head"><span>Механика · Свободное падение</span><strong>ФИЗМАТ</strong></div>
         <div class="fc-cond">Гонщик стартует с высоты H, вылетает под углом α и приземляется на уровне края трамплина. Найти высоту полёта h.</div>
-        <div class="fc-canvas-box"><canvas id="flyingCyclistCanvas"></canvas></div>
+        <div class="fc-canvas-box">
+          <div class="fc-animation-placeholder">
+            <h3>Анимация будет обновлена</h3>
+            <p>Здесь появится новая схема движения: прямой спуск, глубокая впадина, плавный подъём и полёт по параболе.</p>
+          </div>
+        </div>
       </div>
       <div class="fc-panel">
         <div><strong>Параметры</strong></div>
@@ -5960,13 +5967,6 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
         <div id="fcValues" style="margin-top:8px;font-size:13px;color:var(--gray)"></div>
         <div style="margin-top:10px"><strong>Рабочие формулы</strong>
           <div class="fc-formula">v = √(2gH)</div><div class="fc-formula">h = v²sin²(α)/2g</div><div class="fc-formula">h = Hsin²(α)</div>
-        </div>
-        <div class="fc-ctrl">
-          <button class="fc-btn" onclick="playFlyingCyclistSim()">Старт</button>
-          <button class="fc-btn" onclick="pauseFlyingCyclistSim()">Пауза</button>
-          <button class="fc-btn" onclick="resetFlyingCyclistSim()">Сброс</button>
-          <button class="fc-btn" onclick="resetFlyingCyclistSim(true)">Повтор</button>
-          <label>Скорость <input id="fcSpeed" type="range" min="0.5" max="1.5" step="0.5" value="1"></label>
         </div>
         <button class="fc-btn" style="margin-top:10px" onclick="document.getElementById('fcSolution').classList.toggle('on')">Показать решение</button>
         <div id="fcSolution" class="fc-solution"><h4>Решение</h4>1) m v² / 2 = m g H<br>2) v² / 2g = H<br>3) h = v² sin²(α) / 2g<br>4) h = H sin²(α)<br>5) Подставь своё значение α в sin²(α).</div>
@@ -12360,99 +12360,25 @@ function renderPLab(name){
   return h;
 }
 
-let flyingCyclistState=null;
 function openFlyingCyclistSim(){openSim('flying-cyclist');}
-function closeFlyingCyclistSim(){pauseFlyingCyclistSim();goBack();}
+function closeFlyingCyclistSim(){goBack();}
 function calculateFlyingCyclistValues(H,alphaDeg,g){
   const a=alphaDeg*Math.PI/180, v=Math.sqrt(2*g*H), h=H*Math.sin(a)**2, tUp=v*Math.sin(a)/g, tFlight=2*tUp, R=(v*v*Math.sin(2*a))/g;
   return{v,h,tUp,tFlight,R};
 }
 function updateFlyingCyclistParams(){
-  if(!flyingCyclistState)return;
   const H=+document.getElementById('fcH').value, alpha=+document.getElementById('fcA').value, g=+document.getElementById('fcG').value;
   document.getElementById('fcHVal').textContent=H;document.getElementById('fcAVal').textContent=alpha;
-  flyingCyclistState.params={H,alpha,g};flyingCyclistState.values=calculateFlyingCyclistValues(H,alpha,g);
-  const v=flyingCyclistState.values;
+  const v=calculateFlyingCyclistValues(H,alpha,g);
   document.getElementById('fcValues').innerHTML=`H=${H} м · α=${alpha}° · v≈${v.v.toFixed(2)} м/с · h=${v.h.toFixed(2)} м · t↑=${v.tUp.toFixed(2)} с · tпол=${v.tFlight.toFixed(2)} с · R=${v.R.toFixed(2)} м${alpha===30?'<br><span style="color:var(--green)">При α=30°: h = H/4</span>':''}`;
-  renderFlyingCyclistScene();
 }
 function initFlyingCyclistSim(){
-  const cv=document.getElementById('flyingCyclistCanvas');if(!cv)return;
-  flyingCyclistState={running:false,t:0,lastTs:0,speed:1,params:{H:4,alpha:30,g:9.8},values:null,raf:null};
   ['fcH','fcA','fcG'].forEach(id=>document.getElementById(id).oninput=updateFlyingCyclistParams);
-  document.getElementById('fcSpeed').oninput=e=>{if(flyingCyclistState)flyingCyclistState.speed=+e.target.value;};
-  updateFlyingCyclistParams();resetFlyingCyclistSim();
+  updateFlyingCyclistParams();
 }
-function playFlyingCyclistSim(){if(!flyingCyclistState)return;flyingCyclistState.running=true;flyingCyclistState.lastTs=0;flyingCyclistState.raf=requestAnimationFrame(renderFlyingCyclistScene);}
-function pauseFlyingCyclistSim(){if(!flyingCyclistState)return;flyingCyclistState.running=false;cancelAnimationFrame(flyingCyclistState.raf);}
-function resetFlyingCyclistSim(replay){if(!flyingCyclistState)return;pauseFlyingCyclistSim();flyingCyclistState.t=0;renderFlyingCyclistScene();if(replay)playFlyingCyclistSim();}
-function renderFlyingCyclistScene(ts){
-  const s=flyingCyclistState,cv=document.getElementById('flyingCyclistCanvas');if(!s||!cv)return; const box=cv.parentElement, dpr=window.devicePixelRatio||1, W=box.clientWidth,Hh=box.clientHeight;
-  cv.width=W*dpr;cv.height=Hh*dpr;const ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,Hh);
-  if(s.running){if(!s.lastTs)s.lastTs=ts;const dt=Math.min((ts-s.lastTs)/1000,0.05)*s.speed;s.lastTs=ts;s.t+=dt;}
-  const {H,alpha,g}=s.params,val=s.values,a=alpha*Math.PI/180;
-  const H_MAX=10,H_MIN=3,ALPHA_MIN=40,ALPHA_MAX=60;
-  const padL=18,padR=16,padT=16,padB=18;
-  const sceneScale=Math.min((Hh-padT-padB)/(H_MAX*1.75),(W-padL-padR)/18);
-  const scale=Math.max(18,Math.min(sceneScale,42));
-  const horizonY=Hh*0.52,launchX=W*0.62,launchY=horizonY,startX=W*0.12;
-  const startY=horizonY-H*scale;
-  const ramp1X=startX+(launchX-startX)*0.36;
-  const valleyX=startX+(launchX-startX)*0.56;
-  const ramp1Y=horizonY+H*scale*0.08;
-  const valleyY=horizonY+H*scale*0.55;
-  const firstControlX=startX+(ramp1X-startX)*0.52,firstControlY=startY+(ramp1Y-startY)*0.46;
-  const secondControlX=ramp1X+(valleyX-ramp1X)*0.68,secondControlY=ramp1Y+(valleyY-ramp1Y)*0.56;
-  const baseTrack=`M ${startX} ${startY} L ${ramp1X} ${ramp1Y} Q ${firstControlX} ${firstControlY}, ${valleyX} ${valleyY} Q ${secondControlX} ${secondControlY}, ${launchX} ${launchY}`;
-  const path2d=new Path2D(baseTrack);
-  const rampPathEl=s.rampPathEl||(s.rampPathEl=document.createElementNS('http://www.w3.org/2000/svg','path'));
-  rampPathEl.setAttribute('d',baseTrack);
-  const rampLen=rampPathEl.getTotalLength();
-  const tRamp=2.8,tFlight=val.tFlight,total=tRamp+tFlight;
-  const p=Math.min(s.t,total);
-  const rampProgress=Math.min(p/tRamp,1);
-  const easedRamp=Math.pow(rampProgress,1.35);
-  const arcLen=rampLen*easedRamp;
-  const ptOnRamp=rampPathEl.getPointAtLength(Math.max(0,Math.min(rampLen,arcLen)));
-  const ptAhead=rampPathEl.getPointAtLength(Math.min(rampLen,arcLen+4));
-  const tangentRamp=Math.atan2(ptAhead.y-ptOnRamp.y,ptAhead.x-ptOnRamp.x);
-  const pxPerMeter=scale;
-  const dropScale=scale;
-  const flightHalf=val.R/2*pxPerMeter;
-  const apexX=launchX+flightHalf,apexY=horizonY-val.h*dropScale,landX=launchX+val.R*pxPerMeter;
-  const phase=p<tRamp?1:2;
-  let x=ptOnRamp.x,y=ptOnRamp.y,rot=tangentRamp;
-  if(phase===2){
-    const tp=Math.min(p-tRamp,tFlight);
-    x=launchX+tp*val.v*Math.cos(a)*pxPerMeter;
-    y=horizonY-(tp*val.v*Math.sin(a)-0.5*g*tp*tp)*dropScale;
-    const vx=val.v*Math.cos(a),vy=val.v*Math.sin(a)-g*tp;
-    rot=Math.atan2(-vy,vx);
-  }
-  ctx.strokeStyle='rgba(255,255,255,.16)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(18,horizonY);ctx.lineTo(W-16,horizonY);ctx.stroke();
-  ctx.strokeStyle='rgba(57,255,20,.22)';
-  ctx.lineWidth=2.2;
-  ctx.beginPath();
-  ctx.moveTo(launchX,horizonY);
-  ctx.lineTo(Math.max(launchX+14,Math.min(landX,W-18)),horizonY);
-  ctx.stroke();
-  ctx.strokeStyle='rgba(0,229,255,.95)';ctx.lineWidth=3.6;ctx.lineCap='round';ctx.stroke(path2d);
-  ctx.strokeStyle='rgba(0,229,255,.22)';ctx.lineWidth=9;ctx.stroke(path2d);
-  ctx.fillStyle='rgba(0,229,255,.08)';ctx.beginPath();ctx.moveTo(startX,startY);ctx.lineTo(ramp1X,ramp1Y);ctx.quadraticCurveTo(firstControlX,firstControlY,valleyX,valleyY);ctx.quadraticCurveTo(secondControlX,secondControlY,launchX,launchY);ctx.lineTo(launchX,Hh*0.9);ctx.lineTo(startX,Hh*0.9);ctx.closePath();ctx.fill();
-  ctx.setLineDash([6,6]);ctx.strokeStyle='rgba(0,229,255,.55)';ctx.lineWidth=2;ctx.beginPath();
-  for(let t=0;t<=tFlight;t+=0.04){const px=launchX+t*val.v*Math.cos(a)*pxPerMeter, py=horizonY-(t*val.v*Math.sin(a)-0.5*g*t*t)*dropScale; t===0?ctx.moveTo(px,py):ctx.lineTo(px,py);}ctx.stroke();ctx.setLineDash([]);
-  ctx.strokeStyle='var(--orange)';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(launchX,launchY);ctx.lineTo(launchX+66*Math.cos(a),launchY-66*Math.sin(a));ctx.stroke();
-  ctx.beginPath();ctx.arc(launchX,launchY,28,0,-a,true);ctx.strokeStyle='rgba(255,255,255,.65)';ctx.lineWidth=1.2;ctx.stroke();
-  ctx.fillStyle='#fff';ctx.font='bold 13px Golos Text,sans-serif';ctx.fillText('α',launchX+24,launchY-12);
-  zaA(ctx,launchX,launchY,launchX+78*Math.cos(a),launchY-78*Math.sin(a),'#ff8c00',2.2);
-  ctx.fillStyle='#ffb86b';ctx.fillText('v',launchX+82*Math.cos(a),launchY-82*Math.sin(a));
-  ctx.strokeStyle='var(--cyan)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(startX-20,horizonY);ctx.lineTo(startX-20,startY);ctx.stroke();ctx.fillStyle='var(--cyan)';ctx.fillText('H',startX-34,(startY+horizonY)/2);
-  ctx.strokeStyle='var(--green)';ctx.beginPath();ctx.moveTo(apexX,horizonY);ctx.lineTo(apexX,apexY);ctx.stroke();ctx.fillStyle='var(--green)';ctx.fillText('h',apexX+6,(apexY+horizonY)/2);
-  ctx.fillStyle='rgba(255,255,255,.62)';ctx.font='11px Golos Text,sans-serif';ctx.fillText('уровень края трамплина',launchX+8,horizonY-8);
-  ctx.fillStyle='#00e5ff';
-  ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.beginPath();ctx.arc(0,0,8,0,Math.PI*2);ctx.fill();ctx.fillRect(-12,-5,17,3);ctx.beginPath();ctx.arc(-7,6,4,0,Math.PI*2);ctx.arc(8,6,4,0,Math.PI*2);ctx.fill();ctx.restore();
-  if(s.running&&p<total){s.raf=requestAnimationFrame(renderFlyingCyclistScene);}else if(p>=total){s.running=false;}
-}
+function playFlyingCyclistSim(){}
+function pauseFlyingCyclistSim(){}
+function resetFlyingCyclistSim(){}
 
 /* ═══ ЗСИ SIMULATOR JS ═══ */
 var zsiT=0,zsiRunning=false,zsiRaf=null,zsiLastTS=null,zsiSpeed=1;
