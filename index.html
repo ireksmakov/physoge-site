@@ -12414,7 +12414,9 @@ function renderFlyingCyclistScene(ts){
   const tangentRamp=Math.atan2(ptAhead.y-ptOnRamp.y,ptAhead.x-ptOnRamp.x);
   const pxPerMeter=Math.max(20,Math.min((W-launchX-34)/Math.max(val.R,0.01),34));
   const pxPerMeterVertical=(horizonY-startY)/Math.max(H,0.1);
-  const hPx=val.h*pxPerMeterVertical;
+  const flightHeightVisualScale=0.78;
+  const pxPerMeterVerticalVisual=pxPerMeterVertical*flightHeightVisualScale;
+  const hPx=val.h*pxPerMeterVerticalVisual;
   const flightHalf=val.R/2*pxPerMeter;
   const apexX=launchX+flightHalf,apexY=horizonY-hPx,landX=launchX+val.R*pxPerMeter;
   const phase=p<tRamp?1:2;
@@ -12422,7 +12424,7 @@ function renderFlyingCyclistScene(ts){
   if(phase===2){
     const tp=Math.min(p-tRamp,tFlight);
     x=launchX+tp*val.v*Math.cos(a)*pxPerMeter;
-    y=horizonY-(tp*val.v*Math.sin(a)-0.5*g*tp*tp)*pxPerMeterVertical;
+    y=horizonY-(tp*val.v*Math.sin(a)-0.5*g*tp*tp )*pxPerMeterVerticalVisual;
     const vx=val.v*Math.cos(a),vy=val.v*Math.sin(a)-g*tp;
     rot=Math.atan2(-vy,vx);
   }
@@ -12432,7 +12434,7 @@ function renderFlyingCyclistScene(ts){
   ctx.strokeStyle='rgba(0,229,255,.22)';ctx.lineWidth=9;ctx.stroke(path2d);
   ctx.fillStyle='rgba(0,229,255,.08)';ctx.beginPath();ctx.moveTo(startX,startY);ctx.lineTo(W*0.26,Hh*0.43);ctx.lineTo(W*0.50,Hh*0.73);ctx.lineTo(launchX,launchY);ctx.lineTo(launchX,Hh*0.9);ctx.lineTo(startX,Hh*0.9);ctx.closePath();ctx.fill();
   ctx.setLineDash([6,6]);ctx.strokeStyle='rgba(0,229,255,.55)';ctx.lineWidth=2;ctx.beginPath();
-  for(let t=0;t<=tFlight;t+=0.04){const px=launchX+t*val.v*Math.cos(a)*pxPerMeter, py=horizonY-(t*val.v*Math.sin(a)-0.5*g*t*t)*pxPerMeterVertical; t===0?ctx.moveTo(px,py):ctx.lineTo(px,py);}ctx.stroke();ctx.setLineDash([]);
+  for(let t=0;t<=tFlight;t+=0.04){const px=launchX+t*val.v*Math.cos(a)*pxPerMeter, py=horizonY-(t*val.v*Math.sin(a)-0.5*g*t*t )*pxPerMeterVerticalVisual; t===0?ctx.moveTo(px,py):ctx.lineTo(px,py);}ctx.stroke();ctx.setLineDash([]);
   ctx.strokeStyle='var(--orange)';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(launchX,launchY);ctx.lineTo(launchX+66*Math.cos(a),launchY-66*Math.sin(a));ctx.stroke();
   ctx.beginPath();ctx.arc(launchX,launchY,28,0,-a,true);ctx.strokeStyle='rgba(255,255,255,.65)';ctx.lineWidth=1.2;ctx.stroke();
   ctx.fillStyle='#fff';ctx.font='bold 13px Golos Text,sans-serif';ctx.fillText('α',launchX+66,launchY-22);
