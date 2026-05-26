@@ -12394,11 +12394,17 @@ function pauseFlyingCyclistSim(){if(!flyingCyclistState)return;flyingCyclistStat
 function resetFlyingCyclistSim(replay){if(!flyingCyclistState)return;pauseFlyingCyclistSim();flyingCyclistState.t=0;renderFlyingCyclistScene();if(replay)playFlyingCyclistSim();}
 function renderFlyingCyclistScene(ts){
   const s=flyingCyclistState,cv=document.getElementById('flyingCyclistCanvas');if(!s||!cv)return;
-  const box=cv.parentElement, dpr=window.devicePixelRatio||1, W=box.clientWidth,Hh=box.clientHeight;
+  console.log('Flying cyclist render called');
+  const box=cv.parentElement, dpr=window.devicePixelRatio||1;
+  const W=Math.max(320,box&&box.clientWidth?box.clientWidth:cv.clientWidth||640);
+  const Hh=Math.max(220,box&&box.clientHeight?box.clientHeight:cv.clientHeight||360);
+  cv.style.display='block';cv.style.visibility='visible';cv.style.opacity='1';
   cv.width=W*dpr;cv.height=Hh*dpr;
   const ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,Hh);
+  ctx.fillStyle='red';ctx.fillRect(20,20,20,20);
   if(s.running){if(!s.lastTs)s.lastTs=ts;const dt=Math.min((ts-s.lastTs)/1000,0.05)*s.speed;s.lastTs=ts;s.t+=dt;}
 
+  const safe=(v,fallback)=>Number.isFinite(v)?v:fallback;
   const safeNumber=(v,fallback)=>Number.isFinite(v)&&v>0?v:fallback;
   const isFinitePoint=p=>!!(p&&Number.isFinite(p.x)&&Number.isFinite(p.y));
   const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
@@ -12434,10 +12440,17 @@ function renderFlyingCyclistScene(ts){
   horizonY=clamp(horizonY,padT,Hh-padB);
   let launchX=padL+(launchGroundMarginPhys+rampTotalPhys)*scale;
   launchX=clamp(launchX,padL,W-padR);
-  const launchY=horizonY;
-  const startX=clamp(launchX-rampTotalPhys*scale,padL,W-padR);
-  const startY=clamp(horizonY-H*scale,padT,Hh-padB);
-  const landX=clamp(launchX+val.R*scale,padL,W-padR);
+  let launchY=horizonY;
+  let startX=clamp(launchX-rampTotalPhys*scale,padL,W-padR);
+  let startY=clamp(horizonY-H*scale,padT,Hh-padB);
+  let landX=clamp(launchX+val.R*scale,padL,W-padR);
+
+  launchX=safe(launchX,W*0.62);
+  launchY=safe(launchY,Hh*0.55);
+  horizonY=safe(horizonY,Hh*0.55);
+  scale=safe(scale,32);
+  scale=Math.max(18,Math.min(scale,48));
+  console.log({W,H:Hh,groundY:horizonY,launchX,launchY,scale,Hval:H,alphaDeg:alpha});
 
   const ramp1X=startX+rampLenPhys*scale;
   const ramp1Y=startY+(H*0.42)*scale;
@@ -12454,6 +12467,14 @@ function renderFlyingCyclistScene(ts){
   const launchPoint={x:launchX,y:launchY};
   const apexPoint={x:apexX,y:apexY};
   const invalidGeometry=!Number.isFinite(scale)||scale<=0||!isFinitePoint(startPoint)||!isFinitePoint(launchPoint)||!isFinitePoint(apexPoint);
+  if(invalidGeometry){
+    horizonY=Hh*0.55;
+    startX=W*0.10;
+    startY=horizonY-210;
+    launchX=W*0.62;
+    launchY=horizonY;
+    landX=Math.min(W-padR,launchX+Math.max(120,val.R*28));
+  }
 
   const baseTrack=`M ${startX} ${startY} L ${ramp1X} ${ramp1Y} C ${ramp1X+0.32*preCurveLenPhys*scale} ${ramp1Y+0.52*(ramp2Y-ramp1Y)}, ${ramp2X-0.26*preCurveLenPhys*scale} ${ramp2Y+0.28*H*scale}, ${ramp2X} ${ramp2Y} C ${ramp2X+0.20*postCurveLenPhys*scale} ${ramp2Y-0.22*H*scale}, ${launchCtrlX} ${launchCtrlY}, ${launchX} ${launchY}`;
   const rampPathEl=s.rampPathEl||(s.rampPathEl=document.createElementNS('http://www.w3.org/2000/svg','path'));
@@ -12501,7 +12522,7 @@ function renderFlyingCyclistScene(ts){
   }
 
   ctx.strokeStyle='rgba(255,255,255,.16)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(padL*0.5,horizonY);ctx.lineTo(W-padR*0.45,horizonY);ctx.stroke();
-  ctx.strokeStyle='rgba(57,255,20,.22)';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(launchX,horizonY);ctx.lineTo(Math.min(landX,W-padR*0.3));ctx.stroke();
+  ctx.strokeStyle='rgba(57,255,20,.22)';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(launchX,horizonY);ctx.lineTo(Math.min(landX,W-padR*0.3),horizonY);ctx.stroke();
   ctx.strokeStyle='rgba(0,229,255,.95)';ctx.lineWidth=3.6;ctx.lineCap='round';ctx.stroke(path2d);
   ctx.strokeStyle='rgba(0,229,255,.22)';ctx.lineWidth=9;ctx.stroke(path2d);
   ctx.fillStyle='rgba(0,229,255,.08)';ctx.beginPath();ctx.moveTo(startX,startY);ctx.lineTo(ramp1X,ramp1Y);ctx.lineTo(ramp2X,ramp2Y);ctx.lineTo(launchX,launchY);ctx.lineTo(launchX,Hh-padB*0.2);ctx.lineTo(startX,Hh-padB*0.2);ctx.closePath();ctx.fill();
