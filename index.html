@@ -12367,13 +12367,7 @@ function calculateFlyingCyclistValues(H,alphaDeg,g){
 }
 function updateFlyingCyclistParams(){
   if(!flyingCyclistState)return;
-  const hInput=document.getElementById('fcH'), aInput=document.getElementById('fcA');
-  let H=+hInput.value, alpha=+aInput.value;
-  H=Math.max(3,Math.min(10,H));
-  alpha=Math.max(40,Math.min(60,alpha));
-  hInput.value=H;
-  aInput.value=alpha;
-  const g=+document.getElementById('fcG').value;
+  const H=+document.getElementById('fcH').value, alpha=+document.getElementById('fcA').value, g=+document.getElementById('fcG').value;
   document.getElementById('fcHVal').textContent=H;document.getElementById('fcAVal').textContent=alpha;
   flyingCyclistState.params={H,alpha,g};flyingCyclistState.values=calculateFlyingCyclistValues(H,alpha,g);
   const v=flyingCyclistState.values;
@@ -12396,10 +12390,7 @@ function renderFlyingCyclistScene(ts){
   if(s.running){if(!s.lastTs)s.lastTs=ts;const dt=Math.min((ts-s.lastTs)/1000,0.05)*s.speed;s.lastTs=ts;s.t+=dt;}
   const {H,alpha,g}=s.params,val=s.values,a=alpha*Math.PI/180;
   const horizonY=Hh*0.54,startX=W*0.09,startY=Hh*0.17,launchX=W*0.64,launchY=horizonY;
-  const launchTangentLen=Math.max(30,Math.min(W*0.085,64));
-  const launchCtrlX=launchX-launchTangentLen*Math.cos(a);
-  const launchCtrlY=launchY+launchTangentLen*Math.sin(a);
-  const baseTrack=`M ${startX} ${startY} L ${W*0.26} ${Hh*0.43} C ${W*0.34} ${Hh*0.58}, ${W*0.42} ${Hh*0.74}, ${W*0.50} ${Hh*0.73} C ${W*0.56} ${Hh*0.70}, ${launchCtrlX} ${launchCtrlY}, ${launchX} ${launchY}`;
+  const baseTrack=`M ${startX} ${startY} L ${W*0.26} ${Hh*0.43} C ${W*0.34} ${Hh*0.58}, ${W*0.42} ${Hh*0.74}, ${W*0.50} ${Hh*0.73} C ${W*0.56} ${Hh*0.70}, ${W*0.60} ${Hh*0.59}, ${launchX} ${launchY}`;
   const path2d=new Path2D(baseTrack);
   const rampPathEl=s.rampPathEl||(s.rampPathEl=document.createElementNS('http://www.w3.org/2000/svg','path'));
   rampPathEl.setAttribute('d',baseTrack);
@@ -12413,16 +12404,15 @@ function renderFlyingCyclistScene(ts){
   const ptAhead=rampPathEl.getPointAtLength(Math.min(rampLen,arcLen+4));
   const tangentRamp=Math.atan2(ptAhead.y-ptOnRamp.y,ptAhead.x-ptOnRamp.x);
   const pxPerMeter=Math.max(20,Math.min((W-launchX-34)/Math.max(val.R,0.01),34));
-  const pxPerMeterVertical=(horizonY-startY)/Math.max(H,0.1);
-  const hPx=val.h*pxPerMeterVertical;
+  const dropScale=Math.max((horizonY-Hh*0.2)/Math.max(val.h,0.1),(Hh*0.84-horizonY)/Math.max(val.h,0.1));
   const flightHalf=val.R/2*pxPerMeter;
-  const apexX=launchX+flightHalf,apexY=horizonY-hPx,landX=launchX+val.R*pxPerMeter;
+  const apexX=launchX+flightHalf,apexY=horizonY-val.h*dropScale,landX=launchX+val.R*pxPerMeter;
   const phase=p<tRamp?1:2;
   let x=ptOnRamp.x,y=ptOnRamp.y,rot=tangentRamp;
   if(phase===2){
     const tp=Math.min(p-tRamp,tFlight);
     x=launchX+tp*val.v*Math.cos(a)*pxPerMeter;
-    y=horizonY-(tp*val.v*Math.sin(a)-0.5*g*tp*tp)*pxPerMeterVertical;
+    y=horizonY-(tp*val.v*Math.sin(a)-0.5*g*tp*tp)*dropScale;
     const vx=val.v*Math.cos(a),vy=val.v*Math.sin(a)-g*tp;
     rot=Math.atan2(-vy,vx);
   }
@@ -12432,20 +12422,19 @@ function renderFlyingCyclistScene(ts){
   ctx.strokeStyle='rgba(0,229,255,.22)';ctx.lineWidth=9;ctx.stroke(path2d);
   ctx.fillStyle='rgba(0,229,255,.08)';ctx.beginPath();ctx.moveTo(startX,startY);ctx.lineTo(W*0.26,Hh*0.43);ctx.lineTo(W*0.50,Hh*0.73);ctx.lineTo(launchX,launchY);ctx.lineTo(launchX,Hh*0.9);ctx.lineTo(startX,Hh*0.9);ctx.closePath();ctx.fill();
   ctx.setLineDash([6,6]);ctx.strokeStyle='rgba(0,229,255,.55)';ctx.lineWidth=2;ctx.beginPath();
-  for(let t=0;t<=tFlight;t+=0.04){const px=launchX+t*val.v*Math.cos(a)*pxPerMeter, py=horizonY-(t*val.v*Math.sin(a)-0.5*g*t*t)*pxPerMeterVertical; t===0?ctx.moveTo(px,py):ctx.lineTo(px,py);}ctx.stroke();ctx.setLineDash([]);
+  for(let t=0;t<=tFlight;t+=0.04){const px=launchX+t*val.v*Math.cos(a)*pxPerMeter, py=horizonY-(t*val.v*Math.sin(a)-0.5*g*t*t)*dropScale; t===0?ctx.moveTo(px,py):ctx.lineTo(px,py);}ctx.stroke();ctx.setLineDash([]);
   ctx.strokeStyle='var(--orange)';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(launchX,launchY);ctx.lineTo(launchX+66*Math.cos(a),launchY-66*Math.sin(a));ctx.stroke();
   ctx.beginPath();ctx.arc(launchX,launchY,28,0,-a,true);ctx.strokeStyle='rgba(255,255,255,.65)';ctx.lineWidth=1.2;ctx.stroke();
-  ctx.fillStyle='#fff';ctx.font='bold 13px Golos Text,sans-serif';ctx.fillText('α',launchX+66,launchY-22);
+  ctx.fillStyle='#fff';ctx.font='bold 13px Golos Text,sans-serif';ctx.fillText('α',launchX+24,launchY-12);
   zaA(ctx,launchX,launchY,launchX+78*Math.cos(a),launchY-78*Math.sin(a),'#ff8c00',2.2);
   ctx.fillStyle='#ffb86b';ctx.fillText('v',launchX+82*Math.cos(a),launchY-82*Math.sin(a));
   ctx.strokeStyle='var(--cyan)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(startX-20,horizonY);ctx.lineTo(startX-20,startY);ctx.stroke();ctx.fillStyle='var(--cyan)';ctx.fillText('H',startX-34,(startY+horizonY)/2);
-  ctx.strokeStyle='var(--orange)';ctx.beginPath();ctx.moveTo(apexX,horizonY);ctx.lineTo(apexX,apexY);ctx.stroke();ctx.fillStyle='#ffb86b';ctx.fillText('h',apexX+8,apexY+16);
-  ctx.fillStyle='rgba(255,255,255,.62)';ctx.font='11px Golos Text,sans-serif';ctx.fillText('уровень края трамплина',launchX+110,horizonY+28);
+  ctx.strokeStyle='var(--green)';ctx.beginPath();ctx.moveTo(apexX,horizonY);ctx.lineTo(apexX,apexY);ctx.stroke();ctx.fillStyle='var(--green)';ctx.fillText('h',apexX+6,(apexY+horizonY)/2);
+  ctx.fillStyle='rgba(255,255,255,.62)';ctx.font='11px Golos Text,sans-serif';ctx.fillText('уровень края трамплина',launchX+8,horizonY-8);
   ctx.fillStyle='#00e5ff';
   ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.beginPath();ctx.arc(0,0,8,0,Math.PI*2);ctx.fill();ctx.fillRect(-12,-5,17,3);ctx.beginPath();ctx.arc(-7,6,4,0,Math.PI*2);ctx.arc(8,6,4,0,Math.PI*2);ctx.fill();ctx.restore();
   if(s.running&&p<total){s.raf=requestAnimationFrame(renderFlyingCyclistScene);}else if(p>=total){s.running=false;}
 }
-
 
 /* ═══ ЗСИ SIMULATOR JS ═══ */
 var zsiT=0,zsiRunning=false,zsiRaf=null,zsiLastTS=null,zsiSpeed=1;
