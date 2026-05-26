@@ -12419,7 +12419,12 @@ function renderFlyingCyclistScene(ts){
     rot=Math.atan2(-vy,vx);
   }
   ctx.strokeStyle='rgba(255,255,255,.16)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(18,horizonY);ctx.lineTo(W-16,horizonY);ctx.stroke();
-  ctx.strokeStyle='rgba(57,255,20,.22)';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(launchX,horizonY);ctx.lineTo(Math.max(launchX+14,Math.min(landX,W-18)),horizonY);ctx.stroke();
+  ctx.strokeStyle='rgba(57,255,20,.22)';
+  ctx.lineWidth=2.2;
+  ctx.beginPath();
+  ctx.moveTo(launchX,horizonY);
+  ctx.lineTo(Math.max(launchX+14,Math.min(landX,W-18)),horizonY);
+  ctx.stroke();
   ctx.strokeStyle='rgba(0,229,255,.95)';ctx.lineWidth=3.6;ctx.lineCap='round';ctx.stroke(path2d);
   ctx.strokeStyle='rgba(0,229,255,.22)';ctx.lineWidth=9;ctx.stroke(path2d);
   ctx.fillStyle='rgba(0,229,255,.08)';ctx.beginPath();ctx.moveTo(startX,startY);ctx.lineTo(W*0.26,Hh*0.43);ctx.lineTo(W*0.50,Hh*0.73);ctx.lineTo(launchX,launchY);ctx.lineTo(launchX,Hh*0.9);ctx.lineTo(startX,Hh*0.9);ctx.closePath();ctx.fill();
