@@ -12393,19 +12393,55 @@ function playFlyingCyclistSim(){if(!flyingCyclistState)return;flyingCyclistState
 function pauseFlyingCyclistSim(){if(!flyingCyclistState)return;flyingCyclistState.running=false;cancelAnimationFrame(flyingCyclistState.raf);}
 function resetFlyingCyclistSim(replay){if(!flyingCyclistState)return;pauseFlyingCyclistSim();flyingCyclistState.t=0;renderFlyingCyclistScene();if(replay)playFlyingCyclistSim();}
 function renderFlyingCyclistScene(ts){
-  const s=flyingCyclistState,cv=document.getElementById('flyingCyclistCanvas');if(!s||!cv)return; const box=cv.parentElement, dpr=window.devicePixelRatio||1, W=box.clientWidth,Hh=box.clientHeight;
-  cv.width=W*dpr;cv.height=Hh*dpr;const ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,Hh);
+  const s=flyingCyclistState,cv=document.getElementById('flyingCyclistCanvas');if(!s||!cv)return;
+  const box=cv.parentElement, dpr=window.devicePixelRatio||1, W=box.clientWidth,Hh=box.clientHeight;
+  cv.width=W*dpr;cv.height=Hh*dpr;
+  const ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,Hh);
   if(s.running){if(!s.lastTs)s.lastTs=ts;const dt=Math.min((ts-s.lastTs)/1000,0.05)*s.speed;s.lastTs=ts;s.t+=dt;}
+
   const {H,alpha,g}=s.params,val=s.values,a=alpha*Math.PI/180;
-  const horizonY=Hh*0.54,startX=W*0.09,startY=Hh*0.17,launchX=W*0.64,launchY=horizonY;
-  const launchTangentLen=Math.max(30,Math.min(W*0.085,64));
+  const leftPadding=70,rightPadding=70,topPadding=50,bottomPadding=70;
+  const availableWidth=Math.max(160,W-leftPadding-rightPadding);
+  const availableHeight=Math.max(140,Hh-topPadding-bottomPadding);
+
+  const rampLenPhys=Math.max(5,0.95*H+1.8);
+  const preCurveLenPhys=Math.max(2.6,0.55*H+1.2);
+  const postCurveLenPhys=Math.max(2.0,0.45*H+0.8);
+  const rampTotalPhys=rampLenPhys+preCurveLenPhys+postCurveLenPhys;
+  const launchGroundMarginPhys=Math.max(0.8,0.08*val.R+0.35);
+  const rightRunoutPhys=Math.max(0.9,0.07*val.R+0.35);
+  const totalPhysicalWidth=launchGroundMarginPhys+rampTotalPhys+val.R+rightRunoutPhys;
+
+  const topHeightPhys=Math.max(H,val.h);
+  const verticalHeadroomPhys=Math.max(0.8,0.16*topHeightPhys+0.45);
+  const groundClearancePhys=Math.max(1.0,0.18*H+0.4);
+  const totalPhysicalHeight=topHeightPhys+verticalHeadroomPhys+groundClearancePhys;
+
+  const scaleX=availableWidth/Math.max(totalPhysicalWidth,0.01);
+  const scaleY=availableHeight/Math.max(totalPhysicalHeight,0.01);
+  const scale=Math.min(scaleX,scaleY);
+
+  const horizonY=topPadding+verticalHeadroomPhys*scale+topHeightPhys*scale;
+  const launchX=leftPadding+(launchGroundMarginPhys+rampTotalPhys)*scale;
+  const launchY=horizonY;
+  const startX=launchX-rampTotalPhys*scale;
+  const startY=horizonY-H*scale;
+  const landX=launchX+val.R*scale;
+
+  const ramp1X=startX+rampLenPhys*scale;
+  const ramp1Y=startY+(H*0.42)*scale;
+  const ramp2X=ramp1X+preCurveLenPhys*scale;
+  const ramp2Y=launchY-(H*0.10)*scale;
+  const launchTangentLen=Math.max(22,Math.min(48,postCurveLenPhys*0.85*scale));
   const launchCtrlX=launchX-launchTangentLen*Math.cos(a);
   const launchCtrlY=launchY+launchTangentLen*Math.sin(a);
-  const baseTrack=`M ${startX} ${startY} L ${W*0.26} ${Hh*0.43} C ${W*0.34} ${Hh*0.58}, ${W*0.42} ${Hh*0.74}, ${W*0.50} ${Hh*0.73} C ${W*0.56} ${Hh*0.70}, ${launchCtrlX} ${launchCtrlY}, ${launchX} ${launchY}`;
+
+  const baseTrack=`M ${startX} ${startY} L ${ramp1X} ${ramp1Y} C ${ramp1X+0.32*preCurveLenPhys*scale} ${ramp1Y+0.52*(ramp2Y-ramp1Y)}, ${ramp2X-0.26*preCurveLenPhys*scale} ${ramp2Y+0.28*H*scale}, ${ramp2X} ${ramp2Y} C ${ramp2X+0.20*postCurveLenPhys*scale} ${ramp2Y-0.22*H*scale}, ${launchCtrlX} ${launchCtrlY}, ${launchX} ${launchY}`;
   const path2d=new Path2D(baseTrack);
   const rampPathEl=s.rampPathEl||(s.rampPathEl=document.createElementNS('http://www.w3.org/2000/svg','path'));
   rampPathEl.setAttribute('d',baseTrack);
   const rampLen=rampPathEl.getTotalLength();
+
   const tRamp=2.8,tFlight=val.tFlight,total=tRamp+tFlight;
   const p=Math.min(s.t,total);
   const rampProgress=Math.min(p/tRamp,1);
@@ -12414,11 +12450,13 @@ function renderFlyingCyclistScene(ts){
   const ptOnRamp=rampPathEl.getPointAtLength(Math.max(0,Math.min(rampLen,arcLen)));
   const ptAhead=rampPathEl.getPointAtLength(Math.min(rampLen,arcLen+4));
   const tangentRamp=Math.atan2(ptAhead.y-ptOnRamp.y,ptAhead.x-ptOnRamp.x);
-  const pxPerMeter=Math.max(20,Math.min((W-launchX-34)/Math.max(val.R,0.01),34));
-  const pxPerMeterVertical=(horizonY-startY)/Math.max(H,0.1);
+
+  const pxPerMeter=scale;
+  const pxPerMeterVertical=scale;
   const hPx=val.h*pxPerMeterVertical;
-  const flightHalf=val.R/2*pxPerMeter;
-  const apexX=launchX+flightHalf,apexY=horizonY-hPx,landX=launchX+val.R*pxPerMeter;
+  const flightHalf=val.R*0.5*pxPerMeter;
+  const apexX=launchX+flightHalf,apexY=horizonY-hPx;
+
   const phase=p<tRamp?1:2;
   let x=ptOnRamp.x,y=ptOnRamp.y,rot=tangentRamp;
   if(phase===2){
@@ -12428,11 +12466,13 @@ function renderFlyingCyclistScene(ts){
     const vx=val.v*Math.cos(a),vy=val.v*Math.sin(a)-g*tp;
     rot=Math.atan2(-vy,vx);
   }
-  ctx.strokeStyle='rgba(255,255,255,.16)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(18,horizonY);ctx.lineTo(W-16,horizonY);ctx.stroke();
-  ctx.strokeStyle='rgba(57,255,20,.22)';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(launchX,horizonY);ctx.lineTo(Math.max(launchX+14,Math.min(landX,W-18)),horizonY);ctx.stroke();
+
+  ctx.strokeStyle='rgba(255,255,255,.16)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(leftPadding*0.5,horizonY);ctx.lineTo(W-rightPadding*0.45,horizonY);ctx.stroke();
+  ctx.strokeStyle='rgba(57,255,20,.22)';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(launchX,horizonY);ctx.lineTo(Math.min(landX,W-rightPadding*0.3));ctx.stroke();
   ctx.strokeStyle='rgba(0,229,255,.95)';ctx.lineWidth=3.6;ctx.lineCap='round';ctx.stroke(path2d);
   ctx.strokeStyle='rgba(0,229,255,.22)';ctx.lineWidth=9;ctx.stroke(path2d);
-  ctx.fillStyle='rgba(0,229,255,.08)';ctx.beginPath();ctx.moveTo(startX,startY);ctx.lineTo(W*0.26,Hh*0.43);ctx.lineTo(W*0.50,Hh*0.73);ctx.lineTo(launchX,launchY);ctx.lineTo(launchX,Hh*0.9);ctx.lineTo(startX,Hh*0.9);ctx.closePath();ctx.fill();
+  ctx.fillStyle='rgba(0,229,255,.08)';ctx.beginPath();ctx.moveTo(startX,startY);ctx.lineTo(ramp1X,ramp1Y);ctx.lineTo(ramp2X,ramp2Y);ctx.lineTo(launchX,launchY);ctx.lineTo(launchX,Hh-bottomPadding*0.2);ctx.lineTo(startX,Hh-bottomPadding*0.2);ctx.closePath();ctx.fill();
+
   ctx.setLineDash([6,6]);ctx.strokeStyle='rgba(0,229,255,.55)';ctx.lineWidth=2;ctx.beginPath();
   for(let t=0;t<=tFlight;t+=0.04){const px=launchX+t*val.v*Math.cos(a)*pxPerMeter, py=horizonY-(t*val.v*Math.sin(a)-0.5*g*t*t)*pxPerMeterVertical; t===0?ctx.moveTo(px,py):ctx.lineTo(px,py);}ctx.stroke();ctx.setLineDash([]);
   ctx.strokeStyle='var(--orange)';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(launchX,launchY);ctx.lineTo(launchX+66*Math.cos(a),launchY-66*Math.sin(a));ctx.stroke();
@@ -12440,13 +12480,18 @@ function renderFlyingCyclistScene(ts){
   ctx.fillStyle='#fff';ctx.font='bold 13px Golos Text,sans-serif';ctx.fillText('α',launchX+66,launchY-22);
   zaA(ctx,launchX,launchY,launchX+78*Math.cos(a),launchY-78*Math.sin(a),'#ff8c00',2.2);
   ctx.fillStyle='#ffb86b';ctx.fillText('v',launchX+82*Math.cos(a),launchY-82*Math.sin(a));
+
   ctx.strokeStyle='var(--cyan)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(startX-20,horizonY);ctx.lineTo(startX-20,startY);ctx.stroke();ctx.fillStyle='var(--cyan)';ctx.fillText('H',startX-34,(startY+horizonY)/2);
-  ctx.strokeStyle='var(--orange)';ctx.beginPath();ctx.moveTo(apexX,horizonY);ctx.lineTo(apexX,apexY);ctx.stroke();ctx.fillStyle='#ffb86b';ctx.fillText('h',apexX+8,apexY+16);
-  ctx.fillStyle='rgba(255,255,255,.62)';ctx.font='11px Golos Text,sans-serif';ctx.fillText('уровень края трамплина',launchX+110,horizonY+28);
+  ctx.strokeStyle='var(--orange)';ctx.beginPath();ctx.moveTo(apexX,horizonY);ctx.lineTo(apexX,apexY);ctx.stroke();ctx.fillStyle='#ffb86b';ctx.fillText('h',Math.min(apexX+8,W-rightPadding+8),apexY+16);
+  ctx.fillStyle='rgba(255,255,255,.62)';ctx.font='11px Golos Text,sans-serif';
+  const horizonLabelX=Math.min(launchX+Math.max(40,0.08*W),W-rightPadding-150);
+  ctx.fillText('уровень края трамплина',horizonLabelX,horizonY+28);
+
   ctx.fillStyle='#00e5ff';
   ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.beginPath();ctx.arc(0,0,8,0,Math.PI*2);ctx.fill();ctx.fillRect(-12,-5,17,3);ctx.beginPath();ctx.arc(-7,6,4,0,Math.PI*2);ctx.arc(8,6,4,0,Math.PI*2);ctx.fill();ctx.restore();
   if(s.running&&p<total){s.raf=requestAnimationFrame(renderFlyingCyclistScene);}else if(p>=total){s.running=false;}
 }
+
 
 /* ═══ ЗСИ SIMULATOR JS ═══ */
 var zsiT=0,zsiRunning=false,zsiRaf=null,zsiLastTS=null,zsiSpeed=1;
