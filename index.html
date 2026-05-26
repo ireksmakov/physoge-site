@@ -12427,12 +12427,12 @@ function renderFlyingCyclistScene(ts){
   for(let t=0;t<=tFlight;t+=0.04){const px=launchX+t*val.v*Math.cos(a)*pxPerMeter, py=horizonY-(t*val.v*Math.sin(a)-0.5*g*t*t)*dropScale; t===0?ctx.moveTo(px,py):ctx.lineTo(px,py);}ctx.stroke();ctx.setLineDash([]);
   ctx.strokeStyle='var(--orange)';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(launchX,launchY);ctx.lineTo(launchX+66*Math.cos(a),launchY-66*Math.sin(a));ctx.stroke();
   ctx.beginPath();ctx.arc(launchX,launchY,28,0,-a,true);ctx.strokeStyle='rgba(255,255,255,.65)';ctx.lineWidth=1.2;ctx.stroke();
-  ctx.fillStyle='#fff';ctx.font='bold 13px Golos Text,sans-serif';ctx.fillText('α',launchX+24,launchY-12);
+  ctx.fillStyle='#fff';ctx.font='bold 13px Golos Text,sans-serif';ctx.fillText('α',launchX+66,launchY-22);
   zaA(ctx,launchX,launchY,launchX+78*Math.cos(a),launchY-78*Math.sin(a),'#ff8c00',2.2);
   ctx.fillStyle='#ffb86b';ctx.fillText('v',launchX+82*Math.cos(a),launchY-82*Math.sin(a));
   ctx.strokeStyle='var(--cyan)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(startX-20,horizonY);ctx.lineTo(startX-20,startY);ctx.stroke();ctx.fillStyle='var(--cyan)';ctx.fillText('H',startX-34,(startY+horizonY)/2);
   ctx.strokeStyle='var(--green)';ctx.beginPath();ctx.moveTo(apexX,horizonY);ctx.lineTo(apexX,apexY);ctx.stroke();ctx.fillStyle='var(--green)';ctx.fillText('h',apexX+6,(apexY+horizonY)/2);
-  ctx.fillStyle='rgba(255,255,255,.62)';ctx.font='11px Golos Text,sans-serif';ctx.fillText('уровень края трамплина',launchX+8,horizonY-8);
+  ctx.fillStyle='rgba(255,255,255,.62)';ctx.font='11px Golos Text,sans-serif';ctx.fillText('уровень края трамплина',launchX+110,horizonY+28);
   ctx.fillStyle='#00e5ff';
   ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.beginPath();ctx.arc(0,0,8,0,Math.PI*2);ctx.fill();ctx.fillRect(-12,-5,17,3);ctx.beginPath();ctx.arc(-7,6,4,0,Math.PI*2);ctx.arc(8,6,4,0,Math.PI*2);ctx.fill();ctx.restore();
   if(s.running&&p<total){s.raf=requestAnimationFrame(renderFlyingCyclistScene);}else if(p>=total){s.running=false;}
