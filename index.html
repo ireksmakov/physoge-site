@@ -5959,7 +5959,7 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
       </div>
       <div class="fc-panel">
         <div><strong>Параметры</strong></div>
-        <div>H, м: <span id="fcHVal">3</span><input id="fcH" type="range" min="3" max="10" step="1" value="3"></div>
+        <div>H, м: <span id="fcHVal">3</span><input id="fcH" type="range" min="3" max="6" step="1" value="3"></div>
         <div>α, °: <span id="fcAVal">50</span><input id="fcA" type="range" min="40" max="60" step="1" value="50"></div>
         <div>g, м/с²: <select id="fcG"><option value="9.8" selected>9.8</option><option value="10">10</option></select></div>
         <div id="fcValues" class="fc-metric"></div>
@@ -12369,7 +12369,7 @@ function updateFlyingCyclistParams(){
   if(!flyingCyclistState)return;
   const hInput=document.getElementById('fcH'), aInput=document.getElementById('fcA');
   let H=+hInput.value, alpha=+aInput.value;
-  H=Math.max(1,Math.min(10,H));
+  H=Math.max(3,Math.min(6,H));
   alpha=Math.max(40,Math.min(60,alpha));
   hInput.value=H;
   aInput.value=alpha;
@@ -12382,7 +12382,7 @@ function updateFlyingCyclistParams(){
 }
 function initFlyingCyclistSim(){
   const cv=document.getElementById('flyingCyclistCanvas');if(!cv)return;
-  flyingCyclistState={running:false,t:0,lastTs:0,speed:1,params:{H:10,alpha:50,g:9.8},values:null,raf:null};
+  flyingCyclistState={running:false,t:0,lastTs:0,speed:1,params:{H:3,alpha:50,g:9.8},values:null,raf:null};
   ['fcH','fcA','fcG'].forEach(id=>document.getElementById(id).oninput=updateFlyingCyclistParams);
   document.getElementById('fcSpeed').oninput=e=>{if(flyingCyclistState)flyingCyclistState.speed=+e.target.value;};
   updateFlyingCyclistParams();resetFlyingCyclistSim();
