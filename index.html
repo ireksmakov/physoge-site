@@ -12391,8 +12391,12 @@ function renderFlyingCyclistScene(ts){
   cv.width=W*dpr;cv.height=Hh*dpr;const ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,Hh);
   if(s.running){if(!s.lastTs)s.lastTs=ts;const dt=Math.min((ts-s.lastTs)/1000,0.05)*s.speed;s.lastTs=ts;s.t+=dt;}
   const {H,alpha,g}=s.params,val=s.values,a=alpha*Math.PI/180;
-  const horizonY=Hh*0.54,startX=W*0.09,startY=Hh*0.17,launchX=W*0.64,launchY=horizonY;
-  const baseTrack=`M ${startX} ${startY} L ${W*0.26} ${Hh*0.43} C ${W*0.34} ${Hh*0.58}, ${W*0.42} ${Hh*0.74}, ${W*0.50} ${Hh*0.73} C ${W*0.56} ${Hh*0.70}, ${W*0.60} ${Hh*0.59}, ${launchX} ${launchY}`;
+  const horizonY=Hh*0.54,startX=W*0.12,startY=Hh*0.17,launchX=W*0.76,launchY=horizonY;
+  const rampLineEndX=W*0.42,rampLineEndY=horizonY-(horizonY-startY)*0.42;
+  const valleyX=W*0.57,valleyY=horizonY+(horizonY-startY)*0.34;
+  const firstControlX=W*0.50,firstControlY=horizonY+(horizonY-startY)*0.18;
+  const secondControlX=W*0.67,secondControlY=horizonY+(horizonY-startY)*0.20;
+  const baseTrack=`M ${startX} ${startY} L ${rampLineEndX} ${rampLineEndY} Q ${firstControlX} ${firstControlY}, ${valleyX} ${valleyY} Q ${secondControlX} ${secondControlY}, ${launchX} ${launchY}`;
   const path2d=new Path2D(baseTrack);
   const rampPathEl=s.rampPathEl||(s.rampPathEl=document.createElementNS('http://www.w3.org/2000/svg','path'));
   rampPathEl.setAttribute('d',baseTrack);
@@ -12427,7 +12431,7 @@ function renderFlyingCyclistScene(ts){
   ctx.stroke();
   ctx.strokeStyle='rgba(0,229,255,.95)';ctx.lineWidth=3.6;ctx.lineCap='round';ctx.stroke(path2d);
   ctx.strokeStyle='rgba(0,229,255,.22)';ctx.lineWidth=9;ctx.stroke(path2d);
-  ctx.fillStyle='rgba(0,229,255,.08)';ctx.beginPath();ctx.moveTo(startX,startY);ctx.lineTo(W*0.26,Hh*0.43);ctx.lineTo(W*0.50,Hh*0.73);ctx.lineTo(launchX,launchY);ctx.lineTo(launchX,Hh*0.9);ctx.lineTo(startX,Hh*0.9);ctx.closePath();ctx.fill();
+  ctx.fillStyle='rgba(0,229,255,.08)';ctx.beginPath();ctx.moveTo(startX,startY);ctx.lineTo(rampLineEndX,rampLineEndY);ctx.quadraticCurveTo(firstControlX,firstControlY,valleyX,valleyY);ctx.quadraticCurveTo(secondControlX,secondControlY,launchX,launchY);ctx.lineTo(launchX,Hh*0.9);ctx.lineTo(startX,Hh*0.9);ctx.closePath();ctx.fill();
   ctx.setLineDash([6,6]);ctx.strokeStyle='rgba(0,229,255,.55)';ctx.lineWidth=2;ctx.beginPath();
   for(let t=0;t<=tFlight;t+=0.04){const px=launchX+t*val.v*Math.cos(a)*pxPerMeter, py=horizonY-(t*val.v*Math.sin(a)-0.5*g*t*t)*dropScale; t===0?ctx.moveTo(px,py):ctx.lineTo(px,py);}ctx.stroke();ctx.setLineDash([]);
   ctx.strokeStyle='var(--orange)';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(launchX,launchY);ctx.lineTo(launchX+66*Math.cos(a),launchY-66*Math.sin(a));ctx.stroke();
