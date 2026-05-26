@@ -5966,7 +5966,7 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
         <div style="margin-top:10px"><strong>Рабочие формулы</strong>
           <div class="fc-formula">v = √(2gH)</div><div class="fc-formula">h = v²sin²(α)/(2g)</div><div class="fc-formula">h = Hsin²(α)</div><div class="fc-formula">при α = 30°: h = H/4</div>
         </div>
-        <div class="fc-ctrl"><button class="fc-btn" onclick="playFlyingCyclistSim()">Старт</button><button class="fc-btn" onclick="pauseFlyingCyclistSim()">Пауза</button><button class="fc-btn" onclick="resetFlyingCyclistSim()">Сброс</button><button class="fc-btn" onclick="replayFlyingCyclistSim()">Повтор</button></div><div style="margin-top:10px">Скорость анимации: <input id="fcSpeed" type="range" min="0.5" max="2" step="0.1" value="1"> <span id="fcSpeedVal">×1.0</span></div><button class="fc-btn" style="margin-top:10px" onclick="document.getElementById('fcSolution').classList.toggle('on')">Показать решение</button>
+        <div class="fc-ctrl"><button class="fc-btn" onclick="playFlyingCyclistSim()">Старт</button><button class="fc-btn" onclick="pauseFlyingCyclistSim()">Пауза</button><button class="fc-btn" onclick="resetFlyingCyclistSim()">Сброс</button><button class="fc-btn" onclick="resetFlyingCyclistSim(true)">Повтор</button></div><div style="margin-top:10px">Скорость анимации: <input id="fcSpeed" type="range" min="0.5" max="1.5" step="0.5" value="1"></div><button class="fc-btn" style="margin-top:10px" onclick="document.getElementById('fcSolution').classList.toggle('on')">Показать решение</button>
         <div id="fcSolution" class="fc-solution"><h4>Решение</h4>1) По закону сохранения энергии: m v² / 2 = m g H<br>2) Отсюда: v² / 2g = H<br>3) После вылета: h = v² sin²(α) / 2g<br>4) Подставляем: h = H sin²(α)<br>5) При α = 30°: sin 30° = 1/2, h = H/4<br><strong>Ответ: h = H/4</strong></div>
       </div>
     </div>
@@ -12376,13 +12376,12 @@ function updateFlyingCyclistParams(){
 }
 function initFlyingCyclistSim(){
   const cv=document.getElementById('flyingCyclistCanvas');if(!cv)return;
-  flyingCyclistState={running:false,t:0,lastTs:0,speed:1,params:{H:3,alpha:50,g:9.8},values:null,raf:null};
+  flyingCyclistState={running:false,t:0,lastTs:0,speed:1,params:{H:4,alpha:30,g:9.8},values:null,raf:null};
   ['fcH','fcA','fcG'].forEach(id=>document.getElementById(id).oninput=updateFlyingCyclistParams);
-  document.getElementById('fcSpeed').oninput=e=>{if(flyingCyclistState)flyingCyclistState.speed=+e.target.value;var v=document.getElementById('fcSpeedVal');if(v)v.textContent='×'+(+e.target.value).toFixed(1);};
+  document.getElementById('fcSpeed').oninput=e=>{if(flyingCyclistState)flyingCyclistState.speed=+e.target.value;};
   updateFlyingCyclistParams();resetFlyingCyclistSim();
 }
 function playFlyingCyclistSim(){if(!flyingCyclistState)return;flyingCyclistState.running=true;flyingCyclistState.lastTs=0;flyingCyclistState.raf=requestAnimationFrame(renderFlyingCyclistScene);}
-function replayFlyingCyclistSim(){resetFlyingCyclistSim(true);}
 function pauseFlyingCyclistSim(){if(!flyingCyclistState)return;flyingCyclistState.running=false;cancelAnimationFrame(flyingCyclistState.raf);}
 function resetFlyingCyclistSim(replay){if(!flyingCyclistState)return;pauseFlyingCyclistSim();flyingCyclistState.t=0;renderFlyingCyclistScene();if(replay)playFlyingCyclistSim();}
 function renderFlyingCyclistScene(ts){
@@ -12426,12 +12425,12 @@ function renderFlyingCyclistScene(ts){
   for(let t=0;t<=tFlight;t+=0.04){const px=launchX+t*val.v*Math.cos(a)*pxPerMeter, py=horizonY-(t*val.v*Math.sin(a)-0.5*g*t*t)*dropScale; t===0?ctx.moveTo(px,py):ctx.lineTo(px,py);}ctx.stroke();ctx.setLineDash([]);
   ctx.strokeStyle='var(--orange)';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(launchX,launchY);ctx.lineTo(launchX+66*Math.cos(a),launchY-66*Math.sin(a));ctx.stroke();
   ctx.beginPath();ctx.arc(launchX,launchY,28,0,-a,true);ctx.strokeStyle='rgba(255,255,255,.65)';ctx.lineWidth=1.2;ctx.stroke();
-  ctx.fillStyle='#fff';ctx.font='bold 13px Golos Text,sans-serif';ctx.fillText('α',launchX+24,launchY-12);
+  ctx.fillStyle='#fff';ctx.font='bold 13px Golos Text,sans-serif';ctx.fillText('α',launchX+66,launchY-22);
   zaA(ctx,launchX,launchY,launchX+78*Math.cos(a),launchY-78*Math.sin(a),'#ff8c00',2.2);
   ctx.fillStyle='#ffb86b';ctx.fillText('v',launchX+82*Math.cos(a),launchY-82*Math.sin(a));
   ctx.strokeStyle='var(--cyan)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(startX-20,horizonY);ctx.lineTo(startX-20,startY);ctx.stroke();ctx.fillStyle='var(--cyan)';ctx.fillText('H',startX-34,(startY+horizonY)/2);
   ctx.strokeStyle='var(--green)';ctx.beginPath();ctx.moveTo(apexX,horizonY);ctx.lineTo(apexX,apexY);ctx.stroke();ctx.fillStyle='var(--green)';ctx.fillText('h',apexX+6,(apexY+horizonY)/2);
-  ctx.fillStyle='rgba(255,255,255,.62)';ctx.font='11px Golos Text,sans-serif';ctx.fillText('уровень края трамплина',launchX+8,horizonY-8);
+  ctx.fillStyle='rgba(255,255,255,.62)';ctx.font='11px Golos Text,sans-serif';ctx.fillText('уровень края трамплина',launchX+110,horizonY+28);
   ctx.fillStyle='#00e5ff';
   ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.beginPath();ctx.arc(0,0,8,0,Math.PI*2);ctx.fill();ctx.fillRect(-12,-5,17,3);ctx.beginPath();ctx.arc(-7,6,4,0,Math.PI*2);ctx.arc(8,6,4,0,Math.PI*2);ctx.fill();ctx.restore();
   if(s.running&&p<total){s.raf=requestAnimationFrame(renderFlyingCyclistScene);}else if(p>=total){s.running=false;}
