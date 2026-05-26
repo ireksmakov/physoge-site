@@ -12399,10 +12399,14 @@ function renderFlyingCyclistScene(ts){
   const ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,Hh);
   if(s.running){if(!s.lastTs)s.lastTs=ts;const dt=Math.min((ts-s.lastTs)/1000,0.05)*s.speed;s.lastTs=ts;s.t+=dt;}
 
+  const safeNumber=(v,fallback)=>Number.isFinite(v)&&v>0?v:fallback;
+  const isFinitePoint=p=>!!(p&&Number.isFinite(p.x)&&Number.isFinite(p.y));
+  const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
+
   const {H,alpha,g}=s.params,val=s.values,a=alpha*Math.PI/180;
-  const leftPadding=70,rightPadding=70,topPadding=50,bottomPadding=70;
-  const availableWidth=Math.max(160,W-leftPadding-rightPadding);
-  const availableHeight=Math.max(140,Hh-topPadding-bottomPadding);
+  const padL=60,padR=70,padT=45,padB=80;
+  const availableWidth=Math.max(160,W-padL-padR);
+  const availableHeight=Math.max(140,Hh-padT-padB);
 
   const rampLenPhys=Math.max(5,0.95*H+1.8);
   const preCurveLenPhys=Math.max(2.6,0.55*H+1.2);
@@ -12417,16 +12421,23 @@ function renderFlyingCyclistScene(ts){
   const groundClearancePhys=Math.max(1.0,0.18*H+0.4);
   const totalPhysicalHeight=topHeightPhys+verticalHeadroomPhys+groundClearancePhys;
 
-  const scaleX=availableWidth/Math.max(totalPhysicalWidth,0.01);
-  const scaleY=availableHeight/Math.max(totalPhysicalHeight,0.01);
-  const scale=Math.min(scaleX,scaleY);
+  let scaleX=availableWidth/Math.max(totalPhysicalWidth,0.01);
+  let scaleY=availableHeight/Math.max(totalPhysicalHeight,0.01);
+  scaleX=safeNumber(scaleX,1);
+  scaleY=safeNumber(scaleY,1);
 
-  const horizonY=topPadding+verticalHeadroomPhys*scale+topHeightPhys*scale;
-  const launchX=leftPadding+(launchGroundMarginPhys+rampTotalPhys)*scale;
+  let scale=Math.min(scaleX,scaleY);
+  scale=safeNumber(scale,1);
+  scale=Math.max(18,Math.min(scale,58));
+
+  let horizonY=padT+verticalHeadroomPhys*scale+topHeightPhys*scale;
+  horizonY=clamp(horizonY,padT,Hh-padB);
+  let launchX=padL+(launchGroundMarginPhys+rampTotalPhys)*scale;
+  launchX=clamp(launchX,padL,W-padR);
   const launchY=horizonY;
-  const startX=launchX-rampTotalPhys*scale;
-  const startY=horizonY-H*scale;
-  const landX=launchX+val.R*scale;
+  const startX=clamp(launchX-rampTotalPhys*scale,padL,W-padR);
+  const startY=clamp(horizonY-H*scale,padT,Hh-padB);
+  const landX=clamp(launchX+val.R*scale,padL,W-padR);
 
   const ramp1X=startX+rampLenPhys*scale;
   const ramp1Y=startY+(H*0.42)*scale;
@@ -12436,11 +12447,35 @@ function renderFlyingCyclistScene(ts){
   const launchCtrlX=launchX-launchTangentLen*Math.cos(a);
   const launchCtrlY=launchY+launchTangentLen*Math.sin(a);
 
+  const hPx=val.h*scale;
+  const flightHalf=val.R*0.5*scale;
+  const apexX=launchX+flightHalf,apexY=horizonY-hPx;
+  const startPoint={x:startX,y:startY};
+  const launchPoint={x:launchX,y:launchY};
+  const apexPoint={x:apexX,y:apexY};
+  const invalidGeometry=!Number.isFinite(scale)||scale<=0||!isFinitePoint(startPoint)||!isFinitePoint(launchPoint)||!isFinitePoint(apexPoint);
+
   const baseTrack=`M ${startX} ${startY} L ${ramp1X} ${ramp1Y} C ${ramp1X+0.32*preCurveLenPhys*scale} ${ramp1Y+0.52*(ramp2Y-ramp1Y)}, ${ramp2X-0.26*preCurveLenPhys*scale} ${ramp2Y+0.28*H*scale}, ${ramp2X} ${ramp2Y} C ${ramp2X+0.20*postCurveLenPhys*scale} ${ramp2Y-0.22*H*scale}, ${launchCtrlX} ${launchCtrlY}, ${launchX} ${launchY}`;
-  const path2d=new Path2D(baseTrack);
   const rampPathEl=s.rampPathEl||(s.rampPathEl=document.createElementNS('http://www.w3.org/2000/svg','path'));
   rampPathEl.setAttribute('d',baseTrack);
-  const rampLen=rampPathEl.getTotalLength();
+  let rampLen=safeNumber(rampPathEl.getTotalLength(),0);
+  if(invalidGeometry||rampLen<=0){
+    const fallbackScale=Math.max(18,Math.min(58,safeNumber(scale*0.82,24)));
+    const fbHorizonY=clamp(Hh-padB-18,padT,Hh-padB);
+    const fbStartX=padL+8;
+    const fbStartY=clamp(fbHorizonY-H*fallbackScale,padT,Hh-padB);
+    const fbLaunchX=clamp(fbStartX+rampTotalPhys*fallbackScale,padL,W-padR);
+    const fbRamp1X=fbStartX+rampLenPhys*fallbackScale;
+    const fbRamp1Y=fbStartY+(H*0.44)*fallbackScale;
+    const fbRamp2X=fbRamp1X+preCurveLenPhys*fallbackScale;
+    const fbRamp2Y=fbHorizonY-(H*0.1)*fallbackScale;
+    const fallbackTrack=`M ${fbStartX} ${fbStartY} L ${fbRamp1X} ${fbRamp1Y} C ${fbRamp1X+18} ${fbRamp1Y+18}, ${fbRamp2X-14} ${fbRamp2Y+14}, ${fbRamp2X} ${fbRamp2Y} C ${fbRamp2X+14} ${fbRamp2Y-18}, ${fbLaunchX-26} ${fbHorizonY+18}, ${fbLaunchX} ${fbHorizonY}`;
+    rampPathEl.setAttribute('d',fallbackTrack);
+    rampLen=safeNumber(rampPathEl.getTotalLength(),120);
+  }
+
+  const drawTrack=rampPathEl.getAttribute('d')||baseTrack;
+  const path2d=new Path2D(drawTrack);
 
   const tRamp=2.8,tFlight=val.tFlight,total=tRamp+tFlight;
   const p=Math.min(s.t,total);
@@ -12453,9 +12488,7 @@ function renderFlyingCyclistScene(ts){
 
   const pxPerMeter=scale;
   const pxPerMeterVertical=scale;
-  const hPx=val.h*pxPerMeterVertical;
-  const flightHalf=val.R*0.5*pxPerMeter;
-  const apexX=launchX+flightHalf,apexY=horizonY-hPx;
+  const apexXSafe=clamp(apexX,padL,W-padR),apexYSafe=clamp(apexY,padT,Hh-padB);
 
   const phase=p<tRamp?1:2;
   let x=ptOnRamp.x,y=ptOnRamp.y,rot=tangentRamp;
@@ -12467,11 +12500,11 @@ function renderFlyingCyclistScene(ts){
     rot=Math.atan2(-vy,vx);
   }
 
-  ctx.strokeStyle='rgba(255,255,255,.16)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(leftPadding*0.5,horizonY);ctx.lineTo(W-rightPadding*0.45,horizonY);ctx.stroke();
-  ctx.strokeStyle='rgba(57,255,20,.22)';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(launchX,horizonY);ctx.lineTo(Math.min(landX,W-rightPadding*0.3));ctx.stroke();
+  ctx.strokeStyle='rgba(255,255,255,.16)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(padL*0.5,horizonY);ctx.lineTo(W-padR*0.45,horizonY);ctx.stroke();
+  ctx.strokeStyle='rgba(57,255,20,.22)';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(launchX,horizonY);ctx.lineTo(Math.min(landX,W-padR*0.3));ctx.stroke();
   ctx.strokeStyle='rgba(0,229,255,.95)';ctx.lineWidth=3.6;ctx.lineCap='round';ctx.stroke(path2d);
   ctx.strokeStyle='rgba(0,229,255,.22)';ctx.lineWidth=9;ctx.stroke(path2d);
-  ctx.fillStyle='rgba(0,229,255,.08)';ctx.beginPath();ctx.moveTo(startX,startY);ctx.lineTo(ramp1X,ramp1Y);ctx.lineTo(ramp2X,ramp2Y);ctx.lineTo(launchX,launchY);ctx.lineTo(launchX,Hh-bottomPadding*0.2);ctx.lineTo(startX,Hh-bottomPadding*0.2);ctx.closePath();ctx.fill();
+  ctx.fillStyle='rgba(0,229,255,.08)';ctx.beginPath();ctx.moveTo(startX,startY);ctx.lineTo(ramp1X,ramp1Y);ctx.lineTo(ramp2X,ramp2Y);ctx.lineTo(launchX,launchY);ctx.lineTo(launchX,Hh-padB*0.2);ctx.lineTo(startX,Hh-padB*0.2);ctx.closePath();ctx.fill();
 
   ctx.setLineDash([6,6]);ctx.strokeStyle='rgba(0,229,255,.55)';ctx.lineWidth=2;ctx.beginPath();
   for(let t=0;t<=tFlight;t+=0.04){const px=launchX+t*val.v*Math.cos(a)*pxPerMeter, py=horizonY-(t*val.v*Math.sin(a)-0.5*g*t*t)*pxPerMeterVertical; t===0?ctx.moveTo(px,py):ctx.lineTo(px,py);}ctx.stroke();ctx.setLineDash([]);
@@ -12482,9 +12515,9 @@ function renderFlyingCyclistScene(ts){
   ctx.fillStyle='#ffb86b';ctx.fillText('v',launchX+82*Math.cos(a),launchY-82*Math.sin(a));
 
   ctx.strokeStyle='var(--cyan)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(startX-20,horizonY);ctx.lineTo(startX-20,startY);ctx.stroke();ctx.fillStyle='var(--cyan)';ctx.fillText('H',startX-34,(startY+horizonY)/2);
-  ctx.strokeStyle='var(--orange)';ctx.beginPath();ctx.moveTo(apexX,horizonY);ctx.lineTo(apexX,apexY);ctx.stroke();ctx.fillStyle='#ffb86b';ctx.fillText('h',Math.min(apexX+8,W-rightPadding+8),apexY+16);
+  ctx.strokeStyle='var(--orange)';ctx.beginPath();ctx.moveTo(apexXSafe,horizonY);ctx.lineTo(apexXSafe,apexYSafe);ctx.stroke();ctx.fillStyle='#ffb86b';ctx.fillText('h',Math.min(apexXSafe+8,W-padR+8),apexYSafe+16);
   ctx.fillStyle='rgba(255,255,255,.62)';ctx.font='11px Golos Text,sans-serif';
-  const horizonLabelX=Math.min(launchX+Math.max(40,0.08*W),W-rightPadding-150);
+  const horizonLabelX=Math.min(launchX+Math.max(40,0.08*W),W-padR-150);
   ctx.fillText('уровень края трамплина',horizonLabelX,horizonY+28);
 
   ctx.fillStyle='#00e5ff';
