@@ -12524,11 +12524,11 @@ function renderFlyingCyclistScene(ts){
   const preCurveLenPhys=Math.max(2.8,0.56*H+1.2);
   const postCurveLenPhys=Math.max(3.4,0.68*H+1.45);
   const valleyInStartX=valleyX-preCurveLenPhys*0.95*scale;
-  const ramp1X=valleyInStartX+14*scale;
+  const ramp1X=valleyInStartX;
   const rampSlope=(valleyY-startY)/Math.max(valleyX-startX,1e-6);
-  const ramp1Y=startY+rampSlope*(ramp1X-startX)+12*scale;
-  const valleyInCtrlX=ramp1X+Math.max(4,4*scale);
-  const valleyInCtrlY=ramp1Y+rampSlope*Math.max(4,4*scale)+6*scale;
+  const ramp1Y=startY+rampSlope*(ramp1X-startX);
+  const valleyInCtrlX=ramp1X+Math.max(1.5,1.5*scale);
+  const valleyInCtrlY=ramp1Y+rampSlope*Math.max(1.5,1.5*scale)+Math.max(0.6,0.6*scale);
   const valleyOutCtrlX=valleyX+postCurveLenPhys*0.52*scale;
   const valleyOutCtrlY=valleyY;
   const launchTangentLen=Math.max(30,Math.min(W*0.085,64));
