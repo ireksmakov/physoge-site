@@ -12506,9 +12506,9 @@ function renderFlyingCyclistScene(ts){
   const startPoint={x:startX,y:startY};
   const joinPoint={x:rampJoinX,y:rampJoinY};
   const leftCurveC1={x:joinPoint.x+drawW*0.06,y:joinPoint.y+drawH*0.06};
-  const leftCurveC2={x:padL+drawW*0.40,y:padT+drawH*0.705};
-  const leftCurveEnd={x:padL+drawW*0.48,y:padT+drawH*0.70};
-  const rightCurveC1={x:padL+drawW*0.54,y:padT+drawH*0.67};
+  const leftCurveC2={x:padL+drawW*0.41,y:padT+drawH*0.725};
+  const leftCurveEnd={x:padL+drawW*0.49,y:padT+drawH*0.725};
+  const rightCurveC1={x:padL+drawW*0.56,y:padT+drawH*0.69};
   const baseTrack=`M ${startPoint.x} ${startPoint.y} L ${joinPoint.x} ${joinPoint.y} C ${leftCurveC1.x} ${leftCurveC1.y}, ${leftCurveC2.x} ${leftCurveC2.y}, ${leftCurveEnd.x} ${leftCurveEnd.y} C ${rightCurveC1.x} ${rightCurveC1.y}, ${launchCtrlX} ${launchCtrlY}, ${launchX} ${launchY}`;
   const path2d=new Path2D();
   path2d.moveTo(startPoint.x,startPoint.y);
