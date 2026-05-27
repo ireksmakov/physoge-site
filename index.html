@@ -1528,6 +1528,11 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 .fc-head{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border);font-size:11px;color:var(--gray)}
 .fc-cond{padding:8px 12px;font-size:clamp(14px,2.2vw,22px);line-height:1.35;white-space:normal;overflow:visible;color:var(--white);border-bottom:1px solid var(--border)}
 .fc-canvas-box{flex:1;min-height:0;padding:24px}
+
+.fc-inline-params{display:flex;flex-wrap:nowrap;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid rgba(8,216,255,.18)}
+.fc-param-chip{min-height:34px;height:34px;padding:0 12px;border-radius:12px;border:1px solid rgba(80,180,255,.32);background:linear-gradient(180deg,rgba(42,72,112,.96),rgba(14,28,52,.96));color:#eaf6ff;font-size:14px;font-weight:600;line-height:1.2;display:inline-flex;align-items:center;gap:7px;box-shadow:0 4px 10px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.10),inset 0 -2px 5px rgba(0,0,0,.22)}
+.fc-param-chip input[type="range"]{width:90px;height:4px}
+.fc-param-chip select{height:26px;padding:2px 8px;font-size:14px;border-radius:8px}
 #flyingCyclistCanvas{width:100%;height:100%;display:block}
 
 body.flying-record-mode header,
@@ -1558,6 +1563,7 @@ body.flying-record-mode .cyclist-record-frame{width:min(92vw,720px);aspect-ratio
 .fc-solution{display:none;margin-top:12px;border-top:1px solid var(--border);padding-top:10px;font-size:13px;line-height:1.55}
 .fc-solution.on{display:block}
 @media(max-width:980px){.fc-layout{grid-template-columns:1fr}.cyclist-record-frame{width:min(100%,720px)}}
+@media(max-width:700px){.fc-inline-params{flex-wrap:wrap}}
 /* Hub hero */
 .sh-hero{max-width:1200px;margin:0 auto;padding:48px 24px 32px}
 .sh-label{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--cyan);margin-bottom:16px}
@@ -5980,15 +5986,16 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
       <div class="cyclist-record-frame">
         <div class="fc-head"><span>Механика · Свободное падение</span><strong>ФИЗМАТ</strong></div>
         <div class="fc-cond">Гонщик стартует с высоты H, вылетает под углом α и приземляется на уровне края трамплина. Найти высоту полёта h.</div>
+        <div class="fc-inline-params">
+          <div class="fc-param-chip">H, м: <span id="fcHVal">3</span><input id="fcH" type="range" min="3" max="6" step="1" value="3"></div>
+          <div class="fc-param-chip">α, °: <span id="fcAVal">50</span><input id="fcA" type="range" min="40" max="60" step="1" value="50"></div>
+          <div class="fc-param-chip">g, м/с²: <select id="fcG"><option value="9.8" selected>9.8</option><option value="10">10</option></select></div>
+        </div>
         <div class="fc-canvas-box">
           <canvas id="flyingCyclistCanvas"></canvas>
         </div>
       </div>
       <div class="fc-panel">
-        <div><strong>Параметры</strong></div>
-        <div>H, м: <span id="fcHVal">3</span><input id="fcH" type="range" min="3" max="6" step="1" value="3"></div>
-        <div>α, °: <span id="fcAVal">50</span><input id="fcA" type="range" min="40" max="60" step="1" value="50"></div>
-        <div>g, м/с²: <select id="fcG"><option value="9.8" selected>9.8</option><option value="10">10</option></select></div>
         <div id="fcValues" class="fc-metric"></div>
         <div style="margin-top:10px"><strong>Рабочие формулы</strong>
           <div class="fc-formula">v = √(2gH)</div><div class="fc-formula">h = v²sin²(α)/(2g)</div><div class="fc-formula">h = Hsin²(α)</div><div class="fc-formula">при α = 30°: h = H/4</div>
