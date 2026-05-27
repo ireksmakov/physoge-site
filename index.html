@@ -1531,7 +1531,7 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 .fc-inline-params label{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#d9ebff;background:linear-gradient(180deg,rgba(36,66,104,.45),rgba(11,24,44,.45));border:1px solid rgba(80,180,255,.24);border-radius:12px;padding:6px 10px}
 .fc-inline-params input[type="range"]{width:92px;accent-color:#7dd3fc}
 .fc-inline-params select{background:rgba(10,20,36,.95);border:1px solid rgba(80,180,255,.32);color:#eaf6ff;border-radius:8px;padding:4px 7px;font-size:12px}
-.fc-canvas-box{flex:1;min-height:0;padding:18px 20px 12px}
+.fc-canvas-box{flex:1;min-height:0;padding:18px 20px 8px;margin-bottom:0}
 #flyingCyclistCanvas{width:100%;height:100%;display:block}
 
 body.flying-record-mode header,
@@ -1552,7 +1552,7 @@ body.flying-record-mode .cyclist-record-frame{width:min(92vw,720px);aspect-ratio
 .fc-ctrl{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .fc-btn{border:1px solid var(--border);background:var(--bg);color:var(--white);border-radius:10px;padding:8px 12px;cursor:pointer}
 .fc-btn:hover{border-color:var(--cyan);color:var(--cyan)}
-.fc-controls-inside{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;padding:10px 14px 14px;border-top:1px solid rgba(8,216,255,.18)}
+.fc-controls-inside{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;padding:10px 14px 12px;margin-top:8px;border-top:1px solid rgba(8,216,255,.18)}
 .fc-controls-inside button,.fc-speed-control{min-height:34px;padding:7px 13px;border-radius:14px;border:1px solid rgba(80,180,255,.32);background:linear-gradient(180deg, rgba(48,86,132,.96), rgba(12,28,54,.96));color:#eaf6ff;font-size:13px;font-weight:700;box-shadow:0 5px 14px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.14),inset 0 -2px 6px rgba(0,0,0,.28);cursor:pointer}
 .fc-controls-inside button:hover{transform:translateY(-1px);border-color:rgba(8,216,255,.7)}
 .fc-controls-inside button:active{transform:translateY(1px);box-shadow:0 2px 8px rgba(0,0,0,.35),inset 0 2px 4px rgba(0,0,0,.35)}
@@ -1568,6 +1568,10 @@ body.flying-record-mode .cyclist-record-frame{width:min(92vw,720px);aspect-ratio
 .fc-formula{font-family:var(--fh);font-size:13px;margin:4px 0;color:var(--cyan)}
 .fc-solution{display:none;margin-top:12px;border-top:1px solid var(--border);padding-top:10px;font-size:13px;line-height:1.55}
 .fc-solution.on{display:block}
+.fc-solution-btn{display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:8px 16px;border-radius:14px;border:1px solid rgba(80,180,255,.32);background:linear-gradient(180deg, rgba(48,86,132,.96), rgba(12,28,54,.96));color:#eaf6ff;font-size:14px;font-weight:700;box-shadow:0 5px 14px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.14),inset 0 -2px 6px rgba(0,0,0,.28);cursor:pointer}
+.fc-solution-btn:hover{transform:translateY(-1px);border-color:rgba(8,216,255,.7)}
+.fc-solution-btn:active{transform:translateY(1px);box-shadow:0 2px 8px rgba(0,0,0,.35),inset 0 2px 4px rgba(0,0,0,.35)}
+
 @media(max-width:980px){.fc-layout{grid-template-columns:1fr}.cyclist-record-frame{width:min(100%,720px)}.fc-inline-params{gap:8px}.fc-controls-inside{justify-content:flex-start}.fc-speed-slider{width:90px}}
 /* Hub hero */
 .sh-hero{max-width:1200px;margin:0 auto;padding:48px 24px 32px}
@@ -6005,14 +6009,14 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
           <button class="fc-btn sim-control-btn" onclick="resetFlyingCyclistSim()">Сброс</button>
           <button class="fc-btn sim-control-btn" onclick="resetFlyingCyclistSim(true)">Повтор</button>
           <label class="fc-speed-control" for="fcSpeed"><span>Скорость</span><input id="fcSpeed" class="fc-speed-slider" type="range" min="0.5" max="1.5" step="0.5" value="1"></label>
-          <button class="fc-btn sim-control-btn" onclick="document.getElementById('fcSolution').classList.toggle('on')">Показать решение</button>
-        </div>
+                  </div>
       </div>
       <div class="fc-panel">
         <div id="fcValues" class="fc-metric"></div>
         <div style="margin-top:10px"><strong>Рабочие формулы</strong>
           <div class="fc-formula">v = √(2gH)</div><div class="fc-formula">h = v²sin²(α)/(2g)</div><div class="fc-formula">h = Hsin²(α)</div><div class="fc-formula">при α = 30°: h = H/4</div>
         </div>
+        <button class="fc-solution-btn" type="button" onclick="document.getElementById('fcSolution').classList.toggle('on')">Показать решение</button>
         <div id="fcSolution" class="fc-solution"><h4>Решение</h4>1) По закону сохранения энергии: m v² / 2 = m g H<br>2) Отсюда: v² / 2g = H<br>3) После вылета: h = v² sin²(α) / 2g<br>4) Подставляем: h = H sin²(α)<br>5) При α = 30°: sin 30° = 1/2, h = H/4<br><strong>Ответ: h = H/4</strong></div>
       </div>
     </div>
