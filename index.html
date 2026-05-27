@@ -1529,10 +1529,11 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 .fc-cond{padding:8px 12px;font-size:clamp(14px,2.2vw,22px);line-height:1.35;white-space:normal;overflow:visible;color:var(--white);border-bottom:1px solid var(--border)}
 .fc-canvas-box{flex:1;min-height:0;padding:24px}
 
-.fc-inline-params{display:flex;flex-wrap:nowrap;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid rgba(8,216,255,.18)}
-.fc-param-chip{min-height:34px;height:34px;padding:0 12px;border-radius:12px;border:1px solid rgba(80,180,255,.32);background:linear-gradient(180deg,rgba(42,72,112,.96),rgba(14,28,52,.96));color:#eaf6ff;font-size:14px;font-weight:600;line-height:1.2;display:inline-flex;align-items:center;gap:7px;box-shadow:0 4px 10px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.10),inset 0 -2px 5px rgba(0,0,0,.22)}
-.fc-param-chip input[type="range"]{width:90px;height:4px}
-.fc-param-chip select{height:26px;padding:2px 8px;font-size:14px;border-radius:8px}
+.fc-inline-params{display:flex;flex-wrap:nowrap;align-items:center;gap:8px;padding:8px 14px;border-bottom:1px solid rgba(8,216,255,.18);overflow-x:auto}
+.fc-param-chip{min-height:30px;height:30px;padding:0 10px;border-radius:10px;border:1px solid rgba(80,180,255,.32);background:linear-gradient(180deg,rgba(42,72,112,.82),rgba(14,28,52,.92));color:#9fb0c8;font-size:12px;font-weight:600;line-height:1;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;box-shadow:0 3px 8px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.08)}
+.fc-param-chip strong,.fc-param-chip span{font-size:12px;font-weight:600;color:#dcecff}
+.fc-param-chip input[type="range"]{width:70px;height:4px}
+.fc-param-chip select{height:24px;padding:1px 7px;font-size:12px;border-radius:7px}
 #flyingCyclistCanvas{width:100%;height:100%;display:block}
 
 body.flying-record-mode header,
@@ -5990,6 +5991,8 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
           <div class="fc-param-chip">H, м: <span id="fcHVal">3</span><input id="fcH" type="range" min="3" max="6" step="1" value="3"></div>
           <div class="fc-param-chip">α, °: <span id="fcAVal">50</span><input id="fcA" type="range" min="40" max="60" step="1" value="50"></div>
           <div class="fc-param-chip">g, м/с²: <select id="fcG"><option value="9.8" selected>9.8</option><option value="10">10</option></select></div>
+          <div class="fc-param-chip">h=<span id="fcHResult">2.48</span> м</div>
+          <div class="fc-param-chip">t↑=<span id="fcTUpResult">0.71</span> с</div>
         </div>
         <div class="fc-canvas-box">
           <canvas id="flyingCyclistCanvas"></canvas>
@@ -12411,7 +12414,9 @@ function updateFlyingCyclistParams(){
   document.getElementById('fcHVal').textContent=H;document.getElementById('fcAVal').textContent=alpha;
   flyingCyclistState.params={H,alpha,g};flyingCyclistState.values=calculateFlyingCyclistValues(H,alpha,g);
   const v=flyingCyclistState.values;
-  document.getElementById('fcValues').innerHTML=`H=${H} м · α=${alpha}° · v≈${v.v.toFixed(2)} м/с · h=${v.h.toFixed(2)} м · t↑=${v.tUp.toFixed(2)} с · tпол=${v.tFlight.toFixed(2)} с · R=${v.R.toFixed(2)} м${alpha===30?'<br><span style="color:var(--green)">При α=30°: h = H/4</span>':''}`;
+  document.getElementById('fcHResult').textContent=v.h.toFixed(2);
+  document.getElementById('fcTUpResult').textContent=v.tUp.toFixed(2);
+  document.getElementById('fcValues').innerHTML=`H=${H} м · α=${alpha}° · v≈${v.v.toFixed(2)} м/с · tпол=${v.tFlight.toFixed(2)} с · R=${v.R.toFixed(2)} м${alpha===30?'<br><span style="color:var(--green)">При α=30°: h = H/4</span>':''}`;
   renderFlyingCyclistScene();
 }
 function toggleFlyingCyclistRecordMode(isOn){
