@@ -12527,8 +12527,13 @@ function renderFlyingCyclistScene(ts){
   const ramp1X=valleyInStartX;
   const rampSlope=(valleyY-startY)/Math.max(valleyX-startX,1e-6);
   const ramp1Y=startY+rampSlope*(ramp1X-startX);
-  const valleyInCtrlX=ramp1X+Math.max(1.5,1.5*scale);
-  const valleyInCtrlY=ramp1Y+rampSlope*Math.max(1.5,1.5*scale)+Math.max(0.6,0.6*scale);
+  const tangentBlendLen=Math.max(10,Math.min(26,drawW*0.035));
+  const rampJoinX=ramp1X+tangentBlendLen;
+  const rampJoinY=ramp1Y+rampSlope*tangentBlendLen;
+  const valleyInCtrlX=rampJoinX+Math.max(8,Math.min(20,drawW*0.026));
+  const valleyInCtrlY=rampJoinY+rampSlope*Math.max(8,Math.min(20,drawW*0.026))+Math.max(0.22,0.22*scale);
+  const valleyInPreX=valleyX-preCurveLenPhys*0.28*scale;
+  const valleyInPreY=valleyY-Math.max(0.45,0.45*scale);
   const valleyOutCtrlX=valleyX+postCurveLenPhys*0.52*scale;
   const valleyOutCtrlY=valleyY;
   const launchTangentLen=Math.max(30,Math.min(W*0.085,64));
@@ -12536,9 +12541,9 @@ function renderFlyingCyclistScene(ts){
   const launchCtrlY=launchY+launchTangentLen*Math.sin(a);
   const baseTrack=`
   M ${startX} ${startY}
-  L ${ramp1X} ${ramp1Y}
+  L ${rampJoinX} ${rampJoinY}
   C ${valleyInCtrlX} ${valleyInCtrlY},
-    ${valleyX-preCurveLenPhys*0.2*scale} ${valleyY},
+    ${valleyInPreX} ${valleyInPreY},
     ${valleyX} ${valleyY}
   C ${valleyOutCtrlX} ${valleyOutCtrlY},
     ${launchCtrlX} ${launchCtrlY},
