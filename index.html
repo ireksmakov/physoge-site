@@ -1543,6 +1543,12 @@ body.flying-record-mode .cyclist-record-frame{width:min(92vw,720px);aspect-ratio
 .fc-ctrl{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .fc-btn{border:1px solid var(--border);background:var(--bg);color:var(--white);border-radius:10px;padding:8px 12px;cursor:pointer}
 .fc-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.fc-fullscreen-exit{display:none}
+.cyclist-record-frame:fullscreen{width:100vw;height:100vh;max-width:none;max-height:none;border-radius:0;background:#081422}
+.cyclist-record-frame:fullscreen .fc-canvas-box{flex:1;min-height:0}
+.cyclist-record-frame:fullscreen canvas{width:100%;height:100%}
+.cyclist-record-frame:fullscreen .fc-fullscreen-enter{display:none}
+.cyclist-record-frame:fullscreen .fc-fullscreen-exit{display:inline-flex}
 .fc-formula{font-family:var(--fh);font-size:13px;margin:4px 0;color:var(--cyan)}
 .fc-solution{display:none;margin-top:12px;border-top:1px solid var(--border);padding-top:10px;font-size:13px;line-height:1.55}
 .fc-solution.on{display:block}
@@ -5956,7 +5962,11 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
 <!-- flyingCyclist restored to stable implementation (PR #283 lineage) -->
 <div id="sim-flying-cyclist">
   <div class="fc-wrap">
-    <button type="button" onclick="closeFlyingCyclistSim()" class="fc-btn btn-back" style="margin-bottom:12px">← Назад</button>
+    <div class="fc-ctrl" style="margin-bottom:12px">
+      <button type="button" onclick="closeFlyingCyclistSim()" class="fc-btn btn-back">← Назад</button>
+      <button type="button" class="fc-btn fc-fullscreen-enter" onclick="enterFlyingCyclistFullscreen()">На весь экран</button>
+      <button type="button" class="fc-btn fc-fullscreen-exit" onclick="exitFlyingCyclistFullscreen()">Выйти из полноэкранного режима</button>
+    </div>
     <div class="fc-ctrl" style="margin-bottom:12px">
       <button type="button" class="fc-btn" id="fcRecordModeBtn" onclick="toggleFlyingCyclistRecordMode(true)">Режим записи 4:5</button>
       <button type="button" class="fc-btn" id="fcExitRecordModeBtn" onclick="toggleFlyingCyclistRecordMode(false)" style="display:none">Выйти из режима записи</button>
@@ -12401,11 +12411,24 @@ function toggleFlyingCyclistRecordMode(isOn){
   setTimeout(renderFlyingCyclistScene,30);
 }
 
+function enterFlyingCyclistFullscreen(){
+  const frame=document.querySelector('.cyclist-record-frame');
+  if(!frame)return;
+  if(!frame.requestFullscreen){alert('Полноэкранный режим недоступен в этом браузере');return;}
+  frame.requestFullscreen().then(()=>{setTimeout(()=>{renderFlyingCyclistScene();},100);}).catch(()=>{alert('Полноэкранный режим недоступен в этом браузере');});
+}
+function exitFlyingCyclistFullscreen(){
+  if(document.fullscreenElement&&document.exitFullscreen){document.exitFullscreen();}
+}
 function initFlyingCyclistSim(){
   const cv=document.getElementById('flyingCyclistCanvas');if(!cv)return;
   flyingCyclistState={running:false,t:0,lastTs:0,speed:1,params:{H:3,alpha:50,g:9.8},values:null,raf:null};
   ['fcH','fcA','fcG'].forEach(id=>document.getElementById(id).oninput=updateFlyingCyclistParams);
   document.getElementById('fcSpeed').oninput=e=>{if(flyingCyclistState)flyingCyclistState.speed=+e.target.value;};
+  if(!window.__flyingCyclistFullscreenBound){
+    document.addEventListener('fullscreenchange',()=>{renderFlyingCyclistScene();});
+    window.__flyingCyclistFullscreenBound=true;
+  }
   updateFlyingCyclistParams();resetFlyingCyclistSim();
 }
 function playFlyingCyclistSim(){if(!flyingCyclistState)return;flyingCyclistState.running=true;flyingCyclistState.lastTs=0;flyingCyclistState.raf=requestAnimationFrame(renderFlyingCyclistScene);}
