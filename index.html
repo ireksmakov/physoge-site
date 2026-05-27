@@ -12485,11 +12485,15 @@ function renderFlyingCyclistScene(ts){
   const {H,alpha,g}=s.params,val=s.values,a=alpha*Math.PI/180;
   const padL=90,padR=90,padT=70,padB=100;
   const drawW=Math.max(260,W-padL-padR),drawH=Math.max(220,Hh-padT-padB);
-  const horizonY=padT+drawH*0.62,startX=padL+drawW*0.06,startY=padT+drawH*0.08,launchX=padL+drawW*0.58,launchY=horizonY;
+  const horizonY=padT+drawH*0.62,startX=padL+drawW*0.06,launchX=padL+drawW*0.58,launchY=horizonY;
+  const slopeJoinX=padL+drawW*0.24,slopeJoinY=padT+drawH*0.38;
+  const maxTrackHeightPx=Math.max(72,drawH*0.54);
+  const pxPerMeterVertical=maxTrackHeightPx/6;
+  const startY=Math.max(padT+10,horizonY-H*pxPerMeterVertical);
   const launchTangentLen=Math.max(30,Math.min(W*0.085,64));
   const launchCtrlX=launchX-launchTangentLen*Math.cos(a);
   const launchCtrlY=launchY+launchTangentLen*Math.sin(a);
-  const baseTrack=`M ${startX} ${startY} L ${padL+drawW*0.24} ${padT+drawH*0.38} C ${padL+drawW*0.32} ${padT+drawH*0.55}, ${padL+drawW*0.40} ${padT+drawH*0.71}, ${padL+drawW*0.48} ${padT+drawH*0.70} C ${padL+drawW*0.54} ${padT+drawH*0.67}, ${launchCtrlX} ${launchCtrlY}, ${launchX} ${launchY}`;
+  const baseTrack=`M ${startX} ${startY} L ${slopeJoinX} ${slopeJoinY} C ${padL+drawW*0.32} ${padT+drawH*0.55}, ${padL+drawW*0.40} ${padT+drawH*0.71}, ${padL+drawW*0.48} ${padT+drawH*0.70} C ${padL+drawW*0.54} ${padT+drawH*0.67}, ${launchCtrlX} ${launchCtrlY}, ${launchX} ${launchY}`;
   const path2d=new Path2D(baseTrack);
   const rampPathEl=s.rampPathEl||(s.rampPathEl=document.createElementNS('http://www.w3.org/2000/svg','path'));
   rampPathEl.setAttribute('d',baseTrack);
@@ -12503,7 +12507,6 @@ function renderFlyingCyclistScene(ts){
   const ptAhead=rampPathEl.getPointAtLength(Math.min(rampLen,arcLen+4));
   const tangentRamp=Math.atan2(ptAhead.y-ptOnRamp.y,ptAhead.x-ptOnRamp.x);
   const pxPerMeter=Math.max(20,Math.min((W-padR-launchX)/Math.max(val.R,0.01),34));
-  const pxPerMeterVertical=(horizonY-startY)/Math.max(H,0.1);
   const flightHeightVisualScale=0.78;
   const pxPerMeterVerticalVisual=pxPerMeterVertical*flightHeightVisualScale;
   const hPx=val.h*pxPerMeterVerticalVisual;
@@ -12529,7 +12532,7 @@ function renderFlyingCyclistScene(ts){
   ctx.fillStyle='#fff';ctx.font='bold 13px Golos Text,sans-serif';ctx.fillText('α',launchX+66,launchY-22);
   zaA(ctx,launchX,launchY,launchX+78*Math.cos(a),launchY-78*Math.sin(a),'#ff8c00',2.2);
   ctx.fillStyle='#ffb86b';ctx.fillText('v',launchX+82*Math.cos(a),launchY-82*Math.sin(a));
-  ctx.strokeStyle='var(--cyan)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(startX-20,horizonY);ctx.lineTo(startX-20,startY);ctx.stroke();ctx.fillStyle='var(--cyan)';ctx.fillText('H',startX-34,(startY+horizonY)/2);
+  ctx.strokeStyle='var(--orange)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(startX-20,horizonY);ctx.lineTo(startX-20,startY);ctx.stroke();ctx.fillStyle='#ffb86b';ctx.fillText('H',startX-34,(startY+horizonY)/2);
   ctx.strokeStyle='var(--orange)';ctx.beginPath();ctx.moveTo(apexX,horizonY);ctx.lineTo(apexX,apexY);ctx.stroke();ctx.fillStyle='#ffb86b';ctx.fillText('h',apexX+8,apexY+16);
   ctx.fillStyle='rgba(255,255,255,.62)';ctx.font='11px Golos Text,sans-serif';ctx.fillText('уровень края трамплина',Math.min(launchX+110,W-padR-170),horizonY+28);
   ctx.fillStyle='#00e5ff';
