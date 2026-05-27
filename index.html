@@ -1531,7 +1531,7 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 .fc-inline-params label{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#d9ebff;background:linear-gradient(180deg,rgba(36,66,104,.45),rgba(11,24,44,.45));border:1px solid rgba(80,180,255,.24);border-radius:12px;padding:6px 10px}
 .fc-inline-params input[type="range"]{width:92px;accent-color:#7dd3fc}
 .fc-inline-params select{background:rgba(10,20,36,.95);border:1px solid rgba(80,180,255,.32);color:#eaf6ff;border-radius:8px;padding:4px 7px;font-size:12px}
-.fc-canvas-box{flex:0 0 auto;height:clamp(420px,48vw,560px);min-height:0;padding:8px 20px 0;margin-bottom:0}
+.fc-canvas-box{flex:0 0 auto;height:clamp(320px,38vw,440px);min-height:0;padding:8px 20px 0;margin-bottom:0}
 #flyingCyclistCanvas{width:100%;height:100%;display:block}
 
 body.flying-record-mode header,
@@ -1543,7 +1543,7 @@ body.flying-record-mode .fc-wrap{padding:16px;max-width:none}
 body.flying-record-mode .cyclist-record-frame{width:min(92vw,720px);aspect-ratio:4/5;max-height:none}
 .fullscreen-record-overlay{position:fixed;inset:0;background:#050b14;display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px}
 .recording-frame-45{aspect-ratio:4/5;width:min(92vw,720px);height:auto;max-height:95vh;margin:auto;background:#081422;border:1px solid var(--border);border-radius:20px;overflow:hidden;display:flex;flex-direction:column}
-.recording-frame-45 .fc-canvas-box{flex:0 0 auto;height:clamp(420px,48vw,560px);min-height:0;padding:20px}
+.recording-frame-45 .fc-canvas-box{flex:0 0 auto;height:clamp(320px,38vw,440px);min-height:0;padding:8px 20px 0;margin-bottom:0}
 .fc-record-overlay-close{position:absolute;top:14px;right:14px}
 .fc-animation-placeholder{height:100%;min-height:260px;background:linear-gradient(180deg,rgba(8,15,24,.95),rgba(5,12,18,.95));border:1px dashed rgba(0,229,255,.35);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
 .fc-animation-placeholder h3{font-family:var(--fh);font-size:20px;color:var(--white);margin-bottom:10px}
@@ -12467,6 +12467,7 @@ function toggleFlyingCyclistRecordMode(isOn){
   }
   if(enterBtn)enterBtn.style.display=isOn?'none':'inline-flex';
   if(exitBtn)exitBtn.style.display=isOn?'inline-flex':'none';
+  renderFlyingCyclistScene();
   setTimeout(renderFlyingCyclistScene,30);
 }
 
