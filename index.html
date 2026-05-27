@@ -1524,10 +1524,18 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 #lesson-page{display:none;min-height:100vh;padding-top:64px}
 .fc-wrap{max-width:1250px;margin:0 auto;padding:24px}
 .fc-layout{display:grid;grid-template-columns:minmax(320px,700px) minmax(280px,1fr);gap:18px;align-items:start}
-.cyclist-record-frame{aspect-ratio:4/5;width:100%;max-height:calc(100vh - 180px);background:var(--bg2);border:1px solid var(--border);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.cyclist-record-frame{aspect-ratio:4/5;width:min(100%,720px);height:auto;max-height:none;background:var(--bg2);border:1px solid var(--border);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
 .fc-head{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border);font-size:11px;color:var(--gray)}
-.fc-cond{padding:8px 12px;font-size:12px;color:var(--white);border-bottom:1px solid var(--border)}
-.fc-canvas-box{flex:1;min-height:0;padding:8px}
+.fc-cond{padding:8px 12px;font-size:clamp(14px,2.2vw,22px);line-height:1.35;white-space:normal;overflow:visible;color:var(--white);border-bottom:1px solid var(--border)}
+.fc-canvas-box{flex:1;min-height:0;padding:24px}
+#flyingCyclistCanvas{width:100%;height:100%;display:block}
+
+body.flying-record-mode header,
+body.flying-record-mode .fc-panel,
+body.flying-record-mode .btn-back{display:none !important}
+body.flying-record-mode .fc-layout{display:flex;justify-content:center}
+body.flying-record-mode .fc-wrap{padding:16px;max-width:none}
+body.flying-record-mode .cyclist-record-frame{width:min(92vw,720px);aspect-ratio:4/5;max-height:none}
 .fc-animation-placeholder{height:100%;min-height:260px;background:linear-gradient(180deg,rgba(8,15,24,.95),rgba(5,12,18,.95));border:1px dashed rgba(0,229,255,.35);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
 .fc-animation-placeholder h3{font-family:var(--fh);font-size:20px;color:var(--white);margin-bottom:10px}
 .fc-animation-placeholder p{max-width:520px;font-size:13px;line-height:1.5;color:var(--gray)}
@@ -1538,7 +1546,7 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 .fc-formula{font-family:var(--fh);font-size:13px;margin:4px 0;color:var(--cyan)}
 .fc-solution{display:none;margin-top:12px;border-top:1px solid var(--border);padding-top:10px;font-size:13px;line-height:1.55}
 .fc-solution.on{display:block}
-@media(max-width:980px){.fc-layout{grid-template-columns:1fr}.cyclist-record-frame{max-height:70vh}}
+@media(max-width:980px){.fc-layout{grid-template-columns:1fr}.cyclist-record-frame{width:min(100%,720px)}}
 /* Hub hero */
 .sh-hero{max-width:1200px;margin:0 auto;padding:48px 24px 32px}
 .sh-label{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--cyan);margin-bottom:16px}
@@ -5948,7 +5956,11 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
 <!-- flyingCyclist restored to stable implementation (PR #283 lineage) -->
 <div id="sim-flying-cyclist">
   <div class="fc-wrap">
-    <button type="button" onclick="closeFlyingCyclistSim()" class="fc-btn" style="margin-bottom:12px">← Назад</button>
+    <button type="button" onclick="closeFlyingCyclistSim()" class="fc-btn btn-back" style="margin-bottom:12px">← Назад</button>
+    <div class="fc-ctrl" style="margin-bottom:12px">
+      <button type="button" class="fc-btn" id="fcRecordModeBtn" onclick="toggleFlyingCyclistRecordMode(true)">Режим записи 4:5</button>
+      <button type="button" class="fc-btn" id="fcExitRecordModeBtn" onclick="toggleFlyingCyclistRecordMode(false)" style="display:none">Выйти из режима записи</button>
+    </div>
     <div class="fc-layout">
       <div class="cyclist-record-frame">
         <div class="fc-head"><span>Механика · Свободное падение</span><strong>ФИЗМАТ</strong></div>
@@ -12360,7 +12372,7 @@ function renderPLab(name){
 
 let flyingCyclistState=null;
 function openFlyingCyclistSim(){openSim('flying-cyclist');}
-function closeFlyingCyclistSim(){pauseFlyingCyclistSim();goBack();}
+function closeFlyingCyclistSim(){toggleFlyingCyclistRecordMode(false);pauseFlyingCyclistSim();goBack();}
 function calculateFlyingCyclistValues(H,alphaDeg,g){
   const a=alphaDeg*Math.PI/180, v=Math.sqrt(2*g*H), h=H*Math.sin(a)**2, tUp=v*Math.sin(a)/g, tFlight=2*tUp, R=(v*v*Math.sin(2*a))/g;
   return{v,h,tUp,tFlight,R};
@@ -12380,6 +12392,15 @@ function updateFlyingCyclistParams(){
   document.getElementById('fcValues').innerHTML=`H=${H} м · α=${alpha}° · v≈${v.v.toFixed(2)} м/с · h=${v.h.toFixed(2)} м · t↑=${v.tUp.toFixed(2)} с · tпол=${v.tFlight.toFixed(2)} с · R=${v.R.toFixed(2)} м${alpha===30?'<br><span style="color:var(--green)">При α=30°: h = H/4</span>':''}`;
   renderFlyingCyclistScene();
 }
+function toggleFlyingCyclistRecordMode(isOn){
+  document.body.classList.toggle('flying-record-mode',!!isOn);
+  const enterBtn=document.getElementById('fcRecordModeBtn');
+  const exitBtn=document.getElementById('fcExitRecordModeBtn');
+  if(enterBtn)enterBtn.style.display=isOn?'none':'inline-flex';
+  if(exitBtn)exitBtn.style.display=isOn?'inline-flex':'none';
+  setTimeout(renderFlyingCyclistScene,30);
+}
+
 function initFlyingCyclistSim(){
   const cv=document.getElementById('flyingCyclistCanvas');if(!cv)return;
   flyingCyclistState={running:false,t:0,lastTs:0,speed:1,params:{H:3,alpha:50,g:9.8},values:null,raf:null};
@@ -12395,11 +12416,13 @@ function renderFlyingCyclistScene(ts){
   cv.width=W*dpr;cv.height=Hh*dpr;const ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,Hh);
   if(s.running){if(!s.lastTs)s.lastTs=ts;const dt=Math.min((ts-s.lastTs)/1000,0.05)*s.speed;s.lastTs=ts;s.t+=dt;}
   const {H,alpha,g}=s.params,val=s.values,a=alpha*Math.PI/180;
-  const horizonY=Hh*0.54,startX=W*0.09,startY=Hh*0.17,launchX=W*0.64,launchY=horizonY;
+  const padL=90,padR=90,padT=70,padB=100;
+  const drawW=Math.max(260,W-padL-padR),drawH=Math.max(220,Hh-padT-padB);
+  const horizonY=padT+drawH*0.62,startX=padL+drawW*0.06,startY=padT+drawH*0.08,launchX=padL+drawW*0.58,launchY=horizonY;
   const launchTangentLen=Math.max(30,Math.min(W*0.085,64));
   const launchCtrlX=launchX-launchTangentLen*Math.cos(a);
   const launchCtrlY=launchY+launchTangentLen*Math.sin(a);
-  const baseTrack=`M ${startX} ${startY} L ${W*0.26} ${Hh*0.43} C ${W*0.34} ${Hh*0.58}, ${W*0.42} ${Hh*0.74}, ${W*0.50} ${Hh*0.73} C ${W*0.56} ${Hh*0.70}, ${launchCtrlX} ${launchCtrlY}, ${launchX} ${launchY}`;
+  const baseTrack=`M ${startX} ${startY} L ${padL+drawW*0.24} ${padT+drawH*0.38} C ${padL+drawW*0.32} ${padT+drawH*0.55}, ${padL+drawW*0.40} ${padT+drawH*0.71}, ${padL+drawW*0.48} ${padT+drawH*0.70} C ${padL+drawW*0.54} ${padT+drawH*0.67}, ${launchCtrlX} ${launchCtrlY}, ${launchX} ${launchY}`;
   const path2d=new Path2D(baseTrack);
   const rampPathEl=s.rampPathEl||(s.rampPathEl=document.createElementNS('http://www.w3.org/2000/svg','path'));
   rampPathEl.setAttribute('d',baseTrack);
@@ -12412,7 +12435,7 @@ function renderFlyingCyclistScene(ts){
   const ptOnRamp=rampPathEl.getPointAtLength(Math.max(0,Math.min(rampLen,arcLen)));
   const ptAhead=rampPathEl.getPointAtLength(Math.min(rampLen,arcLen+4));
   const tangentRamp=Math.atan2(ptAhead.y-ptOnRamp.y,ptAhead.x-ptOnRamp.x);
-  const pxPerMeter=Math.max(20,Math.min((W-launchX-34)/Math.max(val.R,0.01),34));
+  const pxPerMeter=Math.max(20,Math.min((W-padR-launchX)/Math.max(val.R,0.01),34));
   const pxPerMeterVertical=(horizonY-startY)/Math.max(H,0.1);
   const flightHeightVisualScale=0.78;
   const pxPerMeterVerticalVisual=pxPerMeterVertical*flightHeightVisualScale;
@@ -12428,8 +12451,8 @@ function renderFlyingCyclistScene(ts){
     const vx=val.v*Math.cos(a),vy=val.v*Math.sin(a)-g*tp;
     rot=Math.atan2(-vy,vx);
   }
-  ctx.strokeStyle='rgba(255,255,255,.16)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(18,horizonY);ctx.lineTo(W-16,horizonY);ctx.stroke();
-  ctx.strokeStyle='rgba(57,255,20,.22)';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(launchX,horizonY);ctx.lineTo(Math.max(launchX+14,Math.min(landX,W-18)),horizonY);ctx.stroke();
+  ctx.strokeStyle='rgba(255,255,255,.16)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(padL-18,horizonY);ctx.lineTo(W-padR+16,horizonY);ctx.stroke();
+  ctx.strokeStyle='rgba(57,255,20,.22)';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(launchX,horizonY);ctx.lineTo(Math.max(launchX+14,Math.min(landX,W-padR+8)),horizonY);ctx.stroke();
   ctx.strokeStyle='rgba(0,229,255,.95)';ctx.lineWidth=3.6;ctx.lineCap='round';ctx.stroke(path2d);
   ctx.strokeStyle='rgba(0,229,255,.22)';ctx.lineWidth=9;ctx.stroke(path2d);
   ctx.setLineDash([6,6]);ctx.strokeStyle='rgba(0,229,255,.55)';ctx.lineWidth=2;ctx.beginPath();
@@ -12441,7 +12464,7 @@ function renderFlyingCyclistScene(ts){
   ctx.fillStyle='#ffb86b';ctx.fillText('v',launchX+82*Math.cos(a),launchY-82*Math.sin(a));
   ctx.strokeStyle='var(--cyan)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(startX-20,horizonY);ctx.lineTo(startX-20,startY);ctx.stroke();ctx.fillStyle='var(--cyan)';ctx.fillText('H',startX-34,(startY+horizonY)/2);
   ctx.strokeStyle='var(--orange)';ctx.beginPath();ctx.moveTo(apexX,horizonY);ctx.lineTo(apexX,apexY);ctx.stroke();ctx.fillStyle='#ffb86b';ctx.fillText('h',apexX+8,apexY+16);
-  ctx.fillStyle='rgba(255,255,255,.62)';ctx.font='11px Golos Text,sans-serif';ctx.fillText('уровень края трамплина',launchX+110,horizonY+28);
+  ctx.fillStyle='rgba(255,255,255,.62)';ctx.font='11px Golos Text,sans-serif';ctx.fillText('уровень края трамплина',Math.min(launchX+110,W-padR-170),horizonY+28);
   ctx.fillStyle='#00e5ff';
   ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.beginPath();ctx.arc(0,0,8,0,Math.PI*2);ctx.fill();ctx.fillRect(-12,-5,17,3);ctx.beginPath();ctx.arc(-7,6,4,0,Math.PI*2);ctx.arc(8,6,4,0,Math.PI*2);ctx.fill();ctx.restore();
   if(s.running&&p<total){s.raf=requestAnimationFrame(renderFlyingCyclistScene);}else if(p>=total){s.running=false;}
