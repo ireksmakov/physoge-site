@@ -1532,10 +1532,15 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 
 body.flying-record-mode header,
 body.flying-record-mode .fc-panel,
-body.flying-record-mode .btn-back{display:none !important}
+body.flying-record-mode .btn-back,
+body.flying-record-mode #fcFullscreen45Btn{display:none !important}
 body.flying-record-mode .fc-layout{display:flex;justify-content:center}
 body.flying-record-mode .fc-wrap{padding:16px;max-width:none}
 body.flying-record-mode .cyclist-record-frame{width:min(92vw,720px);aspect-ratio:4/5;max-height:none}
+.fullscreen-record-overlay{position:fixed;inset:0;background:#050b14;display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px}
+.recording-frame-45{aspect-ratio:4/5;width:min(92vw,720px);height:auto;max-height:95vh;margin:auto;background:#081422;border:1px solid var(--border);border-radius:20px;overflow:hidden;display:flex;flex-direction:column}
+.recording-frame-45 .fc-canvas-box{flex:1;min-height:0;padding:20px}
+.fc-record-overlay-close{position:absolute;top:14px;right:14px}
 .fc-animation-placeholder{height:100%;min-height:260px;background:linear-gradient(180deg,rgba(8,15,24,.95),rgba(5,12,18,.95));border:1px dashed rgba(0,229,255,.35);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
 .fc-animation-placeholder h3{font-family:var(--fh);font-size:20px;color:var(--white);margin-bottom:10px}
 .fc-animation-placeholder p{max-width:520px;font-size:13px;line-height:1.5;color:var(--gray)}
@@ -5968,8 +5973,8 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
       <button type="button" class="fc-btn fc-fullscreen-exit" onclick="exitFlyingCyclistFullscreen()">Выйти из полноэкранного режима</button>
     </div>
     <div class="fc-ctrl" style="margin-bottom:12px">
-      <button type="button" class="fc-btn" id="fcRecordModeBtn" onclick="toggleFlyingCyclistRecordMode(true)">Режим записи 4:5</button>
-      <button type="button" class="fc-btn" id="fcExitRecordModeBtn" onclick="toggleFlyingCyclistRecordMode(false)" style="display:none">Выйти из режима записи</button>
+      <button type="button" class="fc-btn" id="fcFullscreen45Btn" onclick="toggleFlyingCyclistRecordMode(true)">На весь экран 4:5</button>
+      <button type="button" class="fc-btn" id="fcExitRecordModeBtn" onclick="toggleFlyingCyclistRecordMode(false)" style="display:none">Выйти из режима 4:5</button>
     </div>
     <div class="fc-layout">
       <div class="cyclist-record-frame">
@@ -12404,8 +12409,38 @@ function updateFlyingCyclistParams(){
 }
 function toggleFlyingCyclistRecordMode(isOn){
   document.body.classList.toggle('flying-record-mode',!!isOn);
-  const enterBtn=document.getElementById('fcRecordModeBtn');
+  const enterBtn=document.getElementById('fcFullscreen45Btn');
   const exitBtn=document.getElementById('fcExitRecordModeBtn');
+  const frame=document.querySelector('.cyclist-record-frame');
+  let overlay=document.getElementById('fcRecordOverlay');
+  const existingClose=document.getElementById('fcRecordOverlayCloseBtn');
+  if(existingClose)existingClose.remove();
+  if(isOn){
+    if(!overlay){
+      overlay=document.createElement('div');
+      overlay.id='fcRecordOverlay';
+      overlay.className='fullscreen-record-overlay';
+      document.body.appendChild(overlay);
+    }
+    if(frame){
+      frame.classList.add('recording-frame-45');
+      overlay.appendChild(frame);
+    }
+    const closeBtn=document.createElement('button');
+    closeBtn.type='button';
+    closeBtn.id='fcRecordOverlayCloseBtn';
+    closeBtn.className='fc-btn fc-record-overlay-close';
+    closeBtn.textContent='Выйти из режима 4:5';
+    closeBtn.onclick=()=>toggleFlyingCyclistRecordMode(false);
+    overlay.appendChild(closeBtn);
+  }else{
+    if(frame){
+      frame.classList.remove('recording-frame-45');
+      const layout=document.querySelector('#sim-flying-cyclist .fc-layout');
+      if(layout)layout.insertBefore(frame,layout.firstElementChild);
+    }
+    if(overlay)overlay.remove();
+  }
   if(enterBtn)enterBtn.style.display=isOn?'none':'inline-flex';
   if(exitBtn)exitBtn.style.display=isOn?'inline-flex':'none';
   setTimeout(renderFlyingCyclistScene,30);
