@@ -12487,7 +12487,7 @@ function renderFlyingCyclistScene(ts){
   const drawW=Math.max(260,W-padL-padR),drawH=Math.max(220,Hh-padT-padB);
   const horizonY=padT+drawH*0.62,launchX=padL+drawW*0.58,launchY=horizonY;
   const rampJoinX=padL+drawW*0.24,rampJoinY=padT+drawH*0.38;
-  const rampAngleAbs=52*Math.PI/180;
+  const rampAngleAbs=48*Math.PI/180;
   const maxTrackHeightPx=Math.max(72,drawH*0.54);
   const pxPerMeterVertical=maxTrackHeightPx/6;
   const startY=Math.max(padT+10,horizonY-H*pxPerMeterVertical);
@@ -12500,12 +12500,16 @@ function renderFlyingCyclistScene(ts){
   const launchCtrlY=launchY+launchTangentLen*Math.sin(a);
   const startPoint={x:startX,y:startY};
   const joinPoint={x:rampJoinX,y:rampJoinY};
-  const baseTrack=`M ${startPoint.x} ${startPoint.y} L ${joinPoint.x} ${joinPoint.y} C ${padL+drawW*0.32} ${padT+drawH*0.55}, ${padL+drawW*0.40} ${padT+drawH*0.71}, ${padL+drawW*0.48} ${padT+drawH*0.70} C ${padL+drawW*0.54} ${padT+drawH*0.67}, ${launchCtrlX} ${launchCtrlY}, ${launchX} ${launchY}`;
+  const leftCurveC1={x:joinPoint.x+drawW*0.06,y:joinPoint.y+drawH*0.06};
+  const leftCurveC2={x:padL+drawW*0.40,y:padT+drawH*0.705};
+  const leftCurveEnd={x:padL+drawW*0.48,y:padT+drawH*0.70};
+  const rightCurveC1={x:padL+drawW*0.54,y:padT+drawH*0.67};
+  const baseTrack=`M ${startPoint.x} ${startPoint.y} L ${joinPoint.x} ${joinPoint.y} C ${leftCurveC1.x} ${leftCurveC1.y}, ${leftCurveC2.x} ${leftCurveC2.y}, ${leftCurveEnd.x} ${leftCurveEnd.y} C ${rightCurveC1.x} ${rightCurveC1.y}, ${launchCtrlX} ${launchCtrlY}, ${launchX} ${launchY}`;
   const path2d=new Path2D();
   path2d.moveTo(startPoint.x,startPoint.y);
   path2d.lineTo(joinPoint.x,joinPoint.y);
-  path2d.bezierCurveTo(padL+drawW*0.32,padT+drawH*0.55,padL+drawW*0.40,padT+drawH*0.71,padL+drawW*0.48,padT+drawH*0.70);
-  path2d.bezierCurveTo(padL+drawW*0.54,padT+drawH*0.67,launchCtrlX,launchCtrlY,launchX,launchY);
+  path2d.bezierCurveTo(leftCurveC1.x,leftCurveC1.y,leftCurveC2.x,leftCurveC2.y,leftCurveEnd.x,leftCurveEnd.y);
+  path2d.bezierCurveTo(rightCurveC1.x,rightCurveC1.y,launchCtrlX,launchCtrlY,launchX,launchY);
   const rampPathEl=s.rampPathEl||(s.rampPathEl=document.createElementNS('http://www.w3.org/2000/svg','path'));
   rampPathEl.setAttribute('d',baseTrack);
   const rampLen=rampPathEl.getTotalLength();
