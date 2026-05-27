@@ -12518,14 +12518,43 @@ function renderFlyingCyclistScene(ts){
   const padL=90,padR=90,padT=70,padB=100;
   const drawW=Math.max(260,W-padL-padR),drawH=Math.max(220,Hh-padT-padB);
   const horizonY=padT+drawH*0.62,startX=padL+drawW*0.06,startY=padT+drawH*0.08,launchX=padL+drawW*0.58,launchY=horizonY;
+  const scale=Math.min(drawW,drawH)/420;
+  const ramp1X=padL+drawW*0.24;
+  const ramp1Y=padT+drawH*0.38;
+  const valleyX=padL+drawW*0.47;
+  const valleyY=horizonY+(H*0.62)*scale;
+  const preCurveLenPhys=Math.max(2.8,0.56*H+1.2);
+  const postCurveLenPhys=Math.max(3.4,0.68*H+1.45);
+  const valleyInCtrlX=valleyX-preCurveLenPhys*0.45*scale;
+  const valleyInCtrlY=valleyY;
+  const valleyOutCtrlX=valleyX+postCurveLenPhys*0.45*scale;
+  const valleyOutCtrlY=valleyY;
   const launchTangentLen=Math.max(30,Math.min(W*0.085,64));
   const launchCtrlX=launchX-launchTangentLen*Math.cos(a);
   const launchCtrlY=launchY+launchTangentLen*Math.sin(a);
-  const baseTrack=`M ${startX} ${startY} L ${padL+drawW*0.24} ${padT+drawH*0.38} C ${padL+drawW*0.32} ${padT+drawH*0.56}, ${padL+drawW*0.39} ${padT+drawH*0.74}, ${padL+drawW*0.47} ${padT+drawH*0.74} C ${padL+drawW*0.53} ${padT+drawH*0.74}, ${launchCtrlX} ${launchCtrlY}, ${launchX} ${launchY}`;
+  const baseTrack=`
+  M ${startX} ${startY}
+  L ${ramp1X} ${ramp1Y}
+  C ${valleyInCtrlX} ${valleyInCtrlY},
+    ${valleyX-preCurveLenPhys*0.18*scale} ${valleyY},
+    ${valleyX} ${valleyY}
+  C ${valleyOutCtrlX} ${valleyOutCtrlY},
+    ${launchCtrlX} ${launchCtrlY},
+    ${launchX} ${launchY}
+`;
+  const fbHorizonY=horizonY;
+  const fbValleyX=padL+drawW*0.47;
+  const fbValleyY=fbHorizonY+drawH*0.12;
+  const fbLaunchX=launchX;
+  const fbCtrlX=fbLaunchX-Math.max(26,drawW*0.06);
+  const fbCtrlY=fbHorizonY+Math.max(6,drawH*0.015);
+  const fallbackTrack=`M ${startX} ${startY} L ${ramp1X} ${ramp1Y} C ${fbValleyX-42} ${fbValleyY}, ${fbValleyX-12} ${fbValleyY}, ${fbValleyX} ${fbValleyY} C ${fbValleyX+42} ${fbValleyY}, ${fbCtrlX} ${fbCtrlY}, ${fbLaunchX} ${fbHorizonY}`;
   const path2d=new Path2D(baseTrack);
   const rampPathEl=s.rampPathEl||(s.rampPathEl=document.createElementNS('http://www.w3.org/2000/svg','path'));
   rampPathEl.setAttribute('d',baseTrack);
-  const rampLen=rampPathEl.getTotalLength();
+  let rampLen=rampPathEl.getTotalLength();
+  if(!Number.isFinite(rampLen)||rampLen<=0){rampPathEl.setAttribute('d',fallbackTrack);rampLen=rampPathEl.getTotalLength();}
+
   const tRamp=2.8,tFlight=val.tFlight,total=tRamp+tFlight;
   const p=Math.min(s.t,total);
   const rampProgress=Math.min(p/tRamp,1);
