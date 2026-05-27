@@ -6005,8 +6005,7 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
           <canvas id="flyingCyclistCanvas"></canvas>
         </div>
         <div class="fc-controls-inside">
-          <button class="fc-btn sim-control-btn" onclick="playFlyingCyclistSim()">Старт</button>
-          <button class="fc-btn sim-control-btn" onclick="pauseFlyingCyclistSim()">Пауза</button>
+          <button id="flyingCyclistPlayPauseBtn" class="fc-btn sim-control-btn" onclick="toggleFlyingCyclistSim()">Старт</button>
           <button class="fc-btn sim-control-btn" onclick="resetFlyingCyclistSim()">Сброс</button>
           <button class="fc-btn sim-control-btn" onclick="resetFlyingCyclistSim(true)">Повтор</button>
           <label class="fc-speed-control" for="fcSpeed"><span>Скорость</span><input id="fcSpeed" class="fc-speed-slider" type="range" min="0.5" max="1.5" step="0.5" value="1"></label>
@@ -12482,7 +12481,7 @@ function exitFlyingCyclistFullscreen(){
 }
 function initFlyingCyclistSim(){
   const cv=document.getElementById('flyingCyclistCanvas');if(!cv)return;
-  flyingCyclistState={running:false,t:0,lastTs:0,speed:1,params:{H:3,alpha:50,g:9.8},values:null,raf:null};
+  flyingCyclistState={running:false,isPlaying:false,t:0,lastTs:0,speed:1,params:{H:3,alpha:50,g:9.8},values:null,raf:null};
   ['fcH','fcA','fcG'].forEach(id=>document.getElementById(id).oninput=updateFlyingCyclistParams);
   document.getElementById('fcSpeed').oninput=e=>{if(flyingCyclistState)flyingCyclistState.speed=+e.target.value;};
   if(!window.__flyingCyclistFullscreenBound){
@@ -12491,9 +12490,23 @@ function initFlyingCyclistSim(){
   }
   updateFlyingCyclistParams();resetFlyingCyclistSim();
 }
-function playFlyingCyclistSim(){if(!flyingCyclistState)return;flyingCyclistState.running=true;flyingCyclistState.lastTs=0;flyingCyclistState.raf=requestAnimationFrame(renderFlyingCyclistScene);}
-function pauseFlyingCyclistSim(){if(!flyingCyclistState)return;flyingCyclistState.running=false;cancelAnimationFrame(flyingCyclistState.raf);}
-function resetFlyingCyclistSim(replay){if(!flyingCyclistState)return;pauseFlyingCyclistSim();flyingCyclistState.t=0;renderFlyingCyclistScene();if(replay)playFlyingCyclistSim();}
+function updateFlyingCyclistPlayPauseButton(){
+  const btn=document.getElementById('flyingCyclistPlayPauseBtn');
+  if(!btn)return;
+  btn.textContent=flyingCyclistState&&flyingCyclistState.isPlaying?'Пауза':'Старт';
+}
+function toggleFlyingCyclistSim(){
+  if(!flyingCyclistState)return;
+  if(flyingCyclistState.isPlaying){
+    pauseFlyingCyclistSim();
+  }else{
+    playFlyingCyclistSim();
+  }
+  updateFlyingCyclistPlayPauseButton();
+}
+function playFlyingCyclistSim(){if(!flyingCyclistState)return;flyingCyclistState.running=true;flyingCyclistState.isPlaying=true;flyingCyclistState.lastTs=0;flyingCyclistState.raf=requestAnimationFrame(renderFlyingCyclistScene);updateFlyingCyclistPlayPauseButton();}
+function pauseFlyingCyclistSim(){if(!flyingCyclistState)return;flyingCyclistState.running=false;flyingCyclistState.isPlaying=false;cancelAnimationFrame(flyingCyclistState.raf);updateFlyingCyclistPlayPauseButton();}
+function resetFlyingCyclistSim(replay){if(!flyingCyclistState)return;pauseFlyingCyclistSim();flyingCyclistState.t=0;renderFlyingCyclistScene();if(replay){playFlyingCyclistSim();flyingCyclistState.isPlaying=true;updateFlyingCyclistPlayPauseButton();}else{flyingCyclistState.isPlaying=false;updateFlyingCyclistPlayPauseButton();}}
 function renderFlyingCyclistScene(ts){
   const s=flyingCyclistState,cv=document.getElementById('flyingCyclistCanvas');if(!s||!cv)return; const box=cv.parentElement, dpr=window.devicePixelRatio||1, W=box.clientWidth,Hh=box.clientHeight;
   cv.width=W*dpr;cv.height=Hh*dpr;const ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,Hh);
@@ -12550,7 +12563,7 @@ function renderFlyingCyclistScene(ts){
   ctx.fillStyle='rgba(255,255,255,.62)';ctx.font='11px Golos Text,sans-serif';ctx.fillText('уровень края трамплина',Math.min(launchX+110,W-padR-170),horizonY+28);
   ctx.fillStyle='#00e5ff';
   ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.beginPath();ctx.arc(0,0,8,0,Math.PI*2);ctx.fill();ctx.fillRect(-12,-5,17,3);ctx.beginPath();ctx.arc(-7,6,4,0,Math.PI*2);ctx.arc(8,6,4,0,Math.PI*2);ctx.fill();ctx.restore();
-  if(s.running&&p<total){s.raf=requestAnimationFrame(renderFlyingCyclistScene);}else if(p>=total){s.running=false;}
+  if(s.running&&p<total){s.raf=requestAnimationFrame(renderFlyingCyclistScene);}else if(p>=total){s.running=false;s.isPlaying=false;updateFlyingCyclistPlayPauseButton();}
 }
 
 /* ═══ ЗСИ SIMULATOR JS ═══ */
