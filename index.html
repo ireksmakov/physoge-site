@@ -12521,7 +12521,7 @@ function renderFlyingCyclistScene(ts){
   const launchTangentLen=Math.max(30,Math.min(W*0.085,64));
   const launchCtrlX=launchX-launchTangentLen*Math.cos(a);
   const launchCtrlY=launchY+launchTangentLen*Math.sin(a);
-  const baseTrack=`M ${startX} ${startY} L ${padL+drawW*0.24} ${padT+drawH*0.38} C ${padL+drawW*0.32} ${padT+drawH*0.55}, ${padL+drawW*0.40} ${padT+drawH*0.71}, ${padL+drawW*0.48} ${padT+drawH*0.70} C ${padL+drawW*0.54} ${padT+drawH*0.67}, ${launchCtrlX} ${launchCtrlY}, ${launchX} ${launchY}`;
+  const baseTrack=`M ${startX} ${startY} L ${padL+drawW*0.24} ${padT+drawH*0.38} C ${padL+drawW*0.32} ${padT+drawH*0.56}, ${padL+drawW*0.39} ${padT+drawH*0.74}, ${padL+drawW*0.47} ${padT+drawH*0.74} C ${padL+drawW*0.53} ${padT+drawH*0.74}, ${launchCtrlX} ${launchCtrlY}, ${launchX} ${launchY}`;
   const path2d=new Path2D(baseTrack);
   const rampPathEl=s.rampPathEl||(s.rampPathEl=document.createElementNS('http://www.w3.org/2000/svg','path'));
   rampPathEl.setAttribute('d',baseTrack);
