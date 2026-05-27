@@ -12519,15 +12519,17 @@ function renderFlyingCyclistScene(ts){
   const drawW=Math.max(260,W-padL-padR),drawH=Math.max(220,Hh-padT-padB);
   const horizonY=padT+drawH*0.62,startX=padL+drawW*0.06,startY=padT+drawH*0.08,launchX=padL+drawW*0.58,launchY=horizonY;
   const scale=Math.min(drawW,drawH)/420;
-  const ramp1X=padL+drawW*0.24;
-  const ramp1Y=padT+drawH*0.38;
   const valleyX=padL+drawW*0.47;
   const valleyY=horizonY+(H*0.62)*scale;
   const preCurveLenPhys=Math.max(2.8,0.56*H+1.2);
   const postCurveLenPhys=Math.max(3.4,0.68*H+1.45);
-  const valleyInCtrlX=valleyX-preCurveLenPhys*0.45*scale;
-  const valleyInCtrlY=valleyY;
-  const valleyOutCtrlX=valleyX+postCurveLenPhys*0.45*scale;
+  const valleyInStartX=valleyX-preCurveLenPhys*0.95*scale;
+  const ramp1X=valleyInStartX;
+  const rampSlope=(valleyY-startY)/Math.max(valleyX-startX,1e-6);
+  const ramp1Y=startY+rampSlope*(ramp1X-startX);
+  const valleyInCtrlX=valleyX-preCurveLenPhys*0.52*scale;
+  const valleyInCtrlY=ramp1Y;
+  const valleyOutCtrlX=valleyX+postCurveLenPhys*0.52*scale;
   const valleyOutCtrlY=valleyY;
   const launchTangentLen=Math.max(30,Math.min(W*0.085,64));
   const launchCtrlX=launchX-launchTangentLen*Math.cos(a);
@@ -12536,7 +12538,7 @@ function renderFlyingCyclistScene(ts){
   M ${startX} ${startY}
   L ${ramp1X} ${ramp1Y}
   C ${valleyInCtrlX} ${valleyInCtrlY},
-    ${valleyX-preCurveLenPhys*0.18*scale} ${valleyY},
+    ${valleyX-preCurveLenPhys*0.14*scale} ${valleyY},
     ${valleyX} ${valleyY}
   C ${valleyOutCtrlX} ${valleyOutCtrlY},
     ${launchCtrlX} ${launchCtrlY},
