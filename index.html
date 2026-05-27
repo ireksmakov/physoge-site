@@ -12498,8 +12498,14 @@ function renderFlyingCyclistScene(ts){
   const launchTangentLen=Math.max(30,Math.min(W*0.085,64));
   const launchCtrlX=launchX-launchTangentLen*Math.cos(a);
   const launchCtrlY=launchY+launchTangentLen*Math.sin(a);
-  const baseTrack=`M ${startX} ${startY} L ${rampJoinX} ${rampJoinY} C ${padL+drawW*0.32} ${padT+drawH*0.55}, ${padL+drawW*0.40} ${padT+drawH*0.71}, ${padL+drawW*0.48} ${padT+drawH*0.70} C ${padL+drawW*0.54} ${padT+drawH*0.67}, ${launchCtrlX} ${launchCtrlY}, ${launchX} ${launchY}`;
-  const path2d=new Path2D(baseTrack);
+  const startPoint={x:startX,y:startY};
+  const joinPoint={x:rampJoinX,y:rampJoinY};
+  const baseTrack=`M ${startPoint.x} ${startPoint.y} L ${joinPoint.x} ${joinPoint.y} C ${padL+drawW*0.32} ${padT+drawH*0.55}, ${padL+drawW*0.40} ${padT+drawH*0.71}, ${padL+drawW*0.48} ${padT+drawH*0.70} C ${padL+drawW*0.54} ${padT+drawH*0.67}, ${launchCtrlX} ${launchCtrlY}, ${launchX} ${launchY}`;
+  const path2d=new Path2D();
+  path2d.moveTo(startPoint.x,startPoint.y);
+  path2d.lineTo(joinPoint.x,joinPoint.y);
+  path2d.bezierCurveTo(padL+drawW*0.32,padT+drawH*0.55,padL+drawW*0.40,padT+drawH*0.71,padL+drawW*0.48,padT+drawH*0.70);
+  path2d.bezierCurveTo(padL+drawW*0.54,padT+drawH*0.67,launchCtrlX,launchCtrlY,launchX,launchY);
   const rampPathEl=s.rampPathEl||(s.rampPathEl=document.createElementNS('http://www.w3.org/2000/svg','path'));
   rampPathEl.setAttribute('d',baseTrack);
   const rampLen=rampPathEl.getTotalLength();
