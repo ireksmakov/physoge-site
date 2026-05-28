@@ -3729,6 +3729,10 @@ function showSimulatorsPage(){
 
   showPage('simulators-page');
 
+  if (typeof renderOgeSimulatorsStructure === 'function') {
+    renderOgeSimulatorsStructure();
+  }
+
   const backBtn = document.getElementById('backBtn');
   if(backBtn) backBtn.classList.add('on');
 
