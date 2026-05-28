@@ -2873,8 +2873,7 @@ function lessonDescription(lesson){return lesson&&typeof lesson==='object'?lesso
 /* ============================================================
    COURSES DATA
    ============================================================ */
-const COURSES={
-  'oge-phy':{name:'ОГЭ · Физика',tag:'Физика',cls:'tp',type:'phy',exam:'ОГЭ',subject:'Физика',modules:[
+const ogeCourseStructure=[
     {name:'Старт ОГЭ',open:true,lessons:[
       makeLesson('Как устроен ОГЭ по физике','Формат экзамена, типы заданий, баллы, основные разделы физики.'),
       makeLesson('Единицы СИ, формулы, графики и оформление задач','Перевод единиц, работа с формулами, чтение графиков, оформление расчётных задач.')
@@ -2964,7 +2963,10 @@ const COURSES={
       makeLesson('Варианты Камзеевой 21–30','Итоговая тренировка по вариантам.'),
       makeLesson('Финальный пробник','Полный вариант ОГЭ с проверкой и разбором.')
     ]}
-  ]},
+  ];
+
+const COURSES={
+  'oge-phy':{name:'ОГЭ · Физика',tag:'Физика',cls:'tp',type:'phy',exam:'ОГЭ',subject:'Физика',modules:ogeCourseStructure},
   'ege-phy':{name:'ЕГЭ · Физика',tag:'Физика',cls:'tp',type:'phy',modules:[
     {
       name:'Кинематика',
@@ -3299,6 +3301,7 @@ function hideAll(){
     'module-page',
     'sim-rupd',
     'sim-zsi',
+    'sim-flying-cyclist',
     'tests-page',
     'test-topic-page',
     'test-editor-page',
@@ -3933,11 +3936,67 @@ function showCoursesPage(){
   });
 }
 
+
+const ogeSimulatorsMap={
+  'Равноускоренное движение и свободное падение':{
+    title:'Равноускоренное движение',
+    id:'rupd',
+    route:'#simulators/rupd',
+    status:'ready',
+    render:function(){openSim('rupd');}
+  },
+  'Импульс и закон сохранения импульса':{
+    title:'Разрыв снаряда (ЗСИ)',
+    id:'zsi',
+    route:'#simulators/zsi',
+    status:'ready',
+    render:function(){openSim('zsi');}
+  },
+  'Свободное падение':{
+    title:'Летающий велосипедист',
+    id:'flying-cyclist',
+    route:'#simulators/flying-cyclist',
+    status:'ready',
+    render:function(){openSim('flying-cyclist');}
+  }
+};
+const ogeModuleIcons={'Старт ОГЭ':'🚀','Механика':'⚙️','Тепловые явления':'🌡️','Электрические явления':'⚡','Магнитные явления':'🧲','Оптика':'🔆','Квантовые явления':'⚛️','Эксперимент ОГЭ':'🧪','Работа с текстом и качественные задачи':'📘','Итоговое повторение':'🎯'};
+function getOgeLessonTitle(lesson){return lessonTitle(lesson);}
+function renderOgeSimulatorsStructure(){
+  const mount=document.getElementById('oge-simulators-structure');
+  if(!mount)return;
+  const modules=ogeCourseStructure||[];
+  mount.innerHTML=modules.map((module,mi)=>{
+    const lessons=Array.isArray(module.lessons)?module.lessons:[];
+    const readyCount=lessons.reduce((sum,lesson)=>sum+(ogeSimulatorsMap[getOgeLessonTitle(lesson)]?1:0),0);
+    const badge=readyCount>0?`<span class="mod-badge mb-avail">${readyCount} ${readyCount===1?'симулятор':'симулятора'}</span>`:'<span class="mod-badge mb-soon">Скоро</span>';
+    const topics=lessons.map((lesson,li)=>{
+      const topic=getOgeLessonTitle(lesson);
+      const sim=ogeSimulatorsMap[topic];
+      const action=sim?`openOgeSimulatorByTopic(${JSON.stringify(topic)})`:`openLesson(${JSON.stringify(module.name)},${li+1},${JSON.stringify(topic)},null)`;
+      const status=sim?'<span class="topic-sim">⚡ симулятор</span>':'<span class="topic-soon">Симулятор скоро будет добавлен</span>';
+      return `<div class="topic-item" onclick='${action}'><span class="topic-num">${li+1}</span><span class="topic-name">${escapeHtml(topic)}</span>${status}</div>`;
+    }).join('');
+    return `<div class="mod-item"><div class="mod-header" onclick="toggleMod(this)"><div class="mod-icon">${ogeModuleIcons[module.name]||'📚'}</div><div class="mod-info"><div class="mod-name">${escapeHtml(module.name)}</div><div class="mod-meta">${lessons.length} уроков · структура синхронизирована с курсом ОГЭ</div></div>${badge}<span class="mod-arrow">›</span></div><div class="mod-topics${mi===0?' open':''}"><div class="topics-grid">${topics}</div></div></div>`;
+  }).join('');
+  const firstArrow=mount.querySelector('.mod-arrow');
+  if(firstArrow)firstArrow.classList.add('open');
+}
+function openOgeSimulatorByTopic(topic){
+  const sim=ogeSimulatorsMap[topic];
+  if(sim&&typeof sim.render==='function'){
+    simPrevPage='simulators';
+    sim.render();
+  }else{
+    openLesson('oge',0,topic,null);
+  }
+}
+
 function showSimulators(examType){
   updateActiveNav('#simulators');
   hideAll();
   const simulatorsPage=document.getElementById('simulators-page');
-  if(simulatorsPage){simulatorsPage.style.display='block';simulatorsPage.style.pointerEvents='auto';simulatorsPage.classList.remove('page-hidden');simulatorsPage.classList.add('page-active');}
+  if(simulatorsPage){renderOgeSimulatorsStructure();simulatorsPage.style.display='block';simulatorsPage.style.pointerEvents='auto';simulatorsPage.classList.remove('page-hidden');simulatorsPage.classList.add('page-active');}
   document.getElementById('backBtn').classList.add('on');
   setBackHref('#home');
   window.scrollTo(0,0);
@@ -3960,7 +4019,7 @@ function goBack(){
   } else {
     hideAll();
     const simulatorsPage=document.getElementById('simulators-page');
-  if(simulatorsPage){simulatorsPage.style.display='block';simulatorsPage.style.pointerEvents='auto';simulatorsPage.classList.remove('page-hidden');simulatorsPage.classList.add('page-active');}
+  if(simulatorsPage){renderOgeSimulatorsStructure();simulatorsPage.style.display='block';simulatorsPage.style.pointerEvents='auto';simulatorsPage.classList.remove('page-hidden');simulatorsPage.classList.add('page-active');}
     document.getElementById('backBtn').classList.add('on');
     setBackHref('#home');
   }
@@ -5104,170 +5163,13 @@ function srReset(){
     <div class="sh-hero">
       <div class="sh-label">Виртуальная лаборатория · ФИЗМАТ</div>
       <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px;flex-wrap:wrap">
-        <h1 style="font-family:var(--fh);font-size:clamp(22px,4vw,44px);font-weight:900;line-height:1.1;letter-spacing:-1px;margin:0">Симуляторы и <span class="acc">лабораторные работы</span></h1>
+        <h1 style="font-family:var(--fh);font-size:clamp(22px,4vw,44px);font-weight:900;line-height:1.1;letter-spacing:-1px;margin:0">Симуляторы ОГЭ и <span class="acc">лабораторные работы</span></h1>
         <a href="#home" style="display:flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border);color:var(--gray);font-size:13px;padding:8px 16px;border-radius:8px;cursor:pointer;transition:all .2s;white-space:nowrap;font-family:var(--fb)" onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--gray)'">← На главную</a>
       </div>
-      <p style="font-size:15px;color:var(--gray);max-width:600px;line-height:1.7">Выберите раздел — внутри каждого темы с теорией, задачами и симуляторами.</p>
+      <p style="font-size:15px;color:var(--gray);max-width:600px;line-height:1.7">Структура раздела автоматически повторяет содержание курса ОГЭ по физике: готовые симуляторы открываются сразу, остальные темы показываются как заглушки.</p>
     </div>
   </div>
-  <div class="mod-list">
-
-    <!-- ⚙️ МЕХАНИКА -->
-    <div class="mod-item">
-      <div class="mod-header" onclick="toggleMod(this)">
-        <div class="mod-icon">⚙️</div>
-        <div class="mod-info">
-          <div class="mod-name">Механика</div>
-          <div class="mod-meta">18 уроков · Кинематика, динамика, законы сохранения, колебания</div>
-        </div>
-        <span class="mod-badge mb-avail">2 симулятора</span>
-        <span class="mod-arrow">›</span>
-      </div>
-      <div class="mod-topics">
-        <div class="topics-grid">
-          <div class="topic-item" onclick="openLesson('mechanics',1,'Система отсчёта','rupd')"><span class="topic-num">1</span><span class="topic-name">Система отсчёта</span></div>
-          <div class="topic-item" onclick="openLesson('mechanics',2,'Равномерное движение','rupd')"><span class="topic-num">2</span><span class="topic-name">Равномерное движение</span></div>
-          <div class="topic-item" onclick="openLesson('mechanics',3,'Равноускоренное движение','rupd')"><span class="topic-num">3</span><span class="topic-name">Равноускоренное движение</span><span class="topic-sim">⚡ симулятор</span></div>
-          <div class="topic-item" onclick="openLesson('mechanics',4,'Графики движения',null)"><span class="topic-num">4</span><span class="topic-name">Графики движения</span></div>
-          <div class="topic-item" onclick="openLesson('mechanics',5,'Свободное падение',null)"><span class="topic-num">5</span><span class="topic-name">Свободное падение</span></div>
-          <div class="topic-item" onclick="openLesson('mechanics',6,'Законы Ньютона',null)"><span class="topic-num">6</span><span class="topic-name">Законы Ньютона</span></div>
-          <div class="topic-item" onclick="openLesson('mechanics',7,'Силы в механике',null)"><span class="topic-num">7</span><span class="topic-name">Силы в механике</span></div>
-          <div class="topic-item" onclick="openLesson('mechanics',8,'Движение по окружности',null)"><span class="topic-num">8</span><span class="topic-name">Движение по окружности</span></div>
-          <div class="topic-item" onclick="openLesson('mechanics',9,'Работа силы',null)"><span class="topic-num">9</span><span class="topic-name">Работа силы</span></div>
-          <div class="topic-item" onclick="openLesson('mechanics',10,'Кинетическая энергия',null)"><span class="topic-num">10</span><span class="topic-name">Кинетическая энергия</span></div>
-          <div class="topic-item" onclick="openLesson('mechanics',11,'Потенциальная энергия',null)"><span class="topic-num">11</span><span class="topic-name">Потенциальная энергия</span></div>
-          <div class="topic-item" onclick="openLesson('mechanics',12,'Закон сохранения энергии',null)"><span class="topic-num">12</span><span class="topic-name">Закон сохранения энергии</span></div>
-          <div class="topic-item" onclick="openLesson('mechanics',13,'Импульс',null)"><span class="topic-num">13</span><span class="topic-name">Импульс</span></div>
-          <div class="topic-item" onclick="openLesson('mechanics',14,'Закон сохранения импульса','zsi')"><span class="topic-num">14</span><span class="topic-name">Закон сохранения импульса</span><span class="topic-sim">⚡ симулятор</span></div>
-          <div class="topic-item" onclick="openLesson('mechanics',15,'Упругий и неупругий удар',null)"><span class="topic-num">15</span><span class="topic-name">Упругий и неупругий удар</span></div>
-          <div class="topic-item" onclick="openLesson('mechanics',16,'Колебания',null)"><span class="topic-num">16</span><span class="topic-name">Колебания</span></div>
-          <div class="topic-item" onclick="openLesson('mechanics',17,'Маятник',null)"><span class="topic-num">17</span><span class="topic-name">Маятник</span></div>
-          <div class="topic-item" onclick="openLesson('mechanics',18,'Волны',null)"><span class="topic-num">18</span><span class="topic-name">Волны</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 🌡️ МОЛЕКУЛЯРНАЯ ФИЗИКА -->
-    <div class="mod-item">
-      <div class="mod-header" onclick="toggleMod(this)">
-        <div class="mod-icon">🌡️</div>
-        <div class="mod-info">
-          <div class="mod-name">Молекулярная физика и термодинамика</div>
-          <div class="mod-meta">10 уроков · МКТ, газовые законы, термодинамика</div>
-        </div>
-        <span class="mod-badge mb-soon">Скоро</span>
-        <span class="mod-arrow">›</span>
-      </div>
-      <div class="mod-topics">
-        <div class="topics-grid">
-          <div class="topic-item" onclick="openLesson('thermo',1,'Основы МКТ',null)"><span class="topic-num">1</span><span class="topic-name">Основы МКТ</span></div>
-          <div class="topic-item" onclick="openLesson('thermo',2,'Давление газа',null)"><span class="topic-num">2</span><span class="topic-name">Давление газа</span></div>
-          <div class="topic-item" onclick="openLesson('thermo',3,'Температура',null)"><span class="topic-num">3</span><span class="topic-name">Температура</span></div>
-          <div class="topic-item" onclick="openLesson('thermo',4,'Уравнение Менделеева-Клапейрона',null)"><span class="topic-num">4</span><span class="topic-name">Уравнение Менделеева-Клапейрона</span></div>
-          <div class="topic-item" onclick="openLesson('thermo',5,'Изопроцессы',null)"><span class="topic-num">5</span><span class="topic-name">Изопроцессы</span></div>
-          <div class="topic-item" onclick="openLesson('thermo',6,'Внутренняя энергия',null)"><span class="topic-num">6</span><span class="topic-name">Внутренняя энергия</span></div>
-          <div class="topic-item" onclick="openLesson('thermo',7,'Первый закон термодинамики',null)"><span class="topic-num">7</span><span class="topic-name">Первый закон термодинамики</span></div>
-          <div class="topic-item" onclick="openLesson('thermo',8,'Тепловые процессы',null)"><span class="topic-num">8</span><span class="topic-name">Тепловые процессы</span></div>
-          <div class="topic-item" onclick="openLesson('thermo',9,'КПД тепловых машин',null)"><span class="topic-num">9</span><span class="topic-name">КПД тепловых машин</span></div>
-          <div class="topic-item" onclick="openLesson('thermo',10,'Разбор задач ЕГЭ',null)"><span class="topic-num">10</span><span class="topic-name">Разбор задач ЕГЭ</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ⚡ ЭЛЕКТРОДИНАМИКА -->
-    <div class="mod-item">
-      <div class="mod-header" onclick="toggleMod(this)">
-        <div class="mod-icon">⚡</div>
-        <div class="mod-info">
-          <div class="mod-name">Электродинамика</div>
-          <div class="mod-meta">20 уроков · Электростатика, ток, магнетизм, индукция, ЭМ колебания</div>
-        </div>
-        <span class="mod-badge mb-soon">Скоро</span>
-        <span class="mod-arrow">›</span>
-      </div>
-      <div class="mod-topics">
-        <div class="topics-grid">
-          <div class="topic-item" onclick="openLesson('electro',1,'Электрический заряд',null)"><span class="topic-num">1</span><span class="topic-name">Электрический заряд</span></div>
-          <div class="topic-item" onclick="openLesson('electro',2,'Закон Кулона',null)"><span class="topic-num">2</span><span class="topic-name">Закон Кулона</span></div>
-          <div class="topic-item" onclick="openLesson('electro',3,'Электрическое поле',null)"><span class="topic-num">3</span><span class="topic-name">Электрическое поле</span></div>
-          <div class="topic-item" onclick="openLesson('electro',4,'Потенциал',null)"><span class="topic-num">4</span><span class="topic-name">Потенциал</span></div>
-          <div class="topic-item" onclick="openLesson('electro',5,'Конденсаторы',null)"><span class="topic-num">5</span><span class="topic-name">Конденсаторы</span></div>
-          <div class="topic-item" onclick="openLesson('electro',6,'Электрический ток',null)"><span class="topic-num">6</span><span class="topic-name">Электрический ток</span></div>
-          <div class="topic-item" onclick="openLesson('electro',7,'Закон Ома',null)"><span class="topic-num">7</span><span class="topic-name">Закон Ома</span></div>
-          <div class="topic-item" onclick="openLesson('electro',8,'Работа и мощность тока',null)"><span class="topic-num">8</span><span class="topic-name">Работа и мощность тока</span></div>
-          <div class="topic-item" onclick="openLesson('electro',9,'Последовательное соединение',null)"><span class="topic-num">9</span><span class="topic-name">Последовательное соединение</span></div>
-          <div class="topic-item" onclick="openLesson('electro',10,'Параллельное соединение',null)"><span class="topic-num">10</span><span class="topic-name">Параллельное соединение</span></div>
-          <div class="topic-item" onclick="openLesson('electro',11,'Магнитное поле',null)"><span class="topic-num">11</span><span class="topic-name">Магнитное поле</span></div>
-          <div class="topic-item" onclick="openLesson('electro',12,'Сила Ампера',null)"><span class="topic-num">12</span><span class="topic-name">Сила Ампера</span></div>
-          <div class="topic-item" onclick="openLesson('electro',13,'Сила Лоренца',null)"><span class="topic-num">13</span><span class="topic-name">Сила Лоренца</span></div>
-          <div class="topic-item" onclick="openLesson('electro',14,'Электромагнитная индукция',null)"><span class="topic-num">14</span><span class="topic-name">Электромагнитная индукция</span></div>
-          <div class="topic-item" onclick="openLesson('electro',15,'Закон Фарадея',null)"><span class="topic-num">15</span><span class="topic-name">Закон Фарадея</span></div>
-          <div class="topic-item" onclick="openLesson('electro',16,'Индукционный ток',null)"><span class="topic-num">16</span><span class="topic-name">Индукционный ток</span></div>
-          <div class="topic-item" onclick="openLesson('electro',17,'Колебательный контур',null)"><span class="topic-num">17</span><span class="topic-name">Колебательный контур</span></div>
-          <div class="topic-item" onclick="openLesson('electro',18,'Переменный ток',null)"><span class="topic-num">18</span><span class="topic-name">Переменный ток</span></div>
-          <div class="topic-item" onclick="openLesson('electro',19,'Трансформатор',null)"><span class="topic-num">19</span><span class="topic-name">Трансформатор</span></div>
-          <div class="topic-item" onclick="openLesson('electro',20,'Разбор задач ЕГЭ',null)"><span class="topic-num">20</span><span class="topic-name">Разбор задач ЕГЭ</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 🔆 ОПТИКА -->
-    <div class="mod-item">
-      <div class="mod-header" onclick="toggleMod(this)">
-        <div class="mod-icon">🔆</div>
-        <div class="mod-info">
-          <div class="mod-name">Оптика</div>
-          <div class="mod-meta">6 уроков · Отражение, преломление, линзы, волновая оптика</div>
-        </div>
-        <span class="mod-badge mb-soon">Скоро</span>
-        <span class="mod-arrow">›</span>
-      </div>
-      <div class="mod-topics">
-        <div class="topics-grid">
-          <div class="topic-item" onclick="openLesson('optics',1,'Прямолинейное распространение света',null)"><span class="topic-num">1</span><span class="topic-name">Прямолинейное распространение света</span></div>
-          <div class="topic-item" onclick="openLesson('optics',2,'Закон отражения',null)"><span class="topic-num">2</span><span class="topic-name">Закон отражения</span></div>
-          <div class="topic-item" onclick="openLesson('optics',3,'Закон преломления',null)"><span class="topic-num">3</span><span class="topic-name">Закон преломления</span></div>
-          <div class="topic-item" onclick="openLesson('optics',4,'Линзы',null)"><span class="topic-num">4</span><span class="topic-name">Линзы</span></div>
-          <div class="topic-item" onclick="openLesson('optics',5,'Интерференция',null)"><span class="topic-num">5</span><span class="topic-name">Интерференция</span></div>
-          <div class="topic-item" onclick="openLesson('optics',6,'Дифракция',null)"><span class="topic-num">6</span><span class="topic-name">Дифракция</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ⚛️ КВАНТОВАЯ ФИЗИКА -->
-    <div class="mod-item">
-      <div class="mod-header" onclick="toggleMod(this)">
-        <div class="mod-icon">⚛️</div>
-        <div class="mod-info">
-          <div class="mod-name">Квантовая физика</div>
-          <div class="mod-meta">6 уроков · Фотоэффект, модель атома, ядерные реакции</div>
-        </div>
-        <span class="mod-badge mb-soon">Скоро</span>
-        <span class="mod-arrow">›</span>
-      </div>
-      <div class="mod-topics">
-        <div class="topics-grid">
-          <div class="topic-item" onclick="openLesson('quantum',1,'Фотоэффект',null)"><span class="topic-num">1</span><span class="topic-name">Фотоэффект</span></div>
-          <div class="topic-item" onclick="openLesson('quantum',2,'Квант света',null)"><span class="topic-num">2</span><span class="topic-name">Квант света</span></div>
-          <div class="topic-item" onclick="openLesson('quantum',3,'Модель атома',null)"><span class="topic-num">3</span><span class="topic-name">Модель атома</span></div>
-          <div class="topic-item" onclick="openLesson('quantum',4,'Спектры',null)"><span class="topic-num">4</span><span class="topic-name">Спектры</span></div>
-          <div class="topic-item" onclick="openLesson('quantum',5,'Радиоактивность',null)"><span class="topic-num">5</span><span class="topic-name">Радиоактивность</span></div>
-          <div class="topic-item" onclick="openLesson('quantum',6,'Ядерные реакции',null)"><span class="topic-num">6</span><span class="topic-name">Ядерные реакции</span></div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- ═══════ СТРАНИЦА УРОКА ═══════ -->
-<div id="lesson-page">
-  <div class="lp-wrap">
-    <button type="button" onclick="goBack()" style="display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border);color:var(--gray);font-size:13px;padding:8px 16px;border-radius:8px;cursor:pointer;transition:all .2s;margin-bottom:20px;font-family:var(--fb)" onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--gray)'">← Назад</button>
-    <div class="lp-label" id="lp-label">Механика</div>
-    <div class="lp-title" id="lp-title">Урок</div>
-    <div id="lp-body"></div>
-  </div>
+  <div id="oge-simulators-structure" class="mod-list"></div>
 </div>
 
 <!-- ═══════ СИМУЛЯТОР РУПД ═══════ -->
