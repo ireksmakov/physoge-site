@@ -1536,17 +1536,32 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 .fc-param-chip select{height:24px;padding:1px 7px;font-size:12px;border-radius:7px}
 #flyingCyclistCanvas{width:100%;height:100%;display:block}
 
-body.flying-record-mode header,
-body.flying-record-mode .fc-panel,
-body.flying-record-mode .btn-back,
-body.flying-record-mode #fcFullscreen45Btn{display:none !important}
-body.flying-record-mode .fc-layout{display:flex;justify-content:center}
-body.flying-record-mode .fc-wrap{padding:16px;max-width:none}
-body.flying-record-mode .cyclist-record-frame{width:min(92vw,720px);aspect-ratio:4/5;max-height:none}
-.fullscreen-record-overlay{position:fixed;inset:0;background:#050b14;display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px}
-.recording-frame-45{aspect-ratio:4/5;width:min(92vw,720px);height:auto;max-height:95vh;margin:auto;background:#081422;border:1px solid var(--border);border-radius:20px;overflow:hidden;display:flex;flex-direction:column}
-.recording-frame-45 .fc-canvas-box{flex:1;min-height:0;padding:20px}
-.fc-record-overlay-close{position:absolute;top:14px;right:14px}
+body.fc-fullscreen-active header{display:none !important}
+.fc-format-menu{position:relative;display:inline-flex;z-index:5}
+.fc-format-toggle{display:inline-flex;align-items:center;gap:8px}
+.fc-format-toggle::after{content:'▾';font-size:10px;color:var(--cyan)}
+.fc-format-dropdown{position:absolute;top:calc(100% + 8px);left:0;min-width:260px;padding:8px;border:1px solid rgba(8,216,255,.28);border-radius:14px;background:#071321;box-shadow:0 18px 48px rgba(0,0,0,.42);display:none;flex-direction:column;gap:4px}
+.fc-format-dropdown.on{display:flex}
+.fc-format-dropdown button{width:100%;border:0;border-radius:10px;background:transparent;color:var(--white);font:inherit;font-size:13px;text-align:left;padding:9px 10px;cursor:pointer}
+.fc-format-dropdown button:hover,.fc-format-dropdown button:focus{background:rgba(8,216,255,.12);color:var(--cyan);outline:none}
+.fc-fullscreen-mode{position:fixed;inset:0;z-index:99999;background:#020914;display:flex;align-items:center;justify-content:center;padding:16px}
+.fc-fullscreen-stage{width:100%;height:100%;background:#071321;border:1px solid rgba(8,216,255,.28);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(0,0,0,.45)}
+.fc-fullscreen-mode .fc-fullscreen-stage{width:min(100vw,100%);height:min(100vh,100%)}
+.fc-format-4-5 .fc-fullscreen-stage{aspect-ratio:4 / 5;width:min(calc(100vw - 32px),calc((100vh - 32px) * 4 / 5));height:min(calc(100vh - 32px),calc((100vw - 32px) * 5 / 4))}
+.fc-format-9-16 .fc-fullscreen-stage{aspect-ratio:9 / 16;width:min(calc(100vw - 32px),calc((100vh - 32px) * 9 / 16));height:min(calc(100vh - 32px),calc((100vw - 32px) * 16 / 9))}
+.fc-format-1-1 .fc-fullscreen-stage{aspect-ratio:1 / 1;width:min(calc(100vw - 32px),calc(100vh - 32px));height:min(calc(100vw - 32px),calc(100vh - 32px))}
+.fc-format-16-9 .fc-fullscreen-stage{aspect-ratio:16 / 9;width:min(calc(100vw - 32px),calc((100vh - 32px) * 16 / 9));height:min(calc(100vh - 32px),calc((100vw - 32px) * 9 / 16))}
+.fc-fullscreen-mode .fc-canvas-box{flex:1;min-height:0;padding:clamp(10px,2.2vmin,22px)}
+.fc-fullscreen-mode .fc-cond{font-size:clamp(12px,2.1vmin,20px);padding:clamp(6px,1.2vmin,10px) clamp(8px,1.6vmin,14px)}
+.fc-fullscreen-mode .fc-head{padding:clamp(6px,1.1vmin,10px) clamp(8px,1.6vmin,14px)}
+.fc-fullscreen-mode .fc-inline-params{flex-wrap:wrap;gap:clamp(4px,.8vmin,8px);padding:clamp(6px,1.2vmin,10px) clamp(8px,1.6vmin,14px);overflow:visible}
+.fc-fullscreen-mode .fc-param-chip{height:auto;min-height:26px;font-size:clamp(10px,1.5vmin,12px);padding:4px 8px}
+.fc-fullscreen-mode .fc-param-chip strong,.fc-fullscreen-mode .fc-param-chip span{font-size:inherit}
+.fc-fullscreen-mode .fc-param-chip input[type="range"]{width:clamp(54px,12vmin,80px)}
+.fc-format-4-5 .fc-fullscreen-stage,.fc-format-9-16 .fc-fullscreen-stage{border-radius:16px}
+.fc-format-4-5 .fc-canvas-box,.fc-format-9-16 .fc-canvas-box{padding:clamp(8px,1.6vmin,16px)}
+.fc-fullscreen-close{position:absolute;top:14px;right:14px;display:none}
+.fc-fullscreen-mode .fc-fullscreen-close{display:inline-flex}
 .fc-animation-placeholder{height:100%;min-height:260px;background:linear-gradient(180deg,rgba(8,15,24,.95),rgba(5,12,18,.95));border:1px dashed rgba(0,229,255,.35);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
 .fc-animation-placeholder h3{font-family:var(--fh);font-size:20px;color:var(--white);margin-bottom:10px}
 .fc-animation-placeholder p{max-width:520px;font-size:13px;line-height:1.5;color:var(--gray)}
@@ -1554,12 +1569,6 @@ body.flying-record-mode .cyclist-record-frame{width:min(92vw,720px);aspect-ratio
 .fc-ctrl{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .fc-btn{border:1px solid var(--border);background:var(--bg);color:var(--white);border-radius:10px;padding:8px 12px;cursor:pointer}
 .fc-btn:hover{border-color:var(--cyan);color:var(--cyan)}
-.fc-fullscreen-exit{display:none}
-.cyclist-record-frame:fullscreen{width:100vw;height:100vh;max-width:none;max-height:none;border-radius:0;background:#081422}
-.cyclist-record-frame:fullscreen .fc-canvas-box{flex:1;min-height:0}
-.cyclist-record-frame:fullscreen canvas{width:100%;height:100%}
-.cyclist-record-frame:fullscreen .fc-fullscreen-enter{display:none}
-.cyclist-record-frame:fullscreen .fc-fullscreen-exit{display:inline-flex}
 .fc-formula{font-family:var(--fh);font-size:13px;margin:4px 0;color:var(--cyan)}
 .fc-solution{display:none;margin-top:12px;border-top:1px solid var(--border);padding-top:10px;font-size:13px;line-height:1.55}
 .fc-solution.on{display:block}
@@ -5976,12 +5985,17 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
   <div class="fc-wrap">
     <div class="fc-ctrl" style="margin-bottom:12px">
       <button type="button" onclick="closeFlyingCyclistSim()" class="fc-btn btn-back">← Назад</button>
-      <button type="button" class="fc-btn fc-fullscreen-enter" onclick="enterFlyingCyclistFullscreen()">На весь экран</button>
-      <button type="button" class="fc-btn fc-fullscreen-exit" onclick="exitFlyingCyclistFullscreen()">Выйти из полноэкранного режима</button>
-    </div>
-    <div class="fc-ctrl" style="margin-bottom:12px">
-      <button type="button" class="fc-btn" id="fcFullscreen45Btn" onclick="toggleFlyingCyclistRecordMode(true)">На весь экран 4:5</button>
-      <button type="button" class="fc-btn" id="fcExitRecordModeBtn" onclick="toggleFlyingCyclistRecordMode(false)" style="display:none">Выйти из режима 4:5</button>
+      <div class="fc-format-menu">
+        <button type="button" class="fc-btn fc-format-toggle" id="fcFormatToggle" aria-expanded="false" aria-controls="fcFormatDropdown">Формат экрана</button>
+        <div class="fc-format-dropdown" id="fcFormatDropdown">
+          <button type="button" data-format="fullscreen">Обычный полный экран</button>
+          <button type="button" data-format="instagram-4-5">Instagram пост 4:5 — 1080×1350</button>
+          <button type="button" data-format="instagram-9-16">Instagram Stories/Reels 9:16 — 1080×1920</button>
+          <button type="button" data-format="instagram-1-1">Instagram квадрат 1:1 — 1080×1080</button>
+          <button type="button" data-format="youtube-16-9">YouTube 16:9 — 1920×1080</button>
+          <button type="button" data-format="youtube-shorts">YouTube Shorts 9:16 — 1080×1920</button>
+        </div>
+      </div>
     </div>
     <div class="fc-layout">
       <div class="cyclist-record-frame">
@@ -12419,61 +12433,91 @@ function updateFlyingCyclistParams(){
   document.getElementById('fcValues').innerHTML=`H=${H} м · α=${alpha}° · v≈${v.v.toFixed(2)} м/с · tпол=${v.tFlight.toFixed(2)} с · R=${v.R.toFixed(2)} м${alpha===30?'<br><span style="color:var(--green)">При α=30°: h = H/4</span>':''}`;
   renderFlyingCyclistScene();
 }
-function toggleFlyingCyclistRecordMode(isOn){
-  document.body.classList.toggle('flying-record-mode',!!isOn);
-  const enterBtn=document.getElementById('fcFullscreen45Btn');
-  const exitBtn=document.getElementById('fcExitRecordModeBtn');
-  const frame=document.querySelector('.cyclist-record-frame');
-  let overlay=document.getElementById('fcRecordOverlay');
-  const existingClose=document.getElementById('fcRecordOverlayCloseBtn');
-  if(existingClose)existingClose.remove();
-  if(isOn){
-    if(!overlay){
-      overlay=document.createElement('div');
-      overlay.id='fcRecordOverlay';
-      overlay.className='fullscreen-record-overlay';
-      document.body.appendChild(overlay);
-    }
-    if(frame){
-      frame.classList.add('recording-frame-45');
-      overlay.appendChild(frame);
-    }
-    const closeBtn=document.createElement('button');
-    closeBtn.type='button';
-    closeBtn.id='fcRecordOverlayCloseBtn';
-    closeBtn.className='fc-btn fc-record-overlay-close';
-    closeBtn.textContent='Выйти из режима 4:5';
-    closeBtn.onclick=()=>toggleFlyingCyclistRecordMode(false);
-    overlay.appendChild(closeBtn);
-  }else{
-    if(frame){
-      frame.classList.remove('recording-frame-45');
-      const layout=document.querySelector('#sim-flying-cyclist .fc-layout');
-      if(layout)layout.insertBefore(frame,layout.firstElementChild);
-    }
-    if(overlay)overlay.remove();
-  }
-  if(enterBtn)enterBtn.style.display=isOn?'none':'inline-flex';
-  if(exitBtn)exitBtn.style.display=isOn?'inline-flex':'none';
-  setTimeout(renderFlyingCyclistScene,30);
+const flyingCyclistFormatClasses=['fc-format-4-5','fc-format-9-16','fc-format-1-1','fc-format-16-9'];
+function getFlyingCyclistFormatClass(format){
+  if(format==='instagram-4-5')return 'fc-format-4-5';
+  if(format==='instagram-9-16'||format==='youtube-shorts')return 'fc-format-9-16';
+  if(format==='instagram-1-1')return 'fc-format-1-1';
+  if(format==='youtube-16-9')return 'fc-format-16-9';
+  return '';
 }
-
-function enterFlyingCyclistFullscreen(){
+function closeFlyingCyclistFormatMenu(){
+  const dropdown=document.getElementById('fcFormatDropdown');
+  const toggle=document.getElementById('fcFormatToggle');
+  if(dropdown)dropdown.classList.remove('on');
+  if(toggle)toggle.setAttribute('aria-expanded','false');
+}
+function openFlyingCyclistFormat(format){
   const frame=document.querySelector('.cyclist-record-frame');
   if(!frame)return;
-  if(!frame.requestFullscreen){alert('Полноэкранный режим недоступен в этом браузере');return;}
-  frame.requestFullscreen().then(()=>{setTimeout(()=>{renderFlyingCyclistScene();},100);}).catch(()=>{alert('Полноэкранный режим недоступен в этом браузере');});
+  let overlay=document.getElementById('fcFullscreenOverlay');
+  if(!overlay){
+    overlay=document.createElement('div');
+    overlay.id='fcFullscreenOverlay';
+    document.body.appendChild(overlay);
+  }
+  overlay.className='fc-fullscreen-mode';
+  flyingCyclistFormatClasses.forEach(cls=>overlay.classList.remove(cls));
+  const formatClass=getFlyingCyclistFormatClass(format);
+  if(formatClass)overlay.classList.add(formatClass);
+  document.body.classList.add('fc-fullscreen-active');
+  frame.classList.add('fc-fullscreen-stage');
+  overlay.appendChild(frame);
+  let closeBtn=document.getElementById('fcFullscreenCloseBtn');
+  if(!closeBtn){
+    closeBtn=document.createElement('button');
+    closeBtn.type='button';
+    closeBtn.id='fcFullscreenCloseBtn';
+    closeBtn.className='fc-btn fc-fullscreen-close';
+    closeBtn.textContent='Закрыть ×';
+    closeBtn.onclick=exitFlyingCyclistFullscreen;
+  }
+  overlay.appendChild(closeBtn);
+  closeFlyingCyclistFormatMenu();
+  setTimeout(renderFlyingCyclistScene,30);
 }
 function exitFlyingCyclistFullscreen(){
-  if(document.fullscreenElement&&document.exitFullscreen){document.exitFullscreen();}
+  const frame=document.querySelector('.cyclist-record-frame');
+  const layout=document.querySelector('#sim-flying-cyclist .fc-layout');
+  const overlay=document.getElementById('fcFullscreenOverlay');
+  if(frame&&layout){
+    frame.classList.remove('fc-fullscreen-stage');
+    layout.insertBefore(frame,layout.firstElementChild);
+  }
+  if(overlay)overlay.remove();
+  document.body.classList.remove('fc-fullscreen-active');
+  setTimeout(renderFlyingCyclistScene,30);
+}
+function enterFlyingCyclistFullscreen(){openFlyingCyclistFormat('fullscreen');}
+function toggleFlyingCyclistRecordMode(isOn){isOn?openFlyingCyclistFormat('instagram-4-5'):exitFlyingCyclistFullscreen();}
+function bindFlyingCyclistFormatMenu(){
+  const toggle=document.getElementById('fcFormatToggle');
+  const dropdown=document.getElementById('fcFormatDropdown');
+  if(!toggle||!dropdown||toggle.dataset.bound)return;
+  toggle.dataset.bound='true';
+  toggle.addEventListener('click',e=>{
+    e.stopPropagation();
+    const isOpen=dropdown.classList.toggle('on');
+    toggle.setAttribute('aria-expanded',isOpen?'true':'false');
+  });
+  dropdown.addEventListener('click',e=>{
+    const btn=e.target.closest('button[data-format]');
+    if(!btn)return;
+    openFlyingCyclistFormat(btn.dataset.format);
+  });
+  document.addEventListener('click',e=>{
+    if(!e.target.closest('.fc-format-menu'))closeFlyingCyclistFormatMenu();
+  });
 }
 function initFlyingCyclistSim(){
   const cv=document.getElementById('flyingCyclistCanvas');if(!cv)return;
   flyingCyclistState={running:false,isPlaying:false,t:0,lastTs:0,speed:1,params:{H:3,alpha:50,g:9.8},values:null,raf:null};
   ['fcH','fcA','fcG'].forEach(id=>document.getElementById(id).oninput=updateFlyingCyclistParams);
   document.getElementById('fcSpeed').oninput=e=>{if(flyingCyclistState)flyingCyclistState.speed=+e.target.value;};
+  bindFlyingCyclistFormatMenu();
   if(!window.__flyingCyclistFullscreenBound){
     document.addEventListener('fullscreenchange',()=>{renderFlyingCyclistScene();});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('fcFullscreenOverlay'))exitFlyingCyclistFullscreen();});
     window.__flyingCyclistFullscreenBound=true;
   }
   updateFlyingCyclistParams();resetFlyingCyclistSim();
@@ -12488,8 +12532,13 @@ function renderFlyingCyclistScene(ts){
   cv.width=W*dpr;cv.height=Hh*dpr;const ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,Hh);
   if(s.running){if(!s.lastTs)s.lastTs=ts;const dt=Math.min((ts-s.lastTs)/1000,0.05)*s.speed;s.lastTs=ts;s.t+=dt;}
   const {H,alpha,g}=s.params,val=s.values,a=alpha*Math.PI/180;
-  const padL=90,padR=90,padT=70,padB=100;
-  const drawW=Math.max(260,W-padL-padR),drawH=Math.max(220,Hh-padT-padB);
+  const fsOverlay=document.getElementById('fcFullscreenOverlay');
+  const isVerticalFormat=!!(fsOverlay&&(fsOverlay.classList.contains('fc-format-4-5')||fsOverlay.classList.contains('fc-format-9-16')));
+  const padL=Math.round(Math.max(isVerticalFormat?48:70,Math.min(isVerticalFormat?72:90,W*(isVerticalFormat?0.15:0.12))));
+  const padR=Math.round(Math.max(isVerticalFormat?34:70,Math.min(isVerticalFormat?58:90,W*(isVerticalFormat?0.10:0.12))));
+  const padT=Math.round(Math.max(isVerticalFormat?44:56,Math.min(70,Hh*(isVerticalFormat?0.07:0.09))));
+  const padB=Math.round(Math.max(isVerticalFormat?58:76,Math.min(isVerticalFormat?82:100,Hh*(isVerticalFormat?0.09:0.12))));
+  const drawW=Math.max(isVerticalFormat?210:260,W-padL-padR),drawH=Math.max(220,Hh-padT-padB);
   const horizonY=padT+drawH*0.62,launchX=padL+drawW*0.58,launchY=horizonY;
   const rampJoinX=padL+drawW*0.24,rampJoinY=padT+drawH*0.38;
   const rampAngleAbs=48*Math.PI/180;
