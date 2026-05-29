@@ -1853,8 +1853,8 @@ img,svg,canvas,video,iframe{max-width:100%}
       <div class="sim-menu" id="simMenu">
         <a href="#simulators" class="sim-toggle">Симуляторы</a>
         <div class="sim-pop">
-          <a href="#simulators">ОГЭ</a>
-          <a href="#simulators">ЕГЭ</a>
+          <a href="#simulators/oge" onclick="showSimulatorsPage('oge')">ОГЭ</a>
+          <a href="#simulators/ege" onclick="showSimulatorsPage('ege')">ЕГЭ</a>
         </div>
       </div>
     </div>
@@ -3724,13 +3724,18 @@ function showBankPage(){
   showLanding('#task-bank');
 }
 
-function showSimulatorsPage(){
-  hideAll();
+let currentSimulatorsExam = 'oge';
 
+function showSimulatorsPage(exam = 'oge'){
+  currentSimulatorsExam = exam === 'ege' ? 'ege' : 'oge';
+
+  hideAll();
   showPage('simulators-page');
 
-  if (typeof renderOgeSimulatorsStructure === 'function') {
-    renderOgeSimulatorsStructure();
+  if(currentSimulatorsExam === 'ege'){
+    showEgeSimulators();
+  }else{
+    showOgeSimulators();
   }
 
   const backBtn = document.getElementById('backBtn');
@@ -3850,7 +3855,9 @@ function handleRoute(){
   if(hash === '#for-teachers') return showLanding('#for-teachers');
   if(hash === '#students') return showStudentsPage ? showStudentsPage() : showLanding('#students');
   if(hash === '#bank') return showBankPage ? showBankPage() : showLanding('#bank');
-  if(hash === '#simulators') return showSimulatorsPage();
+  if(hash === '#simulators') return showSimulatorsPage('oge');
+  if(hash === '#simulators/oge') return showSimulatorsPage('oge');
+  if(hash === '#simulators/ege') return showSimulatorsPage('ege');
 
   if(hash.startsWith('#course/')){
     const {courseKey, moduleIndex, lessonIndex, tabId} = parseCourseRoute(hash);
@@ -3996,14 +4003,121 @@ function openOgeSimulatorByTopic(topic){
   }
 }
 
+
+
+const egeSimulatorsMap={
+  'Равноускоренное движение':{
+    title:'РУПД — равноускоренное движение',
+    id:'rupd',
+    route:'#simulators/rupd',
+    status:'ready',
+    render:function(){openSim('rupd');}
+  },
+  'Свободное падение':{
+    title:'Летающий велосипедист',
+    id:'flying-cyclist',
+    route:'#simulators/flying-cyclist',
+    status:'ready',
+    render:function(){openSim('flying-cyclist');}
+  },
+  'Импульс':{
+    title:'Разрыв снаряда / закон сохранения импульса',
+    id:'zsi',
+    route:'#simulators/zsi',
+    status:'ready',
+    render:function(){openSim('zsi');}
+  },
+  'Закон сохранения импульса и изменения импульса':{
+    title:'Разрыв снаряда / закон сохранения импульса',
+    id:'zsi',
+    route:'#simulators/zsi',
+    status:'ready',
+    render:function(){openSim('zsi');}
+  },
+  'Закон сохранения импульса':{
+    title:'Разрыв снаряда / закон сохранения импульса',
+    id:'zsi',
+    route:'#simulators/zsi',
+    status:'ready',
+    render:function(){openSim('zsi');}
+  },
+  'Линзы':{
+    title:'Тонкая линза',
+    id:'lens',
+    route:'#simulators/lens',
+    status:'ready',
+    render:function(){openLens();}
+  }
+};
+const egeModuleIcons={'Кинематика':'⚙️','Динамика':'🏎️','Статика. Гидростатика':'⚖️','Импульс. Законы сохранения энергии и импульса':'💥','Механические колебания и волны':'〰️','МКТ':'🌡️','Термодинамика':'🔥','Количество теплоты. Строение вещества':'🧊','Электростатика':'⚡','Законы постоянного тока':'🔌','Электромагнетизм':'🧲','Электромагнитные колебания и волны':'📡','Оптика':'🔆','Квантовая физика. СТО':'⚛️','Атомная и ядерная физика':'☢️'};
+function getEgeModuleIcon(moduleName){return egeModuleIcons[moduleName]||'📚';}
+function getSimulatorCountLabel(count){
+  const abs=Math.abs(count)%100;
+  const last=abs%10;
+  if(abs>10&&abs<20)return 'симуляторов';
+  if(last===1)return 'симулятор';
+  if(last>=2&&last<=4)return 'симулятора';
+  return 'симуляторов';
+}
+function renderEgeSimulatorsStructure(){
+  const mount=document.getElementById('ege-simulators-structure');
+  if(!mount)return;
+  const course=COURSES['ege-phy'];
+  const modules=course&&Array.isArray(course.modules)?course.modules:[];
+  mount.innerHTML=modules.map((module,mi)=>{
+    const lessons=Array.isArray(module.lessons)?module.lessons:[];
+    const readyCount=lessons.reduce((sum,lesson)=>{
+      const topic=lessonTitle(lesson);
+      return sum+(egeSimulatorsMap[topic]?1:0);
+    },0);
+    const badge=readyCount>0?`<span class="mod-badge mb-avail">${readyCount} ${getSimulatorCountLabel(readyCount)}</span>`:'<span class="mod-badge mb-soon">Скоро</span>';
+    const topics=lessons.map((lesson,li)=>{
+      const topic=lessonTitle(lesson);
+      const sim=egeSimulatorsMap[topic];
+      const action=sim?`openEgeSimulatorByTopic(${JSON.stringify(topic)})`:`openCourse('ege-phy',${mi},${li},'sims')`;
+      const status=sim?'<span class="topic-sim">⚡ симулятор</span>':'<span class="topic-soon">Симулятор скоро будет добавлен</span>';
+      return `<div class="topic-item" onclick='${action}'><span class="topic-num">${li+1}</span><span class="topic-name">${escapeHtml(topic)}</span>${status}</div>`;
+    }).join('');
+    return `<div class="mod-item"><div class="mod-header" onclick="toggleMod(this)"><div class="mod-icon">${getEgeModuleIcon(module.name)}</div><div class="mod-info"><div class="mod-name">${escapeHtml(module.name)}</div><div class="mod-meta">${lessons.length} уроков · структура синхронизирована с курсом ЕГЭ</div></div>${badge}<span class="mod-arrow">›</span></div><div class="mod-topics${mi===0?' open':''}"><div class="topics-grid">${topics}</div></div></div>`;
+  }).join('');
+  const firstArrow=mount.querySelector('.mod-arrow');
+  if(firstArrow)firstArrow.classList.add('open');
+}
+function openEgeSimulatorByTopic(topic){
+  const sim=egeSimulatorsMap[topic];
+  if(sim&&typeof sim.render==='function'){
+    simPrevPage='simulators';
+    sim.render();
+    return;
+  }
+  openCourse('ege-phy',0,0,'sims');
+}
+function getSimulatorsBackHash(){return currentSimulatorsExam==='ege'?'#simulators/ege':'#simulators/oge';}
+function setSimulatorsHeader(title,description){
+  const titleEl=document.getElementById('simulators-title');
+  const descEl=document.getElementById('simulators-description');
+  if(titleEl)titleEl.innerHTML=title;
+  if(descEl)descEl.textContent=description;
+}
+function showOgeSimulators(){
+  const ogeMount=document.getElementById('oge-simulators-structure');
+  const egeMount=document.getElementById('ege-simulators-structure');
+  if(ogeMount)ogeMount.style.display='block';
+  if(egeMount)egeMount.style.display='none';
+  setSimulatorsHeader('Симуляторы ОГЭ и <span class="acc">лабораторные работы</span>','Структура раздела автоматически повторяет содержание курса ОГЭ по физике: готовые симуляторы открываются сразу, остальные темы показываются как заглушки.');
+  renderOgeSimulatorsStructure();
+}
+function showEgeSimulators(){
+  const ogeMount=document.getElementById('oge-simulators-structure');
+  const egeMount=document.getElementById('ege-simulators-structure');
+  if(ogeMount)ogeMount.style.display='none';
+  if(egeMount)egeMount.style.display='block';
+  setSimulatorsHeader('Симуляторы ЕГЭ и <span class="acc">лабораторные работы</span>','Структура раздела автоматически повторяет содержание курса ЕГЭ по физике: готовые симуляторы открываются сразу, остальные темы показываются как заглушки.');
+  renderEgeSimulatorsStructure();
+}
+
 function showSimulators(examType){
-  updateActiveNav('#simulators');
-  hideAll();
-  const simulatorsPage=document.getElementById('simulators-page');
-  if(simulatorsPage){renderOgeSimulatorsStructure();simulatorsPage.style.display='block';simulatorsPage.style.pointerEvents='auto';simulatorsPage.classList.remove('page-hidden');simulatorsPage.classList.add('page-active');}
-  document.getElementById('backBtn').classList.add('on');
-  setBackHref('#home');
-  window.scrollTo(0,0);
+  showSimulatorsPage(examType==='ege'?'ege':'oge');
 }
 function backToSimulators(){
   simPrevPage='simulators';
@@ -4023,7 +4137,17 @@ function goBack(){
   } else {
     hideAll();
     const simulatorsPage=document.getElementById('simulators-page');
-  if(simulatorsPage){renderOgeSimulatorsStructure();simulatorsPage.style.display='block';simulatorsPage.style.pointerEvents='auto';simulatorsPage.classList.remove('page-hidden');simulatorsPage.classList.add('page-active');}
+    if(simulatorsPage){
+      if(currentSimulatorsExam==='ege'){
+        showEgeSimulators();
+      }else{
+        showOgeSimulators();
+      }
+      simulatorsPage.style.display='block';
+      simulatorsPage.style.pointerEvents='auto';
+      simulatorsPage.classList.remove('page-hidden');
+      simulatorsPage.classList.add('page-active');
+    }
     document.getElementById('backBtn').classList.add('on');
     setBackHref('#home');
   }
@@ -4042,7 +4166,7 @@ function openLesson(section,num,title,simKey){
   simPrevPage='simulators';
   hideAll();
   document.getElementById('backBtn').classList.add('on');
-  setBackHref('#simulators');
+  setBackHref(getSimulatorsBackHash());
   if(simKey==='rupd'){
     showPage('sim-rupd');
     setTimeout(()=>{initSrChart();srReset();},50);
@@ -4074,18 +4198,21 @@ function openSim(key){
   if(key==='rupd'){
     showPage('sim-rupd');
     document.getElementById('backBtn').classList.add('on');
-    setBackHref('#simulators');
+    setBackHref(getSimulatorsBackHash());
     setTimeout(()=>{initSrChart();srReset();},50);
   } else if(key==='zsi'){
     showPage('sim-zsi');
     document.getElementById('backBtn').classList.add('on');
-    setBackHref('#simulators');
+    setBackHref(getSimulatorsBackHash());
     setTimeout(()=>{zsiInit();},60);
   } else if(key==='flying-cyclist'){
     showPage('sim-flying-cyclist');
     document.getElementById('backBtn').classList.add('on');
-    setBackHref('#simulators');
+    setBackHref(getSimulatorsBackHash());
     setTimeout(()=>initFlyingCyclistSim(),40);
+  } else if(key==='lens'){
+    openCourse('ege-phy',12,2,'sims');
+    return;
   }
   window.scrollTo(0,0);
 }
@@ -5167,13 +5294,14 @@ function srReset(){
     <div class="sh-hero">
       <div class="sh-label">Виртуальная лаборатория · ФИЗМАТ</div>
       <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px;flex-wrap:wrap">
-        <h1 style="font-family:var(--fh);font-size:clamp(22px,4vw,44px);font-weight:900;line-height:1.1;letter-spacing:-1px;margin:0">Симуляторы ОГЭ и <span class="acc">лабораторные работы</span></h1>
+        <h1 id="simulators-title" style="font-family:var(--fh);font-size:clamp(22px,4vw,44px);font-weight:900;line-height:1.1;letter-spacing:-1px;margin:0">Симуляторы ОГЭ и <span class="acc">лабораторные работы</span></h1>
         <a href="#home" style="display:flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border);color:var(--gray);font-size:13px;padding:8px 16px;border-radius:8px;cursor:pointer;transition:all .2s;white-space:nowrap;font-family:var(--fb)" onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--gray)'">← На главную</a>
       </div>
-      <p style="font-size:15px;color:var(--gray);max-width:600px;line-height:1.7">Структура раздела автоматически повторяет содержание курса ОГЭ по физике: готовые симуляторы открываются сразу, остальные темы показываются как заглушки.</p>
+      <p id="simulators-description" style="font-size:15px;color:var(--gray);max-width:600px;line-height:1.7">Структура раздела автоматически повторяет содержание курса ОГЭ по физике: готовые симуляторы открываются сразу, остальные темы показываются как заглушки.</p>
     </div>
   </div>
   <div id="oge-simulators-structure" class="mod-list"></div>
+  <div id="ege-simulators-structure" class="mod-list" style="display:none"></div>
 </div>
 
 <!-- ═══════ СИМУЛЯТОР РУПД ═══════ -->
