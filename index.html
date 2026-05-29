@@ -3948,108 +3948,169 @@ function showCoursesPage(){
 }
 
 
-const ogeSimulatorsMap={
-  'Равноускоренное движение и свободное падение':{
+
+const SIMULATORS_REGISTRY=[
+  {
+    id:'rupd',
     title:'Равноускоренное движение',
-    id:'rupd',
+    exams:['oge','ege'],
+    subject:'phy',
+    topicKeys:['Равноускоренное движение','Равноускоренное движение и свободное падение'],
+    icon:'⚙️',
+    description:'Анимация движения с постоянным ускорением. Графики V(t). Список задач с разбором.',
+    action:"openSim('rupd')",
+    courseAction:"openRupd()",
     route:'#simulators/rupd',
-    status:'ready',
-    render:function(){openSim('rupd');}
+    status:'ready'
   },
-  'Импульс и закон сохранения импульса':{
+  {
+    id:'flying-cyclist',
+    title:'Летающий велосипедист',
+    exams:['oge','ege'],
+    subject:'phy',
+    topicKeys:['Свободное падение','Равноускоренное движение и свободное падение','Движение под углом к горизонту','Баллистика'],
+    icon:'🚴',
+    description:'Движение по трамплину, вылет под углом и расчёт высоты h через энергию.',
+    action:"openSim('flying-cyclist')",
+    courseAction:"openFlyingCyclistSim()",
+    route:'#simulators/flying-cyclist',
+    status:'ready'
+  },
+  {
+    id:'zsi',
     title:'Разрыв снаряда (ЗСИ)',
-    id:'zsi',
+    exams:['oge','ege'],
+    subject:'phy',
+    topicKeys:['Импульс','Закон сохранения импульса','Закон сохранения импульса и изменения импульса','Импульс. Закон сохранения','Импульс и закон сохранения импульса','Работа. Мощность. Энергия. Импульс'],
+    icon:'💥',
+    description:'Анимация взрыва. Векторная диаграмма импульсов. Нахождение угла осколка через ЗСИ.',
+    action:"openSim('zsi')",
+    courseAction:"openZsi()",
     route:'#simulators/zsi',
-    status:'ready',
-    render:function(){openSim('zsi');}
+    status:'ready'
   },
-  'Свободное падение':{
-    title:'Летающий велосипедист',
-    id:'flying-cyclist',
-    route:'#simulators/flying-cyclist',
-    status:'ready',
-    render:function(){openSim('flying-cyclist');}
-  }
-};
-const ogeModuleIcons={'Старт ОГЭ':'🚀','Механика':'⚙️','Тепловые явления':'🌡️','Электрические явления':'⚡','Магнитные явления':'🧲','Оптика':'🔆','Квантовые явления':'⚛️','Эксперимент ОГЭ':'🧪','Работа с текстом и качественные задачи':'📘','Итоговое повторение':'🎯'};
-function getOgeLessonTitle(lesson){return lessonTitle(lesson);}
-function renderOgeSimulatorsStructure(){
-  const mount=document.getElementById('oge-simulators-structure');
-  if(!mount)return;
-  const modules=ogeCourseStructure||[];
-  mount.innerHTML=modules.map((module,mi)=>{
-    const lessons=Array.isArray(module.lessons)?module.lessons:[];
-    const readyCount=lessons.reduce((sum,lesson)=>sum+(ogeSimulatorsMap[getOgeLessonTitle(lesson)]?1:0),0);
-    const badge=readyCount>0?`<span class="mod-badge mb-avail">${readyCount} ${readyCount===1?'симулятор':'симулятора'}</span>`:'<span class="mod-badge mb-soon">Скоро</span>';
-    const topics=lessons.map((lesson,li)=>{
-      const topic=getOgeLessonTitle(lesson);
-      const sim=ogeSimulatorsMap[topic];
-      const action=sim?`openOgeSimulatorByTopic(${JSON.stringify(topic)})`:`openLesson(${JSON.stringify(module.name)},${li+1},${JSON.stringify(topic)},null)`;
-      const status=sim?'<span class="topic-sim">⚡ симулятор</span>':'<span class="topic-soon">Симулятор скоро будет добавлен</span>';
-      return `<div class="topic-item" onclick='${action}'><span class="topic-num">${li+1}</span><span class="topic-name">${escapeHtml(topic)}</span>${status}</div>`;
-    }).join('');
-    return `<div class="mod-item"><div class="mod-header" onclick="toggleMod(this)"><div class="mod-icon">${ogeModuleIcons[module.name]||'📚'}</div><div class="mod-info"><div class="mod-name">${escapeHtml(module.name)}</div><div class="mod-meta">${lessons.length} уроков · структура синхронизирована с курсом ОГЭ</div></div>${badge}<span class="mod-arrow">›</span></div><div class="mod-topics${mi===0?' open':''}"><div class="topics-grid">${topics}</div></div></div>`;
-  }).join('');
-  const firstArrow=mount.querySelector('.mod-arrow');
-  if(firstArrow)firstArrow.classList.add('open');
-}
-function openOgeSimulatorByTopic(topic){
-  const sim=ogeSimulatorsMap[topic];
-  if(sim&&typeof sim.render==='function'){
-    simPrevPage='simulators';
-    sim.render();
-  }else{
-    openLesson('oge',0,topic,null);
-  }
-}
-
-
-
-const egeSimulatorsMap={
-  'Равноускоренное движение':{
-    title:'РУПД — равноускоренное движение',
-    id:'rupd',
-    route:'#simulators/rupd',
-    status:'ready',
-    render:function(){openSim('rupd');}
+  {
+    id:'lesson12-task10',
+    title:'Задача 10 — маятник после удара',
+    exams:['ege'],
+    subject:'phy',
+    topicKeys:['Закон сохранения импульса и изменения импульса','Импульс','Закон сохранения импульса'],
+    icon:'🎬',
+    description:'Анимация налёта малого тела, передачи импульса грузу, вертикального падения тела и подъёма маятника до α = 90°.',
+    action:"openTaskAnimation('lesson12-task10')",
+    route:'#simulators/lesson12-task10',
+    status:'ready'
   },
-  'Свободное падение':{
-    title:'Летающий велосипедист',
-    id:'flying-cyclist',
-    route:'#simulators/flying-cyclist',
-    status:'ready',
-    render:function(){openSim('flying-cyclist');}
-  },
-  'Импульс':{
-    title:'Разрыв снаряда / закон сохранения импульса',
-    id:'zsi',
-    route:'#simulators/zsi',
-    status:'ready',
-    render:function(){openSim('zsi');}
-  },
-  'Закон сохранения импульса и изменения импульса':{
-    title:'Разрыв снаряда / закон сохранения импульса',
-    id:'zsi',
-    route:'#simulators/zsi',
-    status:'ready',
-    render:function(){openSim('zsi');}
-  },
-  'Закон сохранения импульса':{
-    title:'Разрыв снаряда / закон сохранения импульса',
-    id:'zsi',
-    route:'#simulators/zsi',
-    status:'ready',
-    render:function(){openSim('zsi');}
-  },
-  'Линзы':{
-    title:'Тонкая линза',
+  {
     id:'lens',
+    title:'Тонкая линза',
+    exams:['ege'],
+    subject:'phy',
+    topicKeys:['Линзы','Оптика','Оптические лабораторные работы'],
+    icon:'🔆',
+    description:'Интерактивное построение изображений. Drag предмета. Собирающая и рассеивающая линзы.',
+    action:"openSim('lens')",
+    courseAction:"openLens()",
     route:'#simulators/lens',
-    status:'ready',
-    render:function(){openLens();}
+    status:'ready'
+  },
+  {
+    id:'forces-acceleration',
+    title:'Силы и ускорение',
+    exams:['oge','ege'],
+    subject:'phy',
+    topicKeys:['Законы Ньютона','Законы Ньютона и силы в природе'],
+    icon:'🔵',
+    description:'Наклонная плоскость. Силы тяжести, нормальная, трения.',
+    action:'',
+    route:'',
+    status:'soon'
+  },
+  {
+    id:'pendulum',
+    title:'Математический маятник',
+    exams:['oge','ege'],
+    subject:'phy',
+    topicKeys:['Колебания','Колебания, волны и звук','Математический маятник'],
+    icon:'🔵',
+    description:'Период колебаний от длины нити. Графики x(t) и v(t).',
+    action:'',
+    route:'',
+    status:'soon'
+  },
+  {
+    id:'electric-circuits',
+    title:'Электрические цепи',
+    exams:['oge','ege'],
+    subject:'phy',
+    topicKeys:['Закон Ома. Цепи','Электрические цепи','Закон Ома для участка цепи','Законы постоянного тока'],
+    icon:'⚡',
+    description:'Последовательное и параллельное соединение. Расчёт токов и напряжений.',
+    action:'',
+    route:'',
+    status:'soon'
+  },
+  {
+    id:'electric-field',
+    title:'Электрическое поле',
+    exams:['oge','ege'],
+    subject:'phy',
+    topicKeys:['Закон Кулона','Электростатика','Электрическое поле'],
+    icon:'⚡',
+    description:'Силовые линии точечных зарядов. Суперпозиция полей.',
+    action:'',
+    route:'',
+    status:'soon'
   }
-};
+];
+function normalizeTopic(text){
+  return String(text||'')
+    .toLowerCase()
+    .replace(/ё/g,'е')
+    .replace(/[.,:;()]/g,'')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+function normalizeExamKey(exam){
+  const value=String(exam||'').toLowerCase();
+  if(value.indexOf('егэ')!==-1||value.indexOf('ege')!==-1)return 'ege';
+  if(value.indexOf('огэ')!==-1||value.indexOf('oge')!==-1)return 'oge';
+  return value;
+}
+function getCourseKeyByExam(exam){return normalizeExamKey(exam)==='ege'?'ege-phy':'oge-phy';}
+function getCurrentCourseExam(){return normalizeExamKey(AC||((COURSES&&COURSES[AC]&&COURSES[AC].exam)||''));}
+function getSimulatorTopicKeys(sim){return Array.isArray(sim&&sim.topicKeys)?sim.topicKeys:[];}
+function getSimulatorsForLesson(exam,topicTitle){
+  const normalizedTitle=normalizeTopic(topicTitle);
+  return SIMULATORS_REGISTRY.filter(sim=>
+    Array.isArray(sim.exams)&&sim.exams.includes(normalizeExamKey(exam))&&
+    getSimulatorTopicKeys(sim).some(key=>normalizeTopic(key)===normalizedTitle)
+  );
+}
+function getReadySimulatorsForLesson(exam,topicTitle){
+  return getSimulatorsForLesson(exam,topicTitle).filter(sim=>sim.status==='ready');
+}
+function toLegacySimulator(sim){
+  return {title:sim.title,id:sim.id,route:sim.route||`#simulators/${sim.id}`,status:sim.status,render:function(){if(sim.status==='ready'&&sim.action)new Function(sim.action)();}};
+}
+function buildSimulatorsMapFromRegistry(exam){
+  const map={};
+  const course=COURSES&&COURSES[getCourseKeyByExam(exam)];
+  const modules=course&&Array.isArray(course.modules)?course.modules:[];
+  modules.forEach(module=>{
+    (Array.isArray(module.lessons)?module.lessons:[]).forEach(lesson=>{
+      const topic=lessonTitle(lesson);
+      const sim=getReadySimulatorsForLesson(exam,topic)[0];
+      if(sim)map[topic]=toLegacySimulator(sim);
+    });
+  });
+  return map;
+}
+const ogeModuleIcons={'Старт ОГЭ':'🚀','Механика':'⚙️','Тепловые явления':'🌡️','Электрические явления':'⚡','Магнитные явления':'🧲','Оптика':'🔆','Квантовые явления':'⚛️','Эксперимент ОГЭ':'🧪','Работа с текстом и качественные задачи':'📘','Итоговое повторение':'🎯'};
 const egeModuleIcons={'Кинематика':'⚙️','Динамика':'🏎️','Статика. Гидростатика':'⚖️','Импульс. Законы сохранения энергии и импульса':'💥','Механические колебания и волны':'〰️','МКТ':'🌡️','Термодинамика':'🔥','Количество теплоты. Строение вещества':'🧊','Электростатика':'⚡','Законы постоянного тока':'🔌','Электромагнетизм':'🧲','Электромагнитные колебания и волны':'📡','Оптика':'🔆','Квантовая физика. СТО':'⚛️','Атомная и ядерная физика':'☢️'};
+const ogeSimulatorsMap=buildSimulatorsMapFromRegistry('oge');
+const egeSimulatorsMap=buildSimulatorsMapFromRegistry('ege');
+function getOgeLessonTitle(lesson){return lessonTitle(lesson);}
 function getEgeModuleIcon(moduleName){return egeModuleIcons[moduleName]||'📚';}
 function getSimulatorCountLabel(count){
   const abs=Math.abs(count)%100;
@@ -4059,39 +4120,48 @@ function getSimulatorCountLabel(count){
   if(last>=2&&last<=4)return 'симулятора';
   return 'симуляторов';
 }
-function renderEgeSimulatorsStructure(){
-  const mount=document.getElementById('ege-simulators-structure');
+function getExamModuleIcon(exam,moduleName){return normalizeExamKey(exam)==='ege'?getEgeModuleIcon(moduleName):(ogeModuleIcons[moduleName]||'📚');}
+function openSimulatorAction(sim){
+  if(sim&&sim.status==='ready'&&sim.action){
+    simPrevPage='simulators';
+    new Function(sim.action)();
+  }
+}
+function openSimulatorById(simId){
+  const sim=SIMULATORS_REGISTRY.find(item=>item.id===simId&&item.status==='ready');
+  if(sim)openSimulatorAction(sim);
+}
+function renderSimulatorsStructure(exam){
+  const examKey=normalizeExamKey(exam);
+  const mount=document.getElementById(`${examKey}-simulators-structure`);
   if(!mount)return;
-  const course=COURSES['ege-phy'];
+  const course=COURSES&&COURSES[getCourseKeyByExam(examKey)];
   const modules=course&&Array.isArray(course.modules)?course.modules:[];
   mount.innerHTML=modules.map((module,mi)=>{
     const lessons=Array.isArray(module.lessons)?module.lessons:[];
-    const readyCount=lessons.reduce((sum,lesson)=>{
-      const topic=lessonTitle(lesson);
-      return sum+(egeSimulatorsMap[topic]?1:0);
-    },0);
+    const readyCount=lessons.reduce((sum,lesson)=>sum+getReadySimulatorsForLesson(examKey,lessonTitle(lesson)).length,0);
     const badge=readyCount>0?`<span class="mod-badge mb-avail">${readyCount} ${getSimulatorCountLabel(readyCount)}</span>`:'<span class="mod-badge mb-soon">Скоро</span>';
     const topics=lessons.map((lesson,li)=>{
       const topic=lessonTitle(lesson);
-      const sim=egeSimulatorsMap[topic];
-      const action=sim?`openEgeSimulatorByTopic(${JSON.stringify(topic)})`:`openCourse('ege-phy',${mi},${li},'sims')`;
-      const status=sim?'<span class="topic-sim">⚡ симулятор</span>':'<span class="topic-soon">Симулятор скоро будет добавлен</span>';
+      const sims=getReadySimulatorsForLesson(examKey,topic);
+      const action=sims.length?`openSimulatorByTopic(${JSON.stringify(examKey)},${JSON.stringify(topic)})`:`openCourse(${JSON.stringify(getCourseKeyByExam(examKey))},${mi},${li},'sims')`;
+      const status=sims.length?sims.map(sim=>`<span class="topic-sim" onclick="event.stopPropagation();openSimulatorById('${sim.id}')">⚡ ${escapeHtml(sim.title)}</span>`).join(''):'<span class="topic-soon">Симулятор скоро будет добавлен</span>';
       return `<div class="topic-item" onclick='${action}'><span class="topic-num">${li+1}</span><span class="topic-name">${escapeHtml(topic)}</span>${status}</div>`;
     }).join('');
-    return `<div class="mod-item"><div class="mod-header" onclick="toggleMod(this)"><div class="mod-icon">${getEgeModuleIcon(module.name)}</div><div class="mod-info"><div class="mod-name">${escapeHtml(module.name)}</div><div class="mod-meta">${lessons.length} уроков · структура синхронизирована с курсом ЕГЭ</div></div>${badge}<span class="mod-arrow">›</span></div><div class="mod-topics${mi===0?' open':''}"><div class="topics-grid">${topics}</div></div></div>`;
+    return `<div class="mod-item"><div class="mod-header" onclick="toggleMod(this)"><div class="mod-icon">${getExamModuleIcon(examKey,module.name)}</div><div class="mod-info"><div class="mod-name">${escapeHtml(module.name)}</div><div class="mod-meta">${lessons.length} уроков · структура синхронизирована с курсом ${examKey==='ege'?'ЕГЭ':'ОГЭ'}</div></div>${badge}<span class="mod-arrow">›</span></div><div class="mod-topics${mi===0?' open':''}"><div class="topics-grid">${topics}</div></div></div>`;
   }).join('');
   const firstArrow=mount.querySelector('.mod-arrow');
   if(firstArrow)firstArrow.classList.add('open');
 }
-function openEgeSimulatorByTopic(topic){
-  const sim=egeSimulatorsMap[topic];
-  if(sim&&typeof sim.render==='function'){
-    simPrevPage='simulators';
-    sim.render();
-    return;
-  }
-  openCourse('ege-phy',0,0,'sims');
+function renderOgeSimulatorsStructure(){renderSimulatorsStructure('oge');}
+function renderEgeSimulatorsStructure(){renderSimulatorsStructure('ege');}
+function openSimulatorByTopic(exam,topic){
+  const sim=getReadySimulatorsForLesson(exam,topic)[0];
+  if(sim){openSimulatorAction(sim);return;}
+  openCourse(getCourseKeyByExam(exam),0,0,'sims');
 }
+function openOgeSimulatorByTopic(topic){openSimulatorByTopic('oge',topic);}
+function openEgeSimulatorByTopic(topic){openSimulatorByTopic('ege',topic);}
 function getSimulatorsBackHash(){return currentSimulatorsExam==='ege'?'#simulators/ege':'#simulators/oge';}
 function setSimulatorsHeader(title,description){
   const titleEl=document.getElementById('simulators-title');
@@ -6975,25 +7045,27 @@ const LESSON_SPECIAL_TESTS={
   ]
 };
 
-const LESSON_SIMS={
-'Равноускоренное движение':[
-  {icon:'⚙️',name:'РУПД — задачи с симулятором',desc:'Анимация движения с постоянным ускорением. Графики V(t). Список задач с разбором.',btn:'open',action:'openRupd()'}
-],
-'Закон сохранения импульса и изменения импульса':[
-  {icon:'🎬',name:'Задача 10 — маятник после удара',desc:'Анимация налёта малого тела, передачи импульса грузу, вертикального падения тела и подъёма маятника до α = 90°.',btn:'open',action:"openTaskAnimation('lesson12-task10')"}
-],
-'Импульс. Закон сохранения':[
-  {icon:'💥',name:'Разрыв снаряда (ЗСИ)',desc:'Анимация взрыва. Векторная диаграмма импульсов. Нахождение угла осколка через ЗСИ.',btn:'open',action:'openZsi()'}
-],
-'Линзы':[
-  {icon:'🔆',name:'Тонкая линза',desc:'Интерактивное построение изображений. Drag предмета. Собирающая и рассеивающая линзы.',btn:'open',action:'openLens()'}
-],
-'Свободное падение':[{icon:'🚴',name:'Летающий велосипедист',desc:'Движение по трамплину, вылет под углом и расчёт высоты h через энергию.',btn:'open',action:'openFlyingCyclistSim()'}],
-'Законы Ньютона':[{icon:'🔵',name:'Силы и ускорение',desc:'Наклонная плоскость. Силы тяжести, нормальная, трения.',btn:'soon'}],
-'Колебания':[{icon:'🔵',name:'Математический маятник',desc:'Период колебаний от длины нити. Графики x(t) и v(t).',btn:'soon'}],
-'Закон Ома. Цепи':[{icon:'⚡',name:'Электрические цепи',desc:'Последовательное и параллельное соединение. Расчёт токов и напряжений.',btn:'soon'}],
-'Закон Кулона':[{icon:'⚡',name:'Электрическое поле',desc:'Силовые линии точечных зарядов. Суперпозиция полей.',btn:'soon'}]
-};
+
+function getLessonSimulatorsMapFromRegistry(){
+  const map={};
+  SIMULATORS_REGISTRY.forEach(sim=>{
+    getSimulatorTopicKeys(sim).forEach(topic=>{
+      if(!map[topic])map[topic]=[];
+      if(map[topic].some(item=>item.id===sim.id))return;
+      map[topic].push({
+        id:sim.id,
+        icon:sim.icon||'⚡',
+        name:sim.title,
+        desc:sim.description||'',
+        btn:sim.status==='ready'?'open':'soon',
+        action:sim.courseAction||sim.action||''
+      });
+    });
+  });
+  return map;
+}
+const LESSON_SIMS=getLessonSimulatorsMapFromRegistry();
+
 
 const LESSON_LABS={
 'Равноускоренное движение':[{
@@ -12416,12 +12488,14 @@ function taskBoardSimDraw(){
   ctx.fillStyle='#111827';ctx.font='bold 16px Golos Text,sans-serif';ctx.fillText('v′₁ = 0 м/с',bx+12,by+42);ctx.fillText('p′₁ = 0 кг·м/с',bx+12,by+62);
 }
 function renderPSims(name){
-  const sims=LESSON_SIMS[name];
+  const currentExam=getCurrentCourseExam();
+  const sims=getSimulatorsForLesson(currentExam,name);
   if(!sims||!sims.length) return`<div style="text-align:center;padding:40px 20px;color:var(--gray)"><div style="font-size:32px;margin-bottom:12px">⚡</div><div style="font-family:var(--fh);font-size:14px;font-weight:700;color:var(--white);margin-bottom:6px">Симулятор в разработке</div><div style="font-size:13px">Симулятор для темы <strong style="color:#39ff14">"${name}"</strong> появится в ближайшее время.</div></div>`;
   let h='<div class="ps-grid">';
-  sims.forEach(s=>{
-    const isSoon=s.btn==='soon';
-    h+=`<div class="ps-card${isSoon?' ps-soon':''}"><div class="ps-icon">${s.icon}</div><div class="ps-name">${s.name}</div><div class="ps-desc">${s.desc}</div>${isSoon?`<button class="ps-btn ps-btn-soon" disabled>🔒 Скоро</button>`:`<button class="ps-btn ps-btn-open" onclick="${s.action}">▶ Открыть симулятор</button>`}</div>`;
+  sims.forEach(sim=>{
+    const lessonAction=sim.courseAction||sim.action||'';
+    const isSoon=sim.status!=='ready'||!lessonAction;
+    h+=`<div class="ps-card${isSoon?' ps-soon':''}"><div class="ps-icon">${sim.icon||'⚡'}</div><div class="ps-name">${escapeHtml(sim.title)}</div><div class="ps-desc">${escapeHtml(sim.description||'')}</div>${isSoon?`<button class="ps-btn ps-btn-soon" disabled>🔒 Скоро</button>`:`<button class="ps-btn ps-btn-open" onclick="${lessonAction}">▶ Открыть симулятор</button>`}</div>`;
   });
   return h+'</div>';
 }
