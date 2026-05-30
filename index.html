@@ -1533,6 +1533,8 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 .fc-inline-params::-webkit-scrollbar{display:none}
 .fc-animation-controls{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 14px;border-bottom:1px solid rgba(8,216,255,.18)}
 .fc-animation-controls .fc-ctrl{margin-top:0}
+.fc-bottom-solution-control{display:flex;align-items:center;justify-content:flex-start;padding:10px;border-top:1px solid rgba(8,216,255,.18)}
+.fc-solution-chip{min-width:130px;justify-content:center}
 .fc-speed-control{min-height:30px;padding:0 10px;border-radius:10px;border:1px solid rgba(80,180,255,.32);background:linear-gradient(180deg,rgba(42,72,112,.82),rgba(14,28,52,.92));color:#9fb0c8;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
 .fc-speed-control input[type="range"]{width:86px;height:4px}
 .fc-param-chip{min-height:30px;height:30px;padding:0 10px;border-radius:10px;border:1px solid rgba(80,180,255,.32);background:linear-gradient(180deg,rgba(42,72,112,.82),rgba(14,28,52,.92));color:#9fb0c8;font-size:12px;font-weight:600;line-height:1;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;box-shadow:0 3px 8px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.08)}
@@ -6194,9 +6196,9 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
         <div class="fc-canvas-box">
           <canvas id="flyingCyclistCanvas"></canvas>
         </div>
-      </div>
-      <div class="fc-panel">
-        <button class="fc-btn" onclick="document.getElementById('fcSolution').classList.toggle('on')">Показать решение</button>
+        <div class="fc-bottom-solution-control">
+          <button class="fc-param-chip fc-control-chip fc-solution-chip" onclick="document.getElementById('fcSolution').classList.toggle('on')">Показать решение</button>
+        </div>
         <div id="fcSolution" class="fc-solution"><h4>Решение</h4>1) По закону сохранения энергии: m v² / 2 = m g H<br>2) Отсюда: v² / 2g = H<br>3) После вылета: h = v² sin²(α) / 2g<br>4) Подставляем: h = H sin²(α)<br>5) При α = 30°: sin 30° = 1/2, h = H/4<br><strong>Ответ: h = H/4</strong></div>
       </div>
     </div>
