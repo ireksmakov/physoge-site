@@ -1529,7 +1529,8 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 .fc-cond{padding:8px 12px;font-size:clamp(14px,2.2vw,22px);line-height:1.35;white-space:normal;overflow:visible;color:var(--white);border-bottom:1px solid var(--border)}
 .fc-canvas-box{flex:1;min-height:0;padding:24px}
 
-.fc-inline-params{display:flex;flex-wrap:nowrap;align-items:center;gap:8px;padding:8px 14px;border-bottom:1px solid rgba(8,216,255,.18);overflow-x:auto}
+.fc-inline-params{display:flex;flex-wrap:nowrap;align-items:center;gap:8px;padding:8px 14px;border-bottom:1px solid rgba(8,216,255,.18);overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.fc-inline-params::-webkit-scrollbar{display:none}
 .fc-animation-controls{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 14px;border-bottom:1px solid rgba(8,216,255,.18)}
 .fc-animation-controls .fc-ctrl{margin-top:0}
 .fc-speed-control{min-height:30px;padding:0 10px;border-radius:10px;border:1px solid rgba(80,180,255,.32);background:linear-gradient(180deg,rgba(42,72,112,.82),rgba(14,28,52,.92));color:#9fb0c8;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
@@ -1570,11 +1571,10 @@ body.fc-fullscreen-active header{display:none !important}
 .fc-animation-placeholder{height:100%;min-height:260px;background:linear-gradient(180deg,rgba(8,15,24,.95),rgba(5,12,18,.95));border:1px dashed rgba(0,229,255,.35);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
 .fc-animation-placeholder h3{font-family:var(--fh);font-size:20px;color:var(--white);margin-bottom:10px}
 .fc-animation-placeholder p{max-width:520px;font-size:13px;line-height:1.5;color:var(--gray)}
-.fc-panel{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px}
+.fc-panel{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:12px}
 .fc-ctrl{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .fc-btn{border:1px solid var(--border);background:var(--bg);color:var(--white);border-radius:10px;padding:8px 12px;cursor:pointer}
 .fc-btn:hover{border-color:var(--cyan);color:var(--cyan)}
-.fc-formula{font-family:var(--fh);font-size:13px;margin:4px 0;color:var(--cyan)}
 .fc-solution{display:none;margin-top:12px;border-top:1px solid var(--border);padding-top:10px;font-size:13px;line-height:1.55}
 .fc-solution.on{display:block}
 @media(max-width:980px){.fc-layout{grid-template-columns:1fr}.cyclist-record-frame{width:min(100%,720px)}}
@@ -6196,11 +6196,7 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
         </div>
       </div>
       <div class="fc-panel">
-        <div id="fcValues" class="fc-metric"></div>
-        <div style="margin-top:10px"><strong>Рабочие формулы</strong>
-          <div class="fc-formula">v = √(2gH)</div><div class="fc-formula">h = v²sin²(α)/(2g)</div><div class="fc-formula">h = Hsin²(α)</div><div class="fc-formula">при α = 30°: h = H/4</div>
-        </div>
-        <button class="fc-btn" style="margin-top:10px" onclick="document.getElementById('fcSolution').classList.toggle('on')">Показать решение</button>
+        <button class="fc-btn" onclick="document.getElementById('fcSolution').classList.toggle('on')">Показать решение</button>
         <div id="fcSolution" class="fc-solution"><h4>Решение</h4>1) По закону сохранения энергии: m v² / 2 = m g H<br>2) Отсюда: v² / 2g = H<br>3) После вылета: h = v² sin²(α) / 2g<br>4) Подставляем: h = H sin²(α)<br>5) При α = 30°: sin 30° = 1/2, h = H/4<br><strong>Ответ: h = H/4</strong></div>
       </div>
     </div>
@@ -12619,7 +12615,8 @@ function updateFlyingCyclistParams(){
   document.getElementById('fcTUpResult').textContent=v.tUp.toFixed(2);
   const lEl=document.getElementById('fcLResult');
   if(lEl)lEl.textContent=v.R.toFixed(2);
-  document.getElementById('fcValues').innerHTML=`H=${H} м · α=${alpha}° · v≈${v.v.toFixed(2)} м/с · t<sub class="fc-sub">пол</sub>=${v.tFlight.toFixed(2)} с · L=${v.R.toFixed(2)} м${alpha===30?'<br><span style="color:var(--green)">При α=30°: h = H/4</span>':''}`;
+  const valuesEl=document.getElementById('fcValues');
+  if(valuesEl)valuesEl.innerHTML=`H=${H} м · α=${alpha}° · v≈${v.v.toFixed(2)} м/с · t<sub class="fc-sub">пол</sub>=${v.tFlight.toFixed(2)} с · L=${v.R.toFixed(2)} м${alpha===30?'<br><span style="color:var(--green)">При α=30°: h = H/4</span>':''}`;
   renderFlyingCyclistScene();
 }
 const flyingCyclistFormatClasses=['fc-format-4-5','fc-format-9-16','fc-format-1-1','fc-format-16-9'];
