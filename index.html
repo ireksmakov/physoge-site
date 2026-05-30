@@ -1524,7 +1524,10 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 #lesson-page{display:none;min-height:100vh;padding-top:64px}
 .fc-wrap{max-width:1250px;margin:0 auto;padding:24px}
 .fc-layout{display:grid;grid-template-columns:minmax(320px,700px) minmax(280px,1fr);gap:18px;align-items:start}
+#sim-flying-cyclist .fc-layout{display:flex;justify-content:center;align-items:flex-start;width:100%}
+#sim-flying-cyclist .fc-panel{display:none}
 .cyclist-record-frame{aspect-ratio:4/5;width:min(100%,720px);height:auto;max-height:none;background:var(--bg2);border:1px solid var(--border);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+#sim-flying-cyclist .cyclist-record-frame{width:min(980px,100%);margin-left:auto;margin-right:auto}
 .fc-head{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border);font-size:11px;color:var(--gray)}
 .fc-cond{padding:8px 12px;font-size:clamp(14px,2.2vw,22px);line-height:1.35;white-space:normal;overflow:visible;color:var(--white);border-bottom:1px solid var(--border)}
 .fc-canvas-box{flex:1;min-height:0;padding:24px}
@@ -1580,6 +1583,7 @@ body.fc-fullscreen-active header{display:none !important}
 .fc-solution{display:none;margin-top:12px;border-top:1px solid var(--border);padding-top:10px;font-size:13px;line-height:1.55}
 .fc-solution.on{display:block}
 @media(max-width:980px){.fc-layout{grid-template-columns:1fr}.cyclist-record-frame{width:min(100%,720px)}}
+@media(max-width:900px){#sim-flying-cyclist .cyclist-record-frame{width:100%}}
 @media(max-width:700px){.fc-inline-params{flex-wrap:wrap}}
 /* Hub hero */
 .sh-hero{max-width:1200px;margin:0 auto;padding:48px 24px 32px}
