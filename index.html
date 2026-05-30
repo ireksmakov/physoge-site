@@ -6180,6 +6180,7 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
           <div class="fc-param-chip">g, м/с²: <select id="fcG"><option value="9.8" selected>9.8</option><option value="10">10</option></select></div>
           <div class="fc-param-chip">h=<span id="fcHResult">2.48</span> м</div>
           <div class="fc-param-chip">t↑=<span id="fcTUpResult">0.71</span> с</div>
+          <div class="fc-param-chip">L=<span id="fcLResult">5.91</span> м</div>
         </div>
         <div class="fc-canvas-box">
           <canvas id="flyingCyclistCanvas"></canvas>
@@ -12607,7 +12608,9 @@ function updateFlyingCyclistParams(){
   const v=flyingCyclistState.values;
   document.getElementById('fcHResult').textContent=v.h.toFixed(2);
   document.getElementById('fcTUpResult').textContent=v.tUp.toFixed(2);
-  document.getElementById('fcValues').innerHTML=`H=${H} м · α=${alpha}° · v≈${v.v.toFixed(2)} м/с · tпол=${v.tFlight.toFixed(2)} с · R=${v.R.toFixed(2)} м${alpha===30?'<br><span style="color:var(--green)">При α=30°: h = H/4</span>':''}`;
+  const lEl=document.getElementById('fcLResult');
+  if(lEl)lEl.textContent=v.R.toFixed(2);
+  document.getElementById('fcValues').innerHTML=`H=${H} м · α=${alpha}° · v≈${v.v.toFixed(2)} м/с · tпол=${v.tFlight.toFixed(2)} с · L=${v.R.toFixed(2)} м${alpha===30?'<br><span style="color:var(--green)">При α=30°: h = H/4</span>':''}`;
   renderFlyingCyclistScene();
 }
 const flyingCyclistFormatClasses=['fc-format-4-5','fc-format-9-16','fc-format-1-1','fc-format-16-9'];
