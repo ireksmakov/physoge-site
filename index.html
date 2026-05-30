@@ -1592,6 +1592,12 @@ body.fc-fullscreen-active header{display:none !important}
 .fc-format-4-5 .fc-solution-block,.fc-format-9-16 .fc-solution-block,.fc-format-1-1 .fc-solution-block,.fc-format-16-9 .fc-solution-block{position:static;width:100%;overflow:visible}
 .fc-solution-carousel{display:flex;align-items:center;justify-content:center;gap:14px;width:100%}
 .fc-solution-carousel-track{position:relative;width:min(420px,100%);aspect-ratio:4 / 5;overflow:hidden;border-radius:18px;border:1px solid rgba(8,216,255,.25);background:#06111f;display:flex;align-items:center;justify-content:center}
+.fc-format-4-5 .fc-solution-block,#sim-flying-cyclist.fc-format-45 .fc-solution-block,#sim-flying-cyclist[data-format="instagram-45"] .fc-solution-block,#sim-flying-cyclist[data-format="instagram-4-5"] .fc-solution-block{width:100%;padding:12px;margin:0;box-sizing:border-box}
+.fc-format-4-5 .fc-solution-carousel,#sim-flying-cyclist.fc-format-45 .fc-solution-carousel,#sim-flying-cyclist[data-format="instagram-45"] .fc-solution-carousel,#sim-flying-cyclist[data-format="instagram-4-5"] .fc-solution-carousel{position:relative;width:100%;display:block}
+.fc-format-4-5 .fc-solution-carousel-track,#sim-flying-cyclist.fc-format-45 .fc-solution-carousel-track,#sim-flying-cyclist[data-format="instagram-45"] .fc-solution-carousel-track,#sim-flying-cyclist[data-format="instagram-4-5"] .fc-solution-carousel-track{width:100%;max-width:none;aspect-ratio:4 / 5;margin:0 auto}
+.fc-format-4-5 .fc-carousel-btn,#sim-flying-cyclist.fc-format-45 .fc-carousel-btn,#sim-flying-cyclist[data-format="instagram-45"] .fc-carousel-btn,#sim-flying-cyclist[data-format="instagram-4-5"] .fc-carousel-btn{position:absolute;top:50%;transform:translateY(-50%);z-index:3}
+.fc-format-4-5 .fc-carousel-btn:first-child,#sim-flying-cyclist.fc-format-45 .fc-carousel-btn:first-child,#sim-flying-cyclist[data-format="instagram-45"] .fc-carousel-btn:first-child,#sim-flying-cyclist[data-format="instagram-4-5"] .fc-carousel-btn:first-child{left:10px}
+.fc-format-4-5 .fc-carousel-btn:last-child,#sim-flying-cyclist.fc-format-45 .fc-carousel-btn:last-child,#sim-flying-cyclist[data-format="instagram-45"] .fc-carousel-btn:last-child,#sim-flying-cyclist[data-format="instagram-4-5"] .fc-carousel-btn:last-child{right:10px}
 .fc-solution-slide{width:100%;height:100%;object-fit:contain;display:none;background:#06111f}
 .fc-solution-slide.active{display:block}
 .fc-solution-slide.active[data-failed="true"]{display:none}
