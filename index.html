@@ -6223,8 +6223,8 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
         <div class="fc-solution-carousel">
           <button class="fc-carousel-btn" type="button" onclick="moveFlyingCyclistSolutionSlide(-1)">‹</button>
           <div class="fc-solution-carousel-track" id="flyingCyclistSolutionCarousel">
-            <img class="active" src="images/flying-cyclist-solution-01.png" alt="" onerror="handleFlyingCyclistSolutionImageError(this)" onload="handleFlyingCyclistSolutionImageLoad(this)">
-            <img src="images/flying-cyclist-solution-02.png" alt="" onerror="handleFlyingCyclistSolutionImageError(this)" onload="handleFlyingCyclistSolutionImageLoad(this)">
+            <img class="fc-solution-slide active" src="images/simulators/ege/free-fall/images:flying-cyclist-solution-01.png" alt="" onerror="handleFlyingCyclistSolutionImageError(this)" onload="handleFlyingCyclistSolutionImageLoad(this)">
+            <img class="fc-solution-slide" src="images/simulators/ege/free-fall/images:flying-cyclist-solution-02.png" alt="" onerror="handleFlyingCyclistSolutionImageError(this)" onload="handleFlyingCyclistSolutionImageLoad(this)">
             <div class="fc-solution-empty">Фото решения будет добавлено</div>
           </div>
           <button class="fc-carousel-btn" type="button" onclick="moveFlyingCyclistSolutionSlide(1)">›</button>
@@ -12635,7 +12635,10 @@ function updateFlyingCyclistSolutionCarousel(){
   const imgs=document.querySelectorAll('#flyingCyclistSolutionCarousel img');
   if(!imgs.length)return;
   if(flyingCyclistSolutionSlide<0||flyingCyclistSolutionSlide>=imgs.length)flyingCyclistSolutionSlide=0;
-  imgs.forEach((img,index)=>{img.classList.toggle('active',index===flyingCyclistSolutionSlide);});
+  imgs.forEach((img,index)=>{
+    img.alt='';
+    img.classList.toggle('active',index===flyingCyclistSolutionSlide);
+  });
   const activeImg=imgs[flyingCyclistSolutionSlide];
   if(track)track.classList.toggle('is-empty',!activeImg||activeImg.dataset.failed==='true');
 }
