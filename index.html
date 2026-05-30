@@ -1587,23 +1587,21 @@ body.fc-fullscreen-active header{display:none !important}
 .fc-btn:hover{border-color:var(--cyan);color:var(--cyan)}
 .fc-solution{display:none;margin-top:12px;border-top:1px solid var(--border);padding-top:10px;font-size:13px;line-height:1.55}
 .fc-solution.on{display:block}
-.fc-solution-block{display:none;width:100%;padding:18px 20px 22px;border-top:1px solid rgba(8,216,255,.18);background:rgba(8,216,255,.025)}
+.fc-solution-block{display:none;width:100%;margin:0;padding:0;border-top:1px solid rgba(8,216,255,.18);background:rgba(8,216,255,.025);box-sizing:border-box}
 .fc-solution-block.open{display:block}
 .fc-format-4-5 .fc-solution-block,.fc-format-9-16 .fc-solution-block,.fc-format-1-1 .fc-solution-block,.fc-format-16-9 .fc-solution-block{position:static;width:100%;overflow:visible}
-.fc-solution-carousel{display:flex;align-items:center;justify-content:center;gap:14px;width:100%}
-.fc-solution-carousel-track{position:relative;width:min(420px,100%);aspect-ratio:4 / 5;overflow:hidden;border-radius:18px;border:1px solid rgba(8,216,255,.25);background:#06111f;display:flex;align-items:center;justify-content:center}
-.fc-format-4-5 .fc-solution-block,#sim-flying-cyclist.fc-format-45 .fc-solution-block,#sim-flying-cyclist[data-format="instagram-45"] .fc-solution-block,#sim-flying-cyclist[data-format="instagram-4-5"] .fc-solution-block{width:100%;padding:12px;margin:0;box-sizing:border-box}
-.fc-format-4-5 .fc-solution-carousel,#sim-flying-cyclist.fc-format-45 .fc-solution-carousel,#sim-flying-cyclist[data-format="instagram-45"] .fc-solution-carousel,#sim-flying-cyclist[data-format="instagram-4-5"] .fc-solution-carousel{position:relative;width:100%;display:block}
-.fc-format-4-5 .fc-solution-carousel-track,#sim-flying-cyclist.fc-format-45 .fc-solution-carousel-track,#sim-flying-cyclist[data-format="instagram-45"] .fc-solution-carousel-track,#sim-flying-cyclist[data-format="instagram-4-5"] .fc-solution-carousel-track{width:100%;max-width:none;aspect-ratio:4 / 5;margin:0 auto}
-.fc-format-4-5 .fc-carousel-btn,#sim-flying-cyclist.fc-format-45 .fc-carousel-btn,#sim-flying-cyclist[data-format="instagram-45"] .fc-carousel-btn,#sim-flying-cyclist[data-format="instagram-4-5"] .fc-carousel-btn{position:absolute;top:50%;transform:translateY(-50%);z-index:3}
-.fc-format-4-5 .fc-carousel-btn:first-child,#sim-flying-cyclist.fc-format-45 .fc-carousel-btn:first-child,#sim-flying-cyclist[data-format="instagram-45"] .fc-carousel-btn:first-child,#sim-flying-cyclist[data-format="instagram-4-5"] .fc-carousel-btn:first-child{left:10px}
-.fc-format-4-5 .fc-carousel-btn:last-child,#sim-flying-cyclist.fc-format-45 .fc-carousel-btn:last-child,#sim-flying-cyclist[data-format="instagram-45"] .fc-carousel-btn:last-child,#sim-flying-cyclist[data-format="instagram-4-5"] .fc-carousel-btn:last-child{right:10px}
+.fc-solution-carousel{position:relative;width:100%;display:block;margin:0;padding:12px;box-sizing:border-box}
+.fc-solution-carousel-track{position:relative;width:100%;max-width:none;aspect-ratio:4 / 5;overflow:hidden;border-radius:16px;border:1px solid rgba(8,216,255,.25);background:#06111f}
+#sim-flying-cyclist.fc-format-45 .fc-solution-carousel-track,#sim-flying-cyclist[data-format="instagram-45"] .fc-solution-carousel-track{width:100%;max-width:none;aspect-ratio:4 / 5}
 .fc-solution-slide{width:100%;height:100%;object-fit:contain;display:none;background:#06111f}
 .fc-solution-slide.active{display:block}
 .fc-solution-slide.active[data-failed="true"]{display:none}
+#sim-flying-cyclist.fc-format-45 .fc-solution-slide,#sim-flying-cyclist[data-format="instagram-45"] .fc-solution-slide{width:100%;height:100%;object-fit:contain}
+.fc-carousel-btn{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:38px;height:38px;border-radius:999px;border:1px solid rgba(8,216,255,.35);background:rgba(8,216,255,.12);color:#f2f8ff;font-size:24px;cursor:pointer}
+.fc-carousel-btn:first-child{left:20px}
+.fc-carousel-btn:last-child{right:20px}
 .fc-solution-empty{display:none;position:absolute;inset:0;align-items:center;justify-content:center;text-align:center;color:rgba(242,248,255,.65);font-size:14px;font-weight:700;padding:20px}
 .fc-solution-carousel-track.is-empty .fc-solution-empty{display:flex}
-.fc-carousel-btn{width:38px;height:38px;border-radius:999px;border:1px solid rgba(8,216,255,.35);background:rgba(8,216,255,.08);color:#f2f8ff;font-size:24px;cursor:pointer;flex-shrink:0}
 .fc-carousel-btn:hover{border-color:var(--cyan);color:var(--cyan)}
 @media(max-width:980px){.fc-layout{grid-template-columns:1fr}.cyclist-record-frame{width:min(100%,720px)}}
 @media(max-width:900px){#sim-flying-cyclist .cyclist-record-frame{width:100%}}
