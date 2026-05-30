@@ -1527,7 +1527,7 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 #sim-flying-cyclist .fc-layout{display:flex;flex-direction:column;justify-content:flex-start;align-items:center;width:100%}
 #sim-flying-cyclist .fc-panel{display:none}
 .cyclist-record-frame{aspect-ratio:4/5;width:min(100%,720px);height:auto;max-height:none;background:var(--bg2);border:1px solid var(--border);border-radius:16px;overflow:visible;display:flex;flex-direction:column}
-#sim-flying-cyclist .cyclist-record-frame{width:min(980px,100%);height:auto;aspect-ratio:auto;margin-left:auto;margin-right:auto}
+#sim-flying-cyclist .cyclist-record-frame{width:min(760px,100%);height:auto;aspect-ratio:auto;margin-left:auto;margin-right:auto;overflow:hidden}
 .fc-head{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border);font-size:11px;color:var(--gray)}
 .fc-cond{padding:8px 12px;font-size:clamp(14px,2.2vw,22px);line-height:1.35;white-space:normal;overflow:visible;color:var(--white);border-bottom:1px solid var(--border)}
 .fc-canvas-box{flex:1;min-height:0;padding:24px}
@@ -1587,14 +1587,14 @@ body.fc-fullscreen-active header{display:none !important}
 .fc-btn:hover{border-color:var(--cyan);color:var(--cyan)}
 .fc-solution{display:none;margin-top:12px;border-top:1px solid var(--border);padding-top:10px;font-size:13px;line-height:1.55}
 .fc-solution.on{display:block}
-.fc-solution-block{display:none;width:100%;padding:18px;border-top:1px solid rgba(8,216,255,.18);background:rgba(8,216,255,.025);overflow:visible}
+.fc-solution-block{display:none;width:100%;padding:18px 20px 22px;border-top:1px solid rgba(8,216,255,.18);background:rgba(8,216,255,.025)}
 .fc-solution-block.open{display:block}
 .fc-format-4-5 .fc-solution-block,.fc-format-9-16 .fc-solution-block,.fc-format-1-1 .fc-solution-block,.fc-format-16-9 .fc-solution-block{position:static;width:100%;overflow:visible}
 .fc-solution-carousel{display:flex;align-items:center;justify-content:center;gap:14px;width:100%}
-.fc-solution-carousel-track{position:relative;width:min(420px,100%);aspect-ratio:4 / 5;overflow:hidden;border-radius:18px;border:1px solid rgba(8,216,255,.25);background:#06111f}
-.fc-solution-carousel-track img{width:100%;height:100%;object-fit:contain;display:none;background:#06111f}
-.fc-solution-carousel-track img.active{display:block}
-.fc-solution-carousel-track img.active[data-failed="true"]{display:none}
+.fc-solution-carousel-track{position:relative;width:min(420px,100%);aspect-ratio:4 / 5;overflow:hidden;border-radius:18px;border:1px solid rgba(8,216,255,.25);background:#06111f;display:flex;align-items:center;justify-content:center}
+.fc-solution-slide{width:100%;height:100%;object-fit:contain;display:none;background:#06111f}
+.fc-solution-slide.active{display:block}
+.fc-solution-slide.active[data-failed="true"]{display:none}
 .fc-solution-empty{display:none;position:absolute;inset:0;align-items:center;justify-content:center;text-align:center;color:rgba(242,248,255,.65);font-size:14px;font-weight:700;padding:20px}
 .fc-solution-carousel-track.is-empty .fc-solution-empty{display:flex}
 .fc-carousel-btn{width:38px;height:38px;border-radius:999px;border:1px solid rgba(8,216,255,.35);background:rgba(8,216,255,.08);color:#f2f8ff;font-size:24px;cursor:pointer;flex-shrink:0}
@@ -6224,8 +6224,8 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
           <div class="fc-solution-carousel">
             <button class="fc-carousel-btn" type="button" onclick="moveFlyingCyclistSolutionSlide(-1)">‹</button>
             <div class="fc-solution-carousel-track" id="flyingCyclistSolutionCarousel">
-              <img class="fc-solution-slide active" src="images/simulators/ege/free-fall/flying-cyclist-solution-01.png" alt="" onerror="handleFlyingCyclistSolutionImageError(this)" onload="handleFlyingCyclistSolutionImageLoad(this)">
-              <img class="fc-solution-slide" src="images/simulators/ege/free-fall/flying-cyclist-solution-02.png" alt="" onerror="handleFlyingCyclistSolutionImageError(this)" onload="handleFlyingCyclistSolutionImageLoad(this)">
+              <img class="fc-solution-slide active" src="images/simulators/ege/free-fall/flying-cyclist-solution-01.png" alt="">
+              <img class="fc-solution-slide" src="images/simulators/ege/free-fall/flying-cyclist-solution-02.png" alt="">
               <div class="fc-solution-empty">Фото решения будет добавлено</div>
             </div>
             <button class="fc-carousel-btn" type="button" onclick="moveFlyingCyclistSolutionSlide(1)">›</button>
@@ -12646,39 +12646,65 @@ function toggleFlyingCyclistSolution(){
 }
 function updateFlyingCyclistSolutionCarousel(){
   const track=document.getElementById('flyingCyclistSolutionCarousel');
-  const imgs=document.querySelectorAll('#flyingCyclistSolutionCarousel img');
-  if(!imgs.length)return;
-  if(flyingCyclistSolutionSlide<0||flyingCyclistSolutionSlide>=imgs.length)flyingCyclistSolutionSlide=0;
-  imgs.forEach((img,index)=>{
+  const imgs=Array.from(document.querySelectorAll('#flyingCyclistSolutionCarousel .fc-solution-slide'));
+  if(!track||!imgs.length)return;
+
+  const availableImgs=imgs.filter(img=>img.dataset.failed!=='true');
+  if(!availableImgs.length){
+    imgs.forEach(img=>{
+      img.alt='';
+      img.classList.remove('active');
+    });
+    track.classList.add('is-empty');
+    flyingCyclistSolutionSlide=0;
+    return;
+  }
+
+  track.classList.remove('is-empty');
+  if(flyingCyclistSolutionSlide<0)flyingCyclistSolutionSlide=availableImgs.length-1;
+  if(flyingCyclistSolutionSlide>=availableImgs.length)flyingCyclistSolutionSlide=0;
+  const activeImg=availableImgs[flyingCyclistSolutionSlide];
+
+  imgs.forEach(img=>{
     img.alt='';
-    img.classList.toggle('active',index===flyingCyclistSolutionSlide);
+    img.classList.toggle('active',img===activeImg);
   });
-  const activeImg=imgs[flyingCyclistSolutionSlide];
-  if(track)track.classList.toggle('is-empty',!activeImg||activeImg.dataset.failed==='true');
 }
 function handleFlyingCyclistSolutionImageError(img){
   if(!img)return;
   img.dataset.failed='true';
-  img.style.display='none';
+  img.classList.remove('active');
   updateFlyingCyclistSolutionCarousel();
 }
 function handleFlyingCyclistSolutionImageLoad(img){
   if(!img)return;
   delete img.dataset.failed;
-  img.style.display='';
+  updateFlyingCyclistSolutionCarousel();
+}
+function bindFlyingCyclistSolutionImages(){
+  const imgs=document.querySelectorAll('#flyingCyclistSolutionCarousel .fc-solution-slide');
+  imgs.forEach(img=>{
+    img.alt='';
+    img.addEventListener('error',()=>handleFlyingCyclistSolutionImageError(img));
+    img.addEventListener('load',()=>handleFlyingCyclistSolutionImageLoad(img));
+    if(img.complete&&img.naturalWidth===0)handleFlyingCyclistSolutionImageError(img);
+  });
   updateFlyingCyclistSolutionCarousel();
 }
 function moveFlyingCyclistSolutionSlide(direction){
-  const imgs=document.querySelectorAll('#flyingCyclistSolutionCarousel img');
-  if(!imgs.length)return;
+  const availableImgs=Array.from(document.querySelectorAll('#flyingCyclistSolutionCarousel .fc-solution-slide')).filter(img=>img.dataset.failed!=='true');
+  if(!availableImgs.length){
+    updateFlyingCyclistSolutionCarousel();
+    return;
+  }
   flyingCyclistSolutionSlide+=direction;
-  if(flyingCyclistSolutionSlide<0)flyingCyclistSolutionSlide=imgs.length-1;
-  if(flyingCyclistSolutionSlide>=imgs.length)flyingCyclistSolutionSlide=0;
+  if(flyingCyclistSolutionSlide<0)flyingCyclistSolutionSlide=availableImgs.length-1;
+  if(flyingCyclistSolutionSlide>=availableImgs.length)flyingCyclistSolutionSlide=0;
   updateFlyingCyclistSolutionCarousel();
 }
 if(document.readyState==='loading'){
-  document.addEventListener('DOMContentLoaded',updateFlyingCyclistSolutionCarousel,{once:true});
-}else{updateFlyingCyclistSolutionCarousel();}
+  document.addEventListener('DOMContentLoaded',bindFlyingCyclistSolutionImages,{once:true});
+}else{bindFlyingCyclistSolutionImages();}
 function openFlyingCyclistSim(){openSim('flying-cyclist');}
 function closeFlyingCyclistSim(){toggleFlyingCyclistRecordMode(false);pauseFlyingCyclistSim();goBack();}
 function calculateFlyingCyclistValues(H,alphaDeg,g){
