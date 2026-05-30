@@ -1526,21 +1526,22 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 .fc-layout{display:grid;grid-template-columns:minmax(320px,700px) minmax(280px,1fr);gap:18px;align-items:start}
 #sim-flying-cyclist .fc-layout{display:flex;flex-direction:column;justify-content:flex-start;align-items:center;width:100%}
 #sim-flying-cyclist .fc-panel{display:none}
-.cyclist-record-frame{aspect-ratio:4/5;width:min(100%,720px);height:auto;max-height:none;background:var(--bg2);border:1px solid var(--border);border-radius:16px;overflow:visible;display:flex;flex-direction:column}
-#sim-flying-cyclist .cyclist-record-frame{width:min(760px,100%);height:auto;aspect-ratio:auto;margin-left:auto;margin-right:auto;overflow:hidden}
+.cyclist-record-frame{width:100%;max-width:100%;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;height:auto;min-height:0;overflow:visible;box-sizing:border-box;background:var(--bg2);border:1px solid var(--border);border-radius:16px;--solution-card-ratio:4 / 5}
+#sim-flying-cyclist .cyclist-record-frame{width:min(760px,100%);max-width:100%;height:auto;min-height:0;aspect-ratio:auto;margin-left:auto;margin-right:auto;overflow:visible}
+.cyclist-record-frame > *{width:100%;box-sizing:border-box}
 .fc-head{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border);font-size:11px;color:var(--gray)}
 .fc-cond{padding:8px 12px;font-size:clamp(14px,2.2vw,22px);line-height:1.35;white-space:normal;overflow:visible;color:var(--white);border-bottom:1px solid var(--border)}
 .fc-canvas-box{flex:1;min-height:0;padding:24px}
 #sim-flying-cyclist .fc-canvas-wrap,
 #sim-flying-cyclist .fc-animation-wrap,
-#sim-flying-cyclist .fc-canvas-box{min-height:360px;height:360px;flex-shrink:0;overflow:hidden}
+#sim-flying-cyclist .fc-canvas-box{width:100%;height:auto;min-height:0;display:block;flex:0 0 auto;overflow:hidden;box-sizing:border-box;aspect-ratio:16 / 9}
 #sim-flying-cyclist canvas{width:100%;height:100%;display:block}
 
 .fc-inline-params{display:flex;flex-wrap:nowrap;align-items:center;gap:8px;padding:8px 14px;border-bottom:1px solid rgba(8,216,255,.18);overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
 .fc-inline-params::-webkit-scrollbar{display:none}
 .fc-animation-controls{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 14px;border-bottom:1px solid rgba(8,216,255,.18)}
 .fc-animation-controls .fc-ctrl{margin-top:0}
-.fc-bottom-solution-control{display:flex;align-items:center;justify-content:flex-start;padding:10px;border-top:1px solid rgba(8,216,255,.18)}
+.fc-bottom-solution-control{display:flex;align-items:center;justify-content:flex-start;width:100%;padding:12px 16px;border-top:1px solid rgba(8,216,255,.14);box-sizing:border-box}
 .fc-solution-chip{min-width:130px;justify-content:center}
 .fc-speed-control{min-height:30px;padding:0 10px;border-radius:10px;border:1px solid rgba(80,180,255,.32);background:linear-gradient(180deg,rgba(42,72,112,.82),rgba(14,28,52,.92));color:#9fb0c8;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
 .fc-speed-control input[type="range"]{width:86px;height:4px}
@@ -1560,14 +1561,24 @@ body.fc-fullscreen-active header{display:none !important}
 .fc-format-dropdown button{width:100%;border:0;border-radius:10px;background:transparent;color:var(--white);font:inherit;font-size:13px;text-align:left;padding:9px 10px;cursor:pointer}
 .fc-format-dropdown button:hover,.fc-format-dropdown button:focus{background:rgba(8,216,255,.12);color:var(--cyan);outline:none}
 .fc-fullscreen-mode{position:fixed;inset:0;z-index:99999;background:#020914;display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow:auto}
-.fc-fullscreen-stage{width:100%;height:100%;background:#071321;border:1px solid rgba(8,216,255,.28);border-radius:18px;overflow:visible;display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(0,0,0,.45)}
-.fc-fullscreen-mode .fc-fullscreen-stage{width:min(100vw,100%);height:min(100vh,100%)}
-.fc-format-4-5 .fc-fullscreen-stage{aspect-ratio:4 / 5;width:min(calc(100vw - 32px),calc((100vh - 32px) * 4 / 5));height:min(calc(100vh - 32px),calc((100vw - 32px) * 5 / 4))}
-.fc-format-9-16 .fc-fullscreen-stage{aspect-ratio:9 / 16;width:min(calc(100vw - 32px),calc((100vh - 32px) * 9 / 16));height:min(calc(100vh - 32px),calc((100vw - 32px) * 16 / 9))}
-.fc-format-1-1 .fc-fullscreen-stage{aspect-ratio:1 / 1;width:min(calc(100vw - 32px),calc(100vh - 32px));height:min(calc(100vw - 32px),calc(100vh - 32px))}
-.fc-format-16-9 .fc-fullscreen-stage{aspect-ratio:16 / 9;width:min(calc(100vw - 32px),calc((100vh - 32px) * 16 / 9));height:min(calc(100vh - 32px),calc((100vw - 32px) * 9 / 16))}
-.fc-fullscreen-mode .fc-canvas-box{flex:1;min-height:0;padding:clamp(10px,2.2vmin,22px)}
-.fc-fullscreen-mode .fc-canvas-wrap{min-height:360px;height:360px;flex:0 0 auto;overflow:hidden}
+.fc-fullscreen-stage{width:100%;height:auto;min-height:0;background:#071321;border:1px solid rgba(8,216,255,.28);border-radius:18px;overflow:visible;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;box-sizing:border-box;box-shadow:0 24px 80px rgba(0,0,0,.45)}
+.fc-fullscreen-mode .fc-fullscreen-stage{width:min(100vw,100%);height:auto;min-height:0}
+.fc-format-4-5 .fc-fullscreen-stage{width:min(calc(100vw - 32px),calc((100vh - 32px) * 4 / 5));height:auto}
+.fc-format-9-16 .fc-fullscreen-stage{width:min(calc(100vw - 32px),calc((100vh - 32px) * 9 / 16));height:auto}
+.fc-format-1-1 .fc-fullscreen-stage{width:min(calc(100vw - 32px),calc(100vh - 32px));height:auto}
+.fc-format-16-9 .fc-fullscreen-stage{width:min(calc(100vw - 32px),calc((100vh - 32px) * 16 / 9));height:auto}
+.fc-format-4-5,.fc-format-4-5 .fc-fullscreen-stage{--solution-card-ratio:4 / 5}
+.fc-format-9-16,.fc-format-9-16 .fc-fullscreen-stage{--solution-card-ratio:9 / 16}
+.fc-format-1-1,.fc-format-1-1 .fc-fullscreen-stage{--solution-card-ratio:1 / 1}
+.fc-format-16-9,.fc-format-16-9 .fc-fullscreen-stage{--solution-card-ratio:16 / 9}
+#sim-flying-cyclist[data-format="default"],.cyclist-record-frame[data-format="default"]{--solution-card-ratio:4 / 5}
+#sim-flying-cyclist[data-format="instagram-45"],.cyclist-record-frame[data-format="instagram-45"]{--solution-card-ratio:4 / 5}
+#sim-flying-cyclist[data-format="instagram-916"],.cyclist-record-frame[data-format="instagram-916"]{--solution-card-ratio:9 / 16}
+#sim-flying-cyclist[data-format="instagram-11"],.cyclist-record-frame[data-format="instagram-11"]{--solution-card-ratio:1 / 1}
+#sim-flying-cyclist[data-format="youtube-169"],.cyclist-record-frame[data-format="youtube-169"]{--solution-card-ratio:16 / 9}
+#sim-flying-cyclist[data-format="youtube-shorts-916"],.cyclist-record-frame[data-format="youtube-shorts-916"]{--solution-card-ratio:9 / 16}
+.fc-fullscreen-mode .fc-canvas-box{flex:0 0 auto;min-height:0;padding:clamp(10px,2.2vmin,22px)}
+.fc-fullscreen-mode .fc-canvas-wrap{height:auto;min-height:0;flex:0 0 auto;overflow:hidden}
 .fc-fullscreen-mode .fc-cond{font-size:clamp(12px,2.1vmin,20px);padding:clamp(6px,1.2vmin,10px) clamp(8px,1.6vmin,14px)}
 .fc-fullscreen-mode .fc-head{padding:clamp(6px,1.1vmin,10px) clamp(8px,1.6vmin,14px)}
 .fc-fullscreen-mode .fc-inline-params{flex-wrap:wrap;gap:clamp(4px,.8vmin,8px);padding:clamp(6px,1.2vmin,10px) clamp(8px,1.6vmin,14px);overflow:visible}
@@ -1587,19 +1598,18 @@ body.fc-fullscreen-active header{display:none !important}
 .fc-btn:hover{border-color:var(--cyan);color:var(--cyan)}
 .fc-solution{display:none;margin-top:12px;border-top:1px solid var(--border);padding-top:10px;font-size:13px;line-height:1.55}
 .fc-solution.on{display:block}
-.fc-solution-block{display:none;width:100%;margin:0;padding:0;border-top:1px solid rgba(8,216,255,.18);background:rgba(8,216,255,.025);box-sizing:border-box}
+.fc-solution-block{display:none;width:100%;margin:0;padding:0;border-top:1px solid rgba(8,216,255,.16);background:rgba(8,216,255,.02);box-sizing:border-box;overflow:visible}
 .fc-solution-block.open{display:block}
 .fc-format-4-5 .fc-solution-block,.fc-format-9-16 .fc-solution-block,.fc-format-1-1 .fc-solution-block,.fc-format-16-9 .fc-solution-block{position:static;width:100%;overflow:visible}
-.fc-solution-carousel{position:relative;width:100%;display:block;margin:0;padding:12px;box-sizing:border-box}
-.fc-solution-carousel-track{position:relative;width:100%;max-width:none;aspect-ratio:4 / 5;overflow:hidden;border-radius:16px;border:1px solid rgba(8,216,255,.25);background:#06111f}
-#sim-flying-cyclist.fc-format-45 .fc-solution-carousel-track,#sim-flying-cyclist[data-format="instagram-45"] .fc-solution-carousel-track{width:100%;max-width:none;aspect-ratio:4 / 5}
-.fc-solution-slide{width:100%;height:100%;object-fit:contain;display:none;background:#06111f}
+.fc-solution-carousel{position:relative;width:100%;display:block;margin:0;padding:14px 16px 18px;box-sizing:border-box}
+.fc-solution-carousel-track{position:relative;width:100%;max-width:none;margin:0 auto;aspect-ratio:var(--solution-card-ratio,4 / 5);overflow:hidden;border-radius:16px;border:1px solid rgba(8,216,255,.22);background:#06111f;box-sizing:border-box}
+.fc-solution-slide{display:none;width:100%;height:100%;object-fit:contain;background:#06111f}
 .fc-solution-slide.active{display:block}
 .fc-solution-slide.active[data-failed="true"]{display:none}
 #sim-flying-cyclist.fc-format-45 .fc-solution-slide,#sim-flying-cyclist[data-format="instagram-45"] .fc-solution-slide{width:100%;height:100%;object-fit:contain}
-.fc-carousel-btn{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:38px;height:38px;border-radius:999px;border:1px solid rgba(8,216,255,.35);background:rgba(8,216,255,.12);color:#f2f8ff;font-size:24px;cursor:pointer}
-.fc-carousel-btn:first-child{left:20px}
-.fc-carousel-btn:last-child{right:20px}
+.fc-carousel-btn{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:40px;height:40px;border-radius:999px;border:1px solid rgba(8,216,255,.35);background:rgba(8,216,255,.10);color:#f2f8ff;font-size:24px;cursor:pointer}
+.fc-carousel-btn.prev,.fc-carousel-btn:first-child{left:24px}
+.fc-carousel-btn.next,.fc-carousel-btn:last-child{right:24px}
 .fc-solution-empty{display:none;position:absolute;inset:0;align-items:center;justify-content:center;text-align:center;color:rgba(242,248,255,.65);font-size:14px;font-weight:700;padding:20px}
 .fc-solution-carousel-track.is-empty .fc-solution-empty{display:flex}
 .fc-carousel-btn:hover{border-color:var(--cyan);color:var(--cyan)}
@@ -6226,13 +6236,13 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
         </div>
         <div class="fc-solution-block" id="flyingCyclistSolution">
           <div class="fc-solution-carousel">
-            <button class="fc-carousel-btn" type="button" onclick="moveFlyingCyclistSolutionSlide(-1)">‹</button>
+            <button class="fc-carousel-btn prev" type="button" onclick="moveFlyingCyclistSolutionSlide(-1)">‹</button>
             <div class="fc-solution-carousel-track" id="flyingCyclistSolutionCarousel">
               <img class="fc-solution-slide active" src="images/simulators/ege/free-fall/flying-cyclist-solution-01.png" alt="">
               <img class="fc-solution-slide" src="images/simulators/ege/free-fall/flying-cyclist-solution-02.png" alt="">
               <div class="fc-solution-empty">Фото решения будет добавлено</div>
             </div>
-            <button class="fc-carousel-btn" type="button" onclick="moveFlyingCyclistSolutionSlide(1)">›</button>
+            <button class="fc-carousel-btn next" type="button" onclick="moveFlyingCyclistSolutionSlide(1)">›</button>
           </div>
         </div>
       </div>
@@ -12634,19 +12644,7 @@ let flyingCyclistSolutionSlide=0;
 function toggleFlyingCyclistSolution(){
   const block=document.getElementById('flyingCyclistSolution');
   if(!block)return;
-
   block.classList.toggle('open');
-
-  if(block.classList.contains('open')){
-    updateFlyingCyclistSolutionCarousel?.();
-
-    setTimeout(()=>{
-      block.scrollIntoView({
-        behavior:'smooth',
-        block:'start'
-      });
-    },80);
-  }
 }
 function updateFlyingCyclistSolutionCarousel(){
   const track=document.getElementById('flyingCyclistSolutionCarousel');
@@ -12743,6 +12741,14 @@ function getFlyingCyclistFormatClass(format){
   if(format==='youtube-16-9')return 'fc-format-16-9';
   return '';
 }
+function getFlyingCyclistSolutionFormat(format){
+  if(format==='instagram-4-5')return 'instagram-45';
+  if(format==='instagram-9-16')return 'instagram-916';
+  if(format==='instagram-1-1')return 'instagram-11';
+  if(format==='youtube-16-9')return 'youtube-169';
+  if(format==='youtube-shorts')return 'youtube-shorts-916';
+  return 'default';
+}
 function closeFlyingCyclistFormatMenu(){
   const dropdown=document.getElementById('fcFormatDropdown');
   const toggle=document.getElementById('fcFormatToggle');
@@ -12762,6 +12768,10 @@ function openFlyingCyclistFormat(format){
   flyingCyclistFormatClasses.forEach(cls=>overlay.classList.remove(cls));
   const formatClass=getFlyingCyclistFormatClass(format);
   if(formatClass)overlay.classList.add(formatClass);
+  const solutionFormat=getFlyingCyclistSolutionFormat(format);
+  const sim=document.getElementById('sim-flying-cyclist');
+  if(sim)sim.dataset.format=solutionFormat;
+  frame.dataset.format=solutionFormat;
   document.body.classList.add('fc-fullscreen-active');
   frame.classList.add('fc-fullscreen-stage');
   overlay.appendChild(frame);
@@ -12784,8 +12794,11 @@ function exitFlyingCyclistFullscreen(){
   const overlay=document.getElementById('fcFullscreenOverlay');
   if(frame&&layout){
     frame.classList.remove('fc-fullscreen-stage');
+    frame.dataset.format='default';
     layout.insertBefore(frame,layout.firstElementChild);
   }
+  const sim=document.getElementById('sim-flying-cyclist');
+  if(sim)sim.dataset.format='default';
   if(overlay)overlay.remove();
   document.body.classList.remove('fc-fullscreen-active');
   setTimeout(renderFlyingCyclistScene,30);
