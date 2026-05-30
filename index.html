@@ -3844,6 +3844,33 @@ function showNotFoundRoute(hash){
   return showRouteMessage('Страница не найдена',`Маршрут ${hash || 'без адреса'} не найден.`,'#home','На главную');
 }
 
+const FIZMAT_LAST_ROUTE_KEY = 'fizmat_last_route';
+
+function saveCurrentRoute(){
+  const hash = window.location.hash || '';
+
+  if(hash && hash !== '#home'){
+    sessionStorage.setItem(FIZMAT_LAST_ROUTE_KEY, hash);
+  }
+}
+
+function restoreRouteOnReload(){
+  const currentHash = window.location.hash || '';
+
+  if(currentHash){
+    return currentHash;
+  }
+
+  const savedHash = sessionStorage.getItem(FIZMAT_LAST_ROUTE_KEY);
+
+  if(savedHash){
+    history.replaceState(null, '', savedHash);
+    return savedHash;
+  }
+
+  return '#home';
+}
+
 function handleRoute(){
   const hash = window.location.hash || '#home';
 
@@ -3915,9 +3942,15 @@ function handleRoute(){
   }
 }
 
-window.addEventListener('hashchange',handleRoute);
+window.addEventListener('hashchange',function(){
+  saveCurrentRoute();
+  handleRoute();
+});
+window.addEventListener('beforeunload', saveCurrentRoute);
+window.addEventListener('pagehide', saveCurrentRoute);
 document.addEventListener('DOMContentLoaded',function(){
   initSimMenu();
+  restoreRouteOnReload();
   handleRoute();
 });
 
@@ -4456,7 +4489,7 @@ function restoreTaskBoardAfterRefresh(){
 
   if(!saved || !saved.isOpen) return;
 
-  if(saved.route && window.location.hash !== saved.route){
+  if(saved.route && !window.location.hash){
     history.replaceState(null, '', saved.route);
   }
 
