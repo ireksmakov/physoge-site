@@ -3883,6 +3883,16 @@ function handleRoute(){
   if(hash === '#students') return showStudentsPage ? showStudentsPage() : showLanding('#students');
   if(hash === '#bank') return showBankPage ? showBankPage() : showLanding('#bank');
   if(hash === '#simulators') return showSimulatorsPage('oge');
+  if(hash.startsWith('#simulators/ege/')){
+    const simKey = hash.replace('#simulators/ege/', '');
+    currentSimulatorsExam = 'ege';
+    return openSimFromRoute(simKey, 'ege');
+  }
+  if(hash.startsWith('#simulators/oge/')){
+    const simKey = hash.replace('#simulators/oge/', '');
+    currentSimulatorsExam = 'oge';
+    return openSimFromRoute(simKey, 'oge');
+  }
   if(hash === '#simulators/oge') return showSimulatorsPage('oge');
   if(hash === '#simulators/ege') return showSimulatorsPage('ege');
 
@@ -4294,7 +4304,33 @@ function openLesson(section,num,title,simKey){
   }
   window.scrollTo(0,0);
 }
-function openSim(key){
+function openSimFromRoute(simKey, exam){
+  currentSimulatorsExam = exam === 'ege' ? 'ege' : 'oge';
+
+  const allowed = ['rupd', 'zsi', 'flying-cyclist'];
+  if(!allowed.includes(simKey)){
+    const fallbackHash = getSimulatorsBackHash();
+    if(window.location.hash !== fallbackHash){
+      history.replaceState(null, '', fallbackHash);
+    }
+    return showSimulatorsPage(currentSimulatorsExam);
+  }
+
+  return openSim(simKey, { fromRoute: true, exam: currentSimulatorsExam });
+}
+function openSim(key, options = {}){
+  const fromRoute = options.fromRoute === true;
+  const exam = options.exam || currentSimulatorsExam || 'oge';
+
+  currentSimulatorsExam = exam === 'ege' ? 'ege' : 'oge';
+
+  if(!fromRoute){
+    const nextHash = '#simulators/' + currentSimulatorsExam + '/' + key;
+    if(window.location.hash !== nextHash){
+      history.pushState(null, '', nextHash);
+    }
+  }
+
   if(!openCourse_back) simPrevPage='simulators';
   openCourse_back=false;
   hideAll();
