@@ -1643,8 +1643,11 @@ body.fc-fullscreen-active header{display:none !important}
 .topics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;padding:0}
 @media(max-width:800px){.topics-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:500px){.topics-grid{grid-template-columns:1fr}}
-.topic-item{display:flex;align-items:center;gap:10px;padding:13px 24px;border-bottom:1px solid rgba(0,229,255,.06);border-right:1px solid rgba(0,229,255,.06);cursor:pointer;transition:background .15s}
+.topic-item{display:flex;flex-direction:column;gap:10px;padding:13px 24px;border-bottom:1px solid rgba(0,229,255,.06);border-right:1px solid rgba(0,229,255,.06);cursor:pointer;transition:background .15s}
 .topic-item:hover{background:rgba(0,229,255,.04)}
+.topic-main{display:flex;align-items:center;gap:10px;width:100%}
+.topic-labs{width:100%;cursor:default}
+.topic-labs .pl-card{margin:2px 0 0;padding:14px;background:rgba(168,85,247,.04)}
 .topic-num{font-size:11px;font-weight:700;color:var(--gray);min-width:22px;flex-shrink:0}
 .topic-name{font-size:13px;color:var(--white);flex:1;line-height:1.4}
 .topic-sim{font-size:10px;padding:2px 7px;border-radius:4px;background:rgba(0,229,255,.12);color:var(--cyan);flex-shrink:0}
@@ -3019,23 +3022,11 @@ const COURSES={
       lessons:[
         'Система отсчета и относительность движения',
         'Равномерное прямолинейное движение',
-        Object.assign(makeLesson(
+        makeLesson(
           'Равноускоренное движение',
           'Прямолинейное равноускоренное движение, формулы скорости, перемещения и координаты, графики v(t), s(t), a(t).',
           'Равноускоренное движение'
-        ),{
-          labs:[{
-            id:'incline-motion',
-            icon:'🧪',
-            name:'Исследование равноускоренного движения без начальной скорости',
-            subtitle:'Виртуальная лабораторная работа · Наклонная плоскость',
-            badge:'Виртуальная',
-            desc:'Шар движется по наклонной плоскости из состояния покоя. Ученик меняет угол наклона и длину пути, измеряет время движения, строит таблицу результатов и проверяет формулу s = at² / 2.',
-            formulas:['v = v0 + at','s = at² / 2','a = g · sinα'],
-            steps:['Установить угол наклона α и длину пути s','Запустить движение шара из состояния покоя','Измерить время движения и записать результат','Повторить опыт для нескольких значений','Сравнить измерения с формулой s = at² / 2'],
-            btn:'open',action:"openLab('incline-motion',{exam:'ege'})",buttonText:'Открыть лабораторную'
-          }]
-        }),
+        ),
         'Движение по окружности',
         'Свободное падение'
       ]
@@ -4167,6 +4158,95 @@ const SIMULATORS_REGISTRY=[
     status:'soon'
   }
 ];
+const LAB_REGISTRY=[
+  {
+    id:'ege-rupd-lab',
+    exam:'ege',
+    subject:'physics',
+    topic:'Равноускоренное движение',
+    module:'Кинематика',
+    simulatorSlug:'rupd',
+    simulatorHash:'#simulators/ege/rupd',
+    title:'Исследование равноускоренного движения без начальной скорости',
+    subtitle:'Виртуальная лабораторная работа · Наклонная плоскость',
+    description:'Шар движется по наклонной плоскости из состояния покоя. Ученик меняет угол наклона и длину пути, измеряет время движения, строит таблицу результатов и проверяет формулу s = at² / 2.',
+    formulas:['v = v0 + at','s = at² / 2','a = g · sinα'],
+    buttonText:'Открыть лабораторную',
+    action:'openRupdLaboratoryFromCourse'
+  }
+];
+function normalizeLabTopic(value){
+  return String(value||'')
+    .trim()
+    .toLowerCase()
+    .replaceAll('ё','е')
+    .replace(/\s+/g,' ');
+}
+function getExamFromId(value){
+  const text=String(value||'').toLowerCase();
+  if(text.includes('oge'))return 'oge';
+  if(text.includes('ege'))return 'ege';
+  return '';
+}
+function getLabsForCourseLesson(courseId,lesson){
+  const exam=getExamFromId(courseId);
+  const lessonName=typeof lesson==='string'?lesson:(lesson&&((lesson.title||lesson.name||lesson.theory)||''));
+  const normalizedTitle=normalizeLabTopic(lessonName);
+  const ownLabs=lesson&&Array.isArray(lesson.labs)?lesson.labs:[];
+  const theoryKey=lesson&&typeof lesson==='object'?lesson.theory:lessonName;
+  const mappedLabs=(typeof LESSON_LABS!=='undefined'&&(LESSON_LABS[theoryKey]||LESSON_LABS[lessonName]))||[];
+  const registryLabs=LAB_REGISTRY.filter(lab=>lab.exam===exam&&normalizeLabTopic(lab.topic)===normalizedTitle);
+  const result=[...ownLabs,...mappedLabs];
+  registryLabs.forEach(lab=>{
+    const labKey=lab.id||lab.title||lab.name;
+    if(!result.some(item=>(item.id||item.title||item.name)===labKey))result.push(lab);
+  });
+  return result;
+}
+function getLabsForSimulatorTopic(exam,topic){
+  const normalizedTopic=normalizeLabTopic(topic);
+  return LAB_REGISTRY.filter(lab=>lab.exam===normalizeExamKey(exam)&&normalizeLabTopic(lab.topic)===normalizedTopic);
+}
+function getLabsForSimulator(exam,simulatorSlug){
+  return LAB_REGISTRY.filter(lab=>lab.exam===normalizeExamKey(exam)&&lab.simulatorSlug===simulatorSlug);
+}
+function openLabItem(lab){
+  if(lab&&lab.action&&typeof window[lab.action]==='function'){
+    window[lab.action]();
+    return;
+  }
+  if(lab&&lab.simulatorHash)location.hash=lab.simulatorHash;
+}
+function openLabItemById(labId){
+  const lab=LAB_REGISTRY.find(item=>item.id===labId);
+  if(lab)openLabItem(lab);
+}
+function renderLabCard(lab){
+  const isSoon=lab.btn==='soon';
+  const title=lab.title||lab.name||'Лабораторная работа';
+  const description=lab.description||lab.desc||'';
+  const steps=Array.isArray(lab.steps)?lab.steps:[];
+  const formulas=Array.isArray(lab.formulas)?lab.formulas:[];
+  const openAction=lab.id&&LAB_REGISTRY.some(item=>item.id===lab.id)
+    ?`openLabItemById(${JSON.stringify(lab.id)})`
+    :(lab.action||'');
+  const stepsMarkup=steps.length?`<div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#a855f7;margin-bottom:8px">Ход работы</div><div class="pl-steps">${steps.map((step,index)=>`<div class="pl-step"><div class="pl-snum">${index+1}</div><div>${escapeHtml(step)}</div></div>`).join('')}</div>`:'';
+  const formulasMarkup=formulas.length?`<div class="pl-formulas">${formulas.map(formula=>`<span class="pl-formula">${escapeHtml(formula)}</span>`).join('')}</div>`:'';
+  const button=isSoon||!openAction&&!lab.simulatorHash
+    ?'<button class="pl-btn pl-btn-dis" disabled>🔒 Скоро</button>'
+    :`<button class="pl-btn" onclick='event.stopPropagation();${openAction||`openLabItemById(${JSON.stringify(lab.id)})`}'>${escapeHtml(lab.buttonText||'🔬 Открыть лабораторную')}</button>`;
+  return `<div class="pl-card"><div class="pl-head"><div class="pl-icon">${escapeHtml(lab.icon||'🧪')}</div><div><div class="pl-title">${escapeHtml(title)}</div>${lab.subtitle?`<div class="pl-subtitle">${escapeHtml(lab.subtitle)}</div>`:''}</div><div class="pl-badge">${escapeHtml(lab.badge||'Виртуальная')}</div></div><div class="pl-desc">${escapeHtml(description)}</div>${formulasMarkup}${stepsMarkup}${button}</div>`;
+}
+function renderLabCards(labs){return (labs||[]).map(renderLabCard).join('');}
+function openRupdLaboratoryFromCourse(){
+  location.hash='#simulators/ege/rupd';
+  setTimeout(()=>{
+    const labButton=Array.from(document.querySelectorAll('button, a'))
+      .find(el=>el.textContent&&el.textContent.includes('Виртуальная лабораторная'));
+    if(labButton)labButton.click();
+  },150);
+}
+
 function normalizeTopic(text){
   return String(text||'')
     .toLowerCase()
@@ -4248,9 +4328,11 @@ function renderSimulatorsStructure(exam){
     const topics=lessons.map((lesson,li)=>{
       const topic=lessonTitle(lesson);
       const sims=getReadySimulatorsForLesson(examKey,topic);
+      const labs=getLabsForSimulatorTopic(examKey,topic);
       const action=sims.length?`openSimulatorByTopic(${JSON.stringify(examKey)},${JSON.stringify(topic)})`:`openCourse(${JSON.stringify(getCourseKeyByExam(examKey))},${mi},${li},'sims')`;
       const status=sims.length?sims.map(sim=>`<span class="topic-sim" onclick="event.stopPropagation();openSimulatorById('${sim.id}')">⚡ ${escapeHtml(sim.title)}</span>`).join(''):'<span class="topic-soon">Симулятор скоро будет добавлен</span>';
-      return `<div class="topic-item" onclick='${action}'><span class="topic-num">${li+1}</span><span class="topic-name">${escapeHtml(topic)}</span>${status}</div>`;
+      const labsMarkup=labs.length?`<div class="topic-labs" onclick="event.stopPropagation()">${renderLabCards(labs)}</div>`:'';
+      return `<div class="topic-item" onclick='${action}'><div class="topic-main"><span class="topic-num">${li+1}</span><span class="topic-name">${escapeHtml(topic)}</span>${status}</div>${labsMarkup}</div>`;
     }).join('');
     return `<div class="mod-item"><div class="mod-header" onclick="toggleMod(this)"><div class="mod-icon">${getExamModuleIcon(examKey,module.name)}</div><div class="mod-info"><div class="mod-name">${escapeHtml(module.name)}</div><div class="mod-meta">${lessons.length} уроков · структура синхронизирована с курсом ${examKey==='ege'?'ЕГЭ':'ОГЭ'}</div></div>${badge}<span class="mod-arrow">›</span></div><div class="mod-topics${mi===0?' open':''}"><div class="topics-grid">${topics}</div></div></div>`;
   }).join('');
@@ -7210,12 +7292,6 @@ const LESSON_SIMS=getLessonSimulatorsMapFromRegistry();
 
 
 const LESSON_LABS={
-'Равноускоренное движение':[{
-  id:'incline-motion',icon:'🧪',name:'Движение из покоя с постоянным ускорением',badge:'Виртуальная',
-  desc:'Виртуальная лабораторная работа: шар на наклонной плоскости. Измерение пути и времени, построение таблицы результатов и проверка зависимости s = at²/2.',
-  steps:['Установить угол α (10–45°) и длину S','Нажать «Пуск» — шар скатывается','Зафиксировать t → «Записать»','Повторить для 4 разных углов','Сравнить s = at²/2 с результатами измерений'],
-  btn:'open',action:'openLab()',buttonText:'▶ Открыть лабораторную'
-}],
 'Свободное падение':[{icon:'🔴',name:'Измерение g',badge:'Скоро',desc:'Падение с разных высот. Определение g из h=gt²/2.',steps:['Задать h','Запустить','Записать t','Вычислить g=2h/t²'],btn:'soon'}],
 'Законы Ньютона':[{icon:'⚖️',name:'Второй закон Ньютона',badge:'Скоро',desc:'Тело на горизонтальной поверхности. Зависимость a от F и m.',steps:['Изменять F → измерять a','Изменять m → измерять a','Построить a(F) и a(1/m)'],btn:'soon'}],
 'Линзы':[{
@@ -12643,16 +12719,7 @@ function renderPSims(name){
 }
 
 function getLessonLabsForLesson(lesson){
-  const title=lessonTitle(lesson);
-  const theoryKey=lesson&&typeof lesson==='object'?lesson.theory:title;
-  const ownLabs=lesson&&Array.isArray(lesson.labs)?lesson.labs:[];
-  const mappedLabs=(typeof LESSON_LABS!=='undefined'&&(LESSON_LABS[theoryKey]||LESSON_LABS[title]))||[];
-  const result=[...ownLabs];
-  mappedLabs.forEach(lab=>{
-    const labKey=lab.id||lab.title||lab.name;
-    if(!result.some(item=>(item.id||item.title||item.name)===labKey))result.push(lab);
-  });
-  return result;
+  return getLabsForCourseLesson(AC,lesson);
 }
 function renderPLab(lesson){
   if(shouldRestoreActiveLab()){
@@ -12663,14 +12730,7 @@ function renderPLab(lesson){
   const name=lessonTitle(lesson);
   const labs=getLessonLabsForLesson(lesson);
   if(!labs.length) return`<div style="text-align:center;padding:40px 20px;color:var(--gray)"><div style="font-size:32px;margin-bottom:12px">🔬</div><div style="font-family:var(--fh);font-size:14px;font-weight:700;color:var(--white);margin-bottom:6px">Лабораторная в разработке</div><div style="font-size:13px">Виртуальная лаборатория для темы <strong style="color:#a855f7">"${name}"</strong> появится в ближайшее время.</div></div>`;
-  let h='';
-  labs.forEach(l=>{
-    const isSoon=l.btn==='soon';
-    const steps=(l.steps||[]).map((s,i)=>`<div class="pl-step"><div class="pl-snum">${i+1}</div><div>${s}</div></div>`).join('');
-    const formulas=(l.formulas||[]).map(formula=>`<span class="pl-formula">${formula}</span>`).join('');
-    h+=`<div class="pl-card"><div class="pl-head"><div class="pl-icon">${l.icon}</div><div><div class="pl-title">${l.name}</div>${l.subtitle?`<div class="pl-subtitle">${l.subtitle}</div>`:''}</div><div class="pl-badge">${l.badge}</div></div><div class="pl-desc">${l.desc}</div>${formulas?`<div class="pl-formulas">${formulas}</div>`:''}<div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#a855f7;margin-bottom:8px">Ход работы</div><div class="pl-steps">${steps}</div>${isSoon?`<button class="pl-btn pl-btn-dis" disabled>🔒 Скоро</button>`:`<button class="pl-btn" onclick="${l.action}">${l.buttonText||'🔬 Открыть лабораторную'}</button>`}</div>`;
-  });
-  return h;
+  return renderLabCards(labs);
 }
 
 let flyingCyclistState=null;
