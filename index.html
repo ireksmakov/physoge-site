@@ -1529,6 +1529,9 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 .fc-layout{display:grid;grid-template-columns:minmax(320px,700px) minmax(280px,1fr);gap:18px;align-items:start}
 #sim-flying-cyclist .fc-layout{display:flex;flex-direction:column;justify-content:flex-start;align-items:center;width:100%}
 #sim-flying-cyclist .fc-panel{display:none}
+.fc-top-back-row{width:min(760px,100%);margin:0 auto 12px;display:flex;justify-content:flex-start;align-items:center}
+.fc-back-btn{min-height:34px;padding:0 14px;border-radius:10px;border:1px solid rgba(8,216,255,.35);background:rgba(8,216,255,.06);color:#dcecff;font-family:var(--fb);font-size:14px;font-weight:700;cursor:pointer}
+.fc-back-btn:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(8,216,255,.12)}
 .cyclist-record-frame{width:100%;max-width:100%;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;height:auto;min-height:0;overflow:visible;box-sizing:border-box;background:var(--bg2);border:1px solid var(--border);border-radius:16px;--solution-card-ratio:4 / 5}
 #sim-flying-cyclist .cyclist-record-frame{width:min(760px,100%);max-width:100%;height:auto;min-height:0;aspect-ratio:auto;margin-left:auto;margin-right:auto;overflow:visible}
 .cyclist-record-frame > *{width:100%;box-sizing:border-box}
@@ -1563,13 +1566,14 @@ body.fc-fullscreen-active header{display:none !important}
 .fc-format-dropdown.on{display:flex}
 .fc-format-dropdown button{width:100%;border:0;border-radius:10px;background:transparent;color:var(--white);font:inherit;font-size:13px;text-align:left;padding:9px 10px;cursor:pointer}
 .fc-format-dropdown button:hover,.fc-format-dropdown button:focus{background:rgba(8,216,255,.12);color:var(--cyan);outline:none}
-.fc-fullscreen-mode{position:fixed;inset:0;z-index:99999;background:#020914;display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow:auto}
+.fc-fullscreen-mode{position:fixed;inset:0;z-index:99999;background:#020914;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:16px;overflow:auto}
 .fc-fullscreen-stage{width:100%;height:auto;min-height:0;background:#071321;border:1px solid rgba(8,216,255,.28);border-radius:18px;overflow:visible;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;box-sizing:border-box;box-shadow:0 24px 80px rgba(0,0,0,.45)}
 .fc-fullscreen-mode .fc-fullscreen-stage{width:min(100vw,100%);height:auto;min-height:0}
-.fc-format-4-5 .fc-fullscreen-stage{width:min(calc(100vw - 32px),calc((100vh - 32px) * 4 / 5));height:auto}
-.fc-format-9-16 .fc-fullscreen-stage{width:min(calc(100vw - 32px),calc((100vh - 32px) * 9 / 16));height:auto}
-.fc-format-1-1 .fc-fullscreen-stage{width:min(calc(100vw - 32px),calc(100vh - 32px));height:auto}
-.fc-format-16-9 .fc-fullscreen-stage{width:min(calc(100vw - 32px),calc((100vh - 32px) * 16 / 9));height:auto}
+.fc-fullscreen-mode .fc-top-back-row{width:min(100vw,100%);flex:0 0 auto}
+.fc-format-4-5 .fc-fullscreen-stage,.fc-format-4-5 .fc-top-back-row{width:min(calc(100vw - 32px),calc((100vh - 32px) * 4 / 5));height:auto}
+.fc-format-9-16 .fc-fullscreen-stage,.fc-format-9-16 .fc-top-back-row{width:min(calc(100vw - 32px),calc((100vh - 32px) * 9 / 16));height:auto}
+.fc-format-1-1 .fc-fullscreen-stage,.fc-format-1-1 .fc-top-back-row{width:min(calc(100vw - 32px),calc(100vh - 32px));height:auto}
+.fc-format-16-9 .fc-fullscreen-stage,.fc-format-16-9 .fc-top-back-row{width:min(calc(100vw - 32px),calc((100vh - 32px) * 16 / 9));height:auto}
 .fc-format-4-5,.fc-format-4-5 .fc-fullscreen-stage{--solution-card-ratio:4 / 5}
 .fc-format-9-16,.fc-format-9-16 .fc-fullscreen-stage{--solution-card-ratio:9 / 16}
 .fc-format-1-1,.fc-format-1-1 .fc-fullscreen-stage{--solution-card-ratio:1 / 1}
@@ -3345,6 +3349,10 @@ function initSidebarResize(){
 
 /* ============ NAV ============ */
 function hideAll(){
+  if(document.getElementById('fcFullscreenOverlay')&&typeof exitFlyingCyclistFullscreen==='function'){
+    exitFlyingCyclistFullscreen();
+  }
+
   [
     'landing',
     'platform',
@@ -6300,7 +6308,6 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
 <div id="sim-flying-cyclist">
   <div class="fc-wrap">
     <div class="fc-ctrl" style="margin-bottom:12px">
-      <button type="button" onclick="closeFlyingCyclistSim()" class="fc-btn btn-back">← Назад</button>
       <div class="fc-format-menu">
         <button type="button" class="fc-btn fc-format-toggle" id="fcFormatToggle" aria-expanded="false" aria-controls="fcFormatDropdown">Формат экрана</button>
         <div class="fc-format-dropdown" id="fcFormatDropdown">
@@ -6314,6 +6321,11 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
       </div>
     </div>
     <div class="fc-layout">
+      <div class="fc-top-back-row">
+        <button class="fc-back-btn" type="button" onclick="goBackFromFlyingCyclist()">
+          ← Назад
+        </button>
+      </div>
       <div class="cyclist-record-frame">
         <div class="fc-head"><span>Механика · Свободное падение</span><strong>ФИЗМАТ</strong></div>
         <div class="fc-cond">Гонщик стартует с высоты H, вылетает под углом α и приземляется на уровне края трамплина. Найти высоту полёта h.</div>
@@ -12802,6 +12814,13 @@ if(document.readyState==='loading'){
   document.addEventListener('DOMContentLoaded',bindFlyingCyclistSolutionImages,{once:true});
 }else{bindFlyingCyclistSolutionImages();}
 function openFlyingCyclistSim(){openSim('flying-cyclist');}
+function goBackFromFlyingCyclist(){
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    location.hash = '#simulators/ege';
+  }
+}
 function closeFlyingCyclistSim(){toggleFlyingCyclistRecordMode(false);pauseFlyingCyclistSim();goBack();}
 function calculateFlyingCyclistValues(H,alphaDeg,g){
   const a=alphaDeg*Math.PI/180, v=Math.sqrt(2*g*H), h=H*Math.sin(a)**2, tUp=v*Math.sin(a)/g, tFlight=2*tUp, R=(v*v*Math.sin(2*a))/g;
@@ -12868,6 +12887,8 @@ function openFlyingCyclistFormat(format){
   frame.dataset.format=solutionFormat;
   document.body.classList.add('fc-fullscreen-active');
   frame.classList.add('fc-fullscreen-stage');
+  const backRow=document.querySelector('#sim-flying-cyclist .fc-top-back-row');
+  if(backRow)overlay.appendChild(backRow);
   overlay.appendChild(frame);
   let closeBtn=document.getElementById('fcFullscreenCloseBtn');
   if(!closeBtn){
@@ -12886,10 +12907,12 @@ function exitFlyingCyclistFullscreen(){
   const frame=document.querySelector('.cyclist-record-frame');
   const layout=document.querySelector('#sim-flying-cyclist .fc-layout');
   const overlay=document.getElementById('fcFullscreenOverlay');
+  const backRow=document.querySelector('.fc-top-back-row');
   if(frame&&layout){
     frame.classList.remove('fc-fullscreen-stage');
     frame.dataset.format='default';
-    layout.insertBefore(frame,layout.firstElementChild);
+    if(backRow)layout.insertBefore(backRow,layout.firstElementChild);
+    layout.insertBefore(frame,backRow?backRow.nextElementSibling:layout.firstElementChild);
   }
   const sim=document.getElementById('sim-flying-cyclist');
   if(sim)sim.dataset.format='default';
