@@ -6544,7 +6544,7 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
         <div class="ballistics-record-frame" id="bpFrame">
         <div class="fc-head"><span>ЕГЭ · Физика → Динамика → 9 Баллистика</span><strong>ФИЗМАТ</strong></div>
         <div class="fc-cond" id="bpCondition"></div>
-        <div class="bp-mode-row"><label>Режим задачи: <select class="bp-select" id="bpMode"><option value="find-v0">1) Найти начальную скорость v₀</option><option value="find-H">2) Найти максимальную высоту H</option></select></label></div>
+        <div class="bp-mode-row"><label>Режим задачи: <select class="bp-select" id="bpMode"><option value="find-v0">1) Найти начальную скорость v₀</option><option value="find-H">2) Найти максимальную высоту H</option><option value="flightTime">3) Время полета T, с</option><option value="flightRange">4) Дальность полета L, м</option><option value="detectionHeight">5) Высота обнаружения h₁, м</option><option value="detectionDistance">6) Расстояние l, м</option></select></label></div>
         <div class="fc-inline-params">
           <label class="fc-param-chip">h₁, м <input class="bp-number" id="bpH1" type="number" value="1655" min="1"></label><label class="fc-param-chip">t, с <input class="bp-number" id="bpT" type="number" value="3" min="0.1" step="0.1"></label><label class="fc-param-chip">l, м <input class="bp-number" id="bpL" type="number" value="1700" min="1"></label><label class="fc-param-chip">g, м/с² <input class="bp-number" id="bpG" type="number" value="10" min="0.1" step="0.1"></label><label class="fc-param-chip" id="bpV0Chip" hidden>v₀, м/с <input class="bp-number" id="bpV0" type="number" value="800" min="1"></label>
         </div>
