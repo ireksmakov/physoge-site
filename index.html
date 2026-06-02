@@ -1684,17 +1684,24 @@ body.fc-fullscreen-active header{display:none !important}
 @media(max-width:700px){.fc-inline-params{flex-wrap:wrap}}
 /* ── EGE BALLISTICS PROJECTILE SIMULATOR ── */
 #sim-ballistics-projectile{display:none;min-height:100vh;padding-top:64px;overflow:visible}
-#sim-ballistics-projectile .fc-layout{display:flex;flex-direction:column;align-items:center;width:100%}
+#sim-ballistics-projectile .ballistics-layout-shell{width:100%;max-width:1218px;margin:0 auto;display:grid;grid-template-columns:220px minmax(0,980px);gap:18px;align-items:start;justify-content:center;box-sizing:border-box}
+.ballistics-format-panel{position:sticky;top:88px;align-self:start;z-index:50}
+.ballistics-format-toggle{height:30px;padding:0 10px;border-radius:9px;border:1px solid rgba(8,216,255,.35);background:rgba(8,216,255,.06);color:#dcecff;font-family:var(--fb);font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.ballistics-format-toggle:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(8,216,255,.12)}
+.ballistics-format-menu{display:none;position:absolute;top:38px;left:0;width:220px;padding:8px;border-radius:14px;border:1px solid rgba(8,216,255,.25);background:rgba(5,16,30,.96);box-shadow:0 14px 34px rgba(0,0,0,.38);backdrop-filter:blur(8px);box-sizing:border-box}
+.ballistics-format-menu.open{display:grid;gap:4px}
+.ballistics-format-menu button{width:100%;padding:8px 10px;border:0;border-radius:9px;background:transparent;color:#dcecff;font-family:var(--fb);font-size:13px;font-weight:700;text-align:left;cursor:pointer}
+.ballistics-format-menu button:hover{background:rgba(8,216,255,.12);color:var(--cyan)}
+.ballistics-main-column{width:100%;min-width:0}
 #sim-ballistics-projectile .ballistics-record-frame{width:min(980px,100%);max-width:100%;margin:0 auto;display:flex;flex-direction:column;background:var(--bg2);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-sizing:border-box}
-.ballistics-format-row{width:min(980px,100%);margin:0 auto 12px;box-sizing:border-box}
 .ballistics-top-actions-row{width:min(980px,100%);margin:0 auto 12px;display:flex!important;align-items:center;justify-content:space-between;gap:12px;box-sizing:border-box;position:relative;z-index:20}
 .ballistics-back-btn,.ballistics-close-btn{min-height:30px;height:30px;padding:0 10px;border-radius:9px;border:1px solid rgba(8,216,255,.35);background:rgba(8,216,255,.06);color:#dcecff;font-family:var(--fb);font-size:13px;font-weight:700;line-height:1;cursor:pointer;display:inline-flex!important;align-items:center;justify-content:center;white-space:nowrap}
 .ballistics-back-btn:hover,.ballistics-close-btn:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(8,216,255,.12)}
-#sim-ballistics-projectile[data-format="default"] .ballistics-top-actions-row,#sim-ballistics-projectile[data-format="default"] .ballistics-record-frame,.bp-fullscreen-mode[data-format="default"] .ballistics-top-actions-row,.bp-fullscreen-mode[data-format="default"] .ballistics-record-frame{width:min(980px,100%)}
-#sim-ballistics-projectile[data-format="instagram-45"] .ballistics-top-actions-row,#sim-ballistics-projectile[data-format="instagram-45"] .ballistics-record-frame,.bp-fullscreen-mode[data-format="instagram-45"] .ballistics-top-actions-row,.bp-fullscreen-mode[data-format="instagram-45"] .ballistics-record-frame{width:min(540px,100%)}
-#sim-ballistics-projectile[data-format="instagram-916"] .ballistics-top-actions-row,#sim-ballistics-projectile[data-format="instagram-916"] .ballistics-record-frame,#sim-ballistics-projectile[data-format="youtube-shorts-916"] .ballistics-top-actions-row,#sim-ballistics-projectile[data-format="youtube-shorts-916"] .ballistics-record-frame,.bp-fullscreen-mode[data-format="instagram-916"] .ballistics-top-actions-row,.bp-fullscreen-mode[data-format="instagram-916"] .ballistics-record-frame,.bp-fullscreen-mode[data-format="youtube-shorts-916"] .ballistics-top-actions-row,.bp-fullscreen-mode[data-format="youtube-shorts-916"] .ballistics-record-frame{width:min(480px,100%)}
-#sim-ballistics-projectile[data-format="instagram-11"] .ballistics-top-actions-row,#sim-ballistics-projectile[data-format="instagram-11"] .ballistics-record-frame,.bp-fullscreen-mode[data-format="instagram-11"] .ballistics-top-actions-row,.bp-fullscreen-mode[data-format="instagram-11"] .ballistics-record-frame{width:min(620px,100%)}
-#sim-ballistics-projectile[data-format="youtube-169"] .ballistics-top-actions-row,#sim-ballistics-projectile[data-format="youtube-169"] .ballistics-record-frame,.bp-fullscreen-mode[data-format="youtube-169"] .ballistics-top-actions-row,.bp-fullscreen-mode[data-format="youtube-169"] .ballistics-record-frame{width:min(980px,100%)}
+#sim-ballistics-projectile[data-format="default"] .ballistics-top-actions-row,#sim-ballistics-projectile[data-format="default"] .ballistics-record-frame{width:min(980px,100%)}
+#sim-ballistics-projectile[data-format="instagram-45"] .ballistics-top-actions-row,#sim-ballistics-projectile[data-format="instagram-45"] .ballistics-record-frame{width:min(540px,100%)}
+#sim-ballistics-projectile[data-format="instagram-916"] .ballistics-top-actions-row,#sim-ballistics-projectile[data-format="instagram-916"] .ballistics-record-frame,#sim-ballistics-projectile[data-format="youtube-shorts-916"] .ballistics-top-actions-row,#sim-ballistics-projectile[data-format="youtube-shorts-916"] .ballistics-record-frame{width:min(480px,100%)}
+#sim-ballistics-projectile[data-format="instagram-11"] .ballistics-top-actions-row,#sim-ballistics-projectile[data-format="instagram-11"] .ballistics-record-frame{width:min(620px,100%)}
+#sim-ballistics-projectile[data-format="youtube-169"] .ballistics-top-actions-row,#sim-ballistics-projectile[data-format="youtube-169"] .ballistics-record-frame{width:min(980px,100%)}
 #sim-ballistics-projectile .fc-canvas-box{width:100%;height:auto;padding:12px;aspect-ratio:16 / 8;overflow:hidden;box-sizing:border-box}
 #ballisticsCanvas{width:100%;height:100%;display:block;border-radius:10px;background:#06111f}
 .bp-mode-row{display:flex;gap:8px;align-items:center;padding:8px 14px;border-bottom:1px solid rgba(8,216,255,.18);overflow-x:auto}
@@ -1705,8 +1712,7 @@ body.fc-fullscreen-active header{display:none !important}
 .bp-result{padding:6px 9px;border:1px solid rgba(57,255,20,.25);border-radius:9px;background:rgba(57,255,20,.05);color:#dcecff;font-size:12px;font-weight:700}
 .bp-solution-copy{padding:16px;color:#dcecff;font-size:14px;line-height:1.65;border-bottom:1px solid rgba(8,216,255,.16)}
 .bp-solution-copy h3{margin:0 0 8px;color:var(--cyan);font-family:var(--fh);font-size:17px}.bp-solution-copy p{margin:6px 0}.bp-solution-copy strong{color:#39ff14}
-.bp-format-menu{position:relative}.bp-format-dropdown{display:none;z-index:20;min-width:250px;margin-top:6px;padding:6px;border:1px solid var(--border);border-radius:10px;background:#0b1726;box-shadow:0 12px 28px rgba(0,0,0,.35)}.bp-format-dropdown.on{display:block}.bp-format-dropdown button{display:block;width:100%;padding:8px;border:0;border-radius:7px;background:transparent;color:#dcecff;text-align:left;cursor:pointer}.bp-format-dropdown button:hover{background:rgba(0,229,255,.1);color:var(--cyan)}
-.bp-fullscreen-mode{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:14px;background:#030811;overflow:auto}.bp-fullscreen-mode .ballistics-format-row{width:min(980px,100%)}
+@media(max-width:900px){#sim-ballistics-projectile .ballistics-layout-shell{display:block;max-width:min(980px,100%)}.ballistics-format-panel{position:relative;top:auto;width:max-content;margin:0 0 12px;z-index:80}.ballistics-format-menu{left:0;top:38px}}
 @media(max-width:700px){#sim-ballistics-projectile .fc-wrap{padding:12px}#sim-ballistics-projectile .fc-canvas-box{aspect-ratio:4 / 3;padding:6px}.bp-mode-row,.fc-inline-params{flex-wrap:wrap}.bp-number{width:62px}.bp-solution-copy{font-size:13px}}
 
 /* Hub hero */
@@ -6542,10 +6548,14 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
 
 <div id="sim-ballistics-projectile">
   <div class="fc-wrap">
-    <div class="fc-layout" id="bpLayout">
-      <div class="ballistics-format-row"><div class="bp-format-menu"><button type="button" class="fc-btn" onclick="toggleBallisticsFormatMenu(event)">Формат экрана</button><div class="bp-format-dropdown" id="bpFormatDropdown"><button onclick="openBallisticsFormat('fullscreen')">Обычный полный экран</button><button onclick="openBallisticsFormat('instagram-4-5')">Instagram пост 4:5</button><button onclick="openBallisticsFormat('instagram-9-16')">Instagram Stories/Reels 9:16</button><button onclick="openBallisticsFormat('instagram-1-1')">Instagram квадрат 1:1</button><button onclick="openBallisticsFormat('youtube-16-9')">YouTube 16:9</button><button onclick="openBallisticsFormat('youtube-shorts')">YouTube Shorts 9:16</button></div></div></div>
-      <div class="ballistics-top-actions-row"><button class="ballistics-back-btn" type="button" onclick="goBackFromBallisticsProjectile()">← Назад</button><button class="ballistics-close-btn" type="button" onclick="closeBallisticsProjectile()">Закрыть ×</button></div>
-      <div class="ballistics-record-frame" id="bpFrame">
+    <div class="ballistics-layout-shell" id="bpLayout">
+      <aside class="ballistics-format-panel">
+        <button class="ballistics-format-toggle" type="button" onclick="toggleBallisticsFormatMenu()">Формат экрана <span>⌄</span></button>
+        <div class="ballistics-format-menu" id="ballisticsFormatMenu"><button type="button" onclick="setBallisticsFormat('default')">Обычный полный экран</button><button type="button" onclick="setBallisticsFormat('instagram-45')">Instagram пост 4:5</button><button type="button" onclick="setBallisticsFormat('instagram-916')">Instagram Stories/Reels 9:16</button><button type="button" onclick="setBallisticsFormat('instagram-11')">Instagram квадрат 1:1</button><button type="button" onclick="setBallisticsFormat('youtube-169')">YouTube 16:9</button><button type="button" onclick="setBallisticsFormat('youtube-shorts-916')">YouTube Shorts 9:16</button></div>
+      </aside>
+      <main class="ballistics-main-column">
+        <div class="ballistics-top-actions-row"><button class="ballistics-back-btn" type="button" onclick="goBackFromBallisticsProjectile()">← Назад</button><button class="ballistics-close-btn" type="button" onclick="closeBallisticsProjectile()">Закрыть ×</button></div>
+        <div class="ballistics-record-frame" id="bpFrame">
         <div class="fc-head"><span>ЕГЭ · Физика → Динамика → 9 Баллистика</span><strong>ФИЗМАТ</strong></div>
         <div class="fc-cond" id="bpCondition"></div>
         <div class="bp-mode-row"><label>Режим задачи: <select class="bp-select" id="bpMode"><option value="find-v0">1) Найти начальную скорость v₀</option><option value="find-H">2) Найти максимальную высоту H</option></select></label></div>
@@ -6557,7 +6567,8 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
         <div class="bp-results" id="bpResults"></div>
         <div class="fc-bottom-solution-control"><button class="fc-param-chip fc-control-chip fc-solution-chip" type="button" id="bpSolutionBtn" onclick="toggleBallisticsSolution()">Показать решение</button></div>
         <div class="fc-solution-block" id="bpSolution"><div class="bp-solution-copy" id="bpSolutionCopy"></div><div class="fc-solution-carousel"><button class="fc-carousel-btn prev" type="button" onclick="moveBallisticsSolutionSlide(-1)">‹</button><div class="fc-solution-carousel-track" id="bpSolutionCarousel"><div class="fc-solution-empty">Фото решения будет добавлено</div></div><button class="fc-carousel-btn next" type="button" onclick="moveBallisticsSolutionSlide(1)">›</button></div></div>
-      </div>
+        </div>
+      </main>
     </div>
   </div>
 </div>
@@ -13279,10 +13290,10 @@ function renderBallisticsScene(ts){
 function toggleBallisticsSolution(){const b=document.getElementById('bpSolution');b.classList.toggle('open');document.getElementById('bpSolutionBtn').textContent=b.classList.contains('open')?'Скрыть решение':'Показать решение';}
 function renderBallisticsCarousel(){const mode=document.getElementById('bpMode').value,track=document.getElementById('bpSolutionCarousel'),prefix=mode==='find-H'?'solution-H':'solution-v0';ballisticsSolutionSlide=0;track.innerHTML=`<img class="fc-solution-slide active" src="images/simulators/ege/ballistics-projectile/${prefix}-01.png" alt="Фото решения 1"><img class="fc-solution-slide" src="images/simulators/ege/ballistics-projectile/${prefix}-02.png" alt="Фото решения 2"><div class="fc-solution-empty">Фото решения будет добавлено</div>`;track.querySelectorAll('img').forEach(img=>img.onerror=()=>{img.dataset.failed='true';img.classList.remove('active');const available=[...track.querySelectorAll('img')].filter(x=>x.dataset.failed!=='true');if(available.length)available[0].classList.add('active');track.classList.toggle('is-empty',!available.length);});}
 function moveBallisticsSolutionSlide(dir){const imgs=[...document.querySelectorAll('#bpSolutionCarousel img')].filter(x=>x.dataset.failed!=='true');if(!imgs.length)return;imgs.forEach(x=>x.classList.remove('active'));ballisticsSolutionSlide=(ballisticsSolutionSlide+dir+imgs.length)%imgs.length;imgs[ballisticsSolutionSlide].classList.add('active');}
-function toggleBallisticsFormatMenu(e){e.stopPropagation();document.getElementById('bpFormatDropdown').classList.toggle('on');}
-function openBallisticsFormat(format){let overlay=document.getElementById('bpFullscreenOverlay');if(!overlay){overlay=document.createElement('div');overlay.id='bpFullscreenOverlay';overlay.className='bp-fullscreen-mode';document.body.appendChild(overlay);}const layout=document.getElementById('bpLayout'),formatRow=document.querySelector('.ballistics-format-row'),actions=document.querySelector('.ballistics-top-actions-row'),frame=document.getElementById('bpFrame'),formatNames={fullscreen:'default','instagram-4-5':'instagram-45','instagram-9-16':'instagram-916','instagram-1-1':'instagram-11','youtube-16-9':'youtube-169','youtube-shorts':'youtube-shorts-916'};overlay.dataset.format=formatNames[format]||'default';document.getElementById('sim-ballistics-projectile').dataset.format=overlay.dataset.format;overlay.innerHTML='';overlay.append(formatRow,actions,frame);document.getElementById('bpFormatDropdown').classList.remove('on');setTimeout(renderBallisticsScene,30);}
-function exitBallisticsFormat(){const overlay=document.getElementById('bpFullscreenOverlay'),layout=document.getElementById('bpLayout'),frame=document.getElementById('bpFrame');if(!overlay||!layout||!frame)return;const formatRow=overlay.querySelector('.ballistics-format-row'),actions=overlay.querySelector('.ballistics-top-actions-row');if(formatRow)layout.appendChild(formatRow);if(actions)layout.appendChild(actions);layout.appendChild(frame);overlay.remove();setTimeout(renderBallisticsScene,30);}
-document.addEventListener('click',e=>{if(!e.target.closest('.bp-format-menu')){const d=document.getElementById('bpFormatDropdown');if(d)d.classList.remove('on');}});
+function toggleBallisticsFormatMenu(){const menu=document.getElementById('ballisticsFormatMenu');if(!menu)return;menu.classList.toggle('open');}
+function setBallisticsFormat(format){const root=document.getElementById('sim-ballistics-projectile');if(!root)return;root.dataset.format=format;const menu=document.getElementById('ballisticsFormatMenu');if(menu)menu.classList.remove('open');setTimeout(renderBallisticsScene,30);}
+function exitBallisticsFormat(){const menu=document.getElementById('ballisticsFormatMenu');if(menu)menu.classList.remove('open');}
+document.addEventListener('click',function(event){const panel=event.target.closest('.ballistics-format-panel');const menu=document.getElementById('ballisticsFormatMenu');if(!panel&&menu)menu.classList.remove('open');});
 
 /* ═══ ЗСИ SIMULATOR JS ═══ */
 var zsiT=0,zsiRunning=false,zsiRaf=null,zsiLastTS=null,zsiSpeed=1;
