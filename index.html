@@ -1684,24 +1684,24 @@ body.fc-fullscreen-active header{display:none !important}
 @media(max-width:700px){.fc-inline-params{flex-wrap:wrap}}
 /* ── EGE BALLISTICS PROJECTILE SIMULATOR ── */
 #sim-ballistics-projectile{display:none;min-height:100vh;padding-top:64px;overflow:visible}
-#sim-ballistics-projectile .ballistics-layout-shell{width:100%;max-width:1218px;margin:0 auto;display:grid;grid-template-columns:220px minmax(0,980px);gap:18px;align-items:start;justify-content:center;box-sizing:border-box}
-.ballistics-format-panel{position:sticky;top:88px;align-self:start;z-index:50}
+#sim-ballistics-projectile .ballistics-layout-shell{position:relative;width:100%;max-width:none;margin:0 auto;box-sizing:border-box}
+.ballistics-format-panel{position:fixed;top:190px;left:28px;z-index:100}
 .ballistics-format-toggle{height:30px;padding:0 10px;border-radius:9px;border:1px solid rgba(8,216,255,.35);background:rgba(8,216,255,.06);color:#dcecff;font-family:var(--fb);font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
 .ballistics-format-toggle:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(8,216,255,.12)}
-.ballistics-format-menu{display:none;position:absolute;top:38px;left:0;width:220px;padding:8px;border-radius:14px;border:1px solid rgba(8,216,255,.25);background:rgba(5,16,30,.96);box-shadow:0 14px 34px rgba(0,0,0,.38);backdrop-filter:blur(8px);box-sizing:border-box}
+.ballistics-format-menu{display:none;position:absolute;top:38px;left:0;width:230px;padding:8px;border-radius:14px;border:1px solid rgba(8,216,255,.25);background:rgba(5,16,30,.96);box-shadow:0 14px 34px rgba(0,0,0,.38);backdrop-filter:blur(8px);box-sizing:border-box}
 .ballistics-format-menu.open{display:grid;gap:4px}
 .ballistics-format-menu button{width:100%;padding:8px 10px;border:0;border-radius:9px;background:transparent;color:#dcecff;font-family:var(--fb);font-size:13px;font-weight:700;text-align:left;cursor:pointer}
 .ballistics-format-menu button:hover{background:rgba(8,216,255,.12);color:var(--cyan)}
-.ballistics-main-column{width:100%;min-width:0}
-#sim-ballistics-projectile .ballistics-record-frame{width:min(980px,100%);max-width:100%;margin:0 auto;display:flex;flex-direction:column;background:var(--bg2);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-sizing:border-box}
+.ballistics-main-column{width:min(980px,100%);margin:0 auto;min-width:0;box-sizing:border-box}
+#sim-ballistics-projectile .ballistics-record-frame{width:100%;max-width:100%;margin:0 auto;display:flex;flex-direction:column;background:var(--bg2);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-sizing:border-box}
 .ballistics-top-actions-row{width:min(980px,100%);margin:0 auto 12px;display:flex!important;align-items:center;justify-content:space-between;gap:12px;box-sizing:border-box;position:relative;z-index:20}
 .ballistics-back-btn,.ballistics-close-btn{min-height:30px;height:30px;padding:0 10px;border-radius:9px;border:1px solid rgba(8,216,255,.35);background:rgba(8,216,255,.06);color:#dcecff;font-family:var(--fb);font-size:13px;font-weight:700;line-height:1;cursor:pointer;display:inline-flex!important;align-items:center;justify-content:center;white-space:nowrap}
 .ballistics-back-btn:hover,.ballistics-close-btn:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(8,216,255,.12)}
-#sim-ballistics-projectile[data-format="default"] .ballistics-top-actions-row,#sim-ballistics-projectile[data-format="default"] .ballistics-record-frame{width:min(980px,100%)}
-#sim-ballistics-projectile[data-format="instagram-45"] .ballistics-top-actions-row,#sim-ballistics-projectile[data-format="instagram-45"] .ballistics-record-frame{width:min(540px,100%)}
-#sim-ballistics-projectile[data-format="instagram-916"] .ballistics-top-actions-row,#sim-ballistics-projectile[data-format="instagram-916"] .ballistics-record-frame,#sim-ballistics-projectile[data-format="youtube-shorts-916"] .ballistics-top-actions-row,#sim-ballistics-projectile[data-format="youtube-shorts-916"] .ballistics-record-frame{width:min(480px,100%)}
-#sim-ballistics-projectile[data-format="instagram-11"] .ballistics-top-actions-row,#sim-ballistics-projectile[data-format="instagram-11"] .ballistics-record-frame{width:min(620px,100%)}
-#sim-ballistics-projectile[data-format="youtube-169"] .ballistics-top-actions-row,#sim-ballistics-projectile[data-format="youtube-169"] .ballistics-record-frame{width:min(980px,100%)}
+#sim-ballistics-projectile[data-format="default"] .ballistics-main-column,#sim-ballistics-projectile[data-format="default"] .ballistics-top-actions-row{width:min(980px,100%)}
+#sim-ballistics-projectile[data-format="instagram-45"] .ballistics-main-column,#sim-ballistics-projectile[data-format="instagram-45"] .ballistics-top-actions-row{width:min(540px,100%)}
+#sim-ballistics-projectile[data-format="instagram-916"] .ballistics-main-column,#sim-ballistics-projectile[data-format="instagram-916"] .ballistics-top-actions-row,#sim-ballistics-projectile[data-format="youtube-shorts-916"] .ballistics-main-column,#sim-ballistics-projectile[data-format="youtube-shorts-916"] .ballistics-top-actions-row{width:min(480px,100%)}
+#sim-ballistics-projectile[data-format="instagram-11"] .ballistics-main-column,#sim-ballistics-projectile[data-format="instagram-11"] .ballistics-top-actions-row{width:min(620px,100%)}
+#sim-ballistics-projectile[data-format="youtube-169"] .ballistics-main-column,#sim-ballistics-projectile[data-format="youtube-169"] .ballistics-top-actions-row{width:min(980px,100%)}
 #sim-ballistics-projectile .fc-canvas-box{width:100%;height:auto;padding:12px;aspect-ratio:16 / 8;overflow:hidden;box-sizing:border-box}
 #ballisticsCanvas{width:100%;height:100%;display:block;border-radius:10px;background:#06111f}
 .bp-mode-row{display:flex;gap:8px;align-items:center;padding:8px 14px;border-bottom:1px solid rgba(8,216,255,.18);overflow-x:auto}
@@ -1712,7 +1712,8 @@ body.fc-fullscreen-active header{display:none !important}
 .bp-result{padding:6px 9px;border:1px solid rgba(57,255,20,.25);border-radius:9px;background:rgba(57,255,20,.05);color:#dcecff;font-size:12px;font-weight:700}
 .bp-solution-copy{padding:16px;color:#dcecff;font-size:14px;line-height:1.65;border-bottom:1px solid rgba(8,216,255,.16)}
 .bp-solution-copy h3{margin:0 0 8px;color:var(--cyan);font-family:var(--fh);font-size:17px}.bp-solution-copy p{margin:6px 0}.bp-solution-copy strong{color:#39ff14}
-@media(max-width:900px){#sim-ballistics-projectile .ballistics-layout-shell{display:block;max-width:min(980px,100%)}.ballistics-format-panel{position:relative;top:auto;width:max-content;margin:0 0 12px;z-index:80}.ballistics-format-menu{left:0;top:38px}}
+@media(max-width:1500px){.ballistics-format-panel{position:relative;top:auto;left:auto;width:max-content;margin:0 auto 12px;z-index:100}.ballistics-format-menu{top:38px;left:0}}
+@media(max-width:900px){.ballistics-main-column{margin:0 auto}}
 @media(max-width:700px){#sim-ballistics-projectile .fc-wrap{padding:12px}#sim-ballistics-projectile .fc-canvas-box{aspect-ratio:4 / 3;padding:6px}.bp-mode-row,.fc-inline-params{flex-wrap:wrap}.bp-number{width:62px}.bp-solution-copy{font-size:13px}}
 
 /* Hub hero */
