@@ -1699,10 +1699,8 @@ body.fc-fullscreen-active header{display:none !important}
 .bp-number{width:68px}
 .bp-results{display:flex;flex-wrap:wrap;gap:7px;padding:8px 14px;border-top:1px solid rgba(8,216,255,.18);border-bottom:1px solid rgba(8,216,255,.18)}
 .bp-result{padding:6px 9px;border:1px solid rgba(57,255,20,.25);border-radius:9px;background:rgba(57,255,20,.05);color:#dcecff;font-size:12px;font-weight:700}
-.bp-solution-copy{padding:16px;color:#dcecff;font-size:14px;line-height:1.65;border-bottom:1px solid rgba(8,216,255,.16)}
-.bp-solution-copy h3{margin:0 0 8px;color:var(--cyan);font-family:var(--fh);font-size:17px}.bp-solution-copy p{margin:6px 0}.bp-solution-copy strong{color:#39ff14}
 @media(max-width:900px){.ballistics-main-column{margin:0 auto}}
-@media(max-width:700px){#sim-ballistics-projectile .fc-wrap{padding:12px}#sim-ballistics-projectile .fc-canvas-box{aspect-ratio:4 / 3;padding:6px}.bp-mode-row,.fc-inline-params{flex-wrap:wrap}.bp-number{width:62px}.bp-solution-copy{font-size:13px}}
+@media(max-width:700px){#sim-ballistics-projectile .fc-wrap{padding:12px}#sim-ballistics-projectile .fc-canvas-box{aspect-ratio:4 / 3;padding:6px}.bp-mode-row,.fc-inline-params{flex-wrap:wrap}.bp-number{width:62px}}
 
 /* Hub hero */
 .sh-hero{max-width:1200px;margin:0 auto;padding:48px 24px 32px}
@@ -6554,7 +6552,7 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
         <div class="fc-canvas-box"><canvas id="ballisticsCanvas"></canvas></div>
         <div class="bp-results" id="bpResults"></div>
         <div class="fc-bottom-solution-control"><button class="fc-param-chip fc-control-chip fc-solution-chip" type="button" id="bpSolutionBtn" onclick="toggleBallisticsSolution()">Показать решение</button></div>
-        <div class="fc-solution-block" id="bpSolution"><div class="bp-solution-copy" id="bpSolutionCopy"></div><div class="fc-solution-carousel"><button class="fc-carousel-btn prev" type="button" onclick="moveBallisticsSolutionSlide(-1)">‹</button><div class="fc-solution-carousel-track" id="bpSolutionCarousel"><div class="fc-solution-empty">Фото решения будет добавлено</div></div><button class="fc-carousel-btn next" type="button" onclick="moveBallisticsSolutionSlide(1)">›</button></div></div>
+        <div class="fc-solution-block ballistics-solution-block" id="bpSolution"><div class="fc-solution-carousel ballistics-solution-carousel"><button class="fc-carousel-btn prev" type="button" onclick="moveBallisticsSolutionSlide(-1)">‹</button><div class="fc-solution-carousel-track" id="bpSolutionCarousel"><div class="fc-solution-empty">Фото решения будет добавлено</div></div><button class="fc-carousel-btn next" type="button" onclick="moveBallisticsSolutionSlide(1)">›</button></div></div>
         </div>
       </main>
     </div>
@@ -13251,7 +13249,6 @@ function updateBallisticsProjectile(){
   document.getElementById('bpCondition').innerHTML=mode==='find-v0'?`Прибор обнаружил снаряд на высоте <strong>h₁ = ${bpN(v.h1)} м</strong>. Через <strong>t = ${bpN(v.t,1)} с</strong> снаряд упал на землю, пройдя по горизонтали <strong>l = ${bpN(v.l)} м</strong>. Найдите начальную скорость v₀.`:`Прибор обнаружил снаряд на высоте <strong>h₁ = ${bpN(v.h1)} м</strong>. Через <strong>t = ${bpN(v.t,1)} с</strong> он упал на землю в <strong>l = ${bpN(v.l)} м</strong> от точки обнаружения. При <strong>v₀ = ${bpN(v.inputV0)} м/с</strong> найдите максимальную высоту H.`;
   const results=mode==='find-v0'?[`vₓ = ${bpN(v.vx)} м/с`,`v₁ᵧ = ${bpN(v.v1y)} м/с`,`v₂ᵧ = ${bpN(v.v2y)} м/с`,`v₀ ≈ ${bpN(Math.round(v.v0/10)*10)} м/с`,`α = ${bpN(v.alpha,1)}°`]:[`vₓ = ${bpN(v.vx)} м/с`,`v₁ᵧ = ${bpN(v.v1y)} м/с`,`τ = ${bpN(v.tau)} с`,`T = ${bpN(v.T)} с`,`H = ${bpN(v.H)} м`,`H ≈ ${bpN(v.H/1000)} км`];
   document.getElementById('bpResults').innerHTML=results.map(x=>`<span class="bp-result">${x}</span>`).join('');
-  document.getElementById('bpSolutionCopy').innerHTML=mode==='find-v0'?`<h3>Решение: найти начальную скорость v₀</h3><p>vₓ = l / t = ${bpN(v.l)} / ${bpN(v.t,1)} ≈ <strong>${bpN(v.vx)} м/с</strong>.</p><p>h₁ = v₁ᵧt + gt² / 2, поэтому v₁ᵧ = (h₁ − gt² / 2) / t ≈ <strong>${bpN(v.v1y)} м/с</strong>.</p><p>v₂ᵧ = v₁ᵧ + gt ≈ <strong>${bpN(v.v2y)} м/с</strong>.</p><p>v₀ = √(vₓ² + v₂ᵧ²) ≈ <strong>${bpN(Math.round(v.v0/10)*10)} м/с</strong>. Угол вылета α = arctg(v₂ᵧ / vₓ) ≈ <strong>${bpN(v.alpha,1)}°</strong>.</p>`:`<h3>Решение: найти максимальную высоту H</h3><p>vₓ = l / t ≈ <strong>${bpN(v.vx)} м/с</strong>. v₁ᵧ = (h₁ − gt² / 2) / t ≈ <strong>${bpN(v.v1y)} м/с</strong>.</p><p>τ = v₁ᵧ / g ≈ <strong>${bpN(v.tau)} с</strong>; T = τ + t ≈ <strong>${bpN(v.T)} с</strong>.</p><p>H = gT² / 2 ≈ <strong>${bpN(Math.round(v.H/1000)*1000)} м ≈ ${bpN(v.H/1000)} км</strong>.</p><p>Дополнительная проверка по известной скорости: vᵧ₀ = √(v₀² − vₓ²), H = vᵧ₀² / 2g.</p>`;
   renderBallisticsCarousel();resetBallisticsAnimation();
 }
 function initBallisticsProjectileSim(){
