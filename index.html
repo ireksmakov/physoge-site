@@ -1356,14 +1356,27 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
   top: 50%;
   transform: translateY(-50%);
   z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: visible;
   width: 38px;
   height: 38px;
   border-radius: 999px;
-  border: 1px solid rgba(8,216,255,.35);
-  background: rgba(8,216,255,.12);
+  border: 1px solid rgba(8,216,255,.62);
+  background: rgba(0,180,255,.22);
+  backdrop-filter: blur(2px);
   color: #f2f8ff;
+  opacity: .45;
   font-size: 24px;
   cursor: pointer;
+  transition: opacity .18s ease, background-color .18s ease, border-color .18s ease;
+}
+
+.theory-carousel-btn:hover {
+  border-color: rgba(8,216,255,.88);
+  background: rgba(0,180,255,.34);
+  opacity: .85;
 }
 
 .theory-carousel-btn.prev {
