@@ -1587,9 +1587,7 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 .fc-layout{display:grid;grid-template-columns:minmax(320px,700px) minmax(280px,1fr);gap:18px;align-items:start}
 #sim-flying-cyclist .fc-layout{display:flex;flex-direction:column;justify-content:flex-start;align-items:center;width:100%}
 #sim-flying-cyclist .fc-panel{display:none}
-.fc-top-actions-row{width:min(760px,100%);margin:0 auto 12px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.fc-format-toggle.fc-btn,.fc-back-btn,.fc-close-btn{min-height:30px;height:30px;padding:0 10px;border-radius:9px;border:1px solid rgba(8,216,255,.35);background:rgba(8,216,255,.06);color:#dcecff;font-family:var(--fb);font-size:13px;font-weight:700;line-height:1;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:5px;white-space:nowrap}
-.fc-format-toggle.fc-btn:hover,.fc-back-btn:hover,.fc-close-btn:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(8,216,255,.12)}
+.fc-top-actions-row{width:min(760px,100%);margin:0 auto 12px;display:flex;align-items:center;justify-content:flex-start;gap:10px;box-sizing:border-box;position:relative;z-index:50}
 .cyclist-record-frame{width:100%;max-width:100%;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;height:auto;min-height:0;overflow:visible;box-sizing:border-box;background:var(--bg2);border:1px solid var(--border);border-radius:16px;--solution-card-ratio:4 / 5}
 #sim-flying-cyclist .cyclist-record-frame{width:min(760px,100%);max-width:100%;height:auto;min-height:0;aspect-ratio:auto;margin-left:auto;margin-right:auto;overflow:visible}
 #sim-flying-cyclist.fc-format-45 .fc-top-actions-row,#sim-flying-cyclist[data-format="instagram-45"] .fc-top-actions-row{width:min(540px,100%)}
@@ -1620,13 +1618,6 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 #flyingCyclistCanvas{width:100%;height:100%;display:block}
 
 body.fc-fullscreen-active header{display:none !important}
-.fc-format-menu{position:relative;display:inline-flex;z-index:5}
-.fc-format-toggle{display:inline-flex;align-items:center;gap:8px}
-.fc-format-toggle::after{content:'▾';font-size:10px;color:var(--cyan)}
-.fc-format-dropdown{position:absolute;top:calc(100% + 8px);left:0;min-width:260px;padding:8px;border:1px solid rgba(8,216,255,.28);border-radius:14px;background:#071321;box-shadow:0 18px 48px rgba(0,0,0,.42);display:none;flex-direction:column;gap:4px}
-.fc-format-dropdown.on{display:flex}
-.fc-format-dropdown button{width:100%;border:0;border-radius:10px;background:transparent;color:var(--white);font:inherit;font-size:13px;text-align:left;padding:9px 10px;cursor:pointer}
-.fc-format-dropdown button:hover,.fc-format-dropdown button:focus{background:rgba(8,216,255,.12);color:var(--cyan);outline:none}
 .fc-fullscreen-mode{position:fixed;inset:0;z-index:99999;background:#020914;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:16px;overflow:auto}
 .fc-fullscreen-stage{width:100%;height:auto;min-height:0;background:#071321;border:1px solid rgba(8,216,255,.28);border-radius:18px;overflow:visible;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;box-sizing:border-box;box-shadow:0 24px 80px rgba(0,0,0,.45)}
 .fc-fullscreen-mode .fc-fullscreen-stage{width:min(100vw,100%);height:auto;min-height:0}
@@ -1685,18 +1676,16 @@ body.fc-fullscreen-active header{display:none !important}
 /* ── EGE BALLISTICS PROJECTILE SIMULATOR ── */
 #sim-ballistics-projectile{display:none;min-height:100vh;padding-top:64px;overflow:visible}
 #sim-ballistics-projectile .ballistics-layout-shell{position:relative;width:100%;max-width:none;margin:0 auto;box-sizing:border-box}
-.ballistics-format-panel{position:fixed;top:190px;left:28px;z-index:100}
-.ballistics-format-toggle{height:30px;padding:0 10px;border-radius:9px;border:1px solid rgba(8,216,255,.35);background:rgba(8,216,255,.06);color:#dcecff;font-family:var(--fb);font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
-.ballistics-format-toggle:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(8,216,255,.12)}
-.ballistics-format-menu{display:none;position:absolute;top:38px;left:0;width:230px;padding:8px;border-radius:14px;border:1px solid rgba(8,216,255,.25);background:rgba(5,16,30,.96);box-shadow:0 14px 34px rgba(0,0,0,.38);backdrop-filter:blur(8px);box-sizing:border-box}
-.ballistics-format-menu.open{display:grid;gap:4px}
-.ballistics-format-menu button{width:100%;padding:8px 10px;border:0;border-radius:9px;background:transparent;color:#dcecff;font-family:var(--fb);font-size:13px;font-weight:700;text-align:left;cursor:pointer}
-.ballistics-format-menu button:hover{background:rgba(8,216,255,.12);color:var(--cyan)}
 .ballistics-main-column{width:min(980px,100%);margin:0 auto;min-width:0;box-sizing:border-box}
 #sim-ballistics-projectile .ballistics-record-frame{width:100%;max-width:100%;margin:0 auto;display:flex;flex-direction:column;background:var(--bg2);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-sizing:border-box}
-.ballistics-top-actions-row{width:min(980px,100%);margin:0 auto 12px;display:flex!important;align-items:center;justify-content:space-between;gap:12px;box-sizing:border-box;position:relative;z-index:20}
-.ballistics-back-btn,.ballistics-close-btn{min-height:30px;height:30px;padding:0 10px;border-radius:9px;border:1px solid rgba(8,216,255,.35);background:rgba(8,216,255,.06);color:#dcecff;font-family:var(--fb);font-size:13px;font-weight:700;line-height:1;cursor:pointer;display:inline-flex!important;align-items:center;justify-content:center;white-space:nowrap}
-.ballistics-back-btn:hover,.ballistics-close-btn:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(8,216,255,.12)}
+.ballistics-top-actions-row{width:min(980px,100%);margin:0 auto 12px;display:flex;align-items:center;justify-content:flex-start;gap:10px;box-sizing:border-box;position:relative;z-index:50}
+.ballistics-format-panel,.fc-format-panel{position:relative;display:inline-flex;align-items:center}
+.ballistics-format-toggle,.ballistics-back-btn,.fc-format-toggle,.fc-back-btn{min-height:30px;height:30px;padding:0 10px;border-radius:9px;border:1px solid rgba(8,216,255,.35);background:rgba(8,216,255,.06);color:#dcecff;font-family:var(--fb);font-size:13px;font-weight:700;line-height:1;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
+.ballistics-format-toggle:hover,.ballistics-back-btn:hover,.fc-format-toggle:hover,.fc-back-btn:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(8,216,255,.12)}
+.ballistics-format-menu,.fc-format-menu{display:none;position:absolute;top:38px;left:0;width:230px;padding:8px;border-radius:14px;border:1px solid rgba(8,216,255,.25);background:rgba(5,16,30,.96);box-shadow:0 14px 34px rgba(0,0,0,.38);backdrop-filter:blur(8px);z-index:100;box-sizing:border-box}
+.ballistics-format-menu.open,.fc-format-menu.open{display:grid;gap:4px}
+.ballistics-format-menu button,.fc-format-menu button{width:100%;padding:8px 10px;border:0;border-radius:9px;background:transparent;color:#dcecff;font-family:var(--fb);font-size:13px;font-weight:700;text-align:left;cursor:pointer}
+.ballistics-format-menu button:hover,.fc-format-menu button:hover{background:rgba(8,216,255,.12);color:var(--cyan)}
 #sim-ballistics-projectile[data-format="default"] .ballistics-main-column,#sim-ballistics-projectile[data-format="default"] .ballistics-top-actions-row{width:min(980px,100%)}
 #sim-ballistics-projectile[data-format="instagram-45"] .ballistics-main-column,#sim-ballistics-projectile[data-format="instagram-45"] .ballistics-top-actions-row{width:min(540px,100%)}
 #sim-ballistics-projectile[data-format="instagram-916"] .ballistics-main-column,#sim-ballistics-projectile[data-format="instagram-916"] .ballistics-top-actions-row,#sim-ballistics-projectile[data-format="youtube-shorts-916"] .ballistics-main-column,#sim-ballistics-projectile[data-format="youtube-shorts-916"] .ballistics-top-actions-row{width:min(480px,100%)}
@@ -1712,7 +1701,6 @@ body.fc-fullscreen-active header{display:none !important}
 .bp-result{padding:6px 9px;border:1px solid rgba(57,255,20,.25);border-radius:9px;background:rgba(57,255,20,.05);color:#dcecff;font-size:12px;font-weight:700}
 .bp-solution-copy{padding:16px;color:#dcecff;font-size:14px;line-height:1.65;border-bottom:1px solid rgba(8,216,255,.16)}
 .bp-solution-copy h3{margin:0 0 8px;color:var(--cyan);font-family:var(--fh);font-size:17px}.bp-solution-copy p{margin:6px 0}.bp-solution-copy strong{color:#39ff14}
-@media(max-width:1500px){.ballistics-format-panel{position:relative;top:auto;left:auto;width:max-content;margin:0 auto 12px;z-index:100}.ballistics-format-menu{top:38px;left:0}}
 @media(max-width:900px){.ballistics-main-column{margin:0 auto}}
 @media(max-width:700px){#sim-ballistics-projectile .fc-wrap{padding:12px}#sim-ballistics-projectile .fc-canvas-box{aspect-ratio:4 / 3;padding:6px}.bp-mode-row,.fc-inline-params{flex-wrap:wrap}.bp-number{width:62px}.bp-solution-copy{font-size:13px}}
 
@@ -6488,26 +6476,23 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
 <!-- flyingCyclist restored to stable implementation (PR #283 lineage) -->
 <div id="sim-flying-cyclist">
   <div class="fc-wrap">
-    <div class="fc-ctrl" style="margin-bottom:12px">
-      <div class="fc-format-menu">
-        <button type="button" class="fc-btn fc-format-toggle" id="fcFormatToggle" aria-expanded="false" aria-controls="fcFormatDropdown">Формат экрана</button>
-        <div class="fc-format-dropdown" id="fcFormatDropdown">
-          <button type="button" data-format="fullscreen">Обычный полный экран</button>
-          <button type="button" data-format="instagram-4-5">Instagram пост 4:5 — 1080×1350</button>
-          <button type="button" data-format="instagram-9-16">Instagram Stories/Reels 9:16 — 1080×1920</button>
-          <button type="button" data-format="instagram-1-1">Instagram квадрат 1:1 — 1080×1080</button>
-          <button type="button" data-format="youtube-16-9">YouTube 16:9 — 1920×1080</button>
-          <button type="button" data-format="youtube-shorts">YouTube Shorts 9:16 — 1080×1920</button>
-        </div>
-      </div>
-    </div>
     <div class="fc-layout">
       <div class="fc-top-actions-row">
+        <div class="fc-format-panel">
+          <button class="fc-format-toggle" type="button" id="fcFormatToggle" aria-expanded="false" aria-controls="flyingCyclistFormatMenu" onclick="toggleFlyingCyclistFormatMenu()">
+            Формат экрана <span>⌄</span>
+          </button>
+          <div class="fc-format-menu" id="flyingCyclistFormatMenu">
+            <button type="button" data-format="fullscreen">Обычный полный экран</button>
+            <button type="button" data-format="instagram-4-5">Instagram пост 4:5 — 1080×1350</button>
+            <button type="button" data-format="instagram-9-16">Instagram Stories/Reels 9:16 — 1080×1920</button>
+            <button type="button" data-format="instagram-1-1">Instagram квадрат 1:1 — 1080×1080</button>
+            <button type="button" data-format="youtube-16-9">YouTube 16:9 — 1920×1080</button>
+            <button type="button" data-format="youtube-shorts">YouTube Shorts 9:16 — 1080×1920</button>
+          </div>
+        </div>
         <button class="fc-back-btn" type="button" onclick="goBackFromFlyingCyclist()">
           ← Назад
-        </button>
-        <button class="fc-close-btn" type="button" onclick="closeFlyingCyclist()">
-          Закрыть ×
         </button>
       </div>
       <div class="cyclist-record-frame">
@@ -6550,12 +6535,14 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
 <div id="sim-ballistics-projectile">
   <div class="fc-wrap">
     <div class="ballistics-layout-shell" id="bpLayout">
-      <aside class="ballistics-format-panel">
-        <button class="ballistics-format-toggle" type="button" onclick="toggleBallisticsFormatMenu()">Формат экрана <span>⌄</span></button>
-        <div class="ballistics-format-menu" id="ballisticsFormatMenu"><button type="button" onclick="setBallisticsFormat('default')">Обычный полный экран</button><button type="button" onclick="setBallisticsFormat('instagram-45')">Instagram пост 4:5</button><button type="button" onclick="setBallisticsFormat('instagram-916')">Instagram Stories/Reels 9:16</button><button type="button" onclick="setBallisticsFormat('instagram-11')">Instagram квадрат 1:1</button><button type="button" onclick="setBallisticsFormat('youtube-169')">YouTube 16:9</button><button type="button" onclick="setBallisticsFormat('youtube-shorts-916')">YouTube Shorts 9:16</button></div>
-      </aside>
       <main class="ballistics-main-column">
-        <div class="ballistics-top-actions-row"><button class="ballistics-back-btn" type="button" onclick="goBackFromBallisticsProjectile()">← Назад</button><button class="ballistics-close-btn" type="button" onclick="closeBallisticsProjectile()">Закрыть ×</button></div>
+        <div class="ballistics-top-actions-row">
+          <div class="ballistics-format-panel">
+            <button class="ballistics-format-toggle" type="button" onclick="toggleBallisticsFormatMenu()">Формат экрана <span>⌄</span></button>
+            <div class="ballistics-format-menu" id="ballisticsFormatMenu"><button type="button" onclick="setBallisticsFormat('default')">Обычный полный экран</button><button type="button" onclick="setBallisticsFormat('instagram-45')">Instagram пост 4:5</button><button type="button" onclick="setBallisticsFormat('instagram-916')">Instagram Stories/Reels 9:16</button><button type="button" onclick="setBallisticsFormat('instagram-11')">Instagram квадрат 1:1</button><button type="button" onclick="setBallisticsFormat('youtube-169')">YouTube 16:9</button><button type="button" onclick="setBallisticsFormat('youtube-shorts-916')">YouTube Shorts 9:16</button></div>
+          </div>
+          <button class="ballistics-back-btn" type="button" onclick="goBackFromBallisticsProjectile()">← Назад</button>
+        </div>
         <div class="ballistics-record-frame" id="bpFrame">
         <div class="fc-head"><span>ЕГЭ · Физика → Динамика → 9 Баллистика</span><strong>ФИЗМАТ</strong></div>
         <div class="fc-cond" id="bpCondition"></div>
@@ -13081,10 +13068,17 @@ function getFlyingCyclistSolutionFormat(format){
   return 'default';
 }
 function closeFlyingCyclistFormatMenu(){
-  const dropdown=document.getElementById('fcFormatDropdown');
+  const dropdown=document.getElementById('flyingCyclistFormatMenu');
   const toggle=document.getElementById('fcFormatToggle');
-  if(dropdown)dropdown.classList.remove('on');
+  if(dropdown)dropdown.classList.remove('open');
   if(toggle)toggle.setAttribute('aria-expanded','false');
+}
+function toggleFlyingCyclistFormatMenu(){
+  const menu=document.getElementById('flyingCyclistFormatMenu');
+  const toggle=document.getElementById('fcFormatToggle');
+  if(!menu)return;
+  const isOpen=menu.classList.toggle('open');
+  if(toggle)toggle.setAttribute('aria-expanded',isOpen?'true':'false');
 }
 function openFlyingCyclistFormat(format){
   const frame=document.querySelector('.cyclist-record-frame');
@@ -13132,21 +13126,16 @@ function enterFlyingCyclistFullscreen(){openFlyingCyclistFormat('fullscreen');}
 function toggleFlyingCyclistRecordMode(isOn){isOn?openFlyingCyclistFormat('instagram-4-5'):exitFlyingCyclistFullscreen();}
 function bindFlyingCyclistFormatMenu(){
   const toggle=document.getElementById('fcFormatToggle');
-  const dropdown=document.getElementById('fcFormatDropdown');
+  const dropdown=document.getElementById('flyingCyclistFormatMenu');
   if(!toggle||!dropdown||toggle.dataset.bound)return;
   toggle.dataset.bound='true';
-  toggle.addEventListener('click',e=>{
-    e.stopPropagation();
-    const isOpen=dropdown.classList.toggle('on');
-    toggle.setAttribute('aria-expanded',isOpen?'true':'false');
-  });
   dropdown.addEventListener('click',e=>{
     const btn=e.target.closest('button[data-format]');
     if(!btn)return;
     openFlyingCyclistFormat(btn.dataset.format);
   });
   document.addEventListener('click',e=>{
-    if(!e.target.closest('.fc-format-menu'))closeFlyingCyclistFormatMenu();
+    if(!e.target.closest('.fc-format-panel'))closeFlyingCyclistFormatMenu();
   });
 }
 function initFlyingCyclistSim(){
