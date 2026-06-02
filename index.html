@@ -1322,89 +1322,59 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 
 
 .ege-phy-m1-l3-theory-carousel {
-  position: relative;
-  width: 100%;
-  max-width: 920px;
-  margin: 18px auto 0;
-  padding: 14px;
-  border: 1px solid rgba(8,216,255,.22);
-  border-radius: 18px;
-  background: rgba(8,216,255,.035);
+  background: rgba(6,17,31,.96);
+  color: #f2f8ff;
+  border-color: rgba(8,216,255,.22);
 }
 
-.theory-carousel-track {
-  width: 100%;
-  overflow: hidden;
-  border-radius: 16px;
+.ege-phy-m1-l3-theory-carousel .zsi-carousel-kicker {
+  color: var(--cyan);
+}
+
+.ege-phy-m1-l3-theory-carousel .zsi-carousel-head h3 {
+  color: #f2f8ff;
+}
+
+.ege-phy-m1-l3-theory-carousel .zsi-carousel-btn {
+  opacity: .45;
+  visibility: visible;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8,216,255,.16);
+  border: 1px solid rgba(8,216,255,.45);
+  color: #f2f8ff;
+  backdrop-filter: blur(3px);
+}
+
+.ege-phy-m1-l3-theory-carousel .zsi-carousel-btn:hover {
+  opacity: .9;
+  background: rgba(8,216,255,.25);
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+.ege-phy-m1-l3-theory-carousel .zsi-carousel-track::-webkit-scrollbar-thumb {
+  background: rgba(8,216,255,.45);
+}
+
+.ege-phy-m1-l3-theory-carousel .zsi-slide {
+  background: #06111f;
+  border-color: rgba(8,216,255,.22);
+}
+
+.ege-phy-m1-l3-theory-carousel .zsi-slide img {
   background: #06111f;
 }
 
-.theory-carousel-slide {
-  display: none;
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  border-radius: 16px;
+.ege-phy-m1-l3-theory-carousel .zsi-slide figcaption {
+  color: #cfeeff;
+  background: rgba(8,216,255,.08);
+  border-color: rgba(8,216,255,.18);
 }
 
-.theory-carousel-slide.active {
-  display: block;
-}
-
-.theory-carousel-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  visibility: visible;
-  width: 38px;
-  height: 38px;
-  border-radius: 999px;
-  border: 1px solid rgba(8,216,255,.62);
-  background: rgba(0,180,255,.22);
-  backdrop-filter: blur(2px);
-  color: #f2f8ff;
-  opacity: .45;
-  font-size: 24px;
-  cursor: pointer;
-  transition: opacity .18s ease, background-color .18s ease, border-color .18s ease;
-}
-
-.theory-carousel-btn:hover {
-  border-color: rgba(8,216,255,.88);
-  background: rgba(0,180,255,.34);
-  opacity: .85;
-}
-
-.theory-carousel-btn.prev {
-  left: 22px;
-}
-
-.theory-carousel-btn.next {
-  right: 22px;
-}
-
-@media (max-width: 700px) {
-  .ege-phy-m1-l3-theory-carousel {
-    padding: 8px;
-    border-radius: 14px;
-  }
-
-  .theory-carousel-btn {
-    width: 34px;
-    height: 34px;
-  }
-
-  .theory-carousel-btn.prev {
-    left: 14px;
-  }
-
-  .theory-carousel-btn.next {
-    right: 14px;
-  }
+.ege-phy-m1-l3-theory-carousel .zsi-carousel-hint {
+  color: #9eb9ce;
 }
 
 .zsi-theory-carousel {
@@ -5051,16 +5021,36 @@ function showTab(id,btn,colorClass){
 /* ============ THEORY RENDERING ============ */
 function renderTheory(){
   if(AC==='ege-phy'&&CM===1&&CL===3){
-    return `<div class="theory-photo-carousel ege-phy-m1-l3-theory-carousel">
-      <button class="theory-carousel-btn prev" type="button" onclick="moveEgePhyM1L3TheorySlide(-1)">‹</button>
-
-      <div class="theory-carousel-track" id="egePhyM1L3TheoryCarousel">
-        <img class="theory-carousel-slide active" src="images/course/ege-phy/m-1/l-3/theory/ege-phy-m1-l3-theory-01-angle-projectile.png" alt="Движение тела, брошенного под углом к горизонту">
-        <img class="theory-carousel-slide" src="images/course/ege-phy/m-1/l-3/theory/ege-phy-m1-l3-theory-02-horizontal-projectile.png" alt="Движение тела, брошенного горизонтально">
-        <img class="theory-carousel-slide" src="images/course/ege-phy/m-1/l-3/theory/ege-phy-m1-l3-theory-03-vertical-motion.png" alt="Движение тела по вертикали">
+    return `<div class="zsi-theory-carousel ege-phy-m1-l3-theory-carousel">
+      <div class="zsi-carousel-head">
+        <div>
+          <div class="zsi-carousel-kicker">Урок 9 · Теория</div>
+          <h3>Баллистика</h3>
+        </div>
+        <div class="zsi-carousel-controls">
+          <button type="button" class="zsi-carousel-btn" onclick="scrollZsiTheory(-1)">←</button>
+          <button type="button" class="zsi-carousel-btn" onclick="scrollZsiTheory(1)">→</button>
+        </div>
       </div>
 
-      <button class="theory-carousel-btn next" type="button" onclick="moveEgePhyM1L3TheorySlide(1)">›</button>
+      <div class="zsi-carousel-track" id="zsiTheoryTrack">
+        <figure class="zsi-slide media-zoom-wrap" data-solution-zoom="true">
+          <img src="images/course/ege-phy/m-1/l-3/theory/ege-phy-m1-l3-theory-01-angle-projectile.png" alt="Движение тела, брошенного под углом к горизонту">
+          <figcaption>1 / 3 · Движение под углом к горизонту</figcaption>
+        </figure>
+
+        <figure class="zsi-slide media-zoom-wrap" data-solution-zoom="true">
+          <img src="images/course/ege-phy/m-1/l-3/theory/ege-phy-m1-l3-theory-02-horizontal-projectile.png" alt="Движение тела, брошенного горизонтально">
+          <figcaption>2 / 3 · Движение, брошенное горизонтально</figcaption>
+        </figure>
+
+        <figure class="zsi-slide media-zoom-wrap" data-solution-zoom="true">
+          <img src="images/course/ege-phy/m-1/l-3/theory/ege-phy-m1-l3-theory-03-vertical-motion.png" alt="Движение тела по вертикали">
+          <figcaption>3 / 3 · Движение по вертикали</figcaption>
+        </figure>
+      </div>
+
+      <div class="zsi-carousel-hint">Прокручивайте карточки влево и вправо или используйте кнопки со стрелками. Нажмите на фото, чтобы увеличить.</div>
     </div>`;
   }
 
@@ -5102,35 +5092,6 @@ function renderTheory(){
   return h;
 }
 
-
-let egePhyM1L3TheorySlideIndex = 0;
-
-function updateEgePhyM1L3TheorySlides() {
-  const carousel = document.getElementById('egePhyM1L3TheoryCarousel');
-  if (!carousel) return;
-
-  const slides = carousel.querySelectorAll('.theory-carousel-slide');
-  if (!slides.length) return;
-
-  if (egePhyM1L3TheorySlideIndex < 0) {
-    egePhyM1L3TheorySlideIndex = slides.length - 1;
-  }
-
-  if (egePhyM1L3TheorySlideIndex >= slides.length) {
-    egePhyM1L3TheorySlideIndex = 0;
-  }
-
-  slides.forEach((slide, index) => {
-    slide.classList.toggle('active', index === egePhyM1L3TheorySlideIndex);
-  });
-}
-
-function moveEgePhyM1L3TheorySlide(step) {
-  egePhyM1L3TheorySlideIndex += step;
-  updateEgePhyM1L3TheorySlides();
-}
-
-document.addEventListener('DOMContentLoaded', updateEgePhyM1L3TheorySlides);
 
 function scrollZsiTheory(direction){
   const track = document.getElementById('zsiTheoryTrack');
