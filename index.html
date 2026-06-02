@@ -1320,6 +1320,80 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 .thx-scheme-step strong{color:var(--white)}
 @media (max-width:980px){.thx-grid.two,.thx-grid.three,.thx-mini-grid{grid-template-columns:1fr}.thx-eq{font-size:20px}.th-html{padding:16px}}
 
+
+.ege-phy-m1-l3-theory-carousel {
+  position: relative;
+  width: 100%;
+  max-width: 920px;
+  margin: 18px auto 0;
+  padding: 14px;
+  border: 1px solid rgba(8,216,255,.22);
+  border-radius: 18px;
+  background: rgba(8,216,255,.035);
+}
+
+.theory-carousel-track {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #06111f;
+}
+
+.theory-carousel-slide {
+  display: none;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 16px;
+}
+
+.theory-carousel-slide.active {
+  display: block;
+}
+
+.theory-carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  border: 1px solid rgba(8,216,255,.35);
+  background: rgba(8,216,255,.12);
+  color: #f2f8ff;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.theory-carousel-btn.prev {
+  left: 22px;
+}
+
+.theory-carousel-btn.next {
+  right: 22px;
+}
+
+@media (max-width: 700px) {
+  .ege-phy-m1-l3-theory-carousel {
+    padding: 8px;
+    border-radius: 14px;
+  }
+
+  .theory-carousel-btn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .theory-carousel-btn.prev {
+    left: 14px;
+  }
+
+  .theory-carousel-btn.next {
+    right: 14px;
+  }
+}
+
 .zsi-theory-carousel {
   background: #ffffff;
   color: #10233e;
@@ -4963,6 +5037,20 @@ function showTab(id,btn,colorClass){
 
 /* ============ THEORY RENDERING ============ */
 function renderTheory(){
+  if(AC==='ege-phy'&&CM===1&&CL===3){
+    return `<div class="theory-photo-carousel ege-phy-m1-l3-theory-carousel">
+      <button class="theory-carousel-btn prev" type="button" onclick="moveEgePhyM1L3TheorySlide(-1)">‹</button>
+
+      <div class="theory-carousel-track" id="egePhyM1L3TheoryCarousel">
+        <img class="theory-carousel-slide active" src="images/course/ege-phy/m-1/l-3/theory/ege-phy-m1-l3-theory-01-angle-projectile.png" alt="Движение тела, брошенного под углом к горизонту">
+        <img class="theory-carousel-slide" src="images/course/ege-phy/m-1/l-3/theory/ege-phy-m1-l3-theory-02-horizontal-projectile.png" alt="Движение тела, брошенного горизонтально">
+        <img class="theory-carousel-slide" src="images/course/ege-phy/m-1/l-3/theory/ege-phy-m1-l3-theory-03-vertical-motion.png" alt="Движение тела по вертикали">
+      </div>
+
+      <button class="theory-carousel-btn next" type="button" onclick="moveEgePhyM1L3TheorySlide(1)">›</button>
+    </div>`;
+  }
+
   const blocks=getTH();
   let h=EMODE?`<div class="add-block-bar">
     <span style="font-size:11px;color:var(--gray);margin-right:2px">Добавить блок:</span>
@@ -5000,6 +5088,36 @@ function renderTheory(){
   });
   return h;
 }
+
+
+let egePhyM1L3TheorySlideIndex = 0;
+
+function updateEgePhyM1L3TheorySlides() {
+  const carousel = document.getElementById('egePhyM1L3TheoryCarousel');
+  if (!carousel) return;
+
+  const slides = carousel.querySelectorAll('.theory-carousel-slide');
+  if (!slides.length) return;
+
+  if (egePhyM1L3TheorySlideIndex < 0) {
+    egePhyM1L3TheorySlideIndex = slides.length - 1;
+  }
+
+  if (egePhyM1L3TheorySlideIndex >= slides.length) {
+    egePhyM1L3TheorySlideIndex = 0;
+  }
+
+  slides.forEach((slide, index) => {
+    slide.classList.toggle('active', index === egePhyM1L3TheorySlideIndex);
+  });
+}
+
+function moveEgePhyM1L3TheorySlide(step) {
+  egePhyM1L3TheorySlideIndex += step;
+  updateEgePhyM1L3TheorySlides();
+}
+
+document.addEventListener('DOMContentLoaded', updateEgePhyM1L3TheorySlides);
 
 function scrollZsiTheory(direction){
   const track = document.getElementById('zsiTheoryTrack');
