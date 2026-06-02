@@ -1946,6 +1946,37 @@ img,svg,canvas,video,iframe{max-width:100%}
 .generator-summary{display:flex;flex-direction:column;gap:10px}.generator-generate{width:100%;padding:11px;border:none;border-radius:10px;background:var(--cyan);color:#001;font-weight:800}.generator-reset{width:100%;padding:10px;border:1px solid var(--border);background:transparent;color:var(--white);border-radius:10px}.generator-empty,.generator-result{padding:18px;color:var(--gray)}
 @media(max-width:980px){.generator-layout{grid-template-columns:1fr}}
 
+/* Unified dark controls for every image and content carousel. */
+.zsi-carousel-btn,
+.theory-carousel-btn,
+.fc-carousel-btn,
+.solution-carousel-btn,
+.task-carousel-btn,
+.carousel-btn,
+.gallery-btn,
+.image-carousel-btn {
+  background: rgba(1, 8, 18, 0.86) !important;
+  border: 1px solid rgba(8, 216, 255, 0.68) !important;
+  color: #ffffff !important;
+  opacity: 0.88 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.48) !important;
+  backdrop-filter: blur(4px);
+}
+
+.zsi-carousel-btn:hover,
+.theory-carousel-btn:hover,
+.fc-carousel-btn:hover,
+.solution-carousel-btn:hover,
+.task-carousel-btn:hover,
+.carousel-btn:hover,
+.gallery-btn:hover,
+.image-carousel-btn:hover {
+  background: rgba(1, 8, 18, 0.98) !important;
+  border-color: var(--cyan) !important;
+  color: var(--cyan) !important;
+  opacity: 1 !important;
+}
+
 </style>
 </head>
 <body class="view-mode">
@@ -7571,7 +7602,7 @@ function handleSolutionImageError(img,path){
 }
 const universalImageViewerState={items:[],index:0,scale:1,x:0,y:0,isOpen:false,minScale:1,maxScale:5};
 const imageViewerState=universalImageViewerState;
-function ensureUniversalImageViewer(){let box=document.getElementById('universalImageViewer');if(box) return box;document.body.insertAdjacentHTML('beforeend','<div id="universalImageViewer" class="universal-image-viewer" style="display:none"><div class="universal-image-viewer-toolbar"><button type="button" data-viewer-zoom-out>-</button><button type="button" data-viewer-reset>Сброс</button><button type="button" data-viewer-zoom-in>+</button><button type="button" data-viewer-close>×</button></div><button type="button" class="universal-image-viewer-arrow universal-image-viewer-prev">←</button><div class="universal-image-viewer-body"><img class="universal-image-viewer-img" src="" alt=""></div><button type="button" class="universal-image-viewer-arrow universal-image-viewer-next">→</button><div class="universal-image-viewer-counter"></div></div>');return document.getElementById('universalImageViewer');}
+function ensureUniversalImageViewer(){let box=document.getElementById('universalImageViewer');if(box) return box;document.body.insertAdjacentHTML('beforeend','<div id="universalImageViewer" class="universal-image-viewer" style="display:none"><div class="universal-image-viewer-toolbar"><button type="button" data-viewer-zoom-out>-</button><button type="button" data-viewer-reset>Сброс</button><button type="button" data-viewer-zoom-in>+</button><button type="button" data-viewer-close>×</button></div><button type="button" class="universal-image-viewer-arrow universal-image-viewer-prev carousel-btn">←</button><div class="universal-image-viewer-body"><img class="universal-image-viewer-img" src="" alt=""></div><button type="button" class="universal-image-viewer-arrow universal-image-viewer-next carousel-btn">→</button><div class="universal-image-viewer-counter"></div></div>');return document.getElementById('universalImageViewer');}
 function getUniversalImageViewerSelector(){return['.zsi-slide img','.zsi-theory-carousel img','.theory-slide img','.theory-carousel img','.theory-image-block img','.lesson-theory-image','.lesson-theory-img','.theory-carousel-img','.th-html-body img','.pt-photo-img','.pt-solution-image','.pt-task-image','.pt-task-schema-image','.pt-card img','.pt-solution img','.pt-condition img','.pt-task-scheme img','.task-board-photo-img','.task-board-schema-image','.task-board-graph-image','.task-board-solution-image','.task-board-photo-wrap img','.task-board-floating img','.task-board-rich img','.media-zoom-wrap img','img[data-image-zoom="true"]'].join(',');}
 function isUniversalViewableImage(img){if(!img) return false;if(img.closest('header,.nav-inner,.logo,.hero,.hero-media,.hero-animation')) return false;if(img.closest('.universal-image-viewer')) return false;const src=img.currentSrc||img.src||img.getAttribute('src')||'';if(!src||src==='undefined') return false;const rect=img.getBoundingClientRect();if(rect.width<40||rect.height<40) return false;return true;}
 function bindUniversalImageViewer(root){const scope=root||document;const selectors=getUniversalImageViewerSelector();Array.from(scope.querySelectorAll(selectors)).forEach(function(img){if(!img.classList.contains('pt-solution-image')&&img.closest('.pt-solution')) img.classList.add('pt-solution-image');if(!img.classList.contains('pt-task-schema-image')&&img.closest('.pt-task-scheme,.task-board-schema')) img.classList.add('pt-task-schema-image');if(!img.classList.contains('theory-carousel-img')&&img.closest('.theory-carousel,.zsi-theory-carousel,.zsi-slide')) img.classList.add('theory-carousel-img');if(!img.classList.contains('task-board-solution-image')&&img.closest('.task-board-solution,.task-board-floating')) img.classList.add('task-board-solution-image');if(isUniversalViewableImage(img)) img.style.cursor='zoom-in';});}
