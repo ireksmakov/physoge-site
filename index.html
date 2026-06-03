@@ -7889,12 +7889,12 @@ function renderPTasks(name){
       id:taskId,
       boardMode:boardMode,
       mode:boardMode,
-      canOpenTaskBoard:!!(t.boardMode||t.mode),
+      canOpenTaskBoard:true,
       hasAnimation:t.hasAnimation===true,
       animationId:t.animationId||t.animId||'',
       animId:t.animId||t.animationId||''
     };
-    const boardBtn=t.boardMode?`<button type="button" class="pt-board-btn" data-task-id="${escapeHtml(taskId)}" data-board-mode="${escapeHtml(boardMode)}" onclick="return openTaskBoard('${boardModeSafe}',true,'${taskIdSafe}')">🧑‍🏫 Доска</button>`:'';
+    const boardBtn=`<button type="button" class="pt-board-btn" data-task-id="${escapeHtml(taskId)}" data-board-mode="${escapeHtml(boardMode)}" onclick="return openTaskBoard('${boardModeSafe}',true,'${taskIdSafe}')">🧑‍🏫 Доска</button>`;
     const animationBtn=`<button type="button" class="pt-anim-btn" data-action="open-animation" data-task-id="${escapeHtml(taskId)}" data-animation-id="${escapeHtml(t.animationId||t.animId||'')}" onclick="return handleOpenAnimationClick(event)">▶ Анимация</button>`;
     const hasStructuredSolution=hasFilledTaskSolution(t)||hasLegacyTaskTextSolution(t);
     const embeddedRaw=hasStructuredSolution?renderTaskSolutionPanel(t,'pt'):(t.solutionHtml||getEmbeddedSolutionHtml(t));
@@ -8724,6 +8724,8 @@ function taskBoardObjectPointerDown(e){
 function findTaskById(taskId){
   if(!taskId) return null;
   const needle=String(taskId);
+  const runtimeTasks=window.TASK_BOARD_RUNTIME_TASKS||{};
+  if(runtimeTasks[needle]) return runtimeTasks[needle];
   for(const lessonName in LESSON_TASKS){
     const found=(LESSON_TASKS[lessonName]||[]).find(function(t){return t&&(String(t.id||'')===needle||String(t.boardMode||'')===needle);});
     if(found) return found;
@@ -8763,6 +8765,8 @@ function getTaskBoardAnimationButtonText(isOpen){
   return isOpen?'✕ Анимация':'▶ Анимация';
 }
 function getTaskBoardData(mode){
+  const runtimeTasks=window.TASK_BOARD_RUNTIME_TASKS||{};
+  if(mode&&runtimeTasks[String(mode)]) return runtimeTasks[String(mode)];
   if(mode==='task07-pendulum-impact') mode='task10-pendulum-impact';
   if(String(mode||'').indexOf('blank-task-')===0){
     const store=loadBlankTaskBlocks();
