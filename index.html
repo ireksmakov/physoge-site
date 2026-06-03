@@ -3151,8 +3151,11 @@ const COURSES={
         'Равнодействующая сила',
         'Законы Ньютона',
         'Сила тяжести',
-        'Свободное падение',
-        'Баллистика',
+        makeLesson(
+          'Свободное падение и баллистика',
+          'Свободное падение, вертикальное движение и движение тела, брошенного под углом к горизонту.',
+          'Свободное падение'
+        ),
         'Искусственный спутник',
         'Сила трения',
         'Сила упругости'
@@ -4185,7 +4188,7 @@ const SIMULATORS_REGISTRY=[
     title:'Летающий велосипедист',
     exams:['oge','ege'],
     subject:'phy',
-    topicKeys:['Свободное падение','Равноускоренное движение и свободное падение','Движение под углом к горизонту','Баллистика'],
+    topicKeys:['Свободное падение','Свободное падение и баллистика','Равноускоренное движение и свободное падение','Движение под углом к горизонту','Баллистика'],
     icon:'🚴',
     description:'Движение по трамплину, вылет под углом и расчёт высоты h через энергию.',
     action:"openSim('flying-cyclist')",
@@ -4198,7 +4201,7 @@ const SIMULATORS_REGISTRY=[
     title:'Снаряд без сопротивления воздуха',
     exams:['ege'],
     subject:'phy',
-    topicKeys:['Баллистика'],
+    topicKeys:['Баллистика','Свободное падение и баллистика'],
     icon:'🚀',
     description:'Интерактивная модель баллистического движения: по данным наблюдения вычисляется начальная скорость снаряда или максимальная высота траектории.',
     action:"openSim('ballistics-projectile')",
@@ -5033,11 +5036,14 @@ function togM(mi){
 /* ============ CONTENT ============ */
 function renderContent(){
   const c=COURSES[AC],lesson=getLessonObject(AC,CM,CL),name=lessonTitle(lesson),desc=lessonDescription(lesson),ld=gld();
+  const lessonMeta=(AC==='ege-phy'&&CM===1&&CL===3)
+    ? 'ЕГЭ → Физика → Динамика → Свободное падение и баллистика'
+    : `${c.modules[CM].name} · ${c.name}`;
   document.getElementById('cpCon').innerHTML=`
     <div class="lt-row">
       <div class="lt-inp">${name}</div>
     </div>
-    <div class="lmeta">${c.modules[CM].name} · ${c.name}</div>
+    <div class="lmeta">${lessonMeta}</div>
     ${desc?`<div style="margin:8px 0 18px;color:var(--gray);font-size:14px;line-height:1.6">${desc}</div>`:''}
     <div class="cp-stats">
       <div class="cps"><div class="cpsv">${ld.videos.length}</div><div class="cpsl">видео</div></div>
@@ -5093,13 +5099,46 @@ function showTab(id,btn,colorClass){
 }
 
 /* ============ THEORY RENDERING ============ */
+function renderTheoryBlocks(blocks){
+  let h='';
+  blocks.forEach((b,i)=>{
+    const del=EMODE?`<div class="th-block-del" onclick="delBlock(${i})">✕</div>`:'';
+    const editAttrs=EMODE?' contenteditable="true"':'';
+    if(b.type==='formula'){
+      const formulaMain=(b&&b.f)||'';
+      const formulaSub=(b&&b.sub)||'';
+      h+=`<div class="formula-block" style="position:relative">
+        ${del}
+        <span class="formula-main-f"${editAttrs}${EMODE?` onblur="saveBlock(${i},'f',this.innerHTML)"`:''}>${formulaMain}</span>
+        <span class="formula-sub"${editAttrs}${EMODE?` onblur="saveBlock(${i},'sub',this.innerHTML)"`:''}>${formulaSub}</span>
+      </div>`;
+    } else if(b.type==='html'){
+      const htmlBody=(b&&b.html)||'';
+      h+=`<div class="th-html">
+        ${del}
+        <div class="th-html-body"${editAttrs}${EMODE?` onblur="saveBlock(${i},'html',this.innerHTML)"`:''}>${htmlBody}</div>
+      </div>`;
+    } else {
+      const blockTitle=(b&&b.title)||'';
+      const blockText=(b&&b.text)||'';
+      h+=`<div class="th-block">
+        ${del}
+        <div class="tb-label">${b.label||'📌'}</div>
+        <div class="tb-title"${editAttrs}${EMODE?` onblur="saveBlock(${i},'title',this.innerText)"`:''}>${blockTitle}</div>
+        <div class="tb-text"${editAttrs}${EMODE?` onblur="saveBlock(${i},'text',this.innerText)"`:''}>${blockText}</div>
+      </div>`;
+    }
+  });
+  return h;
+}
+
 function renderTheory(){
   if(AC==='ege-phy'&&CM===1&&CL===3){
-    return `<div class="zsi-theory-carousel ege-phy-m1-l3-theory-carousel">
+    return renderTheoryBlocks(getTH()) + `<div class="zsi-theory-carousel ege-phy-m1-l3-theory-carousel">
       <div class="zsi-carousel-head">
         <div>
-          <div class="zsi-carousel-kicker">Урок 9 · Теория</div>
-          <h3>Баллистика</h3>
+          <div class="zsi-carousel-kicker">ЕГЭ · Физика · Динамика</div>
+          <h3>Свободное падение и баллистика</h3>
         </div>
         <div class="zsi-carousel-controls">
           <button type="button" class="zsi-carousel-btn" onclick="scrollZsiTheory(-1)">←</button>
@@ -5135,34 +5174,7 @@ function renderTheory(){
     <button class="abb" onclick="addBlock('formula')">+ Формула</button>
     <button class="abb" onclick="addBlock('html')">+ HTML</button>
   </div>`:'';
-  blocks.forEach((b,i)=>{
-    const del=EMODE?`<div class="th-block-del" onclick="delBlock(${i})">✕</div>`:'';
-    const editAttrs=EMODE?' contenteditable="true"':'';
-    if(b.type==='formula'){
-      const formulaMain=(b&&b.f)||'';
-      const formulaSub=(b&&b.sub)||'';
-      h+=`<div class="formula-block" style="position:relative">
-        ${del}
-        <span class="formula-main-f"${editAttrs}${EMODE?` onblur="saveBlock(${i},'f',this.innerHTML)"`:''}>${formulaMain}</span>
-        <span class="formula-sub"${editAttrs}${EMODE?` onblur="saveBlock(${i},'sub',this.innerHTML)"`:''}>${formulaSub}</span>
-      </div>`;
-    } else if(b.type==='html'){
-      const htmlBody=(b&&b.html)||'';
-      h+=`<div class="th-html">
-        ${del}
-        <div class="th-html-body"${editAttrs}${EMODE?` onblur="saveBlock(${i},'html',this.innerHTML)"`:''}>${htmlBody}</div>
-      </div>`;
-    } else {
-      const blockTitle=(b&&b.title)||'';
-      const blockText=(b&&b.text)||'';
-      h+=`<div class="th-block">
-        ${del}
-        <div class="tb-label">${b.label||'📌'}</div>
-        <div class="tb-title"${editAttrs}${EMODE?` onblur="saveBlock(${i},'title',this.innerText)"`:''}>${blockTitle}</div>
-        <div class="tb-text"${editAttrs}${EMODE?` onblur="saveBlock(${i},'text',this.innerText)"`:''}>${blockText}</div>
-      </div>`;
-    }
-  });
+  h+=renderTheoryBlocks(blocks);
   return h;
 }
 
@@ -6494,7 +6506,7 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
         </button>
       </div>
       <div class="cyclist-record-frame">
-        <div class="fc-head"><span>Механика · Свободное падение</span><strong>ФИЗМАТ</strong></div>
+        <div class="fc-head"><span>Механика · Свободное падение и баллистика</span><strong>ФИЗМАТ</strong></div>
         <div class="fc-cond">Гонщик стартует с высоты H, вылетает под углом α и приземляется на уровне края трамплина. Найти высоту полёта h.</div>
         <div class="fc-inline-params">
           <div class="fc-param-chip">H, м: <span id="fcHVal">3</span><input id="fcH" type="range" min="3" max="6" step="1" value="3"></div>
@@ -6542,7 +6554,7 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
           <button class="ballistics-back-btn" type="button" onclick="goBackFromBallisticsProjectile()">← Назад</button>
         </div>
         <div class="ballistics-record-frame" id="bpFrame">
-        <div class="fc-head"><span>ЕГЭ · Физика → Динамика → 9 Баллистика</span><strong>ФИЗМАТ</strong></div>
+        <div class="fc-head"><span>ЕГЭ → Физика → Динамика → Свободное падение и баллистика</span><strong>ФИЗМАТ</strong></div>
         <div class="fc-cond" id="bpCondition"></div>
         <div class="bp-mode-row"><label>Режим задачи: <select class="bp-select" id="bpMode"><option value="find-v0">1) Найти начальную скорость v₀</option><option value="find-H">2) Найти максимальную высоту H</option><option value="flightTime">3) Время полета T, с</option><option value="flightRange">4) Дальность полета L, м</option><option value="detectionHeight">5) Высота обнаружения h₁, м</option><option value="detectionDistance">6) Расстояние l, м</option></select></label></div>
         <div class="fc-inline-params">
@@ -7358,6 +7370,8 @@ const LESSON_TASKS={
 ]
 };
 
+LESSON_TASKS['Свободное падение и баллистика'] = LESSON_TASKS['Свободное падение'];
+
 (function setupLesson07EmptyTasks(){
   const targetLessonName = getCourseLessonNameByFlatNumber('ege-phy', 7);
   const sourceLessonName = getCourseLessonNameByFlatNumber('ege-phy', 24);
@@ -7501,6 +7515,7 @@ const LESSON_SIMS=getLessonSimulatorsMapFromRegistry();
 
 const LESSON_LABS={
 'Свободное падение':[{icon:'🔴',name:'Измерение g',badge:'Скоро',desc:'Падение с разных высот. Определение g из h=gt²/2.',steps:['Задать h','Запустить','Записать t','Вычислить g=2h/t²'],btn:'soon'}],
+'Свободное падение и баллистика':[{icon:'🔴',name:'Измерение g',badge:'Скоро',desc:'Падение с разных высот. Определение g из h=gt²/2.',steps:['Задать h','Запустить','Записать t','Вычислить g=2h/t²'],btn:'soon'}],
 'Законы Ньютона':[{icon:'⚖️',name:'Второй закон Ньютона',badge:'Скоро',desc:'Тело на горизонтальной поверхности. Зависимость a от F и m.',steps:['Изменять F → измерять a','Изменять m → измерять a','Построить a(F) и a(1/m)'],btn:'soon'}],
 'Линзы':[{
   icon:'🔆',name:'Фокусное расстояние линзы',badge:'Виртуальная',
