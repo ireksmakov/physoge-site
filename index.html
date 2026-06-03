@@ -2380,13 +2380,17 @@ const THEORY = {
   {type:'text',label:'📊 Графики',title:'Графики РУД',text:'• v(t) — прямая линия, угол наклона = ускорение a\n• x(t) — парабола\n• a(t) — горизонтальная прямая\n\nСредняя скорость: <v> = (v₀ + v)/2'},
   {type:'text',label:'🔢 Алгоритм',title:'Решение задач',text:'1. Выбрать СО, направление оси\n2. Записать уравнения: v(t) и x(t)\n3. При торможении: a — противоположно v₀\n4. Тело останавливается при v = 0'}
 ],
-'Свободное падение':[
+'Баллистика. Свободное падение':[
   {type:'text',label:'📌 Определение',title:'Свободное падение',text:'Движение тела только под действием силы тяжести без учёта сопротивления воздуха. Частный случай равноускоренного движения с a = g.'},
   {type:'formula',f:'g = 9,8 м/с² ≈ 10 м/с²',sub:'ускорение свободного падения'},
   {type:'formula',f:'v = v₀ + gt',sub:'скорость при свободном падении'},
   {type:'formula',f:'h = v₀t + gt²/2',sub:'высота (при падении вниз)'},
   {type:'text',label:'📐 Случаи',title:'Варианты задач',text:'• Падение без начальной скорости: v₀ = 0, h = gt²/2, v = gt\n• Бросок вертикально вверх: v₀ ↑, на высоте H: v = 0, H = v₀²/2g\n• Бросок под углом к горизонту: движение по параболе'},
-  {type:'text',label:'⚠️ Важно',title:'Ключевые факты',text:'• Все тела падают с одинаковым ускорением (независимо от массы)\n• Время подъёма = времени падения\n• Скорость в начале = скорости в конце при симметричном броске'}
+  {type:'text',label:'⚠️ Важно',title:'Ключевые факты',text:'• Все тела падают с одинаковым ускорением (независимо от массы)\n• Время подъёма = времени падения\n• Скорость в начале = скорости в конце при симметричном броске'},
+  {type:'text',label:'🚀 Теория',title:'Баллистика',text:'Баллистика рассматривает движение тела, брошенного под углом к горизонту или горизонтально, без сопротивления воздуха. Движение раскладывают на независимые проекции: по горизонтали скорость постоянна, по вертикали действует ускорение g.'},
+  {type:'formula',f:'x = v₀ cosα · t',sub:'горизонтальная координата при броске под углом'},
+  {type:'formula',f:'y = v₀ sinα · t − gt²/2',sub:'вертикальная координата при броске под углом'},
+  {type:'formula',f:'vₓ = v₀ cosα = const,   vᵧ = v₀ sinα − gt',sub:'проекции скорости в баллистическом движении'}
 ],
 'Законы Ньютона':[
   {type:'text',label:'📌 I закон Ньютона',title:'Закон инерции',text:'Тело находится в покое или движется равномерно прямолинейно, если равнодействующая всех сил равна нулю. ΣF = 0 ⟺ a = 0.\n\nИнерция — свойство тел сохранять состояние покоя или равномерного движения.'},
@@ -3023,9 +3027,15 @@ function defaultTheory(title,description){return[
   {type:'text',label:'📝 Заглушка',title:'Материалы в подготовке',text:'Подробная теория, задачи, симуляторы, лабораторные, видео, тесты и домашнее задание будут добавлены в этот урок.'}
 ]}
 function makeLesson(title,description,theory){return{title,description,theory:theory||title,tasks:[],simulators:[],labs:[],video:[],tests:[],homework:[]}}
+function makeLessonRedirect(title,moduleIndex,lessonIndex){return{title,hidden:true,redirectTo:{moduleIndex,lessonIndex},description:'',theory:title,tasks:[],simulators:[],labs:[],video:[],tests:[],homework:[]}}
+function isHiddenLesson(lesson){return !!(lesson&&typeof lesson==='object'&&lesson.hidden)}
 function getLessonObject(courseKey,moduleIndex,lessonIndex){
   const c=COURSES&&COURSES[courseKey];
   const raw=c&&c.modules&&c.modules[moduleIndex]&&c.modules[moduleIndex].lessons?c.modules[moduleIndex].lessons[lessonIndex]:null;
+  if(raw&&typeof raw==='object'&&raw.redirectTo){
+    const target=raw.redirectTo;
+    return getLessonObject(courseKey,target.moduleIndex,target.lessonIndex);
+  }
   if(raw&&typeof raw==='object')return raw;
   return{title:raw||'',description:'',theory:raw||'',tasks:[],simulators:[],labs:[],video:[],tests:[],homework:[]};
 }
@@ -3151,8 +3161,12 @@ const COURSES={
         'Равнодействующая сила',
         'Законы Ньютона',
         'Сила тяжести',
-        'Свободное падение',
-        'Баллистика',
+        makeLesson(
+          'Баллистика. Свободное падение',
+          'Свободное падение и баллистическое движение без сопротивления воздуха: вертикальные броски, движение под углом и горизонтальный бросок.',
+          'Баллистика. Свободное падение'
+        ),
+        makeLessonRedirect('Баллистика',1,3),
         'Искусственный спутник',
         'Сила трения',
         'Сила упругости'
@@ -3869,7 +3883,7 @@ function normalizeLessonTaskToConstructorQuestion(t,meta){const answer=t&&t.ans!
 function normalizeLessonQuestionToConstructorQuestion(q,meta){if((q?.type||'')==='choice'){return {id:'course-task-'+Math.random().toString(36).slice(2,9),exam:meta.exam,subject:meta.subject,section:meta.section,contentTopic:meta.contentTopic,lessonTitle:meta.lessonTitle,sourceType:'lesson-test',type:'single',text:q.text||'',points:1,difficulty:'Базовый',options:(q.opts||[]).map((o,i)=>({id:'o'+(i+1),text:o||'',correct:Number(q.correct)===i})),correctAnswer:null,explanation:q.explanation||'',source:`Курс ФИЗМАТ · Тесты · ${meta.lessonTitle}`,imageUrl:q.imageUrl||'',courseMeta:meta};}
 const ans=q?.answer??''; const t=toQuestionTypeByAnswer(ans); return {id:'course-task-'+Math.random().toString(36).slice(2,9),exam:meta.exam,subject:meta.subject,section:meta.section,contentTopic:meta.contentTopic,lessonTitle:meta.lessonTitle,sourceType:'lesson-test',type:t,text:q?.text||'',points:1,difficulty:'Базовый',options:[],correctAnswer:t==='number'?{value:String(ans),tolerance:''}:{value:String(ans),caseSensitive:false},explanation:q?.explanation||'',source:`Курс ФИЗМАТ · Тесты · ${meta.lessonTitle}`,imageUrl:q?.imageUrl||'',courseMeta:meta};}
 function normalizeSpecialTestToConstructorQuestion(item,meta){if(!item||!item.prompt||!Array.isArray(item.variants)) return null; return {id:'course-task-'+Math.random().toString(36).slice(2,9),exam:meta.exam,subject:meta.subject,section:meta.section,contentTopic:meta.contentTopic,lessonTitle:meta.lessonTitle,sourceType:'special-test',type:'single',text:item.prompt,points:1,difficulty:'Базовый',options:item.variants.map((v,i)=>({id:'o'+(i+1),text:(v&&v.text)||String(v||''),correct:Number(item.correct)===i})),correctAnswer:null,explanation:item.explanation||'',source:`Курс ФИЗМАТ · Спецтест · ${meta.lessonTitle}`,imageUrl:item.imageUrl||'',courseMeta:meta};}
-function buildCourseTaskBank(){const bank=[]; Object.entries(COURSES||{}).forEach(([courseKey,c])=>{(c.modules||[]).forEach((m,mi)=>{(m.lessons||[]).forEach((ld,li)=>{const meta={courseKey,moduleIndex:mi,lessonIndex:li,sourceType:'lesson-task',exam:c.exam||'ЕГЭ',subject:c.subject||'Физика',section:m.name||'Раздел',contentTopic:lessonTitle(ld)||'Тема',lessonTitle:lessonTitle(ld)||'Тема'}; (ld.tasks||[]).forEach(t=>bank.push(normalizeLessonTaskToConstructorQuestion(t,meta))); (ld.questions||[]).forEach(q=>bank.push(normalizeLessonQuestionToConstructorQuestion(q,{...meta,sourceType:'lesson-test'}))); (ld.specialTests||[]).forEach(st=>{const n=normalizeSpecialTestToConstructorQuestion(st,{...meta,sourceType:'special-test'}); if(n) bank.push(n);});});});}); return bank;}
+function buildCourseTaskBank(){const bank=[]; Object.entries(COURSES||{}).forEach(([courseKey,c])=>{(c.modules||[]).forEach((m,mi)=>{(m.lessons||[]).forEach((ld,li)=>{if(isHiddenLesson(ld))return; const meta={courseKey,moduleIndex:mi,lessonIndex:li,sourceType:'lesson-task',exam:c.exam||'ЕГЭ',subject:c.subject||'Физика',section:m.name||'Раздел',contentTopic:lessonTitle(ld)||'Тема',lessonTitle:lessonTitle(ld)||'Тема'}; (ld.tasks||[]).forEach(t=>bank.push(normalizeLessonTaskToConstructorQuestion(t,meta))); (ld.questions||[]).forEach(q=>bank.push(normalizeLessonQuestionToConstructorQuestion(q,{...meta,sourceType:'lesson-test'}))); (ld.specialTests||[]).forEach(st=>{const n=normalizeSpecialTestToConstructorQuestion(st,{...meta,sourceType:'special-test'}); if(n) bank.push(n);});});});}); return bank;}
 function renderGeneratorTopicRows(){const mount=document.getElementById('generatorTopicRows'); if(!mount) return; const f=generatorState.filters; const grouped={}; generatorState.courseBank.filter(x=>(!f.exam||x.exam===f.exam)&&(!f.subject||x.subject===f.subject)&&(!f.section||x.section===f.section)&&((f.source==='all')||(f.source==='tasks'&&x.sourceType==='lesson-task')||(f.source==='tests'&&x.sourceType!=='lesson-task'))).forEach(x=>{const k=[x.exam,x.subject,x.section,x.contentTopic].join('|'); (grouped[k]||(grouped[k]={exam:x.exam,subject:x.subject,section:x.section,topic:x.contentTopic,items:[]})).items.push(x);}); const keys=Object.keys(grouped); if(!keys.length){mount.innerHTML='<div class="generator-empty">В выбранном разделе пока нет заданий для генерации.</div>'; updateGeneratorSummary(); return;} mount.innerHTML=keys.map(k=>{const g=grouped[k],avail=g.items.length,sel=Math.min(generatorState.selection[k]||0,avail); generatorState.selection[k]=sel; return `<div class="generator-topic-row"><div class="generator-topic-main"><div class="generator-topic-title">${escapeHtml(g.topic)}</div><div class="generator-topic-meta">${escapeHtml(g.exam+' · '+g.subject+' · '+g.section)} · Доступно: ${avail} заданий</div></div><div class="generator-count"><button class="generator-minus" ${avail? '':'disabled'} onclick="updateGeneratorTopicCount('${k}',-1)">-</button><input value="${sel}" style="width:44px;text-align:center" readonly><button class="generator-plus" ${avail? '':'disabled'} onclick="updateGeneratorTopicCount('${k}',1)">+</button></div></div>`;}).join(''); updateGeneratorSummary(); }
 function updateGeneratorTopicCount(k,d){const max=(document.querySelectorAll('.generator-topic-row').length, (()=>{const [exam,subject,section,topic]=k.split('|'); return generatorState.courseBank.filter(x=>x.exam===exam&&x.subject===subject&&x.section===section&&x.contentTopic===topic).length;})()); const cur=generatorState.selection[k]||0; generatorState.selection[k]=Math.max(0,Math.min(max,cur+d)); renderGeneratorTopicRows();}
 function selectOneFromEveryTopic(){Object.keys(generatorState.selection).forEach(k=>generatorState.selection[k]=Math.max(1,generatorState.selection[k]||0)); renderGeneratorTopicRows();}
@@ -4172,7 +4186,7 @@ const SIMULATORS_REGISTRY=[
     title:'Равноускоренное движение',
     exams:['oge','ege'],
     subject:'phy',
-    topicKeys:['Равноускоренное движение','Равноускоренное движение и свободное падение'],
+    topicKeys:['Равноускоренное движение','Равноускоренное движение и свободное падение','Баллистика. Свободное падение'],
     icon:'⚙️',
     description:'Анимация движения с постоянным ускорением. Графики V(t). Список задач с разбором.',
     action:"openSim('rupd')",
@@ -4185,7 +4199,7 @@ const SIMULATORS_REGISTRY=[
     title:'Летающий велосипедист',
     exams:['oge','ege'],
     subject:'phy',
-    topicKeys:['Свободное падение','Равноускоренное движение и свободное падение','Движение под углом к горизонту','Баллистика'],
+    topicKeys:['Баллистика. Свободное падение'],
     icon:'🚴',
     description:'Движение по трамплину, вылет под углом и расчёт высоты h через энергию.',
     action:"openSim('flying-cyclist')",
@@ -4198,7 +4212,7 @@ const SIMULATORS_REGISTRY=[
     title:'Снаряд без сопротивления воздуха',
     exams:['ege'],
     subject:'phy',
-    topicKeys:['Баллистика'],
+    topicKeys:['Баллистика. Свободное падение'],
     icon:'🚀',
     description:'Интерактивная модель баллистического движения: по данным наблюдения вычисляется начальная скорость снаряда или максимальная высота траектории.',
     action:"openSim('ballistics-projectile')",
@@ -4417,7 +4431,7 @@ function buildSimulatorsMapFromRegistry(exam){
   const course=COURSES&&COURSES[getCourseKeyByExam(exam)];
   const modules=course&&Array.isArray(course.modules)?course.modules:[];
   modules.forEach(module=>{
-    (Array.isArray(module.lessons)?module.lessons:[]).forEach(lesson=>{
+    (Array.isArray(module.lessons)?module.lessons.filter(lesson=>!isHiddenLesson(lesson)):[]).forEach(lesson=>{
       const topic=lessonTitle(lesson);
       const sim=getReadySimulatorsForLesson(exam,topic)[0];
       if(sim)map[topic]=toLegacySimulator(sim);
@@ -4457,19 +4471,20 @@ function renderSimulatorsStructure(exam){
   const course=COURSES&&COURSES[getCourseKeyByExam(examKey)];
   const modules=course&&Array.isArray(course.modules)?course.modules:[];
   mount.innerHTML=modules.map((module,mi)=>{
-    const lessons=Array.isArray(module.lessons)?module.lessons:[];
-    const readyCount=lessons.reduce((sum,lesson)=>sum+getReadySimulatorsForLesson(examKey,lessonTitle(lesson)).length,0);
+    const lessonItems=Array.isArray(module.lessons)?module.lessons.map((lesson,li)=>({lesson,li})).filter(item=>!isHiddenLesson(item.lesson)):[];
+    const readyCount=lessonItems.reduce((sum,item)=>sum+getReadySimulatorsForLesson(examKey,lessonTitle(item.lesson)).length,0);
     const badge=readyCount>0?`<span class="mod-badge mb-avail">${readyCount} ${getSimulatorCountLabel(readyCount)}</span>`:'<span class="mod-badge mb-soon">Скоро</span>';
-    const topics=lessons.map((lesson,li)=>{
+    const topics=lessonItems.map((item,visibleIndex)=>{
+      const lesson=item.lesson,li=item.li;
       const topic=lessonTitle(lesson);
       const sims=getReadySimulatorsForLesson(examKey,topic);
       const labs=getLabsForSimulatorTopic(examKey,topic);
       const action=sims.length?`openSimulatorByTopic(${JSON.stringify(examKey)},${JSON.stringify(topic)})`:`openCourse(${JSON.stringify(getCourseKeyByExam(examKey))},${mi},${li},'sims')`;
       const status=sims.length?sims.map(sim=>`<span class="topic-sim" onclick="event.stopPropagation();openSimulatorById('${sim.id}')">⚡ ${escapeHtml(sim.title)}</span>`).join(''):'<span class="topic-soon">Симулятор скоро будет добавлен</span>';
       const labsMarkup=labs.length?`<div class="topic-labs" onclick="event.stopPropagation()">${renderLabCards(labs)}</div>`:'';
-      return `<div class="topic-item" onclick='${action}'><div class="topic-main"><span class="topic-num">${li+1}</span><span class="topic-name">${escapeHtml(topic)}</span>${status}</div>${labsMarkup}</div>`;
+      return `<div class="topic-item" onclick='${action}'><div class="topic-main"><span class="topic-num">${visibleIndex+1}</span><span class="topic-name">${escapeHtml(topic)}</span>${status}</div>${labsMarkup}</div>`;
     }).join('');
-    return `<div class="mod-item"><div class="mod-header" onclick="toggleMod(this)"><div class="mod-icon">${getExamModuleIcon(examKey,module.name)}</div><div class="mod-info"><div class="mod-name">${escapeHtml(module.name)}</div><div class="mod-meta">${lessons.length} уроков · структура синхронизирована с курсом ${examKey==='ege'?'ЕГЭ':'ОГЭ'}</div></div>${badge}<span class="mod-arrow">›</span></div><div class="mod-topics${mi===0?' open':''}"><div class="topics-grid">${topics}</div></div></div>`;
+    return `<div class="mod-item"><div class="mod-header" onclick="toggleMod(this)"><div class="mod-icon">${getExamModuleIcon(examKey,module.name)}</div><div class="mod-info"><div class="mod-name">${escapeHtml(module.name)}</div><div class="mod-meta">${lessonItems.length} уроков · структура синхронизирована с курсом ${examKey==='ege'?'ЕГЭ':'ОГЭ'}</div></div>${badge}<span class="mod-arrow">›</span></div><div class="mod-topics${mi===0?' open':''}"><div class="topics-grid">${topics}</div></div></div>`;
   }).join('');
   const firstArrow=mount.querySelector('.mod-arrow');
   if(firstArrow)firstArrow.classList.add('open');
@@ -4896,6 +4911,12 @@ function resolveCourseLesson(courseKey,c,moduleIndex,lessonIndex,tabId){
     };
   }
 
+  const rawSelected=c&&c.modules&&c.modules[selected.moduleIndex]&&c.modules[selected.moduleIndex].lessons?c.modules[selected.moduleIndex].lessons[selected.lessonIndex]:null;
+  if(rawSelected&&typeof rawSelected==='object'&&rawSelected.redirectTo){
+    selected.moduleIndex=rawSelected.redirectTo.moduleIndex;
+    selected.lessonIndex=rawSelected.redirectTo.lessonIndex;
+  }
+
   // tabId from the URL always has priority over localStorage.
   if(isValidCourseTab(tabId)){
     selected.tabId = normalizeCourseTab(tabId);
@@ -4990,14 +5011,15 @@ function renderSb(){
   const c=COURSES[AC];let n=1,h='';
   h=`<div class="sb-top"><span class="sb-lbl">Содержание</span></div>`;
   c.modules.forEach((m,mi)=>{
-    let lh=m.open?m.lessons.map((l,li)=>{
+    const visibleLessons=(m.lessons||[]).map((l,li)=>({l,li})).filter(item=>!isHiddenLesson(item.l));
+    let lh=m.open?visibleLessons.map(({l,li})=>{
       const act=mi===CM&&li===CL,idx=n++,title=lessonTitle(l);
       return`<div class="lli${act?' active':''}" data-mi="${mi}" data-li="${li}" onclick="selL(event,${mi},${li})">
         <span class="lnum">${idx}</span>
         <span class="lni">${title}</span>
       </div>`;
     }).join(''):'';
-    if(!m.open)n+=m.lessons.length;
+    if(!m.open)n+=visibleLessons.length;
     h+=`<div class="mod-block" data-mi="${mi}">
       <div class="mod-head">
         <button class="mtog${m.open?' open':''}" onclick="togM(${mi})">▶</button>
@@ -5012,6 +5034,8 @@ function renderSb(){
 /* COURSE NAVIGATION */
 function selL(e,mi,li){
   if(e.target.tagName==='BUTTON')return;
+  const raw=COURSES&&COURSES[AC]&&COURSES[AC].modules&&COURSES[AC].modules[mi]&&COURSES[AC].modules[mi].lessons?COURSES[AC].modules[mi].lessons[li]:null;
+  if(raw&&typeof raw==='object'&&raw.redirectTo){mi=raw.redirectTo.moduleIndex;li=raw.redirectTo.lessonIndex;}
   CM=mi;
   CL=li;
   CTAB='theory';
@@ -5095,11 +5119,12 @@ function showTab(id,btn,colorClass){
 /* ============ THEORY RENDERING ============ */
 function renderTheory(){
   if(AC==='ege-phy'&&CM===1&&CL===3){
-    return `<div class="zsi-theory-carousel ege-phy-m1-l3-theory-carousel">
+    const baseTheoryHtml=renderTheoryBlocks(getTH());
+    return `${baseTheoryHtml}<div class="zsi-theory-carousel ege-phy-m1-l3-theory-carousel">
       <div class="zsi-carousel-head">
         <div>
-          <div class="zsi-carousel-kicker">Урок 9 · Теория</div>
-          <h3>Баллистика</h3>
+          <div class="zsi-carousel-kicker">Карточки и фото по теме</div>
+          <h3>Баллистика. Свободное падение</h3>
         </div>
         <div class="zsi-carousel-controls">
           <button type="button" class="zsi-carousel-btn" onclick="scrollZsiTheory(-1)">←</button>
@@ -5129,6 +5154,9 @@ function renderTheory(){
   }
 
   const blocks=getTH();
+  return renderTheoryBlocks(blocks);
+}
+function renderTheoryBlocks(blocks){
   let h=EMODE?`<div class="add-block-bar">
     <span style="font-size:11px;color:var(--gray);margin-right:2px">Добавить блок:</span>
     <button class="abb" onclick="addBlock('text')">+ Текст</button>
@@ -6494,7 +6522,7 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
         </button>
       </div>
       <div class="cyclist-record-frame">
-        <div class="fc-head"><span>Механика · Свободное падение</span><strong>ФИЗМАТ</strong></div>
+        <div class="fc-head"><span>ЕГЭ · Физика → Динамика → Баллистика. Свободное падение</span><strong>ФИЗМАТ</strong></div>
         <div class="fc-cond">Гонщик стартует с высоты H, вылетает под углом α и приземляется на уровне края трамплина. Найти высоту полёта h.</div>
         <div class="fc-inline-params">
           <div class="fc-param-chip">H, м: <span id="fcHVal">3</span><input id="fcH" type="range" min="3" max="6" step="1" value="3"></div>
@@ -6542,7 +6570,7 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
           <button class="ballistics-back-btn" type="button" onclick="goBackFromBallisticsProjectile()">← Назад</button>
         </div>
         <div class="ballistics-record-frame" id="bpFrame">
-        <div class="fc-head"><span>ЕГЭ · Физика → Динамика → 9 Баллистика</span><strong>ФИЗМАТ</strong></div>
+        <div class="fc-head"><span>ЕГЭ · Физика → Динамика → Баллистика. Свободное падение</span><strong>ФИЗМАТ</strong></div>
         <div class="fc-cond" id="bpCondition"></div>
         <div class="bp-mode-row"><label>Режим задачи: <select class="bp-select" id="bpMode"><option value="find-v0">1) Найти начальную скорость v₀</option><option value="find-H">2) Найти максимальную высоту H</option><option value="flightTime">3) Время полета T, с</option><option value="flightRange">4) Дальность полета L, м</option><option value="detectionHeight">5) Высота обнаружения h₁, м</option><option value="detectionDistance">6) Расстояние l, м</option></select></label></div>
         <div class="fc-inline-params">
@@ -6801,12 +6829,12 @@ const LESSON_TASKS={
    given:'V₀=0, t=4 с, S=32 м<br><span class="pt-find">Найти: a, V₄</span>',
    steps:['S=at²/2 → a=2S/t²=2·32/16=4 м/с²','V₄=a·t=4·4=16 м/с'],ans:'a=4 м/с², V₄=16 м/с'}
 ],
-'Свободное падение':[
-  {num:1,level:1,title:'Камень с высоты 20 м',
+'Баллистика. Свободное падение':[
+  {num:1,level:1,group:'Задачи на свободное падение',title:'Камень с высоты 20 м',
    cond:'Камень падает с высоты <strong>20 м</strong> без начальной скорости. Найдите время и скорость у земли. g=10 м/с².',
    given:'h=20 м, V₀=0, g=10<br><span class="pt-find">Найти: t, V</span>',
    steps:['h=gt²/2 → t=√(2h/g)=√4=2 с','V=gt=10·2=20 м/с'],ans:'t=2 с, V=20 м/с'},
-  {num:2,level:2,title:'Бросок вертикально вверх',
+  {num:2,level:2,group:'Задачи на свободное падение',title:'Бросок вертикально вверх',
    cond:'Тело брошено вертикально вверх со скоростью <strong>15 м/с</strong>. Найдите максимальную высоту и время полёта. g=10 м/с².',
    given:'V₀=15 м/с, g=10<br><span class="pt-find">Найти: H, T</span>',
    steps:['На высоте V=0: t_up=V₀/g=1.5 с','H=V₀²/(2g)=225/20=11.25 м','T=2·t_up=3 с'],ans:'H=11.25 м, T=3 с'}
@@ -7500,7 +7528,7 @@ const LESSON_SIMS=getLessonSimulatorsMapFromRegistry();
 
 
 const LESSON_LABS={
-'Свободное падение':[{icon:'🔴',name:'Измерение g',badge:'Скоро',desc:'Падение с разных высот. Определение g из h=gt²/2.',steps:['Задать h','Запустить','Записать t','Вычислить g=2h/t²'],btn:'soon'}],
+'Баллистика. Свободное падение':[{icon:'🔴',name:'Измерение g',badge:'Скоро',desc:'Падение с разных высот. Определение g из h=gt²/2.',steps:['Задать h','Запустить','Записать t','Вычислить g=2h/t²'],btn:'soon'}],
 'Законы Ньютона':[{icon:'⚖️',name:'Второй закон Ньютона',badge:'Скоро',desc:'Тело на горизонтальной поверхности. Зависимость a от F и m.',steps:['Изменять F → измерять a','Изменять m → измерять a','Построить a(F) и a(1/m)'],btn:'soon'}],
 'Линзы':[{
   icon:'🔆',name:'Фокусное расстояние линзы',badge:'Виртуальная',
