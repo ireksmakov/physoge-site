@@ -4230,7 +4230,7 @@ const SIMULATORS_REGISTRY=[
     topicKeys:['Закон сохранения импульса и изменения импульса','Импульс','Закон сохранения импульса'],
     icon:'🎬',
     description:'Анимация налёта малого тела, передачи импульса грузу, вертикального падения тела и подъёма маятника до α = 90°.',
-    action:"openTaskAnimation('lesson12-task10')",
+    action:"openTaskAnimation('lesson12-task10', {fromBoard:false})",
     route:'#simulators/lesson12-task10',
     status:'ready'
   },
@@ -7895,7 +7895,7 @@ function renderPTasks(name){
       animId:t.animId||t.animationId||''
     };
     const boardBtn=t.boardMode?`<button type="button" class="pt-board-btn" data-task-id="${escapeHtml(taskId)}" data-board-mode="${escapeHtml(boardMode)}" onclick="return openTaskBoard('${boardModeSafe}',true,'${taskIdSafe}')">🧑‍🏫 Доска</button>`:'';
-    const animationBtn=`<button type="button" class="pt-anim-btn" data-task-animation="${escapeHtml(taskId)}" onclick="return openUnifiedTaskAnimation('${taskIdSafe}', {fromBoard:false})">▶ Анимация</button>`;
+    const animationBtn=`<button type="button" class="pt-anim-btn" data-action="open-animation" data-task-id="${escapeHtml(taskId)}" data-animation-id="${escapeHtml(t.animationId||t.animId||taskId)}" onclick="return handleOpenAnimationClick(event)">▶ Анимация</button>`;
     const hasStructuredSolution=hasFilledTaskSolution(t)||hasLegacyTaskTextSolution(t);
     const embeddedRaw=hasStructuredSolution?renderTaskSolutionPanel(t,'pt'):(t.solutionHtml||getEmbeddedSolutionHtml(t));
     const embedded=String(embeddedRaw||'').trim();
@@ -7928,6 +7928,7 @@ function renderPTasks(name){
 }
 
 var TASK_BOARD_RUNTIME_TASKS=window.TASK_BOARD_RUNTIME_TASKS=window.TASK_BOARD_RUNTIME_TASKS||{};
+var TASK_ANIMATION_CONTEXT=window.TASK_ANIMATION_CONTEXT=window.TASK_ANIMATION_CONTEXT||{taskId:'',fromBoard:false,openedBoardForAnimation:false};
 
 function getCurrentTaskBoardTask(){
   const state=window.taskBoardState||null;
@@ -7972,7 +7973,7 @@ function taskHasAnyAnimation(task){
   );
 }
 
-function openUnifiedTaskAnimation(taskOrId,options){
+function openTaskAnimation(taskOrId,options){
   options=options||{};
 
   const runtimeTasks=window.TASK_BOARD_RUNTIME_TASKS||{};
@@ -7989,6 +7990,9 @@ function openUnifiedTaskAnimation(taskOrId,options){
   const taskId=requestedId||(task&&(task.id||task.boardMode||task.mode||task.animationId||task.animId))||'';
 
   if(!task){
+    TASK_ANIMATION_CONTEXT.taskId=taskId||'';
+    TASK_ANIMATION_CONTEXT.fromBoard=!!options.fromBoard;
+    TASK_ANIMATION_CONTEXT.openedBoardForAnimation=false;
     openTaskAnimationPlaceholder(taskId);
     return false;
   }
@@ -7998,22 +8002,26 @@ function openUnifiedTaskAnimation(taskOrId,options){
   const hasBoardMode=canOpenTaskBoard&&!!(task.boardMode||task.mode);
   const boardMode=task.boardMode||task.mode||task.id||taskId;
   const realId=task.id||taskId;
+  const fromBoard=!!options.fromBoard;
+  TASK_ANIMATION_CONTEXT.taskId=realId||animationId||'';
+  TASK_ANIMATION_CONTEXT.fromBoard=fromBoard;
+  TASK_ANIMATION_CONTEXT.openedBoardForAnimation=false;
 
   if(realId==='lesson12-task07'||boardMode==='task07-pendulum-impact'){
     if(taskBoardState&&taskBoardState.animBtn) taskBoardState.animBtn.textContent='✕ Анимация';
-    openTaskAnimation('lesson12-task07');
+    openTaskAnimationOverlay('lesson12-task07');
     return false;
   }
 
   if(realId==='lesson12-task10'||boardMode==='task10-pendulum-impact'){
     if(taskBoardState&&taskBoardState.animBtn) taskBoardState.animBtn.textContent='✕ Анимация';
-    openTaskAnimation('lesson12-task10');
+    openTaskAnimationOverlay('lesson12-task10');
     return false;
   }
 
   if(task.animationId||task.animId){
     if(taskBoardState&&taskBoardState.animBtn) taskBoardState.animBtn.textContent='✕ Анимация';
-    openTaskAnimation(animationId);
+    openTaskAnimationOverlay(animationId);
     return false;
   }
 
@@ -8022,19 +8030,32 @@ function openUnifiedTaskAnimation(taskOrId,options){
     return false;
   }
 
-  if(!options.fromBoard){
+  if(!fromBoard){
+    TASK_ANIMATION_CONTEXT.openedBoardForAnimation=true;
     openTaskBoard(boardMode,false,realId);
-    requestAnimationFrame(function(){
-      requestAnimationFrame(function(){
-        toggleTaskBoardAnimation(true);
-      });
-    });
+    toggleTaskBoardAnimation(true);
     return false;
   }
 
   toggleTaskBoardAnimation(true);
 
   return false;
+}
+
+function openUnifiedTaskAnimation(taskOrId,options){
+  return openTaskAnimation(taskOrId,options);
+}
+
+function handleOpenAnimationClick(event){
+  if(event){
+    event.preventDefault();
+    event.stopPropagation();
+    if(event.stopImmediatePropagation) event.stopImmediatePropagation();
+  }
+  const btn=event&&event.target&&event.target.closest?event.target.closest('[data-action="open-animation"]'):null;
+  const fromBoard=!!(btn&&(btn.hasAttribute('data-board-animation-button')||btn.closest('.task-board-overlay')));
+  const taskId=btn?(btn.getAttribute('data-task-id')||btn.getAttribute('data-task-animation')||btn.getAttribute('data-animation-id')||''):'';
+  return openTaskAnimation(taskId,{fromBoard:fromBoard});
 }
 
 function openTaskAnimationPlaceholder(taskId){
@@ -8075,6 +8096,7 @@ function openTaskAnimationPlaceholder(taskId){
     textEl.innerHTML=condition||'';
   }
 
+  overlay.dataset.keepTaskBoard=(TASK_ANIMATION_CONTEXT&&TASK_ANIMATION_CONTEXT.fromBoard)?'true':'false';
   overlay.classList.add('open');
   overlay.style.display='flex';
 
@@ -8101,10 +8123,13 @@ function closeTaskAnimationPlaceholder(){
         taskBoardRedraw?.();
         taskBoardRenderObjects?.();
       });
+    }else if(TASK_ANIMATION_CONTEXT&&TASK_ANIMATION_CONTEXT.openedBoardForAnimation&&taskBoardState&&taskBoardState.overlay){
+      closeTaskBoard();
     }
   }
 
   if(taskBoardState&&taskBoardState.animBtn) taskBoardState.animBtn.textContent='▶ Анимация';
+  if(TASK_ANIMATION_CONTEXT){TASK_ANIMATION_CONTEXT.fromBoard=false;TASK_ANIMATION_CONTEXT.openedBoardForAnimation=false;}
 
   return false;
 }
@@ -9300,8 +9325,11 @@ function ensureTaskBoardOverlay(){
                 type="button"
                 class="task-board-quick-action task-board-quick-animation"
                 id="taskBoardAnimBtn"
+                data-action="open-animation"
+                data-task-id=""
+                data-animation-id=""
                 data-board-animation-button="true"
-                onclick="return handleTaskBoardAnimationButtonClick(event)"
+                onclick="return handleOpenAnimationClick(event)"
               >▶ Анимация</button>
               <button type="button" class="task-board-quick-action task-board-quick-clear" data-board-action="clear">🧹 Очистить</button>
               <button type="button" class="task-board-quick-action" id="taskBoardUndoBtn" onclick="taskBoardUndo()">↶ Назад</button>
@@ -9357,7 +9385,7 @@ function ensureTaskBoardOverlay(){
                       <div id="taskBoardSimCondition" class="task-animation-condition-text"></div>
                     </div>
                   </div>
-                  <button type="button" class="task-board-popup-close" onclick="toggleTaskBoardAnimation(false)">Скрыть</button>
+                  <button type="button" class="task-board-popup-close" onclick="closeTaskBoardAnimation(); return false;">Скрыть</button>
                 </div>
                 <div id="taskBoardSimNote" class="task-board-sim-note task-animation-description">Запустите движение кнопкой «Старт», ставьте на паузу во время объяснения и при необходимости повторяйте анимацию заново.</div>
                 <div class="task-board-sim-controls">
@@ -9538,7 +9566,7 @@ function ensureTaskBoardOverlay(){
     if(e.key==='Escape'){
       e.preventDefault();
       if(taskBoardHasOpenDropdown()) taskBoardCloseDropdowns();
-      else if(taskBoardState.simPopup.classList.contains('open')) toggleTaskBoardAnimation(false);
+      else if(taskBoardState.simPopup.classList.contains('open')) closeTaskBoardAnimation();
       else closeTaskBoard();
       return;
     }
@@ -9841,6 +9869,8 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
     state.animBtn.style.display='inline-flex';
     state.animBtn.disabled=false;
     state.animBtn.textContent='▶ Анимация';
+    state.animBtn.setAttribute('data-task-id',task.id||taskId||resolvedMode||'');
+    state.animBtn.setAttribute('data-animation-id',task.animationId||task.animId||task.id||taskId||resolvedMode||'');
   }
   const useSolutionWorkspace=!!(hasFilledTaskSolution(task)||hasLegacyTaskSolution(task));
   state.solution.innerHTML=renderTaskBoardSolution(task);
@@ -10663,7 +10693,7 @@ function bindLesson25AnimationControls(root){
     });
   });
 }
-function openTaskAnimation(taskId){
+function openTaskAnimationOverlay(taskId){
   if(taskId==='lesson-25-task-04'){
     return openLesson25Task04Animation(taskId);
   }
@@ -10684,9 +10714,9 @@ function openTaskAnimation(taskId){
       task=findTaskById('lesson12-task10')||findTaskById('task10-pendulum-impact');
     }
   }
-  if(!task||!isTask10PendulumImpactMode(task.boardMode)) return;
+  if(!task||!isTask10PendulumImpactMode(task.boardMode)) return openTaskAnimationPlaceholder(taskId);
   const overlay=ensureTask07AnimationOverlay();
-  const hasOpenBoard=!!(taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
+  const hasOpenBoard=!!(TASK_ANIMATION_CONTEXT&&TASK_ANIMATION_CONTEXT.fromBoard&&taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
   overlay.dataset.keepTaskBoard=hasOpenBoard?'true':'false';
   if(hasOpenBoard){
     taskBoardState.overlay.style.display='block';
@@ -10802,7 +10832,7 @@ function openLesson25Task04Animation(taskId){
   if(!document.getElementById('taskAnimationPlaceholderOverlay')) openTaskAnimationPlaceholder(taskId);
   const overlay=document.getElementById('taskAnimationPlaceholderOverlay');
   if(!overlay) return false;
-  const keepTaskBoard=!!(taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
+  const keepTaskBoard=!!(TASK_ANIMATION_CONTEXT&&TASK_ANIMATION_CONTEXT.fromBoard&&taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
   overlay.dataset.keepTaskBoard=keepTaskBoard?'true':'false';
   overlay.classList.add('open');
   overlay.style.display='flex';
@@ -10819,7 +10849,7 @@ function openLesson25Task06Animation(taskId){
   if(!document.getElementById('taskAnimationPlaceholderOverlay')) openTaskAnimationPlaceholder(taskId);
   const overlay=document.getElementById('taskAnimationPlaceholderOverlay');
   if(!overlay) return false;
-  const keepTaskBoard=!!(taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
+  const keepTaskBoard=!!(TASK_ANIMATION_CONTEXT&&TASK_ANIMATION_CONTEXT.fromBoard&&taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
   overlay.dataset.keepTaskBoard=keepTaskBoard?'true':'false';
   overlay.classList.add('open');
   overlay.style.display='flex';
@@ -10840,6 +10870,8 @@ function openLesson25Task07Animation(taskId){
   if(!document.getElementById('taskAnimationPlaceholderOverlay')) openTaskAnimationPlaceholder(taskId);
   const overlay=document.getElementById('taskAnimationPlaceholderOverlay');
   if(!overlay) return false;
+  const keepTaskBoard=!!(TASK_ANIMATION_CONTEXT&&TASK_ANIMATION_CONTEXT.fromBoard&&taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
+  overlay.dataset.keepTaskBoard=keepTaskBoard?'true':'false';
   overlay.classList.add('open');
   overlay.style.display='flex';
   const modal=overlay.querySelector('.task-animation-placeholder-modal');
@@ -10997,11 +11029,27 @@ function closeTaskBoardAnimation(){
     anim.setAttribute('aria-hidden','true');
   }
 
+  if(state&&state.sim){
+    state.sim.running=false;
+    cancelAnimationFrame(state.sim.raf);
+    state.sim.last=0;
+    state.sim.finished=false;
+  }
+  if(state&&state.simPopup) state.simPopup.classList.remove('open');
+  if(state&&state.drawer) state.drawer.classList.remove('anim-hidden');
+  const simBtn=document.getElementById('taskBoardSimToggleBtn');
+  if(simBtn) simBtn.textContent='▶ Старт';
+
   document.body.classList.remove('task07-anim-lock');
   if(state&&state.animBtn) state.animBtn.textContent='▶ Анимация';
 
-  // ВАЖНО: вернуть пользователя на доску, не меняя маршрут и не закрывая доску.
-  if(state&&state.overlay){
+  const shouldKeepTaskBoard=!!(
+    (anim&&anim.dataset&&anim.dataset.keepTaskBoard==='true')||
+    (TASK_ANIMATION_CONTEXT&&TASK_ANIMATION_CONTEXT.fromBoard)
+  );
+  const shouldCloseGeneratedBoard=!!(TASK_ANIMATION_CONTEXT&&TASK_ANIMATION_CONTEXT.openedBoardForAnimation);
+
+  if(shouldKeepTaskBoard&&state&&state.overlay){
     state.overlay.style.display='block';
     state.overlay.style.pointerEvents='auto';
     state.overlay.classList.add('open');
@@ -11014,6 +11062,13 @@ function closeTaskBoardAnimation(){
       taskBoardRedraw?.();
       taskBoardRenderObjects?.();
     });
+  }else if(shouldCloseGeneratedBoard&&state&&state.overlay){
+    closeTaskBoard();
+  }
+
+  if(TASK_ANIMATION_CONTEXT){
+    TASK_ANIMATION_CONTEXT.fromBoard=false;
+    TASK_ANIMATION_CONTEXT.openedBoardForAnimation=false;
   }
 }
 function closeTask07Animation(){
@@ -11083,7 +11138,7 @@ function handleTaskBoardAnimationButtonClick(event){
   const animationId=task.animationId||task.animId||task.mode||task.boardMode||task.id;
   if(!animationId) return false;
 
-  return openUnifiedTaskAnimation(Object.assign({},task,{animationId:animationId,animId:animationId}),{
+  return openTaskAnimation(Object.assign({},task,{animationId:animationId,animId:animationId}),{
     fromBoard:true
   });
 }
@@ -11109,7 +11164,7 @@ function toggleTaskBoardAnimation(force){
       return;
     }
     if(state.animBtn) state.animBtn.textContent='✕ Анимация';
-    openTaskAnimation(state.task.id||state.taskId||state.mode);
+    openTaskAnimation(state.task.id||state.taskId||state.mode,{fromBoard:true});
     return;
   }
   if(!state.task||state.task.hasAnimation===false){
