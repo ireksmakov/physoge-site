@@ -712,6 +712,48 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 .task-animation-placeholder-label{font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#2563eb;margin-bottom:8px}
 .task-animation-placeholder-text{font-size:14px;line-height:1.45;font-weight:600;color:#334155}
 .task-animation-placeholder-empty{min-height:260px;border:1px dashed #cbd5e1;border-radius:18px;background:#f8fafc;display:flex;align-items:center;justify-content:center;text-align:center;color:#64748b;font-size:18px;font-weight:800}
+
+.freefall-anim-modal{width:min(980px,100%);background:linear-gradient(160deg,#07111f,#0b1626 62%,#101b2a);color:var(--white);border:1px solid rgba(8,216,255,.18);box-shadow:0 30px 100px rgba(0,0,0,.52),0 0 44px rgba(8,216,255,.12);padding:26px}
+.freefall-anim-modal .task-animation-placeholder-close{background:rgba(255,255,255,.05);border-color:rgba(8,216,255,.28);color:var(--white)}
+.freefall-anim{display:flex;flex-direction:column;gap:16px;color:var(--white)}
+.freefall-anim-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;padding-right:94px}
+.freefall-anim-kicker{font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;color:var(--cyan)}
+.freefall-anim-title{margin:6px 0 0;font-family:var(--fh);font-size:30px;line-height:1.12;color:var(--white)}
+.freefall-anim-condition{padding:14px 16px;border:1px solid rgba(8,216,255,.18);border-radius:16px;background:rgba(255,255,255,.035)}
+.freefall-anim-label{font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);margin-bottom:8px}
+.freefall-anim-condition-text{font-size:14px;line-height:1.5;color:var(--gray);font-weight:600}
+.freefall-anim-layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(220px,.65fr);gap:16px;align-items:stretch}
+.freefall-scene{position:relative;min-height:430px;border-radius:20px;overflow:hidden;border:1px solid rgba(8,216,255,.18);background:radial-gradient(circle at 24% 18%,rgba(8,216,255,.16),transparent 32%),linear-gradient(180deg,#101c2d 0%,#09111d 62%,#060a12 100%);box-shadow:inset 0 0 44px rgba(8,216,255,.055)}
+.freefall-svg{display:block;width:100%;height:100%;min-height:430px}
+.freefall-panel{display:grid;gap:10px;align-content:start}
+.freefall-stat{padding:13px 14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(107,122,141,.2)}
+.freefall-stat span{display:block;font-size:12px;color:var(--gray);margin-bottom:6px}
+.freefall-stat strong{display:block;font-family:var(--fh);font-size:20px;color:var(--white);line-height:1.2}
+.freefall-note{padding:13px 14px;border-radius:14px;background:rgba(57,255,20,.055);border:1px solid rgba(57,255,20,.18);color:var(--gray);font-size:13px;line-height:1.55}
+.freefall-note strong{color:var(--green)}
+.freefall-controls{display:flex;gap:10px;flex-wrap:wrap}
+.freefall-btn{padding:10px 14px;border-radius:12px;border:1px solid rgba(8,216,255,.25);background:rgba(8,216,255,.08);color:var(--cyan);font-weight:900;cursor:pointer;transition:.18s ease;font-family:var(--fb)}
+.freefall-btn:hover{background:rgba(8,216,255,.15);border-color:rgba(8,216,255,.44);color:#fff;transform:translateY(-1px)}
+.freefall-btn.pause{border-color:rgba(255,140,0,.28);background:rgba(255,140,0,.08);color:var(--orange)}
+.freefall-formulas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.freefall-formula-card{padding:12px 13px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid rgba(107,122,141,.2);font-size:13px;line-height:1.45;color:var(--gray)}
+.freefall-formula-card strong{display:block;color:var(--white);margin-bottom:5px}
+.freefall-axis,.freefall-height-line,.freefall-path{stroke:rgba(8,216,255,.72);stroke-width:4;stroke-linecap:round}
+.freefall-height-line{stroke-dasharray:7 8;stroke-width:2.5}
+.freefall-path{stroke:rgba(255,140,0,.72);stroke-width:3;stroke-dasharray:8 9;fill:none}
+.freefall-ground{fill:#102018;stroke:rgba(57,255,20,.55);stroke-width:3}
+.freefall-ground-line{stroke:rgba(57,255,20,.72);stroke-width:4}
+.freefall-stone{fill:url(#freefallStoneGrad);filter:drop-shadow(0 0 10px rgba(255,140,0,.48))}
+.freefall-shadow{fill:rgba(0,0,0,.34)}
+.freefall-g-arrow{stroke:#39ff14;stroke-width:5;stroke-linecap:round;marker-end:url(#freefallArrowGreen)}
+.freefall-v-arrow{stroke:#ff8c00;stroke-width:4;stroke-linecap:round;marker-end:url(#freefallArrowOrange)}
+.freefall-label{font-family:var(--fb);font-weight:800;font-size:16px;fill:#e5eefc}
+.freefall-small-label{font-size:13px;fill:#aebbd0}
+.freefall-accent-label{fill:var(--orange)}
+.freefall-green-label{fill:var(--green)}
+.freefall-progress-wrap{height:10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);overflow:hidden}
+.freefall-progress{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--green));border-radius:inherit;transition:width .08s linear}
+@media(max-width:760px){.freefall-anim-modal{padding:20px 16px}.freefall-anim-head{padding-right:68px}.freefall-anim-title{font-size:24px}.freefall-anim-layout{grid-template-columns:1fr}.freefall-scene,.freefall-svg{min-height:360px}.freefall-formulas{grid-template-columns:1fr}}
 .lesson25-anim{display:flex;flex-direction:column;gap:16px;color:#0f172a}
 .lesson25-anim-controls{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
 .lesson25-anim-btn{padding:9px 14px;border-radius:12px;border:1px solid #bfdbfe;background:#eff6ff;color:#1d4ed8;font-weight:900;cursor:pointer;transition:.18s ease}
@@ -6819,11 +6861,11 @@ const LESSON_TASKS={
    steps:['S=at²/2 → a=2S/t²=2·32/16=4 м/с²','V₄=a·t=4·4=16 м/с'],ans:'a=4 м/с², V₄=16 м/с'}
 ],
 'Баллистика. Свободное падение':[
-  {num:1,level:1,group:'Задачи на свободное падение',title:'Камень с высоты 20 м',
+  {num:1,level:1,group:'Задачи на свободное падение',id:'freefall-stone-20m',boardMode:'freefall-stone-20m',animationId:'freefall-stone-20m',hasAnimation:true,title:'Камень с высоты 20 м',
    cond:'Камень падает с высоты <strong>20 м</strong> без начальной скорости. Найдите время и скорость у земли. g=10 м/с².',
    given:'h=20 м, V₀=0, g=10<br><span class="pt-find">Найти: t, V</span>',
    steps:['h=gt²/2 → t=√(2h/g)=√4=2 с','V=gt=10·2=20 м/с'],ans:'t=2 с, V=20 м/с'},
-  {num:2,level:2,group:'Задачи на свободное падение',title:'Бросок вертикально вверх',
+  {num:2,level:2,group:'Задачи на свободное падение',id:'vertical-throw-15ms',boardMode:'vertical-throw-15ms',animationId:'vertical-throw-15ms',hasAnimation:true,title:'Бросок вертикально вверх',
    cond:'Тело брошено вертикально вверх со скоростью <strong>15 м/с</strong>. Найдите максимальную высоту и время полёта. g=10 м/с².',
    given:'V₀=15 м/с, g=10<br><span class="pt-find">Найти: H, T</span>',
    steps:['На высоте V=0: t_up=V₀/g=1.5 с','H=V₀²/(2g)=225/20=11.25 м','T=2·t_up=3 с'],ans:'H=11.25 м, T=3 с'}
@@ -8094,6 +8136,9 @@ function openTaskAnimationPlaceholder(taskId){
     document.body.appendChild(overlay);
   }
 
+  const modalEl=overlay.querySelector('.task-animation-placeholder-modal');
+  if(modalEl) modalEl.classList.remove('freefall-anim-modal');
+
   const textEl=overlay.querySelector('.task-animation-placeholder-text');
   if(textEl){
     textEl.innerHTML=condition||'';
@@ -8110,6 +8155,7 @@ function closeTaskAnimationPlaceholder(){
   const overlay=document.getElementById('taskAnimationPlaceholderOverlay');
 
   if(overlay){
+    stopFreeFallAnimationInOverlay(overlay);
     overlay.classList.remove('open');
     overlay.style.display='none';
 
@@ -9558,6 +9604,14 @@ function ensureTaskBoardOverlay(){
     taskBoardCloseDropdowns();
   });
   document.addEventListener('keydown',function(e){
+    const placeholder=document.getElementById('taskAnimationPlaceholderOverlay');
+    if(e.key==='Escape'&&placeholder&&placeholder.classList.contains('open')){
+      e.preventDefault();
+      e.stopPropagation();
+      if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+      closeTaskAnimationPlaceholder();
+      return;
+    }
     const anim=document.getElementById('taskBoardAnimationOverlay')||document.getElementById('task07AnimationOverlay')||document.querySelector('.task-board-animation-overlay')||document.querySelector('.task-animation-overlay');
     if(e.key==='Escape'&&anim&&anim.classList.contains('open')){
       e.preventDefault();
@@ -10700,7 +10754,256 @@ function bindLesson25AnimationControls(root){
     });
   });
 }
+
+const FREEFALL_TASK_ANIMATIONS={
+  'freefall-stone-20m':{
+    kind:'stone',
+    kicker:'Баллистика · Свободное падение · Задача 01',
+    title:'Камень с высоты 20 м',
+    maxHeight:20,
+    totalTime:2,
+    realDuration:4600,
+    note:'Камень стартует без начальной скорости: ускорение свободного падения каждую секунду увеличивает скорость на 10 м/с.',
+    formulas:[['Время падения','h = gt² / 2 → t = √(2h/g) = 2 с'],['Скорость у земли','v = gt = 20 м/с'],['Удар о землю','h = 0, движение завершено']]
+  },
+  'vertical-throw-15ms':{
+    kind:'throw',
+    kicker:'Баллистика · Свободное падение · Задача 02',
+    title:'Бросок вертикально вверх',
+    maxHeight:11.25,
+    axisHeight:12,
+    totalTime:3,
+    realDuration:6400,
+    note:'Тело летит вверх с замедлением, в верхней точке v = 0, затем возвращается на землю под действием того же g.',
+    formulas:[['Верхняя точка','t↑ = v₀/g = 1,5 с, v = 0'],['Максимальная высота','H = v₀² / (2g) = 11,25 м'],['Полное время','T = 2t↑ = 3 с']]
+  }
+};
+
+function isFreeFallAnimationId(taskId){
+  return !!FREEFALL_TASK_ANIMATIONS[String(taskId||'')];
+}
+
+function renderFreeFallTaskAnimation(task,taskId){
+  const cfg=FREEFALL_TASK_ANIMATIONS[taskId]||FREEFALL_TASK_ANIMATIONS['freefall-stone-20m'];
+  const condition=task?.cond||'';
+  const formulas=cfg.formulas.map(function(item){return `<div class="freefall-formula-card"><strong>${item[0]}</strong><span>${item[1]}</span></div>`;}).join('');
+  const topLabel=cfg.kind==='stone'?'20 м':'12 м';
+  const title=task?.title||cfg.title;
+  const throwMarkup=cfg.kind==='throw'
+    ? `<line class="freefall-height-line" x1="180" y1="87" x2="520" y2="87"></line><text x="526" y="92" class="freefall-label freefall-accent-label">верхняя точка</text><text x="526" y="113" class="freefall-label freefall-green-label">v = 0</text>`
+    : '';
+  return `
+    <div class="freefall-anim" data-freefall-anim="${taskId}" data-freefall-kind="${cfg.kind}">
+      <div class="freefall-anim-head">
+        <div>
+          <div class="freefall-anim-kicker">${cfg.kicker}</div>
+          <h3 class="freefall-anim-title">${title}</h3>
+        </div>
+      </div>
+      <div class="freefall-anim-condition">
+        <div class="freefall-anim-label">Условие</div>
+        <div class="freefall-anim-condition-text">${condition}</div>
+      </div>
+      <div class="freefall-anim-layout">
+        <div class="freefall-scene">
+          <svg class="freefall-svg" viewBox="0 0 760 430" role="img" aria-label="Анимация движения: ${title}">
+            <defs>
+              <linearGradient id="freefallStoneGrad" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#fff4b8"></stop><stop offset="38%" stop-color="#ff8c00"></stop><stop offset="100%" stop-color="#8b3d00"></stop></linearGradient>
+              <marker id="freefallArrowGreen" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M 0 0 L 12 6 L 0 12 z" fill="#39ff14"></path></marker>
+              <marker id="freefallArrowOrange" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M 0 0 L 12 6 L 0 12 z" fill="#ff8c00"></path></marker>
+            </defs>
+            <rect x="0" y="340" width="760" height="90" class="freefall-ground"></rect>
+            <line x1="0" y1="340" x2="760" y2="340" class="freefall-ground-line"></line>
+            <text x="612" y="327" class="freefall-label freefall-green-label">земля</text>
+            <line x1="130" y1="70" x2="130" y2="340" class="freefall-axis"></line>
+            <line x1="118" y1="70" x2="142" y2="70" class="freefall-axis"></line>
+            <line x1="118" y1="340" x2="142" y2="340" class="freefall-axis"></line>
+            <line class="freefall-height-line" x1="130" y1="70" x2="300" y2="70"></line>
+            <text x="38" y="210" class="freefall-label" transform="rotate(-90 38 210)">высота</text>
+            <text x="148" y="76" class="freefall-label freefall-accent-label">${topLabel}</text>
+            <path id="freefallPath" class="freefall-path" d="M 300 70 C 300 140 300 235 300 340"></path>
+            ${throwMarkup}
+            <line x1="635" y1="100" x2="635" y2="178" class="freefall-g-arrow"></line>
+            <text x="650" y="148" class="freefall-label freefall-green-label">g = 10 м/с²</text>
+            <line id="freefallVArrow" x1="300" y1="92" x2="300" y2="142" class="freefall-v-arrow"></line>
+            <text id="freefallVArrowLabel" x="315" y="128" class="freefall-label freefall-accent-label">v</text>
+            <ellipse id="freefallShadow" class="freefall-shadow" cx="300" cy="352" rx="23" ry="7"></ellipse>
+            <circle id="freefallBall" class="freefall-stone" cx="300" cy="70" r="18"></circle>
+            <text id="freefallPhase" x="32" y="398" class="freefall-label">Старт: нажмите «Старт» или наблюдайте автозапуск.</text>
+          </svg>
+        </div>
+        <div class="freefall-panel">
+          <div class="freefall-stat"><span>Текущее время</span><strong data-freefall-time>t = 0,00 с</strong></div>
+          <div class="freefall-stat"><span>Высота над землёй</span><strong data-freefall-height>h = ${cfg.kind==='stone'?'20,00':'0,00'} м</strong></div>
+          <div class="freefall-stat"><span>Скорость</span><strong data-freefall-velocity>v = 0,00 м/с</strong></div>
+          <div class="freefall-note"><strong>Что показывает анимация:</strong><br>${cfg.note}</div>
+          <div class="freefall-progress-wrap"><div class="freefall-progress" data-freefall-progress></div></div>
+        </div>
+      </div>
+      <div class="freefall-controls">
+        <button type="button" class="freefall-btn" data-freefall-anim-play>▶ Старт</button>
+        <button type="button" class="freefall-btn pause" data-freefall-anim-pause>⏸ Пауза</button>
+        <button type="button" class="freefall-btn" data-freefall-anim-reset>↺ Сброс</button>
+      </div>
+      <div class="freefall-formulas">${formulas}</div>
+    </div>
+  `;
+}
+
+function updateFreeFallAnimation(root,progress){
+  if(!root) return;
+  const taskId=root.getAttribute('data-freefall-anim')||'freefall-stone-20m';
+  const cfg=FREEFALL_TASK_ANIMATIONS[taskId]||FREEFALL_TASK_ANIMATIONS['freefall-stone-20m'];
+  const clamp=function(v,a,b){return Math.max(a,Math.min(b,v));};
+  progress=clamp(progress,0,1);
+  const total=cfg.totalTime;
+  const t=progress*total;
+  const groundY=340;
+  const topY=70;
+  const usable=groundY-topY;
+  const axisHeight=cfg.axisHeight||cfg.maxHeight;
+  const scale=usable/axisHeight;
+  let h=0;
+  let v=0;
+  let x=300;
+  let phase='';
+  if(cfg.kind==='stone'){
+    h=Math.max(0,20-5*t*t);
+    v=10*t;
+    x=300;
+    phase=progress>=1?'Удар о землю: h = 0, анимация завершена.':'Свободное падение: скорость направлена вниз и растёт.';
+  }else{
+    h=Math.max(0,15*t-5*t*t);
+    v=15-10*t;
+    x=360;
+    if(Math.abs(t-1.5)<0.08) phase='Верхняя точка: v = 0, высота максимальна.';
+    else if(t<1.5) phase='Подъём: скорость направлена вверх и уменьшается.';
+    else if(progress>=1) phase='Возвращение на землю: полёт завершён.';
+    else phase='Спуск: скорость направлена вниз и растёт по модулю.';
+  }
+  const y=groundY-h*scale;
+  const ball=root.querySelector('#freefallBall');
+  const shadow=root.querySelector('#freefallShadow');
+  const vArrow=root.querySelector('#freefallVArrow');
+  const vLabel=root.querySelector('#freefallVArrowLabel');
+  const phaseEl=root.querySelector('#freefallPhase');
+  const path=root.querySelector('#freefallPath');
+  if(path){
+    path.setAttribute('d',cfg.kind==='stone'?`M ${x} ${topY} C ${x} 150 ${x} 240 ${x} ${groundY}`:`M ${x} ${groundY} C ${x-24} 226 ${x-18} 135 ${x} 87 C ${x+24} 135 ${x+24} 226 ${x} ${groundY}`);
+  }
+  if(ball){ball.setAttribute('cx',x.toFixed(1));ball.setAttribute('cy',y.toFixed(1));}
+  if(shadow){
+    shadow.setAttribute('cx',x.toFixed(1));
+    shadow.setAttribute('rx',(12+18*(1-h/(axisHeight||1))).toFixed(1));
+    shadow.setAttribute('opacity',(0.25+0.45*(1-h/(axisHeight||1))).toFixed(2));
+  }
+  if(vArrow&&vLabel){
+    const arrowLen=cfg.kind==='stone'?Math.min(90,22+v*2.5):Math.min(86,22+Math.abs(v)*3);
+    const dir=cfg.kind==='throw'&&v>0?-1:1;
+    const visible=Math.abs(v)>0.2&&progress<1;
+    vArrow.setAttribute('x1',x);
+    vArrow.setAttribute('y1',(y+dir*22).toFixed(1));
+    vArrow.setAttribute('x2',x);
+    vArrow.setAttribute('y2',(y+dir*(22+arrowLen)).toFixed(1));
+    vArrow.setAttribute('opacity',visible?1:0);
+    vLabel.setAttribute('x',(x+16).toFixed(1));
+    vLabel.setAttribute('y',(y+dir*(32+arrowLen)).toFixed(1));
+    vLabel.setAttribute('opacity',visible?1:0);
+  }
+  const fmt=function(n){return n.toFixed(2).replace('.',',');};
+  const speedLabel=cfg.kind==='throw'?(v>0?'вверх':(v<0?'вниз':'верхняя точка')):'вниз';
+  const timeEl=root.querySelector('[data-freefall-time]');
+  const heightEl=root.querySelector('[data-freefall-height]');
+  const velocityEl=root.querySelector('[data-freefall-velocity]');
+  const progressEl=root.querySelector('[data-freefall-progress]');
+  if(timeEl) timeEl.textContent=`t = ${fmt(t)} с`;
+  if(heightEl) heightEl.textContent=`h = ${fmt(h)} м`;
+  if(velocityEl) velocityEl.textContent=`v = ${fmt(Math.abs(v))} м/с ${speedLabel}`;
+  if(progressEl) progressEl.style.width=(progress*100).toFixed(1)+'%';
+  if(phaseEl) phaseEl.textContent=phase;
+}
+
+function stopFreeFallAnimation(root){
+  if(!root||!root.__freefallAnim) return;
+  root.__freefallAnim.running=false;
+  cancelAnimationFrame(root.__freefallAnim.raf);
+}
+
+function stopFreeFallAnimationInOverlay(overlay){
+  const root=overlay&&overlay.querySelector?overlay.querySelector('[data-freefall-anim]'):null;
+  stopFreeFallAnimation(root);
+}
+
+function bindFreeFallAnimationControls(modal){
+  const root=modal&&modal.querySelector?modal.querySelector('[data-freefall-anim]'):null;
+  if(!root) return;
+  const taskId=root.getAttribute('data-freefall-anim')||'freefall-stone-20m';
+  const cfg=FREEFALL_TASK_ANIMATIONS[taskId]||FREEFALL_TASK_ANIMATIONS['freefall-stone-20m'];
+  const state=root.__freefallAnim={running:false,elapsed:0,start:0,raf:0,finished:false};
+  const step=function(now){
+    if(!state.running) return;
+    state.elapsed=now-state.start;
+    const progress=Math.min(1,state.elapsed/cfg.realDuration);
+    updateFreeFallAnimation(root,progress);
+    if(progress>=1){
+      state.running=false;
+      state.finished=true;
+      return;
+    }
+    state.raf=requestAnimationFrame(step);
+  };
+  const play=function(){
+    if(state.finished){state.elapsed=0;state.finished=false;}
+    state.running=true;
+    state.start=performance.now()-state.elapsed;
+    cancelAnimationFrame(state.raf);
+    state.raf=requestAnimationFrame(step);
+  };
+  const pause=function(){
+    state.running=false;
+    cancelAnimationFrame(state.raf);
+  };
+  const reset=function(){
+    state.running=false;
+    state.finished=false;
+    state.elapsed=0;
+    cancelAnimationFrame(state.raf);
+    updateFreeFallAnimation(root,0);
+  };
+  const playBtn=root.querySelector('[data-freefall-anim-play]');
+  const pauseBtn=root.querySelector('[data-freefall-anim-pause]');
+  const resetBtn=root.querySelector('[data-freefall-anim-reset]');
+  if(playBtn) playBtn.addEventListener('click',play);
+  if(pauseBtn) pauseBtn.addEventListener('click',pause);
+  if(resetBtn) resetBtn.addEventListener('click',reset);
+  reset();
+  play();
+}
+
+function openFreeFallTaskAnimation(taskId){
+  const resolvedId=isFreeFallAnimationId(taskId)?String(taskId):'freefall-stone-20m';
+  const task=findTaskById(resolvedId)||taskBoardState?.task||null;
+  if(!document.getElementById('taskAnimationPlaceholderOverlay')) openTaskAnimationPlaceholder(resolvedId);
+  const overlay=document.getElementById('taskAnimationPlaceholderOverlay');
+  if(!overlay) return false;
+  stopFreeFallAnimationInOverlay(overlay);
+  const keepTaskBoard=!!(TASK_ANIMATION_CONTEXT&&TASK_ANIMATION_CONTEXT.fromBoard&&taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
+  overlay.dataset.keepTaskBoard=keepTaskBoard?'true':'false';
+  overlay.classList.add('open');
+  overlay.style.display='flex';
+  const modal=overlay.querySelector('.task-animation-placeholder-modal');
+  if(!modal) return false;
+  modal.classList.add('freefall-anim-modal');
+  modal.innerHTML=`<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder(); return false;">✕ Закрыть</button>${renderFreeFallTaskAnimation(task,resolvedId)}`;
+  setTimeout(function(){ bindFreeFallAnimationControls(modal); },0);
+  if(taskBoardState&&taskBoardState.animBtn) taskBoardState.animBtn.textContent='✕ Анимация';
+  return false;
+}
+
 function openTaskAnimationOverlay(taskId){
+  if(isFreeFallAnimationId(taskId)){
+    return openFreeFallTaskAnimation(taskId);
+  }
   if(taskId==='lesson-25-task-04'){
     return openLesson25Task04Animation(taskId);
   }
