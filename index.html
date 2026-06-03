@@ -7879,7 +7879,7 @@ function renderPTasks(name){
     const steps=(t.steps||[]).map((s,j)=>`<div class="sr-step"><div class="sr-snum">${j+1}</div><div class="sr-sbody">${s}</div></div>`).join('');
     const extra=t.extraHtml?`<div class="pt-extra">${t.extraHtml}</div>`:'';
     const scheme=t.schemeHtml?String(t.schemeHtml):'';
-    const taskId=String(t.id||t.boardMode||'');
+    const taskId=String(t.id||t.boardMode||`${lessonTaskDomId(name||'lesson')}-task-${String(t.num||i+1).padStart(2,'0')}`);
     const boardMode=String(t.boardMode||t.mode||taskId);
     const boardModeSafe=boardMode.replace(/'/g,"\\'");
     const taskIdSafe=taskId.replace(/'/g,"\\'");
@@ -7890,12 +7890,12 @@ function renderPTasks(name){
       boardMode:boardMode,
       mode:boardMode,
       canOpenTaskBoard:!!(t.boardMode||t.mode),
-      hasAnimation:true,
+      hasAnimation:t.hasAnimation===true,
       animationId:t.animationId||t.animId||'',
       animId:t.animId||t.animationId||''
     };
     const boardBtn=t.boardMode?`<button type="button" class="pt-board-btn" data-task-id="${escapeHtml(taskId)}" data-board-mode="${escapeHtml(boardMode)}" onclick="return openTaskBoard('${boardModeSafe}',true,'${taskIdSafe}')">🧑‍🏫 Доска</button>`:'';
-    const animationBtn=`<button type="button" class="pt-anim-btn" data-action="open-animation" data-task-id="${escapeHtml(taskId)}" data-animation-id="${escapeHtml(t.animationId||t.animId||taskId)}" onclick="return handleOpenAnimationClick(event)">▶ Анимация</button>`;
+    const animationBtn=`<button type="button" class="pt-anim-btn" data-action="open-animation" data-task-id="${escapeHtml(taskId)}" data-animation-id="${escapeHtml(t.animationId||t.animId||'')}" onclick="return handleOpenAnimationClick(event)">▶ Анимация</button>`;
     const hasStructuredSolution=hasFilledTaskSolution(t)||hasLegacyTaskTextSolution(t);
     const embeddedRaw=hasStructuredSolution?renderTaskSolutionPanel(t,'pt'):(t.solutionHtml||getEmbeddedSolutionHtml(t));
     const embedded=String(embeddedRaw||'').trim();
@@ -7948,29 +7948,32 @@ function taskHasAnyAnimation(task){
   if(!task) return false;
 
   if(task.hasAnimation===true) return true;
-  if(task.animationId) return true;
-  if(task.animId) return true;
+  if(task.animationId||task.animId) return true;
 
   const id=String(task.id||'');
   const mode=String(task.boardMode||task.mode||'');
+  const value=`${id} ${mode}`;
+  const supportedBoardModes=[
+    'impulseCars',
+    'momentumSystem',
+    'energyHill',
+    'energyPendulum',
+    'puckImpulse',
+    'explosionFragments',
+    'explosionFragmentsVector',
+    'inelasticBlocks',
+    'cartStone',
+    'inelasticFriction',
+    'etherCork',
+    'task07-pendulum-impact',
+    'task10-pendulum-impact',
+    'newtonForceAcceleration',
+    'newtonInclineFriction'
+  ];
 
-  const value=`${id} ${mode}`.toLowerCase();
-
-  return (
-    value.includes('pendulum')||
-    value.includes('impact')||
-    value.includes('collision')||
-    value.includes('impulse')||
-    value.includes('momentum')||
-    value.includes('energy')||
-    value.includes('blocks')||
-    value.includes('cork')||
-    value.includes('cart')||
-    value.includes('friction')||
-    value.includes('newton')||
-    value.includes('task07')||
-    value.includes('task10')
-  );
+  return supportedBoardModes.some(function(supportedMode){
+    return value.split(' ').includes(supportedMode);
+  });
 }
 
 function openTaskAnimation(taskOrId,options){
@@ -9543,7 +9546,7 @@ function ensureTaskBoardOverlay(){
     const animBtn=e.target&&e.target.closest?e.target.closest('[data-board-animation-button]'):null;
     if(!animBtn) return;
     if(!taskBoardState||!taskBoardState.overlay||!taskBoardState.overlay.classList.contains('open')) return;
-    handleTaskBoardAnimationButtonClick(e);
+    handleOpenAnimationClick(e);
   },true);
   document.addEventListener('click',function(e){
     if(!taskBoardState||!taskBoardState.overlay.classList.contains('open')) return;
@@ -9800,7 +9803,7 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
   const resolvedMode=task.boardMode||mode;
   state.mode=resolvedMode;
   state.task=task;
-  state.taskId=taskId||'';
+  state.taskId=task.id||taskId||resolvedMode||'';
   window.currentTaskBoardTask=task;
   window.taskBoardCurrentTask=task;
   window.activeBoardTask=task;
@@ -9869,8 +9872,8 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
     state.animBtn.style.display='inline-flex';
     state.animBtn.disabled=false;
     state.animBtn.textContent='▶ Анимация';
-    state.animBtn.setAttribute('data-task-id',task.id||taskId||resolvedMode||'');
-    state.animBtn.setAttribute('data-animation-id',task.animationId||task.animId||task.id||taskId||resolvedMode||'');
+    state.animBtn.setAttribute('data-task-id',state.taskId||task.id||taskId||resolvedMode||'');
+    state.animBtn.setAttribute('data-animation-id',task.animationId||task.animId||'');
   }
   const useSolutionWorkspace=!!(hasFilledTaskSolution(task)||hasLegacyTaskSolution(task));
   state.solution.innerHTML=renderTaskBoardSolution(task);
@@ -11135,12 +11138,8 @@ function handleTaskBoardAnimationButtonClick(event){
   const task=getCurrentTaskBoardTask()||state.task;
   if(!task) return false;
 
-  const animationId=task.animationId||task.animId||task.mode||task.boardMode||task.id;
-  if(!animationId) return false;
-
-  return openTaskAnimation(Object.assign({},task,{animationId:animationId,animId:animationId}),{
-    fromBoard:true
-  });
+  const taskId=(state.animBtn&&state.animBtn.getAttribute('data-task-id'))||task.id||state.taskId||task.boardMode||task.mode||'';
+  return openTaskAnimation(taskId,{fromBoard:true});
 }
 
 function toggleTaskBoardAnimation(force){
