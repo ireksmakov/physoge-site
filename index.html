@@ -7047,7 +7047,24 @@ const LESSON_TASKS={
   {num:2,level:2,group:'Задачи на свободное падение',id:'vertical-throw-15ms',boardMode:'vertical-throw-15ms',animationId:'vertical-throw-15ms',hasAnimation:true,title:'Бросок вертикально вверх',
    cond:'Тело брошено вертикально вверх со скоростью <strong>15 м/с</strong>. Найдите максимальную высоту и время полёта. g=10 м/с².',
    given:'V₀=15 м/с, g=10<br><span class="pt-find">Найти: H, T</span>',
-   steps:['На высоте V=0: t_up=V₀/g=1.5 с','H=V₀²/(2g)=225/20=11.25 м','T=2·t_up=3 с'],ans:'H=11.25 м, T=3 с'}
+   steps:['На высоте V=0: t_up=V₀/g=1.5 с','H=V₀²/(2g)=225/20=11.25 м','T=2·t_up=3 с'],ans:'H=11.25 м, T=3 с'},
+  {num:3,level:3,group:'Задачи на свободное падение',id:'ballistics-incline-elastic-bounce-task03',boardMode:'ballistics-incline-elastic-bounce-task03',animationId:'ballistics-incline-elastic-bounce-task03',hasAnimation:true,title:'Упругий отскок от наклонной плоскости',fullTitle:'Шарик, падающий на наклонную плоскость',
+   cond:'Маленький шарик падает сверху на наклонную плоскость и упруго отражается от неё. Угол наклона плоскости к горизонту <strong>α = 30°</strong>. На какое расстояние по горизонтали переместится шарик между первым и вторым ударами о плоскость? Скорость шарика непосредственно перед первым ударом направлена вертикально вниз и равна <strong>1 м/с</strong>.',
+   given:'α = 30°<br>v₀ = 1 м/с<br>g = 10 м/с²<br><span class="pt-find">Найти: S — горизонтальное расстояние между первым и вторым ударами</span>',
+   boardConditionHtml:'<strong>Шарик, падающий на наклонную плоскость</strong><br>Маленький шарик падает сверху на наклонную плоскость и упруго отражается от неё. Угол наклона плоскости к горизонту <strong>α = 30°</strong>. На какое расстояние по горизонтали переместится шарик между первым и вторым ударами о плоскость? Скорость шарика непосредственно перед первым ударом направлена вертикально вниз и равна <strong>1 м/с</strong>.<br><br><strong>Дано:</strong><br>α = 30°<br>v₀ = 1 м/с<br>g = 10 м/с²<br><br><strong>Найти:</strong><br>S — горизонтальное расстояние между первым и вторым ударами',
+   solutionImage:'ege-physics/lesson-8/task-solutions/ege-ballistics-freefall-task03-elastic-bounce-incline-solution.png',
+   solutionTitle:'Решение задачи 03: шарик, падающий на наклонную плоскость',
+   solution:{answer:'S ≈ 0,17 м'},steps:[],ans:'S ≈ 0,17 м'},
+  {num:4,level:3,group:'Задачи на свободное падение',id:'ballistics-board-rebound-max-height-task04',boardMode:'ballistics-board-rebound-max-height-task04',animationId:'ballistics-board-rebound-max-height-task04',hasAnimation:true,title:'Отскок от наклонной доски',fullTitle:'Шарик падает и ударяется о доску, а затем поднимается на максимальную высоту',
+   cond:'Шарик падает из состояния покоя и на высоте <strong>h = 1 м</strong> от поверхности Земли абсолютно упруго ударяется о доску, расположенную под углом <strong>α = 30°</strong> к горизонту. Модуль скорости шарика после отскока от доски равен модулю скорости шарика непосредственно перед ударом. После удара шарик поднялся на максимальную высоту <strong>h₁ = 1,25 м</strong> от поверхности Земли. Определите, с какой высоты H над поверхностью Земли упал шарик, если после удара его скорость направлена под углом <strong>2α</strong> к вертикали. Сопротивлением воздуха пренебречь.',
+   given:'h = 1 м<br>α = 30°<br>h₁ = 1,25 м<br>g = 10 м/с²<br><span class="pt-find">Найти: H — высота, с которой упал шарик</span>',
+   boardConditionHtml:'<strong>Шарик падает и ударяется о доску, а затем поднимается на максимальную высоту</strong><br>Шарик падает из состояния покоя и на высоте <strong>h = 1 м</strong> от поверхности Земли абсолютно упруго ударяется о доску, расположенную под углом <strong>α = 30°</strong> к горизонту. Модуль скорости шарика после отскока от доски равен модулю скорости шарика непосредственно перед ударом. После удара шарик поднялся на максимальную высоту <strong>h₁ = 1,25 м</strong> от поверхности Земли. Определите, с какой высоты H над поверхностью Земли упал шарик, если после удара его скорость направлена под углом <strong>2α</strong> к вертикали. Сопротивлением воздуха пренебречь.<br><br><strong>Дано:</strong><br>h = 1 м<br>α = 30°<br>h₁ = 1,25 м<br>g = 10 м/с²<br><br><strong>Найти:</strong><br>H — высота, с которой упал шарик',
+   solutionImages:[
+     {src:'ege-physics/lesson-8/task-solutions/ege-ballistics-freefall-task04-board-rebound-max-height-solution-1.jpg',alt:'Решение задачи 04: отскок от наклонной доски, часть 1'},
+     {src:'ege-physics/lesson-8/task-solutions/ege-ballistics-freefall-task04-board-rebound-max-height-solution-2.jpg',alt:'Решение задачи 04: отскок от наклонной доски, часть 2'}
+   ],
+   solutionTitle:'Решение задачи 04: отскок от наклонной доски',
+   solution:{answer:'H = 2 м'},steps:[],ans:'H = 2 м'}
 ],
 'Варианты Камзеевой 11–20':KAMZEEVA_1120_TASKS,
 'Законы Ньютона':[
@@ -7918,14 +7935,15 @@ function bindUniversalImageViewerDelegated(){if(document.body.dataset.universalI
 function openTheoryImage(index){openUniversalImageViewer((window.currentTheoryImages||[]),index||0);}
 function zoomTheoryImage(delta){universalImageViewerZoom(delta);}
 function resetTheoryImage(){universalImageViewerReset();}
-function renderSolutionImageHtml(path,alt,cls){
+function renderSolutionImageHtml(path,alt,cls,fallbackText){
   const safePath=escapeHtml(String(path||''));
   const safeAlt=escapeHtml(String(alt||'Решение задачи'));
+  const safeFallback=escapeHtml(String(fallbackText||'Изображение решения пока не найдено'));
   const imgClass=cls==='task-board'
     ?'task-board-solution-image task-board-photo-img pt-solution-image universal-viewable-image'
     :'pt-solution-image universal-viewable-image pt-photo-img';
   const wrapClass=cls==='task-board'?'task-board-photo-wrap pt-solution-image-wrap':'pt-photo-wrap pt-solution-image-wrap';
-  return `<div class="${wrapClass}" data-solution-zoom="true"><img class="${imgClass}" src="${safePath}" alt="${safeAlt}" onerror="handleSolutionImageError(this, '${safePath}')"><div class="pt-img-fallback" style="display:none">Изображение решения пока не найдено</div></div>`;
+  return `<div class="${wrapClass}" data-solution-zoom="true"><img class="${imgClass}" src="${safePath}" alt="${safeAlt}" onerror="handleSolutionImageError(this, '${safePath}')"><div class="pt-img-fallback" style="display:none">${safeFallback}</div></div>`;
 }
 function setImageCarouselIndex(carousel,nextIndex){
   if(!carousel) return;
@@ -8072,12 +8090,13 @@ function hasLegacyTaskTextSolution(task){
   return !!(task&&hasRealContent([task.solutionTextHtml,task.solutionFormulas,task.tutorHints]));
 }
 function hasLegacyTaskSolution(task){
-  return !!(task&&(hasLegacyTaskTextSolution(task)||hasRealContent(task.solutionImage)));
+  return !!(task&&(hasLegacyTaskTextSolution(task)||hasRealContent(task.solutionImage)||hasRealContent(task.solutionImages)));
 }
 function renderTaskSolutionImageCard(task,cls){
   const imageCls=cls==='task-board'?'task-board':'pt';
-  if(task&&task.solutionImage){
-    return `<div class="solution-image-card"><h3 class="task-solution-section-title">Инфографика решения</h3>${renderSolutionImageHtml(task.solutionImage,task.solutionTitle||task.title||'Инфографика решения',imageCls)}</div>`;
+  const images=getTaskSolutionImages(task);
+  if(images.length){
+    return `<div class="solution-image-card"><h3 class="task-solution-section-title">Инфографика решения</h3>${renderSolutionImagesHtml(images,imageCls,'Фото решения будет добавлено позже.')}</div>`;
   }
   return '';
 }
@@ -8129,7 +8148,7 @@ function renderTaskSolutionPanel(task,cls){
     <h3 class="task-solution-main-title">Решение</h3>
     ${sections}
   </div>`:'';
-  const image=task&&task.solutionImage?renderTaskSolutionImageCard(task,cls||'pt'):'';
+  const image=getTaskSolutionImages(task).length?renderTaskSolutionImageCard(task,cls||'pt'):'';
   if(!panel&&!image) return '';
   if(!image) return panel;
   if(!panel) return image;
@@ -8184,7 +8203,7 @@ function renderPTasks(name){
     const hasStructuredSolution=hasFilledTaskSolution(t)||hasLegacyTaskTextSolution(t);
     const embeddedRaw=hasStructuredSolution?renderTaskSolutionPanel(t,'pt'):(t.solutionHtml||getEmbeddedSolutionHtml(t));
     const embedded=String(embeddedRaw||'').trim();
-    const imageOnly=!embedded&&t.solutionImage?renderSolutionImageHtml(t.solutionImage,t.solutionTitle||t.title||'Решение задачи','pt'):'';
+    const imageOnly=!embedded&&getTaskSolutionImages(t).length?renderSolutionImagesHtml(getTaskSolutionImages(t),'pt','Фото решения будет добавлено позже.'):'';
     const rich=(embedded||imageOnly)?`<div class="pt-rich-card">${embedded||imageOnly}</div>`:'';
     const answer=t.ans?String(t.ans):'';
     const fallbackSolution='';
@@ -9034,12 +9053,16 @@ function getTaskConditionHtml(task){
 
   const parts=[];
 
-  if(task.title){
-    parts.push(`<strong>${task.title}</strong>`);
-  }
+  if(task.boardConditionHtml){
+    parts.push(String(task.boardConditionHtml));
+  }else{
+    if(task.title){
+      parts.push(`<strong>${task.title}</strong>`);
+    }
 
-  if(task.cond){
-    parts.push(String(task.cond));
+    if(task.cond){
+      parts.push(String(task.cond));
+    }
   }
 
 
@@ -9535,9 +9558,9 @@ function getEmbeddedSolutionHtml(task){
   return task.solutionHtml||'';
 }
 function renderTaskBoardSolution(task){
-  const cardImage=getTaskCardSolutionImage(task);
-  if(cardImage&&cardImage.src){
-    return renderSolutionImageHtml(cardImage.src,cardImage.alt||task.title||'Решение задачи','task-board');
+  const solutionImages=getTaskSolutionImages(task);
+  if(solutionImages.length){
+    return renderSolutionImagesHtml(solutionImages,'task-board','Фото решения будет добавлено позже.');
   }
   const hasStructuredSolution=hasFilledTaskSolution(task)||hasLegacyTaskTextSolution(task);
   const inlineRaw=hasStructuredSolution?renderTaskSolutionPanel(task,'task-board'):(task.solutionHtml||getEmbeddedSolutionHtml(task));
@@ -10111,7 +10134,7 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
   window.currentTaskBoardMode=resolvedMode||task.mode||task.id||'';
   window.taskBoardMode=window.currentTaskBoardMode;
   if(state.title) state.title.textContent=task.title;
-  state.condition.innerHTML=hasRealContent(task.cond)?task.cond:'';
+  state.condition.innerHTML=hasRealContent(task.boardConditionHtml)?task.boardConditionHtml:(hasRealContent(task.cond)?task.cond:'');
   state.graph.innerHTML=getTaskBoardGraph(resolvedMode);
   if(state.graphLabel) state.graphLabel.textContent=task.graphLabel||'График';
   const isPuckImpulse = resolvedMode==='puckImpulse';
