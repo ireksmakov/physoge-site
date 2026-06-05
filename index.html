@@ -3885,6 +3885,8 @@ function initSimMenu(){
   if(!simToggle || !simMenu) return;
 
   simToggle.addEventListener('click', function(e){
+    e.preventDefault();
+    e.stopPropagation();
     simMenu.classList.toggle('open');
     simToggle.classList.toggle('open');
   });
@@ -4118,6 +4120,14 @@ function navigateTo(hash){
   }
 
   window.location.hash = normalizedHash;
+
+  if(typeof handleRoute === 'function'){
+    setTimeout(function(){
+      if(window.location.hash === normalizedHash){
+        handleRoute();
+      }
+    }, 0);
+  }
 }
 function bindHashNavigation(){
   if(document.body.dataset.hashNavigationBound === 'true') return;
@@ -4221,6 +4231,10 @@ function handleRoute(){
 
 if(typeof handleRoute === 'function'){
   window.addEventListener('hashchange',function(){
+    saveCurrentRoute();
+    handleRoute();
+  });
+  window.addEventListener('popstate',function(){
     saveCurrentRoute();
     handleRoute();
   });
@@ -4685,8 +4699,8 @@ function openLesson(section,num,title,simKey){
 function openSimFromRoute(simKey, exam){
   currentSimulatorsExam = exam === 'ege' ? 'ege' : 'oge';
 
-  const allowed = ['rupd', 'zsi', 'flying-cyclist', 'ballistics-projectile'];
-  if(!allowed.includes(simKey)){
+  const sim = SIMULATORS_REGISTRY.find(item => item.id === simKey && item.status === 'ready');
+  if(!sim){
     const fallbackHash = getSimulatorsBackHash();
     if(window.location.hash !== fallbackHash){
       history.replaceState(null, '', fallbackHash);
@@ -4694,7 +4708,16 @@ function openSimFromRoute(simKey, exam){
     return showSimulatorsPage(currentSimulatorsExam);
   }
 
-  return openSim(simKey, { fromRoute: true, exam: currentSimulatorsExam });
+  if(['rupd', 'zsi', 'flying-cyclist', 'ballistics-projectile', 'lens'].includes(simKey)){
+    return openSim(simKey, { fromRoute: true, exam: currentSimulatorsExam });
+  }
+
+  if(sim.action){
+    simPrevPage = 'simulators';
+    return new Function(sim.action)();
+  }
+
+  return showSimulatorsPage(currentSimulatorsExam);
 }
 function openSim(key, options = {}){
   const fromRoute = options.fromRoute === true;
