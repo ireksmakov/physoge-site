@@ -4156,6 +4156,37 @@ function navigateTo(hash){
     if(window.location.hash === normalizedHash) runRoute();
   }, 0);
 }
+function getCourseKeyFromCourseLink(link){
+  if(!link) return '';
+
+  const href = link.getAttribute('href') || '';
+  if(!href.startsWith('#course/')) return '';
+
+  if(typeof parseCourseRoute === 'function'){
+    return parseCourseRoute(href).courseKey || '';
+  }
+
+  return safeDecodeRoutePart(href.replace(/^#course\/?/, '').split('/').filter(Boolean)[0] || '');
+}
+function bindCourseCardNavigation(){
+  if(window.__fizmatCourseCardNavigationBound) return;
+  window.__fizmatCourseCardNavigationBound = true;
+
+  document.addEventListener('click', function(event){
+    const link = event.target && event.target.closest ? event.target.closest('a.bcourse[href^="#course/"]') : null;
+    if(!link) return;
+
+    const courseKey = getCourseKeyFromCourseLink(link);
+    if(!courseKey) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    if(event.stopImmediatePropagation) event.stopImmediatePropagation();
+
+    openCourseCard(null, courseKey);
+    return false;
+  }, true);
+}
 function bindHashNavigation(){
   if(window.__fizmatHashNavigationBound) return;
   window.__fizmatHashNavigationBound = true;
@@ -4163,6 +4194,8 @@ function bindHashNavigation(){
   document.addEventListener('click', function(event){
     const link = event.target && event.target.closest ? event.target.closest('a[href^="#"]') : null;
     if(!link) return;
+
+    if(link.matches && link.matches('a.bcourse[href^="#course/"]')) return;
 
     const hash = link.getAttribute('href');
     if(!hash || hash === '#') return;
@@ -4176,6 +4209,7 @@ function bindHashNavigation(){
   }, true);
 }
 function initRouter(){
+  try{ bindCourseCardNavigation(); }catch(err){ console.error('Ошибка привязки кнопок курсов:', err); }
   try{ bindHashNavigation(); }catch(err){ console.error('Ошибка привязки hash-навигации:', err); }
   try{ if(typeof initSimMenu === 'function') initSimMenu(); }catch(err){ console.error('Ошибка меню симуляторов:', err); }
   try{ restoreRouteOnReload(); }catch(err){ console.error('Ошибка восстановления маршрута:', err); }
