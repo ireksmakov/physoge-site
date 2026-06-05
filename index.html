@@ -6901,15 +6901,7 @@ const LESSON_TASKS={
   {num:2,level:2,group:'Задачи на свободное падение',id:'vertical-throw-15ms',boardMode:'vertical-throw-15ms',animationId:'vertical-throw-15ms',hasAnimation:true,title:'Бросок вертикально вверх',
    cond:'Тело брошено вертикально вверх со скоростью <strong>15 м/с</strong>. Найдите максимальную высоту и время полёта. g=10 м/с².',
    given:'V₀=15 м/с, g=10<br><span class="pt-find">Найти: H, T</span>',
-   steps:['На высоте V=0: t_up=V₀/g=1.5 с','H=V₀²/(2g)=225/20=11.25 м','T=2·t_up=3 с'],ans:'H=11.25 м, T=3 с'},
-  {num:3,level:2,group:'Задачи на свободное падение',id:'ege-ballistics-freefall-task03-elastic-bounce-incline',boardMode:'ege-ballistics-freefall-task03-elastic-bounce-incline',hasAnimation:false,title:'Шарик, падающий на наклонную плоскость',cardTitle:'Упругий отскок от наклонной плоскости',
-   solutionTitle:'Решение задачи: шарик падает на наклонную плоскость и упруго отражается',
-   solutionImage:'ege-physics/lesson-8/task-solutions/ege-ballistics-freefall-task03-elastic-bounce-incline-solution.png',
-   solutionImageFallback:'Фото решения будет добавлено позже.',
-   cond:'Маленький шарик падает сверху на наклонную плоскость и упруго отражается от неё. Угол наклона плоскости к горизонту <strong>α = 30°</strong>. На какое расстояние по горизонтали переместится шарик между первым и вторым ударами о плоскость? Скорость шарика непосредственно перед первым ударом направлена вертикально вниз и равна <strong>1 м/с</strong>.',
-   boardConditionHtml:'Маленький шарик падает сверху на наклонную плоскость и упруго отражается от неё. Угол наклона плоскости к горизонту <strong>α = 30°</strong>. На какое расстояние по горизонтали переместится шарик между первым и вторым ударами о плоскость? Скорость шарика непосредственно перед первым ударом направлена вертикально вниз и равна <strong>1 м/с</strong>.<br><br><strong>Дано:</strong><br>α = 30°<br>v₀ = 1 м/с<br>g = 10 м/с²<br><br><span class="pt-find">Найти: S — горизонтальное расстояние между первым и вторым ударами</span>',
-   given:'α = 30°<br>v₀ = 1 м/с<br>g = 10 м/с²<br><span class="pt-find">Найти: S — горизонтальное расстояние между первым и вторым ударами</span>',
-   steps:[],ans:'S ≈ 0,17 м'}
+   steps:['На высоте V=0: t_up=V₀/g=1.5 с','H=V₀²/(2g)=225/20=11.25 м','T=2·t_up=3 с'],ans:'H=11.25 м, T=3 с'}
 ],
 'Варианты Камзеевой 11–20':KAMZEEVA_1120_TASKS,
 'Законы Ньютона':[
@@ -7780,15 +7772,14 @@ function bindUniversalImageViewerDelegated(){if(document.body.dataset.universalI
 function openTheoryImage(index){openUniversalImageViewer((window.currentTheoryImages||[]),index||0);}
 function zoomTheoryImage(delta){universalImageViewerZoom(delta);}
 function resetTheoryImage(){universalImageViewerReset();}
-function renderSolutionImageHtml(path,alt,cls,fallbackText){
+function renderSolutionImageHtml(path,alt,cls){
   const safePath=escapeHtml(String(path||''));
   const safeAlt=escapeHtml(String(alt||'Решение задачи'));
-  const safeFallback=escapeHtml(String(fallbackText||'Изображение решения пока не найдено'));
   const imgClass=cls==='task-board'
     ?'task-board-solution-image task-board-photo-img pt-solution-image universal-viewable-image'
     :'pt-solution-image universal-viewable-image pt-photo-img';
   const wrapClass=cls==='task-board'?'task-board-photo-wrap pt-solution-image-wrap':'pt-photo-wrap pt-solution-image-wrap';
-  return `<div class="${wrapClass}" data-solution-zoom="true"><img class="${imgClass}" src="${safePath}" alt="${safeAlt}" onerror="handleSolutionImageError(this, '${safePath}')"><div class="pt-img-fallback" style="display:none">${safeFallback}</div></div>`;
+  return `<div class="${wrapClass}" data-solution-zoom="true"><img class="${imgClass}" src="${safePath}" alt="${safeAlt}" onerror="handleSolutionImageError(this, '${safePath}')"><div class="pt-img-fallback" style="display:none">Изображение решения пока не найдено</div></div>`;
 }
 function normalizeCarouselImages(images,defaultAlt){
   return (Array.isArray(images)?images:[images]).map(function(item,index){
@@ -7971,7 +7962,7 @@ function hasLegacyTaskSolution(task){
 function renderTaskSolutionImageCard(task,cls){
   const imageCls=cls==='task-board'?'task-board':'pt';
   if(task&&task.solutionImage){
-    return `<div class="solution-image-card"><h3 class="task-solution-section-title">Инфографика решения</h3>${renderSolutionImageHtml(task.solutionImage,task.solutionTitle||task.title||'Инфографика решения',imageCls,task.solutionImageFallback||'')}</div>`;
+    return `<div class="solution-image-card"><h3 class="task-solution-section-title">Инфографика решения</h3>${renderSolutionImageHtml(task.solutionImage,task.solutionTitle||task.title||'Инфографика решения',imageCls)}</div>`;
   }
   return '';
 }
@@ -8051,7 +8042,7 @@ function renderPTasks(name){
     const isBlank=!!t.isBlank;
     const titleText=isBlank
       ? ''
-      : (t.cardTitle||t.title||'');
+      : (t.title||'');
     const cond=t.cond
       ? String(t.cond)
       : '';
@@ -8078,7 +8069,7 @@ function renderPTasks(name){
     const hasStructuredSolution=hasFilledTaskSolution(t)||hasLegacyTaskTextSolution(t);
     const embeddedRaw=hasStructuredSolution?renderTaskSolutionPanel(t,'pt'):(t.solutionHtml||getEmbeddedSolutionHtml(t));
     const embedded=String(embeddedRaw||'').trim();
-    const imageOnly=!embedded&&t.solutionImage?renderSolutionImageHtml(t.solutionImage,t.solutionTitle||t.title||'Решение задачи','pt',t.solutionImageFallback||''):'';
+    const imageOnly=!embedded&&t.solutionImage?renderSolutionImageHtml(t.solutionImage,t.solutionTitle||t.title||'Решение задачи','pt'):'';
     const rich=(embedded||imageOnly)?`<div class="pt-rich-card">${embedded||imageOnly}</div>`:'';
     const answer=t.ans?String(t.ans):'';
     const fallbackSolution='';
@@ -9431,7 +9422,7 @@ function getEmbeddedSolutionHtml(task){
 function renderTaskBoardSolution(task){
   const cardImage=getTaskCardSolutionImage(task);
   if(cardImage&&cardImage.src){
-    return renderSolutionImageHtml(cardImage.src,cardImage.alt||task.title||'Решение задачи','task-board',task.solutionImageFallback||cardImage.fallback||'');
+    return renderSolutionImageHtml(cardImage.src,cardImage.alt||task.title||'Решение задачи','task-board');
   }
   const hasStructuredSolution=hasFilledTaskSolution(task)||hasLegacyTaskTextSolution(task);
   const inlineRaw=hasStructuredSolution?renderTaskSolutionPanel(task,'task-board'):(task.solutionHtml||getEmbeddedSolutionHtml(task));
@@ -10005,7 +9996,7 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
   window.currentTaskBoardMode=resolvedMode||task.mode||task.id||'';
   window.taskBoardMode=window.currentTaskBoardMode;
   if(state.title) state.title.textContent=task.title;
-  state.condition.innerHTML=hasRealContent(task.boardConditionHtml)?task.boardConditionHtml:(hasRealContent(task.cond)?task.cond:'');
+  state.condition.innerHTML=hasRealContent(task.cond)?task.cond:'';
   state.graph.innerHTML=getTaskBoardGraph(resolvedMode);
   if(state.graphLabel) state.graphLabel.textContent=task.graphLabel||'График';
   const isPuckImpulse = resolvedMode==='puckImpulse';
