@@ -621,6 +621,20 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 .pt-task-scheme-figure{border:1px solid rgba(107,122,141,.22);border-radius:16px;overflow:hidden;background:radial-gradient(circle at 18% 18%,rgba(8,216,255,.13),transparent 32%),radial-gradient(circle at 82% 22%,rgba(255,140,0,.12),transparent 30%),#050c16}
 .pt-task-scheme-svg{display:block;width:100%;height:auto;max-width:100%;font-family:var(--fb)}
 .pt-solution-carousel{display:grid;gap:12px}.pt-solution-carousel-title{font-family:var(--fh);font-size:16px;font-weight:900;color:#0f172a;margin:0}.pt-solution-carousel-track{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.pt-solution-carousel .pt-photo-wrap{margin-top:0}
+.image-carousel{position:relative;margin-top:14px;border:1px solid rgba(8,216,255,.2);border-radius:18px;background:linear-gradient(180deg,rgba(15,23,42,.96),rgba(2,8,18,.98));overflow:hidden;box-shadow:0 14px 34px rgba(0,0,0,.18);touch-action:pan-y}
+.image-carousel-viewport{position:relative;background:#fff;overflow:hidden;border-radius:16px 16px 0 0}
+.image-carousel-track{position:relative;display:block;width:100%}
+.image-carousel-slide{display:none;margin:0;position:relative;background:#fff}
+.image-carousel-slide.is-active{display:block}
+.image-carousel-img{display:block;width:100%;max-width:100%;height:auto;background:#fff;cursor:zoom-in;user-select:none;-webkit-user-drag:none}
+.image-carousel-caption{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;color:#f2f8ff;font-size:12px;font-weight:800;line-height:1.45;background:rgba(1,8,18,.92);border-top:1px solid rgba(8,216,255,.16)}
+.image-carousel-alt{min-width:0;overflow-wrap:anywhere;color:rgba(242,248,255,.9)}
+.image-carousel-counter{flex:0 0 auto;color:var(--cyan);font-family:var(--fh);font-weight:900;white-space:nowrap}
+.image-carousel-btn{position:absolute;top:50%;z-index:3;width:40px;height:40px;border-radius:999px;font-size:24px;font-weight:900;line-height:1;transform:translateY(-50%);cursor:pointer}
+.image-carousel-btn.prev{left:12px}.image-carousel-btn.next{right:12px}
+.image-carousel-hint{padding:9px 14px;color:var(--gray);font-size:11px;line-height:1.45;background:rgba(1,8,18,.78);border-top:1px solid rgba(255,255,255,.06)}
+.solution-image-card .image-carousel,.task-board-rich .image-carousel,.task-board-solution .image-carousel{margin-top:0}
+@media(max-width:680px){.image-carousel{border-radius:16px}.image-carousel-caption{display:block;padding:9px 12px}.image-carousel-counter{display:inline-block;margin-top:4px}.image-carousel-btn{width:34px;height:34px;font-size:20px}.image-carousel-btn.prev{left:8px}.image-carousel-btn.next{right:8px}.image-carousel-hint{font-size:10px}}
 @media(max-width:680px){.pt-task-scheme{padding:10px;margin:12px 0}.pt-task-scheme-title{font-size:14px}.pt-task-scheme-caption{font-size:12px}.pt-solution-carousel-track{grid-template-columns:1fr}}
 
 /* ===== TASK SOLUTION WORKSPACE ===== */
@@ -2010,6 +2024,8 @@ img,svg,canvas,video,iframe{max-width:100%}
 .generator-summary{display:flex;flex-direction:column;gap:10px}.generator-generate{width:100%;padding:11px;border:none;border-radius:10px;background:var(--cyan);color:#001;font-weight:800}.generator-reset{width:100%;padding:10px;border:1px solid var(--border);background:transparent;color:var(--white);border-radius:10px}.generator-empty,.generator-result{padding:18px;color:var(--gray)}
 @media(max-width:980px){.generator-layout{grid-template-columns:1fr}}
 
+.image-carousel .fc-solution-slide{display:block;width:100%;height:auto;object-fit:contain;background:#06111f}
+
 /* Unified dark controls for every image and content carousel. */
 .zsi-carousel-btn,
 .theory-carousel-btn,
@@ -2539,35 +2555,13 @@ const THEORY = {
           <div class="zsi-carousel-kicker">Урок 12 · Теория</div>
           <h3>Закон сохранения импульса</h3>
         </div>
-        <div class="zsi-carousel-controls">
-          <button type="button" class="zsi-carousel-btn" onclick="scrollZsiTheory(-1)">←</button>
-          <button type="button" class="zsi-carousel-btn" onclick="scrollZsiTheory(1)">→</button>
-        </div>
       </div>
-
-      <div class="zsi-carousel-track" id="zsiTheoryTrack">
-        <figure class="zsi-slide media-zoom-wrap" data-solution-zoom="true">
-          <img src="images/lesson12-zsi-theory-01-impulse.png" alt="Закон сохранения импульса: импульс тела, импульс силы и теорема об изменении импульса">
-          <figcaption>1/4 · Импульс тела и импульс силы</figcaption>
-        </figure>
-
-        <figure class="zsi-slide media-zoom-wrap" data-solution-zoom="true">
-          <img src="images/lesson12-zsi-theory-02-conservation-law.png" alt="Закон сохранения импульса: условия применения, упругие и неупругие взаимодействия">
-          <figcaption>2/4 · Закон сохранения импульса</figcaption>
-        </figure>
-
-        <figure class="zsi-slide media-zoom-wrap" data-solution-zoom="true">
-          <img src="images/lesson12-zsi-theory-03-solved-examples.png" alt="Закон сохранения импульса: примеры решения задач">
-          <figcaption>3/4 · Примеры решения задач</figcaption>
-        </figure>
-
-        <figure class="zsi-slide media-zoom-wrap" data-solution-zoom="true">
-          <img src="images/lesson12-zsi-theory-04-formulas-algorithm.png" alt="Закон сохранения импульса: формулы, алгоритм и важные замечания">
-          <figcaption>4/4 · Формулы и алгоритм</figcaption>
-        </figure>
-      </div>
-
-      <div class="zsi-carousel-hint">Прокручивайте карточки влево и вправо или используйте кнопки со стрелками.</div>
+      ${createImageCarousel([
+        {src:'images/lesson12-zsi-theory-01-impulse.png',alt:'Закон сохранения импульса: импульс тела, импульс силы и теорема об изменении импульса'},
+        {src:'images/lesson12-zsi-theory-02-conservation-law.png',alt:'Закон сохранения импульса: условия применения, упругие и неупругие взаимодействия'},
+        {src:'images/lesson12-zsi-theory-03-solved-examples.png',alt:'Закон сохранения импульса: примеры решения задач'},
+        {src:'images/lesson12-zsi-theory-04-formulas-algorithm.png',alt:'Закон сохранения импульса: формулы, алгоритм и важные замечания'}
+      ],{className:'zsi-unified-image-carousel',imgClass:'theory-carousel-img universal-viewable-image image-carousel-img',hint:'Листайте карточки свайпом или стрелками. Нажмите на фото, чтобы увеличить.'})}
     </div>
   `}
 ],
@@ -2579,35 +2573,13 @@ const THEORY = {
           <div class="zsi-carousel-kicker">Урок 25 · Теория</div>
           <h3>Работа силы тяжести</h3>
         </div>
-        <div class="zsi-carousel-controls">
-          <button type="button" class="zsi-carousel-btn" onclick="scrollZsiTheory(-1)">←</button>
-          <button type="button" class="zsi-carousel-btn" onclick="scrollZsiTheory(1)">→</button>
-        </div>
       </div>
-
-      <div class="zsi-carousel-track" id="zsiTheoryTrack">
-        <figure class="zsi-slide media-zoom-wrap" data-solution-zoom="true">
-          <img src="images/ege-physics/lesson-25/theory/theory-01.png" alt="Урок 25: работа силы тяжести, слайд 1" onerror="this.onerror=null;this.src='images/25theory1.png'">
-          <figcaption>1 / 4</figcaption>
-        </figure>
-
-        <figure class="zsi-slide media-zoom-wrap" data-solution-zoom="true">
-          <img src="images/ege-physics/lesson-25/theory/theory-02.png" alt="Урок 25: работа силы тяжести, слайд 2" onerror="this.onerror=null;this.src='images/25theory2.png'">
-          <figcaption>2 / 4</figcaption>
-        </figure>
-
-        <figure class="zsi-slide media-zoom-wrap" data-solution-zoom="true">
-          <img src="images/ege-physics/lesson-25/theory/theory-03.png" alt="Урок 25: работа силы тяжести, слайд 3" onerror="this.onerror=null;this.src='images/25theory3.png'">
-          <figcaption>3 / 4</figcaption>
-        </figure>
-
-        <figure class="zsi-slide media-zoom-wrap" data-solution-zoom="true">
-          <img src="images/ege-physics/lesson-25/theory/theory-04.png" alt="Урок 25: работа силы тяжести, слайд 4" onerror="this.onerror=null;this.src='images/25theory4.png'">
-          <figcaption>4 / 4</figcaption>
-        </figure>
-      </div>
-
-      <div class="zsi-carousel-hint">Прокручивайте карточки влево и вправо или используйте кнопки со стрелками.</div>
+      ${createImageCarousel([
+        {src:'images/ege-physics/lesson-25/theory/theory-01.png',alt:'Урок 25: работа силы тяжести, слайд 1',fallbackSrc:'images/25theory1.png'},
+        {src:'images/ege-physics/lesson-25/theory/theory-02.png',alt:'Урок 25: работа силы тяжести, слайд 2',fallbackSrc:'images/25theory2.png'},
+        {src:'images/ege-physics/lesson-25/theory/theory-03.png',alt:'Урок 25: работа силы тяжести, слайд 3',fallbackSrc:'images/25theory3.png'},
+        {src:'images/ege-physics/lesson-25/theory/theory-04.png',alt:'Урок 25: работа силы тяжести, слайд 4',fallbackSrc:'images/25theory4.png'}
+      ],{className:'zsi-unified-image-carousel',imgClass:'theory-carousel-img universal-viewable-image image-carousel-img',hint:'Листайте карточки свайпом или стрелками. Нажмите на фото, чтобы увеличить.'})}
     </div>
   `}
 ],
@@ -5152,39 +5124,21 @@ function showTab(id,btn,colorClass){
 function renderTheory(){
   if(AC==='ege-phy'&&CM===1&&CL===3){
     const baseTheoryHtml=renderTheoryBlocks(getTH());
+    const theoryImages=[
+      {src:'images/course/ege-phy/m-1/l-3/theory/ege-phy-m1-l3-theory-01-angle-projectile.png',alt:'Движение тела, брошенного под углом к горизонту'},
+      {src:'images/course/ege-phy/m-1/l-3/theory/ege-phy-m1-l3-theory-02-horizontal-projectile.png',alt:'Движение тела, брошенного горизонтально'},
+      {src:'images/course/ege-phy/m-1/l-3/theory/ege-phy-m1-l3-theory-03-vertical-motion.png',alt:'Движение тела по вертикали'}
+    ];
     return `${baseTheoryHtml}<div class="zsi-theory-carousel ege-phy-m1-l3-theory-carousel">
       <div class="zsi-carousel-head">
         <div>
           <div class="zsi-carousel-kicker">Карточки / Фото / Карусель</div>
           <h3>Баллистика. Свободное падение</h3>
         </div>
-        <div class="zsi-carousel-controls">
-          <button type="button" class="zsi-carousel-btn" onclick="scrollZsiTheory(-1)">←</button>
-          <button type="button" class="zsi-carousel-btn" onclick="scrollZsiTheory(1)">→</button>
-        </div>
       </div>
-
-      <div class="zsi-carousel-track" id="zsiTheoryTrack">
-        <figure class="zsi-slide media-zoom-wrap" data-solution-zoom="true">
-          <img src="images/course/ege-phy/m-1/l-3/theory/ege-phy-m1-l3-theory-01-angle-projectile.png" alt="Движение тела, брошенного под углом к горизонту">
-          <figcaption>1 / 3 · Движение под углом к горизонту</figcaption>
-        </figure>
-
-        <figure class="zsi-slide media-zoom-wrap" data-solution-zoom="true">
-          <img src="images/course/ege-phy/m-1/l-3/theory/ege-phy-m1-l3-theory-02-horizontal-projectile.png" alt="Движение тела, брошенного горизонтально">
-          <figcaption>2 / 3 · Движение, брошенное горизонтально</figcaption>
-        </figure>
-
-        <figure class="zsi-slide media-zoom-wrap" data-solution-zoom="true">
-          <img src="images/course/ege-phy/m-1/l-3/theory/ege-phy-m1-l3-theory-03-vertical-motion.png" alt="Движение тела по вертикали">
-          <figcaption>3 / 3 · Движение по вертикали</figcaption>
-        </figure>
-      </div>
-
-      <div class="zsi-carousel-hint">Прокручивайте карточки влево и вправо или используйте кнопки со стрелками. Нажмите на фото, чтобы увеличить.</div>
+      ${createImageCarousel(theoryImages,{className:'zsi-unified-image-carousel',imgClass:'theory-carousel-img universal-viewable-image image-carousel-img',hint:'Листайте карточки свайпом или стрелками. Нажмите на фото, чтобы увеличить.'})}
     </div>`;
   }
-
   const blocks=getTH();
   return renderTheoryBlocks(blocks);
 }
@@ -6575,14 +6529,11 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
           <button class="fc-param-chip fc-control-chip fc-solution-chip" type="button" onclick="toggleFlyingCyclistSolution()">Показать решение</button>
         </div>
         <div class="fc-solution-block" id="flyingCyclistSolution">
-          <div class="fc-solution-carousel">
-            <button class="fc-carousel-btn prev" type="button" onclick="moveFlyingCyclistSolutionSlide(-1)">‹</button>
-            <div class="fc-solution-carousel-track" id="flyingCyclistSolutionCarousel">
-              <img class="fc-solution-slide active" src="images/simulators/ege/free-fall/flying-cyclist-solution-01.png" alt="">
-              <img class="fc-solution-slide" src="images/simulators/ege/free-fall/flying-cyclist-solution-02.png" alt="">
-              <div class="fc-solution-empty">Фото решения будет добавлено</div>
-            </div>
-            <button class="fc-carousel-btn next" type="button" onclick="moveFlyingCyclistSolutionSlide(1)">›</button>
+          <div class="fc-solution-carousel" id="flyingCyclistSolutionCarousel">
+            ${createImageCarousel([
+              {src:'images/simulators/ege/free-fall/flying-cyclist-solution-01.png',alt:'Решение симулятора: велосипедист с трамплина, часть 1'},
+              {src:'images/simulators/ege/free-fall/flying-cyclist-solution-02.png',alt:'Решение симулятора: велосипедист с трамплина, часть 2'}
+            ],{className:'simulator-image-carousel',imgClass:'fc-solution-slide universal-viewable-image image-carousel-img',fallbackText:'Фото решения будет добавлено',hint:'Листайте решение свайпом или стрелками. Нажмите на фото, чтобы увеличить.'})}
           </div>
         </div>
       </div>
@@ -7754,7 +7705,7 @@ function ensureUniversalImageViewer(){let box=document.getElementById('universal
 function getUniversalImageViewerSelector(){return['.zsi-slide img','.zsi-theory-carousel img','.theory-slide img','.theory-carousel img','.theory-image-block img','.lesson-theory-image','.lesson-theory-img','.theory-carousel-img','.th-html-body img','.pt-photo-img','.pt-solution-image','.pt-task-image','.pt-task-schema-image','.pt-card img','.pt-solution img','.pt-condition img','.pt-task-scheme img','.task-board-photo-img','.task-board-schema-image','.task-board-graph-image','.task-board-solution-image','.task-board-photo-wrap img','.task-board-floating img','.task-board-rich img','.media-zoom-wrap img','img[data-image-zoom="true"]'].join(',');}
 function isUniversalViewableImage(img){if(!img) return false;if(img.closest('header,.nav-inner,.logo,.hero,.hero-media,.hero-animation')) return false;if(img.closest('.universal-image-viewer')) return false;const src=img.currentSrc||img.src||img.getAttribute('src')||'';if(!src||src==='undefined') return false;const rect=img.getBoundingClientRect();if(rect.width<40||rect.height<40) return false;return true;}
 function bindUniversalImageViewer(root){const scope=root||document;const selectors=getUniversalImageViewerSelector();Array.from(scope.querySelectorAll(selectors)).forEach(function(img){if(!img.classList.contains('pt-solution-image')&&img.closest('.pt-solution')) img.classList.add('pt-solution-image');if(!img.classList.contains('pt-task-schema-image')&&img.closest('.pt-task-scheme,.task-board-schema')) img.classList.add('pt-task-schema-image');if(!img.classList.contains('theory-carousel-img')&&img.closest('.theory-carousel,.zsi-theory-carousel,.zsi-slide')) img.classList.add('theory-carousel-img');if(!img.classList.contains('task-board-solution-image')&&img.closest('.task-board-solution,.task-board-floating')) img.classList.add('task-board-solution-image');if(isUniversalViewableImage(img)) img.style.cursor='zoom-in';});}
-function bindUniversalImageViewerDelegated(){if(document.body.dataset.universalImageDelegated==='true') return;document.body.dataset.universalImageDelegated='true';document.addEventListener('click',function(e){if(e.target.closest('#universalImageViewer button')) return;if(e.target.closest('.universal-image-viewer-arrow')) return;if(e.target.closest('.universal-image-viewer-toolbar')) return;const selector=getUniversalImageViewerSelector();const img=e.target.closest(selector);if(!isUniversalViewableImage(img)) return;e.preventDefault();e.stopPropagation();const groupName=img.dataset.viewerGroup||img.closest('[data-viewer-group]')?.dataset.viewerGroup||'';let groupImages=[];if(groupName){groupImages=Array.from(document.querySelectorAll(`[data-viewer-group="${groupName}"] img, img[data-viewer-group="${groupName}"]`));}else{const container=img.closest('.zsi-carousel-track,.zsi-theory-carousel,.theory-carousel,.theory-image-block,.th-html-body,.pt-solution,.pt-card,.pt-condition,.task-card,.task-board-floating,.task-board-solution,.task-board-graph,.task-board-schema,.task-board-rich')||img.parentElement;groupImages=container?Array.from(container.querySelectorAll(getUniversalImageViewerSelector())):[img];}groupImages=groupImages.filter(isUniversalViewableImage);if(!groupImages.length){groupImages=[img];}const viewerItems=groupImages.map(function(item,index){return{src:item.currentSrc||item.src||item.getAttribute('src')||'',alt:item.alt||('Слайд '+(index+1))};}).filter(function(item){return item.src&&item.src!=='undefined';});const index=Math.max(0,groupImages.indexOf(img));openUniversalImageViewer(viewerItems,index);return false;},true);}
+function bindUniversalImageViewerDelegated(){if(document.body.dataset.universalImageDelegated==='true') return;document.body.dataset.universalImageDelegated='true';document.addEventListener('click',function(e){if(e.target.closest('#universalImageViewer button')) return;if(e.target.closest('.universal-image-viewer-arrow')) return;if(e.target.closest('.universal-image-viewer-toolbar')) return;const selector=getUniversalImageViewerSelector();const img=e.target.closest(selector);if(!isUniversalViewableImage(img)) return;e.preventDefault();e.stopPropagation();const groupName=img.dataset.viewerGroup||img.closest('[data-viewer-group]')?.dataset.viewerGroup||'';let groupImages=[];if(groupName){groupImages=Array.from(document.querySelectorAll(`[data-viewer-group="${groupName}"] img, img[data-viewer-group="${groupName}"]`));}else{const container=img.closest('.zsi-carousel-track,.zsi-theory-carousel,.theory-carousel,.theory-image-block,.th-html-body,.pt-solution,.pt-card,.pt-condition,.task-card,.task-board-floating,.task-board-solution,.task-board-graph,.task-board-schema,.task-board-rich')||img.parentElement;groupImages=container?Array.from(container.querySelectorAll(getUniversalImageViewerSelector())):[img];}groupImages=groupName?groupImages.filter(function(item){const src=item&&(item.currentSrc||item.src||item.getAttribute('src')||'');return !!src&&src!=='undefined';}):groupImages.filter(isUniversalViewableImage);if(!groupImages.length){groupImages=[img];}const viewerItems=groupImages.map(function(item,index){return{src:item.currentSrc||item.src||item.getAttribute('src')||'',alt:item.alt||('Слайд '+(index+1))};}).filter(function(item){return item.src&&item.src!=='undefined';});const index=Math.max(0,groupImages.indexOf(img));openUniversalImageViewer(viewerItems,index);return false;},true);}
 (function setupUniversalImageViewer(){const viewer=ensureUniversalImageViewer();const stage=viewer.querySelector('.universal-image-viewer-body');const img=viewer.querySelector('.universal-image-viewer-img');const counter=viewer.querySelector('.universal-image-viewer-counter');let activePointers=new Map(),initialPinchDistance=0,initialPinchScale=1,isDragging=false,startX=0,startY=0,baseX=0,baseY=0,dragStartClientX=0,draggingForSwipe=false;const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));const getDistance=(p1,p2)=>Math.hypot(p1.clientX-p2.clientX,p1.clientY-p2.clientY);function applyImageViewerTransform(){const currentViewer=document.getElementById('universalImageViewer');const currentImg=currentViewer?.querySelector('.universal-image-viewer-img');if(!currentImg) return;const scale=Number(imageViewerState.scale)||1;const x=Number(imageViewerState.x)||0;const y=Number(imageViewerState.y)||0;currentImg.style.transform=`translate(${x}px, ${y}px) scale(${scale})`;currentImg.style.transformOrigin='center center';}window.applyImageViewerTransform=applyImageViewerTransform;function resetImageViewerTransform(){imageViewerState.scale=1;imageViewerState.x=0;imageViewerState.y=0;applyImageViewerTransform();}window.resetImageViewerTransform=resetImageViewerTransform;window.universalImageViewerReset=resetImageViewerTransform;function zoomViewerAt(clientX,clientY,nextScale){const currentViewer=document.getElementById('universalImageViewer');const body=currentViewer?.querySelector('.universal-image-viewer-body');if(!currentViewer||!body) return;const oldScale=Number(imageViewerState.scale)||1;const minScale=Number(imageViewerState.minScale)||1;const maxScale=Number(imageViewerState.maxScale)||5;nextScale=Math.max(minScale,Math.min(maxScale,Number(nextScale)||1));const rect=body.getBoundingClientRect();const px=clientX-rect.left-rect.width/2;const py=clientY-rect.top-rect.height/2;const imageX=(px-(Number(imageViewerState.x)||0))/oldScale;const imageY=(py-(Number(imageViewerState.y)||0))/oldScale;imageViewerState.scale=nextScale;imageViewerState.x=px-imageX*nextScale;imageViewerState.y=py-imageY*nextScale;if(nextScale<=1.01){imageViewerState.scale=1;imageViewerState.x=0;imageViewerState.y=0;}applyImageViewerTransform();}window.zoomViewerAt=zoomViewerAt;function universalImageViewerZoom(direction){const currentViewer=document.getElementById('universalImageViewer');const body=currentViewer?.querySelector('.universal-image-viewer-body');if(!currentViewer||!body) return;const rect=body.getBoundingClientRect();const cx=rect.left+rect.width/2;const cy=rect.top+rect.height/2;const currentScale=Number(imageViewerState.scale)||1;const factor=direction>0?1.2:1/1.2;zoomViewerAt(cx,cy,currentScale*factor);}window.universalImageViewerZoom=universalImageViewerZoom;function showViewerImage(index){const currentViewer=document.getElementById('universalImageViewer');if(!currentViewer) return;const currentImg=currentViewer.querySelector('.universal-image-viewer-img');const currentCounter=currentViewer.querySelector('.universal-image-viewer-counter');const items=universalImageViewerState.items||[];if(!currentImg||!items.length) return;const safeIndex=Math.max(0,Math.min(index,items.length-1));universalImageViewerState.index=safeIndex;const item=items[safeIndex]||{};currentImg.src=item.src||'';currentImg.alt=item.alt||'';if(currentCounter){currentCounter.textContent=items.length>1?`${safeIndex+1} / ${items.length}`:'';}if(typeof resetImageViewerTransform==='function'){resetImageViewerTransform();}}window.showViewerImage=showViewerImage;function viewerNextImage(){const items=universalImageViewerState.items||[];if(items.length<=1) return;const nextIndex=(universalImageViewerState.index+1)%items.length;showViewerImage(nextIndex);}function viewerPrevImage(){const items=universalImageViewerState.items||[];if(items.length<=1) return;const prevIndex=(universalImageViewerState.index-1+items.length)%items.length;showViewerImage(prevIndex);}window.viewerNextImage=viewerNextImage;window.viewerPrevImage=viewerPrevImage;function bindUniversalViewerArrows(){const currentViewer=document.getElementById('universalImageViewer');if(!currentViewer) return;if(currentViewer.dataset.arrowsBound==='true') return;currentViewer.dataset.arrowsBound='true';const prevBtn=currentViewer.querySelector('.universal-image-viewer-prev');const nextBtn=currentViewer.querySelector('.universal-image-viewer-next');if(prevBtn){prevBtn.type='button';prevBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();viewerPrevImage();return false;});}if(nextBtn){nextBtn.type='button';nextBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();viewerNextImage();return false;});}}window.bindUniversalViewerArrows=bindUniversalViewerArrows;function closeUniversalImageViewer(){viewer.classList.remove('open');viewer.style.display='none';document.body.classList.remove('image-pinch-lock');img.src='';img.alt='';counter.textContent='';activePointers.clear();universalImageViewerState.isOpen=false;resetImageViewerTransform();}window.closeUniversalImageViewer=closeUniversalImageViewer;function bindUniversalViewerDesktopWheel(){const viewer=document.getElementById('universalImageViewer');if(!viewer) return;const body=viewer.querySelector('.universal-image-viewer-body');const img=viewer.querySelector('.universal-image-viewer-img');if(viewer.dataset.desktopWheelBound==='true') return;viewer.dataset.desktopWheelBound='true';const wheelHandler=function(e){const currentViewer=document.getElementById('universalImageViewer');if(!currentViewer||!currentViewer.classList.contains('open')){return;}const currentBody=currentViewer.querySelector('.universal-image-viewer-body');const currentImg=currentViewer.querySelector('.universal-image-viewer-img');if(!currentBody||!currentImg){return;}e.preventDefault();e.stopPropagation();const currentScale=Number(imageViewerState.scale)||1;const factor=e.deltaY<0?1.18:1/1.18;const nextScale=currentScale*factor;if(typeof zoomViewerAt==='function'){zoomViewerAt(e.clientX,e.clientY,nextScale);}else{imageViewerState.scale=Math.max(1,Math.min(5,nextScale));applyImageViewerTransform();}return false;};viewer.addEventListener('wheel',wheelHandler,{passive:false,capture:true});if(body){body.addEventListener('wheel',wheelHandler,{passive:false,capture:true});}if(img){img.addEventListener('wheel',wheelHandler,{passive:false,capture:true});}document.addEventListener('wheel',wheelHandler,{passive:false,capture:true});}window.bindUniversalViewerDesktopWheel=bindUniversalViewerDesktopWheel;window.openUniversalImageViewer=function(images,startIndex=0){const list=(Array.isArray(images)?images:[images]).map(it=>typeof it==='string'?{src:it,alt:''}:it).filter(it=>it&&it.src&&it.src!=='undefined');if(!list.length) return;const safeStartIndex=Math.max(0,Math.min(startIndex||0,list.length-1));universalImageViewerState.items=list;universalImageViewerState.index=safeStartIndex;viewer.classList.add('open');viewer.style.display='flex';document.body.classList.add('image-pinch-lock');universalImageViewerState.isOpen=true;bindUniversalViewerDesktopWheel();bindUniversalViewerArrows();showViewerImage(safeStartIndex);};bindUniversalImageViewerDelegated();bindUniversalViewerDesktopWheel();bindUniversalViewerArrows();stage.addEventListener('pointerdown',function(event){activePointers.set(event.pointerId,event);stage.setPointerCapture(event.pointerId);if(activePointers.size===1){isDragging=universalImageViewerState.scale>1;draggingForSwipe=universalImageViewerState.scale===1;startX=event.clientX;startY=event.clientY;baseX=universalImageViewerState.x;baseY=universalImageViewerState.y;dragStartClientX=event.clientX;}if(activePointers.size===2){const pts=Array.from(activePointers.values());initialPinchDistance=getDistance(pts[0],pts[1]);initialPinchScale=universalImageViewerState.scale;isDragging=false;draggingForSwipe=false;}});stage.addEventListener('pointermove',function(event){if(!activePointers.has(event.pointerId)) return;activePointers.set(event.pointerId,event);if(activePointers.size===2){const pts=Array.from(activePointers.values());const d=getDistance(pts[0],pts[1]);if(initialPinchDistance>0){universalImageViewerState.scale=clamp(initialPinchScale*(d/initialPinchDistance),1,5);universalImageViewerState.scale=+universalImageViewerState.scale.toFixed(2);if(universalImageViewerState.scale===1){universalImageViewerState.x=0;universalImageViewerState.y=0;}applyImageViewerTransform();}return;}if(activePointers.size===1&&isDragging&&universalImageViewerState.scale>1){universalImageViewerState.x=baseX+(event.clientX-startX);universalImageViewerState.y=baseY+(event.clientY-startY);applyImageViewerTransform();}});function endPointer(event){const prev=activePointers.get(event.pointerId);activePointers.delete(event.pointerId);if(draggingForSwipe&&prev&&universalImageViewerState.scale===1){const dx=event.clientX-dragStartClientX;if(Math.abs(dx)>48){if(dx<0) viewerNextImage(); else viewerPrevImage();}}isDragging=false;draggingForSwipe=false;}stage.addEventListener('pointerup',endPointer);stage.addEventListener('pointercancel',endPointer);viewer.querySelector('[data-viewer-close]').addEventListener('click',closeUniversalImageViewer);viewer.querySelector('[data-viewer-zoom-in]').addEventListener('click',()=>universalImageViewerZoom(1));viewer.querySelector('[data-viewer-zoom-out]').addEventListener('click',()=>universalImageViewerZoom(-1));viewer.addEventListener('click',e=>{if(e.target===viewer||e.target===stage) closeUniversalImageViewer();});document.addEventListener('keydown',function(event){const currentViewer=document.getElementById('universalImageViewer');if(!currentViewer||!currentViewer.classList.contains('open')) return;if(event.key==='Escape') closeUniversalImageViewer();if(event.key==='ArrowRight'){event.preventDefault();viewerNextImage();}if(event.key==='ArrowLeft'){event.preventDefault();viewerPrevImage();}});setTimeout(()=>bindUniversalImageViewer(document),0);})();
 function openTheoryImage(index){openUniversalImageViewer((window.currentTheoryImages||[]),index||0);}
 function zoomTheoryImage(delta){universalImageViewerZoom(delta);}
@@ -7769,6 +7720,83 @@ function renderSolutionImageHtml(path,alt,cls,fallbackText){
   const wrapClass=cls==='task-board'?'task-board-photo-wrap pt-solution-image-wrap':'pt-photo-wrap pt-solution-image-wrap';
   return `<div class="${wrapClass}" data-solution-zoom="true"><img class="${imgClass}" src="${safePath}" alt="${safeAlt}" onerror="handleSolutionImageError(this, '${safePath}')"><div class="pt-img-fallback" style="display:none">${safeFallback}</div></div>`;
 }
+function normalizeCarouselImages(images,defaultAlt){
+  return (Array.isArray(images)?images:[images]).map(function(item,index){
+    if(typeof item==='string') return {src:item,alt:String(defaultAlt||('Фото '+(index+1)))};
+    return {src:String(item&&item.src||''),alt:String(item&&item.alt||defaultAlt||('Фото '+(index+1))),fallbackSrc:String(item&&item.fallbackSrc||'')};
+  }).filter(function(item){return !!item.src&&item.src!=='undefined';});
+}
+function createImageCarousel(images,options){
+  const opts=options||{};
+  const list=normalizeCarouselImages(images,opts.alt||opts.title||'Фото');
+  if(!list.length) return '';
+  if(list.length===1){
+    if(opts.singleRenderer==='solution') return renderSolutionImageHtml(list[0].src,list[0].alt,opts.cls||'',opts.fallbackText||'');
+    const safePath=escapeHtml(list[0].src);
+    const safeAlt=escapeHtml(list[0].alt||opts.alt||'Фото');
+    const singleClass=escapeHtml(opts.singleClass||'media-zoom-wrap');
+    const imgClass=escapeHtml(opts.imgClass||'universal-viewable-image image-carousel-img');
+    return `<figure class="${singleClass}" data-solution-zoom="true"><img class="${imgClass}" src="${safePath}" alt="${safeAlt}" onerror="handleSolutionImageError(this, '${safePath}')"></figure>`;
+  }
+  const group=escapeHtml(opts.group||('image-carousel-'+Math.random().toString(36).slice(2,9)));
+  const cls=escapeHtml(opts.className||'');
+  const title=opts.title?`<div class="image-carousel-title">${escapeHtml(opts.title)}</div>`:'';
+  const hint=opts.hint===false?'':`<div class="image-carousel-hint">${escapeHtml(opts.hint||'Листайте свайпом или стрелками. Нажмите на фото, чтобы увеличить.')}</div>`;
+  const imgClass=escapeHtml(opts.imgClass||'universal-viewable-image image-carousel-img');
+  const fallback=escapeHtml(String(opts.fallbackText||'Изображение пока не найдено'));
+  const slides=list.map(function(item,index){
+    const safePath=escapeHtml(item.src);
+    const safeAlt=escapeHtml(item.alt||('Фото '+(index+1)));
+    const safeFallbackSrc=escapeHtml(item.fallbackSrc||'');
+    const onError=safeFallbackSrc?`this.onerror=null;this.src='${safeFallbackSrc}'`:`handleSolutionImageError(this, '${safePath}')`;
+    return `<figure class="image-carousel-slide${index===0?' is-active':''}" data-carousel-slide="${index}" aria-hidden="${index===0?'false':'true'}"><img class="${imgClass}" src="${safePath}" alt="${safeAlt}" data-viewer-group="${group}" onerror="${onError}"><figcaption class="image-carousel-caption"><span class="image-carousel-alt">${safeAlt}</span><span class="image-carousel-counter">${index+1} / ${list.length}</span></figcaption><div class="pt-img-fallback" style="display:none">${fallback}</div></figure>`;
+  }).join('');
+  return `<div class="image-carousel ${cls}" data-image-carousel data-carousel-index="0" data-viewer-group="${group}">${title}<div class="image-carousel-viewport"><button type="button" class="image-carousel-btn prev" data-carousel-prev aria-label="Предыдущее фото">←</button><div class="image-carousel-track">${slides}</div><button type="button" class="image-carousel-btn next" data-carousel-next aria-label="Следующее фото">→</button></div>${hint}</div>`;
+}
+function setImageCarouselIndex(carousel,nextIndex){
+  if(!carousel) return;
+  const slides=Array.from(carousel.querySelectorAll('[data-carousel-slide]'));
+  if(!slides.length) return;
+  const len=slides.length;
+  const index=((Number(nextIndex)||0)%len+len)%len;
+  carousel.dataset.carouselIndex=String(index);
+  slides.forEach(function(slide,i){
+    const active=i===index;
+    slide.classList.toggle('is-active',active);
+    slide.setAttribute('aria-hidden',active?'false':'true');
+  });
+}
+function bindImageCarouselDelegated(){
+  if(document.body.dataset.imageCarouselDelegated==='true') return;
+  document.body.dataset.imageCarouselDelegated='true';
+  document.addEventListener('click',function(event){
+    const btn=event.target.closest('[data-carousel-prev],[data-carousel-next]');
+    if(!btn) return;
+    const carousel=btn.closest('[data-image-carousel]');
+    if(!carousel) return;
+    event.preventDefault();
+    event.stopPropagation();
+    const current=Number(carousel.dataset.carouselIndex)||0;
+    setImageCarouselIndex(carousel,current+(btn.hasAttribute('data-carousel-next')?1:-1));
+  },true);
+  let swipeTarget=null,startX=0,startY=0;
+  document.addEventListener('pointerdown',function(event){
+    const carousel=event.target.closest('[data-image-carousel]');
+    if(!carousel||event.target.closest('[data-carousel-prev],[data-carousel-next]')) return;
+    swipeTarget=carousel;startX=event.clientX;startY=event.clientY;
+  },{passive:true});
+  document.addEventListener('pointerup',function(event){
+    if(!swipeTarget) return;
+    const dx=event.clientX-startX;
+    const dy=event.clientY-startY;
+    if(Math.abs(dx)>48&&Math.abs(dx)>Math.abs(dy)*1.25){
+      const current=Number(swipeTarget.dataset.carouselIndex)||0;
+      setImageCarouselIndex(swipeTarget,current+(dx<0?1:-1));
+    }
+    swipeTarget=null;
+  },{passive:true});
+}
+setTimeout(bindImageCarouselDelegated,0);
 function getTaskSolutionImages(task){
   if(!task) return [];
   if(Array.isArray(task.solutionImages)){
@@ -7783,10 +7811,9 @@ function getTaskSolutionImages(task){
   return [];
 }
 function renderSolutionImagesHtml(images,cls,fallbackText){
-  const list=Array.isArray(images)?images.filter(function(item){return item&&item.src;}):[];
+  const list=normalizeCarouselImages(images,'Решение задачи');
   if(!list.length) return '';
-  const group='solution-'+Math.random().toString(36).slice(2,9);
-  return `<div data-viewer-group="${group}">${list.map(function(item){return renderSolutionImageHtml(item.src,item.alt||'Решение задачи',cls,fallbackText);}).join('')}</div>`;
+  return createImageCarousel(list,{cls:cls,fallbackText:fallbackText,singleRenderer:'solution',className:cls==='task-board'?'task-board-image-carousel':'pt-image-carousel',imgClass:cls==='task-board'?'task-board-solution-image task-board-photo-img pt-solution-image universal-viewable-image image-carousel-img':'pt-solution-image universal-viewable-image pt-photo-img image-carousel-img'});
 }
 function getFirstSolutionImageFromHtml(html){
   const source=String(html||'');
@@ -13530,62 +13557,18 @@ function toggleFlyingCyclistSolution(){
   block.classList.toggle('open');
 }
 function updateFlyingCyclistSolutionCarousel(){
-  const track=document.getElementById('flyingCyclistSolutionCarousel');
-  const imgs=Array.from(document.querySelectorAll('#flyingCyclistSolutionCarousel .fc-solution-slide'));
-  if(!track||!imgs.length)return;
-
-  const availableImgs=imgs.filter(img=>img.dataset.failed!=='true');
-  if(!availableImgs.length){
-    imgs.forEach(img=>{
-      img.alt='';
-      img.classList.remove('active');
-    });
-    track.classList.add('is-empty');
-    flyingCyclistSolutionSlide=0;
-    return;
-  }
-
-  track.classList.remove('is-empty');
-  if(flyingCyclistSolutionSlide<0)flyingCyclistSolutionSlide=availableImgs.length-1;
-  if(flyingCyclistSolutionSlide>=availableImgs.length)flyingCyclistSolutionSlide=0;
-  const activeImg=availableImgs[flyingCyclistSolutionSlide];
-
-  imgs.forEach(img=>{
-    img.alt='';
-    img.classList.toggle('active',img===activeImg);
-  });
+  const carousel=document.querySelector('#flyingCyclistSolutionCarousel [data-image-carousel]');
+  if(!carousel)return;
+  setImageCarouselIndex(carousel,Number(carousel.dataset.carouselIndex)||0);
 }
-function handleFlyingCyclistSolutionImageError(img){
-  if(!img)return;
-  img.dataset.failed='true';
-  img.classList.remove('active');
-  updateFlyingCyclistSolutionCarousel();
-}
-function handleFlyingCyclistSolutionImageLoad(img){
-  if(!img)return;
-  delete img.dataset.failed;
-  updateFlyingCyclistSolutionCarousel();
-}
-function bindFlyingCyclistSolutionImages(){
-  const imgs=document.querySelectorAll('#flyingCyclistSolutionCarousel .fc-solution-slide');
-  imgs.forEach(img=>{
-    img.alt='';
-    img.addEventListener('error',()=>handleFlyingCyclistSolutionImageError(img));
-    img.addEventListener('load',()=>handleFlyingCyclistSolutionImageLoad(img));
-    if(img.complete&&img.naturalWidth===0)handleFlyingCyclistSolutionImageError(img);
-  });
-  updateFlyingCyclistSolutionCarousel();
-}
+function handleFlyingCyclistSolutionImageError(img){if(img)img.dataset.failed='true';}
+function handleFlyingCyclistSolutionImageLoad(img){if(img)delete img.dataset.failed;}
+function bindFlyingCyclistSolutionImages(){updateFlyingCyclistSolutionCarousel();}
 function moveFlyingCyclistSolutionSlide(direction){
-  const availableImgs=Array.from(document.querySelectorAll('#flyingCyclistSolutionCarousel .fc-solution-slide')).filter(img=>img.dataset.failed!=='true');
-  if(!availableImgs.length){
-    updateFlyingCyclistSolutionCarousel();
-    return;
-  }
-  flyingCyclistSolutionSlide+=direction;
-  if(flyingCyclistSolutionSlide<0)flyingCyclistSolutionSlide=availableImgs.length-1;
-  if(flyingCyclistSolutionSlide>=availableImgs.length)flyingCyclistSolutionSlide=0;
-  updateFlyingCyclistSolutionCarousel();
+  const carousel=document.querySelector('#flyingCyclistSolutionCarousel [data-image-carousel]');
+  if(!carousel)return;
+  const current=Number(carousel.dataset.carouselIndex)||0;
+  setImageCarouselIndex(carousel,current+direction);
 }
 if(document.readyState==='loading'){
   document.addEventListener('DOMContentLoaded',bindFlyingCyclistSolutionImages,{once:true});
@@ -13855,8 +13838,8 @@ function renderBallisticsScene(ts){
   if(s.running)s.raf=requestAnimationFrame(renderBallisticsScene);
 }
 function toggleBallisticsSolution(){const b=document.getElementById('bpSolution');b.classList.toggle('open');document.getElementById('bpSolutionBtn').textContent=b.classList.contains('open')?'Скрыть решение':'Показать решение';}
-function renderBallisticsCarousel(){const mode=document.getElementById('bpMode').value,track=document.getElementById('bpSolutionCarousel'),prefix=mode==='find-H'?'solution-H':'solution-v0';ballisticsSolutionSlide=0;track.innerHTML=`<img class="fc-solution-slide active" src="images/simulators/ege/ballistics-projectile/${prefix}-01.png" alt="Фото решения 1"><img class="fc-solution-slide" src="images/simulators/ege/ballistics-projectile/${prefix}-02.png" alt="Фото решения 2"><div class="fc-solution-empty">Фото решения будет добавлено</div>`;track.querySelectorAll('img').forEach(img=>img.onerror=()=>{img.dataset.failed='true';img.classList.remove('active');const available=[...track.querySelectorAll('img')].filter(x=>x.dataset.failed!=='true');if(available.length)available[0].classList.add('active');track.classList.toggle('is-empty',!available.length);});}
-function moveBallisticsSolutionSlide(dir){const imgs=[...document.querySelectorAll('#bpSolutionCarousel img')].filter(x=>x.dataset.failed!=='true');if(!imgs.length)return;imgs.forEach(x=>x.classList.remove('active'));ballisticsSolutionSlide=(ballisticsSolutionSlide+dir+imgs.length)%imgs.length;imgs[ballisticsSolutionSlide].classList.add('active');}
+function renderBallisticsCarousel(){const mode=document.getElementById('bpMode').value,track=document.getElementById('bpSolutionCarousel'),prefix=mode==='find-H'?'solution-H':'solution-v0';if(!track)return;ballisticsSolutionSlide=0;track.innerHTML=createImageCarousel([{src:`images/simulators/ege/ballistics-projectile/${prefix}-01.png`,alt:'Фото решения 1'},{src:`images/simulators/ege/ballistics-projectile/${prefix}-02.png`,alt:'Фото решения 2'}],{className:'simulator-image-carousel',imgClass:'fc-solution-slide universal-viewable-image image-carousel-img',fallbackText:'Фото решения будет добавлено',hint:'Листайте решение свайпом или стрелками. Нажмите на фото, чтобы увеличить.'});}
+function moveBallisticsSolutionSlide(dir){const carousel=document.querySelector('#bpSolutionCarousel [data-image-carousel]');if(!carousel)return;const current=Number(carousel.dataset.carouselIndex)||0;setImageCarouselIndex(carousel,current+dir);}
 function toggleBallisticsFormatMenu(){const menu=document.getElementById('ballisticsFormatMenu');if(!menu)return;menu.classList.toggle('open');}
 function setBallisticsFormat(format){const root=document.getElementById('sim-ballistics-projectile');if(!root)return;root.dataset.format=format;const menu=document.getElementById('ballisticsFormatMenu');if(menu)menu.classList.remove('open');setTimeout(renderBallisticsScene,30);}
 function exitBallisticsFormat(){const menu=document.getElementById('ballisticsFormatMenu');if(menu)menu.classList.remove('open');}
