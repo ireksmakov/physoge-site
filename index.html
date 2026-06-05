@@ -3549,6 +3549,22 @@ function hideAll(){
   });
 
   document.body.classList.remove('task-board-lock');
+  document.body.classList.remove('image-pinch-lock');
+
+  [
+    'universalImageViewer',
+    'solutionPhotoLightbox',
+    'taskAnimationPlaceholderOverlay',
+    'taskBoardAnimationOverlay',
+    'taskAnimationOverlay',
+    'task07AnimOverlay'
+  ].forEach(function(id){
+    const overlay = document.getElementById(id);
+    if(!overlay) return;
+    overlay.classList.remove('open', 'active');
+    overlay.style.display = 'none';
+    overlay.style.pointerEvents = 'none';
+  });
 
   const taskBoardOverlay = document.getElementById('taskBoardOverlay');
   if(taskBoardOverlay){
@@ -3883,12 +3899,20 @@ function initSimMenu(){
   const simMenu = document.querySelector('.sim-menu');
 
   if(!simToggle || !simMenu) return;
+  if(simToggle.dataset.simMenuBound === 'true') return;
+  simToggle.dataset.simMenuBound = 'true';
 
   simToggle.addEventListener('click', function(e){
     e.preventDefault();
     e.stopPropagation();
-    simMenu.classList.toggle('open');
-    simToggle.classList.toggle('open');
+
+    if(typeof navigateTo === 'function'){
+      navigateTo('#simulators');
+    }else{
+      window.location.hash = '#simulators';
+    }
+
+    closeSimMenu();
   });
 
   document.addEventListener('click', function(e){
@@ -4104,44 +4128,61 @@ function restoreRouteOnReload(){
 
 function normalizeInternalHash(hash){
   if(!hash) return '';
-  return hash.charAt(0) === '#' ? hash : `#${hash}`;
+  return String(hash).startsWith('#') ? String(hash) : '#' + String(hash);
 }
 function navigateTo(hash){
   if(!hash) return;
+  const normalizedHash = String(hash).startsWith('#') ? String(hash) : '#' + String(hash);
+  if(normalizedHash === '#') return;
 
-  const normalizedHash = normalizeInternalHash(hash);
-  closeSimMenu();
+  if(typeof closeSimMenu === 'function'){
+    try{ closeSimMenu(); }catch(e){}
+  }
+
+  const runRoute = function(){
+    if(typeof handleRoute === 'function'){
+      try{ handleRoute(); }catch(err){ console.error('Ошибка маршрутизации:', err); }
+    }
+  };
 
   if(window.location.hash === normalizedHash){
-    if(typeof handleRoute === 'function'){
-      handleRoute();
-    }
+    runRoute();
     return;
   }
 
   window.location.hash = normalizedHash;
 
-  if(typeof handleRoute === 'function'){
-    setTimeout(function(){
-      if(window.location.hash === normalizedHash){
-        handleRoute();
-      }
-    }, 0);
-  }
+  setTimeout(function(){
+    if(window.location.hash === normalizedHash) runRoute();
+  }, 0);
 }
 function bindHashNavigation(){
-  if(document.body.dataset.hashNavigationBound === 'true') return;
-  document.body.dataset.hashNavigationBound = 'true';
+  if(window.__fizmatHashNavigationBound) return;
+  window.__fizmatHashNavigationBound = true;
 
-  document.addEventListener('click', function(e){
-    const link = e.target.closest('a[href^="#"]');
+  document.addEventListener('click', function(event){
+    const link = event.target && event.target.closest ? event.target.closest('a[href^="#"]') : null;
     if(!link) return;
+
     const hash = link.getAttribute('href');
     if(!hash || hash === '#') return;
 
-    e.preventDefault();
+    event.preventDefault();
+    if(event.stopImmediatePropagation) event.stopImmediatePropagation();
+    event.stopPropagation();
+
     navigateTo(hash);
-  });
+    return false;
+  }, true);
+}
+function initRouter(){
+  try{ bindHashNavigation(); }catch(err){ console.error('Ошибка привязки hash-навигации:', err); }
+  try{ if(typeof initSimMenu === 'function') initSimMenu(); }catch(err){ console.error('Ошибка меню симуляторов:', err); }
+  try{ restoreRouteOnReload(); }catch(err){ console.error('Ошибка восстановления маршрута:', err); }
+
+  if(typeof handleRoute === 'function'){
+    handleRoute();
+  }
 }
 
 function handleRoute(){
@@ -4229,26 +4270,18 @@ function handleRoute(){
   }
 }
 
-if(typeof handleRoute === 'function'){
-  window.addEventListener('hashchange',function(){
-    saveCurrentRoute();
-    handleRoute();
-  });
-  window.addEventListener('popstate',function(){
-    saveCurrentRoute();
-    handleRoute();
-  });
-}
+window.addEventListener('hashchange', handleRoute);
+window.addEventListener('hashchange', saveCurrentRoute);
+window.addEventListener('popstate',function(){
+  saveCurrentRoute();
+  handleRoute();
+});
 window.addEventListener('beforeunload', saveCurrentRoute);
 window.addEventListener('pagehide', saveCurrentRoute);
-document.addEventListener('DOMContentLoaded',function(){
-  initSimMenu();
-  bindHashNavigation();
-  restoreRouteOnReload();
+document.addEventListener('DOMContentLoaded', initRouter);
 
-  if(typeof handleRoute === 'function'){
-    handleRoute();
-  }
+window.addEventListener('load', function(){
+  if(typeof handleRoute === 'function') handleRoute();
 });
 
 function showCoursesPage(){
