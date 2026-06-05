@@ -767,7 +767,6 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 .freefall-green-label{fill:var(--green)}
 .freefall-progress-wrap{height:10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);overflow:hidden}
 .freefall-progress{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--green));border-radius:inherit;transition:width .08s linear}
-.freefall-answer-label{font-size:20px;font-weight:900;fill:var(--green);opacity:0;transition:opacity .2s ease}
 @media(max-width:760px){.freefall-anim-modal{padding:20px 16px}.freefall-anim-head{padding-right:68px}.freefall-anim-title{font-size:24px}.freefall-anim-layout{grid-template-columns:1fr}.freefall-scene,.freefall-svg{min-height:360px}.freefall-formulas{grid-template-columns:1fr}}
 .lesson25-anim{display:flex;flex-direction:column;gap:16px;color:#0f172a}
 .lesson25-anim-controls{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
@@ -6828,18 +6827,7 @@ const LESSON_TASKS={
    cond:'Маленький шарик падает сверху на наклонную плоскость и упруго отражается от неё. Угол наклона плоскости к горизонту <strong>α = 30°</strong>. На какое расстояние по горизонтали переместится шарик между первым и вторым ударами о плоскость? Скорость шарика непосредственно перед первым ударом направлена вертикально вниз и равна <strong>1 м/с</strong>.',
    boardConditionHtml:'Маленький шарик падает сверху на наклонную плоскость и упруго отражается от неё. Угол наклона плоскости к горизонту <strong>α = 30°</strong>. На какое расстояние по горизонтали переместится шарик между первым и вторым ударами о плоскость? Скорость шарика непосредственно перед первым ударом направлена вертикально вниз и равна <strong>1 м/с</strong>.<br><br><strong>Дано:</strong><br>α = 30°<br>v₀ = 1 м/с<br>g = 10 м/с²<br><br><span class="pt-find">Найти: S — горизонтальное расстояние между первым и вторым ударами</span>',
    given:'α = 30°<br>v₀ = 1 м/с<br>g = 10 м/с²<br><span class="pt-find">Найти: S — горизонтальное расстояние между первым и вторым ударами</span>',
-   steps:[],ans:'S ≈ 0,17 м'},
-  {num:4,level:3,group:'Задачи на свободное падение',id:'ballistics-board-rebound-max-height-task04',boardMode:'ballistics-board-rebound-max-height-task04',animationId:'ballistics-board-rebound-max-height-task04',hasAnimation:true,title:'Шарик падает и ударяется о доску, а затем поднимается на максимальную высоту',cardTitle:'Отскок от наклонной доски',
-   solutionTitle:'Решение задачи 04: шарик ударяется о наклонную доску',
-   solutionImages:[
-     {src:'ege-physics/lesson-8/task-solutions/ege-ballistics-freefall-task04-board-rebound-max-height-solution-1.jpg',alt:'Решение задачи 04: шарик ударяется о наклонную доску, часть 1'},
-     {src:'ege-physics/lesson-8/task-solutions/ege-ballistics-freefall-task04-board-rebound-max-height-solution-2.jpg',alt:'Решение задачи 04: шарик ударяется о наклонную доску, часть 2'}
-   ],
-   solutionImageFallback:'Фото решения будет добавлено позже.',
-   cond:'Шарик падает из состояния покоя и на высоте <strong>h = 1 м</strong> от поверхности Земли абсолютно упруго ударяется о доску, расположенную под углом <strong>α = 30°</strong> к горизонту. Модуль скорости шарика после отскока от доски равен модулю скорости шарика непосредственно перед ударом. После удара шарик поднялся на максимальную высоту <strong>h₁ = 1,25 м</strong> от поверхности Земли. Определите, с какой высоты <strong>H</strong> над поверхностью Земли упал шарик, если после удара его скорость направлена под углом <strong>2α</strong> к вертикали. Сопротивлением воздуха пренебречь.',
-   boardConditionHtml:'Шарик падает из состояния покоя и на высоте <strong>h = 1 м</strong> от поверхности Земли абсолютно упруго ударяется о доску, расположенную под углом <strong>α = 30°</strong> к горизонту. Модуль скорости шарика после отскока от доски равен модулю скорости шарика непосредственно перед ударом. После удара шарик поднялся на максимальную высоту <strong>h₁ = 1,25 м</strong> от поверхности Земли. Определите, с какой высоты <strong>H</strong> над поверхностью Земли упал шарик, если после удара его скорость направлена под углом <strong>2α</strong> к вертикали. Сопротивлением воздуха пренебречь.<br><br><strong>Дано:</strong><br>h = 1 м<br>α = 30°<br>h₁ = 1,25 м<br>g = 10 м/с²<br><br><span class="pt-find">Найти: H — высота, с которой упал шарик</span>',
-   given:'h = 1 м<br>α = 30°<br>h₁ = 1,25 м<br>g = 10 м/с²<br><span class="pt-find">Найти: H — высота, с которой упал шарик</span>',
-   steps:[],ans:'H = 2 м'}
+   steps:[],ans:'S ≈ 0,17 м'}
 ],
 'Варианты Камзеевой 11–20':KAMZEEVA_1120_TASKS,
 'Законы Ньютона':[
@@ -7825,8 +7813,9 @@ function getFirstSolutionImageFromHtml(html){
 }
 function getTaskCardSolutionImage(task){
   if(!task) return null;
-  const images=getTaskSolutionImages(task);
-  if(images.length) return images[0];
+  if(task.solutionImage){
+    return {src:String(task.solutionImage),alt:String(task.solutionTitle||task.title||'Решение задачи')};
+  }
   return getFirstSolutionImageFromHtml(task.solutionHtml);
 }
 
@@ -7895,13 +7884,12 @@ function hasLegacyTaskTextSolution(task){
   return !!(task&&hasRealContent([task.solutionTextHtml,task.solutionFormulas,task.tutorHints]));
 }
 function hasLegacyTaskSolution(task){
-  return !!(task&&(hasLegacyTaskTextSolution(task)||hasRealContent(task.solutionImage)||hasRealContent(task.solutionImages)));
+  return !!(task&&(hasLegacyTaskTextSolution(task)||hasRealContent(task.solutionImage)));
 }
 function renderTaskSolutionImageCard(task,cls){
   const imageCls=cls==='task-board'?'task-board':'pt';
-  const images=getTaskSolutionImages(task);
-  if(images.length){
-    return `<div class="solution-image-card"><h3 class="task-solution-section-title">Инфографика решения</h3>${renderSolutionImagesHtml(images,imageCls,task.solutionImageFallback||'')}</div>`;
+  if(task&&task.solutionImage){
+    return `<div class="solution-image-card"><h3 class="task-solution-section-title">Инфографика решения</h3>${renderSolutionImageHtml(task.solutionImage,task.solutionTitle||task.title||'Инфографика решения',imageCls,task.solutionImageFallback||'')}</div>`;
   }
   return '';
 }
@@ -7953,7 +7941,7 @@ function renderTaskSolutionPanel(task,cls){
     <h3 class="task-solution-main-title">Решение</h3>
     ${sections}
   </div>`:'';
-  const image=getTaskSolutionImages(task).length?renderTaskSolutionImageCard(task,cls||'pt'):'';
+  const image=task&&task.solutionImage?renderTaskSolutionImageCard(task,cls||'pt'):'';
   if(!panel&&!image) return '';
   if(!image) return panel;
   if(!panel) return image;
@@ -8008,7 +7996,7 @@ function renderPTasks(name){
     const hasStructuredSolution=hasFilledTaskSolution(t)||hasLegacyTaskTextSolution(t);
     const embeddedRaw=hasStructuredSolution?renderTaskSolutionPanel(t,'pt'):(t.solutionHtml||getEmbeddedSolutionHtml(t));
     const embedded=String(embeddedRaw||'').trim();
-    const imageOnly=!embedded&&getTaskSolutionImages(t).length?renderSolutionImagesHtml(getTaskSolutionImages(t),'pt',t.solutionImageFallback||''):'';
+    const imageOnly=!embedded&&t.solutionImage?renderSolutionImageHtml(t.solutionImage,t.solutionTitle||t.title||'Решение задачи','pt',t.solutionImageFallback||''):'';
     const rich=(embedded||imageOnly)?`<div class="pt-rich-card">${embedded||imageOnly}</div>`:'';
     const answer=t.ans?String(t.ans):'';
     const fallbackSolution='';
@@ -8907,37 +8895,6 @@ function getTaskBoardData(mode){
   return null;
 }
 function getTaskBoardGraph(mode){
-  if(mode==='ballistics-board-rebound-max-height-task04') return `
-    <svg viewBox="0 0 400 260" aria-label="Схема движения шарика: падение, удар о наклонную доску и подъём">
-      <defs>
-        <marker id="boardTask04ArrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#2563eb"></path></marker>
-        <marker id="boardTask04ArrowOrange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#f97316"></path></marker>
-      </defs>
-      <rect x="0" y="0" width="400" height="260" rx="16" fill="#f8fafc"></rect>
-      <path d="M32 218H368" stroke="#0f172a" stroke-width="2.4"></path>
-      <text x="326" y="210" fill="#16a34a" font-size="13" font-weight="800">земля</text>
-      <path d="M74 40V218" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 5"></path>
-      <path d="M68 40H82M68 129H82M68 107H82M68 218H82" stroke="#94a3b8" stroke-width="2"></path>
-      <text x="28" y="46" fill="#ea580c" font-size="15" font-weight="900">H</text>
-      <text x="23" y="132" fill="#ea580c" font-size="13" font-weight="900">h=1 м</text>
-      <text x="18" y="102" fill="#16a34a" font-size="13" font-weight="900">h₁=1,25 м</text>
-      <path d="M126 40L164 129" stroke="#2563eb" stroke-width="3.2" stroke-linecap="round" marker-end="url(#boardTask04ArrowBlue)"></path>
-      <path d="M164 129Q244 58 324 107" fill="none" stroke="#f97316" stroke-width="3.2" stroke-linecap="round" marker-end="url(#boardTask04ArrowOrange)"></path>
-      <circle cx="126" cy="40" r="11" fill="#fdba74" stroke="#f97316" stroke-width="2.5"></circle>
-      <circle cx="164" cy="129" r="11" fill="#fdba74" stroke="#f97316" stroke-width="2.5"></circle>
-      <circle cx="324" cy="107" r="11" fill="#fdba74" stroke="#f97316" stroke-width="2.5"></circle>
-      <g transform="rotate(-30 184 129)"><rect x="110" y="122" width="148" height="14" rx="7" fill="#dbeafe" stroke="#2563eb" stroke-width="2.4"></rect></g>
-      <path d="M232 129A42 42 0 0 0 196 108" fill="none" stroke="#f97316" stroke-width="2.5"></path>
-      <text x="235" y="122" fill="#ea580c" font-size="14" font-weight="900">α=30°</text>
-      <path d="M164 78V129" stroke="#2563eb" stroke-width="2" stroke-dasharray="5 4"></path>
-      <path d="M164 93A32 32 0 0 1 191 77" fill="none" stroke="#2563eb" stroke-width="2.5"></path>
-      <text x="194" y="82" fill="#2563eb" font-size="14" font-weight="900">2α</text>
-      <text x="300" y="96" fill="#16a34a" font-size="14" font-weight="900">vᵧ=0</text>
-      <path d="M344 44V92" stroke="#16a34a" stroke-width="3.5" marker-end="url(#boardTask04ArrowBlue)"></path>
-      <text x="354" y="72" fill="#16a34a" font-size="14" font-weight="900">g</text>
-      <rect x="138" y="18" width="124" height="30" rx="10" fill="#ffffff" stroke="#bfdbfe" stroke-width="2"></rect>
-      <text x="153" y="38" fill="#0f172a" font-size="14" font-weight="900">Ответ: H = 2 м</text>
-    </svg>`;
   if(mode==='newtonForceAcceleration') return `
     <svg viewBox="0 0 360 230" aria-label="Схема к задаче: сила сообщает телу ускорение">
       <rect x="0" y="0" width="360" height="230" rx="16" fill="#f8fafc"></rect>
@@ -9390,9 +9347,9 @@ function getEmbeddedSolutionHtml(task){
   return task.solutionHtml||'';
 }
 function renderTaskBoardSolution(task){
-  const cardImages=getTaskSolutionImages(task);
-  if(cardImages.length){
-    return renderSolutionImagesHtml(cardImages,'task-board',task.solutionImageFallback||'');
+  const cardImage=getTaskCardSolutionImage(task);
+  if(cardImage&&cardImage.src){
+    return renderSolutionImageHtml(cardImage.src,cardImage.alt||task.title||'Решение задачи','task-board',task.solutionImageFallback||cardImage.fallback||'');
   }
   const hasStructuredSolution=hasFilledTaskSolution(task)||hasLegacyTaskTextSolution(task);
   const inlineRaw=hasStructuredSolution?renderTaskSolutionPanel(task,'task-board'):(task.solutionHtml||getEmbeddedSolutionHtml(task));
@@ -10874,17 +10831,6 @@ const FREEFALL_TASK_ANIMATIONS={
     realDuration:6400,
     note:'Тело летит вверх с замедлением, в верхней точке v = 0, затем возвращается на землю под действием того же g.',
     formulas:[['Верхняя точка','t↑ = v₀/g = 1,5 с, v = 0'],['Максимальная высота','H = v₀² / (2g) = 11,25 м'],['Полное время','T = 2t↑ = 3 с']]
-  },
-  'ballistics-board-rebound-max-height-task04':{
-    kind:'boardRebound',
-    kicker:'Баллистика · Свободное падение · Задача 04',
-    title:'Отскок от наклонной доски',
-    maxHeight:2,
-    axisHeight:2,
-    totalTime:2.1,
-    realDuration:7200,
-    note:'Шарик падает с высоты H, абсолютно упруго ударяется о наклонную доску на высоте h = 1 м и после отскока летит по параболе до высоты h₁ = 1,25 м.',
-    formulas:[['Дано','h = 1 м, α = 30°, h₁ = 1,25 м, g = 10 м/с²'],['Направление после удара','скорость направлена под углом 2α к вертикали'],['Ответ','H = 2 м']]
   }
 };
 
@@ -10896,68 +10842,6 @@ function renderFreeFallTaskAnimation(task,taskId){
   const cfg=FREEFALL_TASK_ANIMATIONS[taskId]||FREEFALL_TASK_ANIMATIONS['freefall-stone-20m'];
   const condition=task?.cond||'';
   const formulas=cfg.formulas.map(function(item){return `<div class="freefall-formula-card"><strong>${item[0]}</strong><span>${item[1]}</span></div>`;}).join('');
-  if(cfg.kind==='boardRebound'){
-    const title=task?.title||cfg.title;
-    return `
-    <div class="freefall-anim" data-freefall-anim="${taskId}" data-freefall-kind="${cfg.kind}">
-      <div class="freefall-anim-head"><div><div class="freefall-anim-kicker">${cfg.kicker}</div><h3 class="freefall-anim-title">${title}</h3></div></div>
-      <div class="freefall-anim-condition"><div class="freefall-anim-label">Условие</div><div class="freefall-anim-condition-text">${condition}</div></div>
-      <div class="freefall-anim-layout">
-        <div class="freefall-scene">
-          <svg class="freefall-svg" viewBox="0 0 760 430" role="img" aria-label="Анимация задачи 04: отскок шарика от наклонной доски">
-            <defs>
-              <linearGradient id="freefallBoardBallGrad" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#fff4b8"></stop><stop offset="38%" stop-color="#ff8c00"></stop><stop offset="100%" stop-color="#8b3d00"></stop></linearGradient>
-              <marker id="boardArrowGreen" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M 0 0 L 12 6 L 0 12 z" fill="#39ff14"></path></marker>
-              <marker id="boardArrowOrange" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M 0 0 L 12 6 L 0 12 z" fill="#ff8c00"></path></marker>
-              <marker id="boardArrowCyan" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M 0 0 L 12 6 L 0 12 z" fill="#08d8ff"></path></marker>
-            </defs>
-            <rect x="0" y="340" width="760" height="90" class="freefall-ground"></rect>
-            <line x1="0" y1="340" x2="760" y2="340" class="freefall-ground-line"></line>
-            <text x="620" y="327" class="freefall-label freefall-green-label">земля</text>
-            <line x1="104" y1="70" x2="104" y2="340" class="freefall-axis"></line>
-            <line x1="92" y1="70" x2="116" y2="70" class="freefall-axis"></line>
-            <line x1="92" y1="205" x2="116" y2="205" class="freefall-axis"></line>
-            <line x1="92" y1="171" x2="116" y2="171" class="freefall-axis"></line>
-            <line x1="92" y1="340" x2="116" y2="340" class="freefall-axis"></line>
-            <text x="42" y="205" class="freefall-label freefall-accent-label">h = 1 м</text>
-            <text x="38" y="76" class="freefall-label freefall-accent-label">H</text>
-            <text x="42" y="164" class="freefall-label freefall-green-label">h₁ = 1,25 м</text>
-            <line x1="104" y1="70" x2="260" y2="70" class="freefall-height-line"></line>
-            <line x1="104" y1="205" x2="300" y2="205" class="freefall-height-line"></line>
-            <line x1="104" y1="171" x2="520" y2="171" class="freefall-height-line"></line>
-            <path id="freefallPath" class="freefall-path" d="M 260 70 L 300 205 Q 410 114 520 171"></path>
-            <g id="boardPlane" transform="rotate(-30 330 205)">
-              <rect x="218" y="197" width="224" height="16" rx="8" fill="#dbeafe" stroke="#08d8ff" stroke-width="3"></rect>
-              <text x="250" y="190" class="freefall-label">наклонная доска</text>
-            </g>
-            <path d="M 418 205 A 52 52 0 0 0 373 179" fill="none" stroke="#ff8c00" stroke-width="3"></path>
-            <text x="420" y="197" class="freefall-label freefall-accent-label">α = 30°</text>
-            <line id="boardVerticalGuide" x1="300" y1="112" x2="300" y2="205" class="freefall-height-line"></line>
-            <path d="M 300 145 A 42 42 0 0 1 336 124" fill="none" stroke="#08d8ff" stroke-width="3"></path>
-            <text x="342" y="128" class="freefall-label">2α</text>
-            <line x1="635" y1="92" x2="635" y2="170" class="freefall-g-arrow"></line>
-            <text x="650" y="138" class="freefall-label freefall-green-label">g</text>
-            <line id="freefallVArrow" x1="300" y1="184" x2="300" y2="132" class="freefall-v-arrow"></line>
-            <text id="freefallVArrowLabel" x="316" y="135" class="freefall-label freefall-accent-label">v</text>
-            <text id="boardTopVelocityLabel" x="530" y="164" class="freefall-label freefall-green-label" opacity="0">vᵧ = 0</text>
-            <text id="boardAnswerLabel" x="530" y="88" class="freefall-answer-label">Ответ: H = 2 м</text>
-            <ellipse id="freefallShadow" class="freefall-shadow" cx="300" cy="352" rx="23" ry="7"></ellipse>
-            <circle id="freefallBall" class="freefall-stone" cx="260" cy="70" r="18" style="fill:url(#freefallBoardBallGrad)"></circle>
-            <text id="freefallPhase" x="32" y="398" class="freefall-label">Старт: шарик покоится на высоте H.</text>
-          </svg>
-        </div>
-        <div class="freefall-panel">
-          <div class="freefall-stat"><span>Этап</span><strong data-freefall-time>ожидание</strong></div>
-          <div class="freefall-stat"><span>Высота над землёй</span><strong data-freefall-height>H = 2,00 м</strong></div>
-          <div class="freefall-stat"><span>Скорость</span><strong data-freefall-velocity>v = 0,00 м/с</strong></div>
-          <div class="freefall-note"><strong>Что показывает анимация:</strong><br>${cfg.note}</div>
-          <div class="freefall-progress-wrap"><div class="freefall-progress" data-freefall-progress></div></div>
-        </div>
-      </div>
-      <div class="freefall-controls"><button type="button" class="freefall-btn" data-freefall-anim-play>▶ Старт</button><button type="button" class="freefall-btn pause" data-freefall-anim-pause>⏸ Пауза</button><button type="button" class="freefall-btn" data-freefall-anim-reset>↺ Сброс</button></div>
-      <div class="freefall-formulas">${formulas}</div>
-    </div>`;
-  }
   const topLabel=cfg.kind==='stone'?'20 м':'12 м';
   const title=task?.title||cfg.title;
   const throwMarkup=cfg.kind==='throw'
@@ -11027,65 +10911,6 @@ function updateFreeFallAnimation(root,progress){
   const cfg=FREEFALL_TASK_ANIMATIONS[taskId]||FREEFALL_TASK_ANIMATIONS['freefall-stone-20m'];
   const clamp=function(v,a,b){return Math.max(a,Math.min(b,v));};
   progress=clamp(progress,0,1);
-  if(cfg.kind==='boardRebound'){
-    const smooth=function(t){t=clamp(t,0,1);return t*t*(3-2*t);};
-    const set=function(selector,attrs){const el=root.querySelector(selector); if(!el) return; Object.keys(attrs).forEach(function(k){el.setAttribute(k,attrs[k]);});};
-    const text=function(selector,value){const el=root.querySelector(selector); if(el) el.textContent=value;};
-    const fmt=function(n){return n.toFixed(2).replace('.',',');};
-    const pImpact=0.42;
-    const pTop=0.84;
-    const start={x:260,y:70,h:2};
-    const impact={x:300,y:205,h:1};
-    const top={x:520,y:171,h:1.25};
-    let x=start.x,y=start.y,h=start.h,v=0,stage='Свободное падение';
-    if(progress<pImpact){
-      const q=smooth(progress/pImpact);
-      x=start.x+(impact.x-start.x)*q;
-      y=start.y+(impact.y-start.y)*q;
-      h=start.h+(impact.h-start.h)*q;
-      v=progress===0?0:Math.sqrt(Math.max(0,2*10*(2-h)));
-      stage=progress<0.04?'Старт: шарик падает из состояния покоя с высоты H.':'Падение: скорость направлена вертикально вниз.';
-    }else{
-      const q=smooth((progress-pImpact)/(pTop-pImpact));
-      x=impact.x+(top.x-impact.x)*q;
-      y=impact.y+(top.y-impact.y)*(2*q-q*q);
-      h=impact.h+(top.h-impact.h)*(2*q-q*q);
-      v=Math.max(0,Math.sqrt(Math.max(0,2*10*(top.h-h))));
-      if(progress<0.50) stage='Удар: модуль скорости сохраняется, направление меняется.';
-      else if(progress<pTop) stage='Отскок: скорость направлена под углом 2α к вертикали, траектория — парабола.';
-      else stage='Верхняя точка после удара: vᵧ = 0, движение завершено.';
-    }
-    set('#freefallBall',{cx:x.toFixed(1),cy:y.toFixed(1)});
-    set('#freefallShadow',{cx:x.toFixed(1),rx:(12+18*(1-h/2)).toFixed(1),opacity:(0.25+0.45*(1-h/2)).toFixed(2)});
-    const vArrow=root.querySelector('#freefallVArrow');
-    const vLabel=root.querySelector('#freefallVArrowLabel');
-    if(vArrow&&vLabel){
-      let x2=x,y2=y+72,label='v';
-      if(progress>=pImpact){
-        const len=progress>=pTop?0:82;
-        const angle=-Math.PI/6;
-        x2=x+Math.sin(angle)*len;
-        y2=y-Math.cos(angle)*len;
-        label='v после удара';
-      }
-      const visible=progress<pTop&&progress>0.02;
-      set('#freefallVArrow',{x1:x.toFixed(1),y1:(y+(progress<pImpact?18:-16)).toFixed(1),x2:x2.toFixed(1),y2:y2.toFixed(1),opacity:visible?1:0});
-      set('#freefallVArrowLabel',{x:(x2+10).toFixed(1),y:(y2-4).toFixed(1),opacity:visible?1:0});
-      vLabel.textContent=label;
-    }
-    set('#boardTopVelocityLabel',{opacity:progress>=pTop?1:0});
-    set('#boardAnswerLabel',{opacity:progress>=0.96?1:0});
-    const timeEl=root.querySelector('[data-freefall-time]');
-    const heightEl=root.querySelector('[data-freefall-height]');
-    const velocityEl=root.querySelector('[data-freefall-velocity]');
-    const progressEl=root.querySelector('[data-freefall-progress]');
-    if(timeEl) timeEl.textContent=stage;
-    if(heightEl) heightEl.textContent=`h = ${fmt(h)} м`;
-    if(velocityEl) velocityEl.textContent=progress>=pTop?'vᵧ = 0':`v ≈ ${fmt(v)} м/с`;
-    if(progressEl) progressEl.style.width=(progress*100).toFixed(1)+'%';
-    text('#freefallPhase',stage+(progress>=0.96?' Ответ: H = 2 м.':''));
-    return;
-  }
   const total=cfg.totalTime;
   const t=progress*total;
   const groundY=340;
