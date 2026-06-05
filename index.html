@@ -3475,7 +3475,38 @@ function initSidebarResize(){
 }
 
 /* ============ NAV ============ */
+function closeNavigationBlockers(){
+  document.body.classList.remove('task-board-lock','task07-anim-lock','image-pinch-lock','fc-fullscreen-active');
+
+  [
+    'taskBoardOverlay',
+    'vlFsOverlay',
+    'universalImageViewer',
+    'solutionPhotoLightbox',
+    'taskAnimationPlaceholderOverlay',
+    'fcFullscreenOverlay',
+    'bpFullscreenOverlay'
+  ].forEach(id => {
+    const el = document.getElementById(id);
+    if(el){
+      el.classList.remove('open','active');
+      el.style.display = 'none';
+      el.style.pointerEvents = 'none';
+      el.setAttribute('aria-hidden','true');
+    }
+  });
+
+  document.querySelectorAll('.task-board-animation-overlay,.task-animation-overlay,.task07-anim-overlay,.solution-photo-lightbox,.task-animation-placeholder-overlay').forEach(el => {
+    el.classList.remove('open','active');
+    el.style.display = 'none';
+    el.style.pointerEvents = 'none';
+    el.setAttribute('aria-hidden','true');
+  });
+}
+
 function hideAll(){
+  closeNavigationBlockers();
+
   if(document.getElementById('fcFullscreenOverlay')&&typeof exitFlyingCyclistFullscreen==='function'){
     exitFlyingCyclistFullscreen();
   }
@@ -3854,8 +3885,6 @@ function initSimMenu(){
   if(!simToggle || !simMenu) return;
 
   simToggle.addEventListener('click', function(e){
-    e.preventDefault();
-    e.stopPropagation();
     simMenu.classList.toggle('open');
     simToggle.classList.toggle('open');
   });
@@ -4041,7 +4070,11 @@ function saveCurrentRoute(){
   const hash = window.location.hash || '';
 
   if(hash && hash !== '#home'){
-    sessionStorage.setItem(FIZMAT_LAST_ROUTE_KEY, hash);
+    try{
+      sessionStorage.setItem(FIZMAT_LAST_ROUTE_KEY, hash);
+    }catch(err){
+      console.warn('Не удалось сохранить текущий маршрут:', err);
+    }
   }
 }
 
@@ -4052,7 +4085,12 @@ function restoreRouteOnReload(){
     return currentHash;
   }
 
-  const savedHash = sessionStorage.getItem(FIZMAT_LAST_ROUTE_KEY);
+  let savedHash = '';
+  try{
+    savedHash = sessionStorage.getItem(FIZMAT_LAST_ROUTE_KEY) || '';
+  }catch(err){
+    console.warn('Не удалось восстановить сохранённый маршрут:', err);
+  }
 
   if(savedHash){
     history.replaceState(null, '', savedHash);
@@ -4060,6 +4098,35 @@ function restoreRouteOnReload(){
   }
 
   return '#home';
+}
+
+function normalizeInternalHash(hash){
+  return hash && hash.charAt(0) === '#' ? hash : '';
+}
+function navigateTo(hash){
+  const nextHash = normalizeInternalHash(hash) || '#home';
+  closeSimMenu();
+
+  if(window.location.hash === nextHash){
+    handleRoute();
+    return;
+  }
+
+  window.location.hash = nextHash;
+}
+function bindHashNavigation(){
+  if(document.body.dataset.hashNavigationBound === 'true') return;
+  document.body.dataset.hashNavigationBound = 'true';
+
+  document.addEventListener('click', function(e){
+    const link = e.target.closest('a[href^="#"]');
+    if(!link) return;
+    const hash = link.getAttribute('href');
+    if(!hash || hash === '#') return;
+
+    e.preventDefault();
+    navigateTo(hash);
+  });
 }
 
 function handleRoute(){
@@ -4074,6 +4141,10 @@ function handleRoute(){
   if(hash === '#students') return showStudentsPage ? showStudentsPage() : showLanding('#students');
   if(hash === '#bank') return showBankPage ? showBankPage() : showLanding('#bank');
   if(hash === '#simulators') return showSimulatorsPage('oge');
+  if(/^#simulators\/[^/]+$/.test(hash) && !['#simulators/oge','#simulators/ege'].includes(hash)){
+    const simKey = hash.replace('#simulators/', '');
+    return openSimFromRoute(simKey, currentSimulatorsExam || 'oge');
+  }
   if(hash.startsWith('#simulators/ege/')){
     const simKey = hash.replace('#simulators/ege/', '');
     currentSimulatorsExam = 'ege';
@@ -4151,6 +4222,7 @@ window.addEventListener('beforeunload', saveCurrentRoute);
 window.addEventListener('pagehide', saveCurrentRoute);
 document.addEventListener('DOMContentLoaded',function(){
   initSimMenu();
+  bindHashNavigation();
   restoreRouteOnReload();
   handleRoute();
 });
