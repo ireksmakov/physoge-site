@@ -6756,12 +6756,7 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
           <button class="fc-param-chip fc-control-chip fc-solution-chip" type="button" onclick="toggleFlyingCyclistSolution()">Показать решение</button>
         </div>
         <div class="fc-solution-block" id="flyingCyclistSolution">
-          <div class="fc-solution-carousel" id="flyingCyclistSolutionCarousel">
-            ${createImageCarousel([
-              {src:'images/simulators/ege/free-fall/flying-cyclist-solution-01.png',alt:'Решение симулятора: велосипедист с трамплина, часть 1'},
-              {src:'images/simulators/ege/free-fall/flying-cyclist-solution-02.png',alt:'Решение симулятора: велосипедист с трамплина, часть 2'}
-            ],{className:'simulator-image-carousel',imgClass:'fc-solution-slide universal-viewable-image image-carousel-img',fallbackText:'Фото решения будет добавлено',hint:'Листайте решение свайпом или стрелками. Нажмите на фото, чтобы увеличить.'})}
-          </div>
+          <div class="fc-solution-carousel" id="flyingCyclistSolutionCarousel"></div>
         </div>
       </div>
     </div>
@@ -13587,10 +13582,38 @@ function renderPLab(lesson){
 
 let flyingCyclistState=null;
 let flyingCyclistSolutionSlide=0;
+function renderFlyingCyclistSolutionCarousel(){
+  const solutionBlock=document.getElementById('flyingCyclistSolutionCarousel');
+  if(!solutionBlock||solutionBlock.dataset.rendered==='true')return;
+  const cyclistSolutionCarousel=createImageCarousel([
+    {
+      src:'images/simulators/ege/free-fall/flying-cyclist-solution-01.png',
+      alt:'Решение симулятора: велосипедист с трамплина, часть 1'
+    },
+    {
+      src:'images/simulators/ege/free-fall/flying-cyclist-solution-02.png',
+      alt:'Решение симулятора: велосипедист с трамплина, часть 2'
+    }
+  ],{
+    className:'simulator-image-carousel',
+    imgClass:'fc-solution-slide universal-viewable-image image-carousel-img',
+    fallbackText:'Фото решения будет добавлено позже',
+    hint:'Листайте решение свайпом или стрелками. Нажмите на фото, чтобы увеличить.'
+  });
+  solutionBlock.innerHTML=`
+    <div class="sim-solution-card">
+      <h3 class="sim-solution-title">Фото решения</h3>
+      ${cyclistSolutionCarousel}
+    </div>
+  `;
+  solutionBlock.dataset.rendered='true';
+}
 function toggleFlyingCyclistSolution(){
   const block=document.getElementById('flyingCyclistSolution');
   if(!block)return;
+  renderFlyingCyclistSolutionCarousel();
   block.classList.toggle('open');
+  updateFlyingCyclistSolutionCarousel();
 }
 function updateFlyingCyclistSolutionCarousel(){
   const carousel=document.querySelector('#flyingCyclistSolutionCarousel [data-image-carousel]');
@@ -13599,7 +13622,7 @@ function updateFlyingCyclistSolutionCarousel(){
 }
 function handleFlyingCyclistSolutionImageError(img){if(img)img.dataset.failed='true';}
 function handleFlyingCyclistSolutionImageLoad(img){if(img)delete img.dataset.failed;}
-function bindFlyingCyclistSolutionImages(){updateFlyingCyclistSolutionCarousel();}
+function bindFlyingCyclistSolutionImages(){renderFlyingCyclistSolutionCarousel();updateFlyingCyclistSolutionCarousel();}
 function moveFlyingCyclistSolutionSlide(direction){
   const carousel=document.querySelector('#flyingCyclistSolutionCarousel [data-image-carousel]');
   if(!carousel)return;
