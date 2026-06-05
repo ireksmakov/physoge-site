@@ -2261,7 +2261,7 @@ img,svg,canvas,video,iframe{max-width:100%}
         <div class="cd">Подготовка к ОГЭ по кодификатору. Механика, МКТ, электричество, оптика. Алгоритмы решения и банк задач.</div>
         <div class="cmeta"><div class="mi"><span class="dot"></span>68 уроков</div><div class="mi"><span class="dot"></span>4 модуля</div></div>
         <div class="course-badges"><span class="cb cb-free">1 модуль бесплатно</span><span class="cb cb-sim">Симулятор ОГЭ</span></div>
-        <a class="bcourse" href="#course/oge-phy">Открыть курс</a>
+        <a class="bcourse" href="#course/oge-phy" onclick="return openCourseCard(event, 'oge-phy')">Открыть курс</a>
       </div>
       <div class="ccard" data-cat="physics">
         <div class="ci">⚡</div><span class="ctag tp">Физика</span>
@@ -2269,7 +2269,7 @@ img,svg,canvas,video,iframe{max-width:100%}
         <div class="cd">Полная подготовка к ЕГЭ — механика, МКТ, электродинамика, оптика, квантовая физика.</div>
         <div class="cmeta"><div class="mi"><span class="dot"></span>72 часа</div><div class="mi"><span class="dot"></span>15 разделов</div></div>
         <div class="course-badges"><span class="cb cb-free">1 модуль бесплатно</span></div>
-        <a class="bcourse" href="#course/ege-phy">Открыть курс</a>
+        <a class="bcourse" href="#course/ege-phy" onclick="return openCourseCard(event, 'ege-phy')">Открыть курс</a>
       </div>
       <div class="ccard" data-cat="math">
         <div class="ci">📐</div><span class="ctag tm">Математика</span>
@@ -2277,7 +2277,7 @@ img,svg,canvas,video,iframe{max-width:100%}
         <div class="cd">Алгебра, геометрия, теория вероятностей — полная подготовка к ОГЭ по кодификатору.</div>
         <div class="cmeta"><div class="mi"><span class="dot"></span>35 уроков</div><div class="mi"><span class="dot"></span>4 модуля</div></div>
         <div class="course-badges"><span class="cb cb-free">1 модуль бесплатно</span><span class="cb cb-sim">Симулятор ОГЭ</span></div>
-        <a class="bcourse" href="#course/oge-mat">Открыть курс</a>
+        <a class="bcourse" href="#course/oge-mat" onclick="return openCourseCard(event, 'oge-mat')">Открыть курс</a>
       </div>
       <div class="ccard" data-cat="math">
         <div class="ci">📐</div><span class="ctag tm">Математика</span>
@@ -2285,7 +2285,7 @@ img,svg,canvas,video,iframe{max-width:100%}
         <div class="cd">Базовый уровень ЕГЭ — задачи, геометрия, уравнения, статистика. 48 уроков.</div>
         <div class="cmeta"><div class="mi"><span class="dot"></span>48 уроков</div><div class="mi"><span class="dot"></span>4 модуля</div></div>
         <div class="course-badges"><span class="cb cb-free">1 модуль бесплатно</span></div>
-        <a class="bcourse" href="#course/ege-mat-base">Открыть курс</a>
+        <a class="bcourse" href="#course/ege-mat-base" onclick="return openCourseCard(event, 'ege-mat-base')">Открыть курс</a>
       </div>
       <div class="ccard" data-cat="math">
         <div class="ci">📐</div><span class="ctag tm">Математика</span>
@@ -2293,7 +2293,7 @@ img,svg,canvas,video,iframe{max-width:100%}
         <div class="cd">Профильный уровень — производные, интегралы, стереометрия, сложные уравнения.</div>
         <div class="cmeta"><div class="mi"><span class="dot"></span>55 уроков</div><div class="mi"><span class="dot"></span>5 модулей</div></div>
         <div class="course-badges"><span class="cb cb-free">1 модуль бесплатно</span></div>
-        <a class="bcourse" href="#course/ege-mat-pro">Открыть курс</a>
+        <a class="bcourse" href="#course/ege-mat-pro" onclick="return openCourseCard(event, 'ege-mat-pro')">Открыть курс</a>
       </div>
       <div class="ccard" data-cat="spo">
         <div class="ci">🎓</div><span class="ctag ts">СПО</span>
@@ -2301,7 +2301,7 @@ img,svg,canvas,video,iframe{max-width:100%}
         <div class="cd">Физика для студентов СПО — базовый курс для технических специальностей.</div>
         <div class="cmeta"><div class="mi"><span class="dot"></span>6 уроков</div><div class="mi"><span class="dot"></span>1 модуль</div></div>
         <div class="course-badges"><span class="cb cb-free">Бесплатно</span></div>
-        <a class="bcourse" href="#course/spo-phy">Открыть курс</a>
+        <a class="bcourse" href="#course/spo-phy" onclick="return openCourseCard(event, 'spo-phy')">Открыть курс</a>
       </div>
       <div class="ccard" data-cat="spo">
         <div class="ci">🎓</div><span class="ctag ts">СПО</span>
@@ -2309,7 +2309,7 @@ img,svg,canvas,video,iframe{max-width:100%}
         <div class="cd">Математика для студентов СПО — алгебра, начала анализа, геометрия по программе СПО.</div>
         <div class="cmeta"><div class="mi"><span class="dot"></span>8 уроков</div><div class="mi"><span class="dot"></span>2 модуля</div></div>
         <div class="course-badges"><span class="cb cb-free">Бесплатно</span></div>
-        <a class="bcourse" href="#course/spo-mat">Открыть курс</a>
+        <a class="bcourse" href="#course/spo-mat" onclick="return openCourseCard(event, 'spo-mat')">Открыть курс</a>
       </div>
     </div>
   </section>
@@ -5104,6 +5104,25 @@ function fc(cat,btn){
   document.querySelectorAll('.tb').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   document.querySelectorAll('.ccard').forEach(c=>{c.style.display=(cat==='all'||c.dataset.cat===cat)?'flex':'none'});
+}
+
+function openCourseCard(event, courseKey){
+  if(event){
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  if(!courseKey) return false;
+
+  if(typeof closeSimMenu === 'function') closeSimMenu();
+
+  if(typeof openCourse === 'function'){
+    openCourse(courseKey, null, null, null);
+  } else {
+    window.location.hash = `#course/${encodeURIComponent(courseKey)}`;
+  }
+
+  return false;
 }
 
 /* ============ TOPBAR ============ */
