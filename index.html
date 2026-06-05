@@ -623,19 +623,20 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 .pt-task-scheme-svg{display:block;width:100%;height:auto;max-width:100%;font-family:var(--fb)}
 .pt-solution-carousel{display:grid;gap:12px}.pt-solution-carousel-title{font-family:var(--fh);font-size:16px;font-weight:900;color:#0f172a;margin:0}.pt-solution-carousel-track{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.pt-solution-carousel .pt-photo-wrap{margin-top:0}
 .image-carousel{position:relative;margin-top:14px;border:1px solid rgba(8,216,255,.2);border-radius:18px;background:linear-gradient(180deg,rgba(15,23,42,.96),rgba(2,8,18,.98));overflow:hidden;box-shadow:0 14px 34px rgba(0,0,0,.18);touch-action:pan-y}
-.image-carousel-viewport{position:relative;background:#fff;overflow:hidden;border-radius:16px 16px 0 0}
+.image-carousel-topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;background:rgba(1,8,18,.92);border-bottom:1px solid rgba(8,216,255,.16)}
+.image-carousel-viewport{position:relative;background:#fff;overflow:hidden}
 .image-carousel-track{position:relative;display:block;width:100%}
 .image-carousel-slide{display:none;margin:0;position:relative;background:#fff}
 .image-carousel-slide.is-active{display:block}
 .image-carousel-img{display:block;width:100%;max-width:100%;height:auto;background:#fff;cursor:zoom-in;user-select:none;-webkit-user-drag:none}
-.image-carousel-caption{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;color:#f2f8ff;font-size:12px;font-weight:800;line-height:1.45;background:rgba(1,8,18,.92);border-top:1px solid rgba(8,216,255,.16)}
+.image-carousel-caption{display:block;padding:10px 14px;color:#f2f8ff;font-size:12px;font-weight:800;line-height:1.45;background:rgba(1,8,18,.92);border-top:1px solid rgba(8,216,255,.16)}
 .image-carousel-alt{min-width:0;overflow-wrap:anywhere;color:rgba(242,248,255,.9)}
-.image-carousel-counter{flex:0 0 auto;color:var(--cyan);font-family:var(--fh);font-weight:900;white-space:nowrap}
-.image-carousel-btn{position:absolute;top:50%;z-index:3;width:40px;height:40px;border-radius:999px;font-size:24px;font-weight:900;line-height:1;transform:translateY(-50%);cursor:pointer}
-.image-carousel-btn.prev{left:12px}.image-carousel-btn.next{right:12px}
+.image-carousel-counter{flex:1 1 auto;color:var(--cyan);font-family:var(--fh);font-weight:900;white-space:nowrap;text-align:center}
+.image-carousel-btn{position:static;top:auto;z-index:3;width:42px;height:36px;border-radius:12px;font-size:22px;font-weight:900;line-height:1;transform:none;cursor:pointer;flex:0 0 auto}
+.image-carousel-btn.prev,.image-carousel-btn.next{left:auto;right:auto}
 .image-carousel-hint{padding:9px 14px;color:var(--gray);font-size:11px;line-height:1.45;background:rgba(1,8,18,.78);border-top:1px solid rgba(255,255,255,.06)}
 .solution-image-card .image-carousel,.task-board-rich .image-carousel,.task-board-solution .image-carousel{margin-top:0}
-@media(max-width:680px){.image-carousel{border-radius:16px}.image-carousel-caption{display:block;padding:9px 12px}.image-carousel-counter{display:inline-block;margin-top:4px}.image-carousel-btn{width:34px;height:34px;font-size:20px}.image-carousel-btn.prev{left:8px}.image-carousel-btn.next{right:8px}.image-carousel-hint{font-size:10px}}
+@media(max-width:680px){.image-carousel{border-radius:16px}.image-carousel-topbar{gap:8px;padding:9px 10px}.image-carousel-caption{padding:9px 12px}.image-carousel-counter{margin-top:0;font-size:12px}.image-carousel-btn{width:38px;height:34px;font-size:20px}.image-carousel-hint{font-size:10px}}
 @media(max-width:680px){.pt-task-scheme{padding:10px;margin:12px 0}.pt-task-scheme-title{font-size:14px}.pt-task-scheme-caption{font-size:12px}.pt-solution-carousel-track{grid-template-columns:1fr}}
 
 /* ===== TASK SOLUTION WORKSPACE ===== */
@@ -2445,9 +2446,9 @@ function createImageCarousel(images,options){
     const safeAlt=escapeHtml(item.alt||('Фото '+(index+1)));
     const safeFallbackSrc=escapeHtml(item.fallbackSrc||'');
     const onError=safeFallbackSrc?`this.onerror=null;this.src='${safeFallbackSrc}'`:`handleSolutionImageError(this, '${safePath}')`;
-    return `<figure class="image-carousel-slide${index===0?' is-active':''}" data-carousel-slide="${index}" aria-hidden="${index===0?'false':'true'}"><img class="${imgClass}" src="${safePath}" alt="${safeAlt}" data-viewer-group="${group}" onerror="${onError}"><figcaption class="image-carousel-caption"><span class="image-carousel-alt">${safeAlt}</span><span class="image-carousel-counter">${index+1} / ${list.length}</span></figcaption><div class="pt-img-fallback" style="display:none">${fallback}</div></figure>`;
+    return `<figure class="image-carousel-slide${index===0?' is-active':''}" data-carousel-slide="${index}" aria-hidden="${index===0?'false':'true'}"><img class="${imgClass}" src="${safePath}" alt="${safeAlt}" data-viewer-group="${group}" onerror="${onError}"><figcaption class="image-carousel-caption"><span class="image-carousel-alt">${safeAlt}</span></figcaption><div class="pt-img-fallback" style="display:none">${fallback}</div></figure>`;
   }).join('');
-  return `<div class="image-carousel ${cls}" data-image-carousel data-carousel-index="0" data-viewer-group="${group}">${title}<div class="image-carousel-viewport"><button type="button" class="image-carousel-btn prev" data-carousel-prev aria-label="Предыдущее фото">←</button><div class="image-carousel-track">${slides}</div><button type="button" class="image-carousel-btn next" data-carousel-next aria-label="Следующее фото">→</button></div>${hint}</div>`;
+  return `<div class="image-carousel ${cls}" data-image-carousel data-carousel-index="0" data-viewer-group="${group}">${title}<div class="image-carousel-topbar"><button type="button" class="image-carousel-btn prev" data-carousel-prev aria-label="Предыдущее фото">←</button><span class="image-carousel-counter" data-carousel-counter>1 / ${list.length}</span><button type="button" class="image-carousel-btn next" data-carousel-next aria-label="Следующее фото">→</button></div><div class="image-carousel-viewport"><div class="image-carousel-track">${slides}</div></div>${hint}</div>`;
 }
 
 const THEORY = {
@@ -7938,6 +7939,8 @@ function setImageCarouselIndex(carousel,nextIndex){
     slide.classList.toggle('is-active',active);
     slide.setAttribute('aria-hidden',active?'false':'true');
   });
+  const counter=carousel.querySelector('[data-carousel-counter]');
+  if(counter) counter.textContent=(index+1)+' / '+len;
 }
 function bindImageCarouselDelegated(){
   if(document.body.dataset.imageCarouselDelegated==='true') return;
