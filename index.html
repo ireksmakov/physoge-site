@@ -4101,18 +4101,23 @@ function restoreRouteOnReload(){
 }
 
 function normalizeInternalHash(hash){
-  return hash && hash.charAt(0) === '#' ? hash : '';
+  if(!hash) return '';
+  return hash.charAt(0) === '#' ? hash : `#${hash}`;
 }
 function navigateTo(hash){
-  const nextHash = normalizeInternalHash(hash) || '#home';
+  if(!hash) return;
+
+  const normalizedHash = normalizeInternalHash(hash);
   closeSimMenu();
 
-  if(window.location.hash === nextHash){
-    handleRoute();
+  if(window.location.hash === normalizedHash){
+    if(typeof handleRoute === 'function'){
+      handleRoute();
+    }
     return;
   }
 
-  window.location.hash = nextHash;
+  window.location.hash = normalizedHash;
 }
 function bindHashNavigation(){
   if(document.body.dataset.hashNavigationBound === 'true') return;
@@ -4214,17 +4219,22 @@ function handleRoute(){
   }
 }
 
-window.addEventListener('hashchange',function(){
-  saveCurrentRoute();
-  handleRoute();
-});
+if(typeof handleRoute === 'function'){
+  window.addEventListener('hashchange',function(){
+    saveCurrentRoute();
+    handleRoute();
+  });
+}
 window.addEventListener('beforeunload', saveCurrentRoute);
 window.addEventListener('pagehide', saveCurrentRoute);
 document.addEventListener('DOMContentLoaded',function(){
   initSimMenu();
   bindHashNavigation();
   restoreRouteOnReload();
-  handleRoute();
+
+  if(typeof handleRoute === 'function'){
+    handleRoute();
+  }
 });
 
 function showCoursesPage(){
