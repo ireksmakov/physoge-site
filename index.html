@@ -2415,6 +2415,39 @@ img,svg,canvas,video,iframe{max-width:100%}
 const mVec = (v)=>`<span class="vec">${v}</span>`;
 const mFrac = (top,bottom)=>`<span class="frac"><span class="f-top">${top}</span><span class="f-bottom">${bottom}</span></span>`;
 const mSqrt = (body)=>`<span class="sqrt"><span class="root-sign">√</span><span class="root-body">${body}</span></span>`;
+function normalizeCarouselImages(images,defaultAlt){
+  return (Array.isArray(images)?images:[images]).map(function(item,index){
+    if(typeof item==='string') return {src:item,alt:String(defaultAlt||('Фото '+(index+1)))};
+    return {src:String(item&&item.src||''),alt:String(item&&item.alt||defaultAlt||('Фото '+(index+1))),fallbackSrc:String(item&&item.fallbackSrc||'')};
+  }).filter(function(item){return !!item.src&&item.src!=='undefined';});
+}
+function createImageCarousel(images,options){
+  const opts=options||{};
+  const list=normalizeCarouselImages(images,opts.alt||opts.title||'Фото');
+  if(!list.length) return '';
+  if(list.length===1){
+    if(opts.singleRenderer==='solution' && typeof renderSolutionImageHtml === 'function') return renderSolutionImageHtml(list[0].src,list[0].alt,opts.cls||'',opts.fallbackText||'');
+    const safePath=escapeHtml(list[0].src);
+    const safeAlt=escapeHtml(list[0].alt||opts.alt||'Фото');
+    const singleClass=escapeHtml(opts.singleClass||'media-zoom-wrap');
+    const imgClass=escapeHtml(opts.imgClass||'universal-viewable-image image-carousel-img');
+    return `<figure class="${singleClass}" data-solution-zoom="true"><img class="${imgClass}" src="${safePath}" alt="${safeAlt}" onerror="handleSolutionImageError(this, '${safePath}')"></figure>`;
+  }
+  const group=escapeHtml(opts.group||('image-carousel-'+Math.random().toString(36).slice(2,9)));
+  const cls=escapeHtml(opts.className||'');
+  const title=opts.title?`<div class="image-carousel-title">${escapeHtml(opts.title)}</div>`:'';
+  const hint=opts.hint===false?'':`<div class="image-carousel-hint">${escapeHtml(opts.hint||'Листайте свайпом или стрелками. Нажмите на фото, чтобы увеличить.')}</div>`;
+  const imgClass=escapeHtml(opts.imgClass||'universal-viewable-image image-carousel-img');
+  const fallback=escapeHtml(String(opts.fallbackText||'Изображение пока не найдено'));
+  const slides=list.map(function(item,index){
+    const safePath=escapeHtml(item.src);
+    const safeAlt=escapeHtml(item.alt||('Фото '+(index+1)));
+    const safeFallbackSrc=escapeHtml(item.fallbackSrc||'');
+    const onError=safeFallbackSrc?`this.onerror=null;this.src='${safeFallbackSrc}'`:`handleSolutionImageError(this, '${safePath}')`;
+    return `<figure class="image-carousel-slide${index===0?' is-active':''}" data-carousel-slide="${index}" aria-hidden="${index===0?'false':'true'}"><img class="${imgClass}" src="${safePath}" alt="${safeAlt}" data-viewer-group="${group}" onerror="${onError}"><figcaption class="image-carousel-caption"><span class="image-carousel-alt">${safeAlt}</span><span class="image-carousel-counter">${index+1} / ${list.length}</span></figcaption><div class="pt-img-fallback" style="display:none">${fallback}</div></figure>`;
+  }).join('');
+  return `<div class="image-carousel ${cls}" data-image-carousel data-carousel-index="0" data-viewer-group="${group}">${title}<div class="image-carousel-viewport"><button type="button" class="image-carousel-btn prev" data-carousel-prev aria-label="Предыдущее фото">←</button><div class="image-carousel-track">${slides}</div><button type="button" class="image-carousel-btn next" data-carousel-next aria-label="Следующее фото">→</button></div>${hint}</div>`;
+}
 const THEORY = {
 /* -------- МЕХАНИКА -------- */
 'Система отсчёта':[
@@ -4161,24 +4194,41 @@ function bindHashNavigation(){
   window.__fizmatHashNavigationBound = true;
 
   document.addEventListener('click', function(event){
-    const link = event.target && event.target.closest ? event.target.closest('a[href^="#"]') : null;
+    const link = event.target && event.target.closest
+      ? event.target.closest('a[href^="#"]')
+      : null;
+
     if(!link) return;
 
     const hash = link.getAttribute('href');
     if(!hash || hash === '#') return;
 
-    event.preventDefault();
-    if(event.stopImmediatePropagation) event.stopImmediatePropagation();
-    event.stopPropagation();
+    // Важно: не ломать существующие кнопки с onclick
+    if(link.getAttribute('onclick')) return;
+    if(event.defaultPrevented) return;
 
+    event.preventDefault();
     navigateTo(hash);
-    return false;
-  }, true);
+  }, false);
 }
 function initRouter(){
-  try{ bindHashNavigation(); }catch(err){ console.error('Ошибка привязки hash-навигации:', err); }
-  try{ if(typeof initSimMenu === 'function') initSimMenu(); }catch(err){ console.error('Ошибка меню симуляторов:', err); }
-  try{ restoreRouteOnReload(); }catch(err){ console.error('Ошибка восстановления маршрута:', err); }
+  try{
+    if(typeof bindHashNavigation === 'function') bindHashNavigation();
+  }catch(err){
+    console.error('Ошибка hash-навигации:', err);
+  }
+
+  try{
+    if(typeof initSimMenu === 'function') initSimMenu();
+  }catch(err){
+    console.error('Ошибка меню симуляторов:', err);
+  }
+
+  try{
+    restoreRouteOnReload();
+  }catch(err){
+    console.error('Ошибка восстановления маршрута:', err);
+  }
 
   if(typeof handleRoute === 'function'){
     handleRoute();
@@ -7855,39 +7905,6 @@ function renderSolutionImageHtml(path,alt,cls){
     :'pt-solution-image universal-viewable-image pt-photo-img';
   const wrapClass=cls==='task-board'?'task-board-photo-wrap pt-solution-image-wrap':'pt-photo-wrap pt-solution-image-wrap';
   return `<div class="${wrapClass}" data-solution-zoom="true"><img class="${imgClass}" src="${safePath}" alt="${safeAlt}" onerror="handleSolutionImageError(this, '${safePath}')"><div class="pt-img-fallback" style="display:none">Изображение решения пока не найдено</div></div>`;
-}
-function normalizeCarouselImages(images,defaultAlt){
-  return (Array.isArray(images)?images:[images]).map(function(item,index){
-    if(typeof item==='string') return {src:item,alt:String(defaultAlt||('Фото '+(index+1)))};
-    return {src:String(item&&item.src||''),alt:String(item&&item.alt||defaultAlt||('Фото '+(index+1))),fallbackSrc:String(item&&item.fallbackSrc||'')};
-  }).filter(function(item){return !!item.src&&item.src!=='undefined';});
-}
-function createImageCarousel(images,options){
-  const opts=options||{};
-  const list=normalizeCarouselImages(images,opts.alt||opts.title||'Фото');
-  if(!list.length) return '';
-  if(list.length===1){
-    if(opts.singleRenderer==='solution') return renderSolutionImageHtml(list[0].src,list[0].alt,opts.cls||'',opts.fallbackText||'');
-    const safePath=escapeHtml(list[0].src);
-    const safeAlt=escapeHtml(list[0].alt||opts.alt||'Фото');
-    const singleClass=escapeHtml(opts.singleClass||'media-zoom-wrap');
-    const imgClass=escapeHtml(opts.imgClass||'universal-viewable-image image-carousel-img');
-    return `<figure class="${singleClass}" data-solution-zoom="true"><img class="${imgClass}" src="${safePath}" alt="${safeAlt}" onerror="handleSolutionImageError(this, '${safePath}')"></figure>`;
-  }
-  const group=escapeHtml(opts.group||('image-carousel-'+Math.random().toString(36).slice(2,9)));
-  const cls=escapeHtml(opts.className||'');
-  const title=opts.title?`<div class="image-carousel-title">${escapeHtml(opts.title)}</div>`:'';
-  const hint=opts.hint===false?'':`<div class="image-carousel-hint">${escapeHtml(opts.hint||'Листайте свайпом или стрелками. Нажмите на фото, чтобы увеличить.')}</div>`;
-  const imgClass=escapeHtml(opts.imgClass||'universal-viewable-image image-carousel-img');
-  const fallback=escapeHtml(String(opts.fallbackText||'Изображение пока не найдено'));
-  const slides=list.map(function(item,index){
-    const safePath=escapeHtml(item.src);
-    const safeAlt=escapeHtml(item.alt||('Фото '+(index+1)));
-    const safeFallbackSrc=escapeHtml(item.fallbackSrc||'');
-    const onError=safeFallbackSrc?`this.onerror=null;this.src='${safeFallbackSrc}'`:`handleSolutionImageError(this, '${safePath}')`;
-    return `<figure class="image-carousel-slide${index===0?' is-active':''}" data-carousel-slide="${index}" aria-hidden="${index===0?'false':'true'}"><img class="${imgClass}" src="${safePath}" alt="${safeAlt}" data-viewer-group="${group}" onerror="${onError}"><figcaption class="image-carousel-caption"><span class="image-carousel-alt">${safeAlt}</span><span class="image-carousel-counter">${index+1} / ${list.length}</span></figcaption><div class="pt-img-fallback" style="display:none">${fallback}</div></figure>`;
-  }).join('');
-  return `<div class="image-carousel ${cls}" data-image-carousel data-carousel-index="0" data-viewer-group="${group}">${title}<div class="image-carousel-viewport"><button type="button" class="image-carousel-btn prev" data-carousel-prev aria-label="Предыдущее фото">←</button><div class="image-carousel-track">${slides}</div><button type="button" class="image-carousel-btn next" data-carousel-next aria-label="Следующее фото">→</button></div>${hint}</div>`;
 }
 function setImageCarouselIndex(carousel,nextIndex){
   if(!carousel) return;
