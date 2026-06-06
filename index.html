@@ -759,9 +759,23 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 .task03-flying-cyclist-heading{padding-right:110px}
 .task03-flying-cyclist-heading h2{margin:0;color:var(--white);font-family:var(--fh);font-size:30px;line-height:1.2}
 .task03-flying-cyclist-heading p{margin:7px 0 0;color:#94a3b8;font-size:14px;font-weight:700}
-.task03-flying-cyclist-frame{overflow:hidden}
-.task03-flying-cyclist-frame .fc-animation-controls{flex-wrap:wrap}
-.task03-flying-cyclist-frame .fc-canvas-box{min-height:360px}
+.task03-flying-cyclist-actions{width:min(760px,100%);margin:0 auto;z-index:6}
+.task03-flying-cyclist-frame{width:min(760px,100%);margin:0 auto;overflow:hidden}
+.task03-flying-cyclist-frame .fc-animation-controls{flex-wrap:wrap;border-top:1px solid rgba(8,216,255,.18)}
+.task03-flying-cyclist-frame .fc-canvas-box{width:100%;height:auto;min-height:360px;display:block;flex:0 0 auto;overflow:hidden;box-sizing:border-box;aspect-ratio:16 / 9}
+.task03-flying-cyclist-frame canvas{width:100%;height:100%;display:block}
+.task03-flying-cyclist-shell[data-format="instagram-45"] .task03-flying-cyclist-actions,.task03-flying-cyclist-shell[data-format="instagram-45"] .task03-flying-cyclist-frame{width:min(540px,100%)}
+.task03-flying-cyclist-shell[data-format="instagram-916"] .task03-flying-cyclist-actions,.task03-flying-cyclist-shell[data-format="instagram-916"] .task03-flying-cyclist-frame,.task03-flying-cyclist-shell[data-format="youtube-shorts-916"] .task03-flying-cyclist-actions,.task03-flying-cyclist-shell[data-format="youtube-shorts-916"] .task03-flying-cyclist-frame{width:min(480px,100%)}
+.task03-flying-cyclist-shell[data-format="instagram-11"] .task03-flying-cyclist-actions,.task03-flying-cyclist-shell[data-format="instagram-11"] .task03-flying-cyclist-frame{width:min(620px,100%)}
+.task03-flying-cyclist-shell[data-format="instagram-45"] .fc-canvas-box{aspect-ratio:4 / 5}
+.task03-flying-cyclist-shell[data-format="instagram-916"] .fc-canvas-box,.task03-flying-cyclist-shell[data-format="youtube-shorts-916"] .fc-canvas-box{aspect-ratio:9 / 16}
+.task03-flying-cyclist-shell[data-format="instagram-11"] .fc-canvas-box{aspect-ratio:1 / 1}
+.task03-flying-cyclist-shell[data-format="youtube-169"] .fc-canvas-box{aspect-ratio:16 / 9}
+.task03-flying-cyclist-solution-card{padding:14px 16px 18px}
+.task03-flying-cyclist-solution-card h3{margin:0 0 12px;color:var(--white);font-family:var(--fh);font-size:18px}
+.task03-flying-cyclist-solution-image-wrap{overflow:hidden;border:1px solid rgba(8,216,255,.22);border-radius:16px;background:#06111f}
+.task03-flying-cyclist-solution-image{display:block;width:100%;height:auto;cursor:zoom-in}
+.task03-flying-cyclist-solution-hint{margin:10px 0 0;color:#94a3b8;font-size:12px;font-weight:700;text-align:center}
 @media(max-width:760px){.task03-flying-cyclist-modal{padding:20px 14px}.task03-flying-cyclist-heading{padding-right:84px}.task03-flying-cyclist-heading h2{font-size:24px}.task03-flying-cyclist-frame .fc-canvas-box{min-height:300px}.task03-flying-cyclist-frame .fc-speed-control{width:100%;justify-content:space-between}.task03-flying-cyclist-frame .fc-speed-control input{flex:1}}
 
 .freefall-anim-modal{width:min(980px,100%);background:linear-gradient(160deg,#07111f,#0b1626 62%,#101b2a);color:var(--white);border:1px solid rgba(8,216,255,.18);box-shadow:0 30px 100px rgba(0,0,0,.52),0 0 44px rgba(8,216,255,.12);padding:26px}
@@ -13935,12 +13949,27 @@ function renderFlyingCyclistScene(ts){
 let task03FlyingCyclistState=null;
 
 function renderTask03FlyingCyclistAnimation(){
-  return `<div class="task03-flying-cyclist-shell">
+  return `<div class="task03-flying-cyclist-shell" id="task03FlyingCyclistShell" data-format="default">
     <div class="task03-flying-cyclist-heading">
       <h2>Анимация задачи 03</h2>
       <p>Дубликат симулятора: Летающий велосипедист</p>
     </div>
-    <div class="cyclist-record-frame task03-flying-cyclist-frame">
+    <div class="fc-top-actions-row task03-flying-cyclist-actions">
+      <div class="fc-format-panel">
+        <button class="fc-format-toggle" type="button" id="task03FlyingCyclistFormatToggle" aria-expanded="false" aria-controls="task03FlyingCyclistFormatMenu" onclick="toggleTask03FlyingCyclistFormatMenu()">
+          Формат экрана <span>⌄</span>
+        </button>
+        <div class="fc-format-menu" id="task03FlyingCyclistFormatMenu">
+          <button type="button" data-format="fullscreen">Обычный полный экран</button>
+          <button type="button" data-format="instagram-4-5">Instagram пост 4:5 — 1080×1350</button>
+          <button type="button" data-format="instagram-9-16">Instagram Stories/Reels 9:16 — 1080×1920</button>
+          <button type="button" data-format="instagram-1-1">Instagram квадрат 1:1 — 1080×1080</button>
+          <button type="button" data-format="youtube-16-9">YouTube 16:9 — 1920×1080</button>
+          <button type="button" data-format="youtube-shorts">YouTube Shorts 9:16 — 1080×1920</button>
+        </div>
+      </div>
+    </div>
+    <div class="cyclist-record-frame task03-flying-cyclist-frame" id="task03FlyingCyclistFrame" data-format="default">
       <div class="fc-head"><span>ЕГЭ · Физика → Динамика → Баллистика. Свободное падение</span><strong>ФИЗМАТ</strong></div>
       <div class="fc-cond">Гонщик стартует с высоты H, вылетает под углом α и приземляется на уровне края трамплина. Найти высоту полёта h.</div>
       <div class="fc-inline-params">
@@ -13951,13 +13980,63 @@ function renderTask03FlyingCyclistAnimation(){
         <div class="fc-param-chip">t↑=<span id="task03FlyingCyclistTUpResult">0.71</span> с</div>
         <div class="fc-param-chip">L=<span id="task03FlyingCyclistLResult">5.91</span> м</div>
       </div>
+      <div class="fc-canvas-box fc-animation-wrap fc-canvas-wrap"><canvas id="task03FlyingCyclistCanvas"></canvas></div>
       <div class="fc-animation-controls">
         <div class="fc-ctrl"><button class="fc-btn" id="task03FlyingCyclistPlayPauseBtn" type="button">Старт</button><button class="fc-btn" id="task03FlyingCyclistResetBtn" type="button">Сброс</button></div>
         <label class="fc-speed-control">Скорость анимации: <input id="task03FlyingCyclistSpeed" type="range" min="0.5" max="1.5" step="0.5" value="1"></label>
       </div>
-      <div class="fc-canvas-box fc-animation-wrap fc-canvas-wrap"><canvas id="task03FlyingCyclistCanvas"></canvas></div>
+      <div class="fc-bottom-solution-control">
+        <button class="fc-param-chip fc-control-chip fc-solution-chip" type="button" id="task03FlyingCyclistSolutionBtn" onclick="toggleTask03FlyingCyclistSolution()">Показать решение</button>
+      </div>
+      <div class="fc-solution-block" id="task03FlyingCyclistSolution">
+        <div class="task03-flying-cyclist-solution-card">
+          <h3>Фото решения</h3>
+          <div class="task03-flying-cyclist-solution-image-wrap">
+            <img class="task03-flying-cyclist-solution-image pt-solution-image universal-viewable-image" src="ege-physics/lesson-8/task-solutions/ege-ballistics-freefall-task03-elastic-bounce-incline-solution.png" alt="Решение задачи 03: упругий отскок от наклонной плоскости" loading="lazy">
+          </div>
+          <p class="task03-flying-cyclist-solution-hint">Нажмите на фото, чтобы увеличить.</p>
+        </div>
+      </div>
     </div>
   </div>`;
+}
+
+function closeTask03FlyingCyclistFormatMenu(){
+  const menu=document.getElementById('task03FlyingCyclistFormatMenu');
+  const toggle=document.getElementById('task03FlyingCyclistFormatToggle');
+  if(menu)menu.classList.remove('open');
+  if(toggle)toggle.setAttribute('aria-expanded','false');
+}
+
+function toggleTask03FlyingCyclistFormatMenu(){
+  const menu=document.getElementById('task03FlyingCyclistFormatMenu');
+  const toggle=document.getElementById('task03FlyingCyclistFormatToggle');
+  if(!menu)return;
+  const isOpen=menu.classList.toggle('open');
+  if(toggle)toggle.setAttribute('aria-expanded',isOpen?'true':'false');
+}
+
+function setTask03FlyingCyclistFormat(format){
+  const shell=document.getElementById('task03FlyingCyclistShell');
+  const frame=document.getElementById('task03FlyingCyclistFrame');
+  if(!shell||!frame)return;
+  flyingCyclistFormatClasses.forEach(function(cls){shell.classList.remove(cls);});
+  const formatClass=getFlyingCyclistFormatClass(format);
+  if(formatClass)shell.classList.add(formatClass);
+  const displayFormat=getFlyingCyclistSolutionFormat(format);
+  shell.dataset.format=displayFormat;
+  frame.dataset.format=displayFormat;
+  closeTask03FlyingCyclistFormatMenu();
+  requestAnimationFrame(drawTask03FlyingCyclistAnimationFrame);
+}
+
+function toggleTask03FlyingCyclistSolution(){
+  const block=document.getElementById('task03FlyingCyclistSolution');
+  const button=document.getElementById('task03FlyingCyclistSolutionBtn');
+  if(!block||!button)return;
+  const isOpen=block.classList.toggle('open');
+  button.textContent=isOpen?'Скрыть решение':'Показать решение';
+  if(isOpen)bindUniversalImageViewer(block);
 }
 
 function openTask03FlyingCyclistAnimation(taskId){
@@ -13993,6 +14072,15 @@ function initTask03FlyingCyclistAnimation(){
   const speed=document.getElementById('task03FlyingCyclistSpeed');
   const playPause=document.getElementById('task03FlyingCyclistPlayPauseBtn');
   const reset=document.getElementById('task03FlyingCyclistResetBtn');
+  const formatMenu=document.getElementById('task03FlyingCyclistFormatMenu');
+  const shell=document.getElementById('task03FlyingCyclistShell');
+  if(formatMenu)formatMenu.onclick=function(event){
+    const button=event.target.closest('button[data-format]');
+    if(button)setTask03FlyingCyclistFormat(button.dataset.format);
+  };
+  if(shell)shell.onclick=function(event){
+    if(!event.target.closest('.fc-format-panel'))closeTask03FlyingCyclistFormatMenu();
+  };
   if(speed)speed.oninput=function(event){if(task03FlyingCyclistState)task03FlyingCyclistState.speed=+event.target.value;};
   if(playPause)playPause.onclick=toggleTask03FlyingCyclistAnimation;
   if(reset)reset.onclick=function(){resetTask03FlyingCyclistAnimation();};
