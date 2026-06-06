@@ -719,6 +719,8 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 .pt-board-btn:hover{background:rgba(0,229,255,.16);border-color:rgba(0,229,255,.38);color:var(--white);box-shadow:0 0 18px rgba(0,229,255,.2);transform:translateY(-1px)}
 .pt-anim-btn{width:100%;padding:9px 12px;border-radius:8px;border:1px solid rgba(57,255,20,.26);background:rgba(57,255,20,.08);color:var(--green);font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;font-family:var(--fb)}
 .pt-anim-btn:hover{background:rgba(57,255,20,.16);border-color:rgba(57,255,20,.48);color:#fff;box-shadow:0 0 18px rgba(57,255,20,.18);transform:translateY(-1px)}
+.pt-anim-btn:disabled{cursor:not-allowed;opacity:.45;filter:saturate(.65);transform:none;box-shadow:none}
+.pt-anim-btn:disabled:hover{background:rgba(57,255,20,.08);border-color:rgba(57,255,20,.26);color:var(--green);box-shadow:none;transform:none}
 .task-animation-placeholder-overlay{position:fixed;inset:0;z-index:2147483600;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(2,9,20,.82);backdrop-filter:blur(8px)}
 .task-animation-placeholder-overlay.open{display:flex}
 .task-animation-placeholder-modal{position:relative;width:min(900px,100%);max-height:90vh;overflow:auto;border-radius:22px;background:#fff;color:#0f172a;padding:28px;box-shadow:0 28px 90px rgba(0,0,0,.35)}
@@ -750,13 +752,7 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 .ballistics-task-animation-value span{display:block;margin-bottom:4px;color:#64748b;font-size:10px;letter-spacing:.07em;text-transform:uppercase}
 .ballistics-task-animation-value strong{color:#e2e8f0;font-size:13px}
 .ballistics-task-animation-result{border-bottom:0;border-top:1px solid rgba(57,255,20,.18)}
-.task03-animation-shell{display:flex;flex-direction:column;gap:16px}
-.task03-animation-stage{position:relative;width:100%;height:clamp(280px,48vw,440px);min-height:280px;overflow:hidden;border:1px solid rgba(8,216,255,.18);border-radius:16px;background:linear-gradient(180deg,#071522,#030a12)}
-.task03-animation-canvas{width:100%;height:100%}
-.task03-animation-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.task03-animation-controls .fc-ctrl{display:flex;gap:8px;flex-wrap:wrap}
-.task03-animation-controls .fc-speed-control{margin-left:auto}
-@media(max-width:760px){.task-animation-placeholder-overlay{padding:10px}.ballistics-task-animation-modal{padding:20px 14px}.ballistics-task-animation-frame .fc-head{padding-right:92px}.ballistics-task-animation-title{font-size:24px}.ballistics-task-animation-controls .fc-speed-control,.task03-animation-controls .fc-speed-control{width:100%;margin-left:0;justify-content:space-between}.ballistics-task-animation-controls .fc-speed-control input,.task03-animation-controls .fc-speed-control input{flex:1}.ballistics-task-animation-values{grid-template-columns:1fr}}
+@media(max-width:760px){.task-animation-placeholder-overlay{padding:10px}.ballistics-task-animation-modal{padding:20px 14px}.ballistics-task-animation-frame .fc-head{padding-right:92px}.ballistics-task-animation-title{font-size:24px}.ballistics-task-animation-controls .fc-speed-control{width:100%;margin-left:0;justify-content:space-between}.ballistics-task-animation-controls .fc-speed-control input{flex:1}.ballistics-task-animation-values{grid-template-columns:1fr}}
 
 .freefall-anim-modal{width:min(980px,100%);background:linear-gradient(160deg,#07111f,#0b1626 62%,#101b2a);color:var(--white);border:1px solid rgba(8,216,255,.18);box-shadow:0 30px 100px rgba(0,0,0,.52),0 0 44px rgba(8,216,255,.12);padding:26px}
 .freefall-anim-modal .task-animation-placeholder-close{background:rgba(255,255,255,.05);border-color:rgba(8,216,255,.28);color:var(--white)}
@@ -3542,8 +3538,6 @@ function initSidebarResize(){
 /* ============ NAV ============ */
 function closeNavigationBlockers(){
   document.body.classList.remove('task-board-lock','task07-anim-lock','image-pinch-lock','fc-fullscreen-active');
-  if(typeof cleanupTask03Animation==='function') cleanupTask03Animation();
-
   [
     'taskBoardOverlay',
     'vlFsOverlay',
@@ -7073,7 +7067,7 @@ const LESSON_TASKS={
    cond:'Тело брошено вертикально вверх со скоростью <strong>15 м/с</strong>. Найдите максимальную высоту и время полёта. g=10 м/с².',
    given:'V₀=15 м/с, g=10<br><span class="pt-find">Найти: H, T</span>',
    steps:['На высоте V=0: t_up=V₀/g=1.5 с','H=V₀²/(2g)=225/20=11.25 м','T=2·t_up=3 с'],ans:'H=11.25 м, T=3 с'},
-  {num:3,level:3,group:'Задачи на свободное падение',id:'ballistics-incline-elastic-bounce-task03',boardMode:'ballistics-incline-elastic-bounce-task03',animationId:'ballistics-incline-elastic-bounce-task03',hasAnimation:true,title:'Упругий отскок от наклонной плоскости',fullTitle:'Шарик, падающий на наклонную плоскость',
+  {num:3,level:3,group:'Задачи на свободное падение',id:'ballistics-incline-elastic-bounce-task03',boardMode:'ballistics-incline-elastic-bounce-task03',hasAnimation:false,title:'Упругий отскок от наклонной плоскости',fullTitle:'Шарик, падающий на наклонную плоскость',
    cond:'Маленький шарик падает сверху на наклонную плоскость и упруго отражается от неё. Угол наклона плоскости к горизонту <strong>α = 30°</strong>. На какое расстояние по горизонтали переместится шарик между первым и вторым ударами о плоскость? Скорость шарика непосредственно перед первым ударом направлена вертикально вниз и равна <strong>1 м/с</strong>.',
    given:'α = 30°<br>v₀ = 1 м/с<br>g = 10 м/с²<br><span class="pt-find">Найти: S — горизонтальное расстояние между первым и вторым ударами</span>',
    boardConditionHtml:'<strong>Шарик, падающий на наклонную плоскость</strong><br>Маленький шарик падает сверху на наклонную плоскость и упруго отражается от неё. Угол наклона плоскости к горизонту <strong>α = 30°</strong>. На какое расстояние по горизонтали переместится шарик между первым и вторым ударами о плоскость? Скорость шарика непосредственно перед первым ударом направлена вертикально вниз и равна <strong>1 м/с</strong>.<br><br><strong>Дано:</strong><br>α = 30°<br>v₀ = 1 м/с<br>g = 10 м/с²<br><br><strong>Найти:</strong><br>S — горизонтальное расстояние между первым и вторым ударами',
@@ -8224,7 +8218,8 @@ function renderPTasks(name){
       animId:t.animId||t.animationId||''
     };
     const boardBtn=`<button type="button" class="pt-board-btn" data-task-id="${escapeHtml(taskId)}" data-board-mode="${escapeHtml(boardMode)}" onclick="return openTaskBoard('${boardModeSafe}',true,'${taskIdSafe}')">🧑‍🏫 Доска</button>`;
-    const animationBtn=`<button type="button" class="pt-anim-btn" data-action="open-animation" data-task-id="${escapeHtml(taskId)}" data-animation-id="${escapeHtml(t.animationId||t.animId||'')}" onclick="return handleOpenAnimationClick(event)">▶ Анимация</button>`;
+    const animationUnavailable=taskId==='ballistics-incline-elastic-bounce-task03';
+    const animationBtn=`<button type="button" class="pt-anim-btn" data-action="open-animation" data-task-id="${escapeHtml(taskId)}" data-animation-id="${escapeHtml(t.animationId||t.animId||'')}"${animationUnavailable?' disabled title="Анимация будет добавлена позже" aria-label="Анимация будет добавлена позже"':''} onclick="return handleOpenAnimationClick(event)">▶ Анимация</button>`;
     const hasStructuredSolution=hasFilledTaskSolution(t)||hasLegacyTaskTextSolution(t);
     const embeddedRaw=hasStructuredSolution?renderTaskSolutionPanel(t,'pt'):(t.solutionHtml||getEmbeddedSolutionHtml(t));
     const embedded=String(embeddedRaw||'').trim();
@@ -8442,9 +8437,8 @@ function closeTaskAnimationPlaceholder(){
   const overlay=document.getElementById('taskAnimationPlaceholderOverlay');
 
   if(overlay){
-    cleanupTask03Animation();
     stopFreeFallAnimationInOverlay(overlay);
-    overlay.querySelector('.task-animation-placeholder-modal')?.classList.remove('ballistics-task-animation-modal','task03-animation-modal');
+    overlay.querySelector('.task-animation-placeholder-modal')?.classList.remove('ballistics-task-animation-modal');
     overlay.classList.remove('open');
     overlay.style.display='none';
 
@@ -11294,133 +11288,7 @@ function openFreeFallTaskAnimation(taskId){
   return false;
 }
 
-const TASK03_ANIMATION_ID='ballistics-incline-elastic-bounce-task03';
-const task03AnimationState={
-  running:false,
-  paused:false,
-  progress:0,
-  speed:1,
-  rafId:null,
-  lastFrame:0
-};
-
-function renderTask03AnimationShell(){
-  return `<div class="task03-animation-shell">
-    <div class="task03-animation-stage" aria-label="Пустая сцена анимации задачи 03">
-      <div class="task03-animation-canvas"></div>
-    </div>
-    <div class="task03-animation-controls">
-      <div class="fc-ctrl">
-        <button type="button" class="fc-btn" data-task03-animation-start>Старт</button>
-        <button type="button" class="fc-btn" data-task03-animation-pause>Пауза</button>
-        <button type="button" class="fc-btn" data-task03-animation-reset>Сброс</button>
-      </div>
-      <label class="fc-speed-control">Скорость анимации:
-        <input type="range" min="0.5" max="2" step="0.5" value="1" data-task03-animation-speed>
-      </label>
-    </div>
-  </div>`;
-}
-
-function initTask03Animation(){
-  cleanupTask03Animation();
-  task03AnimationState.running=false;
-  task03AnimationState.paused=false;
-  task03AnimationState.progress=0;
-  task03AnimationState.speed=1;
-  task03AnimationState.lastFrame=0;
-
-  const overlay=document.getElementById('taskAnimationPlaceholderOverlay');
-  if(!overlay) return;
-  overlay.querySelector('[data-task03-animation-start]')?.addEventListener('click',startTask03Animation);
-  overlay.querySelector('[data-task03-animation-pause]')?.addEventListener('click',pauseTask03Animation);
-  overlay.querySelector('[data-task03-animation-reset]')?.addEventListener('click',resetTask03Animation);
-  const speedInput=overlay.querySelector('[data-task03-animation-speed]');
-  if(speedInput){
-    speedInput.value=String(task03AnimationState.speed);
-    speedInput.addEventListener('input',function(event){
-      task03AnimationState.speed=Number(event.target.value)||1;
-    });
-  }
-  renderTask03AnimationScene(task03AnimationState.progress);
-}
-
-function startTask03Animation(){
-  if(task03AnimationState.running) return;
-  if(task03AnimationState.progress>=1) task03AnimationState.progress=0;
-  task03AnimationState.running=true;
-  task03AnimationState.paused=false;
-  task03AnimationState.lastFrame=0;
-  task03AnimationState.rafId=requestAnimationFrame(updateTask03AnimationFrame);
-}
-
-function pauseTask03Animation(){
-  task03AnimationState.running=false;
-  task03AnimationState.paused=true;
-  task03AnimationState.lastFrame=0;
-  if(task03AnimationState.rafId!==null) cancelAnimationFrame(task03AnimationState.rafId);
-  task03AnimationState.rafId=null;
-}
-
-function resetTask03Animation(){
-  pauseTask03Animation();
-  task03AnimationState.paused=false;
-  task03AnimationState.progress=0;
-  renderTask03AnimationScene(task03AnimationState.progress);
-}
-
-function updateTask03AnimationFrame(timestamp){
-  if(!task03AnimationState.running) return;
-  if(!task03AnimationState.lastFrame) task03AnimationState.lastFrame=timestamp;
-  const delta=Math.min((timestamp-task03AnimationState.lastFrame)/1000,0.05);
-  task03AnimationState.lastFrame=timestamp;
-  task03AnimationState.progress=Math.min(1,task03AnimationState.progress+delta*task03AnimationState.speed/5);
-  renderTask03AnimationScene(task03AnimationState.progress);
-
-  if(task03AnimationState.progress<1){
-    task03AnimationState.rafId=requestAnimationFrame(updateTask03AnimationFrame);
-  }else{
-    task03AnimationState.running=false;
-    task03AnimationState.rafId=null;
-  }
-}
-
-function renderTask03AnimationScene(progress){
-  const scene=document.querySelector('#taskAnimationPlaceholderOverlay .task03-animation-stage');
-  if(scene) scene.dataset.progress=String(Math.max(0,Math.min(1,Number(progress)||0)));
-}
-
-function cleanupTask03Animation(){
-  task03AnimationState.running=false;
-  task03AnimationState.paused=false;
-  task03AnimationState.lastFrame=0;
-  if(task03AnimationState.rafId!==null) cancelAnimationFrame(task03AnimationState.rafId);
-  task03AnimationState.rafId=null;
-}
-
-function openTask03Animation(){
-  if(!document.getElementById('taskAnimationPlaceholderOverlay')) openTaskAnimationPlaceholder(TASK03_ANIMATION_ID);
-  const overlay=document.getElementById('taskAnimationPlaceholderOverlay');
-  if(!overlay) return false;
-  stopFreeFallAnimationInOverlay(overlay);
-  const keepTaskBoard=!!(TASK_ANIMATION_CONTEXT&&TASK_ANIMATION_CONTEXT.fromBoard&&taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
-  overlay.dataset.keepTaskBoard=keepTaskBoard?'true':'false';
-  overlay.classList.add('open');
-  overlay.style.display='flex';
-  overlay.style.pointerEvents='auto';
-  overlay.setAttribute('aria-hidden','false');
-  const modal=overlay.querySelector('.task-animation-placeholder-modal');
-  if(!modal) return false;
-  modal.classList.remove('freefall-anim-modal');
-  modal.classList.add('ballistics-task-animation-modal','task03-animation-modal');
-  modal.innerHTML=`<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder(); return false;">✕ Закрыть</button>${renderTask03AnimationShell()}`;
-  initTask03Animation();
-  if(taskBoardState&&taskBoardState.animBtn) taskBoardState.animBtn.textContent='✕ Анимация';
-  return false;
-}
-
 const EMPTY_BALLISTICS_TASK_ANIMATION_IDS=new Set([
-  'ballistics-incline-elastic-bounce-task03',
   'ballistics-board-rebound-max-height-task04'
 ]);
 
@@ -11430,8 +11298,6 @@ function isBallisticsTaskAnimationId(taskId){
 
 function openBallisticsTaskAnimation(taskId){
   const resolvedId=String(taskId||'');
-  if(resolvedId===TASK03_ANIMATION_ID) return openTask03Animation();
-  cleanupTask03Animation();
   if(!isBallisticsTaskAnimationId(resolvedId)) return openTaskAnimationPlaceholder(resolvedId);
   if(!document.getElementById('taskAnimationPlaceholderOverlay')) openTaskAnimationPlaceholder(resolvedId);
   const overlay=document.getElementById('taskAnimationPlaceholderOverlay');
@@ -11443,7 +11309,7 @@ function openBallisticsTaskAnimation(taskId){
   overlay.style.display='flex';
   const modal=overlay.querySelector('.task-animation-placeholder-modal');
   if(!modal) return false;
-  modal.classList.remove('freefall-anim-modal','task03-animation-modal');
+  modal.classList.remove('freefall-anim-modal');
   modal.classList.add('ballistics-task-animation-modal');
   modal.innerHTML=`<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder(); return false;">✕ Закрыть</button><div class="task-animation-empty-shell"></div>`;
   if(taskBoardState&&taskBoardState.animBtn) taskBoardState.animBtn.textContent='✕ Анимация';
