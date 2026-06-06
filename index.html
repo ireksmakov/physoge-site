@@ -11289,31 +11289,62 @@ function openFreeFallTaskAnimation(taskId){
   return false;
 }
 
-const BALLISTICS_TASK_SIMULATOR_SHELLS={
-  'ballistics-incline-elastic-bounce-task03':{number:'03',title:'Анимация задачи 03'},
-  'ballistics-board-rebound-max-height-task04':{number:'04',title:'Анимация задачи 04'}
+const taskAnimationConfigs={
+  'ballistics-incline-elastic-bounce-task03':{
+    title:'Анимация задачи 03',
+    subtitle:'Упругий отскок от наклонной плоскости',
+    conditionPlaceholder:'Условие задачи будет добавлено позже.',
+    paramsPlaceholder:'Параметры анимации будут добавлены позже.',
+    resultPlaceholder:'Результат будет добавлен позже.'
+  },
+  'ballistics-board-rebound-max-height-task04':{
+    title:'Анимация задачи 04',
+    subtitle:'Отскок от наклонной доски',
+    conditionPlaceholder:'Условие задачи будет добавлено позже.',
+    paramsPlaceholder:'Параметры анимации будут добавлены позже.',
+    resultPlaceholder:'Результат будет добавлен позже.'
+  }
 };
 
+const taskAnimationState={
+  taskId:null,
+  running:false,
+  paused:false,
+  progress:0,
+  speed:1,
+  rafId:null,
+  startedAt:0,
+  lastFrame:0
+};
+
+const TASK_SIMULATOR_DURATION=4000;
+const TASK_SIMULATOR_MAX_FRAMES=2400;
+
 function isBallisticsTaskSimulatorShellId(taskId){
-  return !!BALLISTICS_TASK_SIMULATOR_SHELLS[String(taskId||'')];
+  return !!taskAnimationConfigs[String(taskId||'')];
 }
 
 function renderTaskSimulatorAnimationShell(config){
   const safeConfig=config||{};
   const taskId=String(safeConfig.taskId||'');
   const title=String(safeConfig.title||'Анимация задачи');
+  const subtitle=String(safeConfig.subtitle||'');
+  const conditionPlaceholder=String(safeConfig.conditionPlaceholder||'Условие задачи будет добавлено позже.');
+  const paramsPlaceholder=String(safeConfig.paramsPlaceholder||'Параметры анимации будут добавлены позже.');
+  const resultPlaceholder=String(safeConfig.resultPlaceholder||'Результат будет добавлен позже.');
   return `<div class="task-simulator-shell" data-task-simulator-shell="${escapeHtml(taskId)}">
     <div class="task-simulator-shell-head">
       <div class="task-simulator-shell-kicker">ЕГЭ · Физика → Динамика → Баллистика. Свободное падение</div>
       <h2 class="task-simulator-shell-title">${escapeHtml(title)}</h2>
+      <div class="task-simulator-shell-copy">${escapeHtml(subtitle)}</div>
     </div>
     <div class="task-simulator-shell-card">
       <div class="task-simulator-shell-label">Условие</div>
-      <div class="task-simulator-shell-copy">Условие задачи будет добавлено позже.</div>
+      <div class="task-simulator-shell-copy">${escapeHtml(conditionPlaceholder)}</div>
     </div>
     <div class="task-simulator-shell-card">
       <div class="task-simulator-shell-label">Параметры</div>
-      <div class="task-simulator-shell-copy">Параметры анимации будут добавлены позже.</div>
+      <div class="task-simulator-shell-copy">${escapeHtml(paramsPlaceholder)}</div>
     </div>
     <div class="task-simulator-shell-layout">
       <div class="task-simulator-shell-scene">
@@ -11339,12 +11370,99 @@ function renderTaskSimulatorAnimationShell(config){
     </div>
     <div class="task-simulator-shell-card task-simulator-shell-result">
       <div class="task-simulator-shell-label">Результат</div>
-      <div class="task-simulator-shell-copy">Результат будет добавлен позже.</div>
+      <div class="task-simulator-shell-copy">${escapeHtml(resultPlaceholder)}</div>
     </div>
   </div>`;
 }
 
-function drawTaskSimulatorShellFrame(root,progress){
+function initTaskSimulatorAnimation(taskId){
+  cleanupTaskSimulatorAnimation();
+  const root=document.querySelector(`[data-task-simulator-shell="${String(taskId||'')}"]`);
+  if(!root) return false;
+  taskAnimationState.taskId=String(taskId||'');
+  taskAnimationState.running=false;
+  taskAnimationState.paused=false;
+  taskAnimationState.progress=0;
+  taskAnimationState.speed=1;
+  taskAnimationState.rafId=null;
+  taskAnimationState.startedAt=0;
+  taskAnimationState.lastFrame=0;
+  taskAnimationState.root=root;
+  taskAnimationState.frameCount=0;
+  const speedInput=root.querySelector('[data-task-simulator-speed]');
+  root.querySelector('[data-task-simulator-start]')?.addEventListener('click',startTaskSimulatorAnimation);
+  root.querySelector('[data-task-simulator-pause]')?.addEventListener('click',pauseTaskSimulatorAnimation);
+  root.querySelector('[data-task-simulator-reset]')?.addEventListener('click',resetTaskSimulatorAnimation);
+  speedInput?.addEventListener('input',function(event){
+    taskAnimationState.speed=Math.max(.5,Math.min(2,Number(event.target.value)||1));
+    renderTaskSimulatorScene(taskAnimationState.progress);
+  });
+  if(window.ResizeObserver){
+    taskAnimationState.resizeObserver=new ResizeObserver(function(){renderTaskSimulatorScene(taskAnimationState.progress);});
+    const canvas=root.querySelector('[data-task-simulator-canvas]');
+    if(canvas) taskAnimationState.resizeObserver.observe(canvas);
+  }
+  resetTaskSimulatorAnimation();
+  return true;
+}
+
+function startTaskSimulatorAnimation(){
+  const state=taskAnimationState;
+  if(!state.root||state.running) return;
+  if(state.progress>=1) state.progress=0;
+  state.running=true;
+  state.paused=false;
+  state.startedAt=performance.now();
+  state.lastFrame=0;
+  state.frameCount=0;
+  if(state.rafId!==null) cancelAnimationFrame(state.rafId);
+  updateTaskSimulatorValues(state.progress,'Выполняется');
+  state.rafId=requestAnimationFrame(updateTaskSimulatorAnimationFrame);
+}
+
+function pauseTaskSimulatorAnimation(){
+  const state=taskAnimationState;
+  if(!state.root||!state.running) return;
+  state.running=false;
+  state.paused=true;
+  if(state.rafId!==null) cancelAnimationFrame(state.rafId);
+  state.rafId=null;
+  updateTaskSimulatorValues(state.progress,'Пауза');
+}
+
+function resetTaskSimulatorAnimation(){
+  const state=taskAnimationState;
+  state.running=false;
+  state.paused=false;
+  state.progress=0;
+  state.startedAt=0;
+  state.lastFrame=0;
+  state.frameCount=0;
+  if(state.rafId!==null) cancelAnimationFrame(state.rafId);
+  state.rafId=null;
+  renderTaskSimulatorScene(0);
+  updateTaskSimulatorValues(0,'Готово к запуску');
+}
+
+function updateTaskSimulatorAnimationFrame(timestamp){
+  const state=taskAnimationState;
+  if(!state.running||!state.root) return;
+  if(!state.lastFrame) state.lastFrame=timestamp;
+  const delta=Math.min(100,Math.max(0,timestamp-state.lastFrame));
+  state.lastFrame=timestamp;
+  state.frameCount+=1;
+  state.progress=Math.min(1,state.progress+(delta*state.speed)/TASK_SIMULATOR_DURATION);
+  renderTaskSimulatorScene(state.progress);
+  updateTaskSimulatorValues(state.progress,state.progress>=1?'Завершено':'Выполняется');
+  if(state.progress>=1||state.frameCount>=TASK_SIMULATOR_MAX_FRAMES){
+    finishTaskSimulatorAnimation();
+    return;
+  }
+  state.rafId=requestAnimationFrame(updateTaskSimulatorAnimationFrame);
+}
+
+function renderTaskSimulatorScene(progress){
+  const root=taskAnimationState.root;
   if(!root) return;
   const canvas=root.querySelector('[data-task-simulator-canvas]');
   if(!canvas) return;
@@ -11358,6 +11476,7 @@ function drawTaskSimulatorShellFrame(root,progress){
   }
   const ctx=canvas.getContext('2d');
   if(!ctx) return;
+  const safeProgress=Math.max(0,Math.min(1,Number(progress)||0));
   ctx.setTransform(dpr,0,0,dpr,0,0);
   ctx.clearRect(0,0,width,height);
   const grid=36;
@@ -11365,116 +11484,64 @@ function drawTaskSimulatorShellFrame(root,progress){
   ctx.lineWidth=1;
   for(let x=0;x<=width;x+=grid){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,height);ctx.stroke();}
   for(let y=0;y<=height;y+=grid){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(width,y);ctx.stroke();}
-  const barX=width*.12;
-  const barWidth=width*.76;
-  const barY=height*.78;
-  ctx.lineCap='round';
-  ctx.lineWidth=8;
-  ctx.strokeStyle='rgba(8,216,255,.16)';
+  const barX=width*.12,barWidth=width*.76,barY=height*.78;
+  ctx.lineCap='round';ctx.lineWidth=8;ctx.strokeStyle='rgba(8,216,255,.16)';
   ctx.beginPath();ctx.moveTo(barX,barY);ctx.lineTo(barX+barWidth,barY);ctx.stroke();
-  ctx.strokeStyle='#08d8ff';
-  ctx.beginPath();ctx.moveTo(barX,barY);ctx.lineTo(barX+barWidth*progress,barY);ctx.stroke();
-  ctx.fillStyle='#39ff14';
-  ctx.shadowColor='rgba(57,255,20,.65)';
-  ctx.shadowBlur=14;
-  ctx.beginPath();ctx.arc(barX+barWidth*progress,barY,7,0,Math.PI*2);ctx.fill();
-  ctx.shadowBlur=0;
+  ctx.strokeStyle='#08d8ff';ctx.beginPath();ctx.moveTo(barX,barY);ctx.lineTo(barX+barWidth*safeProgress,barY);ctx.stroke();
+  ctx.fillStyle='#39ff14';ctx.shadowColor='rgba(57,255,20,.65)';ctx.shadowBlur=14;
+  ctx.beginPath();ctx.arc(barX+barWidth*safeProgress,barY,7,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
 }
 
-function updateTaskSimulatorShellFrame(root,progress,status){
+function updateTaskSimulatorValues(progress,status){
+  const root=taskAnimationState.root;
+  if(!root) return;
   const safeProgress=Math.max(0,Math.min(1,Number(progress)||0));
-  drawTaskSimulatorShellFrame(root,safeProgress);
-  const timeEl=root&&root.querySelector('[data-task-simulator-time]');
-  const progressEl=root&&root.querySelector('[data-task-simulator-progress]');
-  const statusEl=root&&root.querySelector('[data-task-simulator-status]');
-  if(timeEl) timeEl.textContent=(safeProgress*4).toFixed(1).replace('.',',')+' с';
+  const timeEl=root.querySelector('[data-task-simulator-time]');
+  const progressEl=root.querySelector('[data-task-simulator-progress]');
+  const statusEl=root.querySelector('[data-task-simulator-status]');
+  if(timeEl) timeEl.textContent=(safeProgress*TASK_SIMULATOR_DURATION/1000).toFixed(1).replace('.',',')+' с';
   if(progressEl) progressEl.textContent=Math.round(safeProgress*100)+'%';
   if(statusEl&&status) statusEl.textContent=status;
 }
 
-function stopTaskSimulatorAnimation(root,status){
-  if(!root||!root.__taskSimulatorAnimation) return;
-  const state=root.__taskSimulatorAnimation;
+function finishTaskSimulatorAnimation(){
+  const state=taskAnimationState;
   state.running=false;
-  cancelAnimationFrame(state.raf);
+  state.paused=false;
+  state.progress=1;
+  if(state.rafId!==null) cancelAnimationFrame(state.rafId);
+  state.rafId=null;
+  renderTaskSimulatorScene(1);
+  updateTaskSimulatorValues(1,'Завершено');
+}
+
+function cleanupTaskSimulatorAnimation(){
+  const state=taskAnimationState;
+  state.running=false;
+  state.paused=false;
+  if(state.rafId!==null) cancelAnimationFrame(state.rafId);
+  state.rafId=null;
   if(state.resizeObserver){
     state.resizeObserver.disconnect();
     state.resizeObserver=null;
   }
-  if(status) updateTaskSimulatorShellFrame(root,state.elapsed/state.duration,status);
+  state.root=null;
+  state.lastFrame=0;
 }
 
-function stopTaskSimulatorAnimationInOverlay(overlay){
-  const root=overlay&&overlay.querySelector?overlay.querySelector('[data-task-simulator-shell]'):null;
-  stopTaskSimulatorAnimation(root);
-}
-
-function bindTaskSimulatorAnimationShell(root){
-  if(!root) return;
-  const duration=4000;
-  const state=root.__taskSimulatorAnimation={running:false,elapsed:0,lastTime:0,raf:0,duration:duration,frames:0};
-  const speedInput=root.querySelector('[data-task-simulator-speed]');
-  const step=function(now){
-    if(!state.running) return;
-    if(!state.lastTime) state.lastTime=now;
-    const delta=Math.min(100,Math.max(0,now-state.lastTime));
-    state.lastTime=now;
-    const speed=Math.max(.5,Math.min(2,Number(speedInput&&speedInput.value)||1));
-    state.elapsed=Math.min(state.duration,state.elapsed+delta*speed);
-    state.frames+=1;
-    const progress=state.elapsed/state.duration;
-    updateTaskSimulatorShellFrame(root,progress,progress>=1?'Завершено':'Выполняется');
-    if(progress>=1||state.frames>=2400){
-      state.running=false;
-      state.elapsed=state.duration;
-      updateTaskSimulatorShellFrame(root,1,'Завершено');
-      return;
-    }
-    state.raf=requestAnimationFrame(step);
-  };
-  const start=function(){
-    if(state.running) return;
-    if(state.elapsed>=state.duration){state.elapsed=0;state.frames=0;}
-    state.running=true;
-    state.lastTime=0;
-    cancelAnimationFrame(state.raf);
-    state.raf=requestAnimationFrame(step);
-    updateTaskSimulatorShellFrame(root,state.elapsed/state.duration,'Выполняется');
-  };
-  const pause=function(){
-    if(!state.running) return;
-    state.running=false;
-    cancelAnimationFrame(state.raf);
-    updateTaskSimulatorShellFrame(root,state.elapsed/state.duration,'Пауза');
-  };
-  const reset=function(){
-    state.running=false;
-    state.elapsed=0;
-    state.lastTime=0;
-    state.frames=0;
-    cancelAnimationFrame(state.raf);
-    updateTaskSimulatorShellFrame(root,0,'Готово к запуску');
-  };
-  root.querySelector('[data-task-simulator-start]')?.addEventListener('click',start);
-  root.querySelector('[data-task-simulator-pause]')?.addEventListener('click',pause);
-  root.querySelector('[data-task-simulator-reset]')?.addEventListener('click',reset);
-  speedInput?.addEventListener('input',function(){drawTaskSimulatorShellFrame(root,state.elapsed/state.duration);});
-  if(window.ResizeObserver){
-    state.resizeObserver=new ResizeObserver(function(){drawTaskSimulatorShellFrame(root,state.elapsed/state.duration);});
-    state.resizeObserver.observe(root.querySelector('[data-task-simulator-canvas]'));
-  }
-  reset();
+function stopTaskSimulatorAnimationInOverlay(){
+  cleanupTaskSimulatorAnimation();
 }
 
 function openBallisticsTaskSimulatorShell(taskId){
   const resolvedId=String(taskId||'');
-  const config=BALLISTICS_TASK_SIMULATOR_SHELLS[resolvedId];
+  const config=taskAnimationConfigs[resolvedId];
   if(!config) return openTaskAnimationPlaceholder(resolvedId);
   if(!document.getElementById('taskAnimationPlaceholderOverlay')) openTaskAnimationPlaceholder(resolvedId);
   const overlay=document.getElementById('taskAnimationPlaceholderOverlay');
   if(!overlay) return false;
   stopFreeFallAnimationInOverlay(overlay);
-  stopTaskSimulatorAnimationInOverlay(overlay);
+  cleanupTaskSimulatorAnimation();
   const keepTaskBoard=!!(TASK_ANIMATION_CONTEXT&&TASK_ANIMATION_CONTEXT.fromBoard&&taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
   overlay.dataset.keepTaskBoard=keepTaskBoard?'true':'false';
   overlay.classList.add('open');
@@ -11484,8 +11551,7 @@ function openBallisticsTaskSimulatorShell(taskId){
   modal.classList.remove('freefall-anim-modal');
   modal.classList.add('task-simulator-shell-modal');
   modal.innerHTML=`<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder(); return false;">✕ Закрыть</button>${renderTaskSimulatorAnimationShell({...config,taskId:resolvedId})}`;
-  const root=modal.querySelector('[data-task-simulator-shell]');
-  bindTaskSimulatorAnimationShell(root);
+  initTaskSimulatorAnimation(resolvedId);
   if(taskBoardState&&taskBoardState.animBtn) taskBoardState.animBtn.textContent='✕ Анимация';
   return false;
 }
