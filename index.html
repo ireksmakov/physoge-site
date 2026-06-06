@@ -8436,7 +8436,6 @@ function closeTaskAnimationPlaceholder(){
 
   if(overlay){
     stopFreeFallAnimationInOverlay(overlay);
-    cleanupBallisticsTaskAnimation();
     overlay.querySelector('.task-animation-placeholder-modal')?.classList.remove('ballistics-task-animation-modal');
     overlay.classList.remove('open');
     overlay.style.display='none';
@@ -11287,251 +11286,22 @@ function openFreeFallTaskAnimation(taskId){
   return false;
 }
 
-const ballisticsTaskAnimationConfigs={
-  'ballistics-incline-elastic-bounce-task03':{
-    title:'Анимация задачи 03',
-    subtitle:'Упругий отскок от наклонной плоскости',
-    condition:'Условие задачи будет добавлено позже.',
-    params:'Параметры анимации будут добавлены позже.',
-    scenePlaceholder:'Сцена анимации будет настроена позже.',
-    result:'Результат будет добавлен позже.'
-  },
-  'ballistics-board-rebound-max-height-task04':{
-    title:'Анимация задачи 04',
-    subtitle:'Отскок от наклонной доски',
-    condition:'Условие задачи будет добавлено позже.',
-    params:'Параметры анимации будут добавлены позже.',
-    scenePlaceholder:'Сцена анимации будет настроена позже.',
-    result:'Результат будет добавлен позже.'
-  }
-};
-
-const ballisticsTaskAnimationState={
-  taskId:null,
-  running:false,
-  paused:false,
-  progress:0,
-  speed:1,
-  rafId:null,
-  lastFrame:0,
-  frameCount:0,
-  root:null,
-  resizeObserver:null
-};
-
-const BALLISTICS_TASK_ANIMATION_DURATION=4000;
-const BALLISTICS_TASK_ANIMATION_MAX_FRAMES=2400;
+const EMPTY_BALLISTICS_TASK_ANIMATION_IDS=new Set([
+  'ballistics-incline-elastic-bounce-task03',
+  'ballistics-board-rebound-max-height-task04'
+]);
 
 function isBallisticsTaskAnimationId(taskId){
-  return !!ballisticsTaskAnimationConfigs[String(taskId||'')];
-}
-
-function renderBallisticsTaskAnimationShell(config){
-  const safeConfig=config||{};
-  const taskId=String(safeConfig.taskId||'');
-  return `<div class="cyclist-record-frame ballistics-task-animation-frame" data-ballistics-task-animation="${escapeHtml(taskId)}">
-    <div class="fc-head"><span>ЕГЭ · Физика → Динамика → Баллистика. Свободное падение</span><strong>ФИЗМАТ</strong></div>
-    <div class="ballistics-task-animation-section">
-      <h2 class="ballistics-task-animation-title">${escapeHtml(String(safeConfig.title||'Анимация задачи'))}</h2>
-      <div class="ballistics-task-animation-subtitle">${escapeHtml(String(safeConfig.subtitle||''))}</div>
-    </div>
-    <div class="fc-cond">
-      <div class="ballistics-task-animation-label">Условие</div>
-      <div class="ballistics-task-animation-copy">${escapeHtml(String(safeConfig.condition||'Условие задачи будет добавлено позже.'))}</div>
-    </div>
-    <div class="fc-inline-params">
-      <div class="fc-param-chip ballistics-task-animation-param">
-        <div class="ballistics-task-animation-label">Параметры</div>
-        <span>${escapeHtml(String(safeConfig.params||'Параметры анимации будут добавлены позже.'))}</span>
-      </div>
-    </div>
-    <div class="fc-animation-controls ballistics-task-animation-controls">
-      <div class="fc-ctrl">
-        <button type="button" class="fc-btn" data-ballistics-task-animation-start>Старт</button>
-        <button type="button" class="fc-btn" data-ballistics-task-animation-pause>Пауза</button>
-        <button type="button" class="fc-btn" data-ballistics-task-animation-reset>Сброс</button>
-      </div>
-      <label class="fc-speed-control">Скорость анимации: <input type="range" min="0.5" max="2" step="0.5" value="1" data-ballistics-task-animation-speed></label>
-    </div>
-    <div class="fc-canvas-box fc-animation-wrap fc-canvas-wrap ballistics-task-animation-stage">
-      <canvas class="ballistics-task-animation-canvas" data-ballistics-task-animation-canvas aria-label="Временная сцена анимации"></canvas>
-      <div class="ballistics-task-animation-scene-copy">${escapeHtml(String(safeConfig.scenePlaceholder||'Сцена анимации будет настроена позже.'))}</div>
-    </div>
-    <div class="ballistics-task-animation-section">
-      <div class="ballistics-task-animation-label">Текущие значения</div>
-      <div class="ballistics-task-animation-values">
-        <div class="ballistics-task-animation-value"><span>Состояние</span><strong data-ballistics-task-animation-status>Готово к запуску</strong></div>
-        <div class="ballistics-task-animation-value"><span>Время</span><strong data-ballistics-task-animation-time>0,0 с</strong></div>
-        <div class="ballistics-task-animation-value"><span>Прогресс</span><strong data-ballistics-task-animation-progress>0%</strong></div>
-      </div>
-    </div>
-    <div class="ballistics-task-animation-section ballistics-task-animation-result">
-      <div class="ballistics-task-animation-label">Результат</div>
-      <div class="ballistics-task-animation-copy">${escapeHtml(String(safeConfig.result||'Результат будет добавлен позже.'))}</div>
-    </div>
-  </div>`;
-}
-
-function initBallisticsTaskAnimation(taskId){
-  cleanupBallisticsTaskAnimation();
-  const resolvedId=String(taskId||'');
-  const root=document.querySelector(`[data-ballistics-task-animation="${resolvedId}"]`);
-  if(!root) return false;
-  Object.assign(ballisticsTaskAnimationState,{taskId:resolvedId,running:false,paused:false,progress:0,speed:1,rafId:null,lastFrame:0,frameCount:0,root:root});
-  root.querySelector('[data-ballistics-task-animation-start]')?.addEventListener('click',startBallisticsTaskAnimation);
-  root.querySelector('[data-ballistics-task-animation-pause]')?.addEventListener('click',pauseBallisticsTaskAnimation);
-  root.querySelector('[data-ballistics-task-animation-reset]')?.addEventListener('click',resetBallisticsTaskAnimation);
-  root.querySelector('[data-ballistics-task-animation-speed]')?.addEventListener('input',function(event){
-    ballisticsTaskAnimationState.speed=Math.max(.5,Math.min(2,Number(event.target.value)||1));
-  });
-  if(window.ResizeObserver){
-    ballisticsTaskAnimationState.resizeObserver=new ResizeObserver(function(){renderBallisticsTaskAnimationScene(ballisticsTaskAnimationState.progress);});
-    const canvas=root.querySelector('[data-ballistics-task-animation-canvas]');
-    if(canvas) ballisticsTaskAnimationState.resizeObserver.observe(canvas);
-  }
-  resetBallisticsTaskAnimation();
-  return true;
-}
-
-function startBallisticsTaskAnimation(){
-  const state=ballisticsTaskAnimationState;
-  if(!state.root||state.running) return;
-  if(state.progress>=1) state.progress=0;
-  state.running=true;
-  state.paused=false;
-  state.lastFrame=0;
-  state.frameCount=0;
-  if(state.rafId!==null) cancelAnimationFrame(state.rafId);
-  updateBallisticsTaskAnimationValues(state.progress,'Выполняется');
-  state.rafId=requestAnimationFrame(updateBallisticsTaskAnimationFrame);
-}
-
-function pauseBallisticsTaskAnimation(){
-  const state=ballisticsTaskAnimationState;
-  if(!state.root||!state.running) return;
-  state.running=false;
-  state.paused=true;
-  if(state.rafId!==null) cancelAnimationFrame(state.rafId);
-  state.rafId=null;
-  updateBallisticsTaskAnimationValues(state.progress,'Пауза');
-}
-
-function resetBallisticsTaskAnimation(){
-  const state=ballisticsTaskAnimationState;
-  state.running=false;
-  state.paused=false;
-  state.progress=0;
-  state.lastFrame=0;
-  state.frameCount=0;
-  if(state.rafId!==null) cancelAnimationFrame(state.rafId);
-  state.rafId=null;
-  renderBallisticsTaskAnimationScene(0);
-  updateBallisticsTaskAnimationValues(0,'Готово к запуску');
-}
-
-function updateBallisticsTaskAnimationFrame(timestamp){
-  const state=ballisticsTaskAnimationState;
-  if(!state.running||!state.root||!document.body.contains(state.root)){
-    cleanupBallisticsTaskAnimation();
-    return;
-  }
-  if(!state.lastFrame) state.lastFrame=timestamp;
-  const delta=Math.min(100,Math.max(0,timestamp-state.lastFrame));
-  state.lastFrame=timestamp;
-  state.frameCount+=1;
-  state.progress=Math.min(1,state.progress+(delta*state.speed)/BALLISTICS_TASK_ANIMATION_DURATION);
-  renderBallisticsTaskAnimationScene(state.progress);
-  updateBallisticsTaskAnimationValues(state.progress,state.progress>=1?'Завершено':'Выполняется');
-  if(state.progress>=1||state.frameCount>=BALLISTICS_TASK_ANIMATION_MAX_FRAMES){
-    finishBallisticsTaskAnimation();
-    return;
-  }
-  state.rafId=requestAnimationFrame(updateBallisticsTaskAnimationFrame);
-}
-
-function renderBallisticsTaskAnimationScene(progress){
-  const root=ballisticsTaskAnimationState.root;
-  if(!root) return;
-  const canvas=root.querySelector('[data-ballistics-task-animation-canvas]');
-  if(!canvas) return;
-  const rect=canvas.getBoundingClientRect();
-  const width=Math.max(1,Math.round(rect.width));
-  const height=Math.max(1,Math.round(rect.height));
-  const dpr=Math.min(window.devicePixelRatio||1,2);
-  if(canvas.width!==Math.round(width*dpr)||canvas.height!==Math.round(height*dpr)){
-    canvas.width=Math.round(width*dpr);
-    canvas.height=Math.round(height*dpr);
-  }
-  const ctx=canvas.getContext('2d');
-  if(!ctx) return;
-  const safeProgress=Math.max(0,Math.min(1,Number(progress)||0));
-  ctx.setTransform(dpr,0,0,dpr,0,0);
-  ctx.clearRect(0,0,width,height);
-  ctx.strokeStyle='rgba(148,163,184,.08)';
-  ctx.lineWidth=1;
-  for(let x=0;x<=width;x+=36){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,height);ctx.stroke();}
-  for(let y=0;y<=height;y+=36){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(width,y);ctx.stroke();}
-  const lineX=width*.12,lineWidth=width*.76,lineY=height*.78;
-  ctx.lineCap='round';
-  ctx.lineWidth=8;
-  ctx.strokeStyle='rgba(8,216,255,.16)';
-  ctx.beginPath();ctx.moveTo(lineX,lineY);ctx.lineTo(lineX+lineWidth,lineY);ctx.stroke();
-  ctx.strokeStyle='#08d8ff';
-  ctx.beginPath();ctx.moveTo(lineX,lineY);ctx.lineTo(lineX+lineWidth*safeProgress,lineY);ctx.stroke();
-  ctx.fillStyle='#39ff14';
-  ctx.shadowColor='rgba(57,255,20,.65)';
-  ctx.shadowBlur=14;
-  ctx.beginPath();ctx.arc(lineX+lineWidth*safeProgress,lineY,7,0,Math.PI*2);ctx.fill();
-  ctx.shadowBlur=0;
-}
-
-function updateBallisticsTaskAnimationValues(progress,status){
-  const root=ballisticsTaskAnimationState.root;
-  if(!root) return;
-  const safeProgress=Math.max(0,Math.min(1,Number(progress)||0));
-  const timeEl=root.querySelector('[data-ballistics-task-animation-time]');
-  const progressEl=root.querySelector('[data-ballistics-task-animation-progress]');
-  const statusEl=root.querySelector('[data-ballistics-task-animation-status]');
-  if(timeEl) timeEl.textContent=(safeProgress*BALLISTICS_TASK_ANIMATION_DURATION/1000).toFixed(1).replace('.',',')+' с';
-  if(progressEl) progressEl.textContent=Math.round(safeProgress*100)+'%';
-  if(statusEl&&status) statusEl.textContent=status;
-}
-
-function finishBallisticsTaskAnimation(){
-  const state=ballisticsTaskAnimationState;
-  state.running=false;
-  state.paused=false;
-  state.progress=1;
-  if(state.rafId!==null) cancelAnimationFrame(state.rafId);
-  state.rafId=null;
-  renderBallisticsTaskAnimationScene(1);
-  updateBallisticsTaskAnimationValues(1,'Завершено');
-}
-
-function cleanupBallisticsTaskAnimation(){
-  const state=ballisticsTaskAnimationState;
-  state.running=false;
-  state.paused=false;
-  if(state.rafId!==null) cancelAnimationFrame(state.rafId);
-  state.rafId=null;
-  if(state.resizeObserver){
-    state.resizeObserver.disconnect();
-    state.resizeObserver=null;
-  }
-  state.root=null;
-  state.lastFrame=0;
-  state.frameCount=0;
+  return EMPTY_BALLISTICS_TASK_ANIMATION_IDS.has(String(taskId||''));
 }
 
 function openBallisticsTaskAnimation(taskId){
   const resolvedId=String(taskId||'');
-  const config=ballisticsTaskAnimationConfigs[resolvedId];
-  if(!config) return openTaskAnimationPlaceholder(resolvedId);
+  if(!isBallisticsTaskAnimationId(resolvedId)) return openTaskAnimationPlaceholder(resolvedId);
   if(!document.getElementById('taskAnimationPlaceholderOverlay')) openTaskAnimationPlaceholder(resolvedId);
   const overlay=document.getElementById('taskAnimationPlaceholderOverlay');
   if(!overlay) return false;
   stopFreeFallAnimationInOverlay(overlay);
-  cleanupBallisticsTaskAnimation();
   const keepTaskBoard=!!(TASK_ANIMATION_CONTEXT&&TASK_ANIMATION_CONTEXT.fromBoard&&taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
   overlay.dataset.keepTaskBoard=keepTaskBoard?'true':'false';
   overlay.classList.add('open');
@@ -11540,8 +11310,7 @@ function openBallisticsTaskAnimation(taskId){
   if(!modal) return false;
   modal.classList.remove('freefall-anim-modal');
   modal.classList.add('ballistics-task-animation-modal');
-  modal.innerHTML=`<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder(); return false;">✕ Закрыть</button>${renderBallisticsTaskAnimationShell({...config,taskId:resolvedId})}`;
-  initBallisticsTaskAnimation(resolvedId);
+  modal.innerHTML=`<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder(); return false;">✕ Закрыть</button><div class="task-animation-empty-shell"></div>`;
   if(taskBoardState&&taskBoardState.animBtn) taskBoardState.animBtn.textContent='✕ Анимация';
   return false;
 }
