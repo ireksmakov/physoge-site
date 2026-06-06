@@ -753,6 +753,16 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 .ballistics-task-animation-value strong{color:#e2e8f0;font-size:13px}
 .ballistics-task-animation-result{border-bottom:0;border-top:1px solid rgba(57,255,20,.18)}
 @media(max-width:760px){.task-animation-placeholder-overlay{padding:10px}.ballistics-task-animation-modal{padding:20px 14px}.ballistics-task-animation-frame .fc-head{padding-right:92px}.ballistics-task-animation-title{font-size:24px}.ballistics-task-animation-controls .fc-speed-control{width:100%;margin-left:0;justify-content:space-between}.ballistics-task-animation-controls .fc-speed-control input{flex:1}.ballistics-task-animation-values{grid-template-columns:1fr}}
+.task03-flying-cyclist-modal{width:min(980px,100%);background:linear-gradient(160deg,#07111f,#0b1626 62%,#101b2a);color:var(--white);border:1px solid rgba(8,216,255,.18);box-shadow:0 30px 100px rgba(0,0,0,.52),0 0 44px rgba(8,216,255,.12);padding:26px}
+.task03-flying-cyclist-modal .task-animation-placeholder-close{background:rgba(255,255,255,.05);border-color:rgba(8,216,255,.28);color:var(--white);z-index:4}
+.task03-flying-cyclist-shell{display:grid;gap:14px}
+.task03-flying-cyclist-heading{padding-right:110px}
+.task03-flying-cyclist-heading h2{margin:0;color:var(--white);font-family:var(--fh);font-size:30px;line-height:1.2}
+.task03-flying-cyclist-heading p{margin:7px 0 0;color:#94a3b8;font-size:14px;font-weight:700}
+.task03-flying-cyclist-frame{overflow:hidden}
+.task03-flying-cyclist-frame .fc-animation-controls{flex-wrap:wrap}
+.task03-flying-cyclist-frame .fc-canvas-box{min-height:360px}
+@media(max-width:760px){.task03-flying-cyclist-modal{padding:20px 14px}.task03-flying-cyclist-heading{padding-right:84px}.task03-flying-cyclist-heading h2{font-size:24px}.task03-flying-cyclist-frame .fc-canvas-box{min-height:300px}.task03-flying-cyclist-frame .fc-speed-control{width:100%;justify-content:space-between}.task03-flying-cyclist-frame .fc-speed-control input{flex:1}}
 
 .freefall-anim-modal{width:min(980px,100%);background:linear-gradient(160deg,#07111f,#0b1626 62%,#101b2a);color:var(--white);border:1px solid rgba(8,216,255,.18);box-shadow:0 30px 100px rgba(0,0,0,.52),0 0 44px rgba(8,216,255,.12);padding:26px}
 .freefall-anim-modal .task-animation-placeholder-close{background:rgba(255,255,255,.05);border-color:rgba(8,216,255,.28);color:var(--white)}
@@ -7067,7 +7077,7 @@ const LESSON_TASKS={
    cond:'Тело брошено вертикально вверх со скоростью <strong>15 м/с</strong>. Найдите максимальную высоту и время полёта. g=10 м/с².',
    given:'V₀=15 м/с, g=10<br><span class="pt-find">Найти: H, T</span>',
    steps:['На высоте V=0: t_up=V₀/g=1.5 с','H=V₀²/(2g)=225/20=11.25 м','T=2·t_up=3 с'],ans:'H=11.25 м, T=3 с'},
-  {num:3,level:3,group:'Задачи на свободное падение',id:'ballistics-incline-elastic-bounce-task03',boardMode:'ballistics-incline-elastic-bounce-task03',hasAnimation:false,title:'Упругий отскок от наклонной плоскости',fullTitle:'Шарик, падающий на наклонную плоскость',
+  {num:3,level:3,group:'Задачи на свободное падение',id:'ballistics-incline-elastic-bounce-task03',boardMode:'ballistics-incline-elastic-bounce-task03',animationId:'ballistics-incline-elastic-bounce-task03',hasAnimation:true,title:'Упругий отскок от наклонной плоскости',fullTitle:'Шарик, падающий на наклонную плоскость',
    cond:'Маленький шарик падает сверху на наклонную плоскость и упруго отражается от неё. Угол наклона плоскости к горизонту <strong>α = 30°</strong>. На какое расстояние по горизонтали переместится шарик между первым и вторым ударами о плоскость? Скорость шарика непосредственно перед первым ударом направлена вертикально вниз и равна <strong>1 м/с</strong>.',
    given:'α = 30°<br>v₀ = 1 м/с<br>g = 10 м/с²<br><span class="pt-find">Найти: S — горизонтальное расстояние между первым и вторым ударами</span>',
    boardConditionHtml:'<strong>Шарик, падающий на наклонную плоскость</strong><br>Маленький шарик падает сверху на наклонную плоскость и упруго отражается от неё. Угол наклона плоскости к горизонту <strong>α = 30°</strong>. На какое расстояние по горизонтали переместится шарик между первым и вторым ударами о плоскость? Скорость шарика непосредственно перед первым ударом направлена вертикально вниз и равна <strong>1 м/с</strong>.<br><br><strong>Дано:</strong><br>α = 30°<br>v₀ = 1 м/с<br>g = 10 м/с²<br><br><strong>Найти:</strong><br>S — горизонтальное расстояние между первым и вторым ударами',
@@ -8218,8 +8228,7 @@ function renderPTasks(name){
       animId:t.animId||t.animationId||''
     };
     const boardBtn=`<button type="button" class="pt-board-btn" data-task-id="${escapeHtml(taskId)}" data-board-mode="${escapeHtml(boardMode)}" onclick="return openTaskBoard('${boardModeSafe}',true,'${taskIdSafe}')">🧑‍🏫 Доска</button>`;
-    const animationUnavailable=taskId==='ballistics-incline-elastic-bounce-task03';
-    const animationBtn=`<button type="button" class="pt-anim-btn" data-action="open-animation" data-task-id="${escapeHtml(taskId)}" data-animation-id="${escapeHtml(t.animationId||t.animId||'')}"${animationUnavailable?' disabled title="Анимация будет добавлена позже" aria-label="Анимация будет добавлена позже"':''} onclick="return handleOpenAnimationClick(event)">▶ Анимация</button>`;
+    const animationBtn=`<button type="button" class="pt-anim-btn" data-action="open-animation" data-task-id="${escapeHtml(taskId)}" data-animation-id="${escapeHtml(t.animationId||t.animId||'')}" onclick="return handleOpenAnimationClick(event)">▶ Анимация</button>`;
     const hasStructuredSolution=hasFilledTaskSolution(t)||hasLegacyTaskTextSolution(t);
     const embeddedRaw=hasStructuredSolution?renderTaskSolutionPanel(t,'pt'):(t.solutionHtml||getEmbeddedSolutionHtml(t));
     const embedded=String(embeddedRaw||'').trim();
@@ -8419,7 +8428,7 @@ function openTaskAnimationPlaceholder(taskId){
   }
 
   const modalEl=overlay.querySelector('.task-animation-placeholder-modal');
-  if(modalEl) modalEl.classList.remove('freefall-anim-modal','ballistics-task-animation-modal');
+  if(modalEl) modalEl.classList.remove('freefall-anim-modal','ballistics-task-animation-modal','task03-flying-cyclist-modal');
 
   const textEl=overlay.querySelector('.task-animation-placeholder-text');
   if(textEl){
@@ -8437,8 +8446,9 @@ function closeTaskAnimationPlaceholder(){
   const overlay=document.getElementById('taskAnimationPlaceholderOverlay');
 
   if(overlay){
+    cleanupTask03FlyingCyclistAnimation();
     stopFreeFallAnimationInOverlay(overlay);
-    overlay.querySelector('.task-animation-placeholder-modal')?.classList.remove('ballistics-task-animation-modal');
+    overlay.querySelector('.task-animation-placeholder-modal')?.classList.remove('ballistics-task-animation-modal','task03-flying-cyclist-modal');
     overlay.classList.remove('open');
     overlay.style.display='none';
 
@@ -11317,6 +11327,9 @@ function openBallisticsTaskAnimation(taskId){
 }
 
 function openTaskAnimationOverlay(taskId){
+  if(taskId==='ballistics-incline-elastic-bounce-task03'){
+    return openTask03FlyingCyclistAnimation(taskId);
+  }
   if(isBallisticsTaskAnimationId(taskId)){
     return openBallisticsTaskAnimation(taskId);
   }
@@ -13915,6 +13928,218 @@ function renderFlyingCyclistScene(ts){
   ctx.fillStyle='#00e5ff';
   ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.beginPath();ctx.arc(0,0,8,0,Math.PI*2);ctx.fill();ctx.fillRect(-12,-5,17,3);ctx.beginPath();ctx.arc(-7,6,4,0,Math.PI*2);ctx.arc(8,6,4,0,Math.PI*2);ctx.fill();ctx.restore();
   if(s.running&&p<total){s.raf=requestAnimationFrame(renderFlyingCyclistScene);}else if(p>=total){s.running=false;s.isPlaying=false;updateFlyingCyclistPlayPauseButton();}
+}
+
+
+/* ═══ TASK 03: ISOLATED FLYING CYCLIST DUPLICATE ═══ */
+let task03FlyingCyclistState=null;
+
+function renderTask03FlyingCyclistAnimation(){
+  return `<div class="task03-flying-cyclist-shell">
+    <div class="task03-flying-cyclist-heading">
+      <h2>Анимация задачи 03</h2>
+      <p>Дубликат симулятора: Летающий велосипедист</p>
+    </div>
+    <div class="cyclist-record-frame task03-flying-cyclist-frame">
+      <div class="fc-head"><span>ЕГЭ · Физика → Динамика → Баллистика. Свободное падение</span><strong>ФИЗМАТ</strong></div>
+      <div class="fc-cond">Гонщик стартует с высоты H, вылетает под углом α и приземляется на уровне края трамплина. Найти высоту полёта h.</div>
+      <div class="fc-inline-params">
+        <div class="fc-param-chip">H, м: <span id="task03FlyingCyclistHVal">3</span><input id="task03FlyingCyclistH" type="range" min="3" max="6" step="1" value="3"></div>
+        <div class="fc-param-chip">α, °: <span id="task03FlyingCyclistAVal">50</span><input id="task03FlyingCyclistA" type="range" min="40" max="60" step="1" value="50"></div>
+        <div class="fc-param-chip">g, м/с²: <select id="task03FlyingCyclistG"><option value="9.8" selected>9.8</option><option value="10">10</option></select></div>
+        <div class="fc-param-chip">h=<span id="task03FlyingCyclistHResult">2.48</span> м</div>
+        <div class="fc-param-chip">t↑=<span id="task03FlyingCyclistTUpResult">0.71</span> с</div>
+        <div class="fc-param-chip">L=<span id="task03FlyingCyclistLResult">5.91</span> м</div>
+      </div>
+      <div class="fc-animation-controls">
+        <div class="fc-ctrl"><button class="fc-btn" id="task03FlyingCyclistPlayPauseBtn" type="button">Старт</button><button class="fc-btn" id="task03FlyingCyclistResetBtn" type="button">Сброс</button></div>
+        <label class="fc-speed-control">Скорость анимации: <input id="task03FlyingCyclistSpeed" type="range" min="0.5" max="1.5" step="0.5" value="1"></label>
+      </div>
+      <div class="fc-canvas-box fc-animation-wrap fc-canvas-wrap"><canvas id="task03FlyingCyclistCanvas"></canvas></div>
+    </div>
+  </div>`;
+}
+
+function openTask03FlyingCyclistAnimation(taskId){
+  const resolvedId=String(taskId||'');
+  if(resolvedId!=='ballistics-incline-elastic-bounce-task03') return openTaskAnimationPlaceholder(resolvedId);
+  if(!document.getElementById('taskAnimationPlaceholderOverlay')) openTaskAnimationPlaceholder(resolvedId);
+  const overlay=document.getElementById('taskAnimationPlaceholderOverlay');
+  if(!overlay)return false;
+  cleanupTask03FlyingCyclistAnimation();
+  stopFreeFallAnimationInOverlay(overlay);
+  const keepTaskBoard=!!(TASK_ANIMATION_CONTEXT&&TASK_ANIMATION_CONTEXT.fromBoard&&taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
+  overlay.dataset.keepTaskBoard=keepTaskBoard?'true':'false';
+  overlay.classList.add('open');
+  overlay.style.display='flex';
+  const modal=overlay.querySelector('.task-animation-placeholder-modal');
+  if(!modal)return false;
+  modal.classList.remove('freefall-anim-modal','ballistics-task-animation-modal');
+  modal.classList.add('task03-flying-cyclist-modal');
+  modal.innerHTML=`<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder(); return false;">✕ Закрыть</button>${renderTask03FlyingCyclistAnimation()}`;
+  requestAnimationFrame(initTask03FlyingCyclistAnimation);
+  if(taskBoardState&&taskBoardState.animBtn)taskBoardState.animBtn.textContent='✕ Анимация';
+  return false;
+}
+
+function initTask03FlyingCyclistAnimation(){
+  const canvas=document.getElementById('task03FlyingCyclistCanvas');
+  if(!canvas)return;
+  task03FlyingCyclistState={running:false,isPlaying:false,t:0,lastTs:0,speed:1,params:{H:3,alpha:50,g:9.8},values:null,raf:0,rampPathEl:null};
+  ['task03FlyingCyclistH','task03FlyingCyclistA','task03FlyingCyclistG'].forEach(function(id){
+    const input=document.getElementById(id);
+    if(input)input.oninput=updateTask03FlyingCyclistParams;
+  });
+  const speed=document.getElementById('task03FlyingCyclistSpeed');
+  const playPause=document.getElementById('task03FlyingCyclistPlayPauseBtn');
+  const reset=document.getElementById('task03FlyingCyclistResetBtn');
+  if(speed)speed.oninput=function(event){if(task03FlyingCyclistState)task03FlyingCyclistState.speed=+event.target.value;};
+  if(playPause)playPause.onclick=toggleTask03FlyingCyclistAnimation;
+  if(reset)reset.onclick=function(){resetTask03FlyingCyclistAnimation();};
+  updateTask03FlyingCyclistParams();
+  resetTask03FlyingCyclistAnimation();
+}
+
+function updateTask03FlyingCyclistParams(){
+  const state=task03FlyingCyclistState;
+  const hInput=document.getElementById('task03FlyingCyclistH');
+  const aInput=document.getElementById('task03FlyingCyclistA');
+  const gInput=document.getElementById('task03FlyingCyclistG');
+  if(!state||!hInput||!aInput||!gInput)return;
+  const H=Math.max(3,Math.min(6,+hInput.value||3));
+  const alpha=Math.max(40,Math.min(60,+aInput.value||50));
+  const g=+gInput.value||9.8;
+  hInput.value=H;aInput.value=alpha;
+  state.params={H,alpha,g};
+  state.values=calculateFlyingCyclistValues(H,alpha,g);
+  document.getElementById('task03FlyingCyclistHVal').textContent=H;
+  document.getElementById('task03FlyingCyclistAVal').textContent=alpha;
+  document.getElementById('task03FlyingCyclistHResult').textContent=state.values.h.toFixed(2);
+  document.getElementById('task03FlyingCyclistTUpResult').textContent=state.values.tUp.toFixed(2);
+  document.getElementById('task03FlyingCyclistLResult').textContent=state.values.R.toFixed(2);
+  drawTask03FlyingCyclistAnimationFrame();
+}
+
+function updateTask03FlyingCyclistPlayPauseButton(){
+  const button=document.getElementById('task03FlyingCyclistPlayPauseBtn');
+  if(button)button.textContent=task03FlyingCyclistState&&task03FlyingCyclistState.isPlaying?'Пауза':'Старт';
+}
+
+function toggleTask03FlyingCyclistAnimation(){
+  if(!task03FlyingCyclistState)return;
+  if(task03FlyingCyclistState.isPlaying)pauseTask03FlyingCyclistAnimation();
+  else startTask03FlyingCyclistAnimation();
+}
+
+function startTask03FlyingCyclistAnimation(){
+  const state=task03FlyingCyclistState;
+  if(!state)return;
+  const total=2.8+(state.values?state.values.tFlight:0);
+  if(state.t>=total)state.t=0;
+  state.running=true;
+  state.isPlaying=true;
+  state.lastTs=0;
+  cancelAnimationFrame(state.raf);
+  state.raf=requestAnimationFrame(updateTask03FlyingCyclistAnimationFrame);
+  updateTask03FlyingCyclistPlayPauseButton();
+}
+
+function pauseTask03FlyingCyclistAnimation(){
+  const state=task03FlyingCyclistState;
+  if(!state)return;
+  state.running=false;
+  state.isPlaying=false;
+  cancelAnimationFrame(state.raf);
+  state.raf=0;
+  updateTask03FlyingCyclistPlayPauseButton();
+}
+
+function resetTask03FlyingCyclistAnimation(){
+  const state=task03FlyingCyclistState;
+  if(!state)return;
+  pauseTask03FlyingCyclistAnimation();
+  state.t=0;
+  state.lastTs=0;
+  drawTask03FlyingCyclistAnimationFrame();
+}
+
+function updateTask03FlyingCyclistAnimationFrame(timestamp){
+  const state=task03FlyingCyclistState;
+  if(!state||!state.running)return;
+  if(!state.lastTs)state.lastTs=timestamp;
+  const dt=Math.min((timestamp-state.lastTs)/1000,0.05)*state.speed;
+  state.lastTs=timestamp;
+  state.t+=dt;
+  drawTask03FlyingCyclistAnimationFrame();
+}
+
+function drawTask03FlyingCyclistAnimationFrame(){
+  const s=task03FlyingCyclistState,cv=document.getElementById('task03FlyingCyclistCanvas');
+  if(!s||!s.values||!cv)return;
+  const box=cv.parentElement,dpr=window.devicePixelRatio||1,W=box.clientWidth||760,Hh=box.clientHeight||428;
+  cv.width=W*dpr;cv.height=Hh*dpr;
+  const ctx=cv.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,Hh);
+  const {H,alpha,g}=s.params,val=s.values,a=alpha*Math.PI/180;
+  const padL=Math.round(Math.max(70,Math.min(90,W*.12))),padR=Math.round(Math.max(70,Math.min(90,W*.12)));
+  const padT=Math.round(Math.max(56,Math.min(70,Hh*.09))),padB=Math.round(Math.max(76,Math.min(100,Hh*.12)));
+  const drawW=Math.max(260,W-padL-padR),drawH=Math.max(220,Hh-padT-padB);
+  const horizonY=padT+drawH*.62,launchX=padL+drawW*.58,launchY=horizonY;
+  const rampJoinX=padL+drawW*.24,rampJoinY=padT+drawH*.38,rampAngleAbs=48*Math.PI/180;
+  const pxPerMeterVertical=Math.max(72,drawH*.54)/6;
+  const startY=Math.max(padT+10,horizonY-H*pxPerMeterVertical),dy=rampJoinY-startY,dx=dy/Math.tan(rampAngleAbs);
+  const startX=rampJoinX-dx,HLineX=startX-20,launchTangentLen=Math.max(30,Math.min(W*.085,64));
+  const launchCtrlX=launchX-launchTangentLen*Math.cos(a),launchCtrlY=launchY+launchTangentLen*Math.sin(a);
+  const leftCurveC1={x:rampJoinX+drawW*.06,y:rampJoinY+drawH*.06},leftCurveC2={x:padL+drawW*.40,y:padT+drawH*.705};
+  const leftCurveEnd={x:padL+drawW*.48,y:padT+drawH*.70},rightCurveC1={x:padL+drawW*.54,y:padT+drawH*.67};
+  const path2d=new Path2D();
+  path2d.moveTo(startX,startY);path2d.lineTo(rampJoinX,rampJoinY);
+  path2d.bezierCurveTo(leftCurveC1.x,leftCurveC1.y,leftCurveC2.x,leftCurveC2.y,leftCurveEnd.x,leftCurveEnd.y);
+  path2d.bezierCurveTo(rightCurveC1.x,rightCurveC1.y,launchCtrlX,launchCtrlY,launchX,launchY);
+  const pathData=`M ${startX} ${startY} L ${rampJoinX} ${rampJoinY} C ${leftCurveC1.x} ${leftCurveC1.y}, ${leftCurveC2.x} ${leftCurveC2.y}, ${leftCurveEnd.x} ${leftCurveEnd.y} C ${rightCurveC1.x} ${rightCurveC1.y}, ${launchCtrlX} ${launchCtrlY}, ${launchX} ${launchY}`;
+  const rampPathEl=s.rampPathEl||(s.rampPathEl=document.createElementNS('http://www.w3.org/2000/svg','path'));
+  rampPathEl.setAttribute('d',pathData);
+  const rampLen=rampPathEl.getTotalLength(),tRamp=2.8,tFlight=val.tFlight,total=tRamp+tFlight,p=Math.min(s.t,total);
+  const arcLen=rampLen*Math.pow(Math.min(p/tRamp,1),1.35);
+  const ptOnRamp=rampPathEl.getPointAtLength(Math.max(0,Math.min(rampLen,arcLen)));
+  const ptAhead=rampPathEl.getPointAtLength(Math.min(rampLen,arcLen+4));
+  const tangentRamp=Math.atan2(ptAhead.y-ptOnRamp.y,ptAhead.x-ptOnRamp.x);
+  const pxPerMeter=Math.max(20,Math.min((W-padR-launchX)/Math.max(val.R,.01),34));
+  const pxPerMeterVerticalVisual=pxPerMeterVertical*.78,hPx=val.h*pxPerMeterVerticalVisual;
+  const apexX=launchX+val.R/2*pxPerMeter,apexY=horizonY-hPx,landX=launchX+val.R*pxPerMeter;
+  let x=ptOnRamp.x,y=ptOnRamp.y,rot=tangentRamp;
+  if(p>=tRamp){
+    const tp=Math.min(p-tRamp,tFlight);
+    x=launchX+tp*val.v*Math.cos(a)*pxPerMeter;
+    y=horizonY-(tp*val.v*Math.sin(a)-.5*g*tp*tp)*pxPerMeterVerticalVisual;
+    rot=Math.atan2(-(val.v*Math.sin(a)-g*tp),val.v*Math.cos(a));
+  }
+  ctx.strokeStyle='rgba(255,255,255,.16)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(padL-18,horizonY);ctx.lineTo(W-padR+16,horizonY);ctx.stroke();
+  ctx.strokeStyle='rgba(57,255,20,.22)';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(launchX,horizonY);ctx.lineTo(Math.max(launchX+14,Math.min(landX,W-padR+8)),horizonY);ctx.stroke();
+  ctx.strokeStyle='rgba(0,229,255,.95)';ctx.lineWidth=3.6;ctx.lineCap='round';ctx.stroke(path2d);
+  ctx.strokeStyle='rgba(0,229,255,.22)';ctx.lineWidth=9;ctx.stroke(path2d);
+  ctx.setLineDash([6,6]);ctx.strokeStyle='rgba(0,229,255,.55)';ctx.lineWidth=2;ctx.beginPath();
+  for(let t=0;t<=tFlight;t+=.04){const px=launchX+t*val.v*Math.cos(a)*pxPerMeter,py=horizonY-(t*val.v*Math.sin(a)-.5*g*t*t)*pxPerMeterVerticalVisual;t===0?ctx.moveTo(px,py):ctx.lineTo(px,py);}ctx.stroke();ctx.setLineDash([]);
+  ctx.strokeStyle='#ff8c00';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(launchX,launchY);ctx.lineTo(launchX+66*Math.cos(a),launchY-66*Math.sin(a));ctx.stroke();
+  ctx.beginPath();ctx.arc(launchX,launchY,28,0,-a,true);ctx.strokeStyle='rgba(255,255,255,.65)';ctx.lineWidth=1.2;ctx.stroke();
+  ctx.fillStyle='#fff';ctx.font='bold 13px Golos Text,sans-serif';ctx.fillText('α',launchX+66,launchY-22);
+  zaA(ctx,launchX,launchY,launchX+78*Math.cos(a),launchY-78*Math.sin(a),'#ff8c00',2.2);
+  ctx.fillStyle='#ffb86b';ctx.fillText('v',launchX+82*Math.cos(a),launchY-82*Math.sin(a));
+  ctx.strokeStyle='#ff8c00';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(HLineX,horizonY);ctx.lineTo(HLineX,startY);ctx.stroke();ctx.fillStyle='#ffb86b';ctx.fillText('H',HLineX-14,(startY+horizonY)/2);
+  ctx.strokeStyle='#ff8c00';ctx.beginPath();ctx.moveTo(apexX,horizonY);ctx.lineTo(apexX,apexY);ctx.stroke();ctx.fillStyle='#ffb86b';ctx.fillText('h',apexX+8,apexY+16);
+  ctx.fillStyle='rgba(255,255,255,.62)';ctx.font='11px Golos Text,sans-serif';ctx.fillText('уровень края трамплина',Math.min(launchX+110,W-padR-170),horizonY+28);
+  ctx.fillStyle='#00e5ff';ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.beginPath();ctx.arc(0,0,8,0,Math.PI*2);ctx.fill();ctx.fillRect(-12,-5,17,3);ctx.beginPath();ctx.arc(-7,6,4,0,Math.PI*2);ctx.arc(8,6,4,0,Math.PI*2);ctx.fill();ctx.restore();
+  if(s.running&&p<total)s.raf=requestAnimationFrame(updateTask03FlyingCyclistAnimationFrame);
+  else if(p>=total){s.t=total;s.running=false;s.isPlaying=false;s.raf=0;updateTask03FlyingCyclistPlayPauseButton();}
+}
+
+function cleanupTask03FlyingCyclistAnimation(){
+  if(!task03FlyingCyclistState)return;
+  task03FlyingCyclistState.running=false;
+  task03FlyingCyclistState.isPlaying=false;
+  cancelAnimationFrame(task03FlyingCyclistState.raf);
+  task03FlyingCyclistState.raf=0;
+  task03FlyingCyclistState=null;
 }
 
 /* ═══ EGE BALLISTICS PROJECTILE SIMULATOR JS ═══ */
