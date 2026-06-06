@@ -729,6 +729,32 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 .task-animation-placeholder-text{font-size:14px;line-height:1.45;font-weight:600;color:#334155}
 .task-animation-placeholder-empty{min-height:260px;border:1px dashed #cbd5e1;border-radius:18px;background:#f8fafc;display:flex;align-items:center;justify-content:center;text-align:center;color:#64748b;font-size:18px;font-weight:800}
 
+.task-simulator-shell-modal{width:min(980px,100%);background:linear-gradient(160deg,#07111f,#0b1626 62%,#101b2a);color:var(--white);border:1px solid rgba(8,216,255,.18);box-shadow:0 30px 100px rgba(0,0,0,.52),0 0 44px rgba(8,216,255,.12);padding:26px}
+.task-simulator-shell-modal .task-animation-placeholder-close{background:rgba(255,255,255,.05);border-color:rgba(8,216,255,.28);color:var(--white)}
+.task-simulator-shell{display:flex;flex-direction:column;gap:14px;color:var(--white)}
+.task-simulator-shell-head{padding-right:110px}
+.task-simulator-shell-kicker{font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;color:var(--cyan)}
+.task-simulator-shell-title{margin:6px 0 0;font-family:var(--fh);font-size:30px;line-height:1.12;color:var(--white)}
+.task-simulator-shell-card{padding:14px 16px;border:1px solid rgba(8,216,255,.18);border-radius:16px;background:rgba(255,255,255,.035)}
+.task-simulator-shell-label{font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);margin-bottom:7px}
+.task-simulator-shell-copy{font-size:14px;line-height:1.5;color:#cbd5e1;font-weight:600}
+.task-simulator-shell-layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(210px,.55fr);gap:14px;align-items:stretch}
+.task-simulator-shell-scene{position:relative;min-height:310px;border:1px solid rgba(8,216,255,.2);border-radius:18px;overflow:hidden;background:radial-gradient(circle at 50% 42%,rgba(8,216,255,.09),transparent 38%),linear-gradient(180deg,#071522,#030a12)}
+.task-simulator-shell-canvas{display:block;width:100%;height:310px}
+.task-simulator-shell-scene-copy{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:28px;text-align:center;color:#94a3b8;font-size:16px;font-weight:800;pointer-events:none}
+.task-simulator-shell-side{display:flex;flex-direction:column;gap:12px}
+.task-simulator-shell-stats{display:grid;gap:8px}
+.task-simulator-shell-stat{padding:11px 12px;border:1px solid rgba(148,163,184,.16);border-radius:12px;background:rgba(2,8,23,.34)}
+.task-simulator-shell-stat span{display:block;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#64748b;margin-bottom:5px}
+.task-simulator-shell-stat strong{font-size:13px;color:#e2e8f0}
+.task-simulator-shell-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 14px;border:1px solid rgba(8,216,255,.16);border-radius:14px;background:rgba(2,8,23,.38)}
+.task-simulator-shell-btn{min-height:36px;padding:0 14px;border-radius:10px;border:1px solid rgba(8,216,255,.28);background:linear-gradient(180deg,rgba(42,72,112,.82),rgba(14,28,52,.92));color:#dcecff;font-family:var(--fb);font-size:12px;font-weight:800;cursor:pointer}
+.task-simulator-shell-btn:hover{border-color:var(--cyan);color:#fff}
+.task-simulator-shell-speed{display:inline-flex;align-items:center;gap:8px;margin-left:auto;color:#9fb0c8;font-size:12px;font-weight:700}
+.task-simulator-shell-speed input{width:100px;accent-color:var(--cyan)}
+.task-simulator-shell-result{border-color:rgba(57,255,20,.18)}
+@media(max-width:760px){.task-animation-placeholder-overlay{padding:10px}.task-simulator-shell-modal{padding:20px 14px}.task-simulator-shell-head{padding-right:90px}.task-simulator-shell-title{font-size:24px}.task-simulator-shell-layout{grid-template-columns:1fr}.task-simulator-shell-scene,.task-simulator-shell-canvas{min-height:240px;height:240px}.task-simulator-shell-speed{width:100%;margin-left:0;justify-content:space-between}.task-simulator-shell-speed input{flex:1}}
+
 .freefall-anim-modal{width:min(980px,100%);background:linear-gradient(160deg,#07111f,#0b1626 62%,#101b2a);color:var(--white);border:1px solid rgba(8,216,255,.18);box-shadow:0 30px 100px rgba(0,0,0,.52),0 0 44px rgba(8,216,255,.12);padding:26px}
 .freefall-anim-modal .task-animation-placeholder-close{background:rgba(255,255,255,.05);border-color:rgba(8,216,255,.28);color:var(--white)}
 .freefall-anim{display:flex;flex-direction:column;gap:16px;color:var(--white)}
@@ -8394,7 +8420,7 @@ function openTaskAnimationPlaceholder(taskId){
   }
 
   const modalEl=overlay.querySelector('.task-animation-placeholder-modal');
-  if(modalEl) modalEl.classList.remove('freefall-anim-modal');
+  if(modalEl) modalEl.classList.remove('freefall-anim-modal','task-simulator-shell-modal');
 
   const textEl=overlay.querySelector('.task-animation-placeholder-text');
   if(textEl){
@@ -8413,6 +8439,8 @@ function closeTaskAnimationPlaceholder(){
 
   if(overlay){
     stopFreeFallAnimationInOverlay(overlay);
+    stopTaskSimulatorAnimationInOverlay(overlay);
+    overlay.querySelector('.task-animation-placeholder-modal')?.classList.remove('task-simulator-shell-modal');
     overlay.classList.remove('open');
     overlay.style.display='none';
 
@@ -11261,7 +11289,211 @@ function openFreeFallTaskAnimation(taskId){
   return false;
 }
 
+const BALLISTICS_TASK_SIMULATOR_SHELLS={
+  'ballistics-incline-elastic-bounce-task03':{number:'03',title:'Анимация задачи 03'},
+  'ballistics-board-rebound-max-height-task04':{number:'04',title:'Анимация задачи 04'}
+};
+
+function isBallisticsTaskSimulatorShellId(taskId){
+  return !!BALLISTICS_TASK_SIMULATOR_SHELLS[String(taskId||'')];
+}
+
+function renderTaskSimulatorAnimationShell(config){
+  const safeConfig=config||{};
+  const taskId=String(safeConfig.taskId||'');
+  const title=String(safeConfig.title||'Анимация задачи');
+  return `<div class="task-simulator-shell" data-task-simulator-shell="${escapeHtml(taskId)}">
+    <div class="task-simulator-shell-head">
+      <div class="task-simulator-shell-kicker">ЕГЭ · Физика → Динамика → Баллистика. Свободное падение</div>
+      <h2 class="task-simulator-shell-title">${escapeHtml(title)}</h2>
+    </div>
+    <div class="task-simulator-shell-card">
+      <div class="task-simulator-shell-label">Условие</div>
+      <div class="task-simulator-shell-copy">Условие задачи будет добавлено позже.</div>
+    </div>
+    <div class="task-simulator-shell-card">
+      <div class="task-simulator-shell-label">Параметры</div>
+      <div class="task-simulator-shell-copy">Параметры анимации будут добавлены позже.</div>
+    </div>
+    <div class="task-simulator-shell-layout">
+      <div class="task-simulator-shell-scene">
+        <canvas class="task-simulator-shell-canvas" data-task-simulator-canvas aria-label="Временная сцена анимации"></canvas>
+        <div class="task-simulator-shell-scene-copy">Сцена анимации будет настроена позже.</div>
+      </div>
+      <div class="task-simulator-shell-side">
+        <div class="task-simulator-shell-card">
+          <div class="task-simulator-shell-label">Текущие значения</div>
+          <div class="task-simulator-shell-stats">
+            <div class="task-simulator-shell-stat"><span>Состояние</span><strong data-task-simulator-status>Готово к запуску</strong></div>
+            <div class="task-simulator-shell-stat"><span>Время</span><strong data-task-simulator-time>0,0 с</strong></div>
+            <div class="task-simulator-shell-stat"><span>Прогресс</span><strong data-task-simulator-progress>0%</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="task-simulator-shell-controls">
+      <button type="button" class="task-simulator-shell-btn" data-task-simulator-start>Старт</button>
+      <button type="button" class="task-simulator-shell-btn" data-task-simulator-pause>Пауза</button>
+      <button type="button" class="task-simulator-shell-btn" data-task-simulator-reset>Сброс</button>
+      <label class="task-simulator-shell-speed">Скорость анимации <input type="range" min="0.5" max="2" step="0.5" value="1" data-task-simulator-speed></label>
+    </div>
+    <div class="task-simulator-shell-card task-simulator-shell-result">
+      <div class="task-simulator-shell-label">Результат</div>
+      <div class="task-simulator-shell-copy">Результат будет добавлен позже.</div>
+    </div>
+  </div>`;
+}
+
+function drawTaskSimulatorShellFrame(root,progress){
+  if(!root) return;
+  const canvas=root.querySelector('[data-task-simulator-canvas]');
+  if(!canvas) return;
+  const rect=canvas.getBoundingClientRect();
+  const width=Math.max(1,Math.round(rect.width));
+  const height=Math.max(1,Math.round(rect.height));
+  const dpr=Math.min(window.devicePixelRatio||1,2);
+  if(canvas.width!==Math.round(width*dpr)||canvas.height!==Math.round(height*dpr)){
+    canvas.width=Math.round(width*dpr);
+    canvas.height=Math.round(height*dpr);
+  }
+  const ctx=canvas.getContext('2d');
+  if(!ctx) return;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,width,height);
+  const grid=36;
+  ctx.strokeStyle='rgba(148,163,184,.08)';
+  ctx.lineWidth=1;
+  for(let x=0;x<=width;x+=grid){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,height);ctx.stroke();}
+  for(let y=0;y<=height;y+=grid){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(width,y);ctx.stroke();}
+  const barX=width*.12;
+  const barWidth=width*.76;
+  const barY=height*.78;
+  ctx.lineCap='round';
+  ctx.lineWidth=8;
+  ctx.strokeStyle='rgba(8,216,255,.16)';
+  ctx.beginPath();ctx.moveTo(barX,barY);ctx.lineTo(barX+barWidth,barY);ctx.stroke();
+  ctx.strokeStyle='#08d8ff';
+  ctx.beginPath();ctx.moveTo(barX,barY);ctx.lineTo(barX+barWidth*progress,barY);ctx.stroke();
+  ctx.fillStyle='#39ff14';
+  ctx.shadowColor='rgba(57,255,20,.65)';
+  ctx.shadowBlur=14;
+  ctx.beginPath();ctx.arc(barX+barWidth*progress,barY,7,0,Math.PI*2);ctx.fill();
+  ctx.shadowBlur=0;
+}
+
+function updateTaskSimulatorShellFrame(root,progress,status){
+  const safeProgress=Math.max(0,Math.min(1,Number(progress)||0));
+  drawTaskSimulatorShellFrame(root,safeProgress);
+  const timeEl=root&&root.querySelector('[data-task-simulator-time]');
+  const progressEl=root&&root.querySelector('[data-task-simulator-progress]');
+  const statusEl=root&&root.querySelector('[data-task-simulator-status]');
+  if(timeEl) timeEl.textContent=(safeProgress*4).toFixed(1).replace('.',',')+' с';
+  if(progressEl) progressEl.textContent=Math.round(safeProgress*100)+'%';
+  if(statusEl&&status) statusEl.textContent=status;
+}
+
+function stopTaskSimulatorAnimation(root,status){
+  if(!root||!root.__taskSimulatorAnimation) return;
+  const state=root.__taskSimulatorAnimation;
+  state.running=false;
+  cancelAnimationFrame(state.raf);
+  if(state.resizeObserver){
+    state.resizeObserver.disconnect();
+    state.resizeObserver=null;
+  }
+  if(status) updateTaskSimulatorShellFrame(root,state.elapsed/state.duration,status);
+}
+
+function stopTaskSimulatorAnimationInOverlay(overlay){
+  const root=overlay&&overlay.querySelector?overlay.querySelector('[data-task-simulator-shell]'):null;
+  stopTaskSimulatorAnimation(root);
+}
+
+function bindTaskSimulatorAnimationShell(root){
+  if(!root) return;
+  const duration=4000;
+  const state=root.__taskSimulatorAnimation={running:false,elapsed:0,lastTime:0,raf:0,duration:duration,frames:0};
+  const speedInput=root.querySelector('[data-task-simulator-speed]');
+  const step=function(now){
+    if(!state.running) return;
+    if(!state.lastTime) state.lastTime=now;
+    const delta=Math.min(100,Math.max(0,now-state.lastTime));
+    state.lastTime=now;
+    const speed=Math.max(.5,Math.min(2,Number(speedInput&&speedInput.value)||1));
+    state.elapsed=Math.min(state.duration,state.elapsed+delta*speed);
+    state.frames+=1;
+    const progress=state.elapsed/state.duration;
+    updateTaskSimulatorShellFrame(root,progress,progress>=1?'Завершено':'Выполняется');
+    if(progress>=1||state.frames>=2400){
+      state.running=false;
+      state.elapsed=state.duration;
+      updateTaskSimulatorShellFrame(root,1,'Завершено');
+      return;
+    }
+    state.raf=requestAnimationFrame(step);
+  };
+  const start=function(){
+    if(state.running) return;
+    if(state.elapsed>=state.duration){state.elapsed=0;state.frames=0;}
+    state.running=true;
+    state.lastTime=0;
+    cancelAnimationFrame(state.raf);
+    state.raf=requestAnimationFrame(step);
+    updateTaskSimulatorShellFrame(root,state.elapsed/state.duration,'Выполняется');
+  };
+  const pause=function(){
+    if(!state.running) return;
+    state.running=false;
+    cancelAnimationFrame(state.raf);
+    updateTaskSimulatorShellFrame(root,state.elapsed/state.duration,'Пауза');
+  };
+  const reset=function(){
+    state.running=false;
+    state.elapsed=0;
+    state.lastTime=0;
+    state.frames=0;
+    cancelAnimationFrame(state.raf);
+    updateTaskSimulatorShellFrame(root,0,'Готово к запуску');
+  };
+  root.querySelector('[data-task-simulator-start]')?.addEventListener('click',start);
+  root.querySelector('[data-task-simulator-pause]')?.addEventListener('click',pause);
+  root.querySelector('[data-task-simulator-reset]')?.addEventListener('click',reset);
+  speedInput?.addEventListener('input',function(){drawTaskSimulatorShellFrame(root,state.elapsed/state.duration);});
+  if(window.ResizeObserver){
+    state.resizeObserver=new ResizeObserver(function(){drawTaskSimulatorShellFrame(root,state.elapsed/state.duration);});
+    state.resizeObserver.observe(root.querySelector('[data-task-simulator-canvas]'));
+  }
+  reset();
+}
+
+function openBallisticsTaskSimulatorShell(taskId){
+  const resolvedId=String(taskId||'');
+  const config=BALLISTICS_TASK_SIMULATOR_SHELLS[resolvedId];
+  if(!config) return openTaskAnimationPlaceholder(resolvedId);
+  if(!document.getElementById('taskAnimationPlaceholderOverlay')) openTaskAnimationPlaceholder(resolvedId);
+  const overlay=document.getElementById('taskAnimationPlaceholderOverlay');
+  if(!overlay) return false;
+  stopFreeFallAnimationInOverlay(overlay);
+  stopTaskSimulatorAnimationInOverlay(overlay);
+  const keepTaskBoard=!!(TASK_ANIMATION_CONTEXT&&TASK_ANIMATION_CONTEXT.fromBoard&&taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
+  overlay.dataset.keepTaskBoard=keepTaskBoard?'true':'false';
+  overlay.classList.add('open');
+  overlay.style.display='flex';
+  const modal=overlay.querySelector('.task-animation-placeholder-modal');
+  if(!modal) return false;
+  modal.classList.remove('freefall-anim-modal');
+  modal.classList.add('task-simulator-shell-modal');
+  modal.innerHTML=`<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder(); return false;">✕ Закрыть</button>${renderTaskSimulatorAnimationShell({...config,taskId:resolvedId})}`;
+  const root=modal.querySelector('[data-task-simulator-shell]');
+  bindTaskSimulatorAnimationShell(root);
+  if(taskBoardState&&taskBoardState.animBtn) taskBoardState.animBtn.textContent='✕ Анимация';
+  return false;
+}
+
 function openTaskAnimationOverlay(taskId){
+  if(isBallisticsTaskSimulatorShellId(taskId)){
+    return openBallisticsTaskSimulatorShell(taskId);
+  }
   if(isFreeFallAnimationId(taskId)){
     return openFreeFallTaskAnimation(taskId);
   }
