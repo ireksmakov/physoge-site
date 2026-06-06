@@ -753,12 +753,9 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 .ballistics-task-animation-value strong{color:#e2e8f0;font-size:13px}
 .ballistics-task-animation-result{border-bottom:0;border-top:1px solid rgba(57,255,20,.18)}
 @media(max-width:760px){.task-animation-placeholder-overlay{padding:10px}.ballistics-task-animation-modal{padding:20px 14px}.ballistics-task-animation-frame .fc-head{padding-right:92px}.ballistics-task-animation-title{font-size:24px}.ballistics-task-animation-controls .fc-speed-control{width:100%;margin-left:0;justify-content:space-between}.ballistics-task-animation-controls .fc-speed-control input{flex:1}.ballistics-task-animation-values{grid-template-columns:1fr}}
-.task03-flying-cyclist-modal{width:min(980px,100%);background:linear-gradient(160deg,#07111f,#0b1626 62%,#101b2a);color:var(--white);border:1px solid rgba(8,216,255,.18);box-shadow:0 30px 100px rgba(0,0,0,.52),0 0 44px rgba(8,216,255,.12);padding:26px}
-.task03-flying-cyclist-modal .task-animation-placeholder-close{background:rgba(255,255,255,.05);border-color:rgba(8,216,255,.28);color:var(--white);z-index:4}
+.task03-flying-cyclist-modal{width:min(760px,100%);padding:52px 0 0;border:0;border-radius:0;background:transparent;color:var(--white);box-shadow:none}
+.task03-flying-cyclist-modal .task-animation-placeholder-close{top:4px;right:0;background:rgba(7,17,31,.92);border-color:rgba(8,216,255,.28);color:var(--white);z-index:4}
 .task03-flying-cyclist-shell{display:grid;gap:14px}
-.task03-flying-cyclist-heading{padding-right:110px}
-.task03-flying-cyclist-heading h2{margin:0;color:var(--white);font-family:var(--fh);font-size:30px;line-height:1.2}
-.task03-flying-cyclist-heading p{margin:7px 0 0;color:#94a3b8;font-size:14px;font-weight:700}
 .task03-flying-cyclist-actions{width:min(760px,100%);margin:0 auto;z-index:6}
 .task03-flying-cyclist-frame{width:min(760px,100%);margin:0 auto;overflow:hidden}
 .task03-flying-cyclist-frame .fc-animation-controls{flex-wrap:wrap;border-top:1px solid rgba(8,216,255,.18)}
@@ -776,7 +773,7 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 .task03-flying-cyclist-solution-image-wrap{overflow:hidden;border:1px solid rgba(8,216,255,.22);border-radius:16px;background:#06111f}
 .task03-flying-cyclist-solution-image{display:block;width:100%;height:auto;cursor:zoom-in}
 .task03-flying-cyclist-solution-hint{margin:10px 0 0;color:#94a3b8;font-size:12px;font-weight:700;text-align:center}
-@media(max-width:760px){.task03-flying-cyclist-modal{padding:20px 14px}.task03-flying-cyclist-heading{padding-right:84px}.task03-flying-cyclist-heading h2{font-size:24px}.task03-flying-cyclist-frame .fc-canvas-box{min-height:300px}.task03-flying-cyclist-frame .fc-speed-control{width:100%;justify-content:space-between}.task03-flying-cyclist-frame .fc-speed-control input{flex:1}}
+@media(max-width:760px){.task03-flying-cyclist-modal{padding:48px 0 0}.task03-flying-cyclist-frame .fc-canvas-box{min-height:300px}.task03-flying-cyclist-frame .fc-speed-control{width:100%;justify-content:space-between}.task03-flying-cyclist-frame .fc-speed-control input{flex:1}}
 
 .freefall-anim-modal{width:min(980px,100%);background:linear-gradient(160deg,#07111f,#0b1626 62%,#101b2a);color:var(--white);border:1px solid rgba(8,216,255,.18);box-shadow:0 30px 100px rgba(0,0,0,.52),0 0 44px rgba(8,216,255,.12);padding:26px}
 .freefall-anim-modal .task-animation-placeholder-close{background:rgba(255,255,255,.05);border-color:rgba(8,216,255,.28);color:var(--white)}
@@ -13950,10 +13947,6 @@ let task03FlyingCyclistState=null;
 
 function renderTask03FlyingCyclistAnimation(){
   return `<div class="task03-flying-cyclist-shell" id="task03FlyingCyclistShell" data-format="default">
-    <div class="task03-flying-cyclist-heading">
-      <h2>Анимация задачи 03</h2>
-      <p>Дубликат симулятора: Летающий велосипедист</p>
-    </div>
     <div class="fc-top-actions-row task03-flying-cyclist-actions">
       <div class="fc-format-panel">
         <button class="fc-format-toggle" type="button" id="task03FlyingCyclistFormatToggle" aria-expanded="false" aria-controls="task03FlyingCyclistFormatMenu" onclick="toggleTask03FlyingCyclistFormatMenu()">
