@@ -774,6 +774,22 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 .task03-flying-cyclist-solution-image{display:block;width:100%;height:auto;cursor:zoom-in}
 .task03-flying-cyclist-solution-hint{margin:10px 0 0;color:#94a3b8;font-size:12px;font-weight:700;text-align:center}
 @media(max-width:760px){.task03-flying-cyclist-modal{padding:48px 0 0}.task03-flying-cyclist-frame .fc-canvas-box{min-height:300px}.task03-flying-cyclist-frame .fc-speed-control{width:100%;justify-content:space-between}.task03-flying-cyclist-frame .fc-speed-control input{flex:1}}
+body.task03-animation-open.task03-animation-fullscreen{overflow:hidden}
+.task-animation-placeholder-overlay.task03-animation-fullscreen{width:100vw;max-width:100vw;height:100vh;max-height:100vh;padding:0;overflow:hidden;align-items:stretch;justify-content:stretch;box-sizing:border-box}
+.task03-animation-fullscreen .task03-flying-cyclist-modal{width:100vw;max-width:100vw;height:100vh;max-height:100vh;min-height:0;padding:48px 12px 12px;overflow:hidden;box-sizing:border-box}
+.task03-animation-fullscreen .task03-flying-cyclist-modal .task-animation-placeholder-close{top:8px;right:12px}
+.task03-animation-fullscreen .task03-flying-cyclist-shell{width:100%;max-width:100%;height:100%;max-height:100%;min-width:0;min-height:0;grid-template-rows:auto minmax(0,1fr);gap:8px;overflow:hidden;box-sizing:border-box}
+.task03-animation-fullscreen .task03-flying-cyclist-actions{width:100%;max-width:100%;margin:0;box-sizing:border-box}
+.task03-animation-fullscreen .task03-flying-cyclist-frame{width:100%;max-width:100%;height:100%;max-height:100%;min-width:0;min-height:0;margin:0;display:flex;flex-direction:column;overflow:hidden;box-sizing:border-box}
+.task03-animation-fullscreen .task03-flying-cyclist-frame .fc-head,.task03-animation-fullscreen .task03-flying-cyclist-frame .fc-cond,.task03-animation-fullscreen .task03-flying-cyclist-frame .fc-inline-params,.task03-animation-fullscreen .task03-flying-cyclist-frame .fc-animation-controls,.task03-animation-fullscreen .task03-flying-cyclist-frame .fc-bottom-solution-control{flex:0 0 auto;max-width:100%;box-sizing:border-box}
+.task03-animation-fullscreen .task03-flying-cyclist-frame .fc-inline-params{flex-wrap:wrap;overflow:hidden}
+.task03-animation-fullscreen .task03-flying-cyclist-frame .fc-canvas-box{flex:1 1 auto;width:100%;height:auto;min-height:120px;max-height:100%;aspect-ratio:auto;overflow:hidden;box-sizing:border-box}
+.task03-animation-fullscreen .task03-flying-cyclist-frame .fc-solution-block.open{flex:1 1 auto;min-height:0;overflow:hidden}
+.task03-animation-fullscreen .task03-flying-cyclist-frame:has(.fc-solution-block.open) .fc-canvas-box{display:none}
+.task03-animation-fullscreen .task03-flying-cyclist-solution-card{height:100%;min-height:0;display:flex;flex-direction:column;overflow:hidden;box-sizing:border-box}
+.task03-animation-fullscreen .task03-flying-cyclist-solution-image-wrap{flex:1 1 auto;min-height:0}
+.task03-animation-fullscreen .task03-flying-cyclist-solution-image{width:100%;height:100%;object-fit:contain}
+@media(max-width:760px){.task03-animation-fullscreen .task03-flying-cyclist-modal{padding:44px 8px 8px}.task03-animation-fullscreen .task03-flying-cyclist-frame .fc-canvas-box{min-height:80px}.task03-animation-fullscreen .task03-flying-cyclist-frame .fc-inline-params{flex-wrap:nowrap}.task03-animation-fullscreen .task03-flying-cyclist-frame .fc-speed-control{width:auto}.task03-animation-fullscreen .task03-flying-cyclist-frame .fc-speed-control input{flex:0 1 auto}}
 
 .freefall-anim-modal{width:min(980px,100%);background:linear-gradient(160deg,#07111f,#0b1626 62%,#101b2a);color:var(--white);border:1px solid rgba(8,216,255,.18);box-shadow:0 30px 100px rgba(0,0,0,.52),0 0 44px rgba(8,216,255,.12);padding:26px}
 .freefall-anim-modal .task-animation-placeholder-close{background:rgba(255,255,255,.05);border-color:rgba(8,216,255,.28);color:var(--white)}
@@ -14012,13 +14028,17 @@ function toggleTask03FlyingCyclistFormatMenu(){
 function setTask03FlyingCyclistFormat(format){
   const shell=document.getElementById('task03FlyingCyclistShell');
   const frame=document.getElementById('task03FlyingCyclistFrame');
-  if(!shell||!frame)return;
+  const overlay=document.getElementById('taskAnimationPlaceholderOverlay');
+  if(!shell||!frame||!overlay)return;
   flyingCyclistFormatClasses.forEach(function(cls){shell.classList.remove(cls);});
   const formatClass=getFlyingCyclistFormatClass(format);
   if(formatClass)shell.classList.add(formatClass);
   const displayFormat=getFlyingCyclistSolutionFormat(format);
+  const isFullscreen=format==='fullscreen';
   shell.dataset.format=displayFormat;
   frame.dataset.format=displayFormat;
+  overlay.classList.toggle('task03-animation-fullscreen',isFullscreen);
+  document.body.classList.toggle('task03-animation-fullscreen',isFullscreen);
   closeTask03FlyingCyclistFormatMenu();
   requestAnimationFrame(drawTask03FlyingCyclistAnimationFrame);
 }
@@ -14042,6 +14062,9 @@ function openTask03FlyingCyclistAnimation(taskId){
   stopFreeFallAnimationInOverlay(overlay);
   const keepTaskBoard=!!(TASK_ANIMATION_CONTEXT&&TASK_ANIMATION_CONTEXT.fromBoard&&taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
   overlay.dataset.keepTaskBoard=keepTaskBoard?'true':'false';
+  overlay.classList.remove('task03-animation-fullscreen');
+  document.body.classList.add('task03-animation-open');
+  document.body.classList.remove('task03-animation-fullscreen');
   overlay.classList.add('open');
   overlay.style.display='flex';
   const modal=overlay.querySelector('.task-animation-placeholder-modal');
@@ -14215,6 +14238,8 @@ function drawTask03FlyingCyclistAnimationFrame(){
 }
 
 function cleanupTask03FlyingCyclistAnimation(){
+  document.getElementById('taskAnimationPlaceholderOverlay')?.classList.remove('task03-animation-fullscreen');
+  document.body.classList.remove('task03-animation-open','task03-animation-fullscreen');
   if(!task03FlyingCyclistState)return;
   task03FlyingCyclistState.running=false;
   task03FlyingCyclistState.isPlaying=false;
