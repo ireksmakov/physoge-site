@@ -14199,7 +14199,7 @@ function drawTask03FlyingCyclistAnimationFrame(){
 
   const arcRadius=compact?28:36,arcX=planeStartX+8,arcY=planeY(planeStartX+8);
   ctx.strokeStyle='#ff8c00';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(arcX,arcY);ctx.lineTo(arcX+arcRadius+14,arcY);ctx.stroke();ctx.beginPath();ctx.arc(arcX,arcY,arcRadius,0,planeAngle);ctx.stroke();
-  ctx.fillStyle='#ffb86b';ctx.font='700 13px Golos Text,sans-serif';ctx.fillText('α = 30°',arcX+arcRadius+4,arcY+22);
+  ctx.fillStyle='#ffb86b';ctx.font='700 13px Golos Text,sans-serif';ctx.fillText('α = 30°',arcX+arcRadius-14,arcY-10);
 
   ctx.strokeStyle='rgba(0,229,255,.72)';ctx.lineWidth=2.4;ctx.setLineDash([7,6]);ctx.beginPath();
   for(let i=0;i<=60;i++){const point=trajectoryPoint(i/60);i?ctx.lineTo(point.x,point.y):ctx.moveTo(point.x,point.y);}ctx.stroke();ctx.setLineDash([]);
