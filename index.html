@@ -14169,7 +14169,7 @@ function drawTask03FlyingCyclistAnimationFrame(){
   cv.width=W*dpr;cv.height=H*dpr;
   const ctx=cv.getContext('2d');
   ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
-  const values=s.values,total=3.95,fallEnd=1.35,bounceEnd=1.7,flightEnd=3.75,p=Math.min(s.t,total);
+  const values=s.values,total=3.95,fallEnd=1.35,flightEnd=3.75,impactPulseDuration=.18,p=Math.min(s.t,total);
   const compact=W<560,padX=compact?34:Math.max(58,W*.09),impact1={x:padX+Math.max(46,(W-2*padX)*.18),y:H*(compact?.36:.4)};
   const planeAngle=values.alpha,availableX=Math.max(110,W-padX-impact1.x-18),verticalLimit=Math.max(90,(H-(compact?52:76)-impact1.y)/Math.tan(planeAngle));
   const dx=Math.min(availableX,compact?W*.42:W*.5,verticalLimit),impact2={x:impact1.x+dx,y:impact1.y+dx*Math.tan(planeAngle)};
@@ -14177,7 +14177,7 @@ function drawTask03FlyingCyclistAnimationFrame(){
   const planeY=function(x){return impact1.y+(x-impact1.x)*Math.tan(planeAngle);};
   const fallStart={x:impact1.x,y:Math.max(35,impact1.y-(compact?125:165))};
   const measureY=Math.min(H-18,impact2.y+(compact?34:48));
-  const flightProgress=Math.max(0,Math.min(1,(p-bounceEnd)/(flightEnd-bounceEnd)));
+  const flightProgress=Math.max(0,Math.min(1,(p-fallEnd)/(flightEnd-fallEnd)));
   const trajectoryPoint=function(q){
     const x=impact1.x+dx*q;
     const baseY=impact1.y+(impact2.y-impact1.y)*q;
@@ -14211,9 +14211,14 @@ function drawTask03FlyingCyclistAnimationFrame(){
   drawTask03ElasticBounceArrow(ctx,W-(compact?48:64),34,W-(compact?48:64),86,'#ff8c00','g',W-(compact?38:52),66);
 
   let ball=fallStart;
-  if(p<fallEnd){const q=p/fallEnd;ball={x:impact1.x,y:fallStart.y+(impact1.y-fallStart.y)*(q*q*(3-2*q))};drawTask03ElasticBounceArrow(ctx,ball.x+18,ball.y-42,ball.x+18,ball.y-8,'#ff8c00','v₀',ball.x+27,ball.y-19);}
-  else if(p<bounceEnd){ball=impact1;const pulse=(p-fallEnd)/(bounceEnd-fallEnd);ctx.strokeStyle=`rgba(255,140,0,${1-pulse})`;ctx.lineWidth=3;ctx.beginPath();ctx.arc(ball.x,ball.y,10+20*pulse,0,Math.PI*2);ctx.stroke();drawTask03ElasticBounceArrow(ctx,ball.x,ball.y,ball.x+44,ball.y-30,'#39ff14','v',ball.x+49,ball.y-30);}
-  else{ball=trajectoryPoint(flightProgress);const next=trajectoryPoint(Math.min(1,flightProgress+.035));if(flightProgress<.94)drawTask03ElasticBounceArrow(ctx,ball.x,ball.y,ball.x+(next.x-ball.x)*2.2,ball.y+(next.y-ball.y)*2.2,'#39ff14','v',ball.x+14,ball.y-12);}
+  if(p<fallEnd){const q=p/fallEnd;ball={x:impact1.x,y:fallStart.y+(impact1.y-fallStart.y)*q*q};drawTask03ElasticBounceArrow(ctx,ball.x+18,ball.y-42,ball.x+18,ball.y-8,'#ff8c00','v₀',ball.x+27,ball.y-19);}
+  else{
+    ball=trajectoryPoint(flightProgress);
+    const impactPulseProgress=(p-fallEnd)/impactPulseDuration;
+    if(impactPulseProgress<1){ctx.strokeStyle=`rgba(255,140,0,${1-impactPulseProgress})`;ctx.lineWidth=3;ctx.beginPath();ctx.arc(impact1.x,impact1.y,10+20*impactPulseProgress,0,Math.PI*2);ctx.stroke();}
+    const next=trajectoryPoint(Math.min(1,flightProgress+.035));
+    if(flightProgress<.94)drawTask03ElasticBounceArrow(ctx,ball.x,ball.y,ball.x+(next.x-ball.x)*2.2,ball.y+(next.y-ball.y)*2.2,'#39ff14','v',ball.x+14,ball.y-12);
+  }
 
   ctx.shadowColor='rgba(0,229,255,.8)';ctx.shadowBlur=16;ctx.fillStyle='#00e5ff';ctx.beginPath();ctx.arc(ball.x,ball.y,compact?7:9,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.strokeStyle='#d9fbff';ctx.lineWidth=2;ctx.stroke();
 
