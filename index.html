@@ -628,6 +628,11 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 .image-carousel-track{position:relative;display:block;width:100%}
 .image-carousel-slide{display:none;margin:0;position:relative;background:#fff}
 .image-carousel-slide.is-active{display:block}
+.image-carousel.is-moving-next .image-carousel-slide.is-active{animation:imageCarouselNext .28s cubic-bezier(.22,.61,.36,1) both}
+.image-carousel.is-moving-prev .image-carousel-slide.is-active{animation:imageCarouselPrev .28s cubic-bezier(.22,.61,.36,1) both}
+@keyframes imageCarouselNext{from{opacity:.35;transform:translateX(22px)}to{opacity:1;transform:translateX(0)}}
+@keyframes imageCarouselPrev{from{opacity:.35;transform:translateX(-22px)}to{opacity:1;transform:translateX(0)}}
+@media(prefers-reduced-motion:reduce){.image-carousel.is-moving-next .image-carousel-slide.is-active,.image-carousel.is-moving-prev .image-carousel-slide.is-active{animation:none}}
 .image-carousel-img{display:block;width:100%;max-width:100%;height:auto;background:#fff;cursor:zoom-in;user-select:none;-webkit-user-drag:none}
 .image-carousel-caption{display:block;padding:10px 14px;color:#f2f8ff;font-size:12px;font-weight:800;line-height:1.45;background:rgba(1,8,18,.92);border-top:1px solid rgba(8,216,255,.16)}
 .image-carousel-alt{min-width:0;overflow-wrap:anywhere;color:rgba(242,248,255,.9)}
@@ -2495,7 +2500,7 @@ function createImageCarousel(images,options){
   const group=escapeHtml(opts.group||('image-carousel-'+Math.random().toString(36).slice(2,9)));
   const cls=escapeHtml(opts.className||'');
   const title=opts.title?`<div class="image-carousel-title">${escapeHtml(opts.title)}</div>`:'';
-  const hint=opts.hint===false?'':`<div class="image-carousel-hint">${escapeHtml(opts.hint||'Листайте свайпом или стрелками. Нажмите на фото, чтобы увеличить.')}</div>`;
+  const hint=opts.hint===false?'':`<div class="image-carousel-hint">${escapeHtml(opts.hint||'Листайте колесом, тачпадом, свайпом или стрелками. Нажмите на фото, чтобы увеличить.')}</div>`;
   const imgClass=escapeHtml(opts.imgClass||'universal-viewable-image image-carousel-img');
   const fallback=escapeHtml(String(opts.fallbackText||'Изображение пока не найдено'));
   const slides=list.map(function(item,index){
@@ -2654,7 +2659,7 @@ const THEORY = {
         {src:'images/lesson12-zsi-theory-02-conservation-law.png',alt:'Закон сохранения импульса: условия применения, упругие и неупругие взаимодействия'},
         {src:'images/lesson12-zsi-theory-03-solved-examples.png',alt:'Закон сохранения импульса: примеры решения задач'},
         {src:'images/lesson12-zsi-theory-04-formulas-algorithm.png',alt:'Закон сохранения импульса: формулы, алгоритм и важные замечания'}
-      ],{className:'zsi-unified-image-carousel',imgClass:'theory-carousel-img universal-viewable-image image-carousel-img',hint:'Листайте карточки свайпом или стрелками. Нажмите на фото, чтобы увеличить.'})}
+      ],{className:'zsi-unified-image-carousel',imgClass:'theory-carousel-img universal-viewable-image image-carousel-img',hint:'Листайте карточки колесом, тачпадом, свайпом или стрелками. Нажмите на фото, чтобы увеличить.'})}
     </div>
   `}
 ],
@@ -2672,7 +2677,7 @@ const THEORY = {
         {src:'images/ege-physics/lesson-25/theory/theory-02.png',alt:'Урок 25: работа силы тяжести, слайд 2',fallbackSrc:'images/25theory2.png'},
         {src:'images/ege-physics/lesson-25/theory/theory-03.png',alt:'Урок 25: работа силы тяжести, слайд 3',fallbackSrc:'images/25theory3.png'},
         {src:'images/ege-physics/lesson-25/theory/theory-04.png',alt:'Урок 25: работа силы тяжести, слайд 4',fallbackSrc:'images/25theory4.png'}
-      ],{className:'zsi-unified-image-carousel',imgClass:'theory-carousel-img universal-viewable-image image-carousel-img',hint:'Листайте карточки свайпом или стрелками. Нажмите на фото, чтобы увеличить.'})}
+      ],{className:'zsi-unified-image-carousel',imgClass:'theory-carousel-img universal-viewable-image image-carousel-img',hint:'Листайте карточки колесом, тачпадом, свайпом или стрелками. Нажмите на фото, чтобы увеличить.'})}
     </div>
   `}
 ],
@@ -5415,7 +5420,7 @@ function renderTheory(){
           <h3>Баллистика. Свободное падение</h3>
         </div>
       </div>
-      ${createImageCarousel(theoryImages,{className:'zsi-unified-image-carousel',imgClass:'theory-carousel-img universal-viewable-image image-carousel-img',hint:'Листайте карточки свайпом или стрелками. Нажмите на фото, чтобы увеличить.'})}
+      ${createImageCarousel(theoryImages,{className:'zsi-unified-image-carousel',imgClass:'theory-carousel-img universal-viewable-image image-carousel-img',hint:'Листайте карточки колесом, тачпадом, свайпом или стрелками. Нажмите на фото, чтобы увеличить.'})}
     </div>`;
   }
   const blocks=getTH();
@@ -8000,7 +8005,17 @@ function setImageCarouselIndex(carousel,nextIndex){
   const slides=Array.from(carousel.querySelectorAll('[data-carousel-slide]'));
   if(!slides.length) return;
   const len=slides.length;
-  const index=((Number(nextIndex)||0)%len+len)%len;
+  const current=Number(carousel.dataset.carouselIndex)||0;
+  const requested=Number(nextIndex)||0;
+  const index=(requested%len+len)%len;
+  if(index===current) return;
+  carousel.classList.remove('is-moving-next','is-moving-prev');
+  void carousel.offsetWidth;
+  carousel.classList.add(requested>current?'is-moving-next':'is-moving-prev');
+  clearTimeout(carousel._imageCarouselMotionTimer);
+  carousel._imageCarouselMotionTimer=setTimeout(function(){
+    carousel.classList.remove('is-moving-next','is-moving-prev');
+  },320);
   carousel.dataset.carouselIndex=String(index);
   slides.forEach(function(slide,i){
     const active=i===index;
@@ -8023,22 +8038,48 @@ function bindImageCarouselDelegated(){
     const current=Number(carousel.dataset.carouselIndex)||0;
     setImageCarouselIndex(carousel,current+(btn.hasAttribute('data-carousel-next')?1:-1));
   },true);
-  let swipeTarget=null,startX=0,startY=0;
+
+  const wheelStates=new WeakMap();
+  document.addEventListener('wheel',function(event){
+    const carousel=event.target.closest('[data-image-carousel]');
+    if(!carousel||event.ctrlKey||carousel.querySelectorAll('[data-carousel-slide]').length<2) return;
+    event.preventDefault();
+    const now=performance.now();
+    let state=wheelStates.get(carousel);
+    if(!state){state={amount:0,lastEvent:0,lockedUntil:0,axis:''};wheelStates.set(carousel,state);}
+    if(now-state.lastEvent>180){state.amount=0;state.axis='';}
+    state.lastEvent=now;
+    if(!state.axis) state.axis=Math.abs(event.deltaX)>Math.abs(event.deltaY)*.75?'x':'y';
+    let delta=state.axis==='x'?event.deltaX:event.deltaY;
+    if(event.deltaMode===1) delta*=16;
+    else if(event.deltaMode===2) delta*=window.innerHeight;
+    if(now<state.lockedUntil) return;
+    state.amount+=Math.max(-40,Math.min(40,delta));
+    if(Math.abs(state.amount)<70) return;
+    const current=Number(carousel.dataset.carouselIndex)||0;
+    setImageCarouselIndex(carousel,current+(state.amount>0?1:-1));
+    state.amount=0;
+    state.lockedUntil=now+420;
+  },{passive:false});
+
+  let swipeTarget=null,startX=0,startY=0,swipePointerId=null;
+  function clearImageCarouselSwipe(){swipeTarget=null;swipePointerId=null;}
   document.addEventListener('pointerdown',function(event){
     const carousel=event.target.closest('[data-image-carousel]');
     if(!carousel||event.target.closest('[data-carousel-prev],[data-carousel-next]')) return;
-    swipeTarget=carousel;startX=event.clientX;startY=event.clientY;
+    swipeTarget=carousel;swipePointerId=event.pointerId;startX=event.clientX;startY=event.clientY;
   },{passive:true});
   document.addEventListener('pointerup',function(event){
-    if(!swipeTarget) return;
+    if(!swipeTarget||event.pointerId!==swipePointerId) return;
     const dx=event.clientX-startX;
     const dy=event.clientY-startY;
     if(Math.abs(dx)>48&&Math.abs(dx)>Math.abs(dy)*1.25){
       const current=Number(swipeTarget.dataset.carouselIndex)||0;
       setImageCarouselIndex(swipeTarget,current+(dx<0?1:-1));
     }
-    swipeTarget=null;
+    clearImageCarouselSwipe();
   },{passive:true});
+  document.addEventListener('pointercancel',clearImageCarouselSwipe,{passive:true});
 }
 setTimeout(bindImageCarouselDelegated,0);
 function getTaskSolutionImages(task){
