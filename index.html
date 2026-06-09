@@ -2133,8 +2133,8 @@ img,svg,canvas,video,iframe{max-width:100%}
       <a href="#students">Ученикам</a>
       <a href="#bank">Банк задач</a>
       <div class="sim-menu" id="simMenu">
-        <a href="#simulators" class="sim-toggle">Симуляторы</a>
-        <div class="sim-pop">
+        <button type="button" class="sim-toggle" aria-expanded="false" aria-controls="simulatorExamMenu">Симуляторы</button>
+        <div class="sim-pop" id="simulatorExamMenu">
           <a href="#simulators/oge" onclick="showSimulatorsPage('oge')">ОГЭ</a>
           <a href="#simulators/ege" onclick="showSimulatorsPage('ege')">ЕГЭ</a>
         </div>
@@ -3987,7 +3987,10 @@ function closeSimMenu(){
   const simToggle = document.querySelector('.sim-toggle');
 
   if(simMenu) simMenu.classList.remove('open');
-  if(simToggle) simToggle.classList.remove('open');
+  if(simToggle){
+    simToggle.classList.remove('open');
+    simToggle.setAttribute('aria-expanded', 'false');
+  }
 }
 
 function initSimMenu(){
@@ -4002,13 +4005,9 @@ function initSimMenu(){
     e.preventDefault();
     e.stopPropagation();
 
-    if(typeof navigateTo === 'function'){
-      navigateTo('#simulators');
-    }else{
-      window.location.hash = '#simulators';
-    }
-
-    closeSimMenu();
+    const isOpen = simMenu.classList.toggle('open');
+    simToggle.classList.toggle('open', isOpen);
+    simToggle.setAttribute('aria-expanded', String(isOpen));
   });
 
   document.addEventListener('click', function(e){
