@@ -4746,10 +4746,8 @@ function renderSimulatorsStructure(exam){
       const labsMarkup=labs.length?`<div class="topic-labs" onclick="event.stopPropagation()">${renderLabCards(labs)}</div>`:'';
       return `<div class="topic-item" onclick='${action}'><div class="topic-main"><span class="topic-num">${visibleIndex+1}</span><span class="topic-name">${escapeHtml(topic)}</span>${status}</div>${labsMarkup}</div>`;
     }).join('');
-    return `<div class="mod-item"><div class="mod-header" onclick="toggleMod(this)"><div class="mod-icon">${getExamModuleIcon(examKey,module.name)}</div><div class="mod-info"><div class="mod-name">${escapeHtml(module.name)}</div><div class="mod-meta">${lessonItems.length} уроков · структура синхронизирована с курсом ${examKey==='ege'?'ЕГЭ':'ОГЭ'}</div></div>${badge}<span class="mod-arrow">›</span></div><div class="mod-topics${mi===0?' open':''}"><div class="topics-grid">${topics}</div></div></div>`;
+    return `<div class="mod-item"><div class="mod-header" onclick="toggleMod(this)"><div class="mod-icon">${getExamModuleIcon(examKey,module.name)}</div><div class="mod-info"><div class="mod-name">${escapeHtml(module.name)}</div><div class="mod-meta">${lessonItems.length} уроков · структура синхронизирована с курсом ${examKey==='ege'?'ЕГЭ':'ОГЭ'}</div></div>${badge}<span class="mod-arrow">›</span></div><div class="mod-topics"><div class="topics-grid">${topics}</div></div></div>`;
   }).join('');
-  const firstArrow=mount.querySelector('.mod-arrow');
-  if(firstArrow)firstArrow.classList.add('open');
 }
 function renderOgeSimulatorsStructure(){renderSimulatorsStructure('oge');}
 function renderEgeSimulatorsStructure(){renderSimulatorsStructure('ege');}
