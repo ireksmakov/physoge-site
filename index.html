@@ -2472,8 +2472,8 @@ const mFrac = (top,bottom)=>`<span class="frac"><span class="f-top">${top}</span
 const mSqrt = (body)=>`<span class="sqrt"><span class="root-sign">√</span><span class="root-body">${body}</span></span>`;
 function normalizeCarouselImages(images,defaultAlt){
   return (Array.isArray(images)?images:[images]).map(function(item,index){
-    if(typeof item==='string') return {src:item,alt:String(defaultAlt||('Фото '+(index+1)))};
-    return {src:String(item&&item.src||''),alt:String(item&&item.alt||defaultAlt||('Фото '+(index+1))),fallbackSrc:String(item&&item.fallbackSrc||'')};
+    if(typeof item==='string') return {src:item,alt:String(defaultAlt||('Фото '+(index+1))),title:''};
+    return {src:String(item&&item.src||''),alt:String(item&&item.alt||defaultAlt||('Фото '+(index+1))),title:String(item&&item.title||''),fallbackSrc:String(item&&item.fallbackSrc||'')};
   }).filter(function(item){return !!item.src&&item.src!=='undefined';});
 }
 function createImageCarousel(images,options){
@@ -2497,9 +2497,10 @@ function createImageCarousel(images,options){
   const slides=list.map(function(item,index){
     const safePath=escapeHtml(item.src);
     const safeAlt=escapeHtml(item.alt||('Фото '+(index+1)));
+    const safeTitle=escapeHtml(item.title||item.alt||('Фото '+(index+1)));
     const safeFallbackSrc=escapeHtml(item.fallbackSrc||'');
     const onError=safeFallbackSrc?`this.onerror=null;this.src='${safeFallbackSrc}'`:`handleSolutionImageError(this, '${safePath}')`;
-    return `<figure class="image-carousel-slide${index===0?' is-active':''}" data-carousel-slide="${index}" aria-hidden="${index===0?'false':'true'}"><img class="${imgClass}" src="${safePath}" alt="${safeAlt}" data-viewer-group="${group}" onerror="${onError}"><figcaption class="image-carousel-caption"><span class="image-carousel-alt">${safeAlt}</span></figcaption><div class="pt-img-fallback" style="display:none">${fallback}</div></figure>`;
+    return `<figure class="image-carousel-slide${index===0?' is-active':''}" data-carousel-slide="${index}" aria-hidden="${index===0?'false':'true'}"><img class="${imgClass}" src="${safePath}" alt="${safeAlt}" title="${safeTitle}" data-viewer-group="${group}" onerror="${onError}"><figcaption class="image-carousel-caption"><span class="image-carousel-alt">${safeTitle}</span></figcaption><div class="pt-img-fallback" style="display:none">${fallback}</div></figure>`;
   }).join('');
   return `<div class="image-carousel ${cls}" data-image-carousel data-carousel-index="0" data-viewer-group="${group}">${title}<div class="image-carousel-topbar"><button type="button" class="image-carousel-btn prev" data-carousel-prev aria-label="Предыдущее фото">←</button><span class="image-carousel-counter" data-carousel-counter>1 / ${list.length}</span><button type="button" class="image-carousel-btn next" data-carousel-next aria-label="Следующее фото">→</button></div><div class="image-carousel-viewport"><div class="image-carousel-track">${slides}</div></div>${hint}</div>`;
 }
@@ -7099,7 +7100,10 @@ const LESSON_TASKS={
    cond:'Маленький шарик падает сверху на наклонную плоскость и упруго отражается от неё. Угол наклона плоскости к горизонту <strong>α = 30°</strong>. На какое расстояние по горизонтали переместится шарик между первым и вторым ударами о плоскость? Скорость шарика непосредственно перед первым ударом направлена вертикально вниз и равна <strong>1 м/с</strong>.',
    given:'α = 30°<br>v₀ = 1 м/с<br>g = 10 м/с²<br><span class="pt-find">Найти: S — горизонтальное расстояние между первым и вторым ударами</span>',
    boardConditionHtml:'<strong>Шарик, падающий на наклонную плоскость</strong><br>Маленький шарик падает сверху на наклонную плоскость и упруго отражается от неё. Угол наклона плоскости к горизонту <strong>α = 30°</strong>. На какое расстояние по горизонтали переместится шарик между первым и вторым ударами о плоскость? Скорость шарика непосредственно перед первым ударом направлена вертикально вниз и равна <strong>1 м/с</strong>.<br><br><strong>Дано:</strong><br>α = 30°<br>v₀ = 1 м/с<br>g = 10 м/с²<br><br><strong>Найти:</strong><br>S — горизонтальное расстояние между первым и вторым ударами',
-   solutionImage:'ege-physics/lesson-8/task-solutions/ege-ballistics-freefall-task03-elastic-bounce-incline-solution.png',
+   solutionImages:[
+     {src:'images/ege-ballistics-freefall-task03-elastic-bounce-incline-solution-01.png',alt:'Решение задачи 03: идея решения и схема задачи',title:'Фото решения 1 — Идея решения и схема задачи'},
+     {src:'images/ege-ballistics-freefall-task03-elastic-bounce-incline-solution-02.png',alt:'Решение задачи 03: формулы, подстановка чисел и ответ',title:'Фото решения 2 — Формулы, подстановка чисел и ответ'}
+   ],
    solutionTitle:'Решение задачи 03: шарик, падающий на наклонную плоскость',
    solution:{answer:''},steps:[],ans:'S ≈ 0,17 м'},
   {num:4,level:3,group:'Задачи на свободное падение',id:'ballistics-board-rebound-max-height-task04',boardMode:'ballistics-board-rebound-max-height-task04',animationId:'ballistics-board-rebound-max-height-task04',hasAnimation:true,title:'Отскок от наклонной доски',fullTitle:'Шарик падает и ударяется о доску, а затем поднимается на максимальную высоту',
@@ -8042,8 +8046,8 @@ function getTaskSolutionImages(task){
   if(!task) return [];
   if(Array.isArray(task.solutionImages)){
     return task.solutionImages.map(function(item,index){
-      if(typeof item==='string') return {src:item,alt:String(task.solutionTitle||task.title||('Решение задачи, часть '+(index+1)))};
-      return {src:String(item&&item.src||''),alt:String(item&&item.alt||task.solutionTitle||task.title||('Решение задачи, часть '+(index+1)))};
+      if(typeof item==='string') return {src:item,alt:String(task.solutionTitle||task.title||('Решение задачи, часть '+(index+1))),title:''};
+      return {src:String(item&&item.src||''),alt:String(item&&item.alt||task.solutionTitle||task.title||('Решение задачи, часть '+(index+1))),title:String(item&&item.title||'')};
     }).filter(function(item){return !!item.src;});
   }
   if(task.solutionImage){
@@ -13991,10 +13995,25 @@ function renderTask03FlyingCyclistAnimation(){
       <div class="fc-solution-block" id="task03FlyingCyclistSolution">
         <div class="task03-flying-cyclist-solution-card">
           <h3>Фото решения</h3>
-          <div class="task03-flying-cyclist-solution-image-wrap">
-            <img class="task03-flying-cyclist-solution-image pt-solution-image universal-viewable-image" src="ege-physics/lesson-8/task-solutions/ege-ballistics-freefall-task03-elastic-bounce-incline-solution.png" alt="Решение задачи 03: упругий отскок от наклонной плоскости" loading="lazy">
-          </div>
-          <p class="task03-flying-cyclist-solution-hint">Нажмите на фото, чтобы увеличить.</p>
+          ${createImageCarousel(
+            [
+              {
+                src:'images/ege-ballistics-freefall-task03-elastic-bounce-incline-solution-01.png',
+                alt:'Решение задачи 03: идея решения и схема задачи',
+                title:'Фото решения 1 — Идея решения и схема задачи'
+              },
+              {
+                src:'images/ege-ballistics-freefall-task03-elastic-bounce-incline-solution-02.png',
+                alt:'Решение задачи 03: формулы, подстановка чисел и ответ',
+                title:'Фото решения 2 — Формулы, подстановка чисел и ответ'
+              }
+            ],
+            {
+              group:'task03-elastic-bounce-solution',
+              className:'task03-flying-cyclist-solution-carousel',
+              imgClass:'task03-flying-cyclist-solution-image pt-solution-image universal-viewable-image image-carousel-img'
+            }
+          )}
         </div>
       </div>
     </div>
