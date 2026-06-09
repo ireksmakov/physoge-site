@@ -1844,15 +1844,12 @@ body.fc-fullscreen-active header{display:none !important}
 .topics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;padding:0}
 @media(max-width:800px){.topics-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:500px){.topics-grid{grid-template-columns:1fr}}
-.topic-item{display:flex;flex-direction:column;gap:10px;padding:13px 24px;border-bottom:1px solid rgba(0,229,255,.06);border-right:1px solid rgba(0,229,255,.06);cursor:pointer;transition:background .15s}
+.topic-item{display:flex;align-items:center;padding:13px 24px;border-bottom:1px solid rgba(0,229,255,.06);border-right:1px solid rgba(0,229,255,.06);cursor:pointer;transition:background .15s}
 .topic-item:hover{background:rgba(0,229,255,.04)}
 .topic-main{display:flex;align-items:center;gap:10px;width:100%}
-.topic-labs{width:100%;cursor:default}
-.topic-labs .pl-card{margin:2px 0 0;padding:14px;background:rgba(168,85,247,.04)}
 .topic-num{font-size:11px;font-weight:700;color:var(--gray);min-width:22px;flex-shrink:0}
 .topic-name{font-size:13px;color:var(--white);flex:1;line-height:1.4}
-.topic-sim{font-size:10px;padding:2px 7px;border-radius:4px;background:rgba(0,229,255,.12);color:var(--cyan);flex-shrink:0}
-.topic-soon{font-size:10px;color:var(--gray)}
+.topic-sim{display:inline-flex;align-items:center;justify-content:center;min-width:24px;font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(0,229,255,.12);color:var(--cyan);flex-shrink:0}
 /* Module page */
 .mp-wrap{max-width:1200px;margin:0 auto;padding:36px 24px 80px}
 .mp-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--gray);cursor:pointer;margin-bottom:28px;transition:color .2s}
@@ -4740,11 +4737,9 @@ function renderSimulatorsStructure(exam){
       const lesson=item.lesson,li=item.li;
       const topic=lessonTitle(lesson);
       const sims=getReadySimulatorsForLesson(examKey,topic);
-      const labs=getLabsForSimulatorTopic(examKey,topic);
       const action=sims.length?`openSimulatorByTopic(${JSON.stringify(examKey)},${JSON.stringify(topic)})`:`openCourse(${JSON.stringify(getCourseKeyByExam(examKey))},${mi},${li},'sims')`;
-      const status=sims.length?sims.map(sim=>`<span class="topic-sim" onclick="event.stopPropagation();openSimulatorById('${sim.id}')">⚡ ${escapeHtml(sim.title)}</span>`).join(''):'<span class="topic-soon">Симулятор скоро будет добавлен</span>';
-      const labsMarkup=labs.length?`<div class="topic-labs" onclick="event.stopPropagation()">${renderLabCards(labs)}</div>`:'';
-      return `<div class="topic-item" onclick='${action}'><div class="topic-main"><span class="topic-num">${visibleIndex+1}</span><span class="topic-name">${escapeHtml(topic)}</span>${status}</div>${labsMarkup}</div>`;
+      const simulatorCount=`<span class="topic-sim" aria-label="Симуляторов: ${sims.length}">${sims.length}</span>`;
+      return `<div class="topic-item" onclick='${action}'><div class="topic-main"><span class="topic-num">${visibleIndex+1}</span><span class="topic-name">${escapeHtml(topic)}</span>${simulatorCount}</div></div>`;
     }).join('');
     return `<div class="mod-item"><div class="mod-header" onclick="toggleMod(this)"><div class="mod-icon">${getExamModuleIcon(examKey,module.name)}</div><div class="mod-info"><div class="mod-name">${escapeHtml(module.name)}</div><div class="mod-meta">${lessonItems.length} уроков · структура синхронизирована с курсом ${examKey==='ege'?'ЕГЭ':'ОГЭ'}</div></div>${badge}<span class="mod-arrow">›</span></div><div class="mod-topics"><div class="topics-grid">${topics}</div></div></div>`;
   }).join('');
