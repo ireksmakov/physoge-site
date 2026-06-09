@@ -1725,6 +1725,13 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 .fc-param-chip strong,.fc-param-chip span{font-size:12px;font-weight:600;color:#dcecff}
 .fc-sub{font-size:0.5em;line-height:1;vertical-align:sub}
 .fc-param-chip input[type="range"]{width:70px;height:4px}
+.fc-param-stepper{padding-right:5px}
+.fc-param-stepper-controls{display:inline-flex;align-items:center;gap:3px;margin-left:2px}
+.fc-param-stepper-btn{width:24px;height:24px;padding:0;border:1px solid rgba(80,180,255,.38);border-radius:7px;background:rgba(4,17,32,.72);color:#dcecff;font-size:10px;line-height:1;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .16s ease,background .16s ease,color .16s ease,transform .16s ease}
+.fc-param-stepper-btn:hover:not(:disabled){border-color:rgba(0,229,255,.72);background:rgba(0,229,255,.12);color:#fff}
+.fc-param-stepper-btn:active:not(:disabled){transform:translateY(1px)}
+.fc-param-stepper-btn:focus-visible{outline:2px solid #00e5ff;outline-offset:1px}
+.fc-param-stepper-btn:disabled{opacity:.32;cursor:not-allowed}
 .fc-param-chip select{height:24px;padding:1px 7px;font-size:12px;border-radius:7px}
 #flyingCyclistCanvas{width:100%;height:100%;display:block}
 
@@ -13977,8 +13984,8 @@ function renderTask03FlyingCyclistAnimation(){
       <div class="fc-head"><span>ЕГЭ · Физика → Динамика → Баллистика. Свободное падение</span><strong>ФИЗМАТ</strong></div>
       <div class="fc-cond">Маленький шарик падает сверху на наклонную плоскость и упруго отражается от неё. Угол наклона плоскости к горизонту α = <span id="task03ElasticBounceConditionAlpha">30</span>°. На какое расстояние по горизонтали переместится шарик между первым и вторым ударами о плоскость? Скорость шарика непосредственно перед первым ударом направлена вертикально вниз и равна <span id="task03ElasticBounceConditionSpeed">1</span> м/с. Ускорение свободного падения принять g = 10 м/с².</div>
       <div class="fc-inline-params">
-        <label class="fc-param-chip" for="task03ElasticBounceAlpha">α = <span id="task03ElasticBounceAlphaValue">30°</span><input id="task03ElasticBounceAlpha" type="range" min="30" max="60" step="1" value="30" aria-label="Угол наклона плоскости α"></label>
-        <label class="fc-param-chip" for="task03ElasticBounceSpeed">v₀ = <span id="task03ElasticBounceSpeedValue">1 м/с</span><input id="task03ElasticBounceSpeed" type="range" min="0.5" max="3" step="0.1" value="1" aria-label="Скорость шарика v₀"></label>
+        <div class="fc-param-chip fc-param-stepper">α = <span id="task03ElasticBounceAlphaValue">30°</span><span class="fc-param-stepper-controls"><button class="fc-param-stepper-btn" id="task03ElasticBounceAlphaIncrease" type="button" aria-label="Увеличить угол α на 1 градус">▲</button><button class="fc-param-stepper-btn" id="task03ElasticBounceAlphaDecrease" type="button" aria-label="Уменьшить угол α на 1 градус">▼</button></span></div>
+        <div class="fc-param-chip fc-param-stepper">v₀ = <span id="task03ElasticBounceSpeedValue">1 м/с</span><span class="fc-param-stepper-controls"><button class="fc-param-stepper-btn" id="task03ElasticBounceSpeedIncrease" type="button" aria-label="Увеличить скорость v₀ на 0,1 метра в секунду">▲</button><button class="fc-param-stepper-btn" id="task03ElasticBounceSpeedDecrease" type="button" aria-label="Уменьшить скорость v₀ на 0,1 метра в секунду">▼</button></span></div>
         <div class="fc-param-chip">t = <span id="task03ElasticBounceTime">0,2</span> с</div>
         <div class="fc-param-chip">L = <span id="task03ElasticBounceLength">0,2</span> м</div>
         <div class="fc-param-chip">S ≈ <span id="task03ElasticBounceDistance">0,17</span> м</div>
@@ -14080,16 +14087,22 @@ function openTask03FlyingCyclistAnimation(taskId){
 }
 
 function calculateTask03ElasticBounceValues(){
-  const alphaInput=document.getElementById('task03ElasticBounceAlpha');
-  const speedInput=document.getElementById('task03ElasticBounceSpeed');
-  const alphaDeg=Math.max(30,Math.min(60,+(alphaInput&&alphaInput.value)||30));
+  const alphaDeg=Math.max(30,Math.min(50,task03FlyingCyclistState&&Number.isFinite(task03FlyingCyclistState.alphaDeg)?task03FlyingCyclistState.alphaDeg:30));
   const alpha=alphaDeg*Math.PI/180;
-  const v0=Math.max(.5,Math.min(3,+(speedInput&&speedInput.value)||1));
+  const v0=Math.max(.5,Math.min(5,task03FlyingCyclistState&&Number.isFinite(task03FlyingCyclistState.v0)?task03FlyingCyclistState.v0:1));
   const g=10;
   const flightTime=2*v0/g;
   const L=4*v0*v0*Math.sin(alpha)/g;
   const S=L*Math.cos(alpha);
   return{alphaDeg,alpha,v0,g,flightTime,L,S};
+}
+
+function adjustTask03ElasticBounceParameter(parameter,direction){
+  const state=task03FlyingCyclistState;
+  if(!state)return;
+  if(parameter==='alphaDeg')state.alphaDeg=Math.max(30,Math.min(50,state.alphaDeg+direction));
+  if(parameter==='v0')state.v0=Math.max(.5,Math.min(5,Math.round((state.v0+direction*.1)*10)/10));
+  updateTask03ElasticBounceParameters();
 }
 
 function formatTask03ElasticBounceNumber(value,digits){
@@ -14110,16 +14123,26 @@ function updateTask03ElasticBounceParameters(){
     task03ElasticBounceDistance:formatTask03ElasticBounceNumber(values.S,2)
   };
   Object.keys(updates).forEach(function(id){const element=document.getElementById(id);if(element)element.textContent=updates[id];});
+  const limits={
+    task03ElasticBounceAlphaIncrease:values.alphaDeg>=50,
+    task03ElasticBounceAlphaDecrease:values.alphaDeg<=30,
+    task03ElasticBounceSpeedIncrease:values.v0>=5,
+    task03ElasticBounceSpeedDecrease:values.v0<=.5
+  };
+  Object.keys(limits).forEach(function(id){const button=document.getElementById(id);if(button)button.disabled=limits[id];});
   resetTask03FlyingCyclistAnimation();
 }
 
 function initTask03FlyingCyclistAnimation(){
   const canvas=document.getElementById('task03FlyingCyclistCanvas');
   if(!canvas)return;
-  task03FlyingCyclistState={running:false,isPlaying:false,t:0,lastTs:0,speed:1,values:calculateTask03ElasticBounceValues(),raf:0};
+  task03FlyingCyclistState={running:false,isPlaying:false,t:0,lastTs:0,speed:1,alphaDeg:30,v0:1,values:null,raf:0};
+  task03FlyingCyclistState.values=calculateTask03ElasticBounceValues();
   const speed=document.getElementById('task03FlyingCyclistSpeed');
-  const alpha=document.getElementById('task03ElasticBounceAlpha');
-  const initialSpeed=document.getElementById('task03ElasticBounceSpeed');
+  const alphaIncrease=document.getElementById('task03ElasticBounceAlphaIncrease');
+  const alphaDecrease=document.getElementById('task03ElasticBounceAlphaDecrease');
+  const initialSpeedIncrease=document.getElementById('task03ElasticBounceSpeedIncrease');
+  const initialSpeedDecrease=document.getElementById('task03ElasticBounceSpeedDecrease');
   const playPause=document.getElementById('task03FlyingCyclistPlayPauseBtn');
   const reset=document.getElementById('task03FlyingCyclistResetBtn');
   const formatMenu=document.getElementById('task03FlyingCyclistFormatMenu');
@@ -14132,8 +14155,10 @@ function initTask03FlyingCyclistAnimation(){
     if(!event.target.closest('.fc-format-panel'))closeTask03FlyingCyclistFormatMenu();
   };
   if(speed)speed.oninput=function(event){if(task03FlyingCyclistState)task03FlyingCyclistState.speed=+event.target.value;};
-  if(alpha)alpha.oninput=updateTask03ElasticBounceParameters;
-  if(initialSpeed)initialSpeed.oninput=updateTask03ElasticBounceParameters;
+  if(alphaIncrease)alphaIncrease.onclick=function(){adjustTask03ElasticBounceParameter('alphaDeg',1);};
+  if(alphaDecrease)alphaDecrease.onclick=function(){adjustTask03ElasticBounceParameter('alphaDeg',-1);};
+  if(initialSpeedIncrease)initialSpeedIncrease.onclick=function(){adjustTask03ElasticBounceParameter('v0',1);};
+  if(initialSpeedDecrease)initialSpeedDecrease.onclick=function(){adjustTask03ElasticBounceParameter('v0',-1);};
   if(playPause)playPause.onclick=toggleTask03FlyingCyclistAnimation;
   if(reset)reset.onclick=resetTask03FlyingCyclistAnimation;
   updateTask03ElasticBounceParameters();
