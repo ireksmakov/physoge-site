@@ -3129,8 +3129,9 @@ function defaultTheory(title,description){return[
   {type:'text',label:'📝 Заглушка',title:'Материалы в подготовке',text:'Подробная теория, задачи, симуляторы, лабораторные, видео, тесты и домашнее задание будут добавлены в этот урок.'}
 ]}
 function makeLesson(title,description,theory){return{title,description,theory:theory||title,tasks:[],simulators:[],labs:[],video:[],tests:[],homework:[]}}
-function makeLessonRedirect(title,moduleIndex,lessonIndex){return{title,hidden:true,redirectTo:{moduleIndex,lessonIndex},description:'',theory:title,tasks:[],simulators:[],labs:[],video:[],tests:[],homework:[]}}
+function makeLessonRedirect(title,moduleIndex,lessonIndex,preserveNumber=false){return{title,hidden:true,preserveNumber,redirectTo:{moduleIndex,lessonIndex},description:'',theory:title,tasks:[],simulators:[],labs:[],video:[],tests:[],homework:[]}}
 function isHiddenLesson(lesson){return !!(lesson&&typeof lesson==='object'&&lesson.hidden)}
+function countsInLessonNumbering(lesson){return !isHiddenLesson(lesson)||!!lesson.preserveNumber}
 function getLessonObject(courseKey,moduleIndex,lessonIndex){
   const c=COURSES&&COURSES[courseKey];
   const raw=c&&c.modules&&c.modules[moduleIndex]&&c.modules[moduleIndex].lessons?c.modules[moduleIndex].lessons[lessonIndex]:null;
@@ -3297,8 +3298,8 @@ const COURSES={
         'Импульс',
         'Закон сохранения импульса и изменения импульса',
         'Сила тяжести. Работа. Энергия',
-        'Работа силы трения',
-        'Работа силы упругости',
+        makeLessonRedirect('Работа силы трения',3,5,true),
+        makeLessonRedirect('Работа силы упругости',3,5,true),
         'Кинетическая энергии',
         'Потенциальная энергия силы тяжести',
         'Мощность. КПД'
@@ -5299,15 +5300,19 @@ function renderSb(){
   const c=COURSES[AC];let n=1,h='';
   h=`<div class="sb-top"><span class="sb-lbl">Содержание</span></div>`;
   c.modules.forEach((m,mi)=>{
-    const visibleLessons=(m.lessons||[]).map((l,li)=>({l,li})).filter(item=>!isHiddenLesson(item.l));
-    let lh=m.open?visibleLessons.map(({l,li})=>{
+    const lessons=m.lessons||[];
+    let lh=m.open?lessons.map((l,li)=>{
+      if(isHiddenLesson(l)){
+        if(countsInLessonNumbering(l))n++;
+        return '';
+      }
       const act=mi===CM&&li===CL,idx=n++,title=lessonTitle(l);
       return`<div class="lli${act?' active':''}" data-mi="${mi}" data-li="${li}" onclick="selL(event,${mi},${li})">
         <span class="lnum">${idx}</span>
         <span class="lni">${title}</span>
       </div>`;
     }).join(''):'';
-    if(!m.open)n+=visibleLessons.length;
+    if(!m.open)n+=lessons.filter(countsInLessonNumbering).length;
     h+=`<div class="mod-block" data-mi="${mi}">
       <div class="mod-head">
         <button class="mtog${m.open?' open':''}" onclick="togM(${mi})">▶</button>
