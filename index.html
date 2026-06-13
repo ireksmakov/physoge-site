@@ -1818,7 +1818,7 @@ body.fc-fullscreen-active header{display:none !important}
 #ballisticsCanvas{width:100%;height:100%;display:block;border-radius:10px;background:#06111f}
 .bp-mode-row{display:flex;gap:8px;align-items:center;padding:8px 14px;border-bottom:1px solid rgba(8,216,255,.18);overflow-x:auto}
 .bp-mode-row label{color:#dcecff;font-size:12px;font-weight:700;white-space:nowrap}
-.bp-scenario-note{padding:0 14px 8px;color:#94a3b8;font-size:11px;line-height:1.45}
+#sim-ballistics-projectile #bpCondition{padding:8px 14px;color:#dcecff;font-size:12px;font-weight:700;line-height:1.45}
 .bp-select,.bp-number{height:26px;border:1px solid rgba(80,180,255,.32);border-radius:8px;background:#0b1a2d;color:#dcecff;font-family:var(--fb);font-size:12px;padding:0 7px}
 .bp-number{width:68px}
 .bp-results{display:flex;flex-wrap:wrap;gap:7px;padding:8px 14px;border-top:1px solid rgba(8,216,255,.18);border-bottom:1px solid rgba(8,216,255,.18)}
@@ -6842,11 +6842,10 @@ function vlClearTable(){vlRowNum=0;document.getElementById('vlTableBody').innerH
         </div>
         <div class="ballistics-record-frame" id="bpFrame">
         <div class="fc-head"><span>ЕГЭ · Физика → Динамика → Баллистика. Свободное падение</span><strong>ФИЗМАТ</strong></div>
-        <div class="fc-cond" id="bpCondition"></div>
+        <div class="fc-cond" id="bpCondition">Прибор наблюдения обнаружил летящий снаряд и зафиксировал его горизонтальную координату x₁ и высоту h₁ над Землёй. Через t секунд снаряд упал на Землю и взорвался на расстоянии l от места обнаружения. Пушка и место взрыва находятся на одной горизонтали. Сопротивлением воздуха пренебречь.</div>
         <div class="bp-mode-row"><label>Режим задачи: <select class="bp-select" id="bpMode"><option value="find-v0">1) Найти начальную скорость v₀</option><option value="find-H">2) Найти максимальную высоту H</option><option value="flightTime">3) Время полета T, с</option><option value="flightRange">4) Дальность полета L, м</option><option value="detectionHeight">5) Высота обнаружения h₁, м</option><option value="detectionDistance">6) Расстояние l, м</option></select></label><label>Положение точки взрыва: <select class="bp-select" id="bpExplosionSide"><option value="before">До прибора</option><option value="after">После прибора (снаряд перелетает прибор)</option></select></label></div>
-        <div class="bp-scenario-note">Прибор служит наблюдателем и может находиться как после точки взрыва, так и до неё — во втором случае снаряд пролетает над прибором.</div>
         <div class="fc-inline-params">
-          <label class="fc-param-chip">h₁, м <input class="bp-number" id="bpH1" type="number" value="1635" min="1"></label><label class="fc-param-chip">t, с <input class="bp-number" id="bpT" type="number" value="3" min="0.1" step="0.1"></label><label class="fc-param-chip">l, м <input class="bp-number" id="bpL" type="number" value="1764" min="1"></label><label class="fc-param-chip">g, м/с² <input class="bp-number" id="bpG" type="number" value="10" min="0.1" step="0.1"></label><label class="fc-param-chip" id="bpV0Chip" hidden>v₀, м/с <input class="bp-number" id="bpV0" type="number" value="800" min="1"></label>
+          <label class="fc-param-chip">h₁, м <input class="bp-number" id="bpH1" type="number" value="1635" min="1"></label><label class="fc-param-chip">t, с <input class="bp-number" id="bpT" type="number" value="3" min="0.1" step="0.1"></label><label class="fc-param-chip">l, м <input class="bp-number" id="bpL" type="number" value="1764" min="1"></label><label class="fc-param-chip" id="bpV0Chip" hidden>v₀, м/с <input class="bp-number" id="bpV0" type="number" value="800" min="1"></label>
         </div>
         <div class="fc-animation-controls"><div class="fc-ctrl"><button class="fc-btn" id="bpPlayBtn" onclick="toggleBallisticsAnimation()">Старт</button><button class="fc-btn" onclick="resetBallisticsAnimation()">Сброс</button></div><label class="fc-speed-control">Скорость анимации: <input id="bpSpeed" type="range" min="0.5" max="2" step="0.5" value="1"></label></div>
         <div class="fc-canvas-box"><canvas id="ballisticsCanvas"></canvas></div>
@@ -14384,23 +14383,22 @@ function cleanupTask03FlyingCyclistAnimation(){
 
 /* ═══ EGE BALLISTICS PROJECTILE SIMULATOR JS ═══ */
 let ballisticsState=null,ballisticsSolutionSlide=0;
+const BALLISTICS_G=10;
 function calculateBallisticsValues(){
-  const h1=Math.max(1,+document.getElementById('bpH1').value||1635),t=Math.max(.1,+document.getElementById('bpT').value||3),l=Math.max(1,+document.getElementById('bpL').value||1764),g=Math.max(.1,+document.getElementById('bpG').value||10),inputV0=Math.max(1,+document.getElementById('bpV0').value||800);
-  const vx=l/t,v1y=(h1-g*t*t/2)/t,v2y=v1y+g*t,tau=v1y/g,T=tau+t,H=g*T*T/2,v0=Math.hypot(vx,v2y),alpha=Math.atan2(v2y,vx)*180/Math.PI,vy0FromInput=Math.sqrt(Math.max(0,inputV0*inputV0-vx*vx)),hFromInput=vy0FromInput*vy0FromInput/(2*g);
-  return{h1,t,l,g,inputV0,vx,v1y,v2y,tau,T,H,v0,alpha,vy0FromInput,hFromInput};
+  const h1=Math.max(1,+document.getElementById('bpH1').value||1635),t=Math.max(.1,+document.getElementById('bpT').value||3),l=Math.max(1,+document.getElementById('bpL').value||1764),g=BALLISTICS_G,inputV0=Math.max(1,+document.getElementById('bpV0').value||800);
+  const vx=l/t,v1y=(h1-g*t*t/2)/t,v2y=v1y+g*t,timeBeforeDetection=v1y/g,T=timeBeforeDetection+t,H=g*T*T/2,v0=Math.hypot(vx,v2y),alpha=Math.atan2(v2y,vx)*180/Math.PI,vy0FromInput=Math.sqrt(Math.max(0,inputV0*inputV0-vx*vx)),hFromInput=vy0FromInput*vy0FromInput/(2*g);
+  return{h1,t,l,g,inputV0,vx,v1y,v2y,timeBeforeDetection,T,H,v0,alpha,vy0FromInput,hFromInput};
 }
 function bpN(n,d=0){return Number(n).toLocaleString('ru-RU',{maximumFractionDigits:d,minimumFractionDigits:d});}
 function updateBallisticsProjectile(){
   if(!ballisticsState)return;ballisticsState.values=calculateBallisticsValues();const v=ballisticsState.values,mode=document.getElementById('bpMode').value,explosionSide=document.getElementById('bpExplosionSide').value;ballisticsState.mode=mode;ballisticsState.explosionSide=explosionSide;document.getElementById('bpV0Chip').hidden=mode!=='find-H';
-  const scenarioText=explosionSide==='after'?'Прибор расположен между точкой обнаружения и местом падения: снаряд пролетает над ним и взрывается за прибором.':'Точка взрыва расположена до прибора наблюдения.';
-  document.getElementById('bpCondition').innerHTML=`Прибор наблюдения обнаружил летящий снаряд и зафиксировал его горизонтальную координату x₁ и высоту h₁ м над Землей. Через t с снаряд упал на Землю и взорвался на расстоянии l м от места его обнаружения. ${scenarioText} Известно, что снаряды данного типа вылетают из ствола пушки со скоростью v₀, м/с. Пушка и место взрыва находятся на одной горизонтали, сопротивление воздуха пренебрежимо мало.<br>Ниже определяем режим задачи:`;
-  const results=mode==='find-v0'?[`vₓ = ${bpN(v.vx)} м/с`,`v₁ᵧ = ${bpN(v.v1y)} м/с`,`v₂ᵧ = ${bpN(v.v2y)} м/с`,`v₀ ≈ ${bpN(Math.round(v.v0/10)*10)} м/с`,`α = ${bpN(v.alpha,1)}°`]:[`vₓ = ${bpN(v.vx)} м/с`,`v₁ᵧ = ${bpN(v.v1y)} м/с`,`τ = ${bpN(v.tau)} с`,`T = ${bpN(v.T)} с`,`H = ${bpN(v.H)} м`,`H ≈ ${bpN(v.H/1000)} км`];
+  const results=mode==='find-v0'?[`vₓ = ${bpN(v.vx)} м/с`,`v₁ᵧ = ${bpN(v.v1y)} м/с`,`v₂ᵧ = ${bpN(v.v2y)} м/с`,`v₀ ≈ ${bpN(Math.round(v.v0/10)*10)} м/с`,`α = ${bpN(v.alpha,1)}°`]:[`vₓ = ${bpN(v.vx)} м/с`,`v₁ᵧ = ${bpN(v.v1y)} м/с`,`t = ${bpN(v.timeBeforeDetection)} с`,`T = ${bpN(v.T)} с`,`H = ${bpN(v.H)} м`,`H ≈ ${bpN(v.H/1000)} км`];
   document.getElementById('bpResults').innerHTML=results.map(x=>`<span class="bp-result">${x}</span>`).join('');
   renderBallisticsCarousel();resetBallisticsAnimation();
 }
 function initBallisticsProjectileSim(){
   ballisticsState={running:false,t:0,lastTs:0,speed:1,raf:null,values:null,mode:'find-v0',explosionSide:'before'};
-  ['bpMode','bpExplosionSide','bpH1','bpT','bpL','bpG','bpV0'].forEach(id=>document.getElementById(id).oninput=updateBallisticsProjectile);document.getElementById('bpSpeed').oninput=e=>ballisticsState.speed=+e.target.value;updateBallisticsProjectile();
+  ['bpMode','bpExplosionSide','bpH1','bpT','bpL','bpV0'].forEach(id=>document.getElementById(id).oninput=updateBallisticsProjectile);document.getElementById('bpSpeed').oninput=e=>ballisticsState.speed=+e.target.value;updateBallisticsProjectile();
 }
 function openBallisticsSim(){location.hash='#simulators/ege/ballistics-projectile';}
 function goBackFromBallisticsProjectile(){exitBallisticsFormat();if(window.history.length>1){window.history.back();}else{location.hash='#simulators/ege';}}
