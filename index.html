@@ -2483,7 +2483,7 @@ const mSqrt = (body)=>`<span class="sqrt"><span class="root-sign">√</span><spa
 function normalizeCarouselImages(images,defaultAlt){
   return (Array.isArray(images)?images:[images]).map(function(item,index){
     if(typeof item==='string') return {src:item,alt:String(defaultAlt||('Фото '+(index+1))),title:''};
-    return {src:String(item&&item.src||''),alt:String(item&&item.alt||defaultAlt||('Фото '+(index+1))),title:String(item&&item.title||''),fallbackSrc:String(item&&item.fallbackSrc||'')};
+    return {src:String(item&&item.src||''),alt:String(item&&item.alt||defaultAlt||('Фото '+(index+1))),title:String(item&&item.title||''),caption:String(item&&item.caption||''),fallbackSrc:String(item&&item.fallbackSrc||'')};
   }).filter(function(item){return !!item.src&&item.src!=='undefined';});
 }
 function createImageCarousel(images,options){
@@ -2507,10 +2507,10 @@ function createImageCarousel(images,options){
   const slides=list.map(function(item,index){
     const safePath=escapeHtml(item.src);
     const safeAlt=escapeHtml(item.alt||('Фото '+(index+1)));
-    const safeTitle=escapeHtml(item.title||item.alt||('Фото '+(index+1)));
+    const safeCaption=escapeHtml(item.caption||item.title||item.alt||('Фото '+(index+1)));
     const safeFallbackSrc=escapeHtml(item.fallbackSrc||'');
     const onError=safeFallbackSrc?`this.onerror=null;this.src='${safeFallbackSrc}'`:`handleSolutionImageError(this, '${safePath}')`;
-    return `<figure class="image-carousel-slide${index===0?' is-active':''}" data-carousel-slide="${index}" aria-hidden="${index===0?'false':'true'}"><img class="${imgClass}" src="${safePath}" alt="${safeAlt}" data-viewer-group="${group}" onerror="${onError}"><figcaption class="image-carousel-caption"><span class="image-carousel-alt">${safeTitle}</span></figcaption><div class="pt-img-fallback" style="display:none">${fallback}</div></figure>`;
+    return `<figure class="image-carousel-slide${index===0?' is-active':''}" data-carousel-slide="${index}" aria-hidden="${index===0?'false':'true'}"><img class="${imgClass}" src="${safePath}" alt="${safeAlt}" data-viewer-group="${group}" onerror="${onError}"><figcaption class="image-carousel-caption"><span class="image-carousel-alt">${safeCaption}</span></figcaption><div class="pt-img-fallback" style="display:none">${fallback}</div></figure>`;
   }).join('');
   return `<div class="image-carousel ${cls}" data-image-carousel data-carousel-index="0" data-viewer-group="${group}">${title}<div class="image-carousel-topbar"><button type="button" class="image-carousel-btn prev" data-carousel-prev aria-label="Предыдущее фото">←</button><span class="image-carousel-counter" data-carousel-counter>1 / ${list.length}</span><button type="button" class="image-carousel-btn next" data-carousel-next aria-label="Следующее фото">→</button></div><div class="image-carousel-viewport"><div class="image-carousel-track">${slides}</div></div>${hint}</div>`;
 }
@@ -5415,6 +5415,41 @@ function showTab(id,btn,colorClass){
 
 /* ============ THEORY RENDERING ============ */
 function renderTheory(){
+  if(AC==='ege-phy'&&CM===0&&CL===0){
+    const baseTheoryHtml=renderTheoryBlocks(getTH());
+    const theoryImages=[
+      {
+        src:'images/ege-physics/lesson-1/theory/111.png',
+        alt:'Основные понятия кинематики: материальная точка, относительность движения, траектория, путь и перемещение',
+        caption:'Основные понятия кинематики'
+      },
+      {
+        src:'images/ege-physics/lesson-1/theory/222.png',
+        alt:'Виды движения, система отсчёта, система координат и скорость',
+        caption:'Виды движения. Система отсчёта. Скорость'
+      },
+      {
+        src:'images/ege-physics/lesson-1/theory/333.png',
+        alt:'Относительность движения и правило сложения классических скоростей',
+        caption:'Относительность движения. Сложение скоростей'
+      },
+      {
+        src:'images/ege-physics/lesson-1/theory/444.png',
+        alt:'Сложение скоростей: движение в одну сторону, навстречу и перпендикулярно',
+        caption:'Сложение скоростей: три основных случая'
+      }
+    ];
+    return `${baseTheoryHtml}<div class="zsi-theory-carousel ege-phy-m0-l0-theory-carousel">
+      <div class="zsi-carousel-head">
+        <div>
+          <div class="zsi-carousel-kicker">Карточки / Фото / Карусель</div>
+          <h3>Карточки по теме</h3>
+          <p>Основные понятия кинематики, виды движения, система отсчёта, относительность движения и сложение скоростей.</p>
+        </div>
+      </div>
+      ${createImageCarousel(theoryImages,{className:'zsi-unified-image-carousel',imgClass:'theory-carousel-img universal-viewable-image image-carousel-img',hint:'Перелистывайте карточки кнопками со стрелками. Нажмите на фото, чтобы увеличить.'})}
+    </div>`;
+  }
   if(AC==='ege-phy'&&CM===1&&CL===3){
     const baseTheoryHtml=renderTheoryBlocks(getTH());
     const theoryImages=[
