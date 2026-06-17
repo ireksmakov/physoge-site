@@ -2501,7 +2501,7 @@ function createImageCarousel(images,options){
   const group=escapeHtml(opts.group||('image-carousel-'+Math.random().toString(36).slice(2,9)));
   const cls=escapeHtml(opts.className||'');
   const title=opts.title?`<div class="image-carousel-title">${escapeHtml(opts.title)}</div>`:'';
-  const hint=opts.hint===false?'':`<div class="image-carousel-hint">${escapeHtml(opts.hint||'Листайте колесом, тачпадом, свайпом или стрелками. Нажмите на фото, чтобы увеличить.')}</div>`;
+  const hint=opts.hint===false?'':`<div class="image-carousel-hint">${escapeHtml(opts.hint||'Перелистывайте кнопками со стрелками. Нажмите на фото, чтобы увеличить.')}</div>`;
   const imgClass=escapeHtml(opts.imgClass||'universal-viewable-image image-carousel-img');
   const fallback=escapeHtml(String(opts.fallbackText||'Изображение пока не найдено'));
   const slides=list.map(function(item,index){
@@ -2660,7 +2660,7 @@ const THEORY = {
         {src:'images/lesson12-zsi-theory-02-conservation-law.png',alt:'Закон сохранения импульса: условия применения, упругие и неупругие взаимодействия'},
         {src:'images/lesson12-zsi-theory-03-solved-examples.png',alt:'Закон сохранения импульса: примеры решения задач'},
         {src:'images/lesson12-zsi-theory-04-formulas-algorithm.png',alt:'Закон сохранения импульса: формулы, алгоритм и важные замечания'}
-      ],{className:'zsi-unified-image-carousel',imgClass:'theory-carousel-img universal-viewable-image image-carousel-img',hint:'Листайте карточки колесом, тачпадом, свайпом или стрелками. Нажмите на фото, чтобы увеличить.'})}
+      ],{className:'zsi-unified-image-carousel',imgClass:'theory-carousel-img universal-viewable-image image-carousel-img',hint:'Перелистывайте карточки кнопками со стрелками. Нажмите на фото, чтобы увеличить.'})}
     </div>
   `}
 ],
@@ -2678,7 +2678,7 @@ const THEORY = {
         {src:'images/ege-physics/lesson-25/theory/theory-02.png',alt:'Урок 25: работа силы тяжести, слайд 2',fallbackSrc:'images/25theory2.png'},
         {src:'images/ege-physics/lesson-25/theory/theory-03.png',alt:'Урок 25: работа силы тяжести, слайд 3',fallbackSrc:'images/25theory3.png'},
         {src:'images/ege-physics/lesson-25/theory/theory-04.png',alt:'Урок 25: работа силы тяжести, слайд 4',fallbackSrc:'images/25theory4.png'}
-      ],{className:'zsi-unified-image-carousel',imgClass:'theory-carousel-img universal-viewable-image image-carousel-img',hint:'Листайте карточки колесом, тачпадом, свайпом или стрелками. Нажмите на фото, чтобы увеличить.'})}
+      ],{className:'zsi-unified-image-carousel',imgClass:'theory-carousel-img universal-viewable-image image-carousel-img',hint:'Перелистывайте карточки кнопками со стрелками. Нажмите на фото, чтобы увеличить.'})}
     </div>
   `}
 ],
@@ -5429,7 +5429,7 @@ function renderTheory(){
           <h3>Баллистика. Свободное падение</h3>
         </div>
       </div>
-      ${createImageCarousel(theoryImages,{className:'zsi-unified-image-carousel',imgClass:'theory-carousel-img universal-viewable-image image-carousel-img',hint:'Листайте карточки колесом, тачпадом, свайпом или стрелками. Нажмите на фото, чтобы увеличить.'})}
+      ${createImageCarousel(theoryImages,{className:'zsi-unified-image-carousel',imgClass:'theory-carousel-img universal-viewable-image image-carousel-img',hint:'Перелистывайте карточки кнопками со стрелками. Нажмите на фото, чтобы увеличить.'})}
     </div>`;
   }
   const blocks=getTH();
@@ -8048,79 +8048,8 @@ function bindImageCarouselDelegated(){
     setImageCarouselIndex(carousel,current+(btn.hasAttribute('data-carousel-next')?1:-1));
   },true);
 
-  const wheelStates=new WeakMap();
-  document.addEventListener('wheel',function(event){
-    const carousel=event.target.closest('[data-image-carousel]');
-    if(!carousel||event.ctrlKey||carousel.querySelectorAll('[data-carousel-slide]').length<2) return;
-    event.preventDefault();
-    const now=performance.now();
-    let state=wheelStates.get(carousel);
-    if(!state){state={amount:0,lastEvent:0,lockedUntil:0,axis:''};wheelStates.set(carousel,state);}
-    if(now-state.lastEvent>180){state.amount=0;state.axis='';}
-    state.lastEvent=now;
-    if(!state.axis) state.axis=Math.abs(event.deltaX)>Math.abs(event.deltaY)*.75?'x':'y';
-    let delta=state.axis==='x'?event.deltaX:event.deltaY;
-    if(event.deltaMode===1) delta*=16;
-    else if(event.deltaMode===2) delta*=window.innerHeight;
-    if(now<state.lockedUntil) return;
-    state.amount+=Math.max(-40,Math.min(40,delta));
-    if(Math.abs(state.amount)<70) return;
-    const current=Number(carousel.dataset.carouselIndex)||0;
-    setImageCarouselIndex(carousel,current+(state.amount>0?1:-1));
-    state.amount=0;
-    state.lockedUntil=now+420;
-  },{passive:false});
-
-  const SWIPE_THRESHOLD=40;
-  const SWIPE_DIRECTION_LOCK=10;
-  let swipeTarget=null,startX=0,startY=0,swipePointerId=null,swipeAxis='';
-  function clearImageCarouselSwipe(){
-    swipeTarget=null;
-    swipePointerId=null;
-    swipeAxis='';
-  }
-  function suppressNextCarouselImageClick(carousel){
-    carousel.dataset.suppressNextImageClick='true';
-    clearTimeout(carousel._imageCarouselClickSuppressTimer);
-    carousel._imageCarouselClickSuppressTimer=setTimeout(function(){
-      carousel.dataset.suppressNextImageClick='false';
-    },600);
-  }
-  document.addEventListener('pointerdown',function(event){
-    const carousel=event.target.closest('[data-image-carousel]');
-    if(!event.isPrimary||!carousel||event.target.closest('[data-carousel-prev],[data-carousel-next]')) return;
-    swipeTarget=carousel;
-    swipePointerId=event.pointerId;
-    startX=event.clientX;
-    startY=event.clientY;
-    swipeAxis='';
-  },{passive:true});
-  document.addEventListener('pointermove',function(event){
-    if(!swipeTarget||event.pointerId!==swipePointerId||swipeAxis==='vertical') return;
-    const deltaX=event.clientX-startX;
-    const deltaY=event.clientY-startY;
-    const absX=Math.abs(deltaX);
-    const absY=Math.abs(deltaY);
-    if(!swipeAxis&&Math.max(absX,absY)>=SWIPE_DIRECTION_LOCK){
-      swipeAxis=absX>absY*1.25?'horizontal':'vertical';
-    }
-    if(swipeAxis==='horizontal') event.preventDefault();
-  },{passive:false});
-  document.addEventListener('pointerup',function(event){
-    if(!swipeTarget||event.pointerId!==swipePointerId) return;
-    const carousel=swipeTarget;
-    const deltaX=event.clientX-startX;
-    const deltaY=event.clientY-startY;
-    const isHorizontalSwipe=swipeAxis==='horizontal'&&Math.abs(deltaX)>=SWIPE_THRESHOLD&&Math.abs(deltaX)>Math.abs(deltaY)*1.25;
-    if(isHorizontalSwipe){
-      event.preventDefault();
-      suppressNextCarouselImageClick(carousel);
-      const current=Number(carousel.dataset.carouselIndex)||0;
-      setImageCarouselIndex(carousel,current+(deltaX<0?1:-1));
-    }
-    clearImageCarouselSwipe();
-  },{passive:false});
-  document.addEventListener('pointercancel',clearImageCarouselSwipe,{passive:true});
+  // Touch, pointer and wheel swipe navigation is intentionally disabled for image carousels.
+  // Slides are changed only by the visible previous/next arrow buttons.
 }
 setTimeout(bindImageCarouselDelegated,0);
 function getTaskSolutionImages(task){
@@ -13772,7 +13701,7 @@ function renderFlyingCyclistSolutionCarousel(){
     className:'simulator-image-carousel',
     imgClass:'fc-solution-slide universal-viewable-image image-carousel-img',
     fallbackText:'Фото решения будет добавлено позже',
-    hint:'Листайте решение свайпом или стрелками. Нажмите на фото, чтобы увеличить.'
+    hint:'Перелистывайте решение кнопками со стрелками. Нажмите на фото, чтобы увеличить.'
   });
   solutionBlock.innerHTML=`
     <div class="sim-solution-card">
@@ -14423,7 +14352,7 @@ function renderBallisticsCarousel(){const track=document.getElementById('bpSolut
   {src:'images/simulators/ege/ballistics-projectile/solution-v0-01.png',alt:'Решение задачи «Снаряд обнаружен в полёте», часть 1'},
   {src:'images/simulators/ege/ballistics-projectile/solution-v0-02.png',alt:'Решение задачи «Снаряд обнаружен в полёте», часть 2'},
   {src:'images/simulators/ege/ballistics-projectile/solution-v0-03.png',alt:'Решение задачи «Снаряд обнаружен в полёте», часть 3'}
-],{className:'simulator-image-carousel',imgClass:'fc-solution-slide universal-viewable-image image-carousel-img',fallbackText:'Фото решения будет добавлено',hint:'Листайте свайпом влево или вправо либо стрелками. Нажмите на фото, чтобы увеличить.'});}
+],{className:'simulator-image-carousel',imgClass:'fc-solution-slide universal-viewable-image image-carousel-img',fallbackText:'Фото решения будет добавлено',hint:'Перелистывайте кнопками со стрелками. Нажмите на фото, чтобы увеличить.'});}
 function moveBallisticsSolutionSlide(dir){const carousel=document.querySelector('#bpSolutionCarousel [data-image-carousel]');if(!carousel)return;const current=Number(carousel.dataset.carouselIndex)||0;setImageCarouselIndex(carousel,current+dir);}
 function toggleBallisticsFormatMenu(){const menu=document.getElementById('ballisticsFormatMenu');if(!menu)return;menu.classList.toggle('open');}
 function setBallisticsFormat(format){const root=document.getElementById('sim-ballistics-projectile');if(!root)return;root.dataset.format=format;const menu=document.getElementById('ballisticsFormatMenu');if(menu)menu.classList.remove('open');setTimeout(renderBallisticsScene,30);}
