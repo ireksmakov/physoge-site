@@ -5416,25 +5416,25 @@ function showTab(id,btn,colorClass){
 /* ============ THEORY RENDERING ============ */
 function renderTheory(){
   if(AC==='ege-phy'&&CM===0&&CL===0){
-    const baseTheoryHtml=renderTheoryBlocks(getTH());
+    const baseTheoryHtml=renderTheoryBlocks(getTH().filter(function(block){return !(block&&block.label==='📝 Заглушка'&&block.title==='Материалы в подготовке');}));
     const theoryImages=[
       {
-        src:'images/ege-physics/lesson-1/theory/111.png',
+        src:'images/ege-physics/lesson-1/theory/ege-physics_lesson_1_theory1.png',
         alt:'Основные понятия кинематики: материальная точка, относительность движения, траектория, путь и перемещение',
         caption:'Основные понятия кинематики'
       },
       {
-        src:'images/ege-physics/lesson-1/theory/222.png',
+        src:'images/ege-physics/lesson-1/theory/ege-physics_lesson_1_theory2.png',
         alt:'Виды движения, система отсчёта, система координат и скорость',
         caption:'Виды движения. Система отсчёта. Скорость'
       },
       {
-        src:'images/ege-physics/lesson-1/theory/333.png',
+        src:'images/ege-physics/lesson-1/theory/ege-physics_lesson_1_theory3.png',
         alt:'Относительность движения и правило сложения классических скоростей',
         caption:'Относительность движения. Сложение скоростей'
       },
       {
-        src:'images/ege-physics/lesson-1/theory/444.png',
+        src:'images/ege-physics/lesson-1/theory/ege-physics_lesson_1_theory4.png',
         alt:'Сложение скоростей: движение в одну сторону, навстречу и перпендикулярно',
         caption:'Сложение скоростей: три основных случая'
       }
