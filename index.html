@@ -3370,7 +3370,7 @@ const COURSES={
       lessons:[
         'Первый закон термодинамики',
         'Применение первого закона термодинамики к изопроцессам',
-        'Внутренняя энергия',
+        makeLesson('Внутренняя энергия идеального газа','Внутренняя энергия одноатомного идеального газа и её изменение при нагревании.'),
         'Работа газа',
         'Насыщенный пар',
         'Точка росы',
@@ -7712,6 +7712,49 @@ const LESSON_TASKS={
     isBlank:false
   }
 ],
+
+'Внутренняя энергия идеального газа':[
+  {
+    id:'ege-thermo-internal-energy-helium-01',
+    boardMode:'ege-thermo-internal-energy-helium-01',
+    mode:'ege-thermo-internal-energy-helium-01',
+    animationId:'gas-heating',
+    animId:'gas-heating',
+    num:1,
+    level:2,
+    exam:'ЕГЭ (1 балл)',
+    points:1,
+    title:'Изменение внутренней энергии гелия',
+    cond:'В стальном баллоне находится гелий массой <strong>0,5 кг</strong> при температуре <strong>10 °C</strong>. Как изменится внутренняя энергия гелия, если его температура повысится до <strong>30 °C</strong>?',
+    given:'m = 0,5 кг, t₁ = 10 °C, t₂ = 30 °C, M = 4 · 10⁻³ кг/моль, R = 8,31 Дж/(моль · К)<br><span class="pt-find">Найти: ΔU</span>',
+    boardConditionHtml:'В баллоне находится гелий массой <strong>0,5 кг</strong> при температуре <strong>10 °C</strong>. Температура повысилась до <strong>30 °C</strong>. Найти изменение внутренней энергии.',
+    boardSolutionHtml:`
+      <div class="task-board-manual">
+        <div class="task-board-step"><div class="task-board-step-num">1</div><div class="task-board-step-body"><strong>Найти:</strong><div class="sr-fml">ΔU — ?</div></div></div>
+        <div class="task-board-step"><div class="task-board-step-num">2</div><div class="task-board-step-body"><strong>Дано:</strong><div class="sr-fml">m = 0,5 кг; t₁ = 10 °C; t₂ = 30 °C; M = 4 · 10⁻³ кг/моль; R = 8,31 Дж/(моль · К)</div></div></div>
+        <div class="task-board-step"><div class="task-board-step-num">3</div><div class="task-board-step-body"><strong>СИ:</strong><div class="sr-fml">T₁ = 10 + 273 = 283 К</div><div class="sr-fml">T₂ = 30 + 273 = 303 К</div><div class="sr-fml">ΔT = T₂ − T₁ = 20 К</div></div></div>
+        <div class="task-board-step"><div class="task-board-step-num">4</div><div class="task-board-step-body"><strong>Формулы:</strong> гелий — одноатомный газ, поэтому<div class="sr-fml">U = 3/2 · νRT</div><div class="sr-fml">ν = m / M</div><div class="sr-fml">ΔU = 3/2 · νRΔT = 3/2 · (m / M) · R · ΔT</div></div></div>
+        <div class="task-board-step"><div class="task-board-step-num">5</div><div class="task-board-step-body"><strong>Расчёт:</strong><div class="sr-fml">ΔU = 3/2 · (0,5 / 4 · 10⁻³) · 8,31 · 20</div><div class="sr-fml">ΔU = 31 162,5 Дж</div><div class="sr-fml">ΔU ≈ 31,2 кДж</div></div></div>
+        <div class="task-board-step"><div class="task-board-step-num">6</div><div class="task-board-step-body"><strong>Ответ:</strong> внутренняя энергия гелия увеличится на <strong>31,2 кДж</strong>.</div></div>
+      </div>`,
+    solutionHtml:`
+      <div class="solution-workspace">
+        <h4>1. Анализ условия</h4>
+        <p>Газ находится в стальном баллоне, значит объём постоянный. Но нас спрашивают не работу газа, а изменение внутренней энергии. Для идеального газа внутренняя энергия зависит только от температуры.</p>
+        <div class="sr-fml">U = 3/2 · νRT</div><div class="sr-fml">ΔU = 3/2 · νRΔT</div>
+        <h4>2. Перевод температуры в Кельвины</h4>
+        <div class="sr-fml">T₁ = t₁ + 273 = 10 + 273 = 283 К</div><div class="sr-fml">T₂ = t₂ + 273 = 30 + 273 = 303 К</div><div class="sr-fml">ΔT = T₂ − T₁ = 303 − 283 = 20 К</div>
+        <h4>3. Находим количество вещества</h4>
+        <div class="sr-fml">ν = m / M = 0,5 / (4 · 10⁻³) = 125 моль</div>
+        <h4>4. Подставляем в формулу</h4>
+        <div class="sr-fml">ΔU = 3/2 · 125 · 8,31 · 20 = 31 162,5 Дж ≈ 31,2 кДж</div>
+        <h4>5. Ответ</h4><p>Внутренняя энергия гелия увеличится на <strong>ΔU = 31,2 кДж</strong>.</p>
+        <h4>Что запомнить для ЕГЭ</h4><p>Для одноатомного газа <strong>U = 3/2 · νRT</strong>, а изменение внутренней энергии равно <strong>ΔU = 3/2 · νRΔT</strong>. Для идеального газа внутренняя энергия зависит только от температуры.</p>
+      </div>`,
+    hasAnimation:true,
+    ans:'ΔU = 31,2 кДж'
+  }
+],
 'Линзы':[
   {num:1,level:1,title:'Формула тонкой линзы',
    cond:'Предмет на расстоянии <strong>d=30 см</strong> от собирающей линзы с <strong>F=20 см</strong>. Найдите расстояние до изображения и увеличение.',
@@ -11415,7 +11458,51 @@ function openBallisticsTaskAnimation(taskId){
   return false;
 }
 
+
+function isGasHeatingAnimationId(taskId){
+  return String(taskId||'')==='gas-heating'||String(taskId||'')==='ege-thermo-internal-energy-helium-01';
+}
+
+function renderGasHeatingAnimation(task){
+  const condition=task?.cond||'';
+  return `<div class="gas-heating-anim">
+    <style>
+      .gas-heating-anim{color:#eaf6ff;font-family:inherit}.gas-heating-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:14px}.gas-heating-kicker{font-size:12px;color:#7dd3fc;text-transform:uppercase;letter-spacing:.08em}.gas-heating-title{margin:4px 0 0;font-size:24px}.gas-heating-condition{border:1px solid rgba(125,211,252,.25);border-radius:16px;padding:12px;background:rgba(8,20,34,.72);margin-bottom:14px}.gas-heating-label{font-size:12px;color:#93c5fd;margin-bottom:4px}.gas-heating-scene{position:relative;min-height:340px;border-radius:20px;overflow:hidden;background:radial-gradient(circle at 50% 40%,rgba(56,189,248,.18),transparent 35%),linear-gradient(180deg,#071626,#101827);border:1px solid rgba(148,163,184,.25)}.gas-heating-cylinder{position:absolute;left:50%;top:50%;width:320px;height:190px;transform:translate(-50%,-50%);border-radius:95px/60px;background:linear-gradient(90deg,rgba(148,163,184,.45),rgba(226,232,240,.18),rgba(71,85,105,.55));border:4px solid rgba(203,213,225,.75);box-shadow:inset 0 0 35px rgba(15,23,42,.9),0 18px 45px rgba(0,0,0,.35)}.gas-heating-cylinder:before,.gas-heating-cylinder:after{content:"";position:absolute;top:16px;width:28px;height:158px;border-radius:50%;border:3px solid rgba(226,232,240,.65)}.gas-heating-cylinder:before{left:18px}.gas-heating-cylinder:after{right:18px}.gas-particle{position:absolute;width:12px;height:12px;border-radius:50%;background:#67e8f9;box-shadow:0 0 14px #22d3ee;animation:gasSlow 4.8s linear infinite}.gas-particle.hot{background:#fb923c;box-shadow:0 0 18px #f97316;animation-name:gasFast;animation-duration:2.1s}.gas-p1{left:32%;top:43%;animation-delay:-.2s}.gas-p2{left:42%;top:55%;animation-delay:-1.3s}.gas-p3{left:53%;top:39%;animation-delay:-2.1s}.gas-p4{left:61%;top:57%;animation-delay:-.8s}.gas-p5{left:48%;top:48%;animation-delay:-3s}.gas-p6{left:57%;top:46%;animation-delay:-1.7s}@keyframes gasSlow{0%{transform:translate(-35px,-18px)}25%{transform:translate(36px,12px)}50%{transform:translate(20px,42px)}75%{transform:translate(-42px,22px)}100%{transform:translate(-35px,-18px)}}@keyframes gasFast{0%{transform:translate(-52px,-28px)}25%{transform:translate(58px,22px)}50%{transform:translate(34px,54px)}75%{transform:translate(-65px,31px)}100%{transform:translate(-52px,-28px)}}.gas-heating-temp{position:absolute;left:24px;top:24px;display:flex;gap:10px;align-items:center}.gas-temp-card{padding:10px 14px;border-radius:14px;background:rgba(15,23,42,.82);border:1px solid rgba(148,163,184,.28)}.gas-temp-card strong{display:block;font-size:22px}.gas-temp-card.hot strong{color:#fb923c}.gas-heater{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);width:190px;height:34px;border-radius:18px;background:linear-gradient(90deg,#f97316,#fde047,#f97316);box-shadow:0 0 26px rgba(249,115,22,.65);animation:heaterPulse 1.2s ease-in-out infinite alternate}@keyframes heaterPulse{from{opacity:.55;filter:blur(.2px)}to{opacity:1;filter:blur(0)}}.gas-heating-caption{position:absolute;left:24px;right:24px;bottom:74px;padding:12px 14px;border-radius:16px;background:rgba(2,6,23,.78);border:1px solid rgba(251,146,60,.35);font-weight:700}.gas-heating-formula{position:absolute;right:26px;top:26px;padding:14px 18px;border-radius:16px;background:rgba(14,116,144,.22);border:1px solid rgba(103,232,249,.4);font-size:22px;font-weight:800}.gas-heating-note{margin-top:12px;color:#cbd5e1;font-size:14px}.gas-heating-controls{display:flex;gap:10px;margin-top:12px}.gas-heating-btn{border:0;border-radius:999px;padding:10px 14px;background:#ff8c00;color:#111827;font-weight:800;cursor:pointer}
+    </style>
+    <div class="gas-heating-head"><div><div class="gas-heating-kicker">МКТ и термодинамика · газ нагревается</div><h3 class="gas-heating-title">Изменение внутренней энергии гелия</h3></div></div>
+    <div class="gas-heating-condition"><div class="gas-heating-label">Условие</div>${condition}</div>
+    <div class="gas-heating-scene" aria-label="Нагревание гелия в стальном баллоне">
+      <div class="gas-heating-temp"><div class="gas-temp-card"><span>сначала</span><strong>10 °C</strong></div><div class="gas-temp-card hot"><span>после нагревания</span><strong>30 °C</strong></div></div>
+      <div class="gas-heating-formula">ΔU = 3/2 · νRΔT</div><div class="gas-heating-cylinder"></div>
+      <span class="gas-particle gas-p1"></span><span class="gas-particle gas-p2"></span><span class="gas-particle gas-p3"></span><span class="gas-particle hot gas-p4"></span><span class="gas-particle hot gas-p5"></span><span class="gas-particle hot gas-p6"></span>
+      <div class="gas-heating-caption">Температура увеличилась → средняя кинетическая энергия молекул увеличилась → внутренняя энергия газа увеличилась.</div><div class="gas-heater"></div>
+    </div>
+    <div class="gas-heating-note">Объём стального баллона постоянный, но для изменения внутренней энергии идеального газа важна только температура.</div>
+  </div>`;
+}
+
+function openGasHeatingAnimation(taskId){
+  const task=findTaskById('ege-thermo-internal-energy-helium-01')||findTaskById(taskId)||taskBoardState?.task||null;
+  if(!document.getElementById('taskAnimationPlaceholderOverlay')) openTaskAnimationPlaceholder(taskId);
+  const overlay=document.getElementById('taskAnimationPlaceholderOverlay');
+  if(!overlay) return false;
+  stopFreeFallAnimationInOverlay(overlay);
+  const keepTaskBoard=!!(TASK_ANIMATION_CONTEXT&&TASK_ANIMATION_CONTEXT.fromBoard&&taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
+  overlay.dataset.keepTaskBoard=keepTaskBoard?'true':'false';
+  overlay.classList.add('open');
+  overlay.style.display='flex';
+  const modal=overlay.querySelector('.task-animation-placeholder-modal');
+  if(!modal) return false;
+  modal.classList.remove('freefall-anim-modal','ballistics-task-animation-modal','task03-flying-cyclist-modal');
+  modal.innerHTML=`<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder(); return false;">✕ Закрыть</button>${renderGasHeatingAnimation(task)}`;
+  if(taskBoardState&&taskBoardState.animBtn) taskBoardState.animBtn.textContent='✕ Анимация';
+  return false;
+}
+
 function openTaskAnimationOverlay(taskId){
+  if(isGasHeatingAnimationId(taskId)){
+    return openGasHeatingAnimation(taskId);
+  }
   if(taskId==='ballistics-incline-elastic-bounce-task03'){
     return openTask03FlyingCyclistAnimation(taskId);
   }
