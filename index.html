@@ -1306,6 +1306,29 @@ body.task-board-lock header,body.task-board-lock .topbar,body.task-board-lock .s
 @media(max-width:1080px){.task-board-problem-main{padding-right:0;padding-top:62px}.task-board-problem-graph{top:12px;left:16px;right:auto;width:calc(100% - 32px);max-width:220px}.task-board-problem-graph.graph-open{left:0;right:0;width:100%;max-width:none;top:calc(100% + 10px)}.task-board-popup{inset:10px;padding:14px 16px 16px}.task-board-sim-panel{grid-template-columns:repeat(2,minmax(0,1fr))}.task-board-sim-speed{margin-left:0;min-width:0;justify-content:flex-start}.task-board-sim-canvas-wrap{min-height:clamp(320px,52vh,640px)}.task-board-sim-canvas{height:clamp(320px,52vh,640px)}}
 @media(max-width:900px){.task-animation-condition{width:100%}.task-animation-condition-text{max-height:130px}}
 @media(max-width:820px){.task-board-shell{padding:10px}.task-board-title{font-size:20px}.task-board-condition{font-size:14px}.task-board-given{font-size:14px}.task-board-solution .task-board-step-body,.task-board-manual .task-board-step-body,.task-board-manual .task-board-step-body .sr-fml{font-size:14px;line-height:1.6}.task-board-drawer{width:288px}.task-board-popup{inset:8px;padding:12px 12px 14px;border-radius:18px}.task-board-popup-title{font-size:20px}.task-board-sim-canvas-wrap{min-height:clamp(280px,44vh,420px)}.task-board-sim-canvas{height:clamp(280px,44vh,420px)}.task-board-sim-panel{grid-template-columns:1fr}.task-board-sim-controls{align-items:stretch}.task-board-sim-play,.task-board-sim-reset,.task-board-popup-close{justify-content:center}.task-board-sim-speed{width:100%;justify-content:flex-start}}
+
+.task-board-popup.is-ether-cork-animation{gap:14px;background:#f8fbff;border-color:#d5e4f7;box-shadow:0 28px 90px rgba(15,23,42,.16)}
+.task-board-popup.is-ether-cork-animation.open{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,340px);grid-template-areas:'head head' 'note note' 'controls controls' 'canvas solution' 'state state';align-content:start}
+.task-board-popup.is-ether-cork-animation .task-board-popup-head{grid-area:head;position:relative;top:auto;background:transparent;border-bottom:0;padding:4px 0 0}
+.task-board-popup.is-ether-cork-animation .task-board-popup-title{font-size:clamp(32px,4.1vw,54px);font-weight:900;letter-spacing:-.035em;color:#0f172a}
+.task-board-popup.is-ether-cork-animation .task-animation-condition{width:100%;margin:18px 0 0;padding:16px 18px;background:#fff;border-color:#d8e7f8;border-radius:18px;box-shadow:0 12px 30px rgba(37,99,235,.055)}
+.task-board-popup.is-ether-cork-animation .task-animation-condition-title{color:#2563eb;font-size:11px;letter-spacing:.12em;margin-bottom:8px}
+.task-board-popup.is-ether-cork-animation .task-animation-condition-text{max-height:128px;color:#24344d;font-size:15px;line-height:1.5}
+.task-board-popup.is-ether-cork-animation .task-animation-description{grid-area:note;margin:0;color:#526985;font-size:15px;line-height:1.55}
+.task-board-popup.is-ether-cork-animation .task-board-sim-controls{grid-area:controls;padding:12px 14px;background:#fff;border:1px solid #d8e7f8;border-radius:16px;box-shadow:0 10px 24px rgba(15,23,42,.045)}
+.task-board-popup.is-ether-cork-animation .task-board-sim-play{background:#2563eb;border:1px solid #2563eb;border-radius:12px;box-shadow:0 10px 24px rgba(37,99,235,.18)}
+.task-board-popup.is-ether-cork-animation .task-board-sim-reset{border-color:#bfdbfe;color:#1d4ed8;background:#fff}
+.task-board-popup.is-ether-cork-animation .task-board-sim-speed{margin-left:auto;color:#526985;font-weight:700}
+.task-board-popup.is-ether-cork-animation .task-board-sim-canvas-wrap{grid-area:canvas;min-height:clamp(440px,58vh,700px);background:#fff;border-color:#d8e7f8;border-radius:22px;box-shadow:0 16px 42px rgba(15,23,42,.07)}
+.task-board-popup.is-ether-cork-animation .task-board-sim-canvas{height:clamp(440px,58vh,700px)}
+.task-board-popup.is-ether-cork-animation .task-board-sim-panel{grid-area:solution;display:flex;flex-direction:column;gap:10px;align-self:start;padding:16px;background:#fff;border:1.5px solid #93c5fd;border-radius:20px;box-shadow:0 16px 38px rgba(37,99,235,.10)}
+.task-board-popup.is-ether-cork-animation .task-board-sim-panel::before{content:'Решение';display:block;margin-bottom:2px;font-family:var(--fh);font-size:24px;font-weight:900;color:#0f172a}
+.task-board-popup.is-ether-cork-animation .task-board-sim-stat{background:#f8fbff;border-color:#dbeafe;border-radius:14px;padding:11px 12px}
+.task-board-popup.is-ether-cork-animation .task-board-sim-stat span{color:#2563eb;font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+.task-board-popup.is-ether-cork-animation .task-board-sim-stat strong{font-size:15px;color:#0f172a}
+.task-board-popup.is-ether-cork-animation .task-board-sim-state{grid-area:state;background:#fff;border-color:#d8e7f8;color:#526985}
+@media(max-width:960px){.task-board-popup.is-ether-cork-animation.open{grid-template-columns:1fr;grid-template-areas:'head' 'note' 'controls' 'canvas' 'solution' 'state'}.task-board-popup.is-ether-cork-animation .task-board-sim-speed{margin-left:0}.task-board-popup.is-ether-cork-animation .task-board-sim-panel{width:auto}}
+@media(max-width:620px){.task-board-popup.is-ether-cork-animation{inset:6px;padding:12px}.task-board-popup.is-ether-cork-animation .task-board-popup-head{display:block}.task-board-popup.is-ether-cork-animation .task-board-popup-close{margin-top:10px;width:100%}.task-board-popup.is-ether-cork-animation .task-board-popup-title{font-size:28px}.task-board-popup.is-ether-cork-animation .task-board-sim-canvas-wrap{min-height:360px}.task-board-popup.is-ether-cork-animation .task-board-sim-canvas{height:360px}}
 /* Platform sim cards */
 .ps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
 .ps-card{background:var(--bg3);border:1px solid var(--border);border-radius:13px;padding:16px;display:flex;flex-direction:column;gap:9px;transition:border-color .2s,transform .2s}
@@ -10313,6 +10336,7 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
   const isCartStone = resolvedMode==='cartStone';
   const isEtherCork = resolvedMode==='etherCork';
   const isNewton = resolvedMode==='newtonForceAcceleration'||resolvedMode==='newtonInclineFriction';
+  if(state.simPopup) state.simPopup.classList.toggle('is-ether-cork-animation',isEtherCork);
   if(state.simTitle) state.simTitle.textContent=isNewton?(resolvedMode==='newtonInclineFriction'?'Анимация движения по наклонной':'Анимация второго закона Ньютона'):(isInelasticFriction?'Анимация пластилина и бруска':(isEtherCork?'Анимация отдачи пробирки':(isBlocks?'Анимация столкновения брусков':(isExplosionVector?'Анимация распада снаряда':(isExplosion?'Анимация взрыва снаряда':(isPuckImpulse?'Анимация удара шайб':(isMomentum?'Анимация соударения':(isPendulumImpact?'Анимация задачи 10: удар малого тела о маятник':(isEnergyPendulum?'Анимация удара и подъёма доски':(isEnergyHill?'Анимация подъёма по горке':(isCartStone?'Анимация падения камня':'Анимация движения')))))))))));
   if(state.simCondition) state.simCondition.innerHTML=getTaskConditionHtml(task);
   if(state.simNote) state.simNote.innerHTML=isNewton
@@ -12192,7 +12216,7 @@ function taskBoardSimReset(resetFrame){
   if(resetFrame) sim.frame='earth';
   document.querySelectorAll('[data-frame-btn]').forEach(function(btn){btn.classList.toggle('active',btn.getAttribute('data-frame-btn')===sim.frame);});
   const btn=document.getElementById('taskBoardSimToggleBtn');
-  if(btn) btn.textContent='▶ Старт';
+  if(btn) btn.textContent=state.mode==='etherCork'?'↻ Повтор':'▶ Старт';
   taskBoardSimSync();
   taskBoardSimDraw();
 }
@@ -13031,14 +13055,6 @@ function taskBoardSimDraw(){
     ctx.fillStyle='#2563eb';ctx.font='700 12px Golos Text,sans-serif';ctx.textAlign='left';
     ctx.fillText('L = 1 м',pivotX+12,(pivotY+restY)/2);
 
-    const bw=Math.min(315,Math.max(248,W*0.36)),bh=116,bx=W-bw-22,by=20;
-    ctx.fillStyle='rgba(255,255,255,.98)';ctx.fillRect(bx,by,bw,bh);
-    ctx.strokeStyle='rgba(37,99,235,.18)';ctx.strokeRect(bx,by,bw,bh);
-    ctx.fillStyle='#64748b';ctx.font='11px Golos Text,sans-serif';ctx.fillText('Решение',bx+12,by+18);
-    ctx.fillStyle='#111827';ctx.font='bold 16px Golos Text,sans-serif';ctx.fillText('Фаза: '+phase,bx+12,by+42);
-    ctx.fillText('uₘᵢₙ = √(5gL) = 7 м/с',bx+12,by+64);
-    ctx.fillStyle='#0284c7';ctx.font='700 12px Golos Text,sans-serif';ctx.fillText('m v = M u',bx+12,by+86);
-    ctx.fillText('v = (0,10 / 0,020) · 7 = 35 м/с',bx+12,by+104);
     return;
   }
   if(state.mode==='inelasticFriction'){
