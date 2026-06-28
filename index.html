@@ -11467,18 +11467,96 @@ function renderGasHeatingAnimation(task){
   const condition=task?.cond||'';
   return `<div class="gas-heating-anim">
     <style>
-      .gas-heating-anim{color:#eaf6ff;font-family:inherit}.gas-heating-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:14px}.gas-heating-kicker{font-size:12px;color:#7dd3fc;text-transform:uppercase;letter-spacing:.08em}.gas-heating-title{margin:4px 0 0;font-size:24px}.gas-heating-condition{border:1px solid rgba(125,211,252,.25);border-radius:16px;padding:12px;background:rgba(8,20,34,.72);margin-bottom:14px}.gas-heating-label{font-size:12px;color:#93c5fd;margin-bottom:4px}.gas-heating-scene{position:relative;min-height:340px;border-radius:20px;overflow:hidden;background:radial-gradient(circle at 50% 40%,rgba(56,189,248,.18),transparent 35%),linear-gradient(180deg,#071626,#101827);border:1px solid rgba(148,163,184,.25)}.gas-heating-cylinder{position:absolute;left:50%;top:50%;width:320px;height:190px;transform:translate(-50%,-50%);border-radius:95px/60px;background:linear-gradient(90deg,rgba(148,163,184,.45),rgba(226,232,240,.18),rgba(71,85,105,.55));border:4px solid rgba(203,213,225,.75);box-shadow:inset 0 0 35px rgba(15,23,42,.9),0 18px 45px rgba(0,0,0,.35)}.gas-heating-cylinder:before,.gas-heating-cylinder:after{content:"";position:absolute;top:16px;width:28px;height:158px;border-radius:50%;border:3px solid rgba(226,232,240,.65)}.gas-heating-cylinder:before{left:18px}.gas-heating-cylinder:after{right:18px}.gas-particle{position:absolute;width:12px;height:12px;border-radius:50%;background:#67e8f9;box-shadow:0 0 14px #22d3ee;animation:gasSlow 4.8s linear infinite}.gas-particle.hot{background:#fb923c;box-shadow:0 0 18px #f97316;animation-name:gasFast;animation-duration:2.1s}.gas-p1{left:32%;top:43%;animation-delay:-.2s}.gas-p2{left:42%;top:55%;animation-delay:-1.3s}.gas-p3{left:53%;top:39%;animation-delay:-2.1s}.gas-p4{left:61%;top:57%;animation-delay:-.8s}.gas-p5{left:48%;top:48%;animation-delay:-3s}.gas-p6{left:57%;top:46%;animation-delay:-1.7s}@keyframes gasSlow{0%{transform:translate(-35px,-18px)}25%{transform:translate(36px,12px)}50%{transform:translate(20px,42px)}75%{transform:translate(-42px,22px)}100%{transform:translate(-35px,-18px)}}@keyframes gasFast{0%{transform:translate(-52px,-28px)}25%{transform:translate(58px,22px)}50%{transform:translate(34px,54px)}75%{transform:translate(-65px,31px)}100%{transform:translate(-52px,-28px)}}.gas-heating-temp{position:absolute;left:24px;top:24px;display:flex;gap:10px;align-items:center}.gas-temp-card{padding:10px 14px;border-radius:14px;background:rgba(15,23,42,.82);border:1px solid rgba(148,163,184,.28)}.gas-temp-card strong{display:block;font-size:22px}.gas-temp-card.hot strong{color:#fb923c}.gas-heater{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);width:190px;height:34px;border-radius:18px;background:linear-gradient(90deg,#f97316,#fde047,#f97316);box-shadow:0 0 26px rgba(249,115,22,.65);animation:heaterPulse 1.2s ease-in-out infinite alternate}@keyframes heaterPulse{from{opacity:.55;filter:blur(.2px)}to{opacity:1;filter:blur(0)}}.gas-heating-caption{position:absolute;left:24px;right:24px;bottom:74px;padding:12px 14px;border-radius:16px;background:rgba(2,6,23,.78);border:1px solid rgba(251,146,60,.35);font-weight:700}.gas-heating-formula{position:absolute;right:26px;top:26px;padding:14px 18px;border-radius:16px;background:rgba(14,116,144,.22);border:1px solid rgba(103,232,249,.4);font-size:22px;font-weight:800}.gas-heating-note{margin-top:12px;color:#cbd5e1;font-size:14px}.gas-heating-controls{display:flex;gap:10px;margin-top:12px}.gas-heating-btn{border:0;border-radius:999px;padding:10px 14px;background:#ff8c00;color:#111827;font-weight:800;cursor:pointer}
+      .gas-heating-anim{color:#eaf6ff;font-family:inherit}.gas-heating-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:14px}.gas-heating-kicker{font-size:12px;color:#7dd3fc;text-transform:uppercase;letter-spacing:.08em}.gas-heating-title{margin:4px 0 0;font-size:24px}.gas-heating-condition{border:1px solid rgba(125,211,252,.25);border-radius:16px;padding:12px;background:rgba(8,20,34,.72);margin-bottom:14px}.gas-heating-label{font-size:12px;color:#93c5fd;margin-bottom:4px}.gas-heating-scene{position:relative;min-height:390px;border-radius:20px;overflow:hidden;background:radial-gradient(circle at 50% 40%,rgba(56,189,248,.18),transparent 35%),linear-gradient(180deg,#071626,#101827);border:1px solid rgba(148,163,184,.25)}.gas-heating-cylinder{position:absolute;left:50%;top:51%;width:min(76vw,360px);height:clamp(180px,34vw,220px);transform:translate(-50%,-50%);border-radius:110px/70px;background:linear-gradient(90deg,rgba(148,163,184,.45),rgba(226,232,240,.16),rgba(71,85,105,.55));border:4px solid rgba(203,213,225,.75);box-shadow:inset 0 0 35px rgba(15,23,42,.9),0 18px 45px rgba(0,0,0,.35);overflow:hidden}.gas-heating-cylinder:before,.gas-heating-cylinder:after{content:"";position:absolute;z-index:2;top:16px;width:30px;height:calc(100% - 32px);border-radius:50%;border:3px solid rgba(226,232,240,.65);pointer-events:none}.gas-heating-cylinder:before{left:18px}.gas-heating-cylinder:after{right:18px}.gas-heating-canvas{position:absolute;inset:0;z-index:1;width:100%;height:100%;display:block}.gas-heating-temp{position:absolute;left:24px;top:24px;display:flex;gap:10px;align-items:center;z-index:3}.gas-temp-card{padding:10px 14px;border-radius:14px;background:rgba(15,23,42,.82);border:1px solid rgba(148,163,184,.28)}.gas-temp-card strong{display:block;font-size:22px}.gas-temp-card.hot strong{color:#fb923c}.gas-heater{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);width:190px;height:34px;border-radius:18px;background:linear-gradient(90deg,#f97316,#fde047,#f97316);box-shadow:0 0 26px rgba(249,115,22,.65);animation:heaterPulse 1.2s ease-in-out infinite alternate}@keyframes heaterPulse{from{opacity:.55;filter:blur(.2px)}to{opacity:1;filter:blur(0)}}.gas-heating-caption{position:absolute;left:24px;right:24px;bottom:74px;padding:12px 14px;border-radius:16px;background:rgba(2,6,23,.78);border:1px solid rgba(251,146,60,.35);font-weight:700;z-index:3}.gas-heating-formula{position:absolute;right:26px;top:26px;padding:14px 18px;border-radius:16px;background:rgba(14,116,144,.22);border:1px solid rgba(103,232,249,.4);font-size:22px;font-weight:800;z-index:3}.gas-heating-note{margin-top:12px;color:#cbd5e1;font-size:14px}.gas-heating-control-panel{margin-top:12px;padding:13px 14px;border-radius:16px;background:linear-gradient(180deg,rgba(8,20,34,.9),rgba(15,23,42,.78));border:1px solid rgba(125,211,252,.25);box-shadow:inset 0 0 18px rgba(14,165,233,.08)}.gas-heating-control-row{display:flex;align-items:center;gap:14px}.gas-heating-slider-label{display:flex;align-items:baseline;justify-content:space-between;gap:12px;min-width:172px;font-weight:800}.gas-heating-slider-value{color:#67e8f9;text-shadow:0 0 12px rgba(34,211,238,.65)}.gas-heating-slider{flex:1;min-width:160px;accent-color:#22d3ee}.gas-heating-hint{margin-top:8px;color:#bae6fd;font-size:13px}.gas-heating-controls{display:flex;gap:10px;margin-top:12px}.gas-heating-btn{border:0;border-radius:999px;padding:10px 14px;background:#ff8c00;color:#111827;font-weight:800;cursor:pointer}@media (max-width:640px){.gas-heating-title{font-size:20px}.gas-heating-scene{min-height:440px}.gas-heating-temp{position:relative;left:auto;top:auto;padding:12px;flex-wrap:wrap}.gas-heating-formula{position:relative;right:auto;top:auto;margin:0 12px 8px;width:max-content;max-width:calc(100% - 24px);font-size:18px}.gas-heating-cylinder{top:55%;width:min(88vw,330px);height:190px}.gas-heating-caption{left:12px;right:12px;bottom:66px;font-size:13px}.gas-heating-control-row{align-items:stretch;flex-direction:column}.gas-heating-slider-label{min-width:0}.gas-heating-slider{width:100%}}
     </style>
     <div class="gas-heating-head"><div><div class="gas-heating-kicker">МКТ и термодинамика · газ нагревается</div><h3 class="gas-heating-title">Изменение внутренней энергии гелия</h3></div></div>
     <div class="gas-heating-condition"><div class="gas-heating-label">Условие</div>${condition}</div>
     <div class="gas-heating-scene" aria-label="Нагревание гелия в стальном баллоне">
       <div class="gas-heating-temp"><div class="gas-temp-card"><span>сначала</span><strong>10 °C</strong></div><div class="gas-temp-card hot"><span>после нагревания</span><strong>30 °C</strong></div></div>
-      <div class="gas-heating-formula">ΔU = 3/2 · νRΔT</div><div class="gas-heating-cylinder"></div>
-      <span class="gas-particle gas-p1"></span><span class="gas-particle gas-p2"></span><span class="gas-particle gas-p3"></span><span class="gas-particle hot gas-p4"></span><span class="gas-particle hot gas-p5"></span><span class="gas-particle hot gas-p6"></span>
+      <div class="gas-heating-formula">ΔU = 3/2 · νRΔT</div>
+      <div class="gas-heating-cylinder"><canvas class="gas-heating-canvas" data-gas-heating-canvas aria-hidden="true"></canvas></div>
       <div class="gas-heating-caption">Температура увеличилась → средняя кинетическая энергия молекул увеличилась → внутренняя энергия газа увеличилась.</div><div class="gas-heater"></div>
     </div>
+    <div class="gas-heating-control-panel"><div class="gas-heating-control-row"><label class="gas-heating-slider-label" for="gasHeatingTemperature">Температура <span class="gas-heating-slider-value" data-gas-temp-value>T = 30 °C</span></label><input id="gasHeatingTemperature" class="gas-heating-slider" data-gas-temp-slider type="range" min="0" max="100" value="30" step="1" aria-label="Температура газа"></div><div class="gas-heating-hint">Чем выше температура, тем быстрее движутся частицы.</div></div>
     <div class="gas-heating-note">Объём стального баллона постоянный, но для изменения внутренней энергии идеального газа важна только температура.</div>
   </div>`;
+}
+
+function bindGasHeatingAnimation(root){
+  const canvas=root?.querySelector?.('[data-gas-heating-canvas]');
+  const slider=root?.querySelector?.('[data-gas-temp-slider]');
+  const valueEl=root?.querySelector?.('[data-gas-temp-value]');
+  if(!canvas||canvas.dataset.gasBound==='true') return;
+  canvas.dataset.gasBound='true';
+  const ctx=canvas.getContext('2d');
+  const particles=[];
+  let w=0,h=0,dpr=1,raf=0,last=performance.now(),temperature=Number(slider?.value||30);
+  const rand=(a,b)=>a+Math.random()*(b-a);
+  const speedForTemp=t=>34+(t/100)*118;
+  const rxAt=function(x,r){
+    const cap=Math.min(h*0.36,w*0.18);
+    if(x<cap) return Math.max(0,cap-Math.sqrt(Math.max(0,1-((x-cap)/cap)**2))*(h/2-r));
+    if(x>w-cap) return Math.max(0,cap-Math.sqrt(Math.max(0,1-((x-(w-cap))/cap)**2))*(h/2-r));
+    return 0;
+  };
+  const inside=function(p,x=p.x,y=p.y){
+    const pad=p.r+7;
+    const left=rxAt(x,p.r)+pad;
+    const right=w-rxAt(w-x,p.r)-pad;
+    return x>=left&&x<=right&&y>=pad&&y<=h-pad;
+  };
+  const clampToVessel=function(p){
+    const pad=p.r+7;
+    const left=rxAt(p.x,p.r)+pad;
+    const right=w-rxAt(w-p.x,p.r)-pad;
+    if(p.x<left){p.x=left;p.vx=Math.abs(p.vx);} if(p.x>right){p.x=right;p.vx=-Math.abs(p.vx);}
+    if(p.y<pad){p.y=pad;p.vy=Math.abs(p.vy);} if(p.y>h-pad){p.y=h-pad;p.vy=-Math.abs(p.vy);}
+  };
+  const resize=function(){
+    const rect=canvas.getBoundingClientRect();
+    w=Math.max(240,rect.width); h=Math.max(160,rect.height); dpr=Math.min(2,window.devicePixelRatio||1);
+    canvas.width=Math.round(w*dpr); canvas.height=Math.round(h*dpr); ctx.setTransform(dpr,0,0,dpr,0,0);
+    const target=Math.max(18,Math.min(30,Math.round(w*h/2600)));
+    while(particles.length<target){
+      const r=rand(4.2,5.8); let p={x:0,y:0,vx:0,vy:0,r,phase:rand(0,Math.PI*2)};
+      do{p.x=rand(r+12,w-r-12);p.y=rand(r+12,h-r-12);}while(!inside(p));
+      const a=rand(0,Math.PI*2), sp=speedForTemp(temperature)*rand(.75,1.25);
+      p.vx=Math.cos(a)*sp; p.vy=Math.sin(a)*sp; particles.push(p);
+    }
+    while(particles.length>target) particles.pop();
+    particles.forEach(clampToVessel);
+  };
+  const handleCollisions=function(){
+    for(let i=0;i<particles.length;i++) for(let j=i+1;j<particles.length;j++){
+      const a=particles[i],b=particles[j],dx=b.x-a.x,dy=b.y-a.y,dist=Math.hypot(dx,dy)||.01,min=a.r+b.r+1;
+      if(dist<min){
+        const nx=dx/dist,ny=dy/dist,over=(min-dist)/2; a.x-=nx*over; a.y-=ny*over; b.x+=nx*over; b.y+=ny*over;
+        const rel=(a.vx-b.vx)*nx+(a.vy-b.vy)*ny;
+        if(rel<0){a.vx-=rel*nx; a.vy-=rel*ny; b.vx+=rel*nx; b.vy+=rel*ny;}
+      }
+    }
+  };
+  const step=function(now){
+    const dt=Math.min(.035,(now-last)/1000||.016); last=now;
+    const target=speedForTemp(temperature);
+    ctx.clearRect(0,0,w,h);
+    particles.forEach(function(p,idx){
+      const current=Math.hypot(p.vx,p.vy)||1, desired=target*(.75+(idx%7)*.07);
+      const k=1+(desired/current-1)*.035; p.vx*=k; p.vy*=k;
+      p.vx+=Math.sin(now/420+p.phase)*2.5*dt; p.vy+=Math.cos(now/510+p.phase)*2.5*dt;
+      p.x+=p.vx*dt; p.y+=p.vy*dt; clampToVessel(p);
+    });
+    handleCollisions(); particles.forEach(clampToVessel);
+    particles.forEach(function(p){
+      const hot=temperature/100; const g=ctx.createRadialGradient(p.x-1.5,p.y-1.5,1,p.x,p.y,p.r*2.4);
+      g.addColorStop(0,'rgba(255,255,255,.95)'); g.addColorStop(.35,`rgba(${Math.round(103+hot*148)},${Math.round(232-hot*86)},${Math.round(249-hot*189)},.98)`); g.addColorStop(1,'rgba(34,211,238,0)');
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(p.x,p.y,p.r*2.4,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle=hot>.45?'#fb923c':'#67e8f9'; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+    });
+    if(root.isConnected) raf=requestAnimationFrame(step); else window.removeEventListener('resize',resize);
+  };
+  slider?.addEventListener('input',function(){temperature=Number(slider.value||30); if(valueEl) valueEl.textContent=`T = ${temperature} °C`;});
+  resize(); window.addEventListener('resize',resize,{passive:true}); raf=requestAnimationFrame(step);
 }
 
 function openGasHeatingAnimation(taskId){
@@ -11495,6 +11573,7 @@ function openGasHeatingAnimation(taskId){
   if(!modal) return false;
   modal.classList.remove('freefall-anim-modal','ballistics-task-animation-modal','task03-flying-cyclist-modal');
   modal.innerHTML=`<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder(); return false;">✕ Закрыть</button>${renderGasHeatingAnimation(task)}`;
+  setTimeout(function(){ bindGasHeatingAnimation(modal); },0);
   if(taskBoardState&&taskBoardState.animBtn) taskBoardState.animBtn.textContent='✕ Анимация';
   return false;
 }
