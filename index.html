@@ -120,9 +120,10 @@ header{position:fixed;top:0;left:0;right:0;z-index:10000;background:rgba(2,9,20,
 footer{border-top:1px solid var(--border);padding:28px 24px}
 .fi{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
 .fc2{font-size:13px;color:var(--gray)}
-.fl2{display:flex;gap:22px}
-.fl2 a{font-size:13px;color:var(--gray);transition:color .2s}
+.fl2{display:flex;gap:18px;flex-wrap:wrap;justify-content:flex-end}
+.fl2 a{font-size:13px;color:var(--gray);transition:color .2s;white-space:nowrap}
 .fl2 a:hover{color:var(--white)}
+@media(max-width:680px){.fi{align-items:flex-start;flex-direction:column}.fl2{justify-content:flex-start;display:grid;grid-template-columns:1fr;gap:10px}}
 .divider{height:1px;background:var(--border);max-width:1200px;margin:0 auto}
 
 /* DUAL CTA */
@@ -2397,7 +2398,7 @@ img,svg,canvas,video,iframe{max-width:100%}
       <div style="font-family:var(--fh);font-size:16px;font-weight:900;margin-bottom:4px">FIZ<span style="color:var(--cyan)">MAT</span></div>
       <div class="fc2">© 2026 ФИЗМАТ — образовательная платформа по физике и математике</div>
     </div>
-    <div class="fl2"><a href="#students">Ученикам</a><a href="#courses">Курсы</a><a href="#simulators" style="color:var(--cyan);cursor:pointer">Симуляторы</a><a href="#home">Контакты</a></div>
+    <div class="fl2"><a href="#about">О нас</a><a href="#blog">Блог</a><a href="#offer">Оферта</a><a href="#privacy">Политика конфиденциальности</a><a href="#terms">Пользовательское соглашение</a><a href="#support">Написать в тех.поддержку</a></div>
   </div></footer>
 </div>
 
@@ -4124,6 +4125,22 @@ function showRouteMessage(title,message,backHref='#courses',backText='Верну
 
   window.scrollTo(0,0);
 }
+function showFooterInfoPage(title,message,options={}){
+  hideAll();
+  const page = ensureRouteMessagePage();
+  const supportButton = options.supportEmail ? `<a class="tests-editor-save" href="mailto:${escapeHtml(options.supportEmail)}">Написать в поддержку</a>` : '';
+  page.innerHTML = `<div class="tests-wrap"><div class="tests-topic-empty"><h2>${escapeHtml(title)}</h2><div>${escapeHtml(message)}</div>${supportButton}<a class="tests-editor-back" href="#home">На главную</a></div></div>`;
+  page.style.display = 'block';
+  page.style.pointerEvents = 'auto';
+  page.classList.remove('page-hidden');
+  page.classList.add('page-active');
+
+  const backBtn = document.getElementById('backBtn');
+  if(backBtn) backBtn.classList.add('on');
+  if(typeof setBackHref === 'function') setBackHref('#home');
+
+  window.scrollTo(0,0);
+}
 function showCourseNotFound(){
   return showRouteMessage('Курс не найден','Курс не найден или ещё загружается.','#courses','Вернуться к курсам');
 }
@@ -4270,6 +4287,12 @@ function handleRoute(){
   if(['#directions','#physics','#math','#physics-oge','#physics-ege','#math-oge','#math-ege'].includes(hash)) return showCoursesPage();
   if(hash === '#tests') return showTestsPage();
   if(hash === '#students') return showStudentsPage ? showStudentsPage() : showLanding('#students');
+  if(hash === '#about') return showFooterInfoPage('О нас','ФИЗМАТ — образовательная платформа для подготовки к ОГЭ и ЕГЭ по физике и математике.');
+  if(hash === '#blog') return showFooterInfoPage('Блог','Здесь будут публиковаться полезные материалы, разборы задач, новости курса и советы по подготовке к экзаменам.');
+  if(hash === '#offer') return showFooterInfoPage('Оферта','Раздел находится в подготовке. Здесь будет размещена публичная оферта образовательной платформы ФИЗМАТ.');
+  if(hash === '#privacy') return showFooterInfoPage('Политика конфиденциальности','Раздел находится в подготовке. Здесь будет размещена информация об обработке и защите персональных данных пользователей.');
+  if(hash === '#terms') return showFooterInfoPage('Пользовательское соглашение','Раздел находится в подготовке. Здесь будут размещены правила использования образовательной платформы ФИЗМАТ.');
+  if(hash === '#support') return showFooterInfoPage('Техническая поддержка','Если у вас возник вопрос по работе сайта, напишите в техническую поддержку.',{supportEmail:'support@fizmat-course.com'});
   if(hash === '#bank') return showBankPage ? showBankPage() : showLanding('#bank');
   if(hash === '#simulators') return showSimulatorsPage('oge');
   if(/^#simulators\/[^/]+$/.test(hash) && !['#simulators/oge','#simulators/ege'].includes(hash)){
