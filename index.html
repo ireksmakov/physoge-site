@@ -135,11 +135,11 @@ footer{border-top:1px solid var(--border);padding:28px 24px}
 .legal-document{margin-top:30px;color:rgba(235,245,255,.92);font-size:15px;line-height:1.78}
 .legal-document h2{font-family:var(--fh);font-size:clamp(18px,2.5vw,24px);line-height:1.25;margin:34px 0 14px;color:var(--white)}
 .legal-document h3{font-family:var(--fh);font-size:16px;margin:24px 0 10px;color:var(--cyan)}
-.legal-document p{margin:0 0 12px}.legal-document a{color:var(--cyan);border-bottom:1px solid rgba(8,216,255,.38)}
+.legal-document p{margin:0 0 12px}.legal-document ul,.legal-document ol{margin:10px 0 18px 22px;padding-left:16px}.legal-document li{margin:7px 0;padding-left:2px}.legal-document a{color:var(--cyan);border-bottom:1px solid rgba(8,216,255,.38);overflow-wrap:anywhere}.legal-document strong{color:var(--white)}
 .legal-terms{display:grid;grid-template-columns:minmax(140px,.36fr) 1fr;gap:0;margin:18px 0 24px;border:1px solid var(--border);border-radius:16px;overflow:hidden;background:rgba(2,9,20,.35)}
 .legal-terms dt,.legal-terms dd{padding:13px 15px;border-bottom:1px solid var(--border)}.legal-terms dt{font-weight:700;color:var(--cyan);background:rgba(8,216,255,.055)}.legal-terms dd{color:rgba(235,245,255,.9)}.legal-terms dt:last-of-type,.legal-terms dd:last-of-type{border-bottom:0}
 .legal-requisites{margin-top:28px;padding:18px;border:1px dashed rgba(8,216,255,.42);border-radius:16px;background:rgba(8,216,255,.05)}
-@media(max-width:640px){.legal-page{padding:92px 14px 48px}.legal-container{border-radius:18px;padding:22px 16px}.legal-document{font-size:14px;line-height:1.68}.legal-terms{grid-template-columns:1fr}.legal-terms dt{border-bottom:0}.legal-terms dd{padding-top:0}}
+@media(max-width:640px){.legal-page{padding:92px 14px 48px}.legal-container{border-radius:18px;padding:22px 16px}.legal-container h1{overflow-wrap:anywhere}.legal-document{font-size:14px;line-height:1.68;overflow-wrap:anywhere}.legal-document ul,.legal-document ol{margin-left:18px;padding-left:12px}.legal-terms{grid-template-columns:1fr}.legal-terms dt{border-bottom:0}.legal-terms dd{padding-top:0}}
 
 .divider{height:1px;background:var(--border);max-width:1200px;margin:0 auto}
 
@@ -3593,6 +3593,7 @@ function hideAll(){
     'tests-generator-page',
     'route-message-page',
     'offer-page',
+    'privacy-page',
     'test-generator-page',
     'student-variant-intro-page',
     'student-variant-solve-page',
@@ -4255,6 +4256,110 @@ function showOfferPage(){
   window.scrollTo(0,0);
 }
 
+
+function ensurePrivacyPage(){
+  let page = document.getElementById('privacy-page');
+  if(!page){
+    page = document.createElement('div');
+    page.id = 'privacy-page';
+    page.className = 'page-hidden';
+    document.body.appendChild(page);
+  }
+  return page;
+}
+function showPrivacyPage(){
+  hideAll();
+  const page = ensurePrivacyPage();
+  page.innerHTML = `<section class="legal-page">
+    <div class="legal-container">
+      <span class="legal-badge">Правовые документы</span>
+      <h1>Политика конфиденциальности</h1>
+      <p class="legal-lead">Политика обработки и защиты персональной информации пользователей платформы ФИЗМАТ.</p>
+      <div class="legal-warning">Документ находится в подготовке. Перед публикацией и началом сбора персональных данных текст необходимо проверить с юристом и заполнить реквизиты оператора персональных данных.</div>
+      <div class="legal-note">Текст политики размещён в информационных целях и подлежит финальной юридической проверке перед использованием.</div>
+      <article class="legal-document">
+        <p><strong>Главная страница / Политика конфиденциальности</strong></p>
+        <h2>Политика конфиденциальности персональной информации</h2>
+        <h2>Охват политики конфиденциальности</h2>
+        <p>Настоящая Политика конфиденциальности персональной информации действует в отношении информации, которую образовательная платформа ФИЗМАТ, расположенная на доменном имени <a href="https://fizmat-course.com/">fizmat-course.com</a>, может получить о Пользователе во время использования сайта, образовательных материалов, курсов, задач, тестов, симуляторов, форм обратной связи и иных сервисов платформы.</p>
+        <p>Использование сайта ФИЗМАТ означает согласие Пользователя с настоящей Политикой и условиями обработки его персональной информации. В случае несогласия с условиями Политики Пользователь должен прекратить использование сайта.</p>
+
+        <h2>1. Термины и определения</h2>
+        <dl class="legal-terms">
+          <dt>Платформа</dt><dd>Сайт и цифровые сервисы ФИЗМАТ, доступные по адресу fizmat-course.com.</dd>
+          <dt>Пользователь</dt><dd>Физическое лицо, использующее сайт, материалы, тесты, задания, симуляторы или формы связи ФИЗМАТ.</dd>
+          <dt>Персональная информация</dt><dd>Любая информация, относящаяся прямо или косвенно к определённому или определяемому Пользователю.</dd>
+          <dt>Оператор</dt><dd>Владелец образовательной платформы ФИЗМАТ. Реквизиты оператора подлежат заполнению перед публикацией финальной редакции документа.</dd>
+        </dl>
+
+        <h2>2. Какие данные могут обрабатываться</h2>
+        <p>ФИЗМАТ может обрабатывать данные, которые Пользователь предоставляет самостоятельно, а также техническую информацию, автоматически передаваемую устройством Пользователя.</p>
+        <ul>
+          <li>имя, фамилия, класс, учебная цель и иные сведения, указанные в формах регистрации, заявки или обратной связи;</li>
+          <li>адрес электронной почты, номер телефона или другой контакт для связи, если Пользователь передал его платформе;</li>
+          <li>результаты тестов, ответы на задания, прогресс обучения, история прохождения курсов и домашних заданий;</li>
+          <li>технические данные: IP-адрес, тип браузера, сведения об устройстве, файлы cookie, дата и время посещения, адреса просмотренных страниц;</li>
+          <li>сообщения, обращения и вложения, направленные в техническую поддержку.</li>
+        </ul>
+
+        <h2>3. Цели обработки данных</h2>
+        <ul>
+          <li>предоставление доступа к курсам, задачам, тестам, симуляторам и другим образовательным материалам;</li>
+          <li>создание и сопровождение учётной записи Пользователя;</li>
+          <li>проверка заданий, сохранение результатов обучения и отображение прогресса;</li>
+          <li>обработка заявок, обратная связь, техническая поддержка и ответы на обращения;</li>
+          <li>улучшение качества платформы, интерфейса, содержания курсов и стабильности работы сайта;</li>
+          <li>выполнение требований законодательства и защита прав ФИЗМАТ и Пользователей.</li>
+        </ul>
+
+        <h2>4. Правовые основания обработки</h2>
+        <p>Обработка персональной информации осуществляется на основании согласия Пользователя, необходимости исполнения пользовательского соглашения или договора, а также иных оснований, предусмотренных применимым законодательством.</p>
+        <p>Пользователь вправе отозвать согласие на обработку персональных данных, направив обращение на адрес <a href="mailto:support@fizmat-course.com">support@fizmat-course.com</a>. После получения отзыва ФИЗМАТ прекращает обработку данных, кроме случаев, когда продолжение обработки допускается законом.</p>
+
+        <h2>5. Cookie и аналитика</h2>
+        <p>Сайт может использовать cookie и аналогичные технологии для корректной работы интерфейса, сохранения пользовательских настроек, маршрутов, результатов и улучшения сервисов. Пользователь может ограничить или отключить cookie в настройках браузера, однако отдельные функции сайта могут работать некорректно.</p>
+
+        <h2>6. Передача данных третьим лицам</h2>
+        <p>ФИЗМАТ не продаёт персональную информацию Пользователей. Передача данных возможна только в объёме, необходимом для работы платформы, обработки платежей, хостинга, аналитики, коммуникаций, исполнения закона или защиты прав и законных интересов.</p>
+        <p>При привлечении подрядчиков и сервисов ФИЗМАТ принимает разумные меры, чтобы такие лица соблюдали конфиденциальность и обрабатывали данные только для согласованных целей.</p>
+
+        <h2>7. Хранение и защита информации</h2>
+        <p>ФИЗМАТ принимает необходимые организационные и технические меры для защиты персональной информации от неправомерного доступа, изменения, раскрытия, уничтожения или блокирования.</p>
+        <p>Срок хранения данных определяется целями обработки, сроком использования платформы, требованиями законодательства и необходимостью защиты прав сторон. Данные удаляются или обезличиваются после достижения целей обработки, если их дальнейшее хранение не требуется законом.</p>
+
+        <h2>8. Права Пользователя</h2>
+        <p>Пользователь вправе:</p>
+        <ul>
+          <li>получать информацию об обработке своих персональных данных;</li>
+          <li>запрашивать уточнение, блокирование или удаление недостоверных, устаревших или незаконно обработанных данных;</li>
+          <li>отозвать согласие на обработку персональных данных;</li>
+          <li>направлять вопросы и обращения по адресу <a href="mailto:support@fizmat-course.com">support@fizmat-course.com</a>.</li>
+        </ul>
+
+        <h2>9. Персональные данные несовершеннолетних</h2>
+        <p>Платформа предназначена для обучения школьников. Если для использования отдельных функций требуется предоставление персональных данных несовершеннолетнего, такие данные должны предоставляться с согласия родителя или законного представителя в случаях, предусмотренных законодательством.</p>
+
+        <h2>10. Изменение Политики</h2>
+        <p>ФИЗМАТ вправе обновлять настоящую Политику. Новая редакция вступает в силу с момента публикации на сайте <a href="https://fizmat-course.com/">fizmat-course.com</a>, если иной срок не указан в тексте обновления.</p>
+        <p>Пользователю рекомендуется периодически проверять актуальную редакцию Политики конфиденциальности.</p>
+
+        <h2>11. Контакты</h2>
+        <p>По вопросам обработки персональной информации, доступа, удаления или уточнения данных Пользователь может обратиться в поддержку ФИЗМАТ по адресу <a href="mailto:support@fizmat-course.com">support@fizmat-course.com</a>.</p>
+        <div class="legal-requisites">Реквизиты оператора персональных данных будут добавлены после утверждения юридической редакции документа.</div>
+      </article>
+    </div>
+  </section>`;
+  page.style.display = 'block';
+  page.style.pointerEvents = 'auto';
+  page.classList.remove('page-hidden');
+  page.classList.add('page-active');
+  const backBtn = document.getElementById('backBtn');
+  if(backBtn) backBtn.classList.add('on');
+  if(typeof setBackHref === 'function') setBackHref('#home');
+  updateActiveNav('#privacy');
+  window.scrollTo(0,0);
+}
+
 function showCourseNotFound(){
   return showRouteMessage('Курс не найден','Курс не найден или ещё загружается.','#courses','Вернуться к курсам');
 }
@@ -4404,7 +4509,7 @@ function handleRoute(){
   if(hash === '#about') return showFooterInfoPage('О нас','ФИЗМАТ — образовательная платформа для подготовки к ОГЭ и ЕГЭ по физике и математике.');
   if(hash === '#blog') return showFooterInfoPage('Блог','Здесь будут публиковаться полезные материалы, разборы задач, новости курса и советы по подготовке к экзаменам.');
   if(hash === '#offer') return showOfferPage();
-  if(hash === '#privacy') return showFooterInfoPage('Политика конфиденциальности','Раздел находится в подготовке. Здесь будет размещена информация об обработке и защите персональных данных пользователей.');
+  if(hash === '#privacy') return showPrivacyPage();
   if(hash === '#terms') return showFooterInfoPage('Пользовательское соглашение','Раздел находится в подготовке. Здесь будут размещены правила использования образовательной платформы ФИЗМАТ.');
   if(hash === '#support') return showFooterInfoPage('Техническая поддержка','Если у вас возник вопрос по работе сайта, напишите в техническую поддержку.',{supportEmail:'support@fizmat-course.com'});
   if(hash === '#bank') return showBankPage ? showBankPage() : showLanding('#bank');
