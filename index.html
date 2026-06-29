@@ -124,6 +124,23 @@ footer{border-top:1px solid var(--border);padding:28px 24px}
 .fl2 a{font-size:13px;color:var(--gray);transition:color .2s;white-space:nowrap}
 .fl2 a:hover{color:var(--white)}
 @media(max-width:680px){.fi{align-items:flex-start;flex-direction:column}.fl2{justify-content:flex-start;display:grid;grid-template-columns:1fr;gap:10px}}
+/* LEGAL PAGES */
+.legal-page{min-height:100vh;padding:112px 24px 72px;background:radial-gradient(circle at 18% 8%,rgba(8,216,255,.12),transparent 30%),linear-gradient(180deg,#020914 0%,#04101e 100%)}
+.legal-container{width:min(920px,100%);margin:0 auto;background:linear-gradient(160deg,rgba(255,255,255,.045),rgba(8,216,255,.018));border:1px solid var(--border);border-radius:24px;padding:clamp(24px,4vw,48px);box-shadow:var(--panel-shadow)}
+.legal-badge{display:inline-flex;align-items:center;gap:8px;margin-bottom:18px;padding:7px 14px;border:1px solid rgba(8,216,255,.36);border-radius:999px;background:rgba(8,216,255,.08);color:var(--cyan);font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase}
+.legal-container h1{font-family:var(--fh);font-size:clamp(30px,5vw,52px);line-height:1.08;margin-bottom:14px;letter-spacing:-.8px}
+.legal-lead{max-width:760px;color:rgba(221,238,255,.86);font-size:clamp(15px,2vw,18px);margin-bottom:22px}
+.legal-warning,.legal-note{border:1px solid rgba(8,216,255,.3);border-left:4px solid var(--cyan);background:rgba(8,216,255,.08);border-radius:14px;padding:16px 18px;color:#dff8ff;font-size:14px;line-height:1.65;margin:22px 0}
+.legal-note{border-color:rgba(255,140,0,.34);border-left-color:var(--orange);background:rgba(255,140,0,.08);color:#ffe8ca}
+.legal-document{margin-top:30px;color:rgba(235,245,255,.92);font-size:15px;line-height:1.78}
+.legal-document h2{font-family:var(--fh);font-size:clamp(18px,2.5vw,24px);line-height:1.25;margin:34px 0 14px;color:var(--white)}
+.legal-document h3{font-family:var(--fh);font-size:16px;margin:24px 0 10px;color:var(--cyan)}
+.legal-document p{margin:0 0 12px}.legal-document a{color:var(--cyan);border-bottom:1px solid rgba(8,216,255,.38)}
+.legal-terms{display:grid;grid-template-columns:minmax(140px,.36fr) 1fr;gap:0;margin:18px 0 24px;border:1px solid var(--border);border-radius:16px;overflow:hidden;background:rgba(2,9,20,.35)}
+.legal-terms dt,.legal-terms dd{padding:13px 15px;border-bottom:1px solid var(--border)}.legal-terms dt{font-weight:700;color:var(--cyan);background:rgba(8,216,255,.055)}.legal-terms dd{color:rgba(235,245,255,.9)}.legal-terms dt:last-of-type,.legal-terms dd:last-of-type{border-bottom:0}
+.legal-requisites{margin-top:28px;padding:18px;border:1px dashed rgba(8,216,255,.42);border-radius:16px;background:rgba(8,216,255,.05)}
+@media(max-width:640px){.legal-page{padding:92px 14px 48px}.legal-container{border-radius:18px;padding:22px 16px}.legal-document{font-size:14px;line-height:1.68}.legal-terms{grid-template-columns:1fr}.legal-terms dt{border-bottom:0}.legal-terms dd{padding-top:0}}
+
 .divider{height:1px;background:var(--border);max-width:1200px;margin:0 auto}
 
 /* DUAL CTA */
@@ -3575,6 +3592,7 @@ function hideAll(){
     'student-variant-page',
     'tests-generator-page',
     'route-message-page',
+    'offer-page',
     'test-generator-page',
     'student-variant-intro-page',
     'student-variant-solve-page',
@@ -4141,6 +4159,102 @@ function showFooterInfoPage(title,message,options={}){
 
   window.scrollTo(0,0);
 }
+function ensureOfferPage(){
+  let page = document.getElementById('offer-page');
+  if(!page){
+    page = document.createElement('div');
+    page.id = 'offer-page';
+    page.className = 'page-hidden';
+    document.body.appendChild(page);
+  }
+  return page;
+}
+function showOfferPage(){
+  hideAll();
+  const page = ensureOfferPage();
+  page.innerHTML = `<section class="legal-page">
+    <div class="legal-container">
+      <span class="legal-badge">Правовые документы</span>
+      <h1>Договор оферты</h1>
+      <p class="legal-lead">Оферта на оказание образовательных и информационных услуг платформы ФИЗМАТ.</p>
+      <div class="legal-warning">Документ находится в подготовке. Перед публикацией и приёмом оплат текст оферты необходимо проверить с юристом и заполнить реквизиты Исполнителя.</div>
+      <div class="legal-note">Текст оферты размещён в информационных целях и подлежит финальной юридической проверке перед использованием для приёма оплат.</div>
+      <article class="legal-document">
+        <h2>1. Общие положения</h2>
+        <p>1.1. Настоящий документ является публичной офертой на заключение договора оказания образовательных и информационных услуг платформы ФИЗМАТ.</p>
+        <p>1.2. Исполнитель — владелец образовательной платформы ФИЗМАТ, размещённой в сети Интернет по адресу <a href="https://fizmat-course.com/">fizmat-course.com</a>.</p>
+        <p>1.3. Акцептом оферты считается совершение Пользователем действий по регистрации на платформе, оформлению заявки, началу использования материалов, оплате услуг либо иное подтверждение согласия с условиями оферты.</p>
+        <p>1.4. С момента акцепта настоящий договор считается заключённым между Исполнителем и Пользователем.</p>
+
+        <h2>2. Термины и определения</h2>
+        <dl class="legal-terms">
+          <dt>Платформа</dt><dd>Сайт и цифровые сервисы ФИЗМАТ, доступные по адресу fizmat-course.com.</dd>
+          <dt>Пользователь</dt><dd>Физическое лицо, использующее материалы и сервисы платформы ФИЗМАТ.</dd>
+          <dt>Услуги</dt><dd>Предоставление доступа к образовательным материалам, курсам, заданиям, тестам, симуляторам, домашним заданиям, разборам и информационным сервисам.</dd>
+          <dt>Личный кабинет</dt><dd>Раздел платформы, через который Пользователь получает доступ к материалам и результатам обучения.</dd>
+        </dl>
+
+        <h2>3. Предмет договора</h2>
+        <p>3.1. Исполнитель обязуется предоставить Пользователю доступ к образовательным и информационным материалам платформы ФИЗМАТ, а Пользователь обязуется соблюдать условия настоящего договора.</p>
+        <p>3.2. Состав, стоимость, сроки доступа и формат услуг определяются описанием соответствующего курса, тарифа или материала на платформе.</p>
+        <p>3.3. Услуги оказываются дистанционно с использованием сайта, интерактивных модулей, тестов, симуляторов и иных цифровых инструментов.</p>
+
+        <h2>4. Порядок оказания услуг</h2>
+        <p>4.1. Доступ к материалам предоставляется после регистрации, оформления заявки, оплаты или выполнения иных условий, указанных на странице конкретной услуги.</p>
+        <p>4.2. Исполнитель вправе обновлять содержание курсов, добавлять новые задания, тесты, симуляторы и методические материалы без ухудшения общего объёма оплаченного доступа.</p>
+        <p>4.3. Пользователь самостоятельно обеспечивает наличие устройства, доступа к Интернету и программного обеспечения, необходимых для работы с платформой.</p>
+
+        <h2>5. Права и обязанности сторон</h2>
+        <h3>5.1. Исполнитель обязуется:</h3>
+        <p>5.1.1. Предоставлять доступ к оплаченным или открытым материалам платформы в соответствии с выбранным форматом обучения.</p>
+        <p>5.1.2. Принимать разумные меры для стабильной работы сайта и сохранности пользовательских данных.</p>
+        <p>5.1.3. Оказывать техническую поддержку через контакты технической поддержки ФИЗМАТ и по адресу <a href="mailto:support@fizmat-course.com">support@fizmat-course.com</a>.</p>
+        <h3>5.2. Пользователь обязуется:</h3>
+        <p>5.2.1. Предоставлять достоверные данные при регистрации и оплате.</p>
+        <p>5.2.2. Не передавать доступ к личному кабинету третьим лицам.</p>
+        <p>5.2.3. Не копировать, не распространять и не публиковать материалы платформы без письменного согласия Исполнителя.</p>
+
+        <h2>6. Стоимость и порядок оплаты</h2>
+        <p>6.1. Стоимость услуг указывается на сайте ФИЗМАТ в описании соответствующего курса, тарифа или образовательного продукта.</p>
+        <p>6.2. Оплата производится способами, доступными на платформе на дату оформления заказа.</p>
+        <p>6.3. Обязательство Пользователя по оплате считается исполненным после поступления подтверждения платежа от платёжного сервиса.</p>
+
+        <h2>7. Возвраты и прекращение доступа</h2>
+        <p>7.1. Условия возврата денежных средств определяются применимым законодательством и конкретными условиями оплаченной услуги.</p>
+        <p>7.2. Пользователь может направить обращение по вопросам возврата или доступа на адрес <a href="mailto:support@fizmat-course.com">support@fizmat-course.com</a>.</p>
+        <p>7.3. Исполнитель вправе ограничить доступ при нарушении Пользователем условий договора, правил платформы или прав на материалы.</p>
+
+        <h2>8. Интеллектуальная собственность</h2>
+        <p>8.1. Все учебные материалы, тексты, задания, тесты, симуляторы, изображения, видео, интерфейсы и иные объекты, размещённые на платформе, являются объектами интеллектуальных прав Исполнителя или правообладателей.</p>
+        <p>8.2. Пользователю предоставляется право использовать материалы исключительно для личного обучения в пределах предоставленного доступа.</p>
+
+        <h2>9. Ответственность сторон</h2>
+        <p>9.1. Стороны несут ответственность за неисполнение или ненадлежащее исполнение обязательств в соответствии с законодательством Российской Федерации.</p>
+        <p>9.2. Исполнитель не несёт ответственности за невозможность использования платформы по причинам, зависящим от Пользователя, провайдера связи, оборудования или сторонних сервисов.</p>
+
+        <h2>10. Персональные данные</h2>
+        <p>10.1. Обработка персональных данных Пользователя осуществляется в целях регистрации, предоставления доступа, обратной связи, оплаты и технической поддержки.</p>
+        <p>10.2. Подробные условия обработки данных размещаются в политике конфиденциальности платформы ФИЗМАТ.</p>
+
+        <h2>11. Изменение условий оферты</h2>
+        <p>11.1. Исполнитель вправе изменять условия оферты. Новая редакция вступает в силу с момента публикации на сайте, если иной срок не указан в тексте изменений.</p>
+        <p>11.2. Продолжение использования платформы после публикации изменений означает согласие Пользователя с новой редакцией.</p>
+
+        <h2>12. Реквизиты</h2>
+        <div class="legal-requisites">Реквизиты Исполнителя будут добавлены после утверждения юридической редакции документа.</div>
+      </article>
+    </div>
+  </section>`;
+  page.style.display = 'block';
+  page.style.pointerEvents = 'auto';
+  page.classList.remove('page-hidden');
+  page.classList.add('page-active');
+  const backBtn = document.getElementById('backBtn');
+  if(backBtn) backBtn.classList.add('on');
+  if(typeof setBackHref === 'function') setBackHref('#home');
+  window.scrollTo(0,0);
+}
+
 function showCourseNotFound(){
   return showRouteMessage('Курс не найден','Курс не найден или ещё загружается.','#courses','Вернуться к курсам');
 }
@@ -4289,7 +4403,7 @@ function handleRoute(){
   if(hash === '#students') return showStudentsPage ? showStudentsPage() : showLanding('#students');
   if(hash === '#about') return showFooterInfoPage('О нас','ФИЗМАТ — образовательная платформа для подготовки к ОГЭ и ЕГЭ по физике и математике.');
   if(hash === '#blog') return showFooterInfoPage('Блог','Здесь будут публиковаться полезные материалы, разборы задач, новости курса и советы по подготовке к экзаменам.');
-  if(hash === '#offer') return showFooterInfoPage('Оферта','Раздел находится в подготовке. Здесь будет размещена публичная оферта образовательной платформы ФИЗМАТ.');
+  if(hash === '#offer') return showOfferPage();
   if(hash === '#privacy') return showFooterInfoPage('Политика конфиденциальности','Раздел находится в подготовке. Здесь будет размещена информация об обработке и защите персональных данных пользователей.');
   if(hash === '#terms') return showFooterInfoPage('Пользовательское соглашение','Раздел находится в подготовке. Здесь будут размещены правила использования образовательной платформы ФИЗМАТ.');
   if(hash === '#support') return showFooterInfoPage('Техническая поддержка','Если у вас возник вопрос по работе сайта, напишите в техническую поддержку.',{supportEmail:'support@fizmat-course.com'});
