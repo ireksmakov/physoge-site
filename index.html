@@ -130,7 +130,6 @@ footer{border-top:1px solid var(--border);padding:28px 24px}
 .cta-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px 20px;display:flex;flex-direction:column;align-items:flex-start;gap:12px;transition:border-color .2s,transform .2s}
 .cta-card:hover{transform:translateY(-2px)}
 .cta-student:hover{border-color:rgba(0,229,255,.5)}
-.cta-teacher:hover{border-color:rgba(255,140,0,.5)}
 .cta-card-row{display:flex;align-items:center;gap:12px;width:100%}
 .cta-card-icon{font-size:28px;line-height:1;transform:translateY(-2px);flex-shrink:0}
 .cta-card-title{font-family:var(--fh);font-size:14px;font-weight:700;line-height:1.2}
@@ -149,7 +148,6 @@ footer{border-top:1px solid var(--border);padding:28px 24px}
 .audience-header{margin-bottom:40px}
 .aud-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1px;padding:5px 14px;border-radius:20px;margin-bottom:14px}
 .aud-student{background:rgba(0,229,255,.1);color:var(--cyan);border:1px solid rgba(0,229,255,.25)}
-.aud-teacher{background:rgba(255,140,0,.1);color:var(--orange);border:1px solid rgba(255,140,0,.25)}
 
 /* FEATURE GRID */
 .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
@@ -162,36 +160,6 @@ footer{border-top:1px solid var(--border);padding:28px 24px}
 .ftag{font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;background:rgba(0,229,255,.1);color:var(--cyan)}
 .ftag-o{background:rgba(255,140,0,.1);color:var(--orange)}
 .ftag-g{background:rgba(57,255,20,.1);color:var(--green)}
-
-/* TEACHER SECTION */
-.teacher-section{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.teacher-layout{display:grid;grid-template-columns:1fr 1fr;gap:48px;max-width:1200px;margin:0 auto;padding:40px 24px 60px;align-items:start}
-.teacher-tools{display:flex;flex-direction:column;gap:0}
-.tool-item{display:flex;gap:20px;padding:20px 0;border-bottom:1px solid var(--border)}
-.tool-item:last-child{border-bottom:none}
-.tool-num{font-family:var(--fh);font-size:28px;font-weight:900;color:var(--border);line-height:1;flex-shrink:0;min-width:36px}
-.tool-title{font-family:var(--fh);font-size:13px;font-weight:700;margin-bottom:6px;color:var(--orange)}
-.tool-desc{font-size:13px;color:var(--gray);line-height:1.6}
-
-/* TEACHER VISUAL - TEST CARD */
-.teacher-visual{position:sticky;top:80px}
-.tv-card{background:var(--bg);border:1px solid var(--border);border-radius:14px;overflow:hidden}
-.tv-header{display:flex;align-items:center;gap:6px;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg2)}
-.tv-dot{width:10px;height:10px;border-radius:50%;background:var(--cyan)}
-.tv-body{padding:20px}
-.tv-q{display:flex;gap:10px;margin-bottom:16px}
-.tv-q-n{font-size:11px;font-weight:700;color:var(--cyan);flex-shrink:0;padding-top:2px}
-.tv-q-text{font-size:14px;font-weight:600;line-height:1.5}
-.tv-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
-.tv-opt{font-size:13px;padding:9px 14px;border-radius:8px;border:1px solid var(--border);color:var(--gray);font-family:'Georgia',serif}
-.tv-opt-right{background:rgba(57,255,20,.08);border-color:rgba(57,255,20,.3);color:var(--green);font-weight:600}
-.tv-actions{display:flex;gap:8px}
-.tv-tag{font-size:10px;font-weight:600;padding:3px 9px;border-radius:4px;background:rgba(0,229,255,.08);color:var(--cyan)}
-.tv-footer{display:flex;gap:8px;padding:14px 16px;border-top:1px solid var(--border);background:var(--bg2)}
-.tv-btn{flex:1;padding:8px;border-radius:7px;border:1px solid var(--border);background:none;color:var(--gray);font-size:12px;cursor:pointer;transition:all .15s;font-family:var(--fb)}
-.tv-btn:hover{border-color:var(--cyan);color:var(--cyan)}
-.tv-btn-c{background:var(--cyan);color:#000;border-color:var(--cyan)}
-.tv-btn-c:hover{background:var(--cyan-dim)}
 
 /* COURSE BADGES */
 .course-badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
@@ -2119,8 +2087,8 @@ img,svg,canvas,video,iframe{max-width:100%}
 .sr-frow{gap:16px;flex-wrap:wrap}
 
 /* Slight type boost for micro copy */
-.nav-subj a,.btn-start,.hero-label,.sl,.slbl,.mi,.cta-badge,.cta-card-sub,.aud-tag,.tv-q-n,.tv-btn,.cp-ctag,.cp-hint,.sb-btn,.mni,.et,.cpsl,.tb-label,.fbadge,.sh-label,.sr-label,.sr-mc-l,.sr-mc-u,.sr-ans-l,.sr-fdesc{font-size:12px}
-.ctag,.platform-badge,.ftag,.tv-tag,.cb,.price-label,.sb-lbl,.mtog,.lnum,.pt-level,.pl-badge,.th-section-title,.vlab-table th,.sr-fi .fd,.sr-sec{font-size:11px}
+.nav-subj a,.btn-start,.hero-label,.sl,.slbl,.mi,.cta-badge,.cta-card-sub,.aud-tag,.cp-ctag,.cp-hint,.sb-btn,.mni,.et,.cpsl,.tb-label,.fbadge,.sh-label,.sr-label,.sr-mc-l,.sr-mc-u,.sr-ans-l,.sr-fdesc{font-size:12px}
+.ctag,.platform-badge,.ftag,.cb,.price-label,.sb-lbl,.mtog,.lnum,.pt-level,.pl-badge,.th-section-title,.vlab-table th,.sr-fi .fd,.sr-sec{font-size:11px}
 .al-btn,.am-btn,.ps-desc,.mod-meta{font-size:13px}
 .btn-start{line-height:1}
 .hero-label,.slbl,.sh-label,.sr-label{letter-spacing:1.2px}
@@ -2280,85 +2248,6 @@ img,svg,canvas,video,iframe{max-width:100%}
     </div>
   </section>
 
-  <!-- ===== ДЛЯ УЧИТЕЛЕЙ ===== -->
-  <div class="divider"></div>
-  <section id="for-teachers" class="teacher-section">
-    <div class="section" style="padding-bottom:0">
-      <div class="audience-header">
-        <div class="aud-tag aud-teacher">📋 Для учителей</div>
-        <h2 class="stitle">Инструменты для цифрового урока</h2>
-        <p class="ssub">Экономьте время на подготовке. Создавайте тесты, выдавайте задания, смотрите результаты.</p>
-      </div>
-    </div>
-    <div class="teacher-layout">
-      <div class="teacher-tools">
-        <div class="tool-item">
-          <div class="tool-num">01</div>
-          <div>
-            <div class="tool-title">Конструктор тестов</div>
-            <div class="tool-desc">Одиночный выбор, множественный, ввод числа, соответствие, задания с рисунком. Создавайте 2–4 варианта автоматически с перемешиванием заданий.</div>
-          </div>
-        </div>
-        <div class="tool-item">
-          <div class="tool-num">02</div>
-          <div>
-            <div class="tool-title">Банк задач с фильтрами</div>
-            <div class="tool-desc">Выбирайте по классу, теме, уровню, номеру задания ОГЭ, типу ответа — и собирайте вариант за 2 минуты.</div>
-          </div>
-        </div>
-        <div class="tool-item">
-          <div class="tool-num">03</div>
-          <div>
-            <div class="tool-title">Библиотека материалов</div>
-            <div class="tool-desc">Презентации, конспекты, рабочие листы, лабораторные, карточки, формульные листы — всё по темам и классам.</div>
-          </div>
-        </div>
-        <div class="tool-item">
-          <div class="tool-num">04</div>
-          <div>
-            <div class="tool-title">Кабинет учителя</div>
-            <div class="tool-desc">Выдача домашних заданий, просмотр результатов учеников, экспорт в PDF, шаблоны уроков и генератор вариантов.</div>
-          </div>
-        </div>
-        <div class="tool-item">
-          <div class="tool-num">05</div>
-          <div>
-            <div class="tool-title">Урок за 20 минут</div>
-            <div class="tool-desc">Готовый мини-урок: теория → демонстрация → 3 задания → мини-тест. Для быстрого старта на любой теме.</div>
-          </div>
-        </div>
-      </div>
-      <div class="teacher-visual">
-        <div class="tv-card">
-          <div class="tv-header">
-            <span class="tv-dot"></span><span class="tv-dot" style="background:var(--orange)"></span><span class="tv-dot" style="background:var(--green)"></span>
-            <span style="font-size:11px;color:var(--gray);margin-left:8px">Конструктор теста</span>
-          </div>
-          <div class="tv-body">
-            <div class="tv-q">
-              <div class="tv-q-n">В1</div>
-              <div class="tv-q-text">Чему равна скорость тела при равноускоренном движении?</div>
-            </div>
-            <div class="tv-opts">
-              <div class="tv-opt tv-opt-right">✓ &nbsp;v = v₀ + at</div>
-              <div class="tv-opt">○ &nbsp;v = at²/2</div>
-              <div class="tv-opt">○ &nbsp;v = v₀/t</div>
-              <div class="tv-opt">○ &nbsp;v = √(2as)</div>
-            </div>
-            <div class="tv-actions">
-              <span class="tv-tag">⚡ Физика ОГЭ · Механика</span>
-              <span class="tv-tag">Уровень 1</span>
-            </div>
-          </div>
-          <div class="tv-footer">
-            <button class="tv-btn">+ Добавить вопрос</button>
-            <button class="tv-btn tv-btn-c">Создать вариант →</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- ===== КУРСЫ ===== -->
   <div class="divider"></div>
   <section id="courses" class="section">
@@ -2499,10 +2388,9 @@ img,svg,canvas,video,iframe{max-width:100%}
       </a>
     </div>
     <h2>Начни готовиться к ОГЭ прямо сейчас</h2>
-    <p>Для школьников · Для учителей · Для школ</p>
+    <p>Для школьников · Для школ</p>
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
       <a href="#courses" class="btn-p" style="font-size:14px;padding:14px 32px">Выбрать курс →</a>
-      <a href="#for-teachers" class="btn-p" style="font-size:14px;padding:14px 32px;background:transparent;border:1px solid var(--border);color:var(--white)">Инструменты учителя</a>
     </div>
   </div>
 
@@ -2511,7 +2399,7 @@ img,svg,canvas,video,iframe{max-width:100%}
       <div style="font-family:var(--fh);font-size:16px;font-weight:900;margin-bottom:4px">FIZ<span style="color:var(--cyan)">MAT</span></div>
       <div class="fc2">© 2026 ФИЗМАТ — образовательная платформа по физике и математике</div>
     </div>
-    <div class="fl2"><a href="#students">Ученикам</a><a href="#for-teachers">Учителям</a><a href="#courses">Курсы</a><a href="#simulators" style="color:var(--cyan);cursor:pointer">Симуляторы</a><a href="#home">Контакты</a></div>
+    <div class="fl2"><a href="#students">Ученикам</a><a href="#courses">Курсы</a><a href="#simulators" style="color:var(--cyan);cursor:pointer">Симуляторы</a><a href="#home">Контакты</a></div>
   </div></footer>
 </div>
 
@@ -4383,7 +4271,6 @@ function handleRoute(){
   if(hash === '#courses') return showCoursesPage();
   if(['#directions','#physics','#math','#physics-oge','#physics-ege','#math-oge','#math-ege'].includes(hash)) return showCoursesPage();
   if(hash === '#tests') return showTestsPage();
-  if(hash === '#for-teachers') return showLanding('#for-teachers');
   if(hash === '#students') return showStudentsPage ? showStudentsPage() : showLanding('#students');
   if(hash === '#bank') return showBankPage ? showBankPage() : showLanding('#bank');
   if(hash === '#simulators') return showSimulatorsPage('oge');
