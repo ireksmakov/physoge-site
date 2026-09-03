@@ -2174,7 +2174,6 @@ img,svg,canvas,video,iframe{max-width:100%}
       <a href="#courses" class="active">Курсы</a>
       <a href="#courses">Физика</a>
       <a href="#courses">Математика</a>
-      <a href="#tests">Конструктор тестов</a>
       <div class="sim-menu" id="simMenu">
         <button type="button" class="sim-toggle" aria-expanded="false" aria-controls="simulatorExamMenu">Симуляторы</button>
         <div class="sim-pop" id="simulatorExamMenu">
@@ -4680,10 +4679,10 @@ function handleRoute(){
   const hash = window.location.hash || '#home';
 
   try{
+  if(isDisabledTestConstructorRoute(hash)) return redirectDisabledTestConstructorRoute();
   if(hash === '#home') return showLanding();
   if(hash === '#courses') return showCoursesPage();
   if(['#directions','#physics','#math','#physics-oge','#physics-ege','#math-oge','#math-ege'].includes(hash)) return showCoursesPage();
-  if(hash === '#tests') return showTestsPage();
   if(hash === '#students') return showStudentsPage ? showStudentsPage() : showLanding('#students');
   if(hash === '#about') return showFooterInfoPage('О нас','ФИЗМАТ — образовательная платформа для подготовки к ОГЭ и ЕГЭ по физике и математике.');
   if(hash === '#blog') return showFooterInfoPage('Блог','Здесь будут публиковаться полезные материалы, разборы задач, новости курса и советы по подготовке к экзаменам.');
@@ -4716,16 +4715,6 @@ function handleRoute(){
     return openCourse(courseKey, moduleIndex, lessonIndex, tabId);
   }
 
-  if(hash === '#tests/topic'){
-    if(typeof renderTestTopicPage === 'function') return renderTestTopicPage();
-    return showTestsPage();
-  }
-
-  if(hash === '#tests/generator'){
-    if(typeof renderTestsGeneratorPage === 'function') return renderTestsGeneratorPage();
-    return showTestsPage();
-  }
-
   if(hash.startsWith('#test/pass/')){
     const route = hash.replace('#test/pass/', '');
     return openStudentTestRoute(route);
@@ -4741,30 +4730,21 @@ function handleRoute(){
     return openStudentVariantRoute(id, 'result');
   }
 
-  if(hash.startsWith('#test/edit/')){
-    const id = hash.replace('#test/edit/', '');
-    if(typeof renderTestEditorPage === 'function') return renderTestEditorPage(id);
-    return showTestsPage();
-  }
-
-  if(hash.startsWith('#test/results/')){
-    const id = hash.replace('#test/results/', '');
-    if(typeof openTestResults === 'function') return openTestResults(id);
-    if(typeof openTestResultsRoute === 'function') return openTestResultsRoute(id);
-    return showTestsPage();
-  }
-
-  if(hash.startsWith('#test/preview/')){
-    const id = hash.replace('#test/preview/', '');
-    if(typeof openTestPreview === 'function') return openTestPreview(id);
-    if(typeof openTestPreviewRoute === 'function') return openTestPreviewRoute(id);
-    return showTestsPage();
-  }
-
   return showNotFoundRoute(hash);
   }finally{
     setTimeout(restoreTaskBoardAfterRefresh,350);
   }
+}
+
+function isDisabledTestConstructorRoute(hash){
+  return /^#tests(?:[/?]|$)/.test(hash)
+    || /^#test\/(?:edit|results|preview)(?:[/?]|$)/.test(hash)
+    || /^#(?:test-constructor|tests-constructor|constructor|teacher|builder)(?:[/?]|$)/.test(hash);
+}
+
+function redirectDisabledTestConstructorRoute(){
+  history.replaceState(null, '', '#courses');
+  return showCoursesPage();
 }
 
 window.addEventListener('hashchange', handleRoute);
@@ -6482,25 +6462,8 @@ function srReset(){
 
 </script>
 
-<!-- ═══════ КОНСТРУКТОР ТЕСТОВ ═══════ -->
-<div id="tests-page">
-  <div class="tests-wrap">
-    <a href="#home" style="display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border);color:var(--gray);font-size:13px;padding:8px 16px;border-radius:8px;cursor:pointer;transition:all .2s;white-space:nowrap;font-family:var(--fb);margin-bottom:20px" onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--gray)'">← Назад</a>
-    <div class="tests-panel tests-nav-full">
-      <h3>Конструктор тестов</h3>
-      <div id="testConstructorNav"></div>
-      <div id="openTopicTestsMount"></div>
-      <a href="#tests/generator" class="tests-action">⚡ Собрать тест из курса</a>
-    </div>
-  </div>
-</div>
-
-<div id="test-topic-page" class="test-topic-page"></div>
-<div id="test-editor-page"></div>
-<div id="test-preview-page" class="test-preview-page"></div>
 <div id="student-test-page" class="student-test-page"></div>
 <div id="student-variant-page" class="student-variant-page"></div>
-<div id="tests-generator-page" class="tests-generator-page"></div>
 
 <!-- ═══════ СИМУЛЯТОРЫ ХАБ ═══════ -->
 <div id="simulators-page">
