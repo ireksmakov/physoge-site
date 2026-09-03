@@ -99,6 +99,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:10000;background:rgba(2,9,20,
 .mi .dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);opacity:.6}
 .bcourse{display:block;text-align:center;padding:9px;border-radius:8px;border:1px solid var(--border);font-size:13px;font-weight:600;color:var(--cyan);cursor:pointer;background:none;width:100%;transition:all .2s}
 .bcourse:hover{background:var(--cyan);color:#000;border-color:var(--cyan)}
+.school-hero{max-width:1100px;margin:0 auto;padding:34px 0}.school-hero h1{font-family:var(--fh);font-size:clamp(27px,4vw,42px);margin:0 0 12px}.school-lead{color:var(--gray);font-size:15px;line-height:1.7;max-width:760px}.school-grades{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-top:30px}.school-grade{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:20px}.school-grade h2{font-family:var(--fh);font-size:18px;color:var(--cyan);margin:0 0 14px}.school-grade ul{list-style:none;margin:0;padding:0}.school-grade li{color:var(--gray);font-size:13px;line-height:1.45;padding:8px 0;border-top:1px solid var(--border)}.school-grade a{color:inherit}.school-grade a:hover{color:var(--cyan)}.school-placeholder{padding:22px;border:1px dashed rgba(0,229,255,.3);border-radius:12px;background:rgba(0,229,255,.035);color:var(--gray);line-height:1.6}.school-grade-label{padding:13px 11px 5px;color:var(--cyan);font-family:var(--fh);font-weight:800;font-size:13px}.school-video-frame{width:100%;aspect-ratio:16/9;border:0;border-radius:12px;background:var(--bg2)}
 .how-s{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
 .how-g{display:grid;grid-template-columns:repeat(4,1fr)}
 .how-step{padding:36px 28px;border-right:1px solid var(--border)}
@@ -1729,6 +1730,7 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 
 
 @media(max-width:900px){.hero{grid-template-columns:1fr;min-height:auto;padding:58px 24px 20px}.hero h1{font-size:clamp(30px,8vw,40px);line-height:1.12}.hero-media{transform:translateY(-6px)}.fbox{display:none}.cgrid{grid-template-columns:1fr 1fr}.how-g{grid-template-columns:1fr 1fr}.how-step{border-right:none;border-bottom:1px solid var(--border)}.cp-layout{--sbw:210px}}
+@media(max-width:640px){.school-grades{grid-template-columns:1fr}.school-hero{padding:18px 0}.cp-tabs .cpt{padding:9px 8px;font-size:12px}}
 @media(max-width:600px){.hero-formula{font-size:11px;padding:4px 8px;opacity:.82}.hero-formula.f1{left:6%;bottom:12px}.hero-formula.f2{right:6%;bottom:24px}.hero-formula.f3{display:none}}
 
 @media(max-width:600px){.nav-subj{display:none}.cgrid{grid-template-columns:1fr}.how-g{grid-template-columns:1fr}.stats-grid{grid-template-columns:1fr 1fr}.cp-sb,.cp-resizer{display:none}}
@@ -2279,6 +2281,22 @@ img,svg,canvas,video,iframe{max-width:100%}
       <button class="tb" onclick="fc('spo',this)">🎓 СПО</button>
     </div>
     <div class="cgrid" id="cGrid">
+      <div class="ccard" data-cat="physics">
+        <div class="ci">⚛️</div><span class="ctag tp">Школа</span>
+        <div class="cn">Физика · Школа</div>
+        <div class="cd">Школьный курс физики: теория, видеоуроки, тесты, задачи и домашние задания по темам.</div>
+        <div class="cmeta"><div class="mi"><span class="dot"></span>7–8 класс</div><div class="mi"><span class="dot"></span>разделы по программе</div></div>
+        <div class="course-badges"><span class="cb cb-free">теория · видео · тесты · задачи</span></div>
+        <a class="bcourse" href="#course/school-physics" onclick="return openCourseCard(event, 'school-physics')">Открыть курс</a>
+      </div>
+      <div class="ccard" data-cat="math">
+        <div class="ci">📚</div><span class="ctag tm">Школа</span>
+        <div class="cn">Математика · Школа</div>
+        <div class="cd">Школьный курс математики для 5–8 классов: теория, видеоуроки, тесты, задачи и домашние задания.</div>
+        <div class="cmeta"><div class="mi"><span class="dot"></span>5–8 класс</div><div class="mi"><span class="dot"></span>разделы по программе</div></div>
+        <div class="course-badges"><span class="cb cb-free">теория · видео · тесты · задачи</span></div>
+        <a class="bcourse" href="#course/school-math" onclick="return openCourseCard(event, 'school-math')">Открыть курс</a>
+      </div>
       <div class="ccard" data-cat="physics">
         <div class="ci">⚡</div><span class="ctag tp">Физика</span>
         <div class="cn">ОГЭ · Физика</div>
@@ -3461,6 +3479,43 @@ const COURSES={
   ]}
 };
 
+
+/* School courses use the common course/lesson model and add grade metadata. */
+const SCHOOL_TOPIC_PLACEHOLDER='Материалы по этой теме будут добавлены позже.';
+function makeSchoolTopic(id,title){
+  return {
+    id,title,description:SCHOOL_TOPIC_PLACEHOLDER,
+    theory:{title:'Теория',content:'Теоретический материал будет добавлен позже.'},
+    video:{title:'Видеоурок',url:'',placeholder:'Видеоурок будет добавлен позже.'},
+    tests:{title:'Тесты',questions:[],placeholder:'Тесты по теме будут добавлены позже.'},
+    tasks:{title:'Задачи',items:[],placeholder:'Задачи по теме будут добавлены позже.'},
+    homework:{title:'Домашнее задание',content:'Домашнее задание будет добавлено позже.'}
+  };
+}
+function makeSchoolCourse(name,subtitle,type,grades){
+  const modules=[];
+  Object.keys(grades).forEach(grade=>grades[grade].forEach((section,sectionIndex)=>{
+    modules.push({name:section,grade:Number(grade),sectionIndex,open:true,lessons:[
+      makeSchoolTopic(`${type}-grade-${grade}-section-${sectionIndex+1}-topic-1`,section)
+    ]});
+  }));
+  return {name,subtitle,tag:'Школа',cls:type==='physics'?'tp':'tm',type:type==='physics'?'phy':'mat',school:true,grades:Object.keys(grades).map(Number),modules};
+}
+COURSES['school-physics']=makeSchoolCourse('Физика · Школа','Школьная физика: теория, видеоуроки, тесты и задачи по темам.','physics',{
+  7:['Введение в физику','Первоначальные сведения о строении вещества','Взаимодействие тел','Давление твёрдых тел, жидкостей и газов','Работа, мощность и энергия'],
+  8:['Тепловые явления','Электрические явления','Электромагнитные явления','Световые явления']
+});
+COURSES['school-math']=makeSchoolCourse('Математика · Школа','Школьная математика для 5–8 классов: теория, видеоуроки, тесты и задачи по темам.','math',{
+  5:['Натуральные числа','Обыкновенные дроби','Десятичные дроби','Геометрические фигуры'],
+  6:['Делимость чисел','Обыкновенные и десятичные дроби','Отношения и пропорции','Рациональные числа'],
+  7:['Алгебраические выражения','Уравнения','Функции','Геометрия: начальные сведения'],
+  8:['Квадратные корни','Квадратные уравнения','Функции','Геометрия: четырёхугольники и площади']
+});
+function isSchoolCourse(courseKey){return !!(COURSES[courseKey]&&COURSES[courseKey].school);}
+function findSchoolModule(course,grade,sectionIndex){
+  return course.modules.findIndex(module=>module.grade===Number(grade)&&module.sectionIndex===Number(sectionIndex));
+}
+
 let AC=null,CM=0,CL=0,CTAB='theory',EMODE=false;
 const LD={};
 function lk(){return AC+'_'+CM+'_'+CL}
@@ -4101,6 +4156,15 @@ function parseCourseRoute(hash){
   let tabId = null;
   let hasTab = false;
 
+  if(isSchoolCourse(courseKey) && parts[1] && /^grade-\d+$/.test(parts[1])){
+    const grade=Number(parts[1].replace('grade-',''));
+    const sectionIndex=Number((parts[2]||'').replace('section-',''))-1;
+    const topicIndex=Number((parts[3]||'').replace('topic-',''))-1;
+    const schoolModule=findSchoolModule(COURSES[courseKey],grade,sectionIndex);
+    const schoolTab=parts[4] ? normalizeCourseTab(safeDecodeRoutePart(parts[4])) : 'theory';
+    return {courseKey,moduleIndex:schoolModule>=0?schoolModule:null,lessonIndex:topicIndex>=0?topicIndex:null,tabId:isValidCourseTab(schoolTab)?schoolTab:'theory'};
+  }
+
   for(let i = 1; i < parts.length; i += 1){
     if(parts[i] === 'm'){
       moduleIndex = parseOptionalRouteIndex(parts[i + 1]);
@@ -4648,6 +4712,7 @@ function handleRoute(){
 
   if(hash.startsWith('#course/')){
     const {courseKey, moduleIndex, lessonIndex, tabId} = parseCourseRoute(hash);
+    if(isSchoolCourse(courseKey) && hash === `#course/${courseKey}`) return showSchoolCourseOverview(courseKey);
     return openCourse(courseKey, moduleIndex, lessonIndex, tabId);
   }
 
@@ -5283,6 +5348,10 @@ function applyCourseSidebarState(courseKey){
 function getCourseRoute(courseKey,moduleIndex,lessonIndex,tabId){
   const safeCourseKey = encodeURIComponent(courseKey || '');
   const safeTabId = isValidCourseTab(tabId) ? normalizeCourseTab(tabId) : 'theory';
+  if(isSchoolCourse(courseKey)){
+    const module=COURSES[courseKey].modules[moduleIndex];
+    if(module) return `#course/${safeCourseKey}/grade-${module.grade}/section-${module.sectionIndex+1}/topic-${lessonIndex+1}/${safeTabId==='hw'?'homework':safeTabId}`;
+  }
   return `#course/${safeCourseKey}/m/${moduleIndex}/l/${lessonIndex}/t/${safeTabId}`;
 }
 function getCurrentCourseRoute(){
@@ -5500,6 +5569,29 @@ function resolveCourseLesson(courseKey,c,moduleIndex,lessonIndex,tabId){
 
   return selected;
 }
+function showSchoolCourseOverview(courseKey){
+  const c=COURSES[courseKey];
+  if(!c) return showCourseNotFound();
+  AC=courseKey; CM=0; CL=0; CTAB='theory';
+  hideAll();
+  const platform=showPage('platform');
+  if(platform) platform.classList.add('on');
+  const backBtn=document.getElementById('backBtn');
+  if(backBtn) backBtn.classList.add('on');
+  setBackHref('#courses');
+  renderTopbar();
+  renderSb();
+  const gradeCards=c.grades.map(grade=>{
+    const sections=c.modules.filter(module=>module.grade===grade);
+    return `<article class="school-grade"><h2>${grade} класс</h2><ul>${sections.map(module=>{
+      const mi=c.modules.indexOf(module);
+      return `<li><a href="${getCourseRoute(courseKey,mi,0,'theory')}">${escapeHtml(module.name)}</a></li>`;
+    }).join('')}</ul></article>`;
+  }).join('');
+  document.getElementById('cpCon').innerHTML=`<div class="school-hero"><span class="cp-ctag ${c.cls}">Школа</span><h1>${escapeHtml(c.name)}</h1><p class="school-lead">${escapeHtml(c.subtitle)}</p><div class="school-grades">${gradeCards}</div></div>`;
+  updateActiveNav('#courses');
+  window.scrollTo(0,0);
+}
 function openCourse(key,moduleIndex,lessonIndex,tabId){
   if(!COURSES || !COURSES[key]){
     console.warn('Курс не найден:', key);
@@ -5561,6 +5653,36 @@ function openCourse(key,moduleIndex,lessonIndex,tabId){
     window.scrollTo(0,0);
   }
 }
+
+function renderSchoolTopic(course,topic){
+  const module=course.modules[CM];
+  const safeTopic=topic||makeSchoolTopic('missing','Тема');
+  const videoUrl=safeTopic.video&&safeTopic.video.url||'';
+  const panels={
+    theory:`<h2>${escapeHtml(safeTopic.theory.title)}</h2><div class="school-placeholder">${escapeHtml(safeTopic.theory.content)}</div>`,
+    video:videoUrl?`<iframe class="school-video-frame" src="${escapeHtml(videoUrl)}" title="${escapeHtml(safeTopic.video.title)}" allowfullscreen></iframe>`:`<div class="school-placeholder">${escapeHtml(safeTopic.video.placeholder)}</div>`,
+    tests:`<div class="school-placeholder">${escapeHtml(safeTopic.tests.placeholder)}</div>`,
+    tasks:`<div class="school-placeholder">${escapeHtml(safeTopic.tasks.placeholder)}</div>`,
+    hw:`<div class="school-placeholder">${escapeHtml(safeTopic.homework.content)}</div>`
+  };
+  document.getElementById('cpCon').innerHTML=`
+    <div class="lt-row"><div class="lt-inp">${escapeHtml(safeTopic.title)}</div></div>
+    <div class="lmeta">${module.grade} класс · ${escapeHtml(module.name)} · ${escapeHtml(course.name)}</div>
+    <div class="school-placeholder" style="margin-bottom:20px">${escapeHtml(safeTopic.description)}</div>
+    <div class="cp-tabs">
+      <button class="cpt" data-tab="theory" onclick="showTab('theory',this)">📖 Теория</button>
+      <button class="cpt" data-tab="video" onclick="showTab('video',this)">▶ Видео</button>
+      <button class="cpt" data-tab="tests" onclick="showTab('tests',this)">✏️ Тесты</button>
+      <button class="cpt" data-tab="tasks" onclick="showTab('tasks',this,'active-ptasks')">📋 Задачи</button>
+      <button class="cpt" data-tab="hw" onclick="showTab('hw',this)">📎 Домашнее задание</button>
+    </div>
+    <div id="pan-theory" class="cp-panel">${panels.theory}</div>
+    <div id="pan-video" class="cp-panel">${panels.video}</div>
+    <div id="pan-tests" class="cp-panel">${panels.tests}</div>
+    <div id="pan-tasks" class="cp-panel">${panels.tasks}</div>
+    <div id="pan-hw" class="cp-panel">${panels.hw}</div>`;
+  showTab(CTAB);
+}
 function fc(cat,btn){
   document.querySelectorAll('.tb').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
@@ -5577,7 +5699,10 @@ function openCourseCard(event, courseKey){
 
   if(typeof closeSimMenu === 'function') closeSimMenu();
 
-  if(typeof openCourse === 'function'){
+  if(isSchoolCourse(courseKey)){
+    window.location.hash = `#course/${courseKey}`;
+    showSchoolCourseOverview(courseKey);
+  } else if(typeof openCourse === 'function'){
     openCourse(courseKey, null, null, null);
   } else {
     window.location.hash = `#course/${encodeURIComponent(courseKey)}`;
@@ -5598,7 +5723,9 @@ function renderTopbar(){
 function renderSb(){
   const c=COURSES[AC];let n=1,h='';
   h=`<div class="sb-top"><span class="sb-lbl">Содержание</span></div>`;
+  let renderedGrade=null;
   c.modules.forEach((m,mi)=>{
+    if(c.school && renderedGrade!==m.grade){renderedGrade=m.grade;h+=`<div class="school-grade-label">${m.grade} класс</div>`;}
     const lessons=m.lessons||[];
     let lh=m.open?lessons.map((l,li)=>{
       if(isHiddenLesson(l)){
@@ -5649,6 +5776,7 @@ function togM(mi){
 /* ============ CONTENT ============ */
 function renderContent(){
   const c=COURSES[AC],lesson=getLessonObject(AC,CM,CL),name=lessonTitle(lesson),desc=lessonDescription(lesson),ld=gld();
+  if(c.school) return renderSchoolTopic(c,lesson);
   document.getElementById('cpCon').innerHTML=`
     <div class="lt-row">
       <div class="lt-inp">${name}</div>
