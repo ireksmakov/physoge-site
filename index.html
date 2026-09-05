@@ -93,6 +93,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:10000;background:rgba(2,9,20,
 .ctag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:4px;margin-bottom:11px}
 .tp{background:rgba(0,229,255,.15);color:var(--cyan)}.tm{background:rgba(255,140,0,.15);color:var(--orange)}.ts{background:rgba(57,255,20,.12);color:var(--green)}
 .cn{font-family:var(--fh);font-size:14px;font-weight:700;line-height:1.3;margin-bottom:8px}
+.cn-school{font-size:26px;font-weight:900;line-height:1.15}
+@media(max-width:640px){.cn-school{font-size:21px}}
 .cd{font-size:13px;color:var(--gray);line-height:1.6;flex:1;margin-bottom:18px}
 .cmeta{display:flex;gap:14px;margin-bottom:18px}
 .mi{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--gray)}
@@ -2281,16 +2283,16 @@ img,svg,canvas,video,iframe{max-width:100%}
     </div>
     <div class="cgrid" id="cGrid">
       <div class="ccard" data-cat="physics">
-        <div class="ci">⚛️</div><span class="ctag tp">Школа</span>
-        <div class="cn">Физика · Школа</div>
+        <div class="ci">⚛️</div>
+        <div class="cn cn-school">Физика · Школа</div>
         <div class="cd">Школьный курс физики: теория, видеоуроки, тесты, задачи и домашние задания по темам.</div>
         <div class="cmeta"><div class="mi"><span class="dot"></span>7–8 класс</div><div class="mi"><span class="dot"></span>разделы по программе</div></div>
         <div class="course-badges"><span class="cb cb-free">теория · видео · тесты · задачи</span></div>
         <a class="bcourse" href="#course/school-physics" onclick="return openCourseCard(event, 'school-physics')">Открыть курс</a>
       </div>
       <div class="ccard" data-cat="math">
-        <div class="ci">📚</div><span class="ctag tm">Школа</span>
-        <div class="cn">Математика · Школа</div>
+        <div class="ci">📚</div>
+        <div class="cn cn-school">Математика · Школа</div>
         <div class="cd">Школьный курс математики для 5–8 классов: теория, видеоуроки, тесты, задачи и домашние задания.</div>
         <div class="cmeta"><div class="mi"><span class="dot"></span>5–8 класс</div><div class="mi"><span class="dot"></span>разделы по программе</div></div>
         <div class="course-badges"><span class="cb cb-free">теория · видео · тесты · задачи</span></div>
