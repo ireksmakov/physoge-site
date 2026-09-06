@@ -8775,8 +8775,8 @@ function renderPTasks(name){
       animationId:t.animationId||t.animId||'',
       animId:t.animId||t.animationId||''
     };
-    const boardBtn=`<button type="button" class="pt-board-btn" data-task-id="${escapeHtml(taskId)}" data-board-mode="${escapeHtml(boardMode)}" onclick="return openTaskBoard('${boardModeSafe}',true,'${taskIdSafe}')">🧑‍🏫 Доска</button>`;
-    const animationBtn=`<button type="button" class="pt-anim-btn" data-action="open-animation" data-task-id="${escapeHtml(taskId)}" data-animation-id="${escapeHtml(t.animationId||t.animId||'')}" onclick="return handleOpenAnimationClick(event)">▶ Анимация</button>`;
+    const boardBtn=`<button type="button" class="pt-board-btn" data-action="board" data-task-id="${escapeHtml(taskId)}" data-board-mode="${escapeHtml(boardMode)}" onclick="return openTaskBoard('${boardModeSafe}',true,'${taskIdSafe}')">🧑‍🏫 Доска</button>`;
+    const animationBtn=`<button type="button" class="pt-anim-btn" data-action="animation" data-task-id="${escapeHtml(taskId)}" data-animation-id="${escapeHtml(t.animationId||t.animId||'')}" onclick="return handleOpenAnimationClick(event)">▶ Анимация</button>`;
     const hasStructuredSolution=hasFilledTaskSolution(t)||hasLegacyTaskTextSolution(t);
     const embeddedRaw=hasStructuredSolution?renderTaskSolutionPanel(t,'pt'):(t.solutionHtml||getEmbeddedSolutionHtml(t));
     const embedded=String(embeddedRaw||'').trim();
@@ -8786,7 +8786,7 @@ function renderPTasks(name){
     const fallbackSolution='';
     const solutionInner=(embedded||imageOnly)?`${rich}${extra}`:`${steps}${extra}${fallbackSolution}`;
     const emptySolution=!String(solutionInner||'').trim();
-    return `<div class="pt-card${isBlank?' pt-blank-card':''}"><div class="pt-head"><div class="pt-num">${String(t.num).padStart(2,'0')}</div><span class="pt-level ${lvlC[t.level]||lvlC[1]}">${lvlL[t.level]||lvlL[1]}</span><span class="pt-exam">${t.exam||'ЕГЭ'}</span><span class="pt-title">${titleText}</span></div><div class="pt-body"><div class="pt-condition">${cond}</div>${scheme}<div class="pt-side">${boardBtn}${animationBtn}<button class="pt-sol-btn" data-empty-solution="${emptySolution?'1':'0'}" onclick="ptToggle('${sid}',this)">▶ Решение</button></div></div><div class="pt-solution" id="${sid}">${solutionInner}</div></div>`;
+    return `<div class="pt-card${isBlank?' pt-blank-card':''}"><div class="pt-head"><div class="pt-num">${String(t.num).padStart(2,'0')}</div><span class="pt-level ${lvlC[t.level]||lvlC[1]}">${lvlL[t.level]||lvlL[1]}</span><span class="pt-exam">${t.exam||'ЕГЭ'}</span><span class="pt-title">${titleText}</span></div><div class="pt-body"><div class="pt-condition">${cond}</div>${scheme}<div class="pt-side">${boardBtn}${animationBtn}<button class="pt-sol-btn" data-action="solution" data-empty-solution="${emptySolution?'1':'0'}" onclick="ptToggle('${sid}',this)">▶ Решение</button></div></div><div class="pt-solution" id="${sid}">${solutionInner}</div></div>`;
   }
   const hasGroups=tasks.some(t=>t&&t.group);
   if(hasGroups){
@@ -8825,38 +8825,6 @@ function getCurrentTaskBoardTask(){
   return null;
 }
 
-function taskHasAnyAnimation(task){
-  if(!task) return false;
-
-  if(task.hasAnimation===true) return true;
-  if(task.animationId||task.animId) return true;
-
-  const id=String(task.id||'');
-  const mode=String(task.boardMode||task.mode||'');
-  const value=`${id} ${mode}`;
-  const supportedBoardModes=[
-    'impulseCars',
-    'momentumSystem',
-    'energyHill',
-    'energyPendulum',
-    'puckImpulse',
-    'explosionFragments',
-    'explosionFragmentsVector',
-    'inelasticBlocks',
-    'cartStone',
-    'inelasticFriction',
-    'etherCork',
-    'task07-pendulum-impact',
-    'task10-pendulum-impact',
-    'newtonForceAcceleration',
-    'newtonInclineFriction'
-  ];
-
-  return supportedBoardModes.some(function(supportedMode){
-    return value.split(' ').includes(supportedMode);
-  });
-}
-
 function openTaskAnimation(taskOrId,options){
   options=options||{};
 
@@ -8881,9 +8849,7 @@ function openTaskAnimation(taskOrId,options){
     return false;
   }
 
-  const animationId=task.animationId||task.animId||task.mode||task.boardMode||task.id||taskId;
-  const canOpenTaskBoard=task.canOpenTaskBoard!==false;
-  const hasBoardMode=canOpenTaskBoard&&!!(task.boardMode||task.mode);
+  const animationId=task.animationId||task.animId||'';
   const boardMode=task.boardMode||task.mode||task.id||taskId;
   const realId=task.id||taskId;
   const fromBoard=!!options.fromBoard;
@@ -8909,20 +8875,9 @@ function openTaskAnimation(taskOrId,options){
     return false;
   }
 
-  if(!hasBoardMode||!taskHasAnyAnimation(task)){
-    openTaskAnimationPlaceholder(realId||animationId);
-    return false;
-  }
-
-  if(!fromBoard){
-    TASK_ANIMATION_CONTEXT.openedBoardForAnimation=true;
-    openTaskBoard(boardMode,false,realId);
-    toggleTaskBoardAnimation(true);
-    return false;
-  }
-
-  toggleTaskBoardAnimation(true);
-
+  // A board mode is not an animation identifier. If a task has no dedicated
+  // animation, keep the board closed and show the explicit empty state.
+  openTaskAnimationPlaceholder(realId||taskId);
   return false;
 }
 
@@ -8936,7 +8891,7 @@ function handleOpenAnimationClick(event){
     event.stopPropagation();
     if(event.stopImmediatePropagation) event.stopImmediatePropagation();
   }
-  const btn=event&&event.target&&event.target.closest?event.target.closest('[data-action="open-animation"]'):null;
+  const btn=event&&event.target&&event.target.closest?event.target.closest('[data-action="animation"]'):null;
   const fromBoard=!!(btn&&(btn.hasAttribute('data-board-animation-button')||btn.closest('.task-board-overlay')));
   const taskId=btn?(btn.getAttribute('data-task-id')||btn.getAttribute('data-task-animation')||btn.getAttribute('data-animation-id')||''):'';
   return openTaskAnimation(taskId,{fromBoard:fromBoard});
@@ -10246,7 +10201,7 @@ function ensureTaskBoardOverlay(){
                 type="button"
                 class="task-board-quick-action task-board-quick-animation"
                 id="taskBoardAnimBtn"
-                data-action="open-animation"
+                data-action="animation"
                 data-task-id=""
                 data-animation-id=""
                 data-board-animation-button="true"
