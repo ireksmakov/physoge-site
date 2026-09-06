@@ -727,9 +727,9 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 .pt-anim-btn:hover{background:rgba(57,255,20,.16);border-color:rgba(57,255,20,.48);color:#fff;box-shadow:0 0 18px rgba(57,255,20,.18);transform:translateY(-1px)}
 .pt-anim-btn:disabled{cursor:not-allowed;opacity:.45;filter:saturate(.65);transform:none;box-shadow:none}
 .pt-anim-btn:disabled:hover{background:rgba(57,255,20,.08);border-color:rgba(57,255,20,.26);color:var(--green);box-shadow:none;transform:none}
-.task-animation-placeholder-overlay{position:fixed;inset:0;z-index:2147483600;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(2,9,20,.82);backdrop-filter:blur(8px)}
+.task-animation-placeholder-overlay{position:fixed;inset:0;z-index:2147483600;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(2,9,20,.82);backdrop-filter:blur(8px);box-sizing:border-box;overflow:hidden}
 .task-animation-placeholder-overlay.open{display:flex}
-.task-animation-placeholder-modal{position:relative;width:min(900px,100%);max-height:90vh;overflow:auto;border-radius:22px;background:#fff;color:#0f172a;padding:28px;box-shadow:0 28px 90px rgba(0,0,0,.35)}
+.task-animation-placeholder-modal{position:relative;width:100%;height:100%;max-width:none;max-height:none;min-width:0;min-height:0;overflow:auto;border-radius:22px;background:#fff;color:#0f172a;padding:28px;box-shadow:0 28px 90px rgba(0,0,0,.35);box-sizing:border-box}
 .task-animation-placeholder-close{position:absolute;top:18px;right:18px;border:1px solid #cbd5e1;background:#fff;color:#334155;border-radius:12px;padding:8px 14px;font-weight:800;cursor:pointer}
 .task-animation-placeholder-title{font-family:var(--fh);font-size:34px;font-weight:900;margin:0 0 16px}
 .task-animation-placeholder-condition{margin:12px 0 18px;padding:14px 16px;border:1px solid #d8e5f5;border-radius:16px;background:#f8fbff}
@@ -737,7 +737,7 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 .task-animation-placeholder-text{font-size:14px;line-height:1.45;font-weight:600;color:#334155}
 .task-animation-placeholder-empty{min-height:260px;border:1px dashed #cbd5e1;border-radius:18px;background:#f8fafc;display:flex;align-items:center;justify-content:center;text-align:center;color:#64748b;font-size:18px;font-weight:800}
 
-.ballistics-task-animation-modal{width:min(980px,100%);background:linear-gradient(160deg,#07111f,#0b1626 62%,#101b2a);color:var(--white);border:1px solid rgba(8,216,255,.18);box-shadow:0 30px 100px rgba(0,0,0,.52),0 0 44px rgba(8,216,255,.12);padding:26px}
+.ballistics-task-animation-modal{width:100%;height:100%;max-width:none;max-height:none;background:linear-gradient(160deg,#07111f,#0b1626 62%,#101b2a);color:var(--white);border:1px solid rgba(8,216,255,.18);box-shadow:0 30px 100px rgba(0,0,0,.52),0 0 44px rgba(8,216,255,.12);padding:26px}
 .ballistics-task-animation-modal .task-animation-placeholder-close{background:rgba(255,255,255,.05);border-color:rgba(8,216,255,.28);color:var(--white)}
 .ballistics-task-animation-frame{width:100%;overflow:hidden;border:1px solid rgba(8,216,255,.18);border-radius:16px;background:var(--bg2);color:var(--white)}
 .ballistics-task-animation-frame .fc-head{padding-right:112px}
@@ -750,7 +750,7 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 .ballistics-task-animation-param{flex:1 1 260px;min-width:0}
 .ballistics-task-animation-controls .fc-ctrl{display:flex;gap:8px;flex-wrap:wrap}
 .ballistics-task-animation-controls .fc-speed-control{margin-left:auto}
-.ballistics-task-animation-stage{position:relative;width:100%;height:clamp(260px,42vw,390px);min-height:260px;overflow:hidden;background:radial-gradient(circle at 50% 42%,rgba(8,216,255,.09),transparent 38%),linear-gradient(180deg,#071522,#030a12)}
+.ballistics-task-animation-stage{position:relative;width:100%;height:clamp(360px,58vh,760px);min-height:360px;overflow:hidden;background:radial-gradient(circle at 50% 42%,rgba(8,216,255,.09),transparent 38%),linear-gradient(180deg,#071522,#030a12)}
 .ballistics-task-animation-canvas{display:block;width:100%;height:100%}
 .ballistics-task-animation-scene-copy{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:28px;text-align:center;color:#94a3b8;font-size:16px;font-weight:800;pointer-events:none}
 .ballistics-task-animation-values{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
@@ -788,7 +788,7 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 .task03-flying-cyclist-solution-hint{margin:10px 0 0;color:#94a3b8;font-size:12px;font-weight:700;text-align:center}
 @media(max-width:760px){.task03-flying-cyclist-modal{width:calc(100vw - 20px);height:calc(100vh - 20px);max-width:calc(100vw - 20px);max-height:calc(100vh - 20px);padding:48px 0 0}.task03-flying-cyclist-frame .fc-canvas-box{min-height:180px;padding:12px}.task03-flying-cyclist-frame .fc-speed-control{width:100%;justify-content:space-between}.task03-flying-cyclist-frame .fc-speed-control input{flex:1}}
 
-.freefall-anim-modal{width:min(980px,100%);background:linear-gradient(160deg,#07111f,#0b1626 62%,#101b2a);color:var(--white);border:1px solid rgba(8,216,255,.18);box-shadow:0 30px 100px rgba(0,0,0,.52),0 0 44px rgba(8,216,255,.12);padding:26px}
+.freefall-anim-modal{width:100%;height:100%;max-width:none;max-height:none;background:linear-gradient(160deg,#07111f,#0b1626 62%,#101b2a);color:var(--white);border:1px solid rgba(8,216,255,.18);box-shadow:0 30px 100px rgba(0,0,0,.52),0 0 44px rgba(8,216,255,.12);padding:26px}
 .freefall-anim-modal .task-animation-placeholder-close{background:rgba(255,255,255,.05);border-color:rgba(8,216,255,.28);color:var(--white)}
 .freefall-anim{display:flex;flex-direction:column;gap:16px;color:var(--white)}
 .freefall-anim-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;padding-right:94px}
@@ -1082,8 +1082,9 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 .task07-anim-lock{overflow:hidden}
 .task-board-animation-overlay,.task-animation-overlay,.task07-anim-overlay{position:fixed;inset:0;z-index:2147483600;display:none;pointer-events:none;background:radial-gradient(circle at 18% 12%,rgba(0,229,255,.16),transparent 34%),radial-gradient(circle at 78% 18%,rgba(255,140,0,.16),transparent 30%),rgba(2,6,23,.94);backdrop-filter:blur(10px);color:var(--white);padding:18px;box-sizing:border-box;overflow:auto}
 .task-board-animation-overlay.open,.task-animation-overlay.open,.task07-anim-overlay.open{display:flex;align-items:center;justify-content:center;pointer-events:auto;animation:taskBoardOverlayFade .24s ease both}
-.legacy-task-animation-overlay .task-board-popup{position:relative;inset:auto;display:block;width:min(1100px,100%);max-height:calc(100vh - 36px);overflow:auto;margin:auto}
-.task07-anim-modal{width:min(1180px,100%);height:min(820px,100%);min-height:auto;margin:auto;display:flex;flex-direction:column;gap:14px;background:linear-gradient(180deg,rgba(11,18,32,.98),rgba(5,10,20,.98));border:1px solid rgba(0,229,255,.24);border-radius:24px;box-shadow:0 34px 90px rgba(0,0,0,.52),0 0 60px rgba(0,229,255,.12);overflow:visible}
+.task-animation-placeholder-modal.fullscreen-animation{width:100%;height:100%;max-width:none;max-height:none;margin:0}
+.legacy-task-animation-overlay .task-board-popup{position:relative;inset:auto;display:flex;width:100%;height:100%;max-width:none;max-height:none;min-width:0;min-height:0;overflow:auto;margin:0}
+.task07-anim-modal{width:100%;height:100%;max-width:none;max-height:none;min-height:0;margin:0;display:flex;flex-direction:column;gap:14px;background:linear-gradient(180deg,rgba(11,18,32,.98),rgba(5,10,20,.98));border:1px solid rgba(0,229,255,.24);border-radius:24px;box-shadow:0 34px 90px rgba(0,0,0,.52),0 0 60px rgba(0,229,255,.12);overflow:auto}
 .task07-anim-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:18px 20px 0}.task07-anim-head>div{flex:1 1 auto;min-width:0}
 .task07-anim-kicker{font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:var(--cyan);margin-bottom:5px}
 .task07-anim-title{font-family:var(--fh);font-size:clamp(22px,2.8vw,34px);line-height:1.05;font-weight:800;color:var(--white)}
@@ -1104,6 +1105,7 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 .task07-anim-btn{padding:10px 14px;border-radius:12px;border:1px solid rgba(0,229,255,.2);background:rgba(0,229,255,.08);color:var(--cyan);font:800 13px var(--fb);cursor:pointer;transition:all .18s}.task07-anim-btn:hover{background:rgba(0,229,255,.16);color:var(--white);transform:translateY(-1px)}
 .task07-anim-progress{flex:1;min-width:160px;height:8px;border-radius:999px;background:rgba(107,122,141,.24);overflow:hidden}.task07-anim-progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--orange));border-radius:inherit;transition:width .08s linear}
 @media(max-width:900px){.task07-anim-overlay{padding:8px}.task07-anim-body{grid-template-columns:1fr;overflow:auto}.task07-anim-stage{min-height:360px}.task07-anim-svg{min-height:360px}.task07-anim-side{display:grid;grid-template-columns:1fr}.task07-anim-modal{height:100%;border-radius:18px}.task07-anim-head{padding:14px 14px 0}.task07-anim-body{padding:0 14px 14px}.task07-anim-controls{padding:0 14px 14px}}
+@media(max-width:760px){.task-animation-placeholder-overlay{padding:6px}.task-animation-placeholder-modal{border-radius:16px;padding:52px 12px 12px}.ballistics-task-animation-modal,.freefall-anim-modal{padding:52px 10px 10px}.task-animation-placeholder-close{position:fixed;top:12px;right:12px;z-index:20}.ballistics-task-animation-stage{height:clamp(320px,55vh,620px);min-height:320px}.freefall-anim-layout{grid-template-columns:1fr}.freefall-scene,.freefall-svg{min-height:clamp(340px,55vh,620px)}}
 @media(max-width:760px){.lesson25-bullet-scene{height:300px}.lesson25-board{width:96px;height:190px;top:58px}.lesson25-bullet{width:68px;height:22px;top:158px}.lesson25-bullet-tip{right:-18px;border-left-width:22px;border-top-width:11px;border-bottom-width:11px}.lesson25-speed-label{font-size:12px;padding:6px 8px}.lesson25-speed-in{left:18px;top:90px}.lesson25-speed-out{right:18px;top:90px}.lesson25-resistance-force{left:calc(50% - 82px);width:86px}.lesson25-resistance-force span{left:-34px;font-size:11px}.lesson25-task04-anim .lesson25-anim-formulas{grid-template-columns:1fr}.lesson25-ball-scene{height:350px}.lesson25-height-line{left:22px;width:90px}.lesson25-height-line span{font-size:11px}.lesson25-ball-path-down,.lesson25-ball-path-up{left:126px}.lesson25-ball{left:110px}.lesson25-v-arrow{left:162px}.lesson25-v-arrow span{font-size:11px}.lesson25-impact{left:82px;width:86px;height:86px;font-size:11px}.lesson25-energy-bars{right:12px;top:64px;width:185px}.lesson25-energy-row{grid-template-columns:1fr;gap:4px}.lesson25-task06-anim .lesson25-anim-formulas{grid-template-columns:1fr}}
 
 /* ===== BLANK TASK BLOCKS ===== */
@@ -8921,7 +8923,7 @@ function openTaskAnimationPlaceholder(taskId){
     overlay.className='task-animation-placeholder-overlay';
 
     overlay.innerHTML=`
-      <div class="task-animation-placeholder-modal">
+      <div class="task-animation-placeholder-modal fullscreen-animation">
         <button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder(); return false;">Скрыть</button>
 
         <h2 class="task-animation-placeholder-title">Анимация</h2>
@@ -12099,7 +12101,7 @@ function openLegacyTaskAnimation(animationId){
   if(!overlay){
     overlay=document.createElement('div');
     overlay.id='legacyTaskAnimationOverlay';
-    overlay.className='task-board-animation-overlay legacy-task-animation-overlay';
+    overlay.className='task-board-animation-overlay legacy-task-animation-overlay fullscreen-animation';
     overlay.setAttribute('aria-hidden','true');
     document.body.appendChild(overlay);
   }
@@ -12261,7 +12263,7 @@ function ensureTask07AnimationOverlay(){
   if(overlay) return overlay;
   document.body.insertAdjacentHTML('beforeend', `
     <div id="task07AnimationOverlay" class="task07-anim-overlay task-board-animation-overlay" aria-hidden="true">
-      <div class="task07-anim-modal" role="dialog" aria-modal="true" aria-labelledby="task07AnimTitle">
+      <div class="task07-anim-modal fullscreen-animation" role="dialog" aria-modal="true" aria-labelledby="task07AnimTitle">
         <div class="task07-anim-head">
           <div>
             <div class="task07-anim-kicker">ЕГЭ · Физика · Урок 12 · Задача 10</div>
