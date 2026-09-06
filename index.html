@@ -1082,6 +1082,7 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 .task07-anim-lock{overflow:hidden}
 .task-board-animation-overlay,.task-animation-overlay,.task07-anim-overlay{position:fixed;inset:0;z-index:2147483600;display:none;pointer-events:none;background:radial-gradient(circle at 18% 12%,rgba(0,229,255,.16),transparent 34%),radial-gradient(circle at 78% 18%,rgba(255,140,0,.16),transparent 30%),rgba(2,6,23,.94);backdrop-filter:blur(10px);color:var(--white);padding:18px;box-sizing:border-box;overflow:auto}
 .task-board-animation-overlay.open,.task-animation-overlay.open,.task07-anim-overlay.open{display:flex;align-items:center;justify-content:center;pointer-events:auto;animation:taskBoardOverlayFade .24s ease both}
+.legacy-task-animation-overlay .task-board-popup{position:relative;inset:auto;display:block;width:min(1100px,100%);max-height:calc(100vh - 36px);overflow:auto;margin:auto}
 .task07-anim-modal{width:min(1180px,100%);height:min(820px,100%);min-height:auto;margin:auto;display:flex;flex-direction:column;gap:14px;background:linear-gradient(180deg,rgba(11,18,32,.98),rgba(5,10,20,.98));border:1px solid rgba(0,229,255,.24);border-radius:24px;box-shadow:0 34px 90px rgba(0,0,0,.52),0 0 60px rgba(0,229,255,.12);overflow:visible}
 .task07-anim-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:18px 20px 0}.task07-anim-head>div{flex:1 1 auto;min-width:0}
 .task07-anim-kicker{font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:var(--cyan);margin-bottom:5px}
@@ -7686,7 +7687,7 @@ const LESSON_TASKS={
 'Импульс':[
   {
     num:1,level:2,exam:'ЕГЭ (1 балл)',title:'Импульс первого автомобиля в системе второго',
-    boardMode:'impulseCars',graphLabel:'График',
+    boardMode:'impulseCars',animationId:'impulseCars',graphLabel:'График',hasAnimation:true,
     cond:'На рисунке показаны графики зависимости проекции импульса <strong>p<sub>x</sub></strong> двух автомобилей от проекции их скорости <strong>v<sub>x</sub></strong> относительно Земли. Найдите импульс первого автомобиля в системе отсчёта, связанной со вторым автомобилем, если в рассматриваемый момент <strong>v<sub>1x</sub>=20 м/с</strong> и <strong>v<sub>2x</sub>=20 м/с</strong>.',
     given:'v<sub>1x</sub>=20 м/с, v<sub>2x</sub>=20 м/с, по графику p<sub>1x</sub>=9000 кг·м/с<br><span class="pt-find">Найти: p′<sub>1x</sub> в системе отсчёта второго автомобиля</span>',
     steps:[
@@ -7731,8 +7732,8 @@ const LESSON_TASKS={
 
 'Закон сохранения импульса и изменения импульса':[
   {
-    num:1,level:2,exam:'ЕГЭ (1 балл)',title:'Импульс системы после абсолютно неупругого удара',
-    boardMode:'momentumSystem',graphLabel:'Схема',
+    id:'momentum-system-inelastic-impact',num:1,level:2,exam:'ЕГЭ (1 балл)',title:'Импульс системы после абсолютно неупругого удара',
+    boardMode:'momentumSystem',animationId:'momentumSystem',graphLabel:'Схема',hasAnimation:true,
     cond:'Два тела движутся по взаимно перпендикулярным пересекающимся прямым, как показано на рисунке. Модуль импульса первого тела равен <strong>3 кг·м/с</strong>, а второго тела равен <strong>4 кг·м/с</strong>. Чему равен модуль импульса системы этих тел после их абсолютно неупругого удара?',
     given:'|p<sub>1</sub>|=3 кг·м/с, |p<sub>2</sub>|=4 кг·м/с, <span class="fml">p<sub>1</sub> ⟂ p<sub>2</sub></span>, удар абсолютно неупругий<br><span class="pt-find">Найти: |P| после удара</span>',
     steps:[
@@ -7748,7 +7749,7 @@ const LESSON_TASKS={
   },
   {
     num:2,level:3,exam:'ЕГЭ (2 балла)',title:'Высота подъёма доски после удара',
-    boardMode:'energyPendulum',graphLabel:'Схема',
+    boardMode:'energyPendulum',animationId:'energyPendulum',graphLabel:'Схема',hasAnimation:true,
     cond:'Доска массой <strong>0,8 кг</strong> шарнирно подвешена к потолку на лёгком стержне. На доску со скоростью <strong>10 м/с</strong> налетает пластилиновый шарик массой <strong>0,2 кг</strong> и прилипает к ней. Скорость шарика перед ударом направлена под углом <strong>60°</strong> к нормали к доске. Чему равна высота подъёма доски относительно положения равновесия после соударения? Ускорение свободного падения считать равным <strong>10 м/с²</strong>.',
     given:'M=0,8 кг, m=0,2 кг, v=10 м/с, α=60°, g=10 м/с²<br><span class="pt-find">Найти: h</span>',
     steps:[
@@ -7765,7 +7766,7 @@ const LESSON_TASKS={
   },
   {
     num:3,level:3,exam:'ЕГЭ (2 балла)',title:'Импульс шайб после удара',
-    boardMode:'puckImpulse',graphLabel:'Схема',hasAnimation:true,
+    boardMode:'puckImpulse',animationId:'puckImpulse',graphLabel:'Схема',hasAnimation:true,
     cond:'По гладкой горизонтальной плоскости по осям <strong>x</strong> и <strong>y</strong> движутся две шайбы с импульсами, равными по модулю <strong>p<sub>1</sub> = 2 кг·м/с</strong> и <strong>p<sub>2</sub> = 3,5 кг·м/с</strong>, как показано на рисунке. После соударения вторая шайба продолжает двигаться по оси <strong>y</strong> в прежнем направлении с импульсом, равным по модулю <strong>p<sub>3</sub> = 2 кг·м/с</strong>. Найдите модуль импульса первой шайбы после удара.',
     given:'p<sub>1</sub> = 2 кг·м/с, p<sub>2</sub> = 3,5 кг·м/с, p<sub>3</sub> = 2 кг·м/с (вверх по оси y)<br><span class="pt-find">Найти: модуль импульса первой шайбы после удара p<sub>4</sub> и её направление</span>',
     steps:[],
@@ -7795,7 +7796,7 @@ const LESSON_TASKS={
 
   {
     num:4,level:3,exam:'ЕГЭ (2 балла)',title:'Куда направлены осколки после взрыва?',
-    boardMode:'explosionFragments',graphLabel:'Схема',hasAnimation:true,
+    boardMode:'explosionFragments',animationId:'explosionFragments',graphLabel:'Схема',hasAnimation:true,
     cond:'Снаряд массой <strong>4 кг</strong>, летящий со скоростью <strong>400 м/с</strong>, разрывается на две равные части, одна из которых летит в направлении движения снаряда, а другая — в противоположную сторону. В момент разрыва суммарная кинетическая энергия осколков увеличилась на величину <strong>ΔE</strong>. Скорость осколка, летящего по направлению движения снаряда, равна <strong>900 м/с</strong>. Найдите <strong>ΔE</strong>.',
     given:'M = 4 кг, v<sub>0</sub> = 400 м/с, m<sub>1</sub> = m<sub>2</sub> = 2 кг, v<sub>1</sub> = 900 м/с, второй осколок движется в противоположную сторону<br><span class="pt-find">Найти: ΔE</span>',
     steps:[],
@@ -7828,7 +7829,7 @@ const LESSON_TASKS={
 
   {
     num:5,level:3,exam:'ЕГЭ (2 балла)',title:'Абсолютно неупругое столкновение брусков',
-    boardMode:'inelasticBlocks',graphLabel:'Схема',hasAnimation:true,
+    boardMode:'inelasticBlocks',animationId:'inelasticBlocks',graphLabel:'Схема',hasAnimation:true,
     cond:'Брусок массой <strong>m<sub>1</sub> = 500 г</strong> соскальзывает по наклонной плоскости с высоты <strong>h = 0,8 м</strong>, затем движется по горизонтальной поверхности и сталкивается с неподвижным бруском массы <strong>m<sub>2</sub> = 300 г</strong>. Столкновение абсолютно неупругое. Трением пренебречь. Определите общую кинетическую энергию брусков после столкновения.',
     given:'m<sub>1</sub> = 0,5 кг, m<sub>2</sub> = 0,3 кг, h = 0,8 м, g ≈ 10 м/с², столкновение абсолютно неупругое<br><span class="pt-find">Найти: E<sub>к</sub> после столкновения</span>',
     steps:[],
@@ -7859,7 +7860,7 @@ const LESSON_TASKS={
   },
   {
     num:6,level:2,exam:'ЕГЭ (1 балл)',title:'Импульс тележки после падения камня',
-    boardMode:'cartStone',graphLabel:'Схема',hasAnimation:true,
+    boardMode:'cartStone',animationId:'cartStone',graphLabel:'Схема',hasAnimation:true,
     cond:'Камень массой <strong>m<sub>1</sub> = 4 кг</strong> падает под углом <strong>60°</strong> к горизонту со скоростью <strong>10 м/с</strong> в тележку с песком, покоящуюся на горизонтальных рельсах. Чему равен импульс тележки с песком и камнем после падения камня?',
     given:'m<sub>1</sub> = 4 кг, v = 10 м/с, α = 60°, тележка до удара покоится<br><span class="pt-find">Найти: p</span>',
     steps:[],
@@ -7883,7 +7884,7 @@ const LESSON_TASKS={
   {
     id:'lesson12-task07',
     num:7,level:3,exam:'ЕГЭ (2 балла)',points:2,title:'Абсолютно неупругое столкновение пластилина и бруска',
-    boardMode:'inelasticFriction',graphLabel:'Схема',hasAnimation:true,
+    boardMode:'inelasticFriction',animationId:'inelasticFriction',graphLabel:'Схема',hasAnimation:true,
     tags:['импульс','трение','неупругое столкновение','ЕГЭ','сложный'],
     cond:'Кусок пластилина сталкивается со скользящим навстречу по горизонтальной поверхности стола бруском и прилипает к нему. Скорости пластилина и бруска перед ударом направлены противоположно и равны <strong>v<sub>пл</sub> = 15 м/с</strong> и <strong>v<sub>бр</sub> = 5 м/с</strong>. Масса бруска в <strong>4</strong> раза больше массы пластилина. Коэффициент трения скольжения между бруском и столом <strong>μ = 0,17</strong>. На какое расстояние переместятся слипшиеся брусок с пластилином к моменту, когда их скорость уменьшится на <strong>30%</strong>?',
     given:'m<sub>пл</sub> = m<br>m<sub>бр</sub> = 4m<br>v<sub>пл</sub> = 15 м/с<br>v<sub>бр</sub> = 5 м/с<br>μ = 0,17<br>g ≈ 10 м/с²<br>стол горизонтальный, после удара тела движутся вместе<br><span class="pt-find">Найти: s — путь до уменьшения скорости на 30%</span>',
@@ -7919,7 +7920,7 @@ const LESSON_TASKS={
   {
     id:'lesson12-task08',
     num:8,level:3,exam:'ЕГЭ (2 балла)',points:2,title:'Пробирка с каплей эфира',
-    boardMode:'etherCork',graphLabel:'Схема',hasAnimation:true,
+    boardMode:'etherCork',animationId:'etherCork',graphLabel:'Схема',hasAnimation:true,
     tags:['импульс','энергия','движение по окружности','ЕГЭ','сложный'],
     cond:'Пробирка с каплей эфира подвешена на нити длиной <strong>1 м</strong>. С какой скоростью должна вылететь пробка после нагревания эфира, чтобы пробирка сделала полный оборот в вертикальной плоскости? Масса пробирки <strong>100 г</strong>, а пробки — <strong>20 г</strong>.',
     given:'L = 1 м<br>M = 100 г = 0,10 кг — масса пробирки<br>m = 20 г = 0,020 кг — масса пробки<br>g = 9,8 м/с² ≈ 10 м/с²<br><span class="pt-find">Найти: v — скорость вылета пробки</span>',
@@ -7948,7 +7949,7 @@ const LESSON_TASKS={
   {
     id:'lesson12-task09',
     num:9,level:3,exam:'ЕГЭ (2 балла)',points:2,title:'Распад снаряда на два осколка',
-    boardMode:'explosionFragmentsVector',graphLabel:'Схема',hasAnimation:true,
+    boardMode:'explosionFragmentsVector',animationId:'explosionFragmentsVector',graphLabel:'Схема',hasAnimation:true,
     tags:['импульс','векторы','распад','ЕГЭ','сложный'],
     cond:'Снаряд, летящий горизонтально вправо со скоростью <strong><span class="vec">v</span><sub>0</sub></strong>, распадается на два осколка. Больший осколок после распада летит вертикально вверх со скоростью <strong><span class="vec">v</span><sub>1</sub> = <span class="vec">v</span><sub>0</sub></strong>, второй осколок летит вниз-вправо со скоростью <strong><span class="vec">v</span><sub>2</sub> = 5<span class="vec">v</span><sub>0</sub></strong>. Используя закон сохранения импульса, объясните, как направлены импульсы осколков после распада.',
     given:'<span class="vec">v</span><sub>0</sub> — скорость снаряда до распада<br><span class="vec">v</span><sub>1</sub> = <span class="vec">v</span><sub>0</sub> — скорость большего осколка вверх<br><span class="vec">v</span><sub>2</sub> = 5<span class="vec">v</span><sub>0</sub> — скорость второго осколка вниз-вправо<br><span class="pt-find">Найти: векторную связь импульсов после распада</span>',
@@ -7977,7 +7978,7 @@ const LESSON_TASKS={
   {
     id:'lesson12-task10',
     num:10,level:3,exam:'ЕГЭ (2 балла)',points:2,title:'Маятник после удара',
-    boardMode:'task10-pendulum-impact',graphLabel:'Схема',hasAnimation:true,
+    boardMode:'task10-pendulum-impact',animationId:'lesson12-task10',graphLabel:'Схема',hasAnimation:true,
     tags:['импульс','энергия','маятник','ЕГЭ','сложный'],
     cond:'Маятник состоит из маленького груза массой M = 200 г и очень легкой нити подвеса длиной L = 1,25 м. Он висит в состоянии покоя в вертикальном положении. В груз ударяется небольшое тело массой m = 100 г, летевшее в горизонтальном направлении со скоростью v = 10 м/с. После удара тело останавливается и падает вертикально вниз. На какой максимальный угол α маятник отклонится от положения равновесия после удара?',
     given:'M = 200 г = 0,2 кг<br>m = 100 г = 0,1 кг<br>L = 1,25 м<br>v = 10 м/с<br>g = 10 м/с²<br>после удара малое тело останавливается<br><span class="pt-find">Найти: α — максимальный угол отклонения маятника</span>',
@@ -8010,7 +8011,7 @@ const LESSON_TASKS={
 'Закон сохранения энергии и изменения энергии':[
   {
     num:1,level:2,exam:'ЕГЭ (1 балл)',title:'Скорость шайбы после удара у основания горки',
-    boardMode:'energyHill',graphLabel:'Схема',
+    boardMode:'energyHill',animationId:'energyHill',graphLabel:'Схема',hasAnimation:true,
     cond:'После удара клюшкой шайба стала скользить вверх по ледяной горке от её основания и у её вершины имела скорость <strong>5 м/с</strong>. Высота горки <strong>10 м</strong>. Трение шайбы о лёд пренебрежимо мало. Какова скорость шайбы сразу после удара? Ускорение свободного падения считать равным <strong>10 м/с²</strong>.',
     given:'v<sub>1</sub>=5 м/с, h=10 м, g=10 м/с², трение отсутствует<br><span class="pt-find">Найти: v<sub>0</sub></span>',
     steps:[
@@ -8776,7 +8777,7 @@ function renderPTasks(name){
       animId:t.animId||t.animationId||''
     };
     const boardBtn=`<button type="button" class="pt-board-btn" data-action="board" data-task-id="${escapeHtml(taskId)}" data-board-mode="${escapeHtml(boardMode)}" onclick="return openTaskBoard('${boardModeSafe}',true,'${taskIdSafe}')">🧑‍🏫 Доска</button>`;
-    const animationBtn=`<button type="button" class="pt-anim-btn" data-action="animation" data-task-id="${escapeHtml(taskId)}" data-animation-id="${escapeHtml(t.animationId||t.animId||'')}" onclick="return handleOpenAnimationClick(event)">▶ Анимация</button>`;
+    const animationBtn=hasRegisteredTaskAnimation(t)?`<button type="button" class="pt-anim-btn" data-action="animation" data-task-id="${escapeHtml(taskId)}" data-animation-id="${escapeHtml(t.animationId||t.animId||'')}" onclick="return handleOpenAnimationClick(event)">▶ Анимация</button>`:'';
     const hasStructuredSolution=hasFilledTaskSolution(t)||hasLegacyTaskTextSolution(t);
     const embeddedRaw=hasStructuredSolution?renderTaskSolutionPanel(t,'pt'):(t.solutionHtml||getEmbeddedSolutionHtml(t));
     const embedded=String(embeddedRaw||'').trim();
@@ -8825,6 +8826,21 @@ function getCurrentTaskBoardTask(){
   return null;
 }
 
+const LEGACY_TASK_ANIMATION_IDS=new Set([
+  'impulseCars','momentumSystem','energyHill','energyPendulum','puckImpulse',
+  'explosionFragments','explosionFragmentsVector','inelasticBlocks','cartStone',
+  'inelasticFriction','etherCork','newtonForceAcceleration','newtonInclineFriction'
+]);
+
+function hasRegisteredTaskAnimation(task){
+  if(!task) return false;
+  const animationId=String(task.animationId||task.animId||'');
+  if(LEGACY_TASK_ANIMATION_IDS.has(animationId)) return true;
+  if(isFreeFallAnimationId(animationId)||isBallisticsTaskAnimationId(animationId)||isGasHeatingAnimationId(animationId)) return true;
+  return animationId==='ballistics-incline-elastic-bounce-task03'||animationId==='lesson12-task10'||
+    animationId==='lesson-25-task-04'||animationId==='lesson-25-task-06'||animationId==='lesson-25-task-07';
+}
+
 function openTaskAnimation(taskOrId,options){
   options=options||{};
 
@@ -8856,12 +8872,6 @@ function openTaskAnimation(taskOrId,options){
   TASK_ANIMATION_CONTEXT.taskId=realId||animationId||'';
   TASK_ANIMATION_CONTEXT.fromBoard=fromBoard;
   TASK_ANIMATION_CONTEXT.openedBoardForAnimation=false;
-
-  if(realId==='lesson12-task07'||boardMode==='task07-pendulum-impact'){
-    if(taskBoardState&&taskBoardState.animBtn) taskBoardState.animBtn.textContent='✕ Анимация';
-    openTaskAnimationOverlay('lesson12-task07');
-    return false;
-  }
 
   if(realId==='lesson12-task10'||boardMode==='task10-pendulum-impact'){
     if(taskBoardState&&taskBoardState.animBtn) taskBoardState.animBtn.textContent='✕ Анимация';
@@ -10759,7 +10769,7 @@ function openTaskBoard(mode,requestFullscreen=false,taskId=''){
   }
   if(state.simKeyLabel) state.simKeyLabel.textContent='Ключевая мысль';
   if(state.animBtn){
-    state.animBtn.style.display='inline-flex';
+    state.animBtn.style.display=hasRegisteredTaskAnimation(task)?'inline-flex':'none';
     state.animBtn.disabled=false;
     state.animBtn.textContent='▶ Анимация';
     state.animBtn.setAttribute('data-task-id',state.taskId||task.id||taskId||resolvedMode||'');
@@ -12016,6 +12026,9 @@ function openGasHeatingAnimation(taskId){
 }
 
 function openTaskAnimationOverlay(taskId){
+  if(LEGACY_TASK_ANIMATION_IDS.has(String(taskId||''))){
+    return openLegacyTaskAnimation(taskId);
+  }
   if(isGasHeatingAnimationId(taskId)){
     return openGasHeatingAnimation(taskId);
   }
@@ -12073,6 +12086,34 @@ function openTaskAnimationOverlay(taskId){
   renderTask07Animation(overlay.querySelector('[data-task07-stage]'));
   resetTask07Animation();
   playTask07Animation();
+}
+
+function openLegacyTaskAnimation(animationId){
+  const task=findTaskById(TASK_ANIMATION_CONTEXT.taskId)||findTaskById(animationId)||taskBoardState?.task||null;
+  if(!task) return openTaskAnimationPlaceholder(animationId);
+  const state=ensureTaskBoardOverlay();
+  const boardWasOpen=state.overlay.classList.contains('open');
+  if(!boardWasOpen||state.task!==task) openTaskBoard(task.boardMode||task.mode,false,task.id||'');
+
+  let overlay=document.getElementById('legacyTaskAnimationOverlay');
+  if(!overlay){
+    overlay=document.createElement('div');
+    overlay.id='legacyTaskAnimationOverlay';
+    overlay.className='task-board-animation-overlay legacy-task-animation-overlay';
+    overlay.setAttribute('aria-hidden','true');
+    document.body.appendChild(overlay);
+  }
+  overlay.dataset.keepTaskBoard=boardWasOpen?'true':'false';
+  overlay.appendChild(state.simPopup);
+  state.overlay.style.display='none';
+  state.overlay.style.pointerEvents='none';
+  overlay.classList.add('open');
+  overlay.style.display='flex';
+  overlay.style.pointerEvents='auto';
+  overlay.setAttribute('aria-hidden','false');
+  TASK_ANIMATION_CONTEXT.openedBoardForAnimation=!boardWasOpen;
+  toggleTaskBoardAnimation(true);
+  return false;
 }
 function renderLesson25Task04Animation(task){
   const condition=task?.cond||'';
@@ -12356,6 +12397,10 @@ function closeTaskBoardAnimation(){
     document.querySelector('.task-board-animation-overlay')||
     document.querySelector('.task-animation-overlay');
 
+  const isLegacyOverlay=!!(anim&&anim.id==='legacyTaskAnimationOverlay');
+  if(isLegacyOverlay&&state&&state.simPopup&&state.canvasWrap){
+    state.canvasWrap.appendChild(state.simPopup);
+  }
   if(anim){
     anim.classList.remove('open');
     anim.style.display='none';
