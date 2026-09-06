@@ -8169,6 +8169,42 @@ const LESSON_TASKS={
       </div>`,
     hasAnimation:true,
     ans:'ΔU = 31,2 кДж'
+  },
+  {
+    id:'lesson-49-task-02-oxygen-internal-energy',
+    boardMode:'lesson-49-task-02-oxygen-internal-energy',
+    mode:'lesson-49-task-02-oxygen-internal-energy',
+    animationId:'lesson-49-task-02-oxygen-internal-energy',
+    animId:'lesson-49-task-02-oxygen-internal-energy',
+    num:2,
+    level:2,
+    exam:'ЕГЭ (1 балл)',
+    points:1,
+    title:'Внутренняя энергия кислорода',
+    cond:'Какова внутренняя энергия 5 моль кислорода при 10 °C?',
+    given:'ν = 5 моль, t = 10 °C, T = 283 K, R = 8,31 Дж/(моль · К)<br><span class="pt-find">Найти: U</span>',
+    boardConditionHtml:'Какова внутренняя энергия <strong>5 моль</strong> кислорода при <strong>10 °C</strong>?',
+    boardSolutionHtml:`
+      <div class="task-board-manual">
+        <div class="task-board-step"><div class="task-board-step-num">1</div><div class="task-board-step-body"><strong>Дано:</strong><div class="sr-fml">ν = 5 моль; t = 10 °C; T = 283 K; R = 8,31 Дж/(моль · К)</div></div></div>
+        <div class="task-board-step"><div class="task-board-step-num">2</div><div class="task-board-step-body"><strong>Газ:</strong> кислород O₂ — двухатомный газ.</div></div>
+        <div class="task-board-step"><div class="task-board-step-num">3</div><div class="task-board-step-body"><strong>Формула:</strong><div class="sr-fml">U = 5/2 · νRT</div></div></div>
+        <div class="task-board-step"><div class="task-board-step-num">4</div><div class="task-board-step-body"><strong>Расчёт:</strong><div class="sr-fml">U = 5/2 · 5 · 8,31 · 283 ≈ 29396 Дж</div><div class="sr-fml">U ≈ 29,4 кДж</div></div></div>
+        <div class="task-board-step"><div class="task-board-step-num">5</div><div class="task-board-step-body"><strong>Ответ:</strong> <strong>29,4 кДж</strong>.</div></div>
+      </div>`,
+    solution:{
+      idea:'Кислород O₂ — двухатомный газ, поэтому внутренняя энергия идеального газа равна U = 5/2 · νRT.',
+      formulas:['T = t + 273','U = 5/2 · νRT'],
+      steps:['Дано: ν = 5 моль, t = 10 °C, T = 283 K, R = 8,31 Дж/(моль · К).','Подставим: U = 5/2 · 5 · 8,31 · 283 ≈ 29396 Дж.','Переведём в килоджоули: 29396 Дж ≈ 29,4 кДж.'],
+      answer:'29,4 кДж',
+      tutorHint:'Важно не переносить ошибочный ответ с черновика: правильная внутренняя энергия кислорода равна 29,4 кДж.'
+    },
+    solutionImage:'ege-physics/lesson-49/task-solutions/lesson-49-task-02-oxygen-internal-energy.png',
+    solutionImages:[{src:'ege-physics/lesson-49/task-solutions/lesson-49-task-02-oxygen-internal-energy.png',alt:'Решение задачи: внутренняя энергия кислорода'}],
+    solutionTitle:'Решение задачи: внутренняя энергия кислорода',
+    hasAnimation:true,
+    acceptedAnswers:['29,4','29.4','29400','29396','29396,6','29,4 кДж','29.4 кДж'],
+    ans:'29,4 кДж'
   }
 ],
 'Линзы':[
@@ -8734,6 +8770,27 @@ function renderTaskSolutionPanel(task,cls){
 function renderTaskSolutionWorkspace(task,cls){
   return renderTaskSolutionPanel(task,cls);
 }
+function normalizeLessonTaskAnswer(value){
+  return String(value||'').toLowerCase().replace(/ё/g,'е').replace(/кдж/g,'').replace(/дж/g,'').replace(/\s+/g,'').replace(/,/g,'.').trim();
+}
+function lessonTaskCheckAnswer(btn){
+  const gate=btn?btn.closest('[data-lesson-task-answer]'):null;
+  if(!gate) return false;
+  const input=gate.querySelector('.hw-answer-input');
+  const message=gate.querySelector('.hw-answer-message');
+  const user=normalizeLessonTaskAnswer(input&&input.value);
+  let accepted=[];
+  try{accepted=JSON.parse(gate.dataset.accepted||'[]');}catch(e){accepted=[];}
+  const ok=!!user&&accepted.map(normalizeLessonTaskAnswer).includes(user);
+  if(message){
+    message.className='hw-answer-message '+(ok?'ok':'err');
+    message.textContent=ok?'Верно: 29,4 кДж.':'Пока неверно. Проверьте формулу U = 5/2 · νRT и перевод в кДж.';
+  }
+  return false;
+}
+function lessonTaskAnswerKey(event,input){
+  if(event&&event.key==='Enter'){event.preventDefault(); const gate=input&&input.closest('[data-lesson-task-answer]'); const btn=gate&&gate.querySelector('[data-lesson-task-check]'); if(btn) lessonTaskCheckAnswer(btn);}
+}
 
 function renderPTasks(name){
   const baseTasks=Array.isArray(LESSON_TASKS[name])?LESSON_TASKS[name].map(t=>Object.assign({},t,{isBlank:!!(t&&t.isBlank)})):[];
@@ -8783,10 +8840,12 @@ function renderPTasks(name){
     const imageOnly=!embedded&&getTaskSolutionImages(t).length?renderSolutionImagesHtml(getTaskSolutionImages(t),'pt','Фото решения будет добавлено позже.'):'';
     const rich=(embedded||imageOnly)?`<div class="pt-rich-card">${embedded||imageOnly}</div>`:'';
     const answer=t.ans?String(t.ans):'';
+    const acceptedAnswers=Array.isArray(t.acceptedAnswers)?t.acceptedAnswers.map(v=>String(v).trim()).filter(Boolean):[];
+    const answerGate=acceptedAnswers.length?`<div class="hw-answer-gate" data-lesson-task-answer data-accepted="${escapeHtml(JSON.stringify(acceptedAnswers))}"><label class="hw-answer-label" for="${sid}_answer">Введите ответ</label><input class="hw-answer-input" id="${sid}_answer" type="text" inputmode="decimal" autocomplete="off" placeholder="Например: ${escapeHtml(answer||acceptedAnswers[0]||'')}" onkeydown="lessonTaskAnswerKey(event,this)"><div class="hw-answer-actions"><button class="pt-sol-btn" type="button" data-lesson-task-check onclick="lessonTaskCheckAnswer(this)">Проверить</button></div><p class="hw-answer-message" aria-live="polite"></p></div>`:'';
     const fallbackSolution='';
     const solutionInner=(embedded||imageOnly)?`${rich}${extra}`:`${steps}${extra}${fallbackSolution}`;
     const emptySolution=!String(solutionInner||'').trim();
-    return `<div class="pt-card${isBlank?' pt-blank-card':''}"><div class="pt-head"><div class="pt-num">${String(t.num).padStart(2,'0')}</div><span class="pt-level ${lvlC[t.level]||lvlC[1]}">${lvlL[t.level]||lvlL[1]}</span><span class="pt-exam">${t.exam||'ЕГЭ'}</span><span class="pt-title">${titleText}</span></div><div class="pt-body"><div class="pt-condition">${cond}</div>${scheme}<div class="pt-side">${boardBtn}${animationBtn}<button class="pt-sol-btn" data-empty-solution="${emptySolution?'1':'0'}" onclick="ptToggle('${sid}',this)">▶ Решение</button></div></div><div class="pt-solution" id="${sid}">${solutionInner}</div></div>`;
+    return `<div class="pt-card${isBlank?' pt-blank-card':''}"><div class="pt-head"><div class="pt-num">${String(t.num).padStart(2,'0')}</div><span class="pt-level ${lvlC[t.level]||lvlC[1]}">${lvlL[t.level]||lvlL[1]}</span><span class="pt-exam">${t.exam||'ЕГЭ'}</span><span class="pt-title">${titleText}</span></div><div class="pt-body"><div class="pt-condition">${cond}</div>${scheme}${answerGate}<div class="pt-side">${boardBtn}${animationBtn}<button class="pt-sol-btn" data-empty-solution="${emptySolution?'1':'0'}" onclick="ptToggle('${sid}',this)">▶ Решение</button></div></div><div class="pt-solution" id="${sid}">${solutionInner}</div></div>`;
   }
   const hasGroups=tasks.some(t=>t&&t.group);
   if(hasGroups){
