@@ -737,6 +737,20 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 .task-animation-placeholder-text{font-size:14px;line-height:1.45;font-weight:600;color:#334155}
 .task-animation-placeholder-empty{min-height:260px;border:1px dashed #cbd5e1;border-radius:18px;background:#f8fafc;display:flex;align-items:center;justify-content:center;text-align:center;color:#64748b;font-size:18px;font-weight:800}
 
+/* Compact, reusable task condition for every task animation modal. */
+.animation-condition-host{position:relative!important}
+.animation-condition-toggle{position:absolute;z-index:45;top:18px;right:122px;display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:8px 14px;border:1px solid #93c5fd;border-radius:12px;background:#eff6ff;color:#1d4ed8;font:800 13px var(--fb);cursor:pointer;box-shadow:0 8px 22px rgba(37,99,235,.12);transition:background .18s,border-color .18s,transform .18s}
+.animation-condition-toggle:hover{background:#dbeafe;border-color:#60a5fa;transform:translateY(-1px)}
+.animation-condition-panel{position:absolute!important;z-index:44!important;display:none!important;left:20px;top:72px;width:min(560px,calc(100% - 40px))!important;max-width:calc(100% - 40px)!important;max-height:min(62vh,520px)!important;margin:0!important;padding:0!important;overflow:hidden!important;border:1px solid #93c5fd!important;border-radius:16px!important;background:#f8fbff!important;color:#0f172a!important;box-shadow:0 20px 55px rgba(15,23,42,.28)!important;box-sizing:border-box!important;transform:none!important}
+.animation-condition-panel.is-open{display:flex!important;flex-direction:column}
+.animation-condition-header{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:46px;padding:9px 10px 9px 15px;background:#eff6ff;border-bottom:1px solid #bfdbfe;color:#1d4ed8;font:900 14px var(--fb);cursor:grab;touch-action:none;user-select:none}
+.animation-condition-header.is-dragging{cursor:grabbing}
+.animation-condition-close{flex:0 0 auto;width:32px;height:32px;border:1px solid #bfdbfe;border-radius:9px;background:#fff;color:#1e3a8a;font:900 21px/1 var(--fb);cursor:pointer}
+.animation-condition-close:hover{background:#dbeafe;border-color:#60a5fa}
+.animation-condition-body{min-height:0;padding:14px 16px;overflow:auto;overscroll-behavior:contain;color:#334155;font-size:14px;line-height:1.5;font-weight:600;-webkit-overflow-scrolling:touch}
+.animation-condition-body>.task-animation-placeholder-label,.animation-condition-body>.task-animation-condition-title,.animation-condition-body>.freefall-anim-label,.animation-condition-body>.lesson25-anim-label,.animation-condition-body>.gas-heating-label{display:none}
+@media(max-width:760px){.animation-condition-toggle{position:fixed;top:12px;right:112px;z-index:2147483640;min-height:36px;padding:7px 11px}.animation-condition-panel{left:10px;top:58px;width:calc(100% - 20px)!important;max-width:calc(100% - 20px)!important;max-height:min(68vh,460px)!important}.animation-condition-body{padding:12px 13px;font-size:13px}.animation-condition-header{min-height:44px}}
+
 .ballistics-task-animation-modal{width:100%;height:100%;max-width:none;max-height:none;background:linear-gradient(160deg,#07111f,#0b1626 62%,#101b2a);color:var(--white);border:1px solid rgba(8,216,255,.18);box-shadow:0 30px 100px rgba(0,0,0,.52),0 0 44px rgba(8,216,255,.12);padding:26px}
 .ballistics-task-animation-modal .task-animation-placeholder-close{background:rgba(255,255,255,.05);border-color:rgba(8,216,255,.28);color:var(--white)}
 .ballistics-task-animation-frame{width:100%;overflow:hidden;border:1px solid rgba(8,216,255,.18);border-radius:16px;background:var(--bg2);color:var(--white)}
@@ -15072,6 +15086,98 @@ else if(t<ZSI_T2){var ep=(t-ZSI_T1)/(ZSI_T2-ZSI_T1),r=ep*60;[1.0,0.72,0.46].forE
 else{var fp=Math.min((t-ZSI_T2)/(ZSI_TEND-ZSI_T2),1),ease=1-Math.pow(1-fp,2);var f1y=cy-ease*115;ctx.strokeStyle='rgba(57,255,20,0.15)';ctx.lineWidth=2;ctx.setLineDash([3,4]);ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx,f1y);ctx.stroke();ctx.setLineDash([]);var bG1=ctx.createRadialGradient(cx-4,f1y-4,1,cx,f1y,10);bG1.addColorStop(0,'#80ff80');bG1.addColorStop(1,'#1a8c1a');ctx.save();ctx.shadowColor='rgba(57,255,20,0.4)';ctx.shadowBlur=12;ctx.fillStyle=bG1;ctx.beginPath();ctx.arc(cx,f1y,10,0,Math.PI*2);ctx.fill();ctx.restore();if(f1y<cy-20){zaA(ctx,cx,f1y,cx,f1y-32,'#39ff14',1.8);}ctx.fillStyle='#39ff14';ctx.font='11px Golos Text,sans-serif';ctx.textAlign='right';if(fp>0.2){ctx.fillText('m₁=1 кг',cx-14,f1y+4);ctx.fillText('⊥ к v₀',cx-14,f1y+17);}var ang=Math.PI/3,f2d=ease*125,f2x=cx+f2d*Math.cos(ang),f2y=cy+f2d*Math.sin(ang);ctx.strokeStyle='rgba(255,140,0,0.15)';ctx.setLineDash([3,4]);ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(f2x,f2y);ctx.stroke();ctx.setLineDash([]);var bG2=ctx.createRadialGradient(f2x-4,f2y-4,1,f2x,f2y,10);bG2.addColorStop(0,'#ffcc66');bG2.addColorStop(1,'#a05000');ctx.save();ctx.shadowColor='rgba(255,140,0,0.4)';ctx.shadowBlur=12;ctx.fillStyle=bG2;ctx.beginPath();ctx.arc(f2x,f2y,10,0,Math.PI*2);ctx.fill();ctx.restore();if(fp>0.1){zaA(ctx,f2x,f2y,f2x+28*Math.cos(ang),f2y+28*Math.sin(ang),'#ff8c00',1.8);}ctx.fillStyle='#ff8c00';ctx.font='11px Golos Text,sans-serif';ctx.textAlign='left';if(fp>0.2){ctx.fillText('m₂=1 кг',f2x+13,f2y-7);ctx.fillText('v₂=400 м/с',f2x+13,f2y+6);}ctx.fillStyle='rgba(255,200,60,0.8)';ctx.beginPath();ctx.arc(cx,cy,5,0,Math.PI*2);ctx.fill();if(fp>0.55){var aa=Math.min((fp-0.55)/0.3,1);ctx.strokeStyle='rgba(255,255,255,'+aa*0.75+')';ctx.lineWidth=1.5;ctx.setLineDash([]);ctx.beginPath();ctx.arc(cx,cy,42,0,ang);ctx.stroke();ctx.strokeStyle='rgba(255,255,255,'+aa*0.25+')';ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+55,cy);ctx.stroke();ctx.setLineDash([]);if(aa>0.5){ctx.fillStyle='rgba(255,255,255,'+aa+')';ctx.font='bold 14px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('α = 60°',cx+46,cy+18);}}if(fp>0.9){ctx.fillStyle='rgba(168,85,247,'+Math.min((fp-0.9)/0.1,1)+')';ctx.font='bold 14px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('Ответ: α₂ = 60°',14,22);}}}
 function zaA(ctx,x1,y1,x2,y2,col,lw){var dx=x2-x1,dy=y2-y1,L=Math.sqrt(dx*dx+dy*dy);if(L<2)return;var ux=dx/L,uy=dy/L,h=8;ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=lw||2;ctx.setLineDash([]);ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-h*ux+h*0.45*uy,y2-h*uy-h*0.45*ux);ctx.lineTo(x2-h*ux-h*0.45*uy,y2-h*uy+h*0.45*ux);ctx.closePath();ctx.fill();}
 function zsiDrawVec(){var cv=document.getElementById('zsiVecCanvas');if(!cv)return;var dpr=window.devicePixelRatio||1,W=cv.offsetWidth||500,H=160;cv.width=W*dpr;cv.height=H*dpr;cv.style.height=H+'px';var ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);ctx.fillStyle='#080f18';ctx.fillRect(0,0,W,H);var sc=0.44,p0=200*sc,p1=346*sc,p2=400*sc,ox=36,oy=H-30,ang=Math.PI/3;ctx.strokeStyle='rgba(107,122,141,0.2)';ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(ox,oy);ctx.lineTo(ox+190,oy);ctx.stroke();ctx.beginPath();ctx.moveTo(ox,oy);ctx.lineTo(ox,oy-145);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='rgba(107,122,141,0.5)';ctx.font='10px Golos Text,sans-serif';ctx.textAlign='center';ctx.fillText('X →',ox+190,oy+12);ctx.fillText('↑ Y',ox,oy-148);zaA(ctx,ox,oy,ox+p0,oy,'#00e5ff',2.5);ctx.fillStyle='#00e5ff';ctx.font='bold 11px Golos Text,sans-serif';ctx.textAlign='center';taskBoardSimDrawVectorText(ctx,[{base:'p',sub:'0'},'=200'],ox+p0/2,oy+14,{color:'#00e5ff',fontSize:11,weight:'bold',align:'center'});zaA(ctx,ox,oy,ox,oy-p1,'#39ff14',2.5);ctx.fillStyle='#39ff14';ctx.textAlign='right';taskBoardSimDrawVectorText(ctx,[{base:'p',sub:'1'},'≈346'],ox-8,oy-p1/2,{color:'#39ff14',fontSize:11,weight:'bold',align:'right'});var p2x=p2*Math.cos(ang),p2y=p2*Math.sin(ang);zaA(ctx,ox,oy,ox+p2x,oy+p2y,'#ff8c00',2.5);ctx.fillStyle='#ff8c00';ctx.textAlign='left';taskBoardSimDrawVectorText(ctx,[{base:'p',sub:'2'},'=400'],ox+p2x+8,oy+p2y/2+4,{color:'#ff8c00',fontSize:11,weight:'bold'});ctx.strokeStyle='rgba(255,255,255,0.55)';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(ox,oy,30,0,ang);ctx.stroke();ctx.fillStyle='white';ctx.font='bold 11px Golos Text,sans-serif';ctx.textAlign='left';ctx.fillText('60°',ox+33,oy+18);var sq=7;ctx.strokeStyle='rgba(57,255,20,0.55)';ctx.lineWidth=1;ctx.strokeRect(ox,oy-sq,sq,sq);ctx.strokeStyle='rgba(255,140,0,0.3)';ctx.lineWidth=1;ctx.setLineDash([3,4]);ctx.beginPath();ctx.moveTo(ox+p2x,oy+p2y);ctx.lineTo(ox+p2x,oy);ctx.stroke();ctx.beginPath();ctx.moveTo(ox+p2x,oy+p2y);ctx.lineTo(ox,oy+p2y);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='rgba(255,140,0,0.65)';ctx.font='10px Golos Text,sans-serif';ctx.textAlign='center';taskBoardSimDrawVectorText(ctx,[{base:'p',sub:'0'}],ox+p2x/2,oy+12,{color:'rgba(255,140,0,0.65)',fontSize:10,weight:'400',align:'center'});ctx.fillStyle='rgba(168,85,247,0.9)';ctx.font='bold 11px Golos Text,sans-serif';ctx.textAlign='left';taskBoardSimDrawVectorText(ctx,['cosα = ',{base:'p',sub:'0'},'/',{base:'p',sub:'2'},' = 200/400 = 0.5  →  α = 60°'],ox,16,{color:'rgba(168,85,247,0.9)',fontSize:11,weight:'bold'});}
+
+/* Turn the large inline condition in any task animation into a movable overlay. */
+const ANIMATION_CONDITION_SELECTOR=[
+  '.task-animation-placeholder-condition',
+  '.task-animation-condition',
+  '.freefall-anim-condition',
+  '.lesson25-anim-condition',
+  '.gas-heating-condition',
+  '.fc-cond'
+].join(',');
+
+function constrainAnimationCondition(panel,host){
+  if(!panel.classList.contains('is-open')) return;
+  const pad=10,maxX=Math.max(pad,host.clientWidth-panel.offsetWidth-pad),maxY=Math.max(pad,host.clientHeight-panel.offsetHeight-pad);
+  const x=Math.min(maxX,Math.max(pad,parseFloat(panel.style.left)||pad));
+  const y=Math.min(maxY,Math.max(pad,parseFloat(panel.style.top)||58));
+  panel.style.left=x+'px';
+  panel.style.top=y+'px';
+}
+
+function enhanceAnimationCondition(condition){
+  if(!condition||condition.dataset.floatingCondition==='true') return;
+  const host=condition.closest('.task-animation-placeholder-modal,.task07-anim-modal,.task-board-popup');
+  if(!host) return;
+  condition.dataset.floatingCondition='true';
+  host.classList.add('animation-condition-host');
+  condition.classList.add('animation-condition-panel');
+  condition.setAttribute('role','dialog');
+  condition.setAttribute('aria-label','Условие задачи');
+  condition.setAttribute('aria-hidden','true');
+
+  const body=document.createElement('div');
+  body.className='animation-condition-body';
+  while(condition.firstChild) body.appendChild(condition.firstChild);
+  const header=document.createElement('div');
+  header.className='animation-condition-header';
+  header.innerHTML='<span>Условие задачи</span><button type="button" class="animation-condition-close" aria-label="Скрыть условие">×</button>';
+  condition.append(header,body);
+  host.appendChild(condition); // Removes the former large block from document flow.
+
+  const toggle=document.createElement('button');
+  toggle.type='button';
+  toggle.className='animation-condition-toggle';
+  toggle.textContent='Условие';
+  toggle.setAttribute('aria-expanded','false');
+  host.appendChild(toggle);
+  const setOpen=function(open){
+    condition.classList.toggle('is-open',open);
+    condition.setAttribute('aria-hidden',String(!open));
+    toggle.setAttribute('aria-expanded',String(open));
+    if(open) requestAnimationFrame(function(){constrainAnimationCondition(condition,host);});
+  };
+  toggle.addEventListener('click',function(){setOpen(!condition.classList.contains('is-open'));});
+  header.querySelector('.animation-condition-close').addEventListener('click',function(event){event.stopPropagation();setOpen(false);toggle.focus();});
+
+  let drag=null;
+  header.addEventListener('pointerdown',function(event){
+    if(event.target.closest('button')) return;
+    const panelRect=condition.getBoundingClientRect(),hostRect=host.getBoundingClientRect();
+    drag={id:event.pointerId,dx:event.clientX-panelRect.left,dy:event.clientY-panelRect.top,hostRect:hostRect};
+    header.classList.add('is-dragging');
+    header.setPointerCapture(event.pointerId);
+    event.preventDefault();
+  });
+  header.addEventListener('pointermove',function(event){
+    if(!drag||event.pointerId!==drag.id) return;
+    condition.style.left=(event.clientX-drag.hostRect.left-drag.dx+host.scrollLeft)+'px';
+    condition.style.top=(event.clientY-drag.hostRect.top-drag.dy+host.scrollTop)+'px';
+    constrainAnimationCondition(condition,host);
+  });
+  const stopDrag=function(event){
+    if(!drag||event.pointerId!==drag.id) return;
+    drag=null;header.classList.remove('is-dragging');
+  };
+  header.addEventListener('pointerup',stopDrag);
+  header.addEventListener('pointercancel',stopDrag);
+}
+
+function enhanceAllAnimationConditions(root){
+  if(root.nodeType!==1&&root.nodeType!==9) return;
+  if(root.matches?.(ANIMATION_CONDITION_SELECTOR)) enhanceAnimationCondition(root);
+  root.querySelectorAll?.(ANIMATION_CONDITION_SELECTOR).forEach(enhanceAnimationCondition);
+}
+
+(function(){
+  const start=function(){
+    enhanceAllAnimationConditions(document);
+    new MutationObserver(function(records){records.forEach(function(record){record.addedNodes.forEach(enhanceAllAnimationConditions);});}).observe(document.body,{childList:true,subtree:true});
+    window.addEventListener('resize',function(){document.querySelectorAll('.animation-condition-panel.is-open').forEach(function(panel){const host=panel.closest('.animation-condition-host');if(host)constrainAnimationCondition(panel,host);});});
+  };
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start,{once:true}); else start();
+})();
 
 function enlargeSmallNonClickableText(){
   var nodes=document.querySelectorAll('body *');
