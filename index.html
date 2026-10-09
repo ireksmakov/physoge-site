@@ -5896,8 +5896,12 @@ function showTab(id,btn,colorClass){
 /* ============ THEORY RENDERING ============ */
 function renderTheory(){
   if(AC==='oge-phy'&&CM===1&&CL===0){
-    return `<div class="theory-image-block" style="margin-bottom:12px">
-      <img class="lesson-theory-image" data-image-zoom="true" src="images/course/oge-phy/m-1/l-0/theory/reference-frame-path-displacement-speed.png" alt="Система отсчёта, путь, перемещение и скорость: определения, сравнение пути и перемещения, основные формулы">
+    const theoryImages=[
+      {src:'images/course/oge-phy/m-1/l-0/theory/reference-frame-path-displacement-speed.png',alt:'Система отсчёта, путь, перемещение и скорость: определения, сравнение пути и перемещения, основные формулы'},
+      {src:'images/course/oge-phy/m-1/l-0/theory/reference-frame-motion-types.png',alt:'Система отсчёта, путь, перемещение и скорость: материальная точка, относительность движения, виды движения, координаты и инерциальные системы отсчёта'}
+    ];
+    return `<div class="zsi-theory-carousel oge-phy-m1-l0-theory-carousel" style="margin-bottom:12px">
+      ${createImageCarousel(theoryImages,{className:'zsi-unified-image-carousel',imgClass:'theory-carousel-img universal-viewable-image image-carousel-img',captions:false,hint:'Перелистывайте карточки кнопками со стрелками. Нажмите на фото, чтобы увеличить.'})}
     </div>${renderTheoryBlocks(getTH())}`;
   }
   if(AC==='ege-phy'&&CM===0&&CL===0){
