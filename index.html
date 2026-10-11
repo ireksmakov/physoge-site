@@ -1482,7 +1482,6 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 .thx-list-tight li{margin:4px 0}
 .oge-math-powers-roots-theory math{font-size:1.2em;vertical-align:middle}
 .oge-math-powers-roots-theory .thx-eq math{font-size:1em}
-.oge-math-powers-roots-theory th,.oge-math-powers-roots-theory td{padding:6px 8px;text-align:left;border-bottom:1px solid var(--border)}
 .thx-scheme{display:flex;flex-direction:column;gap:10px}
 .thx-scheme-step{padding:10px 12px;border-radius:12px;background:rgba(0,229,255,.04);border:1px solid rgba(0,229,255,.12)}
 .thx-scheme-step strong{color:var(--white)}
@@ -3212,30 +3211,6 @@ const OGE_MATH_POWERS_ROOTS_THEORY=[
       <li>Умейте выносить множитель из-под корня и вносить его под корень.</li>
     </ol>
     <div class="thx-note"><p><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mrow><msup><mi>a</mi><mn>2</mn></msup><mi>b</mi></mrow></msqrt><mo>=</mo><mo>|</mo><mi>a</mi><mo>|</mo><msqrt><mi>b</mi></msqrt></math> при <em>b ≥ 0</em>.</p><p><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi><msqrt><mi>b</mi></msqrt><mo>=</mo><msqrt><mrow><msup><mi>a</mi><mn>2</mn></msup><mi>b</mi></mrow></msqrt></math> при <em>a ≥ 0</em>, <em>b ≥ 0</em>. Если множитель отрицательный, знак минус оставляют перед корнем.</p></div>
-  </section>`},
-  {type:'html',html:`<section class="oge-math-powers-roots-theory" aria-labelledby="oge-math-powers-theory-7">
-    <h3 id="oge-math-powers-theory-7">7. Мини-шпаргалка</h3>
-    <div class="thx-grid two">
-      <div class="thx-card"><h4>Значения квадратных корней</h4>
-        <table aria-label="Квадратные корни из квадратов чисел от 1 до 10"><thead><tr><th scope="col">Корень</th><th scope="col">Значение</th></tr></thead><tbody>
-          <tr><td><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>1</mn></msqrt></math></td><td>1</td></tr>
-          <tr><td><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>4</mn></msqrt></math></td><td>2</td></tr>
-          <tr><td><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>9</mn></msqrt></math></td><td>3</td></tr>
-          <tr><td><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>16</mn></msqrt></math></td><td>4</td></tr>
-          <tr><td><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>25</mn></msqrt></math></td><td>5</td></tr>
-          <tr><td><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>36</mn></msqrt></math></td><td>6</td></tr>
-          <tr><td><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>49</mn></msqrt></math></td><td>7</td></tr>
-          <tr><td><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>64</mn></msqrt></math></td><td>8</td></tr>
-          <tr><td><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>81</mn></msqrt></math></td><td>9</td></tr>
-          <tr><td><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>100</mn></msqrt></math></td><td>10</td></tr>
-        </tbody></table>
-      </div>
-      <div class="thx-card"><h4>Полезные значения</h4>
-        <p class="thx-eq"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mn>10</mn><mn>2</mn></msup><mo>=</mo><mn>100</mn></math></p>
-        <p class="thx-eq"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mn>10</mn><mn>3</mn></msup><mo>=</mo><mn>1000</mn></math></p>
-        <p class="thx-eq"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mn>0,1</mn><mn>2</mn></msup><mo>=</mo><mn>0,01</mn></math></p>
-      </div>
-    </div>
   </section>`}
 ];
 
@@ -3592,10 +3567,7 @@ const COURSES={
     }
   ]},
   'oge-mat':{name:'ОГЭ · Математика',tag:'Математика',cls:'tm',type:'mat',modules:[
-    {name:'Алгебра',open:true,lessons:[makeLesson('Степени и корни','',[
-      ...OGE_MATH_POWERS_ROOTS_THEORY,
-      ...THEORY['Степени и корни']
-    ]),'Уравнения','Неравенства','Тригонометрия','Логарифмы']},
+    {name:'Алгебра',open:true,lessons:[makeLesson('Степени и корни','',OGE_MATH_POWERS_ROOTS_THEORY),'Уравнения','Неравенства','Тригонометрия','Логарифмы']},
     {name:'Геометрия',open:true,lessons:['Треугольники','Четырёхугольники','Окружность','Площади фигур']},
     {name:'Теория вероятн.',open:true,lessons:['Вероятность событий','Статистика']},
     {name:'Подготовка',open:true,lessons:['Разбор тестовой части','Тренировочный вариант']}
