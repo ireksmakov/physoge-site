@@ -1480,6 +1480,9 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 .thx-mini-card h5{margin:0 0 8px;font-size:14px;color:var(--white)}
 .thx-mini-card p{margin:0;font-size:12px;line-height:1.55}
 .thx-list-tight li{margin:4px 0}
+.oge-math-powers-roots-theory math{font-size:1.2em;vertical-align:middle}
+.oge-math-powers-roots-theory .thx-eq math{font-size:1em}
+.oge-math-powers-roots-theory th,.oge-math-powers-roots-theory td{padding:6px 8px;text-align:left;border-bottom:1px solid var(--border)}
 .thx-scheme{display:flex;flex-direction:column;gap:10px}
 .thx-scheme-step{padding:10px 12px;border-radius:12px;background:rgba(0,229,255,.04);border:1px solid rgba(0,229,255,.12)}
 .thx-scheme-step strong{color:var(--white)}
@@ -3147,6 +3150,95 @@ const THEORY = {
 ]
 };
 
+/* OGE mathematics: full theory from the powers and roots reference. */
+const OGE_MATH_POWERS_ROOTS_THEORY=[
+  {type:'html',html:`<section class="oge-math-powers-roots-theory" aria-labelledby="oge-math-powers-theory-1">
+    <div class="thx-kicker">Степени и корни · Теория для ОГЭ по математике</div>
+    <h3 id="oge-math-powers-theory-1">1. Степень числа</h3>
+    <p><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>a</mi><mi>n</mi></msup></math> — произведение <em>n</em> одинаковых множителей <em>a</em>, где <em>n</em> — натуральное число. Число <em>a</em> называют основанием, <em>n</em> — показателем степени.</p>
+    <div class="thx-grid two">
+      <div class="thx-card"><h4>Первая и нулевая степени</h4>
+        <p class="thx-eq"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>a</mi><mn>1</mn></msup><mo>=</mo><mi>a</mi></math></p>
+        <p class="thx-eq"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>a</mi><mn>0</mn></msup><mo>=</mo><mn>1</mn></math></p><p>Для нулевой степени основание должно быть ненулевым: <em>a ≠ 0</em>.</p>
+      </div>
+      <div class="thx-card"><h4>Отрицательная степень</h4>
+        <p class="thx-eq"><math displaystyle="true" xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>a</mi><mrow><mo>−</mo><mi>n</mi></mrow></msup><mo>=</mo><mfrac><mn>1</mn><msup><mi>a</mi><mi>n</mi></msup></mfrac></math></p><p>Здесь <em>a ≠ 0</em>, <em>n</em> — натуральное число.</p>
+      </div>
+    </div>
+  </section>`},
+  {type:'html',html:`<section class="oge-math-powers-roots-theory" aria-labelledby="oge-math-powers-theory-2">
+    <h3 id="oge-math-powers-theory-2">2. Свойства степеней</h3>
+    <p>Правила применяют к целым показателям. При нулевых или отрицательных показателях соответствующие основания должны быть ненулевыми.</p>
+    <div class="thx-grid two">
+      <div class="thx-card"><h4>Произведение степеней</h4><p class="thx-eq"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>a</mi><mi>m</mi></msup><mo>·</mo><msup><mi>a</mi><mi>n</mi></msup><mo>=</mo><msup><mi>a</mi><mrow><mi>m</mi><mo>+</mo><mi>n</mi></mrow></msup></math></p><p>При одинаковом основании показатели складывают.</p></div>
+      <div class="thx-card"><h4>Частное степеней</h4><p class="thx-eq"><math displaystyle="true" xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><msup><mi>a</mi><mi>m</mi></msup><msup><mi>a</mi><mi>n</mi></msup></mfrac><mo>=</mo><msup><mi>a</mi><mrow><mi>m</mi><mo>−</mo><mi>n</mi></mrow></msup></math></p><p>Показатели вычитают. Условие: <em>a ≠ 0</em>.</p></div>
+      <div class="thx-card"><h4>Степень степени</h4><p class="thx-eq"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow><mo>(</mo><msup><mi>a</mi><mi>m</mi></msup><mo>)</mo></mrow><mi>n</mi></msup><mo>=</mo><msup><mi>a</mi><mrow><mi>m</mi><mi>n</mi></mrow></msup></math></p><p>Показатели перемножают.</p></div>
+      <div class="thx-card"><h4>Степень произведения</h4><p class="thx-eq"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow><mo>(</mo><mi>a</mi><mi>b</mi><mo>)</mo></mrow><mi>n</mi></msup><mo>=</mo><msup><mi>a</mi><mi>n</mi></msup><msup><mi>b</mi><mi>n</mi></msup></math></p><p>Каждый множитель возводят в степень.</p></div>
+      <div class="thx-card"><h4>Степень частного</h4><p class="thx-eq"><math displaystyle="true" xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow><mo>(</mo><mfrac><mi>a</mi><mi>b</mi></mfrac><mo>)</mo></mrow><mi>n</mi></msup><mo>=</mo><mfrac><msup><mi>a</mi><mi>n</mi></msup><msup><mi>b</mi><mi>n</mi></msup></mfrac></math></p><p>Числитель и знаменатель возводят в степень. Условие: <em>b ≠ 0</em>; при <em>n ≤ 0</em> также <em>a ≠ 0</em>.</p></div>
+    </div>
+  </section>`},
+  {type:'html',html:`<section class="oge-math-powers-roots-theory" aria-labelledby="oge-math-powers-theory-3">
+    <h3 id="oge-math-powers-theory-3">3. Квадрат и куб числа</h3>
+    <div class="thx-grid two">
+      <div class="thx-card"><h4>Квадрат числа</h4><p><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>a</mi><mn>2</mn></msup><mo>=</mo><mi>a</mi><mo>·</mo><mi>a</mi></math></p><p class="thx-eq"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mn>7</mn><mn>2</mn></msup><mo>=</mo><mn>49</mn></math></p></div>
+      <div class="thx-card"><h4>Куб числа</h4><p><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>a</mi><mn>3</mn></msup><mo>=</mo><mi>a</mi><mo>·</mo><mi>a</mi><mo>·</mo><mi>a</mi></math></p><p class="thx-eq"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mn>3</mn><mn>3</mn></msup><mo>=</mo><mn>27</mn></math></p></div>
+    </div>
+  </section>`},
+  {type:'html',html:`<section class="oge-math-powers-roots-theory" aria-labelledby="oge-math-powers-theory-4">
+    <h3 id="oge-math-powers-theory-4">4. Корень n-й степени</h3>
+    <p>Корень <em>n</em>-й степени из числа <em>b</em> — число <em>a</em>, для которого <math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>a</mi><mi>n</mi></msup><mo>=</mo><mi>b</mi></math>. Показатель <em>n</em> — натуральное число, <em>n ≥ 2</em>.</p>
+    <p>При чётном <em>n</em> требуется <em>b ≥ 0</em>; знак корня обозначает неотрицательный арифметический корень. При нечётном <em>n</em> под корнем может стоять любое действительное число, а знак корня совпадает со знаком этого числа.</p>
+    <div class="thx-grid two">
+      <div class="thx-card"><h4>Квадратный корень</h4><p><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mi>a</mi></msqrt></math> — корень второй степени.</p><p class="thx-eq"><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>49</mn></msqrt><mo>=</mo><mn>7</mn></math></p></div>
+      <div class="thx-card"><h4>Кубический корень</h4><p><math xmlns="http://www.w3.org/1998/Math/MathML"><mroot><mi>a</mi><mn>3</mn></mroot></math> — корень третьей степени.</p><p class="thx-eq"><math xmlns="http://www.w3.org/1998/Math/MathML"><mroot><mn>27</mn><mn>3</mn></mroot><mo>=</mo><mn>3</mn></math></p></div>
+    </div>
+  </section>`},
+  {type:'html',html:`<section class="oge-math-powers-roots-theory" aria-labelledby="oge-math-powers-theory-5">
+    <h3 id="oge-math-powers-theory-5">5. Свойства квадратных корней</h3>
+    <div class="thx-grid two">
+      <div class="thx-card"><h4>Корень произведения</h4><p class="thx-eq"><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mrow><mi>a</mi><mi>b</mi></mrow></msqrt><mo>=</mo><msqrt><mi>a</mi></msqrt><mo>·</mo><msqrt><mi>b</mi></msqrt></math></p><p>Условия: <em>a ≥ 0</em>, <em>b ≥ 0</em>.</p><p><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mrow><mn>9</mn><mo>·</mo><mn>4</mn></mrow></msqrt><mo>=</mo><msqrt><mn>9</mn></msqrt><mo>·</mo><msqrt><mn>4</mn></msqrt></math>, то есть <em>3 · 2 = 6</em>.</p></div>
+      <div class="thx-card"><h4>Корень частного</h4><p class="thx-eq"><math displaystyle="true" xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mfrac><mi>a</mi><mi>b</mi></mfrac></msqrt><mo>=</mo><mfrac><msqrt><mi>a</mi></msqrt><msqrt><mi>b</mi></msqrt></mfrac></math></p><p>Условия: <em>a ≥ 0</em>, <em>b &gt; 0</em>.</p><p><math displaystyle="true" xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mfrac><mn>25</mn><mn>4</mn></mfrac></msqrt><mo>=</mo><mfrac><msqrt><mn>25</mn></msqrt><msqrt><mn>4</mn></msqrt></mfrac><mo>=</mo><mfrac><mn>5</mn><mn>2</mn></mfrac></math></p></div>
+      <div class="thx-card"><h4>Квадрат корня</h4><p class="thx-eq"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow><mo>(</mo><msqrt><mi>a</mi></msqrt><mo>)</mo></mrow><mn>2</mn></msup><mo>=</mo><mi>a</mi></math></p><p>Условие: <em>a ≥ 0</em>.</p><p><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mrow><mo>(</mo><msqrt><mn>36</mn></msqrt><mo>)</mo></mrow><mn>2</mn></msup><mo>=</mo><mn>36</mn></math></p></div>
+      <div class="thx-card"><h4>Корень квадрата</h4><p class="thx-eq"><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><msup><mi>a</mi><mn>2</mn></msup></msqrt><mo>=</mo><mo>|</mo><mi>a</mi><mo>|</mo></math></p><p>Верно для любого действительного <em>a</em>.</p><p><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>25</mn></msqrt><mo>=</mo><mo>|</mo><mn>5</mn><mo>|</mo><mo>=</mo><mn>5</mn></math></p><p><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><msup><mrow><mo>(</mo><mo>−</mo><mn>3</mn><mo>)</mo></mrow><mn>2</mn></msup></msqrt><mo>=</mo><mn>3</mn></math></p></div>
+    </div>
+  </section>`},
+  {type:'html',html:`<section class="oge-math-powers-roots-theory" aria-labelledby="oge-math-powers-theory-6">
+    <h3 id="oge-math-powers-theory-6">6. Важно на ОГЭ</h3>
+    <ol class="thx-list-tight">
+      <li>Подкоренное выражение квадратного корня должно быть неотрицательным: для <math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mi>a</mi></msqrt></math> требуется <em>a ≥ 0</em>.</li>
+      <li><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><msup><mi>a</mi><mn>2</mn></msup></msqrt><mo>=</mo><mo>|</mo><mi>a</mi><mo>|</mo></math>, а не просто <em>a</em>.</li>
+      <li>Сначала упростите выражение, затем подставляйте числа и вычисляйте.</li>
+      <li>Проверяйте область допустимых значений (ОДЗ): знаменатели не равны нулю, подкоренные выражения квадратных корней неотрицательны.</li>
+      <li>Умейте выносить множитель из-под корня и вносить его под корень.</li>
+    </ol>
+    <div class="thx-note"><p><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mrow><msup><mi>a</mi><mn>2</mn></msup><mi>b</mi></mrow></msqrt><mo>=</mo><mo>|</mo><mi>a</mi><mo>|</mo><msqrt><mi>b</mi></msqrt></math> при <em>b ≥ 0</em>.</p><p><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi><msqrt><mi>b</mi></msqrt><mo>=</mo><msqrt><mrow><msup><mi>a</mi><mn>2</mn></msup><mi>b</mi></mrow></msqrt></math> при <em>a ≥ 0</em>, <em>b ≥ 0</em>. Если множитель отрицательный, знак минус оставляют перед корнем.</p></div>
+  </section>`},
+  {type:'html',html:`<section class="oge-math-powers-roots-theory" aria-labelledby="oge-math-powers-theory-7">
+    <h3 id="oge-math-powers-theory-7">7. Мини-шпаргалка</h3>
+    <div class="thx-grid two">
+      <div class="thx-card"><h4>Значения квадратных корней</h4>
+        <table aria-label="Квадратные корни из квадратов чисел от 1 до 10"><thead><tr><th scope="col">Корень</th><th scope="col">Значение</th></tr></thead><tbody>
+          <tr><td><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>1</mn></msqrt></math></td><td>1</td></tr>
+          <tr><td><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>4</mn></msqrt></math></td><td>2</td></tr>
+          <tr><td><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>9</mn></msqrt></math></td><td>3</td></tr>
+          <tr><td><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>16</mn></msqrt></math></td><td>4</td></tr>
+          <tr><td><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>25</mn></msqrt></math></td><td>5</td></tr>
+          <tr><td><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>36</mn></msqrt></math></td><td>6</td></tr>
+          <tr><td><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>49</mn></msqrt></math></td><td>7</td></tr>
+          <tr><td><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>64</mn></msqrt></math></td><td>8</td></tr>
+          <tr><td><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>81</mn></msqrt></math></td><td>9</td></tr>
+          <tr><td><math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>100</mn></msqrt></math></td><td>10</td></tr>
+        </tbody></table>
+      </div>
+      <div class="thx-card"><h4>Полезные значения</h4>
+        <p class="thx-eq"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mn>10</mn><mn>2</mn></msup><mo>=</mo><mn>100</mn></math></p>
+        <p class="thx-eq"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mn>10</mn><mn>3</mn></msup><mo>=</mo><mn>1000</mn></math></p>
+        <p class="thx-eq"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mn>0,1</mn><mn>2</mn></msup><mo>=</mo><mn>0,01</mn></math></p>
+      </div>
+    </div>
+  </section>`}
+];
+
 /* DEFAULT theory for new lessons */
 function defaultTheory(title,description){return[
   {type:'text',label:'📌 Тема',title:title||'Основное понятие',text:description||'Введите определение и описание темы...'},
@@ -3500,7 +3592,10 @@ const COURSES={
     }
   ]},
   'oge-mat':{name:'ОГЭ · Математика',tag:'Математика',cls:'tm',type:'mat',modules:[
-    {name:'Алгебра',open:true,lessons:['Степени и корни','Уравнения','Неравенства','Тригонометрия','Логарифмы']},
+    {name:'Алгебра',open:true,lessons:[makeLesson('Степени и корни','',[
+      ...OGE_MATH_POWERS_ROOTS_THEORY,
+      ...THEORY['Степени и корни']
+    ]),'Уравнения','Неравенства','Тригонометрия','Логарифмы']},
     {name:'Геометрия',open:true,lessons:['Треугольники','Четырёхугольники','Окружность','Площади фигур']},
     {name:'Теория вероятн.',open:true,lessons:['Вероятность событий','Статистика']},
     {name:'Подготовка',open:true,lessons:['Разбор тестовой части','Тренировочный вариант']}
