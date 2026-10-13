@@ -102,6 +102,12 @@ header{position:fixed;top:0;left:0;right:0;z-index:10000;background:rgba(2,9,20,
 .bcourse:hover{background:var(--cyan);color:#000;border-color:var(--cyan)}
 @media(max-width:640px){.cn,.cn-school{font-size:22px;line-height:1.15;white-space:normal}}
 .school-hero{max-width:1100px;margin:0 auto;padding:34px 0}.school-hero h1{font-family:var(--fh);font-size:clamp(27px,4vw,42px);margin:0 0 12px}.school-lead{color:var(--gray);font-size:15px;line-height:1.7;max-width:760px}.school-grades{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-top:30px}.school-grade{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:20px}.school-grade h2{font-family:var(--fh);font-size:18px;color:var(--cyan);margin:0 0 14px}.school-grade ul{list-style:none;margin:0;padding:0}.school-grade li{color:var(--gray);font-size:13px;line-height:1.45;padding:8px 0;border-top:1px solid var(--border)}.school-grade a{color:inherit}.school-grade a:hover{color:var(--cyan)}.school-placeholder{padding:22px;border:1px dashed rgba(0,229,255,.3);border-radius:12px;background:rgba(0,229,255,.035);color:var(--gray);line-height:1.6}.school-grade-label{padding:13px 11px 5px;color:var(--cyan);font-family:var(--fh);font-weight:800;font-size:13px}.school-video-frame{width:100%;aspect-ratio:16/9;border:0;border-radius:12px;background:var(--bg2)}
+.school-grade-toggle{display:flex;align-items:center;justify-content:space-between;gap:10px;width:calc(100% - 14px);margin:10px 7px 6px;padding:10px 12px;border:1px solid rgba(8,216,255,.28);border-radius:10px;background:rgba(8,216,255,.055);color:var(--cyan);font-family:var(--fh);font-size:14px;font-weight:900;cursor:pointer;text-align:left;transition:border-color .18s,background .18s,color .18s}
+.school-grade-toggle:hover,.school-grade-toggle:focus-visible{border-color:var(--cyan);background:rgba(8,216,255,.12);color:var(--white);outline:none}
+.school-grade-toggle.is-open{border-color:rgba(8,216,255,.48);background:rgba(8,216,255,.10)}
+.school-grade-toggle-arrow{font-size:13px;line-height:1;transition:transform .2s;color:var(--gray)}
+.school-grade-toggle.is-open .school-grade-toggle-arrow{transform:rotate(90deg);color:var(--cyan)}
+.school-grade-sections[hidden]{display:none!important}
 /* School Math overview: grade blocks replace the left course contents sidebar. */
 #platform.school-math-page .cp-sb,
 #platform.school-math-page .cp-resizer,
@@ -5408,6 +5414,7 @@ const LAST_COURSE_LESSON_STORAGE_KEY = 'fizmat_last_course_lesson';
 const COURSE_SCROLL_STORAGE_KEY = 'fizmat_course_scroll_positions';
 const ACTIVE_LAB_STORAGE_KEY = 'fizmat_active_lab_state';
 const COURSE_SIDEBAR_STATE_PREFIX = 'courseSidebarState:';
+const SCHOOL_GRADE_SIDEBAR_STATE_PREFIX = 'schoolGradeSidebarState:';
 const COURSE_TABS = ['theory','tasks','sims','lab','video','tests','hw'];
 const COURSE_TAB_ALIASES = {simulators:'sims',labs:'lab',laboratory:'lab',homework:'hw'};
 function normalizeCourseTab(tabId){return COURSE_TAB_ALIASES[tabId]||tabId;}
@@ -5423,6 +5430,35 @@ function getCourseTabActiveClass(tabId){
 }
 function getCourseSidebarStateStorageKey(courseKey){
   return `${COURSE_SIDEBAR_STATE_PREFIX}${courseKey}`;
+}
+function getSchoolGradeSidebarStateStorageKey(courseKey){
+  return `${SCHOOL_GRADE_SIDEBAR_STATE_PREFIX}${courseKey}`;
+}
+function loadSchoolGradeSidebarState(courseKey){
+  if(!courseKey) return {};
+  try{
+    const raw=localStorage.getItem(getSchoolGradeSidebarStateStorageKey(courseKey));
+    if(!raw) return {};
+    const parsed=JSON.parse(raw);
+    return parsed&&typeof parsed==='object'?parsed:{};
+  }catch(err){
+    console.warn('Не удалось загрузить состояние классов в боковом меню:',err);
+    return {};
+  }
+}
+function saveSchoolGradeSidebarState(courseKey,state){
+  if(!courseKey) return;
+  try{
+    localStorage.setItem(getSchoolGradeSidebarStateStorageKey(courseKey),JSON.stringify(state||{}));
+  }catch(err){
+    console.warn('Не удалось сохранить состояние классов в боковом меню:',err);
+  }
+}
+function ensureSchoolGradeOpen(courseKey,grade){
+  if(!courseKey||grade===undefined||grade===null) return;
+  const state=loadSchoolGradeSidebarState(courseKey);
+  state[String(grade)]=true;
+  saveSchoolGradeSidebarState(courseKey,state);
 }
 function getCourseModuleStateId(mi,moduleName){
   return `${mi}:${String(moduleName||'').trim()}`;
@@ -5747,6 +5783,9 @@ function openCourse(key,moduleIndex,lessonIndex,tabId){
   CM = selected.moduleIndex;
   CL = selected.lessonIndex;
   CTAB = selected.tabId || 'theory';
+  if(c.school && c.modules[CM]){
+    ensureSchoolGradeOpen(key,c.modules[CM].grade);
+  }
 
   const sameRoute = isSameCourseRouteBeforeRender(AC, CM, CL, CTAB);
 
@@ -5898,9 +5937,8 @@ document.addEventListener('keydown',event=>{if(event.key==='Escape'&&document.ge
 function renderSb(){
   const c=COURSES[AC];let n=1,h='';
   h=`<div class="sb-top"><span class="sb-lbl">Содержание</span></div>`;
-  let renderedGrade=null;
-  c.modules.forEach((m,mi)=>{
-    if(c.school && renderedGrade!==m.grade){renderedGrade=m.grade;h+=`<div class="school-grade-label">${m.grade} класс</div>`;}
+
+  const renderModule=(m,mi)=>{
     const lessons=m.lessons||[];
     let lh=m.open?lessons.map((l,li)=>{
       if(isHiddenLesson(l)){
@@ -5914,14 +5952,35 @@ function renderSb(){
       </div>`;
     }).join(''):'';
     if(!m.open)n+=lessons.filter(countsInLessonNumbering).length;
-    h+=`<div class="mod-block" data-mi="${mi}">
+    return`<div class="mod-block" data-mi="${mi}">
       <div class="mod-head">
         <button class="mtog${m.open?' open':''}" onclick="togM(${mi})">▶</button>
         <span class="mni">${m.name}</span>
       </div>
       ${m.open?`<div class="lessons-ul">${lh}</div>`:''}
     </div>`;
-  });
+  };
+
+  if(c.school){
+    const gradeState=loadSchoolGradeSidebarState(AC);
+    const currentGrade=c.modules&&c.modules[CM]?c.modules[CM].grade:null;
+    const grades=[...new Set(c.modules.map(module=>module.grade))];
+    grades.forEach(grade=>{
+      const gradeKey=String(grade);
+      const isOpen=Object.prototype.hasOwnProperty.call(gradeState,gradeKey)?!!gradeState[gradeKey]:Number(grade)===Number(currentGrade);
+      h+=`<button class="school-grade-toggle${isOpen?' is-open':''}" type="button" aria-expanded="${isOpen?'true':'false'}" onclick="toggleSchoolGrade(${Number(grade)})">
+        <span>${grade} класс</span><span class="school-grade-toggle-arrow">▶</span>
+      </button>`;
+      h+=`<div class="school-grade-sections" data-grade="${grade}"${isOpen?'':' hidden'}>`;
+      c.modules.forEach((m,mi)=>{
+        if(Number(m.grade)===Number(grade)) h+=renderModule(m,mi);
+      });
+      h+='</div>';
+    });
+  }else{
+    c.modules.forEach((m,mi)=>{h+=renderModule(m,mi);});
+  }
+
   document.getElementById('cpSb').innerHTML=h;
   syncMobileCourseMenu();
 }
@@ -5943,6 +6002,17 @@ function selL(e,mi,li){
   renderSb();
   renderContent();
   closeMobileCourseMenu(false);
+}
+function toggleSchoolGrade(grade){
+  const c=COURSES&&COURSES[AC];
+  if(!c||!c.school) return;
+  const state=loadSchoolGradeSidebarState(AC);
+  const key=String(grade);
+  const currentGrade=c.modules&&c.modules[CM]?c.modules[CM].grade:null;
+  const current=Object.prototype.hasOwnProperty.call(state,key)?!!state[key]:Number(grade)===Number(currentGrade);
+  state[key]=!current;
+  saveSchoolGradeSidebarState(AC,state);
+  renderSb();
 }
 function togM(mi){
   COURSES[AC].modules[mi].open=!COURSES[AC].modules[mi].open;
