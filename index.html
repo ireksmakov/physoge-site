@@ -5915,7 +5915,7 @@ function renderSchoolTopic(course,topic){
   const module=course.modules[CM];
   const safeTopic=topic||makeSchoolTopic('missing','Тема');
   const videoUrl=safeTopic.video&&safeTopic.video.url||'';
-  const hasTrainer=AC==='school-math'&&Number(module.grade)===5;
+  const hasTrainer=AC==='school-math'&&[5,6].includes(Number(module.grade));
   const trainerUrl='https://ireksmakov.github.io/trener-chisla/';
   const panels={
     theory:`<h2>${escapeHtml(safeTopic.theory.title)}</h2><div class="school-placeholder">${escapeHtml(safeTopic.theory.content)}</div>`,
@@ -5924,7 +5924,7 @@ function renderSchoolTopic(course,topic){
     tasks:`<div class="school-placeholder">${escapeHtml(safeTopic.tasks.placeholder)}</div>`,
     hw:`<div class="school-placeholder">${escapeHtml(safeTopic.homework.content)}</div>`,
     trainer:`<div class="school-trainer-wrap">
-      <div class="school-trainer-note"><span><strong style="color:var(--white)">Тренажёр действий с числами</strong><br>Работает прямо внутри курса 5 класса.</span><a class="school-trainer-link" href="${trainerUrl}" target="_blank" rel="noopener">Открыть отдельно ↗</a></div>
+      <div class="school-trainer-note"><span><strong style="color:var(--white)">Тренажёр действий с числами</strong><br>Работает прямо внутри курса ${module.grade} класса.</span><a class="school-trainer-link" href="${trainerUrl}" target="_blank" rel="noopener">Открыть отдельно ↗</a></div>
       <iframe class="school-trainer-frame" src="${trainerUrl}" title="Тренажёр: действия с числами" loading="lazy"></iframe>
     </div>`
   };
