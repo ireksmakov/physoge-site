@@ -5962,21 +5962,19 @@ function renderSb(){
   };
 
   if(c.school){
-    const gradeState=loadSchoolGradeSidebarState(AC);
     const currentGrade=c.modules&&c.modules[CM]?c.modules[CM].grade:null;
-    const grades=[...new Set(c.modules.map(module=>module.grade))];
-    grades.forEach(grade=>{
-      const gradeKey=String(grade);
-      const isOpen=Object.prototype.hasOwnProperty.call(gradeState,gradeKey)?!!gradeState[gradeKey]:Number(grade)===Number(currentGrade);
-      h+=`<button class="school-grade-toggle${isOpen?' is-open':''}" type="button" aria-expanded="${isOpen?'true':'false'}" onclick="toggleSchoolGrade(${Number(grade)})">
-        <span>${grade} класс</span><span class="school-grade-toggle-arrow">▶</span>
-      </button>`;
-      h+=`<div class="school-grade-sections" data-grade="${grade}"${isOpen?'':' hidden'}>`;
-      c.modules.forEach((m,mi)=>{
-        if(Number(m.grade)===Number(grade)) h+=renderModule(m,mi);
-      });
-      h+='</div>';
+    const gradeKey=String(currentGrade);
+    const gradeState=loadSchoolGradeSidebarState(AC);
+    const isOpen=Object.prototype.hasOwnProperty.call(gradeState,gradeKey)?!!gradeState[gradeKey]:true;
+
+    h+=`<button class="school-grade-toggle${isOpen?' is-open':''}" type="button" aria-expanded="${isOpen?'true':'false'}" onclick="toggleSchoolGrade(${Number(currentGrade)})">
+      <span>${currentGrade} класс</span><span class="school-grade-toggle-arrow">▶</span>
+    </button>`;
+    h+=`<div class="school-grade-sections" data-grade="${currentGrade}"${isOpen?'':' hidden'}>`;
+    c.modules.forEach((m,mi)=>{
+      if(Number(m.grade)===Number(currentGrade)) h+=renderModule(m,mi);
     });
+    h+='</div>';
   }else{
     c.modules.forEach((m,mi)=>{h+=renderModule(m,mi);});
   }
@@ -6006,10 +6004,11 @@ function selL(e,mi,li){
 function toggleSchoolGrade(grade){
   const c=COURSES&&COURSES[AC];
   if(!c||!c.school) return;
+  const currentGrade=c.modules&&c.modules[CM]?c.modules[CM].grade:null;
+  if(Number(grade)!==Number(currentGrade)) return;
   const state=loadSchoolGradeSidebarState(AC);
   const key=String(grade);
-  const currentGrade=c.modules&&c.modules[CM]?c.modules[CM].grade:null;
-  const current=Object.prototype.hasOwnProperty.call(state,key)?!!state[key]:Number(grade)===Number(currentGrade);
+  const current=Object.prototype.hasOwnProperty.call(state,key)?!!state[key]:true;
   state[key]=!current;
   saveSchoolGradeSidebarState(AC,state);
   renderSb();
