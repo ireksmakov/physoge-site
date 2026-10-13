@@ -65,6 +65,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:10000;background:rgba(2,9,20,
 .hero-cta{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .btn-p{display:inline-block;background:var(--cyan);color:#000;font-family:var(--fh);font-size:13px;font-weight:700;padding:14px 30px;border-radius:8px;transition:transform .15s,box-shadow .2s;border:none;cursor:pointer}
 .btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,229,255,0.4)}
+.theme-toggle-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 18px;border-radius:8px;border:1px solid var(--border-strong);background:var(--panel);color:var(--white);font-family:var(--fh);font-size:11px;font-weight:700;cursor:pointer;box-shadow:var(--panel-shadow);transition:transform .15s,border-color .2s,background .2s}
+.theme-toggle-btn:hover{transform:translateY(-2px);border-color:var(--cyan);background:rgba(8,216,255,.08)}
 .btn-s{font-size:14px;color:var(--gray);display:flex;align-items:center;gap:8px;transition:color .2s}
 .btn-s:hover{color:var(--white)}
 .arr{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px}
@@ -2237,6 +2239,41 @@ img,svg,canvas,video,iframe{max-width:100%}
   opacity: 1 !important;
 }
 
+
+/* Alternate platform background inspired by the number trainer. */
+body.trainer-theme{
+  --bg:#eef6ff;
+  --bg2:#ffffff;
+  --bg3:#e8f1ff;
+  --cyan:#1f7ae0;
+  --cyan-dim:#18b9d6;
+  --orange:#f59e0b;
+  --green:#16a34a;
+  --white:#172033;
+  --gray:#64748b;
+  --border:rgba(148,163,184,.48);
+  --border-strong:rgba(31,122,224,.34);
+  --panel:rgba(255,255,255,.94);
+  --panel-shadow:0 18px 45px rgba(15,46,99,.13);
+  background:radial-gradient(circle at 8% 5%,#dff7ff 0,transparent 30%),radial-gradient(circle at 95% 92%,#eadfff 0,transparent 30%),#eef6ff;
+  color:var(--white);
+}
+body.trainer-theme header{background:rgba(255,255,255,.88);border-bottom-color:rgba(148,163,184,.5);box-shadow:0 8px 24px rgba(15,46,99,.08)}
+body.trainer-theme .sim-pop,
+body.trainer-theme .mobile-course-menu-drawer,
+body.trainer-theme .mobile-course-menu-head{background:rgba(255,255,255,.98)}
+body.trainer-theme .mobile-course-menu-backdrop{background:rgba(15,46,99,.24)}
+body.trainer-theme .section-subtitle,
+body.trainer-theme .cd,
+body.trainer-theme .feat-desc{color:#52637a}
+body.trainer-theme .hero-shot{box-shadow:0 28px 68px rgba(15,46,99,.18)}
+body.trainer-theme .hero-media::before{background:radial-gradient(circle,rgba(31,122,224,.12),transparent 62%)}
+body.trainer-theme .school-placeholder{background:rgba(31,122,224,.05)}
+body.trainer-theme .theme-toggle-btn{background:#fff;color:#0b2e63;border-color:#cbd5e1}
+body.trainer-theme .theme-toggle-btn:hover{background:#e8f1ff;border-color:#1f7ae0}
+body.trainer-theme .cp-resizer::after{background:rgba(31,122,224,.45)}
+body.trainer-theme .divider{background:rgba(148,163,184,.32)}
+body.trainer-theme footer{background:rgba(255,255,255,.42)}
 </style>
 </head>
 <body class="view-mode">
@@ -2276,6 +2313,7 @@ img,svg,canvas,video,iframe{max-width:100%}
         <p class="section-subtitle">Онлайн-платформа с короткими уроками, задачами по алгоритмам, тестами с автопроверкой и контролем прогресса ученика.</p>
         <div class="hero-cta">
           <a href="#courses" class="btn-p">Выбрать направление</a>
+          <button type="button" class="theme-toggle-btn" id="platformThemeToggle" onclick="togglePlatformTheme()">☀ Фон тренажёра</button>
         </div>
       </div>
       <div class="hero-media">
@@ -15642,5 +15680,38 @@ function enlargeSmallNonClickableText(){
   obs.observe(document.body,{childList:true,subtree:true});
 })();
 
+</script>
+<script>
+const PLATFORM_THEME_STORAGE_KEY='fizmat_platform_theme';
+function updatePlatformThemeButton(){
+  const btn=document.getElementById('platformThemeToggle');
+  if(!btn) return;
+  const trainerTheme=document.body.classList.contains('trainer-theme');
+  btn.textContent=trainerTheme?'🌙 Тёмный фон':'☀ Фон тренажёра';
+  btn.setAttribute('aria-pressed',trainerTheme?'true':'false');
+  btn.title=trainerTheme?'Вернуть тёмный фон платформы':'Включить светлый фон как у тренажёра';
+}
+function setPlatformTheme(theme,persist=true){
+  const useTrainerTheme=theme==='trainer';
+  document.body.classList.toggle('trainer-theme',useTrainerTheme);
+  if(persist){
+    try{localStorage.setItem(PLATFORM_THEME_STORAGE_KEY,useTrainerTheme?'trainer':'dark');}catch(e){}
+  }
+  updatePlatformThemeButton();
+}
+function togglePlatformTheme(){
+  const next=document.body.classList.contains('trainer-theme')?'dark':'trainer';
+  setPlatformTheme(next,true);
+}
+(function initPlatformTheme(){
+  let saved='dark';
+  try{saved=localStorage.getItem(PLATFORM_THEME_STORAGE_KEY)||'dark';}catch(e){}
+  setPlatformTheme(saved==='trainer'?'trainer':'dark',false);
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',updatePlatformThemeButton,{once:true});
+  }else{
+    updatePlatformThemeButton();
+  }
+})();
 </script>
 </body>
