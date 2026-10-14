@@ -3792,11 +3792,94 @@ COURSES['school-math']=makeSchoolCourse('Математика · Школа','Ш
   5:['Натуральные числа','Обыкновенные дроби','Десятичные дроби','Геометрические фигуры'],
   6:['Делимость чисел','Обыкновенные и десятичные дроби','Отношения и пропорции','Рациональные числа'],
   7:['Алгебраические выражения','Уравнения','Функции','Геометрия: начальные сведения'],
-  8:['Квадратные корни','Квадратные уравнения','Функции','Геометрия: четырёхугольники и площади']
+  8:['Квадратные корни','Квадратные уравнения','Функции','Геометрия: 8 класс']
+});
+const SCHOOL_GEOMETRY_GRADE8_PROGRAM=[
+  {"title": "Вводное повторение изученного материала за курс 7 класса. Вводный срез", "section": "Вводное повторение", "paragraphs": "Гл.1-4"},
+  {"title": "Многоугольник. Выпуклый многоугольник. Четырёхугольник.", "section": "Четырёхугольники", "paragraphs": "§ 1 п.39, 40, 41"},
+  {"title": "Многоугольник. Выпуклый многоугольник. Четырёхугольник. Решение задач.", "section": "Четырёхугольники", "paragraphs": "§ 1 п.39, 40, 41"},
+  {"title": "Параллелограмм", "section": "Четырёхугольники", "paragraphs": "§ 2 п. 42"},
+  {"title": "Параллелограмм. Решение задач.", "section": "Четырёхугольники", "paragraphs": "§ 2 п. 42"},
+  {"title": "Признаки параллелограмма.", "section": "Четырёхугольники", "paragraphs": "§ 2 п.43"},
+  {"title": "Признаки параллелограмма. Решение задач.", "section": "Четырёхугольники", "paragraphs": "§ 2 п. 43"},
+  {"title": "Трапеция", "section": "Четырёхугольники", "paragraphs": "§ 2 п. 44"},
+  {"title": "Трапеция. Решение задач.", "section": "Четырёхугольники", "paragraphs": "§ 2 п. 44"},
+  {"title": "Прямоугольник", "section": "Четырёхугольники", "paragraphs": "§ 3 п. 45"},
+  {"title": "Прямоугольник. Решение задач.", "section": "Четырёхугольники", "paragraphs": "§ 3 п.45"},
+  {"title": "Ромб и квадрат. Решение задач.", "section": "Четырёхугольники", "paragraphs": "§ 3 п. 46"},
+  {"title": "Осевая и центральная симметрии", "section": "Четырёхугольники", "paragraphs": "§ 3 п. 47"},
+  {"title": "Решение задач. Четырехугольники", "section": "Четырёхугольники", "paragraphs": "§1 - § 3"},
+  {"title": "Контрольная работа № 1. Тема: «Четырёхугольники»", "section": "Четырёхугольники", "paragraphs": "§ 1 – 3 п.39-47"},
+  {"title": "Понятие о площади многоугольника. Площадь квадрата.", "section": "Площадь", "paragraphs": "§1 п.48, 49"},
+  {"title": "Площадь прямоугольника. Решение задач.", "section": "Площадь", "paragraphs": "§ 1 п.50"},
+  {"title": "Площадь параллелограмма.", "section": "Площадь", "paragraphs": "§2 п.51"},
+  {"title": "Площадь параллелограмма. Решение задач.", "section": "Площадь", "paragraphs": "§2 п.51"},
+  {"title": "Площадь треугольника.", "section": "Площадь", "paragraphs": "§2 п.52"},
+  {"title": "Площадь треугольника. Решение задач.", "section": "Площадь", "paragraphs": "§2 п.52"},
+  {"title": "Площадь трапеции.", "section": "Площадь", "paragraphs": "§2 п.53"},
+  {"title": "Площадь трапеции. Решение задач.", "section": "Площадь", "paragraphs": "§2 п.53"},
+  {"title": "Теорема Пифагора.", "section": "Площадь", "paragraphs": "§3 п.54"},
+  {"title": "Теорема Пифагора. Решение задач.", "section": "Площадь", "paragraphs": "§3 п.54"},
+  {"title": "Теорема, обратная теореме Пифагора. Решение задач.", "section": "Площадь", "paragraphs": "§3 п.55"},
+  {"title": "Теорема Пифагора. Решение задач.", "section": "Площадь", "paragraphs": "§3 п.55"},
+  {"title": "Площадь. Решение задач.", "section": "Площадь", "paragraphs": "§1 – 3 п.48-55"},
+  {"title": "Контрольная работа № 2. «Площадь».", "section": "Площадь", "paragraphs": "§1 – 3 п.48-55"},
+  {"title": "Определение подобных треугольников.", "section": "Подобные треугольники", "paragraphs": "§1 п.56-57"},
+  {"title": "Отношение площадей подобных треугольников. Решение задач.", "section": "Подобные треугольники", "paragraphs": "§1 п. 58"},
+  {"title": "Первый признак подобия треугольников.", "section": "Подобные треугольники", "paragraphs": "§2 п.59"},
+  {"title": "Второй признак подобия треугольников.", "section": "Подобные треугольники", "paragraphs": "§2 п.60"},
+  {"title": "Третий признак подобия треугольников.", "section": "Подобные треугольники", "paragraphs": "§2 п.61"},
+  {"title": "Признаки подобия треугольников. Решение задач.", "section": "Подобные треугольники", "paragraphs": "§2 п.59 - 61"},
+  {"title": "Признаки подобия треугольников. Решение задач.", "section": "Подобные треугольники", "paragraphs": "§2 п.59 - 61"},
+  {"title": "Контрольная работа № 3. Тема: «Признаки подобия треугольников».", "section": "Подобные треугольники", "paragraphs": "§2 п.59 - 61"},
+  {"title": "Применение подобия к доказательству теорем и решению задач. Средняя линия треугольника.", "section": "Подобные треугольники", "paragraphs": "§3 п.62"},
+  {"title": "Применение подобия к доказательству теорем и решению задач. Пропорциональные отрезки в прямоугольном треугольнике.", "section": "Подобные треугольники", "paragraphs": "§3 п.63"},
+  {"title": "Применение подобия к доказательству теорем и решению задач. Решение задач.", "section": "Подобные треугольники", "paragraphs": "§3 п.62-63"},
+  {"title": "Практические приложения подобия треугольников. Решение задач.", "section": "Подобные треугольники", "paragraphs": "§3 п. 64"},
+  {"title": "Практические приложения подобия треугольников. Решение задач.", "section": "Подобные треугольники", "paragraphs": "§3 п.64"},
+  {"title": "О подобии произвольных фигур. Решение задач.", "section": "Подобные треугольники", "paragraphs": "§3 п.65"},
+  {"title": "Применение подобия к доказательству теорем и решению задач.", "section": "Подобные треугольники", "paragraphs": "§3 п.62 – п.65"},
+  {"title": "Соотношения между сторонами и углами прямоугольного треугольника. Синус, косинус и тангенс острого угла прямоугольного треугольника.", "section": "Подобные треугольники", "paragraphs": "§4 п.66"},
+  {"title": "Значения синуса, косинуса и тангенса для углов 30°, 45° и 60°.", "section": "Подобные треугольники", "paragraphs": "§4 п.67"},
+  {"title": "Соотношения между сторонами и углами прямоугольного треугольника. Решение задач.", "section": "Подобные треугольники", "paragraphs": "§4 п.66 – п.67"},
+  {"title": "Контрольная работа № 4. Тема: «Подобные треугольники».", "section": "Подобные треугольники", "paragraphs": "§4 п.56 – п.67"},
+  {"title": "Касательная к окружности. Взаимное расположение прямой и окружности.", "section": "Окружность", "paragraphs": "§1 п.68"},
+  {"title": "Касательная к окружности.", "section": "Окружность", "paragraphs": "§1 п.69"},
+  {"title": "Касательная к окружности. Решение задач.", "section": "Окружность", "paragraphs": "§1 п.69"},
+  {"title": "Центральные и вписанные углы. Градусная мера дуги окружности.", "section": "Окружность", "paragraphs": "§2 п.70"},
+  {"title": "Центральные и вписанные углы. Градусная мера дуги окружности.", "section": "Окружность", "paragraphs": "§2 п.70"},
+  {"title": "Теорема о вписанном угле.", "section": "Окружность", "paragraphs": "§2 п.71"},
+  {"title": "Теорема о вписанном угле. Решение задач.", "section": "Окружность", "paragraphs": "§2 п.71"},
+  {"title": "Свойства биссектрисы угла и серединного перпендикуляра к отрезку.", "section": "Окружность", "paragraphs": "§3 п. 72"},
+  {"title": "Свойства биссектрисы угла и серединного перпендикуляра к отрезку. Решение задач.", "section": "Окружность", "paragraphs": "§3 п. 72"},
+  {"title": "Теорема о пересечении высот треугольника. Решение задач.", "section": "Окружность", "paragraphs": "§3 п.73"},
+  {"title": "Решение задач. Четыре замечательные точки треугольника.", "section": "Окружность", "paragraphs": "§3 п.72 - 73"},
+  {"title": "Вписанная окружность.", "section": "Окружность", "paragraphs": "§4 п.74"},
+  {"title": "Вписанная окружность. Решение задач.", "section": "Окружность", "paragraphs": "§4 п.74"},
+  {"title": "Описанная окружность.", "section": "Окружность", "paragraphs": "§4 п.75"},
+  {"title": "Описанная окружность. Решение задач.", "section": "Окружность", "paragraphs": "§4 п.75"},
+  {"title": "Решение задач Вписанная и описанная окружности.", "section": "Окружность", "paragraphs": "§4 п.74-75"},
+  {"title": "Контрольная работа № 5. Тема: «Окружность»", "section": "Окружность", "paragraphs": "§4 п.74-75"},
+  {"title": "Четырёхугольники. Решение задач.", "section": "Повторение. Решение задач", "paragraphs": "Глава 5"},
+  {"title": "Площадь. Решение задач.", "section": "Повторение. Решение задач", "paragraphs": "Глава 6"},
+  {"title": "Окружность. Подобные треугольники. Решение задач", "section": "Повторение. Решение задач", "paragraphs": "Глава 7, 8"},
+  {"title": "Резерв", "section": "Повторение. Решение задач", "paragraphs": ""},
+  {"title": "Резерв", "section": "Повторение. Решение задач", "paragraphs": ""}
+];
+const schoolGeometryGrade8=COURSES['school-math'].modules.find(module=>module.grade===8&&module.sectionIndex===3);
+schoolGeometryGrade8.lessons=SCHOOL_GEOMETRY_GRADE8_PROGRAM.map((item,index)=>{
+  const topic=makeSchoolTopic(`math-grade-8-section-4-topic-${index+1}`,item.title);
+  topic.sectionTitle=item.section;
+  topic.description=item.section+(item.paragraphs?' · '+item.paragraphs:'');
+  return topic;
 });
 function isSchoolCourse(courseKey){return !!(COURSES[courseKey]&&COURSES[courseKey].school);}
 function findSchoolModule(course,grade,sectionIndex){
   return course.modules.findIndex(module=>module.grade===Number(grade)&&module.sectionIndex===Number(sectionIndex));
+}
+function getSchoolModuleSubject(courseKey,module){
+  if(courseKey!=='school-math'||!module||![7,8].includes(Number(module.grade))) return '';
+  return module.name.startsWith('Геометрия:')?'geometry':'algebra';
 }
 
 let AC=null,CM=0,CL=0,CTAB='theory',EMODE=false;
@@ -5891,7 +5974,7 @@ function showSchoolCourseOverview(courseKey){
     return [{grade,subject:''}];
   });
   const gradeCards=gradeBlocks.map(({grade,subject})=>{
-    const sections=c.modules.filter(module=>module.grade===grade&&(!subject||module.name.startsWith('Геометрия:')===(subject==='geometry')));
+    const sections=c.modules.filter(module=>module.grade===grade&&(!subject||getSchoolModuleSubject(courseKey,module)===subject));
     const gradeTitle=`${grade} класс${subject?' '+(subject==='geometry'?'Геометрия':'Алгебра'):''}`;
     const startModuleIndex=c.modules.indexOf(sections[0]);
     const gradeNumber=String(grade).padStart(2,'0');
@@ -6106,13 +6189,19 @@ function renderSb(){
 
   const renderModule=(m,mi)=>{
     const lessons=m.lessons||[];
+    let sectionTitle='';
     let lh=m.open?lessons.map((l,li)=>{
       if(isHiddenLesson(l)){
         if(countsInLessonNumbering(l))n++;
         return '';
       }
       const act=mi===CM&&li===CL,idx=n++,title=lessonTitle(l);
-      return`<div class="lli${act?' active':''}" data-mi="${mi}" data-li="${li}" onclick="selL(event,${mi},${li})">
+      let sectionHeading='';
+      if(c.school&&l.sectionTitle&&l.sectionTitle!==sectionTitle){
+        sectionTitle=l.sectionTitle;
+        sectionHeading=`<div class="mod-head school-program-section"><span class="mni">${escapeHtml(sectionTitle)}</span></div>`;
+      }
+      return`${sectionHeading}<div class="lli${act?' active':''}" data-mi="${mi}" data-li="${li}" onclick="selL(event,${mi},${li})">
         <span class="lnum">${idx}</span>
         <span class="lni">${title}</span>
       </div>`;
@@ -6128,7 +6217,9 @@ function renderSb(){
   };
 
   if(c.school){
-    const currentGrade=c.modules&&c.modules[CM]?c.modules[CM].grade:null;
+    const currentModule=c.modules&&c.modules[CM];
+    const currentGrade=currentModule?currentModule.grade:null;
+    const currentSubject=getSchoolModuleSubject(AC,currentModule);
     const gradeKey=String(currentGrade);
     const gradeState=loadSchoolGradeSidebarState(AC);
     const isOpen=Object.prototype.hasOwnProperty.call(gradeState,gradeKey)?!!gradeState[gradeKey]:true;
@@ -6138,7 +6229,7 @@ function renderSb(){
     </button>`;
     h+=`<div class="school-grade-sections" data-grade="${currentGrade}"${isOpen?'':' hidden'}>`;
     c.modules.forEach((m,mi)=>{
-      if(Number(m.grade)===Number(currentGrade)) h+=renderModule(m,mi);
+      if(Number(m.grade)===Number(currentGrade)&&getSchoolModuleSubject(AC,m)===currentSubject) h+=renderModule(m,mi);
     });
     h+='</div>';
   }else{
