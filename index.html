@@ -5884,11 +5884,18 @@ function showSchoolCourseOverview(courseKey){
   }else{
     renderSb();
   }
-  const gradeCards=c.grades.map(grade=>{
-    const sections=c.modules.filter(module=>module.grade===grade);
-    const gradeTitle=courseKey==='school-math'&&grade===7?'7 класс Алгебра':courseKey==='school-math'&&grade===8?'8 класс Алгебра':`${grade} класс`;
+  const gradeBlocks=c.grades.flatMap(grade=>{
+    if(courseKey==='school-math'&&(grade===7||grade===8)){
+      return [{grade,subject:'algebra'},{grade,subject:'geometry'}];
+    }
+    return [{grade,subject:''}];
+  });
+  const gradeCards=gradeBlocks.map(({grade,subject})=>{
+    const sections=c.modules.filter(module=>module.grade===grade&&(!subject||module.name.startsWith('Геометрия:')===(subject==='geometry')));
+    const gradeTitle=`${grade} класс${subject?' '+(subject==='geometry'?'Геометрия':'Алгебра'):''}`;
+    const startModuleIndex=c.modules.indexOf(sections[0]);
     const gradeNumber=String(grade).padStart(2,'0');
-    return `<article class="school-grade" data-grade="${grade}" role="link" tabindex="0" aria-label="Открыть курс ${escapeHtml(gradeTitle)}" onclick="openSchoolGrade('${courseKey}',${grade})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSchoolGrade('${courseKey}',${grade})}">
+    return `<article class="school-grade" data-grade="${grade}" data-subject="${subject}" role="link" tabindex="0" aria-label="Открыть курс ${escapeHtml(gradeTitle)}" onclick="openSchoolGrade('${courseKey}',${grade},${startModuleIndex})" onkeydown="if(event.target===this&&(event.key==='Enter'||event.key===' ')){event.preventDefault();openSchoolGrade('${courseKey}',${grade},${startModuleIndex})}">
       <div class="school-grade-top"><span class="school-grade-number">${gradeNumber}</span><span class="school-grade-chip">Школьный курс</span></div>
       <h2>${escapeHtml(gradeTitle)}</h2>
       <ul>${sections.map(module=>{
@@ -5902,10 +5909,12 @@ function showSchoolCourseOverview(courseKey){
   updateActiveNav('#courses');
   window.scrollTo(0,0);
 }
-function openSchoolGrade(courseKey,grade){
+function openSchoolGrade(courseKey,grade,startModuleIndex){
   const c=COURSES[courseKey];
   if(!c||!c.school) return false;
-  const moduleIndex=c.modules.findIndex(module=>module.grade===Number(grade));
+  const moduleIndex=Number.isInteger(startModuleIndex)&&c.modules[startModuleIndex]&&c.modules[startModuleIndex].grade===Number(grade)
+    ? startModuleIndex
+    : c.modules.findIndex(module=>module.grade===Number(grade));
   if(moduleIndex<0) return false;
   const lessonIndex=0;
   const tabId='theory';
