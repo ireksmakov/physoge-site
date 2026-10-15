@@ -117,6 +117,12 @@ header{position:fixed;top:0;left:0;right:0;z-index:10000;background:rgba(2,9,20,
 .school-grade-toggle-arrow{font-size:13px;line-height:1;transition:transform .2s;color:var(--gray)}
 .school-grade-toggle.is-open .school-grade-toggle-arrow{transform:rotate(90deg);color:var(--cyan)}
 .school-grade-sections[hidden]{display:none!important}
+.school-program-section-group{margin:4px 0 8px}
+.school-program-section-toggle{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;padding:10px 14px;border:0;border-top:1px solid rgba(8,216,255,.12);background:transparent;color:var(--white);font-family:var(--fb);font-size:12px;font-weight:900;letter-spacing:.7px;text-transform:uppercase;cursor:pointer;text-align:left}
+.school-program-section-toggle:hover,.school-program-section-toggle:focus-visible{background:rgba(8,216,255,.06);color:var(--cyan);outline:none}
+.school-program-section-toggle-arrow{font-size:12px;line-height:1;color:var(--gray);transition:transform .18s,color .18s}
+.school-program-section-toggle.is-open .school-program-section-toggle-arrow{transform:rotate(90deg);color:var(--cyan)}
+.school-program-section-lessons[hidden]{display:none!important}
 /* School Math overview: grade blocks replace the left course contents sidebar. */
 #platform.school-math-page .cp-sb,
 #platform.school-math-page .cp-resizer,
@@ -5646,6 +5652,7 @@ const COURSE_SCROLL_STORAGE_KEY = 'fizmat_course_scroll_positions';
 const ACTIVE_LAB_STORAGE_KEY = 'fizmat_active_lab_state';
 const COURSE_SIDEBAR_STATE_PREFIX = 'courseSidebarState:';
 const SCHOOL_GRADE_SIDEBAR_STATE_PREFIX = 'schoolGradeSidebarState:';
+const SCHOOL_PROGRAM_SECTION_STATE_PREFIX = 'schoolProgramSectionState:';
 const COURSE_TABS = ['theory','tasks','sims','lab','video','tests','hw','trainer'];
 const COURSE_TAB_ALIASES = {simulators:'sims',labs:'lab',laboratory:'lab',homework:'hw'};
 function normalizeCourseTab(tabId){return COURSE_TAB_ALIASES[tabId]||tabId;}
@@ -5690,6 +5697,32 @@ function ensureSchoolGradeOpen(courseKey,grade){
   const state=loadSchoolGradeSidebarState(courseKey);
   state[String(grade)]=true;
   saveSchoolGradeSidebarState(courseKey,state);
+}
+function getSchoolProgramSectionStateStorageKey(courseKey){
+  return `${SCHOOL_PROGRAM_SECTION_STATE_PREFIX}${courseKey}`;
+}
+function getSchoolProgramSectionStateId(moduleIndex,sectionTitle){
+  return `${moduleIndex}:${String(sectionTitle||'').trim()}`;
+}
+function loadSchoolProgramSectionState(courseKey){
+  if(!courseKey) return {};
+  try{
+    const raw=localStorage.getItem(getSchoolProgramSectionStateStorageKey(courseKey));
+    if(!raw) return {};
+    const parsed=JSON.parse(raw);
+    return parsed&&typeof parsed==='object'?parsed:{};
+  }catch(err){
+    console.warn('Не удалось загрузить состояние разделов школьной программы:',err);
+    return {};
+  }
+}
+function saveSchoolProgramSectionState(courseKey,state){
+  if(!courseKey) return;
+  try{
+    localStorage.setItem(getSchoolProgramSectionStateStorageKey(courseKey),JSON.stringify(state||{}));
+  }catch(err){
+    console.warn('Не удалось сохранить состояние разделов школьной программы:',err);
+  }
 }
 function getCourseModuleStateId(mi,moduleName){
   return `${mi}:${String(moduleName||'').trim()}`;
@@ -6196,23 +6229,58 @@ function renderSb(){
 
   const renderModule=(m,mi)=>{
     const lessons=m.lessons||[];
-    let sectionTitle='';
-    let lh=m.open?lessons.map((l,li)=>{
-      if(isHiddenLesson(l)){
-        if(countsInLessonNumbering(l))n++;
-        return '';
-      }
-      const act=mi===CM&&li===CL,idx=n++,title=lessonTitle(l);
-      let sectionHeading='';
-      if(c.school&&l.sectionTitle&&l.sectionTitle!==sectionTitle){
-        sectionTitle=l.sectionTitle;
-        sectionHeading=`<div class="mod-head school-program-section"><span class="mni">${escapeHtml(sectionTitle)}</span></div>`;
-      }
-      return`${sectionHeading}<div class="lli${act?' active':''}" data-mi="${mi}" data-li="${li}" onclick="selL(event,${mi},${li})">
-        <span class="lnum">${idx}</span>
-        <span class="lni">${title}</span>
-      </div>`;
-    }).join(''):'';
+    let lh='';
+
+    if(m.open&&c.school&&lessons.some(l=>l&&typeof l==='object'&&l.sectionTitle)){
+      const groups=[];
+      let currentGroup=null;
+      lessons.forEach((l,li)=>{
+        if(isHiddenLesson(l)){
+          if(countsInLessonNumbering(l))n++;
+          return;
+        }
+        const idx=n++,title=lessonTitle(l);
+        const sectionTitle=(l&&l.sectionTitle)||m.name||'Раздел';
+        if(!currentGroup||currentGroup.title!==sectionTitle){
+          currentGroup={title:sectionTitle,items:[]};
+          groups.push(currentGroup);
+        }
+        currentGroup.items.push({l,li,idx,title});
+      });
+
+      const sectionState=loadSchoolProgramSectionState(AC);
+      lh=groups.map(group=>{
+        const stateId=getSchoolProgramSectionStateId(mi,group.title);
+        const isOpen=Object.prototype.hasOwnProperty.call(sectionState,stateId)?!!sectionState[stateId]:true;
+        const encodedTitle=encodeURIComponent(group.title);
+        const rows=group.items.map(item=>{
+          const act=mi===CM&&item.li===CL;
+          return`<div class="lli${act?' active':''}" data-mi="${mi}" data-li="${item.li}" onclick="selL(event,${mi},${item.li})">
+            <span class="lnum">${item.idx}</span>
+            <span class="lni">${item.title}</span>
+          </div>`;
+        }).join('');
+        return`<div class="school-program-section-group">
+          <button class="school-program-section-toggle${isOpen?' is-open':''}" type="button" aria-expanded="${isOpen?'true':'false'}" onclick="toggleSchoolProgramSection(${mi},decodeURIComponent('${encodedTitle}'))">
+            <span>${escapeHtml(group.title)}</span><span class="school-program-section-toggle-arrow">▶</span>
+          </button>
+          <div class="school-program-section-lessons"${isOpen?'':' hidden'}>${rows}</div>
+        </div>`;
+      }).join('');
+    }else if(m.open){
+      lh=lessons.map((l,li)=>{
+        if(isHiddenLesson(l)){
+          if(countsInLessonNumbering(l))n++;
+          return '';
+        }
+        const act=mi===CM&&li===CL,idx=n++,title=lessonTitle(l);
+        return`<div class="lli${act?' active':''}" data-mi="${mi}" data-li="${li}" onclick="selL(event,${mi},${li})">
+          <span class="lnum">${idx}</span>
+          <span class="lni">${title}</span>
+        </div>`;
+      }).join('');
+    }
+
     if(!m.open)n+=lessons.filter(countsInLessonNumbering).length;
     return`<div class="mod-block" data-mi="${mi}">
       <div class="mod-head">
@@ -6275,6 +6343,14 @@ function toggleSchoolGrade(grade){
   const current=Object.prototype.hasOwnProperty.call(state,key)?!!state[key]:true;
   state[key]=!current;
   saveSchoolGradeSidebarState(AC,state);
+  renderSb();
+}
+function toggleSchoolProgramSection(mi,sectionTitle){
+  const state=loadSchoolProgramSectionState(AC);
+  const stateId=getSchoolProgramSectionStateId(mi,sectionTitle);
+  const current=Object.prototype.hasOwnProperty.call(state,stateId)?!!state[stateId]:true;
+  state[stateId]=!current;
+  saveSchoolProgramSectionState(AC,state);
   renderSb();
 }
 function togM(mi){
