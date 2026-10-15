@@ -3867,7 +3867,7 @@ const SCHOOL_GEOMETRY_GRADE8_PROGRAM=[
   {"title": "Резерв", "section": "Повторение. Решение задач", "paragraphs": ""}
 ];
 const schoolGeometryGrade8=COURSES['school-math'].modules.find(module=>module.grade===8&&module.sectionIndex===3);
-// Эти пункты остаются в данных и сохраняют исходную нумерацию/маршруты,
+// Эти пункты остаются в данных и сохраняют исходные идентификаторы и маршруты,
 // но не показываются в левом «Содержании» курса геометрии 8 класса.
 const SCHOOL_GEOMETRY_GRADE8_HIDDEN_CONTENT_NUMBERS=new Set([1,2,4,8,10,18,20,22,24,27,50,54,56,60,62,69,70]);
 schoolGeometryGrade8.lessons=SCHOOL_GEOMETRY_GRADE8_PROGRAM.map((item,index)=>{
@@ -3876,7 +3876,6 @@ schoolGeometryGrade8.lessons=SCHOOL_GEOMETRY_GRADE8_PROGRAM.map((item,index)=>{
   topic.description=item.section+(item.paragraphs?' · '+item.paragraphs:'');
   if(SCHOOL_GEOMETRY_GRADE8_HIDDEN_CONTENT_NUMBERS.has(index+1)){
     topic.hidden=true;
-    topic.preserveNumber=true;
   }
   return topic;
 });
