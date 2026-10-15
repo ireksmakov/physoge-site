@@ -6341,6 +6341,34 @@ function showTab(id,btn,colorClass){
 
 /* ============ THEORY RENDERING ============ */
 function renderTheory(){
+  // ЕГЭ Физика · Урок 34 «Виды колебаний» — две учебные карточки 16:9 в карусели.
+  if(AC==='ege-phy'&&CM===4&&CL===0){
+    const theoryImages=[
+      {
+        src:'images/ege-physics/lesson-34/theory/ege-physics-lesson-34-theory-01.svg',
+        alt:'Механические колебания и волны: определение колебаний, механические колебания, свободные, вынужденные и автоколебания'
+      },
+      {
+        src:'images/ege-physics/lesson-34/theory/ege-physics-lesson-34-theory-02.svg',
+        alt:'Свободные колебания: условия возникновения, устойчивое равновесие, возвращающая сила, инертность и малое сопротивление'
+      }
+    ];
+    const carouselHtml=createImageCarousel(theoryImages,{
+      className:'zsi-unified-image-carousel',
+      imgClass:'theory-carousel-img universal-viewable-image image-carousel-img',
+      captions:false,
+      hint:'Перелистывайте две карточки кнопками со стрелками. Нажмите на фото, чтобы увеличить.'
+    });
+    return `<div class="zsi-theory-carousel ege-phy-m4-l0-theory-carousel" style="margin-bottom:14px">
+      <div class="zsi-carousel-head">
+        <div>
+          <div class="zsi-carousel-kicker">Теория · Урок 34</div>
+          <h3>Виды колебаний</h3>
+        </div>
+      </div>
+      ${carouselHtml}
+    </div>${renderTheoryBlocks(getTH())}`;
+  }
   if(AC==='oge-phy'&&CM===1&&CL===0){
     const theoryImages=[
       {src:'images/course/oge-phy/m-1/l-0/theory/reference-frame-path-displacement-speed.png',alt:'Система отсчёта, путь, перемещение и скорость: определения, сравнение пути и перемещения, основные формулы'},
