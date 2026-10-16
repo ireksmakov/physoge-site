@@ -1570,6 +1570,18 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
   object-fit: contain;
   border-radius: 14px;
 }
+.school-task-image-block,
+.school-task-image-carousel{
+  background:#fff;
+}
+.lesson-task-image{
+  display:block;
+  width:100%;
+  max-width:100%;
+  height:auto;
+  object-fit:contain;
+  background:#fff;
+}
 .thx-kicker{font-size:10px;font-weight:700;letter-spacing:1.35px;text-transform:uppercase;color:var(--cyan);margin-bottom:8px}
 .thx-lead{font-size:15px;line-height:1.7;color:var(--white)}
 .thx-grid{display:grid;gap:12px;margin-top:12px}
@@ -3916,6 +3928,47 @@ schoolGeometryGrade8.lessons=SCHOOL_GEOMETRY_GRADE8_PROGRAM.map((item,index)=>{
       }
     ];
   }
+  // Задачи Т43–Т66 распределены по темам программы геометрии 8 класса.
+  // Используются обрезанные по границам заданий исходные скриншоты без масштабирования.
+  const grade8TaskRoot='images/school-math/grade-8/geometry/tasks/';
+  if(index===2){
+    topic.tasks.images=[
+      {src:grade8TaskRoot+'tasks-43-45.png',alt:'Задачи Т43–Т45: многоугольник, выпуклый многоугольник, четырёхугольник'}
+    ];
+  }
+  if(index===4){
+    topic.tasks.images=[
+      {src:grade8TaskRoot+'tasks-46-47.png',alt:'Задачи Т46–Т47: свойства параллелограмма и биссектрисы его углов'}
+    ];
+  }
+  if(index===6){
+    topic.tasks.images=[
+      {src:grade8TaskRoot+'task-48.png',alt:'Задача Т48: признаки параллелограмма'}
+    ];
+  }
+  if(index===8){
+    topic.tasks.images=[
+      {src:grade8TaskRoot+'tasks-55-59.png',alt:'Задачи Т55–Т59: трапеция и равнобедренная трапеция'},
+      {src:grade8TaskRoot+'task-60.png',alt:'Задача Т60: свойства прямоугольной и равнобедренной трапеции'}
+    ];
+  }
+  if(index===10){
+    topic.tasks.images=[
+      {src:grade8TaskRoot+'tasks-52-53.png',alt:'Задачи Т52–Т53: прямоугольник и его свойства'},
+      {src:grade8TaskRoot+'task-54.png',alt:'Задача Т54: свойства прямоугольника и квадрата'}
+    ];
+  }
+  if(index===11){
+    topic.tasks.images=[
+      {src:grade8TaskRoot+'tasks-49-51.png',alt:'Задачи Т49–Т51: ромб, его свойства и признаки'}
+    ];
+  }
+  if(index===13){
+    topic.tasks.images=[
+      {src:grade8TaskRoot+'tasks-61-65.png',alt:'Задачи Т61–Т65: обобщение по четырёхугольникам'},
+      {src:grade8TaskRoot+'task-66.png',alt:'Задача Т66: свойства диагоналей четырёхугольников'}
+    ];
+  }
   if(SCHOOL_GEOMETRY_GRADE8_HIDDEN_CONTENT_NUMBERS.has(index+1)){
     topic.hidden=true;
   }
@@ -6155,6 +6208,7 @@ function renderSchoolTopic(course,topic){
   const module=course.modules[CM];
   const safeTopic=topic||makeSchoolTopic('missing','Тема');
   const theoryImages=Array.isArray(safeTopic.theory.images)?safeTopic.theory.images:[];
+  const taskImages=Array.isArray(safeTopic.tasks&&safeTopic.tasks.images)?safeTopic.tasks.images:[];
   const videoUrl=safeTopic.video&&safeTopic.video.url||'';
   const hasTrainer=AC==='school-math'&&[5,6].includes(Number(module.grade));
   const trainerUrl='https://ireksmakov.github.io/trener-chisla/';
@@ -6162,7 +6216,7 @@ function renderSchoolTopic(course,topic){
     theory:`<h2>${escapeHtml(safeTopic.theory.title)}</h2>${theoryImages.length?createImageCarousel(theoryImages,{singleClass:'theory-image-block',imgClass:'lesson-theory-image universal-viewable-image',captions:false,hint:'Перелистывайте карточки кнопками со стрелками. Нажмите на фото, чтобы увеличить.'}):`<div class="school-placeholder">${escapeHtml(safeTopic.theory.content)}</div>`}`,
     video:videoUrl?`<iframe class="school-video-frame" src="${escapeHtml(videoUrl)}" title="${escapeHtml(safeTopic.video.title)}" allowfullscreen></iframe>`:`<div class="school-placeholder">${escapeHtml(safeTopic.video.placeholder)}</div>`,
     tests:`<div class="school-placeholder">${escapeHtml(safeTopic.tests.placeholder)}</div>`,
-    tasks:`<div class="school-placeholder">${escapeHtml(safeTopic.tasks.placeholder)}</div>`,
+    tasks:taskImages.length?`<h2>${escapeHtml(safeTopic.tasks.title||'Задачи')}</h2>${createImageCarousel(taskImages,{singleClass:'school-task-image-block',className:'school-task-image-carousel',imgClass:'lesson-task-image universal-viewable-image image-carousel-img',captions:false,hint:'Задачи расположены по порядку. Перелистывайте стрелками и нажмите на изображение, чтобы увеличить.'})}`:`<div class="school-placeholder">${escapeHtml(safeTopic.tasks.placeholder)}</div>`,
     hw:`<div class="school-placeholder">${escapeHtml(safeTopic.homework.content)}</div>`,
     trainer:`<div class="school-trainer-wrap">
       <div class="school-trainer-note"><span><strong style="color:var(--white)">Тренажёр действий с числами</strong><br>Работает прямо внутри курса ${module.grade} класса.</span><a class="school-trainer-link" href="${trainerUrl}" target="_blank" rel="noopener">Открыть отдельно ↗</a></div>
