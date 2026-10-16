@@ -6137,7 +6137,6 @@ function renderSchoolTopic(course,topic){
     ${AC==='school-math'?'<a class="school-topic-back" href="#course/school-math">← Назад к классам</a>':''}
     <div class="lt-row"><div class="lt-inp">${escapeHtml(safeTopic.title)}</div></div>
     <div class="lmeta">${module.grade} класс · ${escapeHtml(module.name)} · ${escapeHtml(course.name)}</div>
-    <div class="school-placeholder" style="margin-bottom:20px">${escapeHtml(safeTopic.description)}</div>
     <div class="cp-tabs">
       <button class="cpt" data-tab="theory" onclick="showTab('theory',this)">📖 Теория</button>
       <button class="cpt" data-tab="video" onclick="showTab('video',this)">▶ Видео</button>
