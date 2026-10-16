@@ -1567,6 +1567,7 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
   width: 100%;
   max-width: 100%;
   height: auto;
+  object-fit: contain;
   border-radius: 14px;
 }
 .thx-kicker{font-size:10px;font-weight:700;letter-spacing:1.35px;text-transform:uppercase;color:var(--cyan);margin-bottom:8px}
@@ -3888,6 +3889,32 @@ schoolGeometryGrade8.lessons=SCHOOL_GEOMETRY_GRADE8_PROGRAM.map((item,index)=>{
       src:'images/school-math/grade-8/geometry/lesson-1/theory/polygons-02.png',
       alt:'Многоугольники — учебная карточка ФИЗМАТ: определения, свойства и формулы'
     }];
+  }
+  // Геометрия 8 класс · видимый пункт 2 «Параллелограмм. Решение задач.»
+  // Исходные изображения подключены без обрезки и без изменения пропорций.
+  if(index===4){
+    topic.theory.images=[
+      {
+        src:'images/school-math/grade-8/geometry/parallelogram/parallelogram-01.jpg',
+        alt:'Параллелограмм: определение, основные свойства и высота'
+      },
+      {
+        src:'images/school-math/grade-8/geometry/parallelogram/parallelogram-02.jpg',
+        alt:'Параллелограмм: стороны и углы, диагонали, площади частей'
+      },
+      {
+        src:'images/school-math/grade-8/geometry/parallelogram/parallelogram-03.jpg',
+        alt:'Параллелограмм: признаки параллелограмма и способы доказательства'
+      },
+      {
+        src:'images/school-math/grade-8/geometry/parallelogram/parallelogram-04.jpg',
+        alt:'Параллелограмм: высота, площадь, формулы и мини-примеры'
+      },
+      {
+        src:'images/school-math/grade-8/geometry/parallelogram/parallelogram-05.jpg',
+        alt:'Параллелограмм: биссектрисы, дополнительные свойства и краткое повторение'
+      }
+    ];
   }
   if(SCHOOL_GEOMETRY_GRADE8_HIDDEN_CONTENT_NUMBERS.has(index+1)){
     topic.hidden=true;
