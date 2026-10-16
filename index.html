@@ -6602,58 +6602,184 @@ function openCourse(key,moduleIndex,lessonIndex,tabId){
   }
 }
 
-const SCHOOL_TASK_ANSWER_STORAGE_PREFIX='fizmat_school_task_answer:';
-function getSchoolTaskAnswerStorageKey(courseKey,topicId,taskId){
-  return `${SCHOOL_TASK_ANSWER_STORAGE_PREFIX}${courseKey||''}:${topicId||''}:${taskId||''}`;
+const SCHOOL_TASK_STATE_STORAGE_PREFIX='fizmat_school_task_state:';
+function getSchoolTaskStateStorageKey(courseKey,topicId,taskId){
+  return SCHOOL_TASK_STATE_STORAGE_PREFIX+(courseKey||'')+':'+(topicId||'')+':'+(taskId||'');
 }
-function loadSchoolTaskAnswer(courseKey,topicId,taskId){
-  try{return localStorage.getItem(getSchoolTaskAnswerStorageKey(courseKey,topicId,taskId))||'';}catch(e){return '';}
-}
-function handleSchoolTaskAnswerInput(el){
-  if(!el)return;
-  const courseKey=el.dataset.course||'';
-  const topicId=el.dataset.topic||'';
-  const taskId=el.dataset.task||'';
-  const value=el.value||'';
+function loadSchoolTaskState(courseKey,topicId,taskId){
   try{
-    const key=getSchoolTaskAnswerStorageKey(courseKey,topicId,taskId);
-    if(value.trim())localStorage.setItem(key,value);
-    else localStorage.removeItem(key);
-  }catch(e){}
-  const state=el.closest('.school-task-card')?.querySelector('.school-task-save-state');
-  if(state){
-    state.textContent=value.trim()?'Ответ сохранён на этом устройстве':'Введите свой ответ';
-    state.classList.toggle('is-saved',!!value.trim());
+    const raw=localStorage.getItem(getSchoolTaskStateStorageKey(courseKey,topicId,taskId));
+    if(!raw)return {blanks:[],choices:[]};
+    const parsed=JSON.parse(raw);
+    return {
+      blanks:Array.isArray(parsed&&parsed.blanks)?parsed.blanks:[],
+      choices:Array.isArray(parsed&&parsed.choices)?parsed.choices:[]
+    };
+  }catch(e){
+    return {blanks:[],choices:[]};
   }
 }
-function clearSchoolTaskAnswer(btn){
-  const card=btn&&btn.closest('.school-task-card');
-  const input=card&&card.querySelector('.school-task-answer');
+function saveSchoolTaskStateFromCard(card){
+  if(!card)return;
+  const courseKey=card.dataset.course||AC||'';
+  const topicId=card.dataset.topic||'';
+  const taskId=card.dataset.task||'';
+  const blanks=Array.from(card.querySelectorAll('.school-inline-answer')).map(function(input){return input.value||'';});
+  const choices=Array.from(card.querySelectorAll('.school-task-choice:checked')).map(function(input){return input.value;});
+  try{
+    localStorage.setItem(getSchoolTaskStateStorageKey(courseKey,topicId,taskId),JSON.stringify({blanks:blanks,choices:choices}));
+  }catch(e){}
+}
+function clearSchoolTaskCheckState(card){
+  if(!card)return;
+  card.querySelectorAll('.school-inline-answer').forEach(function(input){input.classList.remove('is-correct','is-incorrect');});
+  card.querySelectorAll('.school-task-option').forEach(function(label){label.classList.remove('is-correct','is-incorrect');});
+  const result=card.querySelector('.school-task-check-result');
+  if(result){
+    result.textContent='';
+    result.className='school-task-check-result';
+  }
+}
+function handleSchoolInlineTaskInput(input){
   if(!input)return;
-  input.value='';
-  handleSchoolTaskAnswerInput(input);
-  input.focus();
+  const card=input.closest('.school-task-card');
+  clearSchoolTaskCheckState(card);
+  saveSchoolTaskStateFromCard(card);
+}
+function handleSchoolTaskChoiceChange(input){
+  if(!input)return;
+  const card=input.closest('.school-task-card');
+  if(!card)return;
+  clearSchoolTaskCheckState(card);
+  if(input.type==='radio'&&input.checked){
+    const firstBlank=card.querySelector('.school-inline-answer');
+    if(firstBlank){
+      firstBlank.value=input.dataset.choiceText||'';
+    }
+  }
+  saveSchoolTaskStateFromCard(card);
+}
+function normalizeSchoolTaskValue(value){
+  return String(value||'')
+    .toLowerCase()
+    .replace(/ё/g,'е')
+    .replace(/[«»"']/g,'')
+    .replace(/\s+/g,' ')
+    .replace(/\s*°\s*/g,'°')
+    .replace(/[.,;:]+$/g,'')
+    .trim();
+}
+function getCurrentSchoolTaskById(taskId){
+  const lesson=getLessonObject(AC,CM,CL);
+  const items=lesson&&lesson.tasks&&Array.isArray(lesson.tasks.items)?lesson.tasks.items:[];
+  return items.find(function(task){return String(task.id)===String(taskId);})||null;
+}
+function schoolTaskValueMatches(value,accepted){
+  const v=normalizeSchoolTaskValue(value);
+  const variants=Array.isArray(accepted)?accepted:[accepted];
+  return variants.some(function(item){return normalizeSchoolTaskValue(item)===v;});
+}
+function checkSchoolTaskAnswer(btn){
+  const card=btn&&btn.closest('.school-task-card');
+  if(!card)return;
+  const task=getCurrentSchoolTaskById(card.dataset.task||'');
+  if(!task||!task.answer)return;
+
+  let ok=true;
+  const blankInputs=Array.from(card.querySelectorAll('.school-inline-answer'));
+  const expectedBlanks=Array.isArray(task.answer.blanks)?task.answer.blanks:[];
+  blankInputs.forEach(function(input,index){
+    const correct=schoolTaskValueMatches(input.value,expectedBlanks[index]||[]);
+    input.classList.toggle('is-correct',correct);
+    input.classList.toggle('is-incorrect',!correct);
+    if(!correct)ok=false;
+  });
+
+  const expectedChoices=Array.isArray(task.answer.correctChoices)?task.answer.correctChoices.map(String):[];
+  const selectedChoices=Array.from(card.querySelectorAll('.school-task-choice:checked')).map(function(input){return String(input.value);});
+  const mustCheckChoices=expectedChoices.length&&(!expectedBlanks.length||selectedChoices.length);
+  if(mustCheckChoices){
+    const expectedSorted=expectedChoices.slice().sort().join('|');
+    const selectedSorted=selectedChoices.slice().sort().join('|');
+    if(expectedSorted!==selectedSorted)ok=false;
+  }
+
+  if(expectedChoices.length){
+    card.querySelectorAll('.school-task-option').forEach(function(label){
+      const input=label.querySelector('.school-task-choice');
+      const value=input?String(input.value):'';
+      const shouldBe=expectedChoices.includes(value);
+      const selected=!!(input&&input.checked);
+      label.classList.toggle('is-correct',shouldBe);
+      label.classList.toggle('is-incorrect',selected&&!shouldBe);
+    });
+  }
+
+  saveSchoolTaskStateFromCard(card);
+  const result=card.querySelector('.school-task-check-result');
+  if(result){
+    result.textContent=ok?'Верно!':'Есть ошибка. Проверьте ответ.';
+    result.className='school-task-check-result '+(ok?'is-correct':'is-incorrect');
+  }
+}
+function renderSchoolTaskInteractiveText(task,topicId,taskState){
+  const raw=String(task.text||'');
+  const lines=raw.split('\n');
+  const answer=task.answer||{};
+  const choiceMode=answer.choiceMode||'';
+  let blankIndex=0;
+  const safeTopicName=String(topicId).replace(/[^a-zA-Z0-9_-]/g,'-');
+  const safeTaskName=String(task.id||'task').replace(/[^a-zA-Z0-9_-]/g,'-');
+  const optionName='school-choice-'+safeTopicName+'-'+safeTaskName;
+
+  function renderBlanks(line){
+    let last=0;
+    let html='';
+    const re=/_{3,}/g;
+    let match;
+    while((match=re.exec(line))){
+      html+=escapeHtml(line.slice(last,match.index));
+      const i=blankIndex++;
+      const value=taskState.blanks[i]||'';
+      html+='<input class="school-inline-answer" type="text" data-blank-index="'+i+'" value="'+escapeHtml(value)+'" aria-label="Ответ '+(i+1)+'" autocomplete="off" oninput="handleSchoolInlineTaskInput(this)">';
+      last=match.index+match[0].length;
+    }
+    html+=escapeHtml(line.slice(last));
+    return html;
+  }
+
+  const body=[];
+  const options=[];
+  lines.forEach(function(line){
+    const m=line.match(/^\s*([абвгде])\)\s*(.*)$/i);
+    if(choiceMode&&m){
+      const letter=m[1].toLowerCase();
+      const optionText=m[2].replace(/[;\s]+$/,'').trim();
+      const checked=taskState.choices.includes(letter);
+      const type=choiceMode==='multi'?'checkbox':'radio';
+      options.push('<label class="school-task-option"><input class="school-task-choice" type="'+type+'" name="'+escapeHtml(optionName)+'" value="'+escapeHtml(letter)+'" data-choice-text="'+escapeHtml(optionText)+'"'+(checked?' checked':'')+' onchange="handleSchoolTaskChoiceChange(this)"><span class="school-task-option-letter">'+escapeHtml(letter)+')</span><span>'+escapeHtml(m[2])+'</span></label>');
+    }else{
+      body.push('<div class="school-task-line">'+renderBlanks(line)+'</div>');
+    }
+  });
+
+  return body.join('')+(options.length?'<div class="school-task-options">'+options.join('')+'</div>':'');
 }
 function renderSchoolTaskItems(topic){
   const items=Array.isArray(topic&&topic.tasks&&topic.tasks.items)?topic.tasks.items:[];
   if(!items.length)return '';
   const topicId=String(topic.id||'topic');
-  return `<div class="school-task-list">${items.map((task,index)=>{
+  return '<div class="school-task-list">'+items.map(function(task,index){
     const taskId=String(task.id||('task-'+(index+1)));
-    const label=String(task.label||('Задача '+(index+1)));
+    const order=Number(task.order)||index+1;
     const instruction=String(task.instruction||'Решите задачу');
-    const text=String(task.text||'');
-    const saved=loadSchoolTaskAnswer(AC,topicId,taskId);
-    return `<article class="school-task-card" data-school-task="${escapeHtml(taskId)}">
-      <div class="school-task-head"><span class="school-task-number">${escapeHtml(label)}</span><div class="school-task-instruction">${escapeHtml(instruction)}</div></div>
-      <div class="school-task-text">${escapeHtml(text)}</div>
-      <div class="school-task-answer-wrap">
-        <label class="school-task-answer-label" for="school-answer-${escapeHtml(topicId)}-${escapeHtml(taskId)}">Ответ ученика</label>
-        <textarea class="school-task-answer" id="school-answer-${escapeHtml(topicId)}-${escapeHtml(taskId)}" data-course="${escapeHtml(AC||'')}" data-topic="${escapeHtml(topicId)}" data-task="${escapeHtml(taskId)}" placeholder="Введите ответ здесь…" oninput="handleSchoolTaskAnswerInput(this)">${escapeHtml(saved)}</textarea>
-        <div class="school-task-answer-footer"><span class="school-task-save-state${saved.trim()?' is-saved':''}">${saved.trim()?'Ответ сохранён на этом устройстве':'Введите свой ответ'}</span><button type="button" class="school-task-clear" onclick="clearSchoolTaskAnswer(this)">Очистить ответ</button></div>
-      </div>
-    </article>`;
-  }).join('')}</div>`;
+    const state=loadSchoolTaskState(AC,topicId,taskId);
+    return '<article class="school-task-card" data-school-task="'+escapeHtml(taskId)+'" data-course="'+escapeHtml(AC||'')+'" data-topic="'+escapeHtml(topicId)+'" data-task="'+escapeHtml(taskId)+'">'+
+      '<div class="school-task-head"><span class="school-task-number">'+order+'</span><div class="school-task-instruction">'+escapeHtml(instruction)+'</div></div>'+
+      '<div class="school-task-text">'+renderSchoolTaskInteractiveText(task,topicId,state)+'</div>'+
+      '<div class="school-task-actions"><button type="button" class="school-task-check" onclick="checkSchoolTaskAnswer(this)">Проверить ответ</button><span class="school-task-check-result" aria-live="polite"></span></div>'+
+    '</article>';
+  }).join('')+'</div>';
 }
 function renderSchoolTopic(course,topic){
   const module=course.modules[CM];
