@@ -3880,6 +3880,12 @@ schoolGeometryGrade8.lessons=SCHOOL_GEOMETRY_GRADE8_PROGRAM.map((item,index)=>{
   const topic=makeSchoolTopic(`math-grade-8-section-4-topic-${index+1}`,item.title);
   topic.sectionTitle=item.section;
   topic.description=item.section+(item.paragraphs?' · '+item.paragraphs:'');
+  if(index===1||index===2){
+    topic.theory.images=[{
+      src:'images/school-math/grade-8/geometry/lesson-1/theory/polygons.png',
+      alt:'Многоугольники: определение, выпуклые и невыпуклые многоугольники, элементы и основные формулы'
+    }];
+  }
   if(SCHOOL_GEOMETRY_GRADE8_HIDDEN_CONTENT_NUMBERS.has(index+1)){
     topic.hidden=true;
   }
@@ -6118,11 +6124,12 @@ function openCourse(key,moduleIndex,lessonIndex,tabId){
 function renderSchoolTopic(course,topic){
   const module=course.modules[CM];
   const safeTopic=topic||makeSchoolTopic('missing','Тема');
+  const theoryImages=Array.isArray(safeTopic.theory.images)?safeTopic.theory.images:[];
   const videoUrl=safeTopic.video&&safeTopic.video.url||'';
   const hasTrainer=AC==='school-math'&&[5,6].includes(Number(module.grade));
   const trainerUrl='https://ireksmakov.github.io/trener-chisla/';
   const panels={
-    theory:`<h2>${escapeHtml(safeTopic.theory.title)}</h2><div class="school-placeholder">${escapeHtml(safeTopic.theory.content)}</div>`,
+    theory:`<h2>${escapeHtml(safeTopic.theory.title)}</h2>${theoryImages.length?createImageCarousel(theoryImages,{singleClass:'theory-image-block',imgClass:'lesson-theory-image universal-viewable-image'}):`<div class="school-placeholder">${escapeHtml(safeTopic.theory.content)}</div>`}`,
     video:videoUrl?`<iframe class="school-video-frame" src="${escapeHtml(videoUrl)}" title="${escapeHtml(safeTopic.video.title)}" allowfullscreen></iframe>`:`<div class="school-placeholder">${escapeHtml(safeTopic.video.placeholder)}</div>`,
     tests:`<div class="school-placeholder">${escapeHtml(safeTopic.tests.placeholder)}</div>`,
     tasks:`<div class="school-placeholder">${escapeHtml(safeTopic.tasks.placeholder)}</div>`,
