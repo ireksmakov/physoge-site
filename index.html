@@ -1582,6 +1582,29 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
   object-fit:contain;
   background:#fff;
 }
+.school-task-list{display:grid;gap:16px}
+.school-task-card{border:1px solid rgba(8,216,255,.22);border-radius:16px;background:linear-gradient(160deg,rgba(8,216,255,.055),rgba(2,9,20,.94));padding:18px;box-shadow:0 10px 26px rgba(0,0,0,.14)}
+.school-task-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.school-task-number{display:inline-flex;align-items:center;justify-content:center;min-width:58px;height:36px;padding:0 12px;border-radius:10px;background:rgba(8,216,255,.12);border:1px solid rgba(8,216,255,.32);color:var(--cyan);font-family:var(--fh);font-size:15px;font-weight:900;letter-spacing:.4px;flex:0 0 auto}
+.school-task-instruction{font-size:16px;line-height:1.35;font-weight:900;color:var(--white);padding-top:6px}
+.school-task-text{white-space:pre-wrap;color:rgba(230,240,255,.88);font-size:15px;line-height:1.65;padding:14px 15px;border-radius:12px;background:rgba(0,0,0,.16);border:1px solid rgba(255,255,255,.06)}
+.school-task-answer-wrap{margin-top:14px}
+.school-task-answer-label{display:block;margin-bottom:7px;color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:.35px;text-transform:uppercase}
+.school-task-answer{display:block;width:100%;min-height:82px;resize:vertical;padding:12px 14px;border:1px solid rgba(8,216,255,.28);border-radius:11px;background:rgba(1,8,18,.68);color:var(--white);font-family:var(--fb);font-size:15px;line-height:1.5;outline:none;transition:border-color .18s,box-shadow .18s,background .18s}
+.school-task-answer:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(8,216,255,.10);background:rgba(1,8,18,.9)}
+.school-task-answer::placeholder{color:rgba(180,198,220,.58)}
+.school-task-answer-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:8px}
+.school-task-save-state{color:var(--gray);font-size:11px}
+.school-task-save-state.is-saved{color:#72e7a0}
+.school-task-clear{padding:7px 10px;border:1px solid rgba(8,216,255,.22);border-radius:8px;background:transparent;color:var(--gray);font-size:11px;font-weight:800;cursor:pointer}
+.school-task-clear:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(8,216,255,.06)}
+body.trainer-theme .school-task-card{background:#fff;border-color:#c9d8e8;box-shadow:0 8px 22px rgba(15,46,99,.07)}
+body.trainer-theme .school-task-instruction{color:#172033}
+body.trainer-theme .school-task-text{color:#27364c;background:#f5f9ff;border-color:#d8e3ef}
+body.trainer-theme .school-task-answer{background:#fff;color:#172033;border-color:#b9ccdf}
+body.trainer-theme .school-task-answer:focus{background:#fff;border-color:#1f7ae0;box-shadow:0 0 0 3px rgba(31,122,224,.10)}
+body.trainer-theme .school-task-answer::placeholder{color:#7b8ba0}
+@media(max-width:700px){.school-task-card{padding:14px}.school-task-head{gap:9px}.school-task-number{min-width:52px;height:34px;font-size:14px}.school-task-instruction{font-size:15px}.school-task-text{font-size:14px;padding:12px}.school-task-answer{font-size:14px;min-height:76px}}
 .thx-kicker{font-size:10px;font-weight:700;letter-spacing:1.35px;text-transform:uppercase;color:var(--cyan);margin-bottom:8px}
 .thx-lead{font-size:15px;line-height:1.7;color:var(--white)}
 .thx-grid{display:grid;gap:12px;margin-top:12px}
@@ -3885,6 +3908,166 @@ const SCHOOL_GEOMETRY_GRADE8_PROGRAM=[
   {"title": "Резерв", "section": "Повторение. Решение задач", "paragraphs": ""},
   {"title": "Резерв", "section": "Повторение. Решение задач", "paragraphs": ""}
 ];
+const SCHOOL_GEOMETRY_GRADE8_TEXT_TASKS={
+  "3": [
+    {
+      "id": "T43",
+      "label": "Т43",
+      "instruction": "Вставьте пропущенное слово",
+      "text": "а) Простая замкнутая ломаная называется ____________________, если ее соседние звенья не лежат на одной прямой.\nб) Выпуклый многоугольник называется ____________________, если у него все стороны и все углы равны.\nв) Сумма длин всех сторон четырехугольника называется ____________________ четырехугольника.\nг) Отрезок, соединяющий противолежащие вершины четырёхугольника, называется ____________________.\nд) Стороны четырехугольника, исходящие из одной вершины, называют ____________________ сторонами."
+    },
+    {
+      "id": "T44",
+      "label": "Т44",
+      "instruction": "Выбери верное утверждение",
+      "text": "Сумма углов выпуклого четырёхугольника равна:\nа) 180°;\nб) 360°;\nв) 90°."
+    },
+    {
+      "id": "T45",
+      "label": "Т45",
+      "instruction": "Выбери верное утверждение",
+      "text": "В n-угольнике сумма внешних углов равна сумме внутренних углов. Этот многоугольник имеет сторон:\nа) 4;\nб) 6;\nв) 8."
+    }
+  ],
+  "5": [
+    {
+      "id": "T46",
+      "label": "Т46",
+      "instruction": "Вставьте пропущенное слово",
+      "text": "а) Четырёхугольник, у которого противоположные стороны попарно параллельны, называется ____________________.\nб) Диагонали параллелограмма точкой пересечения делятся ____________________.\nв) В параллелограмме сумма углов, прилежащих к одной стороне, равна ____________________.\nг) Противолежащие стороны параллелограмма ____________________ и ____________________.\nд) Каждая диагональ делит параллелограмм на два ____________________ треугольника."
+    },
+    {
+      "id": "T47",
+      "label": "Т47",
+      "instruction": "Выберите верные утверждения",
+      "text": "а) Биссектрисы соседних углов параллелограмма параллельны.\nб) Биссектрисы противоположных углов параллельны или лежат на одной прямой.\nв) Биссектрисы соседних углов параллелограмма перпендикулярны.\nг) Биссектрисы соседних углов параллелограмма параллельны или лежат на одной прямой."
+    }
+  ],
+  "7": [
+    {
+      "id": "T48",
+      "label": "Т48",
+      "instruction": "Выберите верное утверждение",
+      "text": "Признак параллелограмма формулируется так:\nа) В параллелограмме противоположные углы и противоположные стороны равны.\nб) Если в четырёхугольнике противоположные стороны попарно равны, то этот четырёхугольник — параллелограмм.\nв) Диагонали параллелограмма точкой пересечения делятся пополам."
+    }
+  ],
+  "9": [
+    {
+      "id": "T55",
+      "label": "Т55",
+      "instruction": "Выберите верное утверждение",
+      "text": "а) Диагонали трапеции перпендикулярны и точкой пересечения делятся пополам.\nб) Сумма углов трапеции равна 360°.\nв) Каждая трапеция является параллелограммом.\nг) Если две стороны выпуклого четырехугольника параллельны, то этот четырехугольник — трапеция."
+    },
+    {
+      "id": "T56",
+      "label": "Т56",
+      "instruction": "Выберите неверные утверждения",
+      "text": "а) У любой трапеции основания параллельны.\nб) Диагональ трапеции делит ее на два равных треугольника.\nв) Отрезок, соединяющий середины диагоналей трапеции, равен полуразности ее оснований.\nг) Диагонали трапеции пересекаются и точкой пересечения делятся пополам."
+    },
+    {
+      "id": "T57",
+      "label": "Т57",
+      "instruction": "Сформулируйте свойство трапеции",
+      "text": "Биссектрисы углов при боковой стороне трапеции ____________.\nа) параллельны;\nб) равны;\nв) перпендикулярны;\nг) образуют угол 120°."
+    },
+    {
+      "id": "T58",
+      "label": "Т58",
+      "instruction": "Закончите предложение",
+      "text": "Трапеция называется равнобедренной, если у нее ____________:\nа) две стороны равны;\nб) два угла равны;\nв) боковые стороны равны;\nг) основания параллельны и равны."
+    },
+    {
+      "id": "T59",
+      "label": "Т59",
+      "instruction": "Укажите верные утверждения",
+      "text": "а) Диагонали равнобедренной трапеции равны.\nб) Если углы при основании трапеции равны, то она равнобедренная.\nв) У любой трапеции боковые стороны равны.\nг) У любой прямоугольной трапеции есть два равных угла."
+    },
+    {
+      "id": "T60",
+      "label": "Т60",
+      "instruction": "Укажите неверное утверждение",
+      "text": "а) В прямоугольной трапеции все углы прямые.\nб) Диагонали прямоугольной трапеции не равны.\nв) Один из углов равнобедренной трапеции равен 100°. Тогда три оставшихся угла равны 100°, 80°, 80°.\nг) В трапеции сумма углов при боковой стороне равна 180°."
+    }
+  ],
+  "11": [
+    {
+      "id": "T52",
+      "label": "Т52",
+      "instruction": "Продолжите предложение",
+      "text": "а) Все углы прямоугольника ____________.\nб) Если диагонали параллелограмма равны, то это ____________.\nв) Диагонали ____________ равны и взаимно перпендикулярны.\nг) В прямоугольнике противоположные стороны ____________."
+    },
+    {
+      "id": "T53",
+      "label": "Т53",
+      "instruction": "Выберите верные утверждения",
+      "text": "а) Диагонали любого прямоугольника делят его на 4 равных треугольника.\nб) Диагонали прямоугольника точкой пересечения делятся пополам.\nв) Если в ромбе один из углов равен 90°, то такой ромб — квадрат.\nг) В любом прямоугольнике диагонали взаимно перпендикулярны.\nд) Любой квадрат является прямоугольником."
+    },
+    {
+      "id": "T54",
+      "label": "Т54",
+      "instruction": "Выберите неверное утверждение",
+      "text": "а) Диагонали прямоугольника делят углы прямоугольника пополам.\nб) В прямоугольнике сумма углов равна 360°.\nв) Если в параллелограмме диагонали равны и перпендикулярны, то этот параллелограмм — квадрат.\nг) Периметр квадрата равен сумме длин всех его сторон.\nд) Существует прямоугольник, диагонали которого взаимно перпендикулярны."
+    }
+  ],
+  "12": [
+    {
+      "id": "T49",
+      "label": "Т49",
+      "instruction": "Вставьте пропущенное слово",
+      "text": "а) Ромб — параллелограмм, у которого все стороны ____________________.\nб) Если у параллелограмма диагонали взаимно ____________________, то он — ромб.\nв) Диагонали ромба взаимно ____________________.\nг) Диагонали ромба являются ____________________ углов.\nд) ____________________ ромба точкой пересечения делятся пополам."
+    },
+    {
+      "id": "T50",
+      "label": "Т50",
+      "instruction": "Выберите верные утверждения",
+      "text": "а) Диагонали ромба точкой пересечения делятся пополам.\nб) Если диагонали параллелограмма равны, то этот параллелограмм является ромбом.\nв) Все углы ромба равны.\nг) Если в параллелограмме две соседние стороны равны, то этот параллелограмм является ромбом.\nд) Каждая диагональ ромба делит его на два равных треугольника."
+    },
+    {
+      "id": "T51",
+      "label": "Т51",
+      "instruction": "Выберите верное утверждение",
+      "text": "Признак ромба формулируется так:\nа) Ромб — это параллелограмм, у которого все углы равны.\nб) Диагонали ромба равны.\nв) Сумма углов ромба равна 180 градусов.\nг) Диагонали ромба точкой пересечения делятся пополам.\nд) Если в четырехугольнике диагонали перпендикулярны и точкой пересечения делятся пополам."
+    }
+  ],
+  "14": [
+    {
+      "id": "T61",
+      "label": "Т61",
+      "instruction": "Закончите предложение",
+      "text": "Расстоянием от точки до прямой называется:\nа) длина перпендикуляра, проведенного от данной точки к прямой;\nб) расстояние между данной точкой и любой точкой прямой;\nв) часть прямой, ограниченная двумя точками;\nг) прямая, проходящая через данную точку и произвольную точку на прямой."
+    },
+    {
+      "id": "T62",
+      "label": "Т62",
+      "instruction": "Укажите неверные утверждения",
+      "text": "а) У параллелограмма длины высот, выходящих из одной вершины, равны.\nб) Прямоугольник имеет 4 вершины, 4 стороны, 2 диагонали.\nв) Боковая сторона трапеции является ее высотой.\nг) Всякий квадрат является ромбом и всякий ромб является квадратом."
+    },
+    {
+      "id": "T63",
+      "label": "Т63",
+      "instruction": "Укажите верное утверждение",
+      "text": "а) У ромба диагонали равны.\nб) Периметр прямоугольника равен произведению длин всех его сторон.\nв) У квадрата длины сторон не равны диагоналям.\nг) Высотой трапеции называется отрезок, пересекающий основание трапеции под прямым углом."
+    },
+    {
+      "id": "T64",
+      "label": "Т64",
+      "instruction": "Вставьте пропущенное слово",
+      "text": "а) Четырехугольник, у которого две стороны параллельны, а две другие стороны не параллельны называется ____________________.\nб) Четырехугольник, у которого противоположные стороны попарно параллельны называется ____________________.\nв) Сумма длин всех сторон четырехугольника называется ____________________.\nг) Две несмежные стороны четырехугольника называются ____________________.\nд) Отрезок, соединяющий любые две не соседние вершины многоугольника, называется ____________________ многоугольника."
+    },
+    {
+      "id": "T65",
+      "label": "Т65",
+      "instruction": "Выбери верные утверждения",
+      "text": "а) В параллелограмме противоположные стороны равны.\nб) Диагонали прямоугольника равны, взаимно перпендикулярны, точкой пересечения делятся пополам и делят углы прямоугольника пополам.\nв) В трапеции противоположные углы равны.\nг) В равнобедренной трапеции углы при каждом основании равны.\nд) Все стороны ромба равны.\nе) Диагонали ромба точкой пересечения делятся пополам."
+    },
+    {
+      "id": "T66",
+      "label": "Т66",
+      "instruction": "Выбери верное утверждение",
+      "text": "Диагонали какого четырёхугольника имеют такие свойства:\nДиагонали равны, взаимно перпендикулярны, точкой пересечения делятся пополам и делят углы четырёхугольника пополам.\nа) прямоугольник;\nб) произвольный четырёхугольник;\nв) квадрат;\nг) ромб;\nд) трапеция;\nе) параллелограмм."
+    }
+  ]
+};
 const schoolGeometryGrade8=COURSES['school-math'].modules.find(module=>module.grade===8&&module.sectionIndex===3);
 // Эти пункты остаются в данных и сохраняют исходные идентификаторы и маршруты,
 // но не показываются в левом «Содержании» курса геометрии 8 класса.
@@ -3928,46 +4111,11 @@ schoolGeometryGrade8.lessons=SCHOOL_GEOMETRY_GRADE8_PROGRAM.map((item,index)=>{
       }
     ];
   }
-  // Задачи Т43–Т66 распределены по темам программы геометрии 8 класса.
-  // Используются обрезанные по границам заданий исходные скриншоты без масштабирования.
-  const grade8TaskRoot='images/school-math/grade-8/geometry/tasks/';
-  if(index===2){
-    topic.tasks.images=[
-      {src:grade8TaskRoot+'tasks-43-45.png',alt:'Задачи Т43–Т45: многоугольник, выпуклый многоугольник, четырёхугольник'}
-    ];
-  }
-  if(index===4){
-    topic.tasks.images=[
-      {src:grade8TaskRoot+'tasks-46-47.png',alt:'Задачи Т46–Т47: свойства параллелограмма и биссектрисы его углов'}
-    ];
-  }
-  if(index===6){
-    topic.tasks.images=[
-      {src:grade8TaskRoot+'task-48.png',alt:'Задача Т48: признаки параллелограмма'}
-    ];
-  }
-  if(index===8){
-    topic.tasks.images=[
-      {src:grade8TaskRoot+'tasks-55-59.png',alt:'Задачи Т55–Т59: трапеция и равнобедренная трапеция'},
-      {src:grade8TaskRoot+'task-60.png',alt:'Задача Т60: свойства прямоугольной и равнобедренной трапеции'}
-    ];
-  }
-  if(index===10){
-    topic.tasks.images=[
-      {src:grade8TaskRoot+'tasks-52-53.png',alt:'Задачи Т52–Т53: прямоугольник и его свойства'},
-      {src:grade8TaskRoot+'task-54.png',alt:'Задача Т54: свойства прямоугольника и квадрата'}
-    ];
-  }
-  if(index===11){
-    topic.tasks.images=[
-      {src:grade8TaskRoot+'tasks-49-51.png',alt:'Задачи Т49–Т51: ромб, его свойства и признаки'}
-    ];
-  }
-  if(index===13){
-    topic.tasks.images=[
-      {src:grade8TaskRoot+'tasks-61-65.png',alt:'Задачи Т61–Т65: обобщение по четырёхугольникам'},
-      {src:grade8TaskRoot+'task-66.png',alt:'Задача Т66: свойства диагоналей четырёхугольников'}
-    ];
+  // Задачи Т43–Т66 введены текстом и распределены по соответствующим темам курса.
+  // Ученик вводит ответ прямо в интерфейсе; ответы сохраняются локально в браузере.
+  const lessonTasks=SCHOOL_GEOMETRY_GRADE8_TEXT_TASKS[index+1];
+  if(Array.isArray(lessonTasks)){
+    topic.tasks.items=lessonTasks.map(task=>({...task}));
   }
   if(SCHOOL_GEOMETRY_GRADE8_HIDDEN_CONTENT_NUMBERS.has(index+1)){
     topic.hidden=true;
@@ -6204,10 +6352,64 @@ function openCourse(key,moduleIndex,lessonIndex,tabId){
   }
 }
 
+const SCHOOL_TASK_ANSWER_STORAGE_PREFIX='fizmat_school_task_answer:';
+function getSchoolTaskAnswerStorageKey(courseKey,topicId,taskId){
+  return `${SCHOOL_TASK_ANSWER_STORAGE_PREFIX}${courseKey||''}:${topicId||''}:${taskId||''}`;
+}
+function loadSchoolTaskAnswer(courseKey,topicId,taskId){
+  try{return localStorage.getItem(getSchoolTaskAnswerStorageKey(courseKey,topicId,taskId))||'';}catch(e){return '';}
+}
+function handleSchoolTaskAnswerInput(el){
+  if(!el)return;
+  const courseKey=el.dataset.course||'';
+  const topicId=el.dataset.topic||'';
+  const taskId=el.dataset.task||'';
+  const value=el.value||'';
+  try{
+    const key=getSchoolTaskAnswerStorageKey(courseKey,topicId,taskId);
+    if(value.trim())localStorage.setItem(key,value);
+    else localStorage.removeItem(key);
+  }catch(e){}
+  const state=el.closest('.school-task-card')?.querySelector('.school-task-save-state');
+  if(state){
+    state.textContent=value.trim()?'Ответ сохранён на этом устройстве':'Введите свой ответ';
+    state.classList.toggle('is-saved',!!value.trim());
+  }
+}
+function clearSchoolTaskAnswer(btn){
+  const card=btn&&btn.closest('.school-task-card');
+  const input=card&&card.querySelector('.school-task-answer');
+  if(!input)return;
+  input.value='';
+  handleSchoolTaskAnswerInput(input);
+  input.focus();
+}
+function renderSchoolTaskItems(topic){
+  const items=Array.isArray(topic&&topic.tasks&&topic.tasks.items)?topic.tasks.items:[];
+  if(!items.length)return '';
+  const topicId=String(topic.id||'topic');
+  return `<div class="school-task-list">${items.map((task,index)=>{
+    const taskId=String(task.id||('task-'+(index+1)));
+    const label=String(task.label||('Задача '+(index+1)));
+    const instruction=String(task.instruction||'Решите задачу');
+    const text=String(task.text||'');
+    const saved=loadSchoolTaskAnswer(AC,topicId,taskId);
+    return `<article class="school-task-card" data-school-task="${escapeHtml(taskId)}">
+      <div class="school-task-head"><span class="school-task-number">${escapeHtml(label)}</span><div class="school-task-instruction">${escapeHtml(instruction)}</div></div>
+      <div class="school-task-text">${escapeHtml(text)}</div>
+      <div class="school-task-answer-wrap">
+        <label class="school-task-answer-label" for="school-answer-${escapeHtml(topicId)}-${escapeHtml(taskId)}">Ответ ученика</label>
+        <textarea class="school-task-answer" id="school-answer-${escapeHtml(topicId)}-${escapeHtml(taskId)}" data-course="${escapeHtml(AC||'')}" data-topic="${escapeHtml(topicId)}" data-task="${escapeHtml(taskId)}" placeholder="Введите ответ здесь…" oninput="handleSchoolTaskAnswerInput(this)">${escapeHtml(saved)}</textarea>
+        <div class="school-task-answer-footer"><span class="school-task-save-state${saved.trim()?' is-saved':''}">${saved.trim()?'Ответ сохранён на этом устройстве':'Введите свой ответ'}</span><button type="button" class="school-task-clear" onclick="clearSchoolTaskAnswer(this)">Очистить ответ</button></div>
+      </div>
+    </article>`;
+  }).join('')}</div>`;
+}
 function renderSchoolTopic(course,topic){
   const module=course.modules[CM];
   const safeTopic=topic||makeSchoolTopic('missing','Тема');
   const theoryImages=Array.isArray(safeTopic.theory.images)?safeTopic.theory.images:[];
+  const taskItems=Array.isArray(safeTopic.tasks&&safeTopic.tasks.items)?safeTopic.tasks.items:[];
   const taskImages=Array.isArray(safeTopic.tasks&&safeTopic.tasks.images)?safeTopic.tasks.images:[];
   const videoUrl=safeTopic.video&&safeTopic.video.url||'';
   const hasTrainer=AC==='school-math'&&[5,6].includes(Number(module.grade));
@@ -6216,7 +6418,7 @@ function renderSchoolTopic(course,topic){
     theory:`<h2>${escapeHtml(safeTopic.theory.title)}</h2>${theoryImages.length?createImageCarousel(theoryImages,{singleClass:'theory-image-block',imgClass:'lesson-theory-image universal-viewable-image',captions:false,hint:'Перелистывайте карточки кнопками со стрелками. Нажмите на фото, чтобы увеличить.'}):`<div class="school-placeholder">${escapeHtml(safeTopic.theory.content)}</div>`}`,
     video:videoUrl?`<iframe class="school-video-frame" src="${escapeHtml(videoUrl)}" title="${escapeHtml(safeTopic.video.title)}" allowfullscreen></iframe>`:`<div class="school-placeholder">${escapeHtml(safeTopic.video.placeholder)}</div>`,
     tests:`<div class="school-placeholder">${escapeHtml(safeTopic.tests.placeholder)}</div>`,
-    tasks:taskImages.length?`<h2>${escapeHtml(safeTopic.tasks.title||'Задачи')}</h2>${createImageCarousel(taskImages,{singleClass:'school-task-image-block',className:'school-task-image-carousel',imgClass:'lesson-task-image universal-viewable-image image-carousel-img',captions:false,hint:'Задачи расположены по порядку. Перелистывайте стрелками и нажмите на изображение, чтобы увеличить.'})}`:`<div class="school-placeholder">${escapeHtml(safeTopic.tasks.placeholder)}</div>`,
+    tasks:taskItems.length?`<h2>${escapeHtml(safeTopic.tasks.title||'Задачи')}</h2>${renderSchoolTaskItems(safeTopic)}`:taskImages.length?`<h2>${escapeHtml(safeTopic.tasks.title||'Задачи')}</h2>${createImageCarousel(taskImages,{singleClass:'school-task-image-block',className:'school-task-image-carousel',imgClass:'lesson-task-image universal-viewable-image image-carousel-img',captions:false,hint:'Задачи расположены по порядку. Перелистывайте стрелками и нажмите на изображение, чтобы увеличить.'})}`:`<div class="school-placeholder">${escapeHtml(safeTopic.tasks.placeholder)}</div>`,
     hw:`<div class="school-placeholder">${escapeHtml(safeTopic.homework.content)}</div>`,
     trainer:`<div class="school-trainer-wrap">
       <div class="school-trainer-note"><span><strong style="color:var(--white)">Тренажёр действий с числами</strong><br>Работает прямо внутри курса ${module.grade} класса.</span><a class="school-trainer-link" href="${trainerUrl}" target="_blank" rel="noopener">Открыть отдельно ↗</a></div>
