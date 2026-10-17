@@ -789,6 +789,10 @@ img[data-image-zoom="true"],.pt-photo-img,.test-preview-image,.student-test-card
 @keyframes imageCarouselPrev{from{opacity:.35;transform:translateX(-22px)}to{opacity:1;transform:translateX(0)}}
 @media(prefers-reduced-motion:reduce){.image-carousel.is-moving-next .image-carousel-slide.is-active,.image-carousel.is-moving-prev .image-carousel-slide.is-active{animation:none}}
 .image-carousel-img{display:block;width:100%;max-width:100%;height:auto;background:transparent;cursor:zoom-in;user-select:none;-webkit-user-drag:none}
+.oge-mat-equations-theory-carousel .image-carousel-viewport,
+.oge-mat-equations-theory-carousel .image-carousel-track,
+.oge-mat-equations-theory-carousel .image-carousel-slide{width:100%}
+.oge-mat-equations-theory-carousel .oge-mat-equations-theory-img{display:block;width:100%;height:auto;max-width:100%;max-height:none;object-fit:contain;object-position:center}
 .image-carousel-caption{display:block;padding:10px 14px;color:#f2f8ff;font-size:12px;font-weight:800;line-height:1.45;background:rgba(1,8,18,.92);border-top:1px solid rgba(8,216,255,.16)}
 .image-carousel-alt{min-width:0;overflow-wrap:anywhere;color:rgba(242,248,255,.9)}
 .image-carousel-counter{flex:1 1 auto;color:var(--cyan);font-family:var(--fh);font-weight:900;white-space:nowrap;text-align:center}
@@ -7134,6 +7138,35 @@ function showTab(id,btn,colorClass){
 
 /* ============ THEORY RENDERING ============ */
 function renderTheory(){
+  // ОГЭ Математика · Уравнения — четыре теоретические карточки 16:9 без искажения пропорций.
+  if(AC==='oge-mat'&&CM===0&&CL===1){
+    const theoryImages=[
+      {
+        src:'images/oge-math/equations/theory/oge-math-equations-theory-01.webp',
+        alt:'ОГЭ математика: линейные уравнения — определение, алгоритм, пример и типичная ошибка'
+      },
+      {
+        src:'images/oge-math/equations/theory/oge-math-equations-theory-02.webp',
+        alt:'ОГЭ математика: квадратные уравнения — определение, дискриминант, формула корней, пример и типичная ошибка'
+      },
+      {
+        src:'images/oge-math/equations/theory/oge-math-equations-theory-03.webp',
+        alt:'ОГЭ математика: пошаговый алгоритм решения уравнений и выбор метода'
+      },
+      {
+        src:'images/oge-math/equations/theory/oge-math-equations-theory-04.webp',
+        alt:'ОГЭ математика: системы уравнений — методы подстановки, сложения и графический метод'
+      }
+    ];
+    return `<div class="zsi-theory-carousel oge-mat-equations-theory-carousel" style="margin-bottom:12px">
+      ${createImageCarousel(theoryImages,{
+        className:'zsi-unified-image-carousel',
+        imgClass:'theory-carousel-img universal-viewable-image image-carousel-img oge-mat-equations-theory-img',
+        captions:false,
+        hint:'Перелистывайте четыре карточки кнопками со стрелками. Нажмите на фото, чтобы увеличить.'
+      })}
+    </div>`;
+  }
   // ЕГЭ Физика · Урок 34 «Виды колебаний» — две учебные карточки 16:9 в карусели.
   if(AC==='ege-phy'&&CM===4&&CL===0){
     const theoryImages=[
