@@ -667,6 +667,10 @@ body.edit-mode .et{display:inline}
 .oge-eq-type{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;background:rgba(255,140,0,.08);border:1px solid rgba(255,140,0,.2);color:var(--orange);font-size:10px;font-weight:800;white-space:nowrap}
 .oge-eq-category{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.2);color:#c9a7ff;font-size:10px;font-weight:800;white-space:nowrap}
 .oge-eq-condition{font-size:20px;line-height:1.55;color:var(--white);font-family:Georgia,'Times New Roman',serif;padding:14px 16px;border-radius:12px;background:rgba(1,8,18,.46);border:1px solid rgba(255,255,255,.06);white-space:pre-wrap}
+.oge-eq-system{display:flex;align-items:stretch;gap:10px;max-width:100%;overflow-x:auto;padding:2px 0}
+.oge-eq-system-brace{display:flex;align-items:center;align-self:stretch;font-family:Georgia,'Times New Roman',serif;font-size:64px;line-height:.82;font-weight:400;transform:scaleY(1.18);transform-origin:center;color:var(--white);flex:0 0 auto}
+.oge-eq-system-lines{display:flex;flex-direction:column;justify-content:center;gap:5px;min-width:max-content}
+.oge-eq-system-line{white-space:nowrap;line-height:1.45}
 .oge-eq-answer-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;margin-top:14px}
 .oge-eq-answer{width:100%;min-height:44px;padding:10px 12px;border:1px solid rgba(8,216,255,.3);border-radius:9px;background:rgba(1,8,18,.72);color:var(--white);font:600 14px var(--fb);outline:none}
 .oge-eq-answer:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(8,216,255,.08)}
@@ -691,7 +695,7 @@ body.trainer-theme .oge-eq-select{background:#fff;color:#172033;border-color:#b9
 body.trainer-theme .oge-eq-visible-count{background:#fff8ee}
 body.trainer-theme .oge-eq-task-hint{background:#f4f8fc;color:#52647a;border-color:#d6e1ed}
 body.trainer-theme .oge-eq-task-hint strong{color:#172033}
-@media(max-width:680px){.oge-eq-controls{padding:12px;gap:10px}.oge-eq-control{min-width:100%;flex-basis:100%}.oge-eq-visible-count{width:100%;justify-content:center}.oge-eq-answer-row{grid-template-columns:1fr}.oge-eq-check{width:100%}.oge-eq-condition{font-size:17px;padding:12px}}
+@media(max-width:680px){.oge-eq-controls{padding:12px;gap:10px}.oge-eq-control{min-width:100%;flex-basis:100%}.oge-eq-visible-count{width:100%;justify-content:center}.oge-eq-answer-row{grid-template-columns:1fr}.oge-eq-check{width:100%}.oge-eq-condition{font-size:17px;padding:12px}.oge-eq-system-brace{font-size:56px}.oge-eq-system{gap:8px}}
 .pt-body{display:grid;grid-template-columns:minmax(0,1fr) 160px;gap:14px;align-items:start}
 .pt-side{display:flex;flex-direction:column;gap:10px;align-items:stretch}
 .hw-card .pt-body{grid-template-columns:1fr}
@@ -10368,6 +10372,19 @@ function ogeEqAnswerKey(event,input){
     if(btn)checkOgeEqAnswer(btn);
   }
 }
+function renderOgeEqCondition(task){
+  if(!task||task.kind!=='systems')return escapeHtml(task&&task.q||'');
+  const raw=String(task.q||'').trim().replace(/^\{\s*/,'').replace(/\s*\}$/,'');
+  const equations=raw.split(';').map(function(part){return part.trim();}).filter(Boolean);
+  if(equations.length<2)return escapeHtml(task.q||'');
+  return '<div class="oge-eq-system" role="group" aria-label="Система уравнений">'+
+    '<span class="oge-eq-system-brace" aria-hidden="true">{</span>'+
+    '<div class="oge-eq-system-lines">'+
+      equations.map(function(eq){return '<div class="oge-eq-system-line">'+escapeHtml(eq)+'</div>';}).join('')+
+    '</div>'+
+  '</div>';
+}
+
 function applyOgeEqTaskControls(){
   const typeSelect=document.getElementById('ogeEqTypeFilter');
   const sortSelect=document.getElementById('ogeEqSortOrder');
@@ -10451,7 +10468,7 @@ function renderOgeMathEquationTasks(){
       const placeholder=t.kind==='systems'?'Например: (−1; 4), (1; 4)':'Введите все корни через ;';
       h+='<article class="pt-card oge-eq-card" data-oge-eq-task="'+Number(t.n)+'">'+
         '<div class="pt-head"><div class="pt-num">'+String(t.n).padStart(2,'0')+'</div><span class="pt-level '+levelClass+'">'+level+'</span><span class="pt-exam">ОГЭ</span><span class="oge-eq-type">'+escapeHtml(t.type)+'</span><span class="oge-eq-category">'+escapeHtml(t.c)+'</span></div>'+
-        '<div class="oge-eq-condition">'+escapeHtml(t.q)+'</div>'+
+        '<div class="oge-eq-condition">'+renderOgeEqCondition(t)+'</div>'+
         '<div class="oge-eq-task-hint">Введите полный ответ. Для нескольких корней используйте точку с запятой, например <strong>0.5;1</strong> или <strong>−2,1; 3</strong>. Для системы: <strong>(−1; 4), (1; 4)</strong>. После трёх неправильных попыток решение откроется автоматически.</div>'+
         '<div class="oge-eq-answer-row"><input class="oge-eq-answer" type="text" autocomplete="off" placeholder="'+escapeHtml(placeholder)+'" onkeydown="ogeEqAnswerKey(event,this)"><button type="button" class="oge-eq-check" onclick="checkOgeEqAnswer(this)">Проверить ответ</button></div>'+
         '<div class="oge-eq-feedback" aria-live="polite">Неправильных попыток: '+Math.min(3,state.wrong)+' из 3.</div>'+
