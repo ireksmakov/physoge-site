@@ -10507,6 +10507,8 @@ function normalizeOgeIneqAnswer(raw){
     .replace(/[−–—]/g,'-')
     .replace(/\s+/g,'')
     .replace(/x∈/g,'')
+    .replace(/-б/g,'-∞')
+    .replace(/\+б/g,'∞')
     .replace(/infinity|inf|oo/g,'∞')
     .replace(/sqrt\s*\(\s*(\d+)\s*\)/g,'√$1')
     .replace(/sqrt\s*(\d+)/g,'√$1')
@@ -10731,7 +10733,7 @@ function renderOgeMathInequalityTasks(){
       h+='<article class="pt-card oge-ineq-card" data-oge-ineq-task="'+escapeHtml(t.id)+'">'+
         '<div class="pt-head"><div class="pt-num">'+String(t.n).padStart(2,'0')+'</div><span class="pt-level '+levelClass+'">'+escapeHtml(t.level)+'</span><span class="pt-exam">ОГЭ</span><span class="oge-eq-type">'+escapeHtml(t.type)+'</span><span class="oge-eq-category">'+escapeHtml(t.c)+'</span></div>'+
         '<div class="oge-eq-condition">'+renderOgeIneqCondition(t)+'</div>'+
-        '<div class="oge-eq-task-hint">Введите <strong>полный ответ</strong> в виде промежутка. Для объединения используйте знак <strong>∪</strong>, например <strong>(−∞; −3) ∪ (2; +∞)</strong>. После трёх неправильных попыток решение откроется автоматически.</div>'+
+        '<div class="oge-eq-task-hint">Введите <strong>полный ответ</strong> в виде промежутка. Для объединения используйте знак <strong>∪</strong>, например <strong>(-б; −3.1) u (2; +б)</strong> либо <strong>(-б; −3,1) u (2; +б)</strong>. После трёх неправильных попыток решение откроется автоматически. <strong>-б — это минус бесконечность, а +б — плюс бесконечность.</strong></div>'+
         '<div class="oge-eq-answer-row"><input class="oge-eq-answer" type="text" autocomplete="off" placeholder="Например: [−2; 5) или (−∞; 1) ∪ [3; +∞)" onkeydown="ogeIneqAnswerKey(event,this)"><button type="button" class="oge-eq-check oge-ineq-check" onclick="checkOgeIneqAnswer(this)">Проверить ответ</button></div>'+
         '<div class="oge-eq-feedback" aria-live="polite">Неправильных попыток: '+Math.min(3,state.wrong)+' из 3.</div>'+
         '<div class="oge-eq-solution"><div class="oge-eq-solution-title">Решение</div><div class="oge-eq-solution-text">'+escapeHtml(solutionText)+'</div><div class="oge-eq-answer-final">Ответ: '+escapeHtml(t.a)+'</div></div>'+
