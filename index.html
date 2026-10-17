@@ -655,8 +655,8 @@ body.edit-mode .et{display:inline}
 .pt-l3{background:rgba(168,85,247,.12);color:#a855f7}
 .pt-title{font-family:var(--fh);font-size:13px;font-weight:700;color:var(--white)}
 .pt-exam{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.18);color:var(--cyan);font-size:10px;font-weight:700;white-space:nowrap}
-.oge-eq-intro{margin:0 0 16px;padding:14px 16px;border:1px solid rgba(8,216,255,.2);border-radius:14px;background:linear-gradient(135deg,rgba(8,216,255,.06),rgba(168,85,247,.04));color:var(--gray);font-size:13px;line-height:1.65}
-.oge-eq-intro strong{color:var(--white)}
+.oge-eq-task-hint{margin:10px 0 0;padding:10px 12px;border:1px solid rgba(8,216,255,.18);border-radius:10px;background:rgba(8,216,255,.045);color:var(--gray);font-size:12px;line-height:1.6}
+.oge-eq-task-hint strong{color:var(--white)}
 .oge-eq-card .pt-num{color:var(--orange);font-size:20px}
 .oge-eq-type{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;background:rgba(255,140,0,.08);border:1px solid rgba(255,140,0,.2);color:var(--orange);font-size:10px;font-weight:800;white-space:nowrap}
 .oge-eq-category{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.2);color:#c9a7ff;font-size:10px;font-weight:800;white-space:nowrap}
@@ -679,6 +679,8 @@ body.trainer-theme .oge-eq-condition{background:#fff;color:#172033;border-color:
 body.trainer-theme .oge-eq-answer{background:#fff;color:#172033;border-color:#b9ccdf}
 body.trainer-theme .oge-eq-solution{background:#f5fff8;color:#172033;border-color:#bce7ca}
 body.trainer-theme .oge-eq-solution-text{color:#27364c}
+body.trainer-theme .oge-eq-task-hint{background:#f4f8fc;color:#52647a;border-color:#d6e1ed}
+body.trainer-theme .oge-eq-task-hint strong{color:#172033}
 @media(max-width:680px){.oge-eq-answer-row{grid-template-columns:1fr}.oge-eq-check{width:100%}.oge-eq-condition{font-size:17px;padding:12px}}
 .pt-body{display:grid;grid-template-columns:minmax(0,1fr) 160px;gap:14px;align-items:start}
 .pt-side{display:flex;flex-direction:column;gap:10px;align-items:stretch}
@@ -10365,7 +10367,7 @@ function renderOgeMathEquationTasks(){
     {p:2,c:'Уравнения',title:'2 часть · Тип 20 · Уравнения',desc:'Сложный уровень · требуется развёрнутое решение · 14 заданий'},
     {p:2,c:'Системы уравнений',title:'2 часть · Тип 20 · Системы уравнений',desc:'Сложный уровень · требуется развёрнутое решение · 6 заданий'}
   ];
-  let h='<div class="oge-eq-intro"><strong>ОГЭ · Математика · Уравнения.</strong> Введите полный ответ. Для нескольких корней используйте точку с запятой, например <strong>−2; 3</strong>. Для системы: <strong>(−1; 4), (1; 4)</strong>. После трёх неправильных попыток решение откроется автоматически.</div>';
+  let h='';
   groups.forEach(function(group){
     const list=tasks.filter(t=>Number(t.p)===group.p&&t.c===group.c);
     if(!list.length)return;
@@ -10378,9 +10380,9 @@ function renderOgeMathEquationTasks(){
       h+='<article class="pt-card oge-eq-card" data-oge-eq-task="'+Number(t.n)+'">'+
         '<div class="pt-head"><div class="pt-num">'+String(t.n).padStart(2,'0')+'</div><span class="pt-level '+levelClass+'">'+level+'</span><span class="pt-exam">ОГЭ</span><span class="oge-eq-type">'+escapeHtml(t.type)+'</span><span class="oge-eq-category">'+escapeHtml(t.c)+'</span></div>'+
         '<div class="oge-eq-condition">'+escapeHtml(t.q)+'</div>'+
+        '<div class="oge-eq-task-hint">Введите полный ответ. Для нескольких корней используйте точку с запятой, например <strong>0.5;1</strong> или <strong>−2,1; 3</strong>. Для системы: <strong>(−1; 4), (1; 4)</strong>. После трёх неправильных попыток решение откроется автоматически.</div>'+
         '<div class="oge-eq-answer-row"><input class="oge-eq-answer" type="text" autocomplete="off" placeholder="'+escapeHtml(placeholder)+'" onkeydown="ogeEqAnswerKey(event,this)"><button type="button" class="oge-eq-check" onclick="checkOgeEqAnswer(this)">Проверить ответ</button></div>'+
         '<div class="oge-eq-feedback" aria-live="polite">'+(state.unlocked?'Решение уже открыто после трёх неправильных попыток.':'Неправильных попыток: '+state.wrong+' из 3.')+'</div>'+
-        '<div class="oge-eq-lock-note">Решение откроется после 3 неправильных попыток.</div>'+
         '<div class="oge-eq-solution'+(state.unlocked?' open':'')+'"><div class="oge-eq-solution-title">Решение</div><div class="oge-eq-solution-text">'+escapeHtml(t.s)+'</div><div class="oge-eq-answer-final">Ответ: '+escapeHtml(t.a)+'</div></div>'+
       '</article>';
     });
