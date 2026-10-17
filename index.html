@@ -10395,7 +10395,6 @@ function applyOgeEqTaskControls(){
       if(partA!==partB)return partB-partA;
       return orderA-orderB;
     }
-    if(sort==='number-desc')return orderB-orderA;
     return orderA-orderB;
   });
 
@@ -10404,7 +10403,7 @@ function applyOgeEqTaskControls(){
     cards.sort(function(a,b){
       const na=Number(a.dataset.ogeEqTask)||0;
       const nb=Number(b.dataset.ogeEqTask)||0;
-      return sort==='number-desc'?nb-na:na-nb;
+      return na-nb;
     });
     cards.forEach(function(card){group.appendChild(card);});
     container.appendChild(group);
@@ -10438,7 +10437,6 @@ function renderOgeMathEquationTasks(){
     '<label class="oge-eq-control"><span class="oge-eq-control-label">Сортировка</span><select class="oge-eq-select" id="ogeEqSortOrder" onchange="applyOgeEqTaskControls()">'+
       '<option value="type9-first">Сначала Тип 9</option>'+
       '<option value="type20-first">Сначала Тип 20</option>'+
-      '<option value="number-desc">По номеру: 53 → 1</option>'+
     '</select></label>'+
     '<div class="oge-eq-visible-count" id="ogeEqVisibleCount">Показано: '+tasks.length+' из '+tasks.length+'</div>'+
   '</div>';
@@ -10456,8 +10454,8 @@ function renderOgeMathEquationTasks(){
         '<div class="oge-eq-condition">'+escapeHtml(t.q)+'</div>'+
         '<div class="oge-eq-task-hint">Введите полный ответ. Для нескольких корней используйте точку с запятой, например <strong>0.5;1</strong> или <strong>−2,1; 3</strong>. Для системы: <strong>(−1; 4), (1; 4)</strong>. После трёх неправильных попыток решение откроется автоматически.</div>'+
         '<div class="oge-eq-answer-row"><input class="oge-eq-answer" type="text" autocomplete="off" placeholder="'+escapeHtml(placeholder)+'" onkeydown="ogeEqAnswerKey(event,this)"><button type="button" class="oge-eq-check" onclick="checkOgeEqAnswer(this)">Проверить ответ</button></div>'+
-        '<div class="oge-eq-feedback" aria-live="polite">'+(state.unlocked?'Решение уже открыто после трёх неправильных попыток.':'Неправильных попыток: '+state.wrong+' из 3.')+'</div>'+
-        '<div class="oge-eq-solution'+(state.unlocked?' open':'')+'"><div class="oge-eq-solution-title">Решение</div><div class="oge-eq-solution-text">'+escapeHtml(t.s)+'</div><div class="oge-eq-answer-final">Ответ: '+escapeHtml(t.a)+'</div></div>'+
+        '<div class="oge-eq-feedback" aria-live="polite">Неправильных попыток: '+Math.min(3,state.wrong)+' из 3.</div>'+
+        '<div class="oge-eq-solution"><div class="oge-eq-solution-title">Решение</div><div class="oge-eq-solution-text">'+escapeHtml(t.s)+'</div><div class="oge-eq-answer-final">Ответ: '+escapeHtml(t.a)+'</div></div>'+
       '</article>';
     });
     h+='</section>';
