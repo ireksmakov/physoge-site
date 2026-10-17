@@ -2760,6 +2760,7 @@ body.trainer-theme footer{background:rgba(255,255,255,.42)}
 </div>
 
 <script src="data/oge-math-equations.js"></script>
+<script src="data/oge-math-inequalities.js"></script>
 <script>
 /* ============================================================
    THEORY DATA — populated from uploaded reference notes
@@ -10480,9 +10481,274 @@ function renderOgeMathEquationTasks(){
   return h;
 }
 
+
+const OGE_INEQ_STATE_PREFIX='fizmat:oge-math-inequalities:';
+function ogeIneqStateKey(id){return OGE_INEQ_STATE_PREFIX+String(id||'');}
+function loadOgeIneqState(id){
+  try{
+    const raw=localStorage.getItem(ogeIneqStateKey(id));
+    if(!raw)return {wrong:0,unlocked:false};
+    const data=JSON.parse(raw);
+    return {wrong:Math.max(0,Number(data.wrong)||0),unlocked:!!data.unlocked};
+  }catch(_){return {wrong:0,unlocked:false};}
+}
+function saveOgeIneqState(id,state){
+  try{
+    localStorage.setItem(ogeIneqStateKey(id),JSON.stringify({
+      wrong:Math.max(0,Number(state&&state.wrong)||0),
+      unlocked:!!(state&&state.unlocked)
+    }));
+  }catch(_){}
+}
+function normalizeOgeIneqAnswer(raw){
+  let s=String(raw==null?'':raw).trim().toLowerCase();
+  if(!s)return '';
+  s=s
+    .replace(/[−–—]/g,'-')
+    .replace(/\s+/g,'')
+    .replace(/x∈/g,'')
+    .replace(/infinity|inf|oo/g,'∞')
+    .replace(/sqrt\s*\(\s*(\d+)\s*\)/g,'√$1')
+    .replace(/sqrt\s*(\d+)/g,'√$1')
+    .replace(/\\cup/g,'∪')
+    .replace(/\bu\b/g,'∪')
+    .replace(/,/g,'.')
+    .replace(/\+∞/g,'∞');
+  return s;
+}
+function ogeIneqAnswerMatches(raw,expected){
+  const a=normalizeOgeIneqAnswer(raw);
+  const e=normalizeOgeIneqAnswer(expected);
+  if(a===e)return true;
+  if(/^\{[^{}]+\}$/.test(e)){
+    const v=e.slice(1,-1);
+    if(a===v||a==='['+v+';'+v+']')return true;
+  }
+  return false;
+}
+function getOgeIneqTaskById(id){
+  const list=Array.isArray(window.OGE_MATH_INEQUALITY_TASKS)?window.OGE_MATH_INEQUALITY_TASKS:[];
+  return list.find(function(t){return String(t.id)===String(id);})||null;
+}
+function ogeIneqSignFromQuestion(q){
+  const m=String(q||'').match(/(≤|≥|<|>)/);
+  return m?m[1]:'';
+}
+function renderOgeIneqCondition(task){
+  if(task&&Array.isArray(task.lines)&&task.lines.length){
+    return '<div class="oge-eq-system" role="group" aria-label="Система неравенств">'+
+      '<span class="oge-eq-system-brace" aria-hidden="true">{</span>'+
+      '<div class="oge-eq-system-lines">'+
+        task.lines.map(function(line){return '<div class="oge-eq-system-line">'+escapeHtml(line)+'</div>';}).join('')+
+      '</div>'+
+    '</div>';
+  }
+  return escapeHtml(task&&task.q||'');
+}
+function buildOgeIneqSolution(task){
+  if(!task)return '';
+  const out=[];
+  if(Array.isArray(task.lines)&&task.lines.length){
+    task.lines.forEach(function(line,index){
+      const sub=Array.isArray(task.sub)?task.sub[index]:'';
+      out.push((index+1)+') '+line+(sub?' ⇒ x ∈ '+sub:'')+'.');
+    });
+    out.push('Решение системы — пересечение найденных промежутков.');
+    out.push('Пересечение: '+task.a+'.');
+    out.push('Ответ: '+task.a+'.');
+    return out.join('\n');
+  }
+
+  const sign=ogeIneqSignFromQuestion(task.q);
+  const roots=Array.isArray(task.roots)?task.roots:[];
+  const excluded=Array.isArray(task.excluded)?task.excluded:[];
+
+  if(task.c==='Линейные неравенства'){
+    out.push('Раскроем скобки, перенесём члены с x в одну часть, числа — в другую и приведём подобные.');
+    out.push('При делении на отрицательное число знак неравенства меняется.');
+    out.push('После преобразований получаем множество решений: '+task.a+'.');
+    out.push('Ответ: '+task.a+'.');
+    return out.join('\n');
+  }
+
+  if(task.den){
+    out.push('ОДЗ: знаменатель не равен нулю.');
+    if(excluded.length)out.push('Исключаем: '+excluded.map(function(v){return 'x = '+v;}).join(', ')+'.');
+    out.push('Приведём выражение к одной дроби и разложим множители: ('+(task.factor||'числитель')+') / ('+task.den+') '+sign+' 0.');
+    if(roots.length)out.push('Нули числителя: '+roots.map(function(v){return 'x = '+v;}).join(', ')+'.');
+    const crit=roots.concat(excluded).filter(function(v,i,a){return a.indexOf(v)===i;});
+    if(crit.length)out.push('Критические точки: '+crit.join(', ')+'.');
+    out.push('Наносим критические точки на числовую прямую, определяем знаки дроби на промежутках и учитываем ОДЗ.');
+    if(excluded.length)out.push('Точки из ОДЗ в ответ не включаются.');
+    out.push('Ответ: '+task.a+'.');
+    return out.join('\n');
+  }
+
+  if(task.factor)out.push('Перенесём все члены в левую часть и приведём неравенство к виду: '+task.factor+' '+sign+' 0.');
+  else out.push('Перенесём все члены в левую часть и приведём подобные.');
+
+  if(roots.length){
+    out.push('Корни (критические точки) полностью: '+roots.map(function(v){return 'x = '+v;}).join(', ')+'.');
+    out.push('Отмечаем корни на числовой прямой и применяем метод интервалов.');
+    if(sign==='≤'||sign==='≥')out.push('Корни, в которых выражение равно нулю, включаем в ответ, если они не нарушают ОДЗ.');
+    else out.push('Неравенство строгое, поэтому корни в ответ не включаем.');
+  }else{
+    out.push('Действительных корней нет; выражение сохраняет один знак на всей числовой прямой.');
+  }
+  out.push('Получаем множество решений: '+task.a+'.');
+  out.push('Ответ: '+task.a+'.');
+  return out.join('\n');
+}
+function checkOgeIneqAnswer(btn){
+  const card=btn&&btn.closest('[data-oge-ineq-task]');
+  if(!card)return;
+  const task=getOgeIneqTaskById(card.dataset.ogeIneqTask||'');
+  if(!task)return;
+  const input=card.querySelector('.oge-eq-answer');
+  const feedback=card.querySelector('.oge-eq-feedback');
+  const solution=card.querySelector('.oge-eq-solution');
+  const raw=input?input.value:'';
+
+  if(!String(raw).trim()){
+    if(feedback){
+      feedback.className='oge-eq-feedback bad';
+      feedback.textContent='Введите полный ответ в виде промежутка или объединения промежутков.';
+    }
+    return;
+  }
+
+  if(ogeIneqAnswerMatches(raw,task.a)){
+    if(feedback){
+      feedback.className='oge-eq-feedback ok';
+      feedback.textContent='Верно! Полный ответ указан правильно.';
+    }
+    if(input)input.classList.remove('is-incorrect');
+    return;
+  }
+
+  const state=loadOgeIneqState(task.id);
+  state.wrong+=1;
+  if(state.wrong>=3)state.unlocked=true;
+  saveOgeIneqState(task.id,state);
+  if(input)input.classList.add('is-incorrect');
+
+  if(state.unlocked){
+    if(feedback){
+      feedback.className='oge-eq-feedback bad';
+      feedback.textContent='Третья неправильная попытка. Решение открыто ниже.';
+    }
+    if(solution)solution.classList.add('open');
+    if(solution)requestAnimationFrame(function(){solution.scrollIntoView({behavior:'smooth',block:'nearest'});});
+  }else{
+    const left=3-state.wrong;
+    if(feedback){
+      feedback.className='oge-eq-feedback bad';
+      feedback.textContent='Неверно. До открытия решения осталось попыток: '+left+'.';
+    }
+  }
+}
+function ogeIneqAnswerKey(event,input){
+  if(event&&event.key==='Enter'){
+    event.preventDefault();
+    const card=input?input.closest('[data-oge-ineq-task]'):null;
+    const btn=card?card.querySelector('.oge-ineq-check'):null;
+    if(btn)checkOgeIneqAnswer(btn);
+  }
+}
+function applyOgeIneqTaskControls(){
+  const typeSelect=document.getElementById('ogeIneqTypeFilter');
+  const sortSelect=document.getElementById('ogeIneqSortOrder');
+  if(!typeSelect||!sortSelect)return;
+  const controls=typeSelect.closest('.oge-eq-controls');
+  const container=controls&&controls.parentElement;
+  if(!container)return;
+
+  const filter=typeSelect.value||'all';
+  const sort=sortSelect.value||'type13-first';
+  const groups=Array.from(container.querySelectorAll('.oge-ineq-group'));
+  if(!groups.length)return;
+
+  groups.forEach(function(group){
+    group.hidden=!(filter==='all'||group.dataset.ogeIneqFilter===filter);
+  });
+
+  const ordered=groups.slice().sort(function(a,b){
+    const partA=Number(a.dataset.ogeIneqPart)||0;
+    const partB=Number(b.dataset.ogeIneqPart)||0;
+    const orderA=Number(a.dataset.ogeIneqOrder)||0;
+    const orderB=Number(b.dataset.ogeIneqOrder)||0;
+    if(sort==='type20-first'){
+      if(partA!==partB)return partB-partA;
+      return orderA-orderB;
+    }
+    if(partA!==partB)return partA-partB;
+    return orderA-orderB;
+  });
+  ordered.forEach(function(group){container.appendChild(group);});
+
+  const total=groups.reduce(function(sum,g){return sum+g.querySelectorAll('.oge-ineq-card').length;},0);
+  const visible=groups.filter(function(g){return !g.hidden;}).reduce(function(sum,g){return sum+g.querySelectorAll('.oge-ineq-card').length;},0);
+  const count=document.getElementById('ogeIneqVisibleCount');
+  if(count)count.textContent='Показано: '+visible+' из '+total;
+}
+function renderOgeMathInequalityTasks(){
+  const tasks=Array.isArray(window.OGE_MATH_INEQUALITY_TASKS)?window.OGE_MATH_INEQUALITY_TASKS:[];
+  if(!tasks.length)return '<div class="emp">Задания по неравенствам пока не загружены.</div>';
+
+  const groups=[
+    {part:1,c:'Линейные неравенства',filter:'linear',title:'1 часть · Тип 13 · Линейные неравенства',desc:'Базовый уровень · 18 заданий'},
+    {part:1,c:'Квадратные неравенства',filter:'quadratic',title:'1 часть · Тип 13 · Квадратные неравенства',desc:'Базовый уровень · 36 заданий'},
+    {part:1,c:'Системы неравенств',filter:'systems',title:'1 часть · Тип 13 · Системы неравенств',desc:'Базовый уровень · 18 заданий'},
+    {part:2,c:'Неравенства второй части',filter:'type20',title:'2 часть · Тип 20 · Неравенства',desc:'Сложный уровень · 30 заданий · метод интервалов и ОДЗ'}
+  ];
+
+  let h='<div class="oge-eq-controls" aria-label="Сортировка и фильтр задач по неравенствам">'+
+    '<label class="oge-eq-control"><span class="oge-eq-control-label">Тип задач</span><select class="oge-eq-select" id="ogeIneqTypeFilter" onchange="applyOgeIneqTaskControls()">'+
+      '<option value="all">Все типы</option>'+
+      '<option value="linear">Тип 13 · Линейные неравенства</option>'+
+      '<option value="quadratic">Тип 13 · Квадратные неравенства</option>'+
+      '<option value="systems">Тип 13 · Системы неравенств</option>'+
+      '<option value="type20">Тип 20 · Вторая часть</option>'+
+    '</select></label>'+
+    '<label class="oge-eq-control"><span class="oge-eq-control-label">Сортировка</span><select class="oge-eq-select" id="ogeIneqSortOrder" onchange="applyOgeIneqTaskControls()">'+
+      '<option value="type13-first">Сначала Тип 13</option>'+
+      '<option value="type20-first">Сначала Тип 20</option>'+
+    '</select></label>'+
+    '<div class="oge-eq-visible-count" id="ogeIneqVisibleCount">Показано: '+tasks.length+' из '+tasks.length+'</div>'+
+  '</div>';
+
+  groups.forEach(function(group,groupIndex){
+    const list=tasks.filter(function(t){return Number(t.p)===group.part&&t.c===group.c;});
+    if(!list.length)return;
+
+    h+='<section class="pt-group oge-ineq-group" data-oge-ineq-filter="'+escapeHtml(group.filter)+'" data-oge-ineq-part="'+Number(group.part)+'" data-oge-ineq-order="'+groupIndex+'">'+
+      '<div class="pt-group-head"><div><div class="pt-group-title">'+escapeHtml(group.title)+'</div><div class="pt-group-desc">'+escapeHtml(group.desc)+'</div></div><div class="pt-group-badge">'+list.length+' заданий</div></div>';
+
+    list.forEach(function(t){
+      const state=loadOgeIneqState(t.id);
+      const levelClass=Number(t.p)===1?'pt-l1':'pt-l3';
+      const solutionText=buildOgeIneqSolution(t);
+      h+='<article class="pt-card oge-ineq-card" data-oge-ineq-task="'+escapeHtml(t.id)+'">'+
+        '<div class="pt-head"><div class="pt-num">'+String(t.n).padStart(2,'0')+'</div><span class="pt-level '+levelClass+'">'+escapeHtml(t.level)+'</span><span class="pt-exam">ОГЭ</span><span class="oge-eq-type">'+escapeHtml(t.type)+'</span><span class="oge-eq-category">'+escapeHtml(t.c)+'</span></div>'+
+        '<div class="oge-eq-condition">'+renderOgeIneqCondition(t)+'</div>'+
+        '<div class="oge-eq-task-hint">Введите <strong>полный ответ</strong> в виде промежутка. Для объединения используйте знак <strong>∪</strong>, например <strong>(−∞; −3) ∪ (2; +∞)</strong>. После трёх неправильных попыток решение откроется автоматически.</div>'+
+        '<div class="oge-eq-answer-row"><input class="oge-eq-answer" type="text" autocomplete="off" placeholder="Например: [−2; 5) или (−∞; 1) ∪ [3; +∞)" onkeydown="ogeIneqAnswerKey(event,this)"><button type="button" class="oge-eq-check oge-ineq-check" onclick="checkOgeIneqAnswer(this)">Проверить ответ</button></div>'+
+        '<div class="oge-eq-feedback" aria-live="polite">Неправильных попыток: '+Math.min(3,state.wrong)+' из 3.</div>'+
+        '<div class="oge-eq-solution"><div class="oge-eq-solution-title">Решение</div><div class="oge-eq-solution-text">'+escapeHtml(solutionText)+'</div><div class="oge-eq-answer-final">Ответ: '+escapeHtml(t.a)+'</div></div>'+
+      '</article>';
+    });
+
+    h+='</section>';
+  });
+  return h;
+}
+
 function renderPTasks(name){
   if(AC==='oge-mat'&&CM===0&&CL===1&&name==='Уравнения'){
     return renderOgeMathEquationTasks();
+  }
+  if(AC==='oge-mat'&&CM===0&&CL===2&&name==='Неравенства'){
+    return renderOgeMathInequalityTasks();
   }
   const baseTasks=getLessonTasks(name).map(t=>Object.assign({},t,{isBlank:!!(t&&t.isBlank)}));
   const lesson07Name=typeof getCourseLessonNameByFlatNumber==='function'
