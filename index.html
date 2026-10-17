@@ -655,6 +655,12 @@ body.edit-mode .et{display:inline}
 .pt-l3{background:rgba(168,85,247,.12);color:#a855f7}
 .pt-title{font-family:var(--fh);font-size:13px;font-weight:700;color:var(--white)}
 .pt-exam{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.18);color:var(--cyan);font-size:10px;font-weight:700;white-space:nowrap}
+.oge-eq-controls{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin:0 0 16px;padding:14px 16px;border:1px solid rgba(8,216,255,.2);border-radius:14px;background:linear-gradient(135deg,rgba(8,216,255,.055),rgba(168,85,247,.04))}
+.oge-eq-control{display:flex;flex-direction:column;gap:6px;min-width:220px;flex:1 1 240px}
+.oge-eq-control-label{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--gray)}
+.oge-eq-select{width:100%;min-height:42px;padding:9px 36px 9px 11px;border:1px solid rgba(8,216,255,.28);border-radius:9px;background:#06111f;color:var(--white);font:700 13px var(--fb);outline:none;cursor:pointer}
+.oge-eq-select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(8,216,255,.08)}
+.oge-eq-visible-count{flex:0 1 auto;min-height:42px;display:flex;align-items:center;padding:9px 12px;border-radius:9px;background:rgba(255,140,0,.08);border:1px solid rgba(255,140,0,.22);color:var(--orange);font-size:12px;font-weight:800;white-space:nowrap}
 .oge-eq-task-hint{margin:10px 0 0;padding:10px 12px;border:1px solid rgba(8,216,255,.18);border-radius:10px;background:rgba(8,216,255,.045);color:var(--gray);font-size:12px;line-height:1.6}
 .oge-eq-task-hint strong{color:var(--white)}
 .oge-eq-card .pt-num{color:var(--orange);font-size:20px}
@@ -679,9 +685,13 @@ body.trainer-theme .oge-eq-condition{background:#fff;color:#172033;border-color:
 body.trainer-theme .oge-eq-answer{background:#fff;color:#172033;border-color:#b9ccdf}
 body.trainer-theme .oge-eq-solution{background:#f5fff8;color:#172033;border-color:#bce7ca}
 body.trainer-theme .oge-eq-solution-text{color:#27364c}
+body.trainer-theme .oge-eq-controls{background:#fff;border-color:#d6e1ed}
+body.trainer-theme .oge-eq-control-label{color:#52647a}
+body.trainer-theme .oge-eq-select{background:#fff;color:#172033;border-color:#b9ccdf}
+body.trainer-theme .oge-eq-visible-count{background:#fff8ee}
 body.trainer-theme .oge-eq-task-hint{background:#f4f8fc;color:#52647a;border-color:#d6e1ed}
 body.trainer-theme .oge-eq-task-hint strong{color:#172033}
-@media(max-width:680px){.oge-eq-answer-row{grid-template-columns:1fr}.oge-eq-check{width:100%}.oge-eq-condition{font-size:17px;padding:12px}}
+@media(max-width:680px){.oge-eq-controls{padding:12px;gap:10px}.oge-eq-control{min-width:100%;flex-basis:100%}.oge-eq-visible-count{width:100%;justify-content:center}.oge-eq-answer-row{grid-template-columns:1fr}.oge-eq-check{width:100%}.oge-eq-condition{font-size:17px;padding:12px}}
 .pt-body{display:grid;grid-template-columns:minmax(0,1fr) 160px;gap:14px;align-items:start}
 .pt-side{display:flex;flex-direction:column;gap:10px;align-items:stretch}
 .hw-card .pt-body{grid-template-columns:1fr}
@@ -10358,20 +10368,84 @@ function ogeEqAnswerKey(event,input){
     if(btn)checkOgeEqAnswer(btn);
   }
 }
+function applyOgeEqTaskControls(){
+  const typeSelect=document.getElementById('ogeEqTypeFilter');
+  const sortSelect=document.getElementById('ogeEqSortOrder');
+  if(!typeSelect||!sortSelect)return;
+  const controls=typeSelect.closest('.oge-eq-controls');
+  const container=controls&&controls.parentElement;
+  if(!container)return;
+
+  const filter=typeSelect.value||'all';
+  const sort=sortSelect.value||'type9-first';
+  const groups=Array.from(container.querySelectorAll('.oge-eq-group'));
+  if(!groups.length)return;
+
+  groups.forEach(function(group){
+    const show=filter==='all'||group.dataset.ogeEqFilter===filter;
+    group.hidden=!show;
+  });
+
+  const ordered=groups.slice().sort(function(a,b){
+    const partA=Number(a.dataset.ogeEqPart)||0;
+    const partB=Number(b.dataset.ogeEqPart)||0;
+    const orderA=Number(a.dataset.ogeEqOrder)||0;
+    const orderB=Number(b.dataset.ogeEqOrder)||0;
+    if(sort==='type20-first'){
+      if(partA!==partB)return partB-partA;
+      return orderA-orderB;
+    }
+    if(sort==='number-desc')return orderB-orderA;
+    return orderA-orderB;
+  });
+
+  ordered.forEach(function(group){
+    const cards=Array.from(group.querySelectorAll('.oge-eq-card'));
+    cards.sort(function(a,b){
+      const na=Number(a.dataset.ogeEqTask)||0;
+      const nb=Number(b.dataset.ogeEqTask)||0;
+      return sort==='number-desc'?nb-na:na-nb;
+    });
+    cards.forEach(function(card){group.appendChild(card);});
+    container.appendChild(group);
+  });
+
+  const visibleGroups=groups.filter(function(group){return !group.hidden;});
+  const visibleCount=visibleGroups.reduce(function(total,group){
+    return total+group.querySelectorAll('.oge-eq-card').length;
+  },0);
+  const count=document.getElementById('ogeEqVisibleCount');
+  if(count)count.textContent='Показано: '+visibleCount+' из '+groups.reduce(function(total,group){return total+group.querySelectorAll('.oge-eq-card').length;},0);
+}
+
 function renderOgeMathEquationTasks(){
   const tasks=Array.isArray(window.OGE_MATH_EQUATION_TASKS)?window.OGE_MATH_EQUATION_TASKS:[];
   if(!tasks.length)return '<div class="emp">Задания пока не загружены.</div>';
   const groups=[
-    {p:1,c:'Линейные уравнения',title:'1 часть · Тип 9 · Линейные уравнения',desc:'Базовый уровень · 20 заданий'},
-    {p:1,c:'Квадратные уравнения',title:'1 часть · Тип 9 · Квадратные уравнения',desc:'Базовый уровень · 13 заданий'},
-    {p:2,c:'Уравнения',title:'2 часть · Тип 20 · Уравнения',desc:'Сложный уровень · требуется развёрнутое решение · 14 заданий'},
-    {p:2,c:'Системы уравнений',title:'2 часть · Тип 20 · Системы уравнений',desc:'Сложный уровень · требуется развёрнутое решение · 6 заданий'}
+    {p:1,c:'Линейные уравнения',filter:'linear',title:'1 часть · Тип 9 · Линейные уравнения',desc:'Базовый уровень · 20 заданий'},
+    {p:1,c:'Квадратные уравнения',filter:'quadratic',title:'1 часть · Тип 9 · Квадратные уравнения',desc:'Базовый уровень · 13 заданий'},
+    {p:2,c:'Уравнения',filter:'equations',title:'2 часть · Тип 20 · Уравнения',desc:'Сложный уровень · требуется развёрнутое решение · 14 заданий'},
+    {p:2,c:'Системы уравнений',filter:'systems',title:'2 часть · Тип 20 · Системы уравнений',desc:'Сложный уровень · требуется развёрнутое решение · 6 заданий'}
   ];
-  let h='';
-  groups.forEach(function(group){
+  let h='<div class="oge-eq-controls" aria-label="Сортировка и фильтр задач">'+
+    '<label class="oge-eq-control"><span class="oge-eq-control-label">Тип задач</span><select class="oge-eq-select" id="ogeEqTypeFilter" onchange="applyOgeEqTaskControls()">'+
+      '<option value="all">Все типы</option>'+
+      '<option value="linear">Тип 9 · Линейные уравнения</option>'+
+      '<option value="quadratic">Тип 9 · Квадратные уравнения</option>'+
+      '<option value="equations">Тип 20 · Уравнения</option>'+
+      '<option value="systems">Тип 20 · Системы уравнений</option>'+
+    '</select></label>'+
+    '<label class="oge-eq-control"><span class="oge-eq-control-label">Сортировка</span><select class="oge-eq-select" id="ogeEqSortOrder" onchange="applyOgeEqTaskControls()">'+
+      '<option value="type9-first">Сначала Тип 9</option>'+
+      '<option value="type20-first">Сначала Тип 20</option>'+
+      '<option value="number-desc">По номеру: 53 → 1</option>'+
+    '</select></label>'+
+    '<div class="oge-eq-visible-count" id="ogeEqVisibleCount">Показано: '+tasks.length+' из '+tasks.length+'</div>'+
+  '</div>';
+  groups.forEach(function(group,groupIndex){
     const list=tasks.filter(t=>Number(t.p)===group.p&&t.c===group.c);
     if(!list.length)return;
-    h+='<section class="pt-group"><div class="pt-group-head"><div><div class="pt-group-title">'+escapeHtml(group.title)+'</div><div class="pt-group-desc">'+escapeHtml(group.desc)+'</div></div><div class="pt-group-badge">'+list.length+' заданий</div></div>';
+    h+='<section class="pt-group oge-eq-group" data-oge-eq-filter="'+escapeHtml(group.filter)+'" data-oge-eq-part="'+Number(group.p)+'" data-oge-eq-order="'+groupIndex+'"><div class="pt-group-head"><div><div class="pt-group-title">'+escapeHtml(group.title)+'</div><div class="pt-group-desc">'+escapeHtml(group.desc)+'</div></div><div class="pt-group-badge">'+list.length+' заданий</div></div>';
     list.forEach(function(t){
       const state=loadOgeEqState(t.n);
       const level=t.p===1?'Базовый':'Сложный';
