@@ -655,6 +655,31 @@ body.edit-mode .et{display:inline}
 .pt-l3{background:rgba(168,85,247,.12);color:#a855f7}
 .pt-title{font-family:var(--fh);font-size:13px;font-weight:700;color:var(--white)}
 .pt-exam{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.18);color:var(--cyan);font-size:10px;font-weight:700;white-space:nowrap}
+.oge-eq-intro{margin:0 0 16px;padding:14px 16px;border:1px solid rgba(8,216,255,.2);border-radius:14px;background:linear-gradient(135deg,rgba(8,216,255,.06),rgba(168,85,247,.04));color:var(--gray);font-size:13px;line-height:1.65}
+.oge-eq-intro strong{color:var(--white)}
+.oge-eq-card .pt-num{color:var(--orange);font-size:20px}
+.oge-eq-type{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;background:rgba(255,140,0,.08);border:1px solid rgba(255,140,0,.2);color:var(--orange);font-size:10px;font-weight:800;white-space:nowrap}
+.oge-eq-category{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.2);color:#c9a7ff;font-size:10px;font-weight:800;white-space:nowrap}
+.oge-eq-condition{font-size:20px;line-height:1.55;color:var(--white);font-family:Georgia,'Times New Roman',serif;padding:14px 16px;border-radius:12px;background:rgba(1,8,18,.46);border:1px solid rgba(255,255,255,.06);white-space:pre-wrap}
+.oge-eq-answer-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;margin-top:14px}
+.oge-eq-answer{width:100%;min-height:44px;padding:10px 12px;border:1px solid rgba(8,216,255,.3);border-radius:9px;background:rgba(1,8,18,.72);color:var(--white);font:600 14px var(--fb);outline:none}
+.oge-eq-answer:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(8,216,255,.08)}
+.oge-eq-check{min-height:44px;padding:10px 16px;border:1px solid rgba(255,140,0,.35);border-radius:9px;background:rgba(255,140,0,.09);color:var(--orange);font:800 12px var(--fb);cursor:pointer;white-space:nowrap}
+.oge-eq-check:hover{background:rgba(255,140,0,.16);border-color:var(--orange)}
+.oge-eq-feedback{min-height:20px;margin-top:8px;font-size:12px;color:var(--gray)}
+.oge-eq-feedback.ok{color:var(--green)}
+.oge-eq-feedback.bad{color:#ff7d7d}
+.oge-eq-solution{display:none;margin-top:14px;padding:14px 16px;border:1px solid rgba(57,255,20,.2);border-radius:12px;background:rgba(57,255,20,.045)}
+.oge-eq-solution.open{display:block;animation:ptSlideDown .2s ease both}
+.oge-eq-solution-title{font-family:var(--fh);font-size:13px;font-weight:900;color:var(--green);margin-bottom:8px}
+.oge-eq-solution-text{white-space:pre-wrap;color:rgba(232,242,255,.9);font-size:13px;line-height:1.72}
+.oge-eq-answer-final{margin-top:10px;padding-top:10px;border-top:1px solid rgba(57,255,20,.15);color:var(--white);font-weight:800}
+.oge-eq-lock-note{margin-top:8px;color:var(--gray);font-size:11px}
+body.trainer-theme .oge-eq-condition{background:#fff;color:#172033;border-color:#d6e1ed}
+body.trainer-theme .oge-eq-answer{background:#fff;color:#172033;border-color:#b9ccdf}
+body.trainer-theme .oge-eq-solution{background:#f5fff8;color:#172033;border-color:#bce7ca}
+body.trainer-theme .oge-eq-solution-text{color:#27364c}
+@media(max-width:680px){.oge-eq-answer-row{grid-template-columns:1fr}.oge-eq-check{width:100%}.oge-eq-condition{font-size:17px;padding:12px}}
 .pt-body{display:grid;grid-template-columns:minmax(0,1fr) 160px;gap:14px;align-items:start}
 .pt-side{display:flex;flex-direction:column;gap:10px;align-items:stretch}
 .hw-card .pt-body{grid-template-columns:1fr}
@@ -2718,6 +2743,7 @@ body.trainer-theme footer{background:rgba(255,255,255,.42)}
   </div>
 </div>
 
+<script src="data/oge-math-equations.js"></script>
 <script>
 /* ============================================================
    THEORY DATA — populated from uploaded reference notes
@@ -10212,7 +10238,161 @@ function renderTaskSolutionWorkspace(task,cls){
   return renderTaskSolutionPanel(task,cls);
 }
 
+
+const OGE_EQ_STATE_PREFIX='fizmat:oge-math-equations:';
+function ogeEqStateKey(num){return OGE_EQ_STATE_PREFIX+String(num);}
+function loadOgeEqState(num){
+  try{
+    const raw=localStorage.getItem(ogeEqStateKey(num));
+    if(!raw)return {wrong:0,unlocked:false};
+    const data=JSON.parse(raw);
+    return {wrong:Math.max(0,Number(data.wrong)||0),unlocked:!!data.unlocked};
+  }catch(_){return {wrong:0,unlocked:false};}
+}
+function saveOgeEqState(num,state){
+  try{localStorage.setItem(ogeEqStateKey(num),JSON.stringify({wrong:Math.max(0,Number(state.wrong)||0),unlocked:!!state.unlocked}));}catch(_){}
+}
+function parseOgeEqNumber(raw){
+  let s=String(raw==null?'':raw).trim().toLowerCase();
+  if(!s)return NaN;
+  s=s.replace(/[−–—]/g,'-').replace(/,/g,'.').replace(/\s+/g,'');
+  s=s.replace(/(?:x|х)(?:_[12]|[₁₂12])?=/g,'');
+  s=s.replace(/√\(?([0-9]+(?:\.[0-9]+)?)\)?/g,function(_,n){return '('+String(Math.sqrt(Number(n)))+')';});
+  s=s.replace(/sqrt\(?([0-9]+(?:\.[0-9]+)?)\)?/g,function(_,n){return '('+String(Math.sqrt(Number(n)))+')';});
+  if(!/^[0-9+\-*/().]+$/.test(s))return NaN;
+  try{
+    const value=Function('"use strict";return ('+s+');')();
+    return Number.isFinite(value)?Number(value):NaN;
+  }catch(_){return NaN;}
+}
+function ogeEqNearlyEqual(a,b){return Number.isFinite(a)&&Number.isFinite(b)&&Math.abs(a-b)<=1e-4;}
+function parseOgeEqRoots(raw,expectedCount){
+  let s=String(raw||'').trim();
+  if(!s)return [];
+  s=s.replace(/[{}[\]]/g,'').replace(/\bкорни?\s*:?\s*/gi,'');
+  s=s.replace(/(?:x|х)(?:_[123]|[₁₂₃1-3])?\s*=/gi,'');
+  let parts=s.split(';').map(v=>v.trim()).filter(Boolean);
+  if(parts.length===1&&expectedCount>1){
+    const commaParts=s.split(',').map(v=>v.trim()).filter(Boolean);
+    if(commaParts.length===expectedCount)parts=commaParts;
+  }
+  if(parts.length===1&&expectedCount>1){
+    const spaceParts=s.split(/\s+/).map(v=>v.trim()).filter(Boolean);
+    if(spaceParts.length===expectedCount)parts=spaceParts;
+  }
+  return parts.map(parseOgeEqNumber).filter(Number.isFinite);
+}
+function parseOgeEqPairs(raw){
+  const s=String(raw||'').replace(/[−–—]/g,'-');
+  const out=[];
+  const re=/\(\s*([^;()]+)\s*;\s*([^)]+)\)/g;
+  let m;
+  while((m=re.exec(s))){
+    const x=parseOgeEqNumber(m[1]);
+    const y=parseOgeEqNumber(m[2]);
+    if(Number.isFinite(x)&&Number.isFinite(y))out.push([x,y]);
+  }
+  return out;
+}
+function sameOgeEqRoots(actual,expected){
+  if(!Array.isArray(actual)||!Array.isArray(expected)||actual.length!==expected.length)return false;
+  const a=actual.slice().sort((u,v)=>u-v);
+  const e=expected.slice().map(Number).sort((u,v)=>u-v);
+  return a.every((v,i)=>ogeEqNearlyEqual(v,e[i]));
+}
+function sameOgeEqPairs(actual,expected){
+  if(!Array.isArray(actual)||!Array.isArray(expected)||actual.length!==expected.length)return false;
+  const sortPairs=function(arr){return arr.slice().map(p=>[Number(p[0]),Number(p[1])]).sort((a,b)=>a[0]-b[0]||a[1]-b[1]);};
+  const a=sortPairs(actual),e=sortPairs(expected);
+  return a.every((p,i)=>ogeEqNearlyEqual(p[0],e[i][0])&&ogeEqNearlyEqual(p[1],e[i][1]));
+}
+function getOgeEqTaskByNum(num){
+  const list=Array.isArray(window.OGE_MATH_EQUATION_TASKS)?window.OGE_MATH_EQUATION_TASKS:[];
+  return list.find(t=>Number(t.n)===Number(num))||null;
+}
+function checkOgeEqAnswer(btn){
+  const card=btn&&btn.closest('[data-oge-eq-task]');
+  if(!card)return;
+  const task=getOgeEqTaskByNum(card.dataset.ogeEqTask);
+  if(!task)return;
+  const input=card.querySelector('.oge-eq-answer');
+  const feedback=card.querySelector('.oge-eq-feedback');
+  const solution=card.querySelector('.oge-eq-solution');
+  const raw=input?input.value:'';
+  if(!String(raw).trim()){
+    if(feedback){feedback.className='oge-eq-feedback bad';feedback.textContent=task.kind==='systems'?'Введите все пары решений системы.':'Введите все корни уравнения.';}
+    return;
+  }
+  let ok=false;
+  if(task.kind==='systems'){
+    ok=sameOgeEqPairs(parseOgeEqPairs(raw),task.pairs||[]);
+  }else{
+    ok=sameOgeEqRoots(parseOgeEqRoots(raw,(task.r||[]).length),task.r||[]);
+  }
+  const state=loadOgeEqState(task.n);
+  if(ok){
+    if(feedback){feedback.className='oge-eq-feedback ok';feedback.textContent='Верно! Ответ указан полностью.';}
+    if(input)input.classList.remove('is-incorrect');
+    return;
+  }
+  state.wrong+=1;
+  if(state.wrong>=3)state.unlocked=true;
+  saveOgeEqState(task.n,state);
+  if(input)input.classList.add('is-incorrect');
+  if(state.unlocked){
+    if(feedback){feedback.className='oge-eq-feedback bad';feedback.textContent='Третья неправильная попытка. Решение открыто ниже.';}
+    if(solution)solution.classList.add('open');
+    if(solution)requestAnimationFrame(()=>solution.scrollIntoView({behavior:'smooth',block:'nearest'}));
+  }else{
+    const left=3-state.wrong;
+    if(feedback){feedback.className='oge-eq-feedback bad';feedback.textContent='Неверно. До открытия решения осталось попыток: '+left+'.';}
+  }
+}
+function ogeEqAnswerKey(event,input){
+  if(event&&event.key==='Enter'){
+    event.preventDefault();
+    const card=input?input.closest('[data-oge-eq-task]'):null;
+    const btn=card?card.querySelector('.oge-eq-check'):null;
+    if(btn)checkOgeEqAnswer(btn);
+  }
+}
+function renderOgeMathEquationTasks(){
+  const tasks=Array.isArray(window.OGE_MATH_EQUATION_TASKS)?window.OGE_MATH_EQUATION_TASKS:[];
+  if(!tasks.length)return '<div class="emp">Задания пока не загружены.</div>';
+  const groups=[
+    {p:1,c:'Линейные уравнения',title:'1 часть · Тип 9 · Линейные уравнения',desc:'Базовый уровень · 20 заданий'},
+    {p:1,c:'Квадратные уравнения',title:'1 часть · Тип 9 · Квадратные уравнения',desc:'Базовый уровень · 13 заданий'},
+    {p:2,c:'Уравнения',title:'2 часть · Тип 20 · Уравнения',desc:'Сложный уровень · требуется развёрнутое решение · 14 заданий'},
+    {p:2,c:'Системы уравнений',title:'2 часть · Тип 20 · Системы уравнений',desc:'Сложный уровень · требуется развёрнутое решение · 6 заданий'}
+  ];
+  let h='<div class="oge-eq-intro"><strong>ОГЭ · Математика · Уравнения.</strong> Введите полный ответ. Для нескольких корней используйте точку с запятой, например <strong>−2; 3</strong>. Для системы: <strong>(−1; 4), (1; 4)</strong>. После трёх неправильных попыток решение откроется автоматически.</div>';
+  groups.forEach(function(group){
+    const list=tasks.filter(t=>Number(t.p)===group.p&&t.c===group.c);
+    if(!list.length)return;
+    h+='<section class="pt-group"><div class="pt-group-head"><div><div class="pt-group-title">'+escapeHtml(group.title)+'</div><div class="pt-group-desc">'+escapeHtml(group.desc)+'</div></div><div class="pt-group-badge">'+list.length+' заданий</div></div>';
+    list.forEach(function(t){
+      const state=loadOgeEqState(t.n);
+      const level=t.p===1?'Базовый':'Сложный';
+      const levelClass=t.p===1?'pt-l1':'pt-l3';
+      const placeholder=t.kind==='systems'?'Например: (−1; 4), (1; 4)':'Введите все корни через ;';
+      h+='<article class="pt-card oge-eq-card" data-oge-eq-task="'+Number(t.n)+'">'+
+        '<div class="pt-head"><div class="pt-num">'+String(t.n).padStart(2,'0')+'</div><span class="pt-level '+levelClass+'">'+level+'</span><span class="pt-exam">ОГЭ</span><span class="oge-eq-type">'+escapeHtml(t.type)+'</span><span class="oge-eq-category">'+escapeHtml(t.c)+'</span></div>'+
+        '<div class="oge-eq-condition">'+escapeHtml(t.q)+'</div>'+
+        '<div class="oge-eq-answer-row"><input class="oge-eq-answer" type="text" autocomplete="off" placeholder="'+escapeHtml(placeholder)+'" onkeydown="ogeEqAnswerKey(event,this)"><button type="button" class="oge-eq-check" onclick="checkOgeEqAnswer(this)">Проверить ответ</button></div>'+
+        '<div class="oge-eq-feedback" aria-live="polite">'+(state.unlocked?'Решение уже открыто после трёх неправильных попыток.':'Неправильных попыток: '+state.wrong+' из 3.')+'</div>'+
+        '<div class="oge-eq-lock-note">Решение откроется после 3 неправильных попыток.</div>'+
+        '<div class="oge-eq-solution'+(state.unlocked?' open':'')+'"><div class="oge-eq-solution-title">Решение</div><div class="oge-eq-solution-text">'+escapeHtml(t.s)+'</div><div class="oge-eq-answer-final">Ответ: '+escapeHtml(t.a)+'</div></div>'+
+      '</article>';
+    });
+    h+='</section>';
+  });
+  return h;
+}
+
 function renderPTasks(name){
+  if(AC==='oge-mat'&&CM===0&&CL===1&&name==='Уравнения'){
+    return renderOgeMathEquationTasks();
+  }
   const baseTasks=getLessonTasks(name).map(t=>Object.assign({},t,{isBlank:!!(t&&t.isBlank)}));
   const lesson07Name=typeof getCourseLessonNameByFlatNumber==='function'
     ? getCourseLessonNameByFlatNumber('ege-phy', 7)
