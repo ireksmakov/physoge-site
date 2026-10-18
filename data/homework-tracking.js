@@ -284,8 +284,8 @@ const lesson39Condition=`
     <div class="hw39-lead">Маятник отклонили от положения равновесия и отпустили в момент времени <strong>t = 0</strong> с нулевой начальной скоростью. Графики А и Б отображают изменение с течением времени физических величин, характеризующих движение груза маятника после этого. Установите соответствие между графиками и физическими величинами, изменение которых со временем эти графики могут отображать. <strong>T</strong> — период колебаний маятника. Сопротивлением воздуха пренебречь.</div>
     <svg class="hw39-pendulum" viewBox="0 0 150 170" role="img" aria-label="Маятник отклонён влево от положения равновесия">
       <rect x="48" y="8" width="72" height="8" rx="3" fill="#9aa7b5"/>
-      <line x1="84" y1="16" x2="48" y2="112" stroke="#e5edf7" stroke-width="3"/>
-      <ellipse cx="43" cy="122" rx="11" ry="19" transform="rotate(26 43 122)" fill="#8a9bb2"/>
+      <line x1="84" y1="16" x2="48" y2="112" stroke="#ff8c00" stroke-width="4"/>
+      <ellipse cx="43" cy="122" rx="11" ry="19" transform="rotate(26 43 122)" fill="#ff8c00"/>
       <line x1="84" y1="16" x2="84" y2="145" stroke="#5f748c" stroke-width="2" stroke-dasharray="5 5"/>
       <line x1="84" y1="145" x2="140" y2="145" stroke="#e5edf7" stroke-width="2"/>
       <line x1="84" y1="145" x2="84" y2="80" stroke="#e5edf7" stroke-width="2"/>
