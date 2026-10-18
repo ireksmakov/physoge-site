@@ -28,6 +28,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && ($_GET['action'] ?? '') === 'health') {
+    respond(['ok' => true, 'service' => 'fizmat-homework', 'php' => PHP_VERSION]);
+}
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     respond(['ok' => false, 'error' => 'method_not_allowed'], 405);
 }
