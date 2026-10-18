@@ -2487,7 +2487,7 @@ body.trainer-theme footer{background:rgba(255,255,255,.42)}
       </div>
     </div>
     <ul class="nav-links">
-      <li><a href="#home">Войти</a></li>
+      <li><a href="#teacher">Кабинет преподавателя</a></li>
       <li><a href="#courses" class="btn-start">Начать бесплатно</a></li>
     </ul>
     <a href="#home" class="btn-back" id="backBtn">← Назад</a>
@@ -4568,7 +4568,8 @@ function hideAll(){
     'student-variant-intro-page',
     'student-variant-solve-page',
     'student-variant-check-page',
-    'student-variant-result-page'
+    'student-variant-result-page',
+    'teacher-dashboard-page'
   ].forEach(id => {
     const el = document.getElementById(id);
     if(el){
@@ -5592,6 +5593,7 @@ function handleRoute(){
   const hash = window.location.hash || '#home';
 
   try{
+  if(hash === '#teacher' && typeof showTeacherDashboard === 'function') return showTeacherDashboard();
   if(isDisabledTestConstructorRoute(hash)) return redirectDisabledTestConstructorRoute();
   if(hash === '#home') return showLanding();
   if(hash === '#courses') return showCoursesPage();
@@ -17268,4 +17270,5 @@ function togglePlatformTheme(){
   }
 })();
 </script>
+<script src="data/homework-tracking.js"></script>
 </body>
