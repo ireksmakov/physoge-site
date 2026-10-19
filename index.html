@@ -3892,6 +3892,132 @@ COURSES['school-math']=makeSchoolCourse('Математика · Школа','Ш
   7:['Алгебраические выражения','Уравнения','Функции','Геометрия: начальные сведения'],
   8:['Квадратные корни','Квадратные уравнения','Функции','Геометрия: 8 класс']
 });
+/* 7 класс · Алгебра — содержание по учебнику
+   Ю. Н. Макарычев, Н. Г. Миндюк, К. И. Нешков, С. Б. Суворова.
+   Структура курса повторяет основные главы, параграфы и 46 нумерованных тем учебника. */
+const SCHOOL_ALGEBRA_GRADE7_CHAPTERS=[
+  {
+    name:'Глава I. Выражения, тождества, уравнения',
+    sectionIndex:0,
+    topics:[
+      {n:1,section:'§ 1. Числа и выражения',title:'Рациональные числа',page:5},
+      {n:2,section:'§ 1. Числа и выражения',title:'Числовые выражения',page:11},
+      {n:3,section:'§ 1. Числа и выражения',title:'Выражения с переменными',page:14},
+      {n:4,section:'§ 1. Числа и выражения',title:'Сравнение значений выражений',page:19},
+      {n:5,section:'§ 2. Преобразование выражений',title:'Свойства действий над числами',page:23},
+      {n:6,section:'§ 2. Преобразование выражений',title:'Тождества. Тождественные преобразования выражений',page:26},
+      {n:7,section:'§ 3. Уравнения с одной переменной',title:'Уравнение и его корни',page:32},
+      {n:8,section:'§ 3. Уравнения с одной переменной',title:'Линейное уравнение с одной переменной',page:34},
+      {n:9,section:'§ 3. Уравнения с одной переменной',title:'Решение задач с помощью уравнений',page:38},
+      {n:10,section:'Для тех, кто хочет знать больше',title:'Формулы',page:42}
+    ]
+  },
+  {
+    name:'Глава II. Функции',
+    sectionIndex:1,
+    topics:[
+      {n:11,section:'§ 4. Функции и их графики',title:'Числовые промежутки',page:51},
+      {n:12,section:'§ 4. Функции и их графики',title:'Что такое функция',page:54},
+      {n:13,section:'§ 4. Функции и их графики',title:'Вычисление значений функции по формуле',page:58},
+      {n:14,section:'§ 4. Функции и их графики',title:'График функции',page:61},
+      {n:15,section:'§ 5. Линейная функция',title:'Прямая пропорциональность и её график',page:69},
+      {n:16,section:'§ 5. Линейная функция',title:'Линейная функция и её график',page:74},
+      {n:17,section:'Для тех, кто хочет знать больше',title:'Кусочно-заданные функции',page:83}
+    ]
+  },
+  {
+    name:'Глава III. Степень с натуральным показателем',
+    sectionIndex:2,
+    topics:[
+      {n:18,section:'§ 6. Степень и её свойства',title:'Определение степени с натуральным показателем',page:95},
+      {n:19,section:'§ 6. Степень и её свойства',title:'Умножение и деление степеней',page:101},
+      {n:20,section:'§ 6. Степень и её свойства',title:'Возведение в степень произведения и степени',page:105},
+      {n:21,section:'§ 7. Одночлены',title:'Одночлен и его стандартный вид',page:110},
+      {n:22,section:'§ 7. Одночлены',title:'Умножение одночленов. Возведение одночлена в степень',page:112},
+      {n:23,section:'§ 7. Одночлены',title:'Функции y = x² и y = x³ и их графики',page:114},
+      {n:24,section:'Для тех, кто хочет знать больше',title:'О простых и составных числах',page:121}
+    ]
+  },
+  {
+    name:'Глава IV. Многочлены',
+    sectionIndex:4,
+    topics:[
+      {n:25,section:'§ 8. Сумма и разность многочленов',title:'Многочлен и его стандартный вид',page:129},
+      {n:26,section:'§ 8. Сумма и разность многочленов',title:'Сложение и вычитание многочленов',page:132},
+      {n:27,section:'§ 9. Произведение одночлена и многочлена',title:'Умножение одночлена на многочлен',page:137},
+      {n:28,section:'§ 9. Произведение одночлена и многочлена',title:'Вынесение общего множителя за скобки',page:142},
+      {n:29,section:'§ 10. Произведение многочленов',title:'Умножение многочлена на многочлен',page:147},
+      {n:30,section:'§ 10. Произведение многочленов',title:'Разложение многочлена на множители способом группировки',page:152},
+      {n:31,section:'Для тех, кто хочет знать больше',title:'Деление с остатком',page:154}
+    ]
+  },
+  {
+    name:'Глава V. Формулы сокращённого умножения',
+    sectionIndex:5,
+    topics:[
+      {n:32,section:'§ 11. Квадрат суммы и квадрат разности',title:'Возведение в квадрат и в куб суммы и разности двух выражений',page:165},
+      {n:33,section:'§ 11. Квадрат суммы и квадрат разности',title:'Разложение на множители с помощью формул квадрата суммы и квадрата разности',page:171},
+      {n:34,section:'§ 12. Разность квадратов. Сумма и разность кубов',title:'Умножение разности двух выражений на их сумму',page:174},
+      {n:35,section:'§ 12. Разность квадратов. Сумма и разность кубов',title:'Разложение разности квадратов на множители',page:179},
+      {n:36,section:'§ 12. Разность квадратов. Сумма и разность кубов',title:'Разложение на множители суммы и разности кубов',page:182},
+      {n:37,section:'§ 13. Преобразование целых выражений',title:'Преобразование целого выражения в многочлен',page:185},
+      {n:38,section:'§ 13. Преобразование целых выражений',title:'Применение различных способов для разложения на множители',page:188},
+      {n:39,section:'Для тех, кто хочет знать больше',title:'Возведение двучлена в степень',page:192}
+    ]
+  },
+  {
+    name:'Глава VI. Системы линейных уравнений',
+    sectionIndex:6,
+    topics:[
+      {n:40,section:'§ 14. Линейные уравнения с двумя переменными и их системы',title:'Линейное уравнение с двумя переменными',page:201},
+      {n:41,section:'§ 14. Линейные уравнения с двумя переменными и их системы',title:'График линейного уравнения с двумя переменными',page:206},
+      {n:42,section:'§ 14. Линейные уравнения с двумя переменными и их системы',title:'Системы линейных уравнений с двумя переменными',page:209},
+      {n:43,section:'§ 15. Решение систем линейных уравнений',title:'Способ подстановки',page:213},
+      {n:44,section:'§ 15. Решение систем линейных уравнений',title:'Способ сложения',page:217},
+      {n:45,section:'§ 15. Решение систем линейных уравнений',title:'Решение задач с помощью систем уравнений',page:221},
+      {n:46,section:'Для тех, кто хочет знать больше',title:'Линейные неравенства с двумя переменными и их системы',page:225}
+    ]
+  }
+];
+
+function makeSchoolAlgebraGrade7Topic(item){
+  const topic=makeSchoolTopic('math-grade-7-algebra-topic-'+item.n,item.title);
+  topic.sectionTitle=item.section;
+  topic.bookTopicNumber=item.n;
+  topic.bookPage=item.page;
+  topic.description=item.section+' · тема '+item.n+' · стр. '+item.page+' учебника';
+  return topic;
+}
+
+(function applySchoolAlgebraGrade7Program(){
+  const course=COURSES['school-math'];
+  if(!course||!Array.isArray(course.modules))return;
+
+  SCHOOL_ALGEBRA_GRADE7_CHAPTERS.forEach((chapter,chapterOrder)=>{
+    let module=course.modules.find(item=>Number(item.grade)===7&&Number(item.sectionIndex)===Number(chapter.sectionIndex));
+    if(module&&module.name.startsWith('Геометрия:'))module=null;
+
+    if(!module){
+      module={
+        name:chapter.name,
+        grade:7,
+        sectionIndex:chapter.sectionIndex,
+        schoolSubject:'algebra',
+        schoolOrder:chapterOrder,
+        open:true,
+        lessons:[]
+      };
+      course.modules.push(module);
+    }
+
+    module.name=chapter.name;
+    module.schoolSubject='algebra';
+    module.schoolOrder=chapterOrder;
+    module.open=true;
+    module.lessons=chapter.topics.map(makeSchoolAlgebraGrade7Topic);
+  });
+})();
+
 const SCHOOL_GEOMETRY_GRADE8_PROGRAM=[
   {"title": "Вводное повторение изученного материала за курс 7 класса. Вводный срез", "section": "Вводное повторение", "paragraphs": "Гл.1-4"},
   {"title": "Многоугольник. Выпуклый многоугольник. Четырёхугольник.", "section": "Четырёхугольники", "paragraphs": "§ 1 п.39, 40, 41"},
@@ -4425,6 +4551,7 @@ function findSchoolModule(course,grade,sectionIndex){
 }
 function getSchoolModuleSubject(courseKey,module){
   if(courseKey!=='school-math'||!module||![7,8].includes(Number(module.grade))) return '';
+  if(module.schoolSubject==='geometry'||module.schoolSubject==='algebra') return module.schoolSubject;
   return module.name.startsWith('Геометрия:')?'geometry':'algebra';
 }
 
