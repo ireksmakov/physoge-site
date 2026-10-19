@@ -104,7 +104,11 @@ header{position:fixed;top:0;left:0;right:0;z-index:10000;background:rgba(2,9,20,
 .bcourse{display:block;text-align:center;padding:9px;border-radius:8px;border:1px solid var(--border);font-size:13px;font-weight:600;color:var(--cyan);cursor:pointer;background:none;width:100%;margin-top:auto;transition:all .2s}
 .bcourse:hover{background:var(--cyan);color:#000;border-color:var(--cyan)}
 @media(max-width:640px){.cn,.cn-school{font-size:22px;line-height:1.15;white-space:normal}}
-.school-hero{max-width:1100px;margin:0 auto;padding:34px 0}.school-hero h1{font-family:var(--fh);font-size:clamp(27px,4vw,42px);margin:0 0 12px}.school-lead{color:var(--gray);font-size:15px;line-height:1.7;max-width:760px}.school-grades{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-top:30px}.school-grade{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:20px}.school-grade h2{font-family:var(--fh);font-size:18px;color:var(--cyan);margin:0 0 14px}.school-grade ul{list-style:none;margin:0;padding:0}.school-grade li{color:var(--gray);font-size:13px;line-height:1.45;padding:8px 0;border-top:1px solid var(--border)}.school-grade a{color:inherit}.school-grade a:hover{color:var(--cyan)}.school-placeholder{padding:22px;border:1px dashed rgba(0,229,255,.3);border-radius:12px;background:rgba(0,229,255,.035);color:var(--gray);line-height:1.6}.school-grade-label{padding:13px 11px 5px;color:var(--cyan);font-family:var(--fh);font-weight:800;font-size:13px}.school-video-frame{width:100%;aspect-ratio:16/9;border:0;border-radius:12px;background:var(--bg2)}
+.school-hero{max-width:1100px;margin:0 auto;padding:34px 0}.school-hero h1{font-family:var(--fh);font-size:clamp(27px,4vw,42px);margin:0 0 12px}.school-lead{color:var(--gray);font-size:15px;line-height:1.7;max-width:760px}.school-grades{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-top:30px}.school-grade{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:20px}.school-grade h2{font-family:var(--fh);font-size:18px;color:var(--cyan);margin:0 0 14px}.school-grade ul{list-style:none;margin:0;padding:0}.school-grade li{color:var(--gray);font-size:13px;line-height:1.45;padding:8px 0;border-top:1px solid var(--border)}.school-grade a{color:inherit}.school-grade a:hover{color:var(--cyan)}
+.school-grade-author{margin:-5px 0 12px;color:var(--gray);font-size:12px;line-height:1.4}
+.school-grade-author strong{color:var(--white);font-weight:700}
+.school-grade-author-sidebar{margin:0 12px 10px;padding:7px 10px;border-left:2px solid rgba(8,216,255,.35);background:rgba(8,216,255,.035);border-radius:0 7px 7px 0}
+.school-placeholder{padding:22px;border:1px dashed rgba(0,229,255,.3);border-radius:12px;background:rgba(0,229,255,.035);color:var(--gray);line-height:1.6}.school-grade-label{padding:13px 11px 5px;color:var(--cyan);font-family:var(--fh);font-weight:800;font-size:13px}.school-video-frame{width:100%;aspect-ratio:16/9;border:0;border-radius:12px;background:var(--bg2)}
 .school-trainer-wrap{display:grid;gap:12px}
 .school-trainer-note{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 16px;border:1px solid rgba(8,216,255,.28);border-radius:12px;background:rgba(8,216,255,.055);color:var(--gray);line-height:1.5}
 .school-trainer-link{display:inline-flex;align-items:center;justify-content:center;padding:9px 13px;border:1px solid rgba(8,216,255,.4);border-radius:9px;color:var(--cyan);font-weight:800;text-decoration:none;white-space:nowrap}
@@ -3886,6 +3890,13 @@ COURSES['school-physics']=makeSchoolCourse('Физика · Школа','Шко�
   7:['Введение в физику','Первоначальные сведения о строении вещества','Взаимодействие тел','Давление твёрдых тел, жидкостей и газов','Работа, мощность и энергия'],
   8:['Тепловые явления','Электрические явления','Электромагнитные явления','Световые явления']
 });
+const SCHOOL_GRADE_BOOK_AUTHORS={
+  'school-physics':{7:'Перышкин А. В.'}
+};
+function getSchoolGradeBookAuthor(courseKey,grade){
+  const byCourse=SCHOOL_GRADE_BOOK_AUTHORS[courseKey];
+  return byCourse&&byCourse[Number(grade)]?String(byCourse[Number(grade)]):'';
+}
 COURSES['school-math']=makeSchoolCourse('Математика · Школа','Школьная математика для 5–8 классов: теория, видеоуроки, тесты и задачи по темам.','math',{
   5:['Натуральные числа','Обыкновенные дроби','Десятичные дроби','Геометрические фигуры'],
   6:['Делимость чисел','Обыкновенные и десятичные дроби','Отношения и пропорции','Рациональные числа'],
@@ -6678,11 +6689,13 @@ function showSchoolCourseOverview(courseKey){
   const gradeCards=gradeBlocks.map(({grade,subject})=>{
     const sections=c.modules.filter(module=>module.grade===grade&&(!subject||getSchoolModuleSubject(courseKey,module)===subject));
     const gradeTitle=`${grade} класс${subject?' '+(subject==='geometry'?'Геометрия':'Алгебра'):''}`;
+    const bookAuthor=getSchoolGradeBookAuthor(courseKey,grade);
     const startModuleIndex=c.modules.indexOf(sections[0]);
     const gradeNumber=String(grade).padStart(2,'0');
     return `<article class="school-grade" data-grade="${grade}" data-subject="${subject}" role="link" tabindex="0" aria-label="Открыть курс ${escapeHtml(gradeTitle)}" onclick="openSchoolGrade('${courseKey}',${grade},${startModuleIndex})" onkeydown="if(event.target===this&&(event.key==='Enter'||event.key===' ')){event.preventDefault();openSchoolGrade('${courseKey}',${grade},${startModuleIndex})}">
       <div class="school-grade-top"><span class="school-grade-number">${gradeNumber}</span><span class="school-grade-chip">Школьный курс</span></div>
       <h2>${escapeHtml(gradeTitle)}</h2>
+      ${bookAuthor?`<div class="school-grade-author">Автор учебника: <strong>${escapeHtml(bookAuthor)}</strong></div>`:''}
       <ul>${sections.map(module=>{
         const mi=c.modules.indexOf(module);
         return `<li><a href="${getCourseRoute(courseKey,mi,0,'theory')}" onclick="event.stopPropagation()">${escapeHtml(module.name)}<span class="school-grade-link-arrow">→</span></a></li>`;
@@ -7142,9 +7155,13 @@ function renderSb(){
     const gradeState=loadSchoolGradeSidebarState(AC);
     const isOpen=Object.prototype.hasOwnProperty.call(gradeState,gradeKey)?!!gradeState[gradeKey]:true;
 
+    const currentBookAuthor=getSchoolGradeBookAuthor(AC,currentGrade);
     h+=`<button class="school-grade-toggle${isOpen?' is-open':''}" type="button" aria-expanded="${isOpen?'true':'false'}" onclick="toggleSchoolGrade(${Number(currentGrade)})">
       <span>${currentGrade} класс</span><span class="school-grade-toggle-arrow">▶</span>
     </button>`;
+    if(currentBookAuthor){
+      h+=`<div class="school-grade-author school-grade-author-sidebar">Автор учебника: <strong>${escapeHtml(currentBookAuthor)}</strong></div>`;
+    }
     h+=`<div class="school-grade-sections" data-grade="${currentGrade}"${isOpen?'':' hidden'}>`;
     c.modules.forEach((m,mi)=>{
       if(Number(m.grade)===Number(currentGrade)&&getSchoolModuleSubject(AC,m)===currentSubject) h+=renderModule(m,mi);
