@@ -3891,11 +3891,16 @@ COURSES['school-physics']=makeSchoolCourse('Физика · Школа','Шко�
   8:['Тепловые явления','Электрические явления','Электромагнитные явления','Световые явления']
 });
 const SCHOOL_GRADE_BOOK_AUTHORS={
-  'school-physics':{7:'Перышкин А. В.'}
+  'school-physics':{7:'Перышкин А. В.'},
+  'school-math':{7:{algebra:'Макарычев Ю. Н. (Базовый)'}}
 };
-function getSchoolGradeBookAuthor(courseKey,grade){
+function getSchoolGradeBookAuthor(courseKey,grade,subject){
   const byCourse=SCHOOL_GRADE_BOOK_AUTHORS[courseKey];
-  return byCourse&&byCourse[Number(grade)]?String(byCourse[Number(grade)]):'';
+  const value=byCourse&&byCourse[Number(grade)]?byCourse[Number(grade)]:'';
+  if(!value)return '';
+  if(typeof value==='string')return value;
+  if(value&&typeof value==='object'&&subject&&value[subject])return String(value[subject]);
+  return '';
 }
 COURSES['school-math']=makeSchoolCourse('Математика · Школа','Школьная математика для 5–8 классов: теория, видеоуроки, тесты и задачи по темам.','math',{
   5:['Натуральные числа','Обыкновенные дроби','Десятичные дроби','Геометрические фигуры'],
@@ -6689,7 +6694,7 @@ function showSchoolCourseOverview(courseKey){
   const gradeCards=gradeBlocks.map(({grade,subject})=>{
     const sections=c.modules.filter(module=>module.grade===grade&&(!subject||getSchoolModuleSubject(courseKey,module)===subject));
     const gradeTitle=`${grade} класс${subject?' '+(subject==='geometry'?'Геометрия':'Алгебра'):''}`;
-    const bookAuthor=getSchoolGradeBookAuthor(courseKey,grade);
+    const bookAuthor=getSchoolGradeBookAuthor(courseKey,grade,subject);
     const startModuleIndex=c.modules.indexOf(sections[0]);
     const gradeNumber=String(grade).padStart(2,'0');
     return `<article class="school-grade" data-grade="${grade}" data-subject="${subject}" role="link" tabindex="0" aria-label="Открыть курс ${escapeHtml(gradeTitle)}" onclick="openSchoolGrade('${courseKey}',${grade},${startModuleIndex})" onkeydown="if(event.target===this&&(event.key==='Enter'||event.key===' ')){event.preventDefault();openSchoolGrade('${courseKey}',${grade},${startModuleIndex})}">
@@ -7155,7 +7160,7 @@ function renderSb(){
     const gradeState=loadSchoolGradeSidebarState(AC);
     const isOpen=Object.prototype.hasOwnProperty.call(gradeState,gradeKey)?!!gradeState[gradeKey]:true;
 
-    const currentBookAuthor=getSchoolGradeBookAuthor(AC,currentGrade);
+    const currentBookAuthor=getSchoolGradeBookAuthor(AC,currentGrade,currentSubject);
     h+=`<button class="school-grade-toggle${isOpen?' is-open':''}" type="button" aria-expanded="${isOpen?'true':'false'}" onclick="toggleSchoolGrade(${Number(currentGrade)})">
       <span>${currentGrade} класс</span><span class="school-grade-toggle-arrow">▶</span>
     </button>`;
