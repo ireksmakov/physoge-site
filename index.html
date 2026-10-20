@@ -10964,7 +10964,17 @@ const LOG_GRAPH_EXERCISES=[
     'По отмеченной точке (2; −1): logₐ 2 = −1.',
     'Следовательно, a = 1/2.',
     'f(8) = log₁/₂ 8 = −3, поскольку (1/2)⁻³ = 8.']}
-];
+,
+{"cond":"На рисунке изображён график функции f(x) = b + logₐ x. Найдите значение x, при котором f(x) = −2.","answer":"27","steps":["Точка (1; 1): b=1.","Точка (3; 0): a=1/3.","1 + log₁/₃x = −2 ⇒ x=27."],"plot":"log-task-06-graph.svg"},
+{"cond":"На рисунке изображён график функции f(x) = logₐ(x − b) + c. Найдите значение x, при котором f(x) = 4.","answer":"29","steps":["Асимптота x=2: b=2.","Точки (3; 1), (5; 2): c=1, a=3.","log₃(x−2)+1=4 ⇒ x=29."],"plot":"log-task-07-graph.svg"},
+{"cond":"На рисунке изображён график функции f(x) = logₐ(x − b) + c. Найдите значение x, при котором f(x) = 3.","answer":"13","steps":["Асимптота x=−3: b=−3.","Точки (−2; −1), (−1; 0): c=−1, a=2.","log₂(x+3)−1=3 ⇒ x=13."],"plot":"log-task-08-graph.svg"},
+{"cond":"На рисунке изображён график функции f(x) = logₐ(x − b) + c. Найдите f(9).","answer":"5","steps":["Асимптота x=1: b=1.","Точки (2; 2), (5; 4): c=2, a=2.","f(9)=log₂8+2=5."],"plot":"log-task-09-graph.svg"},
+{"cond":"На рисунке изображён график функции f(x) = logₐ(x − b) + c. Найдите значение x, при котором f(x) = 5.","answer":"17","steps":["Асимптота x=1: b=1.","Точки (2; 3), (5; 4): c=3, a=4.","log₄(x−1)+3=5 ⇒ x=17."],"plot":"log-task-10-graph.svg"},
+{"cond":"На рисунке изображён график функции вида f(x) = logₐ x. Найдите значение f(8).","answer":"3","steps":["Точка (2; 1): a=2.","f(8)=log₂8=3."],"plot":"log-task-11-graph.svg"},
+{"cond":"На рисунке изображён график функции f(x) = k logₐ x. Найдите значение x, при котором f(x) = −9.","answer":"0.125","steps":["Точки (2; 3), (4; 6): f(x)=3log₂x.","3log₂x=−9 ⇒ x=1/8=0,125."],"plot":"log-task-12-graph.svg"},
+{"cond":"На рисунке изображён график функции f(x) = b + logₐ x. Найдите значение x, при котором f(x) = 7.","answer":"1024","steps":["Точки (2; −2), (4; −1): a=2, b=−3.","−3+log₂x=7 ⇒ x=1024."],"plot":"log-task-13-graph.svg"},
+{"cond":"На рисунке изображён график функции f(x) = logₐ(x + b). Найдите f(13).","answer":"6","steps":["Точка (−2; 0): b=3.","Точка (1; 3): a=∛4.","f(13)=log∛₄16=6."],"plot":"log-task-14-graph.svg"},
+{"cond":"На рисунке изображён график функции f(x) = c + logₐ x. Найдите f(64).","answer":"-4","steps":["Точка (1; −1): c=−1.","Точка (4; −2): a=1/4.","f(64)=−1+log₁/₄64=−4."],"plot":"log-task-15-graph.svg"}];
 function renderLogGraphExercises(){
   return '<div style="font-size:13px;color:var(--gray);margin-bottom:14px">Разверните график и введите ответ. После трёх неверных попыток решение откроется автоматически.</div>'+
     LOG_GRAPH_EXERCISES.map(function(t,i){
@@ -10972,7 +10982,7 @@ function renderLogGraphExercises(){
       return '<section class="log-ex-card" data-log-index="'+i+'">'+
         '<div class="log-ex-head"><span class="log-ex-index">'+String(i+1).padStart(2,'0')+'</span><span class="log-ex-heading">Задача '+(i+1)+' · Логарифмическая функция</span></div>'+
         '<div class="log-ex-body">'+
-          '<div class="log-ex-question">На рисунке изображён график функции вида <i>f</i>(<i>x</i>) = log<sub><i>a</i></sub> <i>x</i>. Найдите значение <i>f</i>('+t.x+').</div>'+
+          '<div class="log-ex-question">'+(t.cond||('На рисунке изображён график функции вида <i>f</i>(<i>x</i>) = log<sub><i>a</i></sub> <i>x</i>. Найдите значение <i>f</i>('+t.x+').'))+'</div>'+
           '<button type="button" class="log-ex-toggle" aria-expanded="false" aria-controls="'+id+'" onclick="toggleLogGraph(this)">▣ Развернуть график</button>'+
           '<figure class="log-ex-figure" id="'+id+'" hidden><img alt="График логарифмической функции к задаче '+(i+1)+'" src="images/ege-math/logarithms/'+t.plot+'" loading="lazy"></figure>'+
           '<div class="log-ex-answer"><label for="'+id+'Input">Ваш ответ:</label><input id="'+id+'Input" type="text" inputmode="decimal" autocomplete="off" aria-label="Ответ для задачи '+(i+1)+'"><button class="log-ex-check" type="button" onclick="checkLogAnswer(this)">Проверить ответ</button></div>'+
