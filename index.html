@@ -2471,6 +2471,19 @@ body.trainer-theme .theme-toggle-btn:hover{background:#e8f1ff;border-color:#1f7a
 body.trainer-theme .cp-resizer::after{background:rgba(31,122,224,.45)}
 body.trainer-theme .divider{background:rgba(148,163,184,.32)}
 body.trainer-theme footer{background:rgba(255,255,255,.42)}
+
+/* ЕГЭ профиль: логарифмы — самостоятельные задания */
+.log-ex-card{border:1px solid var(--border);border-radius:15px;background:var(--bg2);margin:16px 0;overflow:hidden}
+.log-ex-head{padding:14px 18px;background:rgba(8,216,255,.055);border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.log-ex-index{font-weight:900;color:var(--cyan)}.log-ex-heading{font-weight:700;color:var(--white)}
+.log-ex-body{padding:18px}.log-ex-question{font-size:16px;line-height:1.65;color:var(--white);margin-bottom:14px}
+.log-ex-toggle,.log-ex-check{border:1px solid var(--cyan);border-radius:8px;padding:10px 14px;background:rgba(8,216,255,.1);color:var(--cyan);cursor:pointer;font:600 13px var(--fb)}
+.log-ex-toggle:hover,.log-ex-check:hover{background:rgba(8,216,255,.18)}.log-ex-figure{margin:12px 0 18px;padding:8px;background:#fff;border-radius:10px;max-width:880px}
+.log-ex-figure[hidden]{display:none}.log-ex-figure img{display:block;max-width:100%;width:100%;height:auto;object-fit:contain}
+.log-ex-answer{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.log-ex-answer input{width:160px;min-width:120px;padding:10px 12px;background:#020914;color:var(--white);border:1px solid var(--border);border-radius:8px;font:inherit}
+.log-ex-feedback{font-size:13px;color:var(--gray);margin-top:10px;min-height:20px}.log-ex-solution{padding:16px;border-top:1px solid var(--border);line-height:1.8;color:var(--white)}
+.log-ex-solution[hidden]{display:none}.log-ex-solution ol{margin:8px 0 0;padding-left:24px}.log-ex-solution li{margin:7px 0}
+@media(max-width:680px){.log-ex-body{padding:12px}.log-ex-question{font-size:14px}.log-ex-answer input{flex:1;max-width:100%}}
 </style>
 </head>
 <body class="view-mode">
@@ -10929,7 +10942,81 @@ function renderOgeMathInequalityTasks(){
   return h;
 }
 
+
+const LOG_GRAPH_EXERCISES=[
+  {x:25,a:'5',y:'−1',answer:'-2',plot:'log-task-01-graph.svg',steps:[
+    'По отмеченной точке (5; −1): logₐ 5 = −1.',
+    'Следовательно, a⁻¹ = 5, откуда a = 1/5.',
+    'f(25) = log₁/₅ 25 = −2, поскольку (1/5)⁻² = 25.']},
+  {x:16,a:'2',y:'−1',answer:'-4',plot:'log-task-02-graph.svg',steps:[
+    'По отмеченной точке (2; −1): logₐ 2 = −1.',
+    'Следовательно, a = 1/2.',
+    'f(16) = log₁/₂ 16 = −4, поскольку (1/2)⁻⁴ = 16.']},
+  {x:32,a:'2',y:'1',answer:'5',plot:'log-task-03-graph.svg',steps:[
+    'По отмеченной точке (2; 1): logₐ 2 = 1.',
+    'Следовательно, a = 2.',
+    'f(32) = log₂ 32 = 5, поскольку 2⁵ = 32.']},
+  {x:16,a:'2',y:'1',answer:'4',plot:'log-task-04-graph.svg',steps:[
+    'По отмеченной точке (2; 1): logₐ 2 = 1.',
+    'Следовательно, a = 2.',
+    'f(16) = log₂ 16 = 4, поскольку 2⁴ = 16.']},
+  {x:8,a:'2',y:'−1',answer:'-3',plot:'log-task-05-graph.svg',steps:[
+    'По отмеченной точке (2; −1): logₐ 2 = −1.',
+    'Следовательно, a = 1/2.',
+    'f(8) = log₁/₂ 8 = −3, поскольку (1/2)⁻³ = 8.']}
+];
+function renderLogGraphExercises(){
+  return '<div style="font-size:13px;color:var(--gray);margin-bottom:14px">Разверните график и введите ответ. После трёх неверных попыток решение откроется автоматически.</div>'+
+    LOG_GRAPH_EXERCISES.map(function(t,i){
+      const id='logEgeGraph'+(i+1);
+      return '<section class="log-ex-card" data-log-index="'+i+'">'+
+        '<div class="log-ex-head"><span class="log-ex-index">'+String(i+1).padStart(2,'0')+'</span><span class="log-ex-heading">Задача '+(i+1)+' · Логарифмическая функция</span></div>'+
+        '<div class="log-ex-body">'+
+          '<div class="log-ex-question">На рисунке изображён график функции вида <i>f</i>(<i>x</i>) = log<sub><i>a</i></sub> <i>x</i>. Найдите значение <i>f</i>('+t.x+').</div>'+
+          '<button type="button" class="log-ex-toggle" aria-expanded="false" aria-controls="'+id+'" onclick="toggleLogGraph(this)">▣ Развернуть график</button>'+
+          '<figure class="log-ex-figure" id="'+id+'" hidden><img alt="График логарифмической функции к задаче '+(i+1)+'" src="images/ege-math/logarithms/'+t.plot+'" loading="lazy"></figure>'+
+          '<div class="log-ex-answer"><label for="'+id+'Input">Ваш ответ:</label><input id="'+id+'Input" type="text" inputmode="decimal" autocomplete="off" aria-label="Ответ для задачи '+(i+1)+'"><button class="log-ex-check" type="button" onclick="checkLogAnswer(this)">Проверить ответ</button></div>'+
+          '<div class="log-ex-feedback" role="status" aria-live="polite">Осталось попыток: 3</div>'+
+        '</div><div class="log-ex-solution" hidden><strong>Пошаговое решение</strong><ol>'+t.steps.map(function(step){return '<li>'+step+'</li>'}).join('')+'</ol><p><strong>Ответ: '+t.answer.replace('-','−')+'</strong></p></div>'+
+      '</section>';
+    }).join('');
+}
+function toggleLogGraph(btn){
+  const figure=document.getElementById(btn.getAttribute('aria-controls'));
+  if(!figure)return;
+  figure.hidden=!figure.hidden;
+  btn.setAttribute('aria-expanded',String(!figure.hidden));
+  btn.textContent=figure.hidden?'▣ Развернуть график':'▣ Свернуть график';
+}
+function checkLogAnswer(btn){
+  const card=btn.closest('.log-ex-card');
+  if(!card||card.dataset.completed==='true')return;
+  const task=LOG_GRAPH_EXERCISES[Number(card.dataset.logIndex)];
+  const input=card.querySelector('input');
+  const feedback=card.querySelector('.log-ex-feedback');
+  const raw=input.value.trim().replace(/[−–—]/g,'-').replace(',','.').replace(/\\s/g,'');
+  if(!raw){feedback.textContent='Сначала введите ответ.';return;}
+  if(!/^[+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)$/.test(raw)){feedback.textContent='Введите числовой ответ, например: −2.';return;}
+  if(Number(raw)===Number(task.answer)){
+    feedback.textContent='Верно! Ответ принят.';
+    feedback.style.color='var(--green)';
+    card.dataset.completed='true';input.disabled=true;btn.disabled=true;return;
+  }
+  const attempts=(Number(card.dataset.attempts)||0)+1;
+  card.dataset.attempts=String(attempts);
+  const left=Math.max(0,3-attempts);
+  if(left){
+    feedback.textContent='Неверно. Осталось попыток: '+left;
+    feedback.style.color='var(--orange)';
+  }else{
+    feedback.textContent='Три неверных попытки. Решение открыто ниже.';
+    feedback.style.color='var(--orange)';
+    card.querySelector('.log-ex-solution').hidden=false;
+    card.dataset.completed='true';input.disabled=true;btn.disabled=true;
+  }
+}
 function renderPTasks(name){
+  if(AC==='ege-mat-pro'&&name==='Логарифмы')return renderLogGraphExercises();
   if(AC==='oge-mat'&&CM===0&&CL===1&&name==='Уравнения'){
     return renderOgeMathEquationTasks();
   }
