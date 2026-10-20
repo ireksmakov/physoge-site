@@ -10994,9 +10994,9 @@ function checkLogAnswer(btn){
   const task=LOG_GRAPH_EXERCISES[Number(card.dataset.logIndex)];
   const input=card.querySelector('input');
   const feedback=card.querySelector('.log-ex-feedback');
-  const raw=input.value.trim().replace(/[−–—]/g,'-').replace(',','.').replace(/\\s/g,'');
+  const raw=input.value.trim().replace(/[−–—]/g,'-').replace(',','.').replace(/\s/g,'');
   if(!raw){feedback.textContent='Сначала введите ответ.';return;}
-  if(!/^[+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)$/.test(raw)){feedback.textContent='Введите числовой ответ, например: −2.';return;}
+  if(!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(raw)){feedback.textContent='Введите числовой ответ, например: −2.';return;}
   if(Number(raw)===Number(task.answer)){
     feedback.textContent='Верно! Ответ принят.';
     feedback.style.color='var(--green)';
