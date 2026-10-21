@@ -3921,6 +3921,75 @@ COURSES['school-math']=makeSchoolCourse('Математика · Школа','Ш
   7:['Алгебраические выражения','Уравнения','Функции','Геометрия: начальные сведения'],
   8:['Квадратные корни','Квадратные уравнения','Функции','Геометрия: 8 класс']
 });
+
+/* 6 класс · Математика — программа из документа «КУРС 6 КЛАСС».
+   32 занятия сохранены в исходном порядке и распределены по четырём
+   существующим разделам курса, чтобы не менять индексы модулей и ссылки. */
+const SCHOOL_MATH_GRADE6_PROGRAM=[
+  {n:1,sectionIndex:0,title:'Делители и кратные. Простые и составные числа'},
+  {n:2,sectionIndex:0,title:'Признаки делимости на 2, 3, 4, 5, 9 и 10'},
+  {n:3,sectionIndex:0,title:'Разложение на простые множители. Наибольший общий делитель и наименьшее общее кратное'},
+
+  {n:4,sectionIndex:1,title:'Основное свойство дроби. Сокращение дробей. Приведение дробей к общему знаменателю'},
+  {n:5,sectionIndex:1,title:'Сравнение, сложение и вычитание дробей с разными знаменателями'},
+  {n:6,sectionIndex:1,title:'Сложение и вычитание смешанных чисел'},
+  {n:7,sectionIndex:1,title:'Умножение дробей. Применение распределительного свойства умножения'},
+  {n:8,sectionIndex:1,title:'Нахождение дроби от числа. Взаимно обратные числа'},
+  {n:9,sectionIndex:1,title:'Деление дробей'},
+  {n:10,sectionIndex:1,title:'Нахождение числа по его дроби и дроби по числу'},
+  {n:11,sectionIndex:1,title:'Дробные выражения'},
+
+  {n:12,sectionIndex:2,title:'Отношение двух чисел'},
+  {n:13,sectionIndex:2,title:'Пропорции. Прямая и обратная пропорциональные зависимости'},
+  {n:14,sectionIndex:2,title:'Масштаб'},
+  {n:15,sectionIndex:2,title:'Длина окружности и площадь круга'},
+
+  {n:16,sectionIndex:3,title:'Координаты на прямой'},
+  {n:17,sectionIndex:3,title:'Противоположные числа'},
+  {n:18,sectionIndex:3,title:'Сравнение чисел'},
+  {n:19,sectionIndex:3,title:'Изменение величин'},
+  {n:20,sectionIndex:3,title:'Сложение рациональных чисел с помощью координатной прямой'},
+  {n:21,sectionIndex:3,title:'Сложение отрицательных чисел'},
+  {n:22,sectionIndex:3,title:'Сложение чисел с разными знаками'},
+  {n:23,sectionIndex:3,title:'Вычитание рациональных чисел'},
+  {n:24,sectionIndex:3,title:'Умножение и деление рациональных чисел'},
+  {n:25,sectionIndex:3,title:'Рациональные числа. Обобщение'},
+  {n:26,sectionIndex:3,title:'Свойства действий с рациональными числами'},
+  {n:27,sectionIndex:3,title:'Раскрытие скобок'},
+  {n:28,sectionIndex:3,title:'Коэффициент'},
+  {n:29,sectionIndex:3,title:'Решение уравнений'},
+  {n:30,sectionIndex:3,title:'Координатная плоскость'},
+  {n:31,sectionIndex:3,title:'Перпендикулярные и параллельные прямые'},
+  {n:32,sectionIndex:3,title:'Итоговое занятие: решение задач по пройденному материалу'}
+];
+
+(function applySchoolMathGrade6Program(){
+  const course=COURSES['school-math'];
+  if(!course||!Array.isArray(course.modules))return;
+
+  const grade6Modules=course.modules.filter(module=>Number(module.grade)===6);
+  if(grade6Modules.length!==4)return;
+
+  const sectionNames=[
+    'Делимость чисел',
+    'Обыкновенные дроби',
+    'Отношения и пропорции',
+    'Рациональные числа и координаты'
+  ];
+
+  grade6Modules.forEach((module,index)=>{
+    module.name=sectionNames[index];
+    module.open=true;
+    module.lessons=SCHOOL_MATH_GRADE6_PROGRAM
+      .filter(item=>item.sectionIndex===index)
+      .map(item=>{
+        const topic=makeSchoolTopic('math-grade-6-topic-'+item.n,item.title);
+        topic.courseLessonNumber=item.n;
+        topic.description='Занятие '+item.n+' · 6 класс';
+        return topic;
+      });
+  });
+})();
 /* 7 класс · Алгебра — содержание по учебнику
    Ю. Н. Макарычев, Н. Г. Миндюк, К. И. Нешков, С. Б. Суворова.
    Структура курса повторяет основные главы, параграфы и 46 нумерованных тем учебника. */
