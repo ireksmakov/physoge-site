@@ -2484,6 +2484,290 @@ body.trainer-theme footer{background:rgba(255,255,255,.42)}
 .log-ex-feedback{font-size:13px;color:var(--gray);margin-top:10px;min-height:20px}.log-ex-solution{padding:16px;border-top:1px solid var(--border);line-height:1.8;color:var(--white)}
 .log-ex-solution[hidden]{display:none}.log-ex-solution ol{margin:8px 0 0;padding-left:24px}.log-ex-solution li{margin:7px 0}
 @media(max-width:680px){.log-ex-body{padding:12px}.log-ex-question{font-size:14px}.log-ex-answer input{flex:1;max-width:100%}}
+
+/* ===== LANDING: LIGHT COURSE-CARD STYLE (reference: school grade cards) ===== */
+#landing .feat-card,
+#landing .ccard,
+#landing .how-step,
+#landing .cta-s{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  color:#06142f;
+  border:1px solid rgba(8,190,235,.72);
+  border-radius:20px;
+  background:
+    radial-gradient(circle at 82% 12%,rgba(93,208,255,.22),transparent 31%),
+    linear-gradient(155deg,#f9fcff 0%,#eef7ff 47%,#e7f1f7 68%,#c4d2da 84%,#405563 100%);
+  box-shadow:
+    0 18px 38px rgba(13,39,62,.14),
+    inset 0 1px 0 rgba(255,255,255,.92);
+  transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease;
+}
+#landing .feat-card::before,
+#landing .ccard::before,
+#landing .how-step::before,
+#landing .cta-s::before{
+  content:"";
+  position:absolute;
+  left:18px;
+  right:18px;
+  top:0;
+  height:2px;
+  border-radius:999px;
+  background:linear-gradient(90deg,transparent,rgba(8,190,235,.95) 18%,rgba(8,190,235,.52) 82%,transparent);
+  z-index:-1;
+}
+#landing .feat-card::after,
+#landing .ccard::after,
+#landing .how-step::after,
+#landing .cta-s::after{
+  content:"";
+  position:absolute;
+  width:190px;
+  height:190px;
+  right:-88px;
+  bottom:-105px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(4,31,48,.34),rgba(4,31,48,0) 70%);
+  pointer-events:none;
+  z-index:-1;
+}
+#landing .feat-card:hover,
+#landing .ccard:hover,
+#landing .how-step:hover,
+#landing .cta-s:hover{
+  transform:translateY(-5px);
+  border-color:#08bfe8;
+  box-shadow:
+    0 24px 50px rgba(13,39,62,.22),
+    0 0 0 1px rgba(8,190,235,.08) inset;
+}
+
+/* Feature cards */
+#landing .feat-grid{gap:24px}
+#landing .feat-card{
+  min-height:270px;
+  padding:26px 26px 24px;
+  display:flex;
+  flex-direction:column;
+}
+#landing .feat-icon{
+  width:58px;
+  height:38px;
+  margin-bottom:20px;
+  border-radius:11px!important;
+  border:1px solid rgba(8,190,235,.45);
+  background:rgba(224,247,255,.78)!important;
+  color:#0877d9!important;
+  font-size:20px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9);
+}
+#landing .feat-title{
+  color:#06142f;
+  font-size:20px;
+  font-weight:900;
+  line-height:1.15;
+  margin-bottom:12px;
+}
+#landing .feat-desc{
+  color:#263850;
+  font-size:14px;
+  line-height:1.62;
+  margin-bottom:18px;
+}
+#landing .feat-tags{margin-top:auto;gap:7px}
+#landing .ftag,
+#landing .ftag-o,
+#landing .ftag-g{
+  padding:5px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,149,0,.34);
+  background:rgba(255,247,232,.72);
+  color:#ee8500;
+  font-size:10px;
+  font-weight:800;
+}
+
+/* Main course and simulator cards */
+#landing .cgrid{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:26px;
+}
+#landing .ccard{
+  min-height:330px;
+  padding:26px 26px 24px;
+}
+#landing .ci{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:58px;
+  height:38px;
+  margin:0 0 20px;
+  border-radius:11px;
+  border:1px solid rgba(8,190,235,.45);
+  background:rgba(224,247,255,.78);
+  color:#0877d9;
+  font-size:19px;
+}
+#landing .ctag{
+  margin:-58px 0 24px auto;
+  min-height:34px;
+  display:inline-flex;
+  align-items:center;
+  padding:0 14px;
+  border-radius:999px;
+  border:1px solid rgba(255,149,0,.34);
+  background:rgba(255,247,232,.72);
+  color:#ee8500;
+  letter-spacing:.45px;
+}
+#landing .cn,
+#landing .cn-school,
+#landing #simulators .cn{
+  color:#06142f;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  font-size:clamp(20px,1.5vw,26px);
+  line-height:1.12;
+  min-height:58px;
+  margin-bottom:15px;
+}
+#landing .cd{
+  color:#263850;
+  font-size:14px;
+  line-height:1.62;
+  margin-bottom:18px;
+}
+#landing .cmeta{gap:12px;flex-wrap:wrap}
+#landing .mi{color:#3f536b;font-weight:600}
+#landing .mi .dot{background:#0877d9;opacity:.8}
+#landing .course-badges{gap:7px}
+#landing .cb,
+#landing .cb-free,
+#landing .cb-sim{
+  border:1px solid rgba(255,149,0,.3);
+  border-radius:999px;
+  background:rgba(255,247,232,.7)!important;
+  color:#e57e00!important;
+  padding:5px 9px;
+}
+#landing .bcourse{
+  min-height:54px;
+  padding:0 18px;
+  border:1px solid #09bfe8;
+  border-radius:12px;
+  background:rgba(239,249,255,.62);
+  color:#0877d9;
+  font-size:14px;
+  font-weight:900;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  text-align:left;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.85);
+}
+#landing .bcourse::after{content:"→";font-size:18px;line-height:1}
+#landing .bcourse:hover{
+  background:rgba(223,247,255,.92);
+  border-color:#069fc9;
+  color:#055eb4;
+}
+#landing .bcourse[disabled]::after{content:""}
+
+/* Lesson-format cards */
+#landing .how-s{
+  background:transparent;
+  border-color:rgba(8,190,235,.14);
+}
+#landing .how-g{
+  max-width:1500px;
+  margin:0 auto;
+  padding:8px 24px 48px;
+  gap:24px;
+}
+#landing .how-step{
+  min-height:230px;
+  padding:26px;
+  border-right:1px solid rgba(8,190,235,.72);
+}
+#landing .how-step:last-child{border-right:1px solid rgba(8,190,235,.72)}
+#landing .snum{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:58px;
+  height:38px;
+  padding:0 11px;
+  margin-bottom:22px;
+  border-radius:11px;
+  border:1px solid rgba(8,190,235,.45);
+  background:rgba(224,247,255,.78);
+  color:#0877d9;
+  font-size:14px;
+  letter-spacing:1px;
+}
+#landing .snum::before{content:"0"}
+#landing .stit{
+  color:#06142f;
+  font-size:18px;
+  font-weight:900;
+  line-height:1.2;
+  margin-bottom:11px;
+}
+#landing .sdesc{
+  color:#263850;
+  font-size:14px;
+  line-height:1.65;
+}
+
+/* Final CTA in the same visual family */
+#landing .cta-s{
+  max-width:760px;
+  margin:56px auto;
+  padding:44px 34px;
+}
+#landing .cta-s h2{color:#06142f}
+#landing .cta-s p{color:#3d5268}
+#landing .cta-social{
+  background:rgba(245,251,255,.84);
+  border-color:rgba(8,190,235,.52);
+  box-shadow:0 8px 18px rgba(13,39,62,.1);
+}
+#landing .cta-s .btn-p{
+  border:1px solid #09bfe8;
+  background:rgba(239,249,255,.78);
+  color:#0877d9;
+  box-shadow:none;
+}
+#landing .cta-s .btn-p:hover{
+  background:#dff7ff;
+  color:#055eb4;
+}
+
+/* Responsive landing cards */
+@media(max-width:1280px){
+  #landing .cgrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:980px){
+  #landing .cgrid,
+  #landing .feat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #landing .how-g{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:640px){
+  #landing .cgrid,
+  #landing .feat-grid,
+  #landing .how-g{grid-template-columns:1fr}
+  #landing .ccard,
+  #landing .feat-card,
+  #landing .how-step{min-height:auto;padding:22px 20px}
+  #landing .cn,
+  #landing .cn-school,
+  #landing #simulators .cn{min-height:0;font-size:22px}
+  #landing .cta-s{margin:34px 14px;padding:32px 20px}
+}
+
 </style>
 </head>
 <body class="view-mode">
