@@ -1632,6 +1632,8 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
   background:#fff;
 }
 .school-task-list{display:grid;gap:16px}
+.school-task-section-heading{margin:8px 2px 2px;padding:12px 16px;border-left:4px solid var(--cyan);border-radius:8px;background:rgba(8,216,255,.08);color:var(--white);font-family:var(--fb);font-size:clamp(18px,2vw,22px);font-weight:800;line-height:1.4}
+body.trainer-theme .school-task-section-heading{color:#172033;background:#eaf5ff;border-left-color:#1f7ae0}
 .school-task-card{border:1px solid rgba(8,216,255,.22);border-radius:16px;background:linear-gradient(160deg,rgba(8,216,255,.055),rgba(2,9,20,.94));padding:18px;box-shadow:0 10px 26px rgba(0,0,0,.14)}
 .school-task-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
 .school-task-number{display:inline-flex;align-items:center;justify-content:center;min-width:46px;height:36px;padding:0 12px;border-radius:10px;background:rgba(8,216,255,.12);border:1px solid rgba(8,216,255,.32);color:var(--cyan);font-family:var(--fh);font-size:16px;font-weight:900;flex:0 0 auto}
@@ -4646,20 +4648,14 @@ const SCHOOL_GRADE8_ROOT_EXERCISES = [
     "order": 309,
     "instruction": "Найдите значение выражения:",
     "text": "1,5x³y² · 6,2xy, если x = 1,25; y = 4.",
-    "readOnly": true
+    "readOnly": true,
+    "sectionHeading": "Упражнения для повторения"
   },
   {
     "id": "sqrt-ex-310",
     "order": 310,
     "instruction": "Найдите:",
     "text": "а) |x|, если x = 10; 0,3; 0; −2,7; −9;\nб) x, если |x| = 6; 3,2; 0.",
-    "readOnly": true
-  },
-  {
-    "id": "sqrt-ex-311",
-    "order": 311,
-    "instruction": "Запишите без знака модуля:",
-    "text": "а) |a|, где a > 0;\nб) |c|, где c < 0;\nв) |a²|;\nг) |a³|, где a > 0;\nд) |a³|, где a < 0.",
     "readOnly": true
   }
 ];
@@ -7719,7 +7715,8 @@ function renderSchoolTaskItems(topic){
     const order=Number(task.order)||index+1;
     const instruction=String(task.instruction||'Решите задачу');
     const state=loadSchoolTaskState(AC,topicId,taskId);
-    return '<article class="school-task-card" data-school-task="'+escapeHtml(taskId)+'" data-course="'+escapeHtml(AC||'')+'" data-topic="'+escapeHtml(topicId)+'" data-task="'+escapeHtml(taskId)+'">'+
+    const sectionHeading=task.sectionHeading?'<h3 class="school-task-section-heading">'+escapeHtml(task.sectionHeading)+'</h3>':'';
+    return sectionHeading+'<article class="school-task-card" data-school-task="'+escapeHtml(taskId)+'" data-course="'+escapeHtml(AC||'')+'" data-topic="'+escapeHtml(topicId)+'" data-task="'+escapeHtml(taskId)+'">'+
       '<div class="school-task-head"><span class="school-task-number">'+order+'</span><div class="school-task-instruction">'+escapeHtml(instruction)+'</div></div>'+
       '<div class="school-task-text">'+renderSchoolTaskInteractiveText(task,topicId,state)+'</div>'+
       (task.readOnly?'':'<div class="school-task-actions"><button type="button" class="school-task-check" onclick="checkSchoolTaskAnswer(this)">Проверить ответ</button><span class="school-task-check-result" aria-live="polite"></span></div>')+
