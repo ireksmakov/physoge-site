@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="Преобразование рациональных выражений. Теория 4 из 4">
+<defs><linearGradient id="bg" x2="0" y2="1"><stop stop-color="#e5f7ff"/><stop offset="1" stop-color="#bde7ff"/></linearGradient><linearGradient id="panel" x2="0" y2="1"><stop stop-color="#ffffff"/><stop offset="1" stop-color="#f2faff"/></linearGradient></defs>
+<rect width="1600" height="900" fill="url(#bg)"/>
+<rect x="28" y="25" width="1544" height="95" rx="20" fill="#d9efff" opacity=".8"/>
+<text x="64" y="90" font-family="Arial,sans-serif" font-size="55" font-weight="700" fill="#072959">Преобразование рациональных выражений</text>
+<rect x="62" y="127" width="268" height="55" rx="28" fill="#a6dcfa"/>
+<text x="87" y="166" font-family="Arial,sans-serif" font-size="35" fill="#08346a">Теория · 4/4</text>
+<g><rect x="1442" y="132" width="80" height="22" rx="4" fill="#1673c3"/><rect x="1423" y="152" width="95" height="24" rx="4" fill="#fff" stroke="#1673c3" stroke-width="3"/><rect x="1438" y="175" width="83" height="16" rx="4" fill="#00559a"/></g>
+<rect x="35" y="206" width="743" height="317" rx="22" fill="url(#panel)" stroke="#a5d9f4" stroke-width="3"/>
+<rect x="47" y="218" width="719" height="61" rx="22" fill="#d2efff"/>
+<text x="72" y="261" font-family="Arial,sans-serif" font-size="32" font-weight="700" fill="#07346a">Средняя скорость</text>
+<text x="72" y="311" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">Если участки пути одинаковой длины s,</text>
+<text x="72" y="353" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">общее время равно сумме s/vᵢ.</text>
+<text x="72" y="395" font-family="Times New Roman,Georgia,serif" font-size="32" font-weight="400" fill="#123154">vср = 3s / (s/v₁ + s/v₂ + s/v₃)</text>
+<text x="72" y="437" font-family="Times New Roman,Georgia,serif" font-size="35" font-weight="400" fill="#123154">     = 3 / (1/v₁ + 1/v₂ + 1/v₃)</text>
+<text x="72" y="479" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">Это среднее гармоническое скоростей.</text>
+<rect x="800" y="206" width="765" height="317" rx="22" fill="url(#panel)" stroke="#a5d9f4" stroke-width="3"/>
+<rect x="812" y="218" width="741" height="61" rx="22" fill="#ddf9ef"/>
+<text x="837" y="261" font-family="Arial,sans-serif" font-size="32" font-weight="700" fill="#07346a">Применение к движению</text>
+<text x="837" y="311" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">Пешеход прошёл три одинаковых</text>
+<text x="837" y="353" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">участка со скоростями v₁, v₂, v₃.</text>
+<text x="837" y="395" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">Весь путь равен 3s, время:</text>
+<text x="837" y="437" font-family="Times New Roman,Georgia,serif" font-size="34" font-weight="400" fill="#123154">t = s/v₁ + s/v₂ + s/v₃</text>
+<text x="837" y="479" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">Средняя скорость: весь путь / время.</text>
+<rect x="35" y="539" width="985" height="284" rx="22" fill="url(#panel)" stroke="#a5d9f4" stroke-width="3"/>
+<rect x="47" y="551" width="961" height="61" rx="22" fill="#d2efff"/>
+<text x="72" y="594" font-family="Arial,sans-serif" font-size="32" font-weight="700" fill="#07346a">Полезные формулы</text>
+<text x="72" y="644" font-family="Times New Roman,Georgia,serif" font-size="30" font-weight="400" fill="#123154">Два участка: vср = 2 / (1/v₁ + 1/v₂)</text>
+<text x="72" y="686" font-family="Times New Roman,Georgia,serif" font-size="30" font-weight="400" fill="#123154">Четыре: vср = 4 / (1/v₁ + 1/v₂ + 1/v₃ + 1/v₄)</text>
+<text x="72" y="728" font-family="Times New Roman,Georgia,serif" font-size="32" font-weight="400" fill="#123154">Общий вид: H = n / (1/a₁ + … + 1/aₙ)</text>
+<text x="72" y="770" font-family="Times New Roman,Georgia,serif" font-size="30" font-weight="400" fill="#123154">1/H = (1/a₁ + … + 1/aₙ)/n</text>
+<rect x="1034" y="539" width="531" height="284" rx="22" fill="url(#panel)" stroke="#a5d9f4" stroke-width="3"/>
+<rect x="1046" y="551" width="507" height="61" rx="22" fill="#d2efff"/>
+<text x="1071" y="594" font-family="Arial,sans-serif" font-size="32" font-weight="700" fill="#07346a">Напоминание</text>
+<text x="1071" y="644" font-family="Times New Roman,Georgia,serif" font-size="29" font-weight="400" fill="#123154">(a−b)² = a²−2ab+b²</text>
+<text x="1071" y="686" font-family="Times New Roman,Georgia,serif" font-size="29" font-weight="400" fill="#123154">(a+b)² = a²+2ab+b²</text>
+<text x="1071" y="728" font-family="Times New Roman,Georgia,serif" font-size="28" font-weight="400" fill="#123154">a²−b² = (a−b)(a+b)</text>
+<text x="1071" y="770" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">Среднее гармоническое —</text>
+<text x="1071" y="812" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">не среднее арифметическое.</text>
+<rect x="28" y="838" width="1544" height="47" rx="20" fill="#f9feff" stroke="#96d5f7" stroke-width="2"/>
+<text x="58" y="871" font-family="Arial,sans-serif" font-size="24" fill="#074277" font-weight="600">Область определения: скорости и все aᵢ должны быть положительными.</text>
+</svg>
