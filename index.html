@@ -146,7 +146,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:10000;background:rgba(2,9,20,
 /* Presentation refresh for the School Math grade cards. */
 #platform.school-math-page .school-grades{gap:22px;margin-top:34px}
 #platform.school-math-page .school-grade{
-  position:relative;isolation:isolate;overflow:hidden;min-height:330px;padding:22px 22px 20px;
+  position:relative;isolation:isolate;overflow:hidden;min-height:230px;padding:22px 22px 20px;
   border:1px solid rgba(8,216,255,.28);border-radius:20px;
   background:
     radial-gradient(circle at 100% 0%,rgba(8,216,255,.13),transparent 38%),
@@ -6783,10 +6783,10 @@ function showSchoolCourseOverview(courseKey){
       <div class="school-grade-top"><span class="school-grade-number">${gradeNumber}</span><span class="school-grade-chip">Школьный курс</span></div>
       <h2>${escapeHtml(gradeTitle)}</h2>
       ${bookAuthor?`<div class="school-grade-author">Автор учебника: <strong>${escapeHtml(bookAuthor)}</strong></div>`:''}
-      <ul>${sections.map(module=>{
+      ${courseKey==='school-math'?'':`<ul>${sections.map(module=>{
         const mi=c.modules.indexOf(module);
         return `<li><a href="${getCourseRoute(courseKey,mi,0,'theory')}" onclick="event.stopPropagation()">${escapeHtml(module.name)}<span class="school-grade-link-arrow">→</span></a></li>`;
-      }).join('')}</ul>
+      }).join('')}</ul>`}
       <div class="school-grade-open"><span>Открыть курс</span><span aria-hidden="true">→</span></div>
     </article>`;
   }).join('');
