@@ -4189,7 +4189,7 @@ COURSES['school-physics']=makeSchoolCourse('Физика · Школа','Шко�
 });
 const SCHOOL_GRADE_BOOK_AUTHORS={
   'school-physics':{7:'Перышкин А. В.'},
-  'school-math':{7:{algebra:'Макарычев Ю. Н. (Базовый)'}}
+  'school-math':{7:{algebra:'Макарычев Ю. Н. (Базовый)'},8:{algebra:'Макарычев Ю. Н. (Базовый уровень, 2023)'}}
 };
 function getSchoolGradeBookAuthor(courseKey,grade,subject){
   const byCourse=SCHOOL_GRADE_BOOK_AUTHORS[courseKey];
@@ -4397,6 +4397,139 @@ function makeSchoolAlgebraGrade7Topic(item){
     module.schoolOrder=chapterOrder;
     module.open=true;
     module.lessons=chapter.topics.map(makeSchoolAlgebraGrade7Topic);
+  });
+})();
+
+
+/* 8 класс · Алгебра — содержание по учебнику
+   Ю. Н. Макарычев, Н. Г. Миндюк, К. И. Нешков, С. Б. Суворова.
+   Базовый уровень, 2023. Структура курса повторяет 6 глав,
+   16 параграфов и 51 нумерованную тему оглавления учебника. */
+const SCHOOL_ALGEBRA_GRADE8_CHAPTERS=[
+  {
+    name:'Глава I. Рациональные дроби',
+    sectionIndex:0,
+    topics:[
+      {n:1,section:'§ 1. Рациональные дроби и их свойства',title:'Рациональные выражения',page:null},
+      {n:2,section:'§ 1. Рациональные дроби и их свойства',title:'Основное свойство дроби. Сокращение дробей',page:10},
+      {n:3,section:'§ 2. Сумма и разность дробей',title:'Сложение и вычитание дробей с одинаковыми знаменателями',page:null},
+      {n:4,section:'§ 2. Сумма и разность дробей',title:'Сложение и вычитание дробей с разными знаменателями',page:23},
+      {n:5,section:'§ 3. Произведение и частное дробей',title:'Умножение дробей. Возведение дроби в степень',page:null},
+      {n:6,section:'§ 3. Произведение и частное дробей',title:'Деление дробей',page:35},
+      {n:7,section:'§ 3. Произведение и частное дробей',title:'Преобразование рациональных выражений',page:38},
+      {n:8,section:'§ 3. Произведение и частное дробей',title:'Функция y = k/x и её график',page:45},
+      {n:9,section:'Для тех, кто хочет знать больше',title:'Представление дроби в виде суммы дробей',page:52}
+    ]
+  },
+  {
+    name:'Глава II. Квадратные корни',
+    sectionIndex:1,
+    topics:[
+      {n:10,section:'§ 4. Арифметический квадратный корень',title:'Действительные числа',page:null},
+      {n:11,section:'§ 4. Арифметический квадратный корень',title:'Квадратные корни. Арифметический квадратный корень',page:70},
+      {n:12,section:'§ 4. Арифметический квадратный корень',title:'Уравнение x² = a',page:74},
+      {n:13,section:'§ 4. Арифметический квадратный корень',title:'Нахождение приближённых значений квадратного корня',page:78},
+      {n:14,section:'§ 4. Арифметический квадратный корень',title:'Функция y = √x и её график',page:81},
+      {n:15,section:'§ 5. Свойства арифметического квадратного корня',title:'Квадратный корень из произведения и дроби',page:null},
+      {n:16,section:'§ 5. Свойства арифметического квадратного корня',title:'Квадратный корень из степени',page:91},
+      {n:17,section:'§ 6. Применение свойств арифметического квадратного корня',title:'Вынесение множителя из-под знака корня. Внесение множителя под знак корня',page:null},
+      {n:18,section:'§ 6. Применение свойств арифметического квадратного корня',title:'Преобразование выражений, содержащих квадратные корни',page:98},
+      {n:19,section:'Для тех, кто хочет знать больше',title:'Преобразование двойных радикалов',page:103}
+    ]
+  },
+  {
+    name:'Глава III. Уравнения и системы уравнений',
+    sectionIndex:2,
+    topics:[
+      {n:20,section:'§ 7. Квадратное уравнение и его корни',title:'Неполные квадратные уравнения',page:null},
+      {n:21,section:'§ 7. Квадратное уравнение и его корни',title:'Формула корней квадратного уравнения',page:120},
+      {n:22,section:'§ 7. Квадратное уравнение и его корни',title:'Решение задач',page:128},
+      {n:23,section:'§ 7. Квадратное уравнение и его корни',title:'Теорема Виета',page:132},
+      {n:24,section:'§ 8. Квадратный трёхчлен',title:'Квадратный трёхчлен и его корни',page:null},
+      {n:25,section:'§ 8. Квадратный трёхчлен',title:'Разложение квадратного трёхчлена на множители',page:141},
+      {n:26,section:'§ 9. Дробные рациональные уравнения',title:'Решение дробных рациональных уравнений',page:null},
+      {n:27,section:'§ 9. Дробные рациональные уравнения',title:'Решение задач',page:151},
+      {n:28,section:'§ 10. Уравнения с двумя переменными и их системы',title:'Уравнение с двумя переменными и его график',page:null},
+      {n:29,section:'§ 10. Уравнения с двумя переменными и их системы',title:'Исследование систем двух линейных уравнений с двумя переменными',page:160},
+      {n:30,section:'§ 10. Уравнения с двумя переменными и их системы',title:'Графический способ решения систем уравнений',page:163},
+      {n:31,section:'§ 10. Уравнения с двумя переменными и их системы',title:'Алгебраический способ решения систем уравнений',page:165},
+      {n:32,section:'§ 10. Уравнения с двумя переменными и их системы',title:'Решение задач',page:169},
+      {n:33,section:'Для тех, кто хочет знать больше',title:'Уравнения с параметром',page:172}
+    ]
+  },
+  {
+    name:'Глава IV. Неравенства',
+    sectionIndex:4,
+    topics:[
+      {n:34,section:'§ 11. Числовые неравенства и их свойства',title:'Числовые неравенства',page:null},
+      {n:35,section:'§ 11. Числовые неравенства и их свойства',title:'Свойства числовых неравенств',page:190},
+      {n:36,section:'§ 11. Числовые неравенства и их свойства',title:'Сложение и умножение числовых неравенств',page:195},
+      {n:37,section:'§ 12. Неравенства с одной переменной и их системы',title:'Пересечение и объединение множеств',page:null},
+      {n:38,section:'§ 12. Неравенства с одной переменной и их системы',title:'Числовые промежутки',page:203},
+      {n:39,section:'§ 12. Неравенства с одной переменной и их системы',title:'Решение неравенств с одной переменной',page:207},
+      {n:40,section:'§ 12. Неравенства с одной переменной и их системы',title:'Решение систем неравенств с одной переменной',page:215},
+      {n:41,section:'Для тех, кто хочет знать больше',title:'Доказательство неравенств',page:223}
+    ]
+  },
+  {
+    name:'Глава V. Функции',
+    sectionIndex:5,
+    topics:[
+      {n:42,section:'§ 13. Функция и её свойства',title:'Функция. Область определения и множество значений функции',page:null},
+      {n:43,section:'§ 13. Функция и её свойства',title:'Свойства функции',page:243},
+      {n:44,section:'§ 14. Свойства некоторых видов функций',title:'Свойства линейной функции',page:null},
+      {n:45,section:'§ 14. Свойства некоторых видов функций',title:'Свойства функций y = k/x и y = √x',page:252},
+      {n:46,section:'Для тех, кто хочет знать больше',title:'Целая и дробная части числа',page:255}
+    ]
+  },
+  {
+    name:'Глава VI. Степень с целым показателем',
+    sectionIndex:6,
+    topics:[
+      {n:47,section:'§ 15. Степень с целым показателем и её свойства',title:'Определение степени с целым отрицательным показателем',page:null},
+      {n:48,section:'§ 15. Степень с целым показателем и её свойства',title:'Свойства степени с целым показателем',page:265},
+      {n:49,section:'§ 16. Стандартный вид числа',title:'Понятие стандартного вида числа',page:null},
+      {n:50,section:'§ 16. Стандартный вид числа',title:'Решение задач с большими и малыми числами',page:272},
+      {n:51,section:'Для тех, кто хочет знать больше',title:'Функции y = x⁻¹ и y = x⁻² и их свойства',page:275}
+    ]
+  }
+];
+
+function makeSchoolAlgebraGrade8Topic(item){
+  const topic=makeSchoolTopic('math-grade-8-algebra-topic-'+item.n,item.title);
+  topic.sectionTitle=item.section;
+  topic.bookTopicNumber=item.n;
+  if(Number.isFinite(item.page)) topic.bookPage=item.page;
+  topic.description=item.section+' · тема '+item.n+(Number.isFinite(item.page)?' · стр. '+item.page+' учебника':'');
+  return topic;
+}
+
+(function applySchoolAlgebraGrade8Program(){
+  const course=COURSES['school-math'];
+  if(!course||!Array.isArray(course.modules))return;
+
+  SCHOOL_ALGEBRA_GRADE8_CHAPTERS.forEach((chapter,chapterOrder)=>{
+    let module=course.modules.find(item=>Number(item.grade)===8&&Number(item.sectionIndex)===Number(chapter.sectionIndex));
+    if(module&&getSchoolModuleSubject('school-math',module)==='geometry')module=null;
+
+    if(!module){
+      module={
+        name:chapter.name,
+        grade:8,
+        sectionIndex:chapter.sectionIndex,
+        schoolSubject:'algebra',
+        schoolOrder:chapterOrder,
+        open:true,
+        lessons:[]
+      };
+      course.modules.push(module);
+    }
+
+    module.name=chapter.name;
+    module.schoolSubject='algebra';
+    module.schoolOrder=chapterOrder;
+    module.open=true;
+    module.lessons=chapter.topics.map(makeSchoolAlgebraGrade8Topic);
   });
 })();
 
