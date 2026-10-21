@@ -3089,7 +3089,11 @@ function createImageCarousel(images,options){
     const safeAlt=escapeHtml(list[0].alt||opts.alt||'Фото');
     const singleClass=escapeHtml(opts.singleClass||'media-zoom-wrap');
     const imgClass=escapeHtml(opts.imgClass||'universal-viewable-image image-carousel-img');
-    return `<figure class="${singleClass}" data-solution-zoom="true"><img class="${imgClass}" src="${safePath}" alt="${safeAlt}" onerror="handleSolutionImageError(this, '${safePath}')"></figure>`;
+    const fallbackPath=escapeHtml(list[0].fallbackSrc||'');
+    const errorAction=fallbackPath
+      ? `this.onerror=function(){handleSolutionImageError(this, '${safePath}')};this.src='${fallbackPath}'`
+      : `handleSolutionImageError(this, '${safePath}')`;
+    return `<figure class="${singleClass}" data-solution-zoom="true"><img class="${imgClass}" src="${safePath}" alt="${safeAlt}" onerror="${errorAction}"></figure>`;
   }
   const group=escapeHtml(opts.group||('image-carousel-'+Math.random().toString(36).slice(2,9)));
   const cls=escapeHtml(opts.className||'');
@@ -4506,6 +4510,7 @@ function makeSchoolAlgebraGrade8Topic(item){
   if(item.n===10&&item.title==='Действительные числа'){
     topic.theory.images=[{
       src:'images/school-math/grade-8/real-numbers-theory-16x9.png',
+      fallbackSrc:'images/school-math/grade-8/real-numbers-theory-fallback.svg',
       alt:'Действительные числа: натуральные, целые, рациональные и иррациональные числа, множества и координатная прямая'
     }];
   }
