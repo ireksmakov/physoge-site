@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title description">
+<title id="title">Действительные числа — теория, 8 класс</title>
+<desc id="description">Множества натуральных, целых, рациональных, иррациональных и действительных чисел, примеры, включения множеств, координатная прямая и основные правила.</desc>
+<defs>
+<pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M 24 0 L 0 0 0 24" fill="none" stroke="#b5d6ed" stroke-width="1" opacity=".45"/></pattern>
+<linearGradient id="bg" x2="0" y2="1"><stop stop-color="#f7fcff"/><stop offset="1" stop-color="#def1ff"/></linearGradient>
+<linearGradient id="navy" x2="1" y2="1"><stop stop-color="#04518c"/><stop offset="1" stop-color="#032a58"/></linearGradient>
+</defs>
+<rect width="1600" height="900" fill="url(#bg)"/><rect width="1600" height="900" fill="url(#grid)"/>
+<rect x="280" y="13" width="1040" height="91" rx="22" fill="url(#navy)"/>
+<text x="800" y="77" text-anchor="middle" font-size="52" font-weight="bold" font-family="Georgia,serif" fill="#fff">Действительные числа</text>
+<text x="83" y="79" font-size="68" font-family="Georgia,serif" fill="#64a5ce">π</text>
+<text x="1415" y="77" font-size="60" font-family="Georgia,serif" fill="#64a5ce">√2</text>
+<!-- Left: definition -->
+<rect x="20" y="122" width="770" height="151" rx="18" fill="#f7fcff" stroke="#86d2f4" stroke-width="3"/>
+<rect x="32" y="132" width="263" height="41" rx="11" fill="url(#navy)"/>
+<text x="48" y="161" fill="#fff" font-weight="bold" font-size="29" font-family="Georgia,serif">Определение</text>
+<text x="43" y="203" fill="#0c2746" font-size="25" font-family="Arial,sans-serif" font-weight="bold">Действительные числа — все числа, которые</text>
+<text x="43" y="235" fill="#0c2746" font-size="25" font-family="Arial,sans-serif">можно отметить на координатной прямой.</text>
+<text x="43" y="264" fill="#0c2746" font-size="24" font-family="Arial,sans-serif">Рациональные и иррациональные числа.</text>
+<!-- Left: families -->
+<rect x="20" y="282" width="770" height="396" rx="18" fill="#f7fcff" stroke="#86d2f4" stroke-width="3"/>
+<rect x="32" y="290" width="365" height="42" rx="11" fill="url(#navy)"/>
+<text x="46" y="320" fill="#fff" font-weight="bold" font-size="29" font-family="Georgia,serif">Виды чисел и примеры</text>
+<rect x="40" y="342" width="731" height="74" rx="12" fill="#fff0b7"/>
+<rect x="49" y="351" width="68" height="55" rx="11" fill="#ffd850" stroke="#da9f09" stroke-width="2"/>
+<text x="83" y="393" fill="#082344" text-anchor="middle" font-weight="bold" font-size="39" font-family="Georgia,serif">N</text>
+<text x="134" y="373" font-weight="bold" font-size="24" fill="#091e39" font-family="Arial,sans-serif">Натуральные числа</text>
+<text x="134" y="401" font-size="23" fill="#091e39" font-family="Arial,sans-serif">1, 2, 3, 4, 5, ...</text>
+<rect x="40" y="423" width="731" height="74" rx="12" fill="#ddf7dc"/>
+<rect x="49" y="432" width="68" height="55" rx="11" fill="#9deba0" stroke="#4ca65c" stroke-width="2"/>
+<text x="83" y="474" fill="#082344" text-anchor="middle" font-weight="bold" font-size="39" font-family="Georgia,serif">Z</text>
+<text x="134" y="454" font-weight="bold" font-size="24" fill="#091e39" font-family="Arial,sans-serif">Целые числа</text>
+<text x="134" y="482" font-size="23" fill="#091e39" font-family="Arial,sans-serif">..., −3, −2, −1, 0, 1, 2, 3, ...</text>
+<rect x="40" y="504" width="731" height="74" rx="12" fill="#d9edff"/>
+<rect x="49" y="513" width="68" height="55" rx="11" fill="#98d5ff" stroke="#2f95d4" stroke-width="2"/>
+<text x="83" y="555" fill="#082344" text-anchor="middle" font-weight="bold" font-size="39" font-family="Georgia,serif">Q</text>
+<text x="134" y="535" font-weight="bold" font-size="23" fill="#091e39" font-family="Arial,sans-serif">Рациональные числа: m/n, n ≠ 0</text>
+<text x="134" y="563" font-size="23" fill="#091e39" font-family="Arial,sans-serif">1/2; −7/5; 0; 2,75; 0,(3)</text>
+<rect x="40" y="585" width="731" height="76" rx="12" fill="#e9ddff"/>
+<rect x="49" y="594" width="68" height="57" rx="11" fill="#cdadff" stroke="#9967e6" stroke-width="2"/>
+<text x="83" y="636" fill="#082344" text-anchor="middle" font-weight="bold" font-size="39" font-family="Georgia,serif">I</text>
+<text x="134" y="616" font-weight="bold" font-size="23" fill="#091e39" font-family="Arial,sans-serif">Иррациональные числа</text>
+<text x="134" y="645" font-size="23" fill="#091e39" font-family="Arial,sans-serif">√2, π, √5; нельзя представить как m/n</text>
+<!-- Left: line -->
+<rect x="20" y="689" width="770" height="190" rx="18" fill="#f7fcff" stroke="#86d2f4" stroke-width="3"/>
+<rect x="32" y="698" width="339" height="40" rx="11" fill="url(#navy)"/>
+<text x="46" y="727" fill="#fff" font-weight="bold" font-size="29" font-family="Georgia,serif">Координатная прямая</text>
+<line x1="67" y1="796" x2="746" y2="796" stroke="#092447" stroke-width="4"/><path d="M 746 796 l -20 -11 v 22 z" fill="#092447"/>
+<g stroke="#092447" stroke-width="3"><path d="M132 779v34 M222 779v34 M315 779v34 M359 779v34 M405 779v34 M462 779v34 M537 779v34 M658 779v34"/></g>
+<g font-family="Arial,sans-serif" font-size="24" text-anchor="middle"><text x="132" y="841" fill="#129b4e">−2</text><text x="222" y="841" fill="#129b4e">−1</text><text x="315" y="841" fill="#129b4e">0</text><text x="359" y="841" fill="#129b4e">1/2</text><text x="405" y="841" fill="#129b4e">1</text><text x="462" y="841" fill="#eb682a">√2</text><text x="537" y="841" fill="#129b4e">2</text><text x="658" y="841" fill="#eb682a">π</text></g>
+<circle cx="67" cy="865" r="8" fill="#129b4e"/><text x="84" y="872" font-size="19" fill="#092447" font-family="Arial,sans-serif">рациональные</text>
+<circle cx="294" cy="865" r="8" fill="#eb682a"/><text x="313" y="872" font-size="19" fill="#092447" font-family="Arial,sans-serif">иррациональные</text>
+<!-- Right: set inclusion -->
+<rect x="806" y="122" width="774" height="428" rx="18" fill="#f0fcff" stroke="#74cedd" stroke-width="3"/>
+<rect x="816" y="130" width="752" height="45" rx="11" fill="#007d8f"/>
+<text x="1192" y="162" fill="#fff" text-anchor="middle" font-size="29" font-weight="bold" font-family="Georgia,serif">Структура действительных чисел</text>
+<rect x="829" y="188" width="728" height="296" rx="40" fill="#f7fdff" stroke="#24838d" stroke-width="3"/>
+<text x="1191" y="228" text-anchor="middle" font-size="31" fill="#0b2543" font-weight="bold" font-family="Georgia,serif">R — действительные числа</text>
+<rect x="846" y="244" width="484" height="220" rx="55" fill="#ceeaff" stroke="#137bd2" stroke-width="3"/>
+<text x="1088" y="279" text-anchor="middle" fill="#072448" font-size="27" font-weight="bold" font-family="Georgia,serif">Q — рациональные числа</text>
+<rect x="871" y="300" width="434" height="147" rx="62" fill="#dcf8de" stroke="#4baa79" stroke-width="3"/>
+<text x="1088" y="332" text-anchor="middle" fill="#072448" font-size="26" font-weight="bold" font-family="Georgia,serif">Z — целые числа</text>
+<rect x="915" y="347" width="350" height="84" rx="42" fill="#fff0b6" stroke="#eba900" stroke-width="3"/>
+<text x="1090" y="396" text-anchor="middle" fill="#072448" font-size="26" font-weight="bold" font-family="Georgia,serif">N — натуральные</text>
+<rect x="1343" y="244" width="198" height="220" rx="39" fill="#eee0ff" stroke="#9060c7" stroke-width="3"/>
+<text x="1442" y="279" text-anchor="middle" fill="#0d2250" font-size="20" font-weight="bold" font-family="Arial,sans-serif">Иррациональные</text>
+<text x="1442" y="309" text-anchor="middle" fill="#0d2250" font-size="22" font-family="Arial,sans-serif">√2, π, √5</text>
+<text x="1442" y="348" text-anchor="middle" fill="#0d2250" font-size="19" font-family="Arial,sans-serif">не имеют вида</text>
+<text x="1442" y="377" text-anchor="middle" fill="#0d2250" font-size="21" font-family="Arial,sans-serif">m/n, n ≠ 0</text>
+<text x="1192" y="519" text-anchor="middle" font-size="27" fill="#0b2543" font-weight="bold" font-family="Georgia,serif">N ⊂ Z ⊂ Q ⊂ R</text>
+<!-- Right: facts -->
+<rect x="806" y="562" width="774" height="317" rx="18" fill="#f6fcff" stroke="#86d2f4" stroke-width="3"/>
+<rect x="816" y="570" width="286" height="42" rx="11" fill="url(#navy)"/>
+<text x="832" y="601" font-size="29" fill="#fff" font-weight="bold" font-family="Georgia,serif">Важные факты</text>
+<g font-family="Arial,sans-serif" fill="#092447" font-size="23">
+<circle cx="849" cy="650" r="22" fill="#006da9"/><text x="849" y="658" text-anchor="middle" fill="white">1</text><text x="886" y="656">Натуральное число — целое.</text>
+<circle cx="849" cy="698" r="22" fill="#006da9"/><text x="849" y="706" text-anchor="middle" fill="white">2</text><text x="886" y="704">Целое число — рациональное.</text>
+<circle cx="849" cy="746" r="22" fill="#006da9"/><text x="849" y="754" text-anchor="middle" fill="white">3</text><text x="886" y="752">Конечная десятичная дробь — рациональна.</text>
+<circle cx="849" cy="794" r="22" fill="#006da9"/><text x="849" y="802" text-anchor="middle" fill="white">4</text><text x="886" y="800">Периодическая десятичная дробь — рациональна.</text>
+<circle cx="849" cy="842" r="22" fill="#006da9"/><text x="849" y="850" text-anchor="middle" fill="white">5</text><text x="886" y="848">Бесконечная непериодическая — иррациональна.</text>
+</g></svg>
