@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="ttl dsc"><title id="ttl">Квадратные корни. Арифметический квадратный корень</title><desc id="dsc">Инфографика 8 класса: определение, обозначение квадратного корня, примеры и решение уравнения</desc><defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#dbf2ff"/><stop offset="1" stop-color="#b5e5fd"/></linearGradient><linearGradient id="white" x2="0" y2="1"><stop stop-color="#ffffff"/><stop offset="1" stop-color="#f4fbff"/></linearGradient><linearGradient id="titleblue" x2="1" y2="0"><stop stop-color="#97cef8"/><stop offset="1" stop-color="#d9f4ff"/></linearGradient></defs><rect width="1600" height="900" fill="url(#sky)"/>
+<path d="M0 125 Q210 18 360 116 T750 116 T1160 115 T1600 110 L1600 160 L0 160Z" fill="#d1efff" opacity=".8"/>
+<text x="90" y="106" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="88" font-weight="normal" fill="#86c9ee">√a</text>
+<text x="1460" y="101" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="70" font-weight="normal" fill="#86c9ee" text-anchor="middle">x²=a</text>
+<rect x="364" y="8" width="872" height="73" rx="24" fill="#f9fdff" stroke="#9edafa" stroke-width="2"/>
+<text x="800" y="66" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="66" font-weight="bold" fill="#08295e" text-anchor="middle">Квадратные корни</text>
+<rect x="365" y="90" width="870" height="64" rx="29" fill="url(#titleblue)" stroke="#92cbf4" stroke-width="1"/>
+<text x="800" y="134" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="42" font-weight="bold" fill="#092c64" text-anchor="middle">Арифметический квадратный корень</text>
+<rect x="24" y="170" width="518" height="394" rx="17" fill="url(#white)" stroke="#a8dffd" stroke-width="2"/>
+<rect x="553" y="170" width="520" height="394" rx="17" fill="url(#white)" stroke="#a8dffd" stroke-width="2"/>
+<rect x="1084" y="170" width="492" height="394" rx="17" fill="url(#white)" stroke="#a8dffd" stroke-width="2"/>
+<rect x="27" y="175" width="360" height="48" rx="12" fill="#1482c9" stroke="#1482c9" stroke-width="0"/>
+<text x="45" y="208" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="29" font-weight="bold" fill="#fff">Мотивация / пример</text>
+<text x="52" y="251" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="27" font-weight="normal" fill="#14243f">Площадь квадрата равна 64 см².</text>
+<text x="52" y="284" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="27" font-weight="normal" fill="#14243f">Чему равна длина его стороны?</text>
+<rect x="55" y="310" width="163" height="168" rx="0" fill="#cdeeff" stroke="#0f76b2" stroke-width="3"/>
+<text x="136" y="406" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="35" font-weight="normal" fill="#14243f" text-anchor="middle">64 см²</text>
+<text x="136" y="504" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="32" font-weight="normal" fill="#14243f" text-anchor="middle" font-style="italic">x</text>
+<path d="M56 489 v-9 M56 487 h162 M218 489 v-9" fill="none" stroke="#173456" stroke-width="3"/>
+<text x="248" y="340" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="24" font-weight="normal" fill="#14243f">Пусть сторона квадрата равна x.</text>
+<text x="248" y="378" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="31" font-weight="bold" fill="#14243f">x² = 64.</text>
+<text x="248" y="416" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="24" font-weight="normal" fill="#14243f">Корни: x = 8 и x = −8.</text>
+<text x="248" y="451" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="24" font-weight="normal" fill="#14243f">Длина не бывает</text>
+<text x="248" y="480" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="24" font-weight="normal" fill="#14243f">отрицательной.</text>
+<text x="248" y="524" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="26" font-weight="bold" fill="#14243f">Ответ: x = 8 см.</text>
+<rect x="555" y="175" width="516" height="48" rx="12" fill="#1482c9" stroke="#1482c9" stroke-width="0"/>
+<text x="573" y="208" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="29" font-weight="bold" fill="#fff">Определение квадратного корня</text>
+<text x="580" y="260" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="26" font-weight="normal" fill="#14243f">Квадратные корни из числа a —</text>
+<text x="580" y="297" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="26" font-weight="normal" fill="#14243f">это числа, квадраты которых</text>
+<text x="580" y="334" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="26" font-weight="normal" fill="#14243f">равны числу a.</text>
+<rect x="574" y="360" width="480" height="186" rx="14" fill="#def5ff" stroke="#009ee9" stroke-width="3"/>
+<rect x="588" y="350" width="227" height="48" rx="12" fill="#1482c9" stroke="#1482c9" stroke-width="0"/>
+<text x="606" y="383" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="29" font-weight="bold" fill="#fff">Определение</text>
+<text x="595" y="431" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="27" font-weight="bold" fill="#14243f">Арифметический квадратный</text>
+<text x="595" y="468" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="27" font-weight="bold" fill="#14243f">корень из числа a — это</text>
+<text x="595" y="505" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="27" font-weight="bold" fill="#14243f">неотрицательное число,</text>
+<text x="595" y="537" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="26" font-weight="bold" fill="#14243f">квадрат которого равен a.</text>
+<rect x="1086" y="175" width="255" height="48" rx="12" fill="#1482c9" stroke="#1482c9" stroke-width="0"/>
+<text x="1104" y="208" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="29" font-weight="bold" fill="#fff">Обозначение</text>
+<text x="1110" y="263" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="25" font-weight="normal" fill="#14243f">Арифметический квадратный</text>
+<text x="1110" y="297" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="26" font-weight="normal" fill="#14243f">корень из a обозначают:</text>
+<rect x="1245" y="317" width="190" height="91" rx="18" fill="#cdeaff" stroke="#cdeaff" stroke-width="0"/>
+<text x="1340" y="386" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="67" font-weight="normal" fill="#14243f" text-anchor="middle" font-style="italic">√a</text>
+<text x="1110" y="454" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="26" font-weight="normal" fill="#14243f">Знак √ — знак корня</text>
+<text x="1110" y="490" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="26" font-weight="normal" fill="#14243f">(радикал).</text>
+<text x="1110" y="528" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="25" font-weight="normal" fill="#14243f">a — подкоренное выражение.</text>
+<rect x="24" y="578" width="518" height="232" rx="17" fill="url(#white)" stroke="#a8dffd" stroke-width="2"/>
+<rect x="553" y="578" width="520" height="232" rx="17" fill="url(#white)" stroke="#a8dffd" stroke-width="2"/>
+<rect x="1084" y="578" width="492" height="232" rx="17" fill="url(#white)" stroke="#a8dffd" stroke-width="2"/>
+<rect x="27" y="582" width="218" height="48" rx="12" fill="#1482c9" stroke="#1482c9" stroke-width="0"/>
+<text x="45" y="615" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="29" font-weight="bold" fill="#fff">Примеры</text>
+<text x="65" y="664" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="33" font-weight="bold" fill="#14243f">√4 = 2</text>
+<text x="256" y="664" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="23" font-weight="normal" fill="#14243f">так как 2² = 4 и 2 ≥ 0.</text>
+<text x="65" y="722" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="31" font-weight="bold" fill="#14243f">√1,21 = 1,1</text>
+<text x="321" y="722" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="23" font-weight="normal" fill="#14243f">1,1² = 1,21.</text>
+<text x="65" y="778" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="33" font-weight="bold" fill="#14243f">√0 = 0</text>
+<text x="255" y="778" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="23" font-weight="normal" fill="#14243f">так как 0² = 0.</text>
+<rect x="555" y="582" width="205" height="48" rx="12" fill="#1482c9" stroke="#1482c9" stroke-width="0"/>
+<text x="573" y="615" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="29" font-weight="bold" fill="#fff">Вообще</text>
+<rect x="576" y="645" width="474" height="60" rx="8" fill="#dff4ff" stroke="#20a6e0" stroke-width="2"/>
+<text x="813" y="689" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="28" font-weight="normal" fill="#14243f" text-anchor="middle" font-style="italic">√a = b, если b ≥ 0 и b² = a</text>
+<rect x="576" y="719" width="474" height="71" rx="8" fill="#dff4ff" stroke="#20a6e0" stroke-width="2"/>
+<text x="600" y="752" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="26" font-weight="normal" fill="#14243f">При a &lt; 0 выражение √a</text>
+<text x="600" y="782" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="25" font-weight="normal" fill="#14243f">не имеет смысла.</text>
+<rect x="1087" y="582" width="461" height="48" rx="12" fill="#1482c9" stroke="#1482c9" stroke-width="0"/>
+<text x="1105" y="615" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="29" font-weight="bold" fill="#fff">Пример решения уравнения</text>
+<text x="1114" y="663" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="32" font-weight="bold" fill="#14243f">√(5x − 1) = 7</text>
+<text x="1114" y="708" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="28" font-weight="normal" fill="#14243f">5x − 1 = 7² = 49</text>
+<text x="1114" y="748" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="28" font-weight="normal" fill="#14243f">5x = 50</text>
+<text x="1114" y="791" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="32" font-weight="bold" fill="#14243f">x = 10.</text>
+<rect x="24" y="819" width="1552" height="66" rx="16" fill="#f8fdff" stroke="#a8dffd" stroke-width="2"/>
+<rect x="24" y="819" width="285" height="66" rx="16" fill="#117dc2" stroke="#117dc2" stroke-width="0"/>
+<text x="48" y="861" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="30" font-weight="bold" fill="#fff">Важно помнить:</text>
+<text x="341" y="846" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="24" font-weight="normal" fill="#14243f">• √a ≥ 0 при a ≥ 0.</text>
+<text x="341" y="876" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="24" font-weight="normal" fill="#14243f">• При a &lt; 0 корень не определён.</text>
+<text x="894" y="846" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="24" font-weight="normal" fill="#14243f">• √a — неотрицательный корень.</text>
+<text x="894" y="876" font-family="Times New Roman, Liberation Serif, Georgia, serif" font-size="24" font-weight="normal" fill="#14243f">• x² = a  ⇒  x = ±√a (a ≥ 0).</text>
+</svg>
