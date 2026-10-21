@@ -4667,6 +4667,19 @@ function makeSchoolAlgebraGrade8Topic(item){
   topic.bookTopicNumber=item.n;
   if(Number.isFinite(item.page)) topic.bookPage=item.page;
   topic.description=item.section+' · тема '+item.n+(Number.isFinite(item.page)?' · стр. '+item.page+' учебника':'');
+  // 8 класс, тема №7 «Преобразование рациональных выражений».
+  // Для PNG используются оригинальные файлы без перекодирования;
+  // пока PNG не загружены, карусель отображает векторные учебные версии.
+  if(item.n===7&&item.title==='Преобразование рациональных выражений'){
+    topic.theory.images=[1,2,3,4].map(function(slide){
+      const number=String(slide).padStart(2,'0');
+      return {
+        src:'images/school-math/grade-8/rational-expressions-theory-'+number+'.png',
+        fallbackSrc:'images/school-math/grade-8/rational-expressions-theory-'+number+'-fallback.svg',
+        alt:'Преобразование рациональных выражений — теория, карточка '+slide+' из 4'
+      };
+    });
+  }
   // 8 класс · Глава II · тема 10 «Действительные числа».
   // Оригинальная инфографика PNG хранится отдельно, без перекодирования.
   if(item.n===10&&item.title==='Действительные числа'){
