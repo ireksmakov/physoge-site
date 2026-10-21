@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="Преобразование рациональных выражений. Теория 1 из 4">
+<defs><linearGradient id="bg" x2="0" y2="1"><stop stop-color="#e5f7ff"/><stop offset="1" stop-color="#bde7ff"/></linearGradient><linearGradient id="panel" x2="0" y2="1"><stop stop-color="#ffffff"/><stop offset="1" stop-color="#f2faff"/></linearGradient></defs>
+<rect width="1600" height="900" fill="url(#bg)"/>
+<rect x="28" y="25" width="1544" height="95" rx="20" fill="#d9efff" opacity=".8"/>
+<text x="64" y="90" font-family="Arial,sans-serif" font-size="55" font-weight="700" fill="#072959">Преобразование рациональных выражений</text>
+<rect x="62" y="127" width="268" height="55" rx="28" fill="#a6dcfa"/>
+<text x="87" y="166" font-family="Arial,sans-serif" font-size="35" fill="#08346a">Теория · 1/4</text>
+<g><rect x="1442" y="132" width="80" height="22" rx="4" fill="#1673c3"/><rect x="1423" y="152" width="95" height="24" rx="4" fill="#fff" stroke="#1673c3" stroke-width="3"/><rect x="1438" y="175" width="83" height="16" rx="4" fill="#00559a"/></g>
+<rect x="35" y="206" width="730" height="317" rx="22" fill="url(#panel)" stroke="#a5d9f4" stroke-width="3"/>
+<rect x="47" y="218" width="706" height="61" rx="22" fill="#d2efff"/>
+<text x="72" y="261" font-family="Arial,sans-serif" font-size="32" font-weight="700" fill="#07346a">Рациональное выражение</text>
+<text x="72" y="311" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">Выражение из многочленов с помощью</text>
+<text x="72" y="353" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">сложения, вычитания, умножения,</text>
+<text x="72" y="395" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">деления и возведения в степень.</text>
+<text x="72" y="437" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">Его можно представить рациональной</text>
+<text x="72" y="479" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">дробью P(x) / Q(x), где Q(x) ≠ 0.</text>
+<rect x="783" y="206" width="782" height="317" rx="22" fill="url(#panel)" stroke="#a5d9f4" stroke-width="3"/>
+<rect x="795" y="218" width="758" height="61" rx="22" fill="#d2efff"/>
+<text x="820" y="261" font-family="Arial,sans-serif" font-size="32" font-weight="700" fill="#07346a">Главная идея преобразований</text>
+<text x="820" y="311" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">1. Разложить многочлены на множители.</text>
+<text x="820" y="353" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">2. Привести дроби к общему знаменателю.</text>
+<text x="820" y="395" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">3. Сократить общие множители.</text>
+<text x="820" y="437" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">4. Деление заменить обратной дробью.</text>
+<text x="820" y="479" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">5. Проверить область допустимых значений.</text>
+<rect x="35" y="539" width="730" height="284" rx="22" fill="url(#panel)" stroke="#a5d9f4" stroke-width="3"/>
+<rect x="47" y="551" width="706" height="61" rx="22" fill="#d2efff"/>
+<text x="72" y="594" font-family="Arial,sans-serif" font-size="32" font-weight="700" fill="#07346a">Формулы сокращённого умножения</text>
+<text x="72" y="644" font-family="Times New Roman,Georgia,serif" font-size="34" font-weight="400" fill="#123154">a² − b² = (a − b)(a + b)</text>
+<text x="72" y="686" font-family="Times New Roman,Georgia,serif" font-size="34" font-weight="400" fill="#123154">(a + b)² = a² + 2ab + b²</text>
+<text x="72" y="728" font-family="Times New Roman,Georgia,serif" font-size="34" font-weight="400" fill="#123154">(a − b)² = a² − 2ab + b²</text>
+<text x="72" y="770" font-family="Times New Roman,Georgia,serif" font-size="31" font-weight="400" fill="#123154">a³ − b³ = (a − b)(a² + ab + b²)</text>
+<rect x="783" y="539" width="782" height="284" rx="22" fill="url(#panel)" stroke="#a5d9f4" stroke-width="3"/>
+<rect x="795" y="551" width="758" height="61" rx="22" fill="#ddf9ef"/>
+<text x="820" y="594" font-family="Arial,sans-serif" font-size="32" font-weight="700" fill="#07346a">Пример рационального выражения</text>
+<text x="820" y="644" font-family="Times New Roman,Georgia,serif" font-size="32" font-weight="400" fill="#123154">((x−y)/(x+y) + 2y/(x−y)) : (x²−3y²)</text>
+<text x="820" y="686" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">Любое преобразование сводится</text>
+<text x="820" y="728" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">к действиям с рациональными дробями.</text>
+<text x="820" y="770" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">Не забывайте об ОДЗ.</text>
+<rect x="28" y="838" width="1544" height="47" rx="20" fill="#f9feff" stroke="#96d5f7" stroke-width="2"/>
+<text x="58" y="871" font-family="Arial,sans-serif" font-size="24" fill="#074277" font-weight="600">Цель преобразований — сделать выражение проще и удобнее для вычислений.</text>
+</svg>
