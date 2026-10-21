@@ -4514,6 +4514,14 @@ function makeSchoolAlgebraGrade8Topic(item){
       alt:'Действительные числа: натуральные, целые, рациональные и иррациональные числа, множества и координатная прямая'
     }];
   }
+  // Урок 11: оригинальное PNG в пропорции 16:9, резервная SVG-версия при ошибке загрузки.
+  if(item.n===11&&item.title==='Квадратные корни. Арифметический квадратный корень'){
+    topic.theory.images=[{
+      src:'images/school-math/grade-8/arithmetic-square-root-theory-16x9.png',
+      fallbackSrc:'images/school-math/grade-8/arithmetic-square-root-theory-fallback.svg',
+      alt:'Квадратные корни. Арифметический квадратный корень — определения, свойства, формулы и примеры, теория 8 класса'
+    }];
+  }
   return topic;
 }
 
