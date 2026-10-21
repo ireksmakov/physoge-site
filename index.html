@@ -1638,6 +1638,7 @@ body.edit-mode .th-html-body:focus{border-color:rgba(0,229,255,.3);background:rg
 .school-task-instruction{font-size:16px;line-height:1.35;font-weight:900;color:var(--white);padding-top:6px}
 .school-task-text{color:rgba(230,240,255,.9);font-size:15px;line-height:1.72;padding:14px 15px;border-radius:12px;background:rgba(0,0,0,.16);border:1px solid rgba(255,255,255,.06)}
 .school-task-line{margin:5px 0}
+.school-task-line math.school-task-root{font-family:"Times New Roman",Georgia,serif;font-size:1.12em;color:inherit;vertical-align:-.19em;white-space:nowrap}
 .school-inline-answer{display:inline-block;vertical-align:baseline;width:clamp(150px,22vw,310px);max-width:100%;margin:0 5px;padding:4px 7px 3px;border:0;border-bottom:2px solid rgba(207,230,255,.72);background:transparent;color:var(--white);font:inherit;line-height:1.2;outline:none;border-radius:0;transition:border-color .16s,background .16s,color .16s}
 .school-inline-answer:focus{border-bottom-color:var(--cyan);background:rgba(8,216,255,.06)}
 .school-inline-answer.is-correct{border-bottom-color:#56d98c;background:rgba(86,217,140,.08)}
@@ -7602,6 +7603,67 @@ function checkSchoolTaskAnswer(btn){
     result.className='school-task-check-result '+(ok?'is-correct':'is-incorrect');
   }
 }
+/* Урок 11, упражнения 289–311: полноценная черта радикала над ВСЕМ выражением.
+   Встроенный MathML не требует внешнего CDN и сохраняет вертикальные дроби. */
+function renderSchoolSquareRootExerciseMath(line){
+  function radicandMarkup(source){
+    const value=String(source).trim();
+    const mixed=value.match(/^([0-9]+)\s+([0-9]+)\s*\/\s*([0-9]+)$/);
+    if(mixed){
+      return '<mrow><mn>'+mixed[1]+'</mn><mspace width="0.18em"/><mfrac><mn>'+mixed[2]+'</mn><mn>'+mixed[3]+'</mn></mfrac></mrow>';
+    }
+    const fraction=value.match(/^([0-9]+)\s*\/\s*([0-9]+)$/);
+    if(fraction){
+      return '<mfrac><mn>'+fraction[1]+'</mn><mn>'+fraction[2]+'</mn></mfrac>';
+    }
+    if(/^[0-9]+(?:[.,][0-9]+)?$/.test(value))return '<mn>'+escapeHtml(value)+'</mn>';
+    if(/^[a-zA-Z]$/.test(value))return '<mi>'+escapeHtml(value)+'</mi>';
+    return '<mtext>'+escapeHtml(value)+'</mtext>';
+  }
+
+  let result='';
+  let position=0;
+  while(position<line.length){
+    const root=line.indexOf('√',position);
+    if(root<0){
+      result+=escapeHtml(line.slice(position));
+      break;
+    }
+    result+=escapeHtml(line.slice(position,root));
+    const next=root+1;
+    let end=next;
+    let value='';
+    if(line[next]==='('){
+      let depth=0;
+      for(let index=next;index<line.length;index++){
+        if(line[index]==='(')depth++;
+        else if(line[index]===')'){
+          depth--;
+          if(depth===0){
+            value=line.slice(next+1,index);
+            end=index+1;
+            break;
+          }
+        }
+      }
+    }else{
+      const token=line.slice(next).match(/^([0-9]+(?:[.,][0-9]+)?|[a-zA-Z])/);
+      if(token){
+        value=token[1];
+        end=next+token[1].length;
+      }
+    }
+    if(!value){
+      result+='√';
+      position=next;
+      continue;
+    }
+    result+='<math xmlns="http://www.w3.org/1998/Math/MathML" class="school-task-root" display="inline" aria-label="'+escapeHtml('квадратный корень из '+value)+'"><msqrt>'+radicandMarkup(value)+'</msqrt></math>';
+    position=end;
+  }
+  return result;
+}
+
 function renderSchoolTaskInteractiveText(task,topicId,taskState){
   const raw=String(task.text||'');
   const lines=raw.split('\n');
@@ -7613,6 +7675,9 @@ function renderSchoolTaskInteractiveText(task,topicId,taskState){
   const optionName='school-choice-'+safeTopicName+'-'+safeTaskName;
 
   function renderBlanks(line){
+    if(String(task.id||'').startsWith('sqrt-ex-') && task.readOnly){
+      return renderSchoolSquareRootExerciseMath(line);
+    }
     let last=0;
     let html='';
     const re=/_{3,}/g;
