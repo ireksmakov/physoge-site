@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="Преобразование рациональных выражений. Теория 3 из 4">
+<defs><linearGradient id="bg" x2="0" y2="1"><stop stop-color="#e5f7ff"/><stop offset="1" stop-color="#bde7ff"/></linearGradient><linearGradient id="panel" x2="0" y2="1"><stop stop-color="#ffffff"/><stop offset="1" stop-color="#f2faff"/></linearGradient></defs>
+<rect width="1600" height="900" fill="url(#bg)"/>
+<rect x="28" y="25" width="1544" height="95" rx="20" fill="#d9efff" opacity=".8"/>
+<text x="64" y="90" font-family="Arial,sans-serif" font-size="55" font-weight="700" fill="#072959">Преобразование рациональных выражений</text>
+<rect x="62" y="127" width="268" height="55" rx="28" fill="#a6dcfa"/>
+<text x="87" y="166" font-family="Arial,sans-serif" font-size="35" fill="#08346a">Теория · 3/4</text>
+<g><rect x="1442" y="132" width="80" height="22" rx="4" fill="#1673c3"/><rect x="1423" y="152" width="95" height="24" rx="4" fill="#fff" stroke="#1673c3" stroke-width="3"/><rect x="1438" y="175" width="83" height="16" rx="4" fill="#00559a"/></g>
+<rect x="35" y="206" width="750" height="613" rx="22" fill="url(#panel)" stroke="#a5d9f4" stroke-width="3"/>
+<rect x="47" y="218" width="726" height="61" rx="22" fill="#ddf9ef"/>
+<text x="72" y="261" font-family="Arial,sans-serif" font-size="32" font-weight="700" fill="#07346a">Пример 2. Сложение и сокращение</text>
+<text x="72" y="311" font-family="Times New Roman,Georgia,serif" font-size="30" font-weight="400" fill="#123154">[b/(a²−ab) + a/(ab−b²)] ·</text>
+<text x="72" y="353" font-family="Times New Roman,Georgia,serif" font-size="30" font-weight="400" fill="#123154">· [(a²b+ab²)/(a²+b²)] + 1</text>
+<text x="72" y="395" font-family="Times New Roman,Georgia,serif" font-size="29" font-weight="400" fill="#123154">a²−ab=a(a−b); ab−b²=b(a−b)</text>
+<text x="72" y="437" font-family="Times New Roman,Georgia,serif" font-size="30" font-weight="400" fill="#123154">b/[a(a−b)] + a/[b(a−b)]</text>
+<text x="72" y="479" font-family="Times New Roman,Georgia,serif" font-size="30" font-weight="400" fill="#123154">       = (a²+b²)/[ab(a−b)]</text>
+<text x="72" y="521" font-family="Times New Roman,Georgia,serif" font-size="30" font-weight="400" fill="#123154">a²b+ab²=ab(a+b)</text>
+<text x="72" y="563" font-family="Times New Roman,Georgia,serif" font-size="32" font-weight="700" fill="#123154">(a+b)/(a−b) + 1 = 2a/(a−b)</text>
+<text x="72" y="605" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">ОДЗ: a ≠ 0, b ≠ 0, a ≠ b.</text>
+<rect x="801" y="206" width="764" height="613" rx="22" fill="url(#panel)" stroke="#a5d9f4" stroke-width="3"/>
+<rect x="813" y="218" width="740" height="61" rx="22" fill="#ddf9ef"/>
+<text x="838" y="261" font-family="Arial,sans-serif" font-size="32" font-weight="700" fill="#07346a">Пример 3. Сложная дробь</text>
+<text x="838" y="311" font-family="Times New Roman,Georgia,serif" font-size="31" font-weight="400" fill="#123154">[x/y − y/x] / [x/y + y/x − 2]</text>
+<text x="838" y="353" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">Умножим числитель и знаменатель</text>
+<text x="838" y="395" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">на xy. Получим:</text>
+<text x="838" y="437" font-family="Times New Roman,Georgia,serif" font-size="34" font-weight="400" fill="#123154">(x² − y²)/(x² + y² − 2xy)</text>
+<text x="838" y="479" font-family="Times New Roman,Georgia,serif" font-size="33" font-weight="400" fill="#123154">x² − y² = (x − y)(x + y)</text>
+<text x="838" y="521" font-family="Times New Roman,Georgia,serif" font-size="32" font-weight="400" fill="#123154">x² + y² − 2xy = (x − y)²</text>
+<text x="838" y="563" font-family="Times New Roman,Georgia,serif" font-size="37" font-weight="700" fill="#123154">Итог: (x + y)/(x − y)</text>
+<text x="838" y="605" font-family="Arial,sans-serif" font-size="27" font-weight="400" fill="#123154">ОДЗ: x ≠ 0, y ≠ 0, x ≠ y.</text>
+<rect x="28" y="838" width="1544" height="47" rx="20" fill="#f9feff" stroke="#96d5f7" stroke-width="2"/>
+<text x="58" y="871" font-family="Arial,sans-serif" font-size="24" fill="#074277" font-weight="600">Формулы сокращённого умножения помогают увидеть общие множители.</text>
+</svg>
