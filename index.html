@@ -4499,21 +4499,6 @@ const SCHOOL_ALGEBRA_GRADE8_CHAPTERS=[
   }
 ];
 
-function makeSchoolAlgebraGrade8Topic(item){
-  const topic=makeSchoolTopic('math-grade-8-algebra-topic-'+item.n,item.title);
-  topic.sectionTitle=item.section;
-  topic.bookTopicNumber=item.n;
-  if(Number.isFinite(item.page)) topic.bookPage=item.page;
-  topic.description=item.section+' · тема '+item.n+(Number.isFinite(item.page)?' · стр. '+item.page+' учебника':'');
-  // 8 класс · Глава II · тема 10 «Действительные числа».
-  // Оригинальная инфографика PNG хранится отдельно, без перекодирования.
-  if(item.n===10&&item.title==='Действительные числа'){
-    topic.theory.images=[{
-      src:'images/school-math/grade-8/real-numbers-theory-16x9.png',
-      fallbackSrc:'images/school-math/grade-8/real-numbers-theory-fallback.svg',
-      alt:'Действительные числа: натуральные, целые, рациональные и иррациональные числа, множества и координатная прямая'
-    }];
-  }
 const SCHOOL_GRADE8_ROOT_EXERCISES = [
   {
     "id": "sqrt-ex-289",
@@ -4678,6 +4663,22 @@ const SCHOOL_GRADE8_ROOT_EXERCISES = [
   }
 ];
 
+
+function makeSchoolAlgebraGrade8Topic(item){
+  const topic=makeSchoolTopic('math-grade-8-algebra-topic-'+item.n,item.title);
+  topic.sectionTitle=item.section;
+  topic.bookTopicNumber=item.n;
+  if(Number.isFinite(item.page)) topic.bookPage=item.page;
+  topic.description=item.section+' · тема '+item.n+(Number.isFinite(item.page)?' · стр. '+item.page+' учебника':'');
+  // 8 класс · Глава II · тема 10 «Действительные числа».
+  // Оригинальная инфографика PNG хранится отдельно, без перекодирования.
+  if(item.n===10&&item.title==='Действительные числа'){
+    topic.theory.images=[{
+      src:'images/school-math/grade-8/real-numbers-theory-16x9.png',
+      fallbackSrc:'images/school-math/grade-8/real-numbers-theory-fallback.svg',
+      alt:'Действительные числа: натуральные, целые, рациональные и иррациональные числа, множества и координатная прямая'
+    }];
+  }
   // Урок 11: оригинальное PNG в пропорции 16:9, резервная SVG-версия при ошибке загрузки.
   if(item.n===11&&item.title==='Квадратные корни. Арифметический квадратный корень'){
     topic.tasks.items=SCHOOL_GRADE8_ROOT_EXERCISES.map(exercise=>({...exercise}));
