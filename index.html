@@ -8087,10 +8087,16 @@ function renderTheory(){
       const no=String(n).padStart(2,'0');
       const base='images/ege-physics/lesson-37/theory/ege-physics-lesson-37-harmonic-oscillations-theory-'+no;
       const captions=['Основные понятия и кинематика','Скорость и ускорение','Графики и фаза колебаний','Краткий конспект для ЕГЭ'];
-      return {src:base+'.png',alt:'Гармонические колебания — '+captions[n-1]+'. Карточка '+n+' из 4'};
+      const filename='ege-physics-lesson-37-harmonic-oscillations-theory-'+no+'.png';
+      const raw='https://raw.githubusercontent.com/ireksmakov/physoge-site/main/images/ege-physics/lesson-37/theory/'+filename;
+      return {
+        src:base+'.png?v=harmonic-original-20261022',
+        fallbackSrc:raw,
+        alt:'Гармонические колебания — '+captions[n-1]+'. Карточка '+n+' из 4'
+      };
     });
     return `<div class="zsi-theory-carousel ege-phy-harmonic-theory-carousel" style="margin-bottom:14px">
-      ${createImageCarousel(theoryImages,{className:'zsi-unified-image-carousel',imgClass:'theory-carousel-img universal-viewable-image image-carousel-img',captions:false,fallbackText:'Оригинальная фотография пока не загружена в GitHub.',hint:'Перелистывайте четыре оригинальные карточки кнопками со стрелками. Нажмите на фото, чтобы увеличить.'})}
+      ${createImageCarousel(theoryImages,{className:'zsi-unified-image-carousel',imgClass:'theory-carousel-img universal-viewable-image image-carousel-img',captions:false,fallbackText:'Не удалось загрузить фото. Проверьте подключение к интернету.',hint:'Перелистывайте четыре оригинальные карточки кнопками со стрелками. Нажмите на фото, чтобы увеличить.'})}
     </div>${renderTheoryBlocks(getTH())}`;
   }
   // ЕГЭ Физика · Урок 34 «Виды колебаний» — две учебные карточки 16:9 в карусели.
