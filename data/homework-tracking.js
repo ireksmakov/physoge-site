@@ -41,6 +41,45 @@ function hwInjectStyles(){
 .hw39-panel h4{font-family:var(--fh);font-size:13px;margin:0 0 10px;color:var(--white)}.hw39-graphs{display:grid;gap:12px}.hw39-graph{background:#fff;border-radius:10px;padding:8px;color:#0f172a}.hw39-graph svg{display:block;width:100%;height:auto}
 .hw39-quantities{display:grid;gap:8px;color:var(--gray);font-size:13px}.hw39-quantities strong{color:var(--white)}
 .hw39-solution{display:grid;gap:10px;color:var(--gray);line-height:1.65}.hw39-solution strong{color:var(--white)}.hw39-answer{padding:10px 12px;border-radius:10px;background:rgba(57,255,20,.08);border:1px solid rgba(57,255,20,.24);color:var(--green);font-weight:900;text-align:center}
+/* Урок 39: контрастное оформление при переключении платформы на светлую тему.
+   Стили тёмной темы, SVG-графики, ответы и работа преподавательского кабинета не изменяются. */
+body.trainer-theme .hw39-panel{
+  background:linear-gradient(180deg,#ffffff 0%,#eef7ff 100%);
+  border-color:#bfd9ee;
+  box-shadow:0 4px 16px rgba(28,75,119,.07);
+}
+body.trainer-theme .hw39-panel h4{color:#17324f}
+body.trainer-theme .hw39-quantities{color:#334155;line-height:1.7;font-size:14px}
+body.trainer-theme .hw39-quantities strong{color:#0f172a}
+body.trainer-theme .hw39-graph{background:#fff;color:#0f172a;border:1px solid #dbeafe}
+body.trainer-theme .hw39-solution{color:#334155}
+body.trainer-theme .hw39-solution strong{color:#14283e}
+body.trainer-theme .hw39-answer{background:#ecfdf3;border-color:#86efac;color:#166534}
+body.trainer-theme .hw-match-gate{
+  background:#f8fbff;
+  border-color:#c9ddec;
+  border-left-color:#f59e0b;
+  box-shadow:0 2px 8px rgba(15,46,99,.04);
+}
+body.trainer-theme .hw-match-gate .hw-answer-label{color:#53677f}
+body.trainer-theme .hw-match-letter{background:#e3f5ff;border-color:#a6dfff;color:#1666bb}
+body.trainer-theme .hw-match-select{
+  color-scheme:light;
+  background:#ffffff;
+  border-color:#b9ccdf;
+  color:#172033;
+  font-weight:700;
+}
+body.trainer-theme .hw-match-select option{background:#ffffff;color:#172033}
+body.trainer-theme .hw-match-select:focus{border-color:#1f7ae0;box-shadow:0 0 0 3px rgba(31,122,224,.13)}
+body.trainer-theme .hw-track-status{color:#53677f}
+body.trainer-theme .hw-track-status.ok{color:#15803d}
+body.trainer-theme .hw-track-status.err{color:#b45309}
+body.trainer-theme .hw-student-box{background:#fff;border-color:#c7def1;box-shadow:0 8px 24px rgba(31,76,117,.08)}
+body.trainer-theme .hw-student-input{background:#fff;border-color:#b9ccdf;color:#172033;color-scheme:light}
+body.trainer-theme .hw-student-input:focus{border-color:#1f7ae0}
+body.trainer-theme .hw-student-status.ok{color:#15803d}
+body.trainer-theme .hw-student-status.err{color:#b45309}
 .teacher-dashboard{max-width:1180px;margin:0 auto;padding:104px 24px 56px}
 .teacher-hero{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:20px}.teacher-hero h1{font-family:var(--fh);font-size:clamp(24px,3.4vw,42px);line-height:1.15;margin:6px 0 8px}.teacher-kicker{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--cyan);font-weight:900}.teacher-sub{color:var(--gray);max-width:720px}
 .teacher-card{border:1px solid var(--border);border-radius:16px;background:var(--panel);box-shadow:var(--panel-shadow);padding:18px;margin-bottom:14px}.teacher-card h2{font-family:var(--fh);font-size:16px;margin-bottom:10px}
