@@ -11839,7 +11839,7 @@ function renderPTasks(name){
   let h=renderLessonTaskNotice();
   if(!tasks.length){return h+empty+renderBlankTaskAddButton(name);}
   h+='<div style="font-size:12px;color:var(--gray);margin-bottom:14px">Нажмите <strong style="color:var(--orange)">«Решение»</strong>, чтобы увидеть пошаговый разбор.</div>';
-  function ogeCircleCheckAnswer(button){
+  window.ogeCircleCheckAnswer=function ogeCircleCheckAnswer(button){
   const card=button.closest('.pt-card');
   const taskId=card&&card.dataset.ogeTaskId;
   const task=(LESSON_TASKS['oge-phy:Движение по окружности']||[]).find(x=>String(x.id)===taskId);
@@ -11847,7 +11847,7 @@ function renderPTasks(name){
   const input=card.querySelector('.oge-circle-answer-input');
   const feedback=card.querySelector('.oge-circle-answer-feedback');
   if(!input||!feedback)return;
-  const normalize=v=>String(v==null?'':v).trim().toLowerCase().replace(/ё/g,'е').replace(/\\s+/g,'').replace(/,/g,'.');
+  const normalize=v=>String(v==null?'':v).trim().toLowerCase().replace(/ё/g,'е').replace(/\s+/g,'').replace(/,/g,'.');
   const typed=normalize(input.value), expected=normalize(task.ans);
   if(!typed){feedback.textContent='Введите ответ перед проверкой.';return;}
   const key='fizmat_oge_circle_attempts_'+taskId;
