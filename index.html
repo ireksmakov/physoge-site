@@ -11853,6 +11853,13 @@ function renderPTasks(name){
   const key='fizmat_oge_circle_attempts_'+taskId;
   let state={wrong:0,correct:false};
   try{state=Object.assign(state,JSON.parse(localStorage.getItem(key)||'{}'));}catch(_){}
+  if(state.correct||Number(state.wrong)>=3){
+    const panel=card.querySelector('.pt-solution');
+    if(panel)panel.classList.add('open');
+    feedback.textContent=state.correct?'✓ Ответ уже принят. Решение доступно.':'Три попытки уже использованы. Решение доступно.';
+    input.disabled=true;button.disabled=true;
+    return;
+  }
   const panel=card.querySelector('.pt-solution');
   const reveal=()=>{if(panel)panel.classList.add('open');const toggle=card.querySelector('.pt-sol-btn');if(toggle)toggle.textContent='▼ Скрыть решение';};
   if(typed===expected){
@@ -11903,7 +11910,11 @@ function renderOneTask(t,i){
     const fallbackSolution=AC==='oge-phy'&&t.id&&String(t.id).startsWith('oge-circle-motion-')?`<div class="oge-circle-explanation"><strong>Пояснение:</strong> ${escapeHtml(t.answerExplanation||'Проверьте исходные формулы и единицы измерения.')}</div>`:'';
     const solutionInner=(embedded||imageOnly)?`${rich}${extra}${fallbackSolution}`:`${steps}${extra}${fallbackSolution}`;
     const emptySolution=!String(solutionInner||'').trim();
-    return `<div class="pt-card${isBlank?' pt-blank-card':''}" ${AC==='oge-phy'&&String(t.id||'').startsWith('oge-circle-motion-')?`data-oge-task-id="${escapeHtml(taskId)}"`:""}><div class="pt-head"><div class="pt-num">${String(t.num).padStart(2,'0')}</div><span class="pt-level ${lvlC[t.level]||lvlC[1]}">${lvlL[t.level]||lvlL[1]}</span><span class="pt-exam">${AC==='oge-phy'?'ОГЭ':(t.exam||'ЕГЭ')}</span>${AC==='oge-phy'&&t.sourceType?`<span class="pt-exam">${escapeHtml(String(t.sourceType).split(" · ")[0])}</span>`:""}<span class="pt-title">${AC==='oge-phy'&&t.sourceType?titleText.replace(/^Тип\s+(?:Д?\d+)\s*[—–-]\s*/, ""):titleText}</span></div><div class="pt-body"><div class="pt-condition">${cond}</div>${scheme}${AC==='oge-phy'&&String(t.id||'').startsWith('oge-circle-motion-')?`<div class="oge-circle-answer-area" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:12px 0"><label for="oge-answer-${escapeHtml(taskId)}">Ваш ответ:</label><input id="oge-answer-${escapeHtml(taskId)}" class="oge-circle-answer-input" type="text" autocomplete="off" inputmode="text" aria-label="Введите ответ к задаче" style="max-width:190px;min-height:38px;padding:8px;border:1px solid #8eacca;border-radius:8px" onkeydown="if(event.key==='Enter'){event.preventDefault();ogeCircleCheckAnswer(this.nextElementSibling)}"><button type="button" onclick="ogeCircleCheckAnswer(this)" style="padding:8px 12px;border-radius:8px;background:#1877d5;color:#fff;border:0">Проверить</button><span class="oge-circle-answer-feedback" role="status" aria-live="polite"></span></div>`:""}<div class="pt-side">${boardBtn}${animationBtn}<button class="pt-sol-btn" data-action="solution" data-empty-solution="${emptySolution?'1':'0'}" onclick="ptToggle('${sid}',this)">▶ Решение</button></div></div><div class="pt-solution" id="${sid}">${solutionInner}</div></div>`;
+    const ogeProtected=AC==='oge-phy'&&String(t.id||'').startsWith('oge-circle-motion-');
+    let ogeAccess={wrong:0,correct:false};
+    if(ogeProtected){try{ogeAccess=Object.assign(ogeAccess,JSON.parse(localStorage.getItem('fizmat_oge_circle_attempts_'+taskId)||'{}'));}catch(_){}}
+    const ogeUnlocked=!!(ogeAccess.correct||Number(ogeAccess.wrong)>=3);
+    return `<div class="pt-card${isBlank?' pt-blank-card':''}" ${AC==='oge-phy'&&String(t.id||'').startsWith('oge-circle-motion-')?`data-oge-task-id="${escapeHtml(taskId)}"`:""}><div class="pt-head"><div class="pt-num">${String(t.num).padStart(2,'0')}</div><span class="pt-level ${lvlC[t.level]||lvlC[1]}">${lvlL[t.level]||lvlL[1]}</span><span class="pt-exam">${AC==='oge-phy'?'ОГЭ':(t.exam||'ЕГЭ')}</span>${AC==='oge-phy'&&t.sourceType?`<span class="pt-exam">${escapeHtml(String(t.sourceType).split(" · ")[0])}</span>`:""}<span class="pt-title">${AC==='oge-phy'&&t.sourceType?titleText.replace(/^Тип\s+(?:Д?\d+)\s*[—–-]\s*/, ""):titleText}</span></div><div class="pt-body"><div class="pt-condition">${cond}</div>${scheme}${AC==='oge-phy'&&String(t.id||'').startsWith('oge-circle-motion-')?`<div class="oge-circle-answer-area" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:12px 0"><label for="oge-answer-${escapeHtml(taskId)}">Ваш ответ:</label><input id="oge-answer-${escapeHtml(taskId)}" class="oge-circle-answer-input" type="text" autocomplete="off" inputmode="text" aria-label="Введите ответ к задаче" style="max-width:190px;min-height:38px;padding:8px;border:1px solid #8eacca;border-radius:8px" onkeydown="if(event.key==='Enter'){event.preventDefault();ogeCircleCheckAnswer(this.nextElementSibling)}"><button type="button" onclick="ogeCircleCheckAnswer(this)" style="padding:8px 12px;border-radius:8px;background:#1877d5;color:#fff;border:0">Проверить</button><span class="oge-circle-answer-feedback" role="status" aria-live="polite"></span></div>`:""}<div class="pt-side">${boardBtn}${animationBtn}<button class="pt-sol-btn" data-action="solution" data-empty-solution="${emptySolution?'1':'0'}" onclick="ptToggle('${sid}',this)">${ogeProtected&&!ogeUnlocked?'🔒 Решение':'▶ Решение'}</button></div></div><div class="pt-solution${ogeProtected&&ogeUnlocked?' open':''}" id="${sid}">${solutionInner}</div></div>`;
   }
   const hasGroups=tasks.some(t=>t&&t.group);
   if(hasGroups){
@@ -12106,6 +12117,17 @@ function closeTaskAnimationPlaceholder(){
 }
 
 function ptToggle(id,btn){
+  const card=btn&&btn.closest('.pt-card[data-oge-task-id]');
+  if(card){
+    const taskId=card.dataset.ogeTaskId;
+    let state={wrong:0,correct:false};
+    try{state=Object.assign(state,JSON.parse(localStorage.getItem('fizmat_oge_circle_attempts_'+taskId)||'{}'));}catch(_){}
+    if(!state.correct&&Number(state.wrong)<3){
+      const feedback=card.querySelector('.oge-circle-answer-feedback');
+      if(feedback)feedback.textContent='Решение откроется после верного ответа или трёх неправильных попыток.';
+      return;
+    }
+  }
   const el=document.getElementById(id);
   if(!el)return;
   if(btn&&btn.dataset&&btn.dataset.emptySolution==='1'&&!EMODE)return;
