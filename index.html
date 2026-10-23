@@ -10722,6 +10722,10 @@ LESSON_TASKS['oge-phy:Движение по окружности'].push(...[{"nu
   const tasks=LESSON_TASKS['oge-phy:Движение по окружности']||[];
   tasks.forEach(function(task){const n=Number(task.num); if(n>=1&&n<=types.length)task.sourceType='Тип '+types[n-1];});
 })();
+
+/* OGE Circle: answer key and concise educational explanations for all 29 cards. */
+(function setOgeCircleExplanations(){const t=LESSON_TASKS['oge-phy:Движение по окружности']||[];const notes=["При равномерном движении по окружности ускорение направлено к центру O, то есть вдоль стрелки 4.","Физическая величина — центростремительное ускорение (3), единица — минута (4), прибор — электронный секундомер (1).","По формуле a = v²/R: (v/2)²/(R/2) = a/2, ускорение уменьшается в 2 раза.","Частота постоянна, значит угловая скорость постоянна; v = ωr — прямая из начала координат, график 4.","60 оборотов в минуту = 1 оборот в секунду; v = 2πRν = 2π·0,5·1 ≈ 3,14 м/с.","Из графика при R = 0,4 м ускорение 1,6 м/с²: ω² = 1,6/0,4 = 4, ω = 2 рад/с. v_A = ωR = 0,8 м/с; v_B = ωR/2 = 0,4 м/с. Верны утверждения 3 и 4.","Для всех точек жёстко вращающегося диска ω одинакова и v = ωR. Скорость растёт линейно от нуля: график 2.","При постоянной ω зависимость v = ωR — возрастающая прямая через начало координат (график 2).","Центростремительное ускорение aц = ω²R. При постоянной ω оно линейно зависит от расстояния R (график 2).","Из aц = v²/R получаем v = √(aцR) = √(0,4·0,1) = 0,2 м/с.","За 30 минут жук пройдёт 6·30 = 180 см = 1,8 м, то есть три стороны квадрата со стороной 0,6 м. Его траектория состоит из нескольких сторон и не является прямой.","aц = v²/R = 0,4²/0,2 = 0,8 м/с².","Линейная скорость v = 2πR/T (3), угловая скорость ω = 2π/T (2).","Частота ν = N/Δt (1); период T = Δt/N (3).","Точка B дальше от оси, поэтому её линейная скорость v = ωr увеличивается (1), но частота вращения всего диска не меняется (3).","Скорость измеряют спидометром (3), объём жидкости — мензуркой (4), атмосферное давление — барометром (1).","60 оборотов в минуту = 1 с⁻¹; v = 2π·0,3·1 ≈ 1,884 м/с.","При уменьшении периода ω = 2π/T увеличивается. Для бруска на прежнем радиусе Fтр = mω²r и Eк = mω²r²/2 увеличиваются: 1, 1.","aц = 4π²R/T² (1), угловая скорость ω = 2π/T (3).","v = √(aR) = √(2·50) = 10 м/с.","По формуле a = v²/R: новая величина (2v)²/(2R) = 2a. Ускорение увеличивается вдвое.","Частота ν = 1/T — позиция 4; линейная скорость v = 2πR/T — позиция 1.","Для круговой орбиты v = √(GM/r), при уменьшении радиуса скорость растёт. Период T = 2π√(r³/GM) уменьшается.","ν = 120/60 = 2 Гц. При R = 0,5 м: v = 2πRν = 2π·0,5·2 ≈ 6,28 м/с.","По таблице Земля имеет ненулевое полярное сжатие (0,003354), тогда как у Венеры указано 0. Быстрое вращение Земли (1 сутки против 243) способствует большей сплюснутости у полюсов.","T = t/N = (4·60)/480 = 0,5 с.","ν = N/t = 2400/(2·60) = 20 с⁻¹.","При R/2 и v/2: aнов = (v²/4)/(R/2) = a/2. Ускорение уменьшается вдвое.","В верхней точке при невесомости mg = mv²/R; R = v²/g = 10000/10 ≈ 1000 м (при g ≈ 10 м/с²)."];t.forEach(function(x){const n=Number(x.num);if(n>=1&&n<=notes.length)x.answerExplanation=notes[n-1];});})();
+
 const LESSON_HOMEWORK={
   'Закон сохранения импульса и изменения импульса':[
     {
@@ -11835,7 +11839,33 @@ function renderPTasks(name){
   let h=renderLessonTaskNotice();
   if(!tasks.length){return h+empty+renderBlankTaskAddButton(name);}
   h+='<div style="font-size:12px;color:var(--gray);margin-bottom:14px">Нажмите <strong style="color:var(--orange)">«Решение»</strong>, чтобы увидеть пошаговый разбор.</div>';
-  function renderOneTask(t,i){
+  function ogeCircleCheckAnswer(button){
+  const card=button.closest('.pt-card');
+  const taskId=card&&card.dataset.ogeTaskId;
+  const task=(LESSON_TASKS['oge-phy:Движение по окружности']||[]).find(x=>String(x.id)===taskId);
+  if(!task)return;
+  const input=card.querySelector('.oge-circle-answer-input');
+  const feedback=card.querySelector('.oge-circle-answer-feedback');
+  if(!input||!feedback)return;
+  const normalize=v=>String(v==null?'':v).trim().toLowerCase().replace(/ё/g,'е').replace(/\\s+/g,'').replace(/,/g,'.');
+  const typed=normalize(input.value), expected=normalize(task.ans);
+  if(!typed){feedback.textContent='Введите ответ перед проверкой.';return;}
+  const key='fizmat_oge_circle_attempts_'+taskId;
+  let state={wrong:0,correct:false};
+  try{state=Object.assign(state,JSON.parse(localStorage.getItem(key)||'{}'));}catch(_){}
+  const panel=card.querySelector('.pt-solution');
+  const reveal=()=>{if(panel)panel.classList.add('open');const toggle=card.querySelector('.pt-sol-btn');if(toggle)toggle.textContent='▼ Скрыть решение';};
+  if(typed===expected){
+    state.correct=true;feedback.textContent='✓ Верно! Ответ правильный.';feedback.style.color='#16834b';input.disabled=true;button.disabled=true;reveal();
+  }else{
+    state.wrong=Math.min(3,(Number(state.wrong)||0)+1);
+    feedback.style.color='#c45625';
+    if(state.wrong>=3){feedback.textContent='Три неверные попытки. Открыто решение с пояснением.';input.disabled=true;button.disabled=true;reveal();}
+    else feedback.textContent='Неверно. Осталось попыток: '+(3-state.wrong)+'.';
+  }
+  try{localStorage.setItem(key,JSON.stringify(state));}catch(_){}
+}
+function renderOneTask(t,i){
     const sid='ptS_'+lessonTaskDomId((t.id||t.boardMode||i)+'_'+i);
     const isBlank=!!t.isBlank;
     const titleText=isBlank
@@ -11870,10 +11900,10 @@ function renderPTasks(name){
     const imageOnly=!embedded&&getTaskSolutionImages(t).length?renderSolutionImagesHtml(getTaskSolutionImages(t),'pt','Фото решения будет добавлено позже.'):'';
     const rich=(embedded||imageOnly)?`<div class="pt-rich-card">${embedded||imageOnly}</div>`:'';
     const answer=t.ans?String(t.ans):'';
-    const fallbackSolution='';
-    const solutionInner=(embedded||imageOnly)?`${rich}${extra}`:`${steps}${extra}${fallbackSolution}`;
+    const fallbackSolution=AC==='oge-phy'&&t.id&&String(t.id).startsWith('oge-circle-motion-')?`<div class="oge-circle-explanation"><strong>Пояснение:</strong> ${escapeHtml(t.answerExplanation||'Проверьте исходные формулы и единицы измерения.')}</div>`:'';
+    const solutionInner=(embedded||imageOnly)?`${rich}${extra}${fallbackSolution}`:`${steps}${extra}${fallbackSolution}`;
     const emptySolution=!String(solutionInner||'').trim();
-    return `<div class="pt-card${isBlank?' pt-blank-card':''}"><div class="pt-head"><div class="pt-num">${String(t.num).padStart(2,'0')}</div><span class="pt-level ${lvlC[t.level]||lvlC[1]}">${lvlL[t.level]||lvlL[1]}</span><span class="pt-exam">${AC==='oge-phy'?'ОГЭ':(t.exam||'ЕГЭ')}</span>${AC==='oge-phy'&&t.sourceType?`<span class="pt-exam">${escapeHtml(String(t.sourceType).split(" · ")[0])}</span>`:""}<span class="pt-title">${AC==='oge-phy'&&t.sourceType?titleText.replace(/^Тип\s+(?:Д?\d+)\s*[—–-]\s*/, ""):titleText}</span></div><div class="pt-body"><div class="pt-condition">${cond}</div>${scheme}<div class="pt-side">${boardBtn}${animationBtn}<button class="pt-sol-btn" data-action="solution" data-empty-solution="${emptySolution?'1':'0'}" onclick="ptToggle('${sid}',this)">▶ Решение</button></div></div><div class="pt-solution" id="${sid}">${solutionInner}</div></div>`;
+    return `<div class="pt-card${isBlank?' pt-blank-card':''}" ${AC==='oge-phy'&&String(t.id||'').startsWith('oge-circle-motion-')?`data-oge-task-id="${escapeHtml(taskId)}"`:""}><div class="pt-head"><div class="pt-num">${String(t.num).padStart(2,'0')}</div><span class="pt-level ${lvlC[t.level]||lvlC[1]}">${lvlL[t.level]||lvlL[1]}</span><span class="pt-exam">${AC==='oge-phy'?'ОГЭ':(t.exam||'ЕГЭ')}</span>${AC==='oge-phy'&&t.sourceType?`<span class="pt-exam">${escapeHtml(String(t.sourceType).split(" · ")[0])}</span>`:""}<span class="pt-title">${AC==='oge-phy'&&t.sourceType?titleText.replace(/^Тип\s+(?:Д?\d+)\s*[—–-]\s*/, ""):titleText}</span></div><div class="pt-body"><div class="pt-condition">${cond}</div>${scheme}${AC==='oge-phy'&&String(t.id||'').startsWith('oge-circle-motion-')?`<div class="oge-circle-answer-area" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:12px 0"><label for="oge-answer-${escapeHtml(taskId)}">Ваш ответ:</label><input id="oge-answer-${escapeHtml(taskId)}" class="oge-circle-answer-input" type="text" autocomplete="off" inputmode="text" aria-label="Введите ответ к задаче" style="max-width:190px;min-height:38px;padding:8px;border:1px solid #8eacca;border-radius:8px" onkeydown="if(event.key==='Enter'){event.preventDefault();ogeCircleCheckAnswer(this.nextElementSibling)}"><button type="button" onclick="ogeCircleCheckAnswer(this)" style="padding:8px 12px;border-radius:8px;background:#1877d5;color:#fff;border:0">Проверить</button><span class="oge-circle-answer-feedback" role="status" aria-live="polite"></span></div>`:""}<div class="pt-side">${boardBtn}${animationBtn}<button class="pt-sol-btn" data-action="solution" data-empty-solution="${emptySolution?'1':'0'}" onclick="ptToggle('${sid}',this)">▶ Решение</button></div></div><div class="pt-solution" id="${sid}">${solutionInner}</div></div>`;
   }
   const hasGroups=tasks.some(t=>t&&t.group);
   if(hasGroups){
