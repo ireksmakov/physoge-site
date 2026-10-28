@@ -10603,6 +10603,20 @@ const LESSON_TASKS={
 
 'ege-phy:Основы МКТ':[
   {
+    id:'ege-mkt-43-gas-density-07',boardMode:'ege-mkt-43-gas-density-07',mode:'ege-mkt-43-gas-density-07',
+    animationId:'mkt-gas-density-43',animId:'mkt-gas-density-43',hasAnimation:true,
+    num:7,level:1,exam:'ЕГЭ (1 балл)',points:1,
+    title:'Плотность газа по давлению и скорости молекул',
+    cond:'В закрытом сосуде находится идеальный газ при давлении 105750 Па и температуре, соответствующей среднеквадратичной скорости теплового хаотического движения молекул 494 м/с. Чему равна плотность этого газа? Ответ выразите в килограммах на кубический метр и округлите до десятых долей.',
+    given:'p = 105750 Па; vₖᵥ = 494 м/с.<br><span class="pt-find">Найти: ρ (кг/м³)</span>',
+    solutionTitle:'Решение задачи 07 · Плотность идеального газа',
+    solutionHtml:'<div class="solution-workspace"><h4>1. Основное уравнение МКТ</h4><div class="sr-fml">p = 1/3 · ρv²ₖᵥ</div><h4>2. Выразим плотность</h4><div class="sr-fml">ρ = 3p / v²ₖᵥ</div><h4>3. Подставим значения</h4><div class="sr-fml">ρ = 3 · 105750 / 494² = 317250 / 244036 ≈ 1,300</div><p><strong>Ответ: 1,3 кг/м³.</strong></p></div>',
+    boardConditionHtml:'Дано: p = 105750 Па, vₖᵥ = 494 м/с. Найти плотность идеального газа.',
+    boardSolutionHtml:'<div class="task-board-manual"><div class="task-board-step"><strong>Дано:</strong> p = 105750 Па; vₖᵥ = 494 м/с</div><div class="task-board-step"><strong>Формула:</strong> p = ⅓ρv²ₖᵥ</div><div class="task-board-step"><strong>Выразим:</strong> ρ = 3p/v²ₖᵥ</div><div class="task-board-step"><strong>Расчёт:</strong> 3·105750/494² ≈ 1,300 кг/м³</div><div class="task-board-step"><strong>Ответ:</strong> 1,3 кг/м³</div></div>',
+    ans:'1,3',acceptedAnswers:['1,3','1.3'],isBlank:false
+  },
+
+  {
     id:'ege-mkt-43-graph-pressure-concentration-06',boardMode:'ege-mkt-43-graph-pressure-concentration-06',mode:'ege-mkt-43-graph-pressure-concentration-06',
     animationId:'mkt-graph-pressure-concentration-43',animId:'mkt-graph-pressure-concentration-43',hasAnimation:true,
     num:6,level:1,exam:'ЕГЭ (1 балл)',points:1,title:'График давления от концентрации двух идеальных газов',
@@ -12065,7 +12079,7 @@ function hasRegisteredTaskAnimation(task){
   if(!task) return false;
   const animationId=String(task.animationId||task.animId||'');
   if(LEGACY_TASK_ANIMATION_IDS.has(animationId)) return true;
-  if(animationId==='mkt-graph-pressure-concentration-43'||animationId==='mkt-cooling-pressure-43'||animationId==='mkt-gas-mass-pressure-43'||animationId==='mkt-pressure-ratio-43'||animationId==='mkt-rms-pressure-43'||animationId==='mkt-temperature-energy-43'||isFreeFallAnimationId(animationId)||isBallisticsTaskAnimationId(animationId)||isGasHeatingAnimationId(animationId)) return true;
+  if(animationId==='mkt-gas-density-43'||animationId==='mkt-graph-pressure-concentration-43'||animationId==='mkt-cooling-pressure-43'||animationId==='mkt-gas-mass-pressure-43'||animationId==='mkt-pressure-ratio-43'||animationId==='mkt-rms-pressure-43'||animationId==='mkt-temperature-energy-43'||isFreeFallAnimationId(animationId)||isBallisticsTaskAnimationId(animationId)||isGasHeatingAnimationId(animationId)) return true;
   return animationId==='ballistics-incline-elastic-bounce-task03'||animationId==='lesson12-task10'||
     animationId==='lesson-25-task-04'||animationId==='lesson-25-task-06'||animationId==='lesson-25-task-07';
 }
@@ -15605,7 +15619,66 @@ overlay.dataset.keepTaskBoard=keep?'true':'false';overlay.classList.add('open');
 const modal=overlay.querySelector('.task-animation-placeholder-modal');if(!modal)return false;
 modal.innerHTML='<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder();return false;">✕ Закрыть</button>'+renderMktGraph43();bindMktGraph43(modal);return false;
 }
+
+function renderMktDensity43(){
+return `<section class="mkt-density43">
+<style>
+.mkt-density43{background:#091726;color:#eaf6ff;padding:18px;border-radius:18px;max-width:950px;margin:auto}
+.mkt-density43 h2{font-size:clamp(19px,3vw,27px);margin:0 0 10px;color:#eaf6ff}
+.mkt-density43 p{color:#bdd3e5;font-size:13px}
+.mkt-density43 .md-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,1fr);gap:16px}
+.mkt-density43 .md-chamber{height:240px;position:relative;overflow:hidden;background:radial-gradient(circle at center,#17476a,#071726);border:2px solid #5b83a4;border-radius:18px}
+.mkt-density43 .md-dot{position:absolute;width:7px;height:7px;background:#68d5ff;box-shadow:0 0 10px #2dc9ff;border-radius:50%;animation:md-drift var(--dur) linear infinite alternate;animation-delay:var(--delay)}
+@keyframes md-drift{from{transform:translate(-11px,-8px)}to{transform:translate(12px,9px)}}
+.mkt-density43 .md-controls{display:grid;gap:14px}
+.mkt-density43 label{display:grid;gap:7px;background:#12304b;padding:12px;border-radius:11px;font-size:13px}
+.mkt-density43 input{width:100%;accent-color:#3dbbfa}
+.mkt-density43 .md-result{margin-top:15px;border:1px solid #36a1d6;border-radius:12px;padding:15px;background:#11334b;display:grid;gap:8px}
+.mkt-density43 .md-result strong{font-size:clamp(21px,3vw,29px);color:#7fe5ff}
+.mkt-density43 .md-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.mkt-density43 button{background:#146fae;border:1px solid #5bc1f6;color:white;padding:9px 12px;border-radius:8px;cursor:pointer}
+@media(max-width:650px){.mkt-density43 .md-layout{grid-template-columns:1fr}.mkt-density43 .md-chamber{height:170px}}
+@media(prefers-reduced-motion:reduce){.mkt-density43 .md-dot{animation:none}}
+</style>
+<h2>Задача 07 · Плотность идеального газа</h2><p>Регулируйте давление и среднеквадратичную скорость. Модель показывает, как плотность связана с этими величинами по основному уравнению МКТ.</p>
+<div class="md-layout">
+<div><div class="md-chamber" data-md-chamber></div><p>Схематическое движение молекул газа внутри закрытого сосуда. Скорость анимации связана с выбранной среднеквадратичной скоростью.</p></div>
+<div class="md-controls">
+<label>Давление p, Па <b data-md-label="p">105 750</b><input type="range" min="20000" max="200000" step="250" value="105750" data-md-slider="p"></label>
+<label>Среднеквадратичная скорость v, м/с <b data-md-label="v">494</b><input type="range" min="150" max="1000" step="1" value="494" data-md-slider="v"></label>
+</div></div>
+<div class="md-result" aria-live="polite"><span>p = ⅓ ρv²</span><span>ρ = 3p / v²</span><strong data-md-answer>ρ = 1,3 кг/м³</strong><span data-md-math>ρ = 317250 / 244036 ≈ 1,300 кг/м³</span></div>
+<div class="md-actions"><button type="button" data-md-action="task">По условию задачи</button><button type="button" data-md-action="reset">Сброс</button><button type="button" data-md-action="pause">Пауза</button></div></section>`;
+}
+function bindMktDensity43(modal){
+const root=modal.querySelector('.mkt-density43');if(!root)return;
+const p=root.querySelector('[data-md-slider="p"]'),v=root.querySelector('[data-md-slider="v"]'),ch=root.querySelector('[data-md-chamber]');let paused=false;
+const fmt=x=>Number(x).toLocaleString('ru-RU');
+function update(){
+const pressure=Number(p.value),velocity=Number(v.value),rho=3*pressure/(velocity*velocity);
+root.querySelector('[data-md-label="p"]').textContent=fmt(pressure);
+root.querySelector('[data-md-label="v"]').textContent=fmt(velocity);
+root.querySelector('[data-md-answer]').textContent='ρ = '+rho.toFixed(1).replace('.',',')+' кг/м³';
+root.querySelector('[data-md-math]').textContent='ρ = '+fmt(3*pressure)+' / '+fmt(velocity*velocity)+' ≈ '+rho.toFixed(3).replace('.',',')+' кг/м³';
+const count=Math.max(8,Math.min(70,Math.round(rho*24)));
+const frag=document.createDocumentFragment();
+for(let i=0;i<count;i++){const dot=document.createElement('i');dot.className='md-dot';dot.style.left=(8+(i*31+11)%84)+'%';dot.style.top=(9+(i*41+17)%80)+'%';dot.style.setProperty('--dur',((2+(i%7)*.25)*494/velocity)+'s');dot.style.setProperty('--delay',(-i*.27)+'s');dot.style.animationPlayState=paused?'paused':'running';frag.appendChild(dot)}ch.replaceChildren(frag);
+}
+p.addEventListener('input',update);v.addEventListener('input',update);
+root.querySelector('[data-md-action="task"]').addEventListener('click',()=>{p.value=105750;v.value=494;update()});
+root.querySelector('[data-md-action="reset"]').addEventListener('click',()=>{p.value=100000;v.value=500;update()});
+const btn=root.querySelector('[data-md-action="pause"]');btn.addEventListener('click',()=>{paused=!paused;root.querySelectorAll('.md-dot').forEach(dot=>dot.style.animationPlayState=paused?'paused':'running');btn.textContent=paused?'Продолжить':'Пауза'});update();
+}
+function openMktDensity43(taskId){
+if(!document.getElementById('taskAnimationPlaceholderOverlay'))openTaskAnimationPlaceholder(taskId);
+const overlay=document.getElementById('taskAnimationPlaceholderOverlay');if(!overlay)return false;
+const keep=!!(TASK_ANIMATION_CONTEXT&&TASK_ANIMATION_CONTEXT.fromBoard&&taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
+overlay.dataset.keepTaskBoard=keep?'true':'false';overlay.classList.add('open');overlay.style.display='flex';
+const modal=overlay.querySelector('.task-animation-placeholder-modal');if(!modal)return false;
+modal.innerHTML='<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder();return false;">✕ Закрыть</button>'+renderMktDensity43();bindMktDensity43(modal);return false;
+}
 function openTaskAnimationOverlay(taskId){
+ if(taskId==='mkt-gas-density-43')return openMktDensity43(taskId);
   if(taskId==='mkt-graph-pressure-concentration-43')return openMktGraph43(taskId);
   if(taskId==='mkt-cooling-pressure-43'||taskId==='mkt-gas-mass-pressure-43')return openMktTwoGas43(taskId);
   if(taskId==='mkt-temperature-energy-43')return openMktTemperatureEnergy43(taskId);
