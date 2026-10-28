@@ -10603,6 +10603,31 @@ const LESSON_TASKS={
 
 'ege-phy:Основы МКТ':[
   {
+    id:'ege-mkt-43-cooling-pressure-04',boardMode:'ege-mkt-43-cooling-pressure-04',mode:'ege-mkt-43-cooling-pressure-04',
+    animationId:'mkt-cooling-pressure-43',animId:'mkt-cooling-pressure-43',hasAnimation:true,
+    num:4,level:1,exam:'ЕГЭ (1 балл)',points:1,
+    title:'Охлаждение одноатомного идеального газа',
+    cond:'В результате охлаждения одноатомного идеального газа его давление уменьшилось в 4 раза, а концентрация молекул газа не изменилась. Чему равно отношение конечной средней кинетической энергии теплового движения молекул газа к начальной?',
+    given:'p₂ = p₁/4; n₂ = n₁.<br><span class="pt-find">Найти: ⟨E₂⟩/⟨E₁⟩</span>',
+    boardConditionHtml:'Давление идеального газа уменьшилось в четыре раза, концентрация молекул постоянна. Найдите ⟨E₂⟩/⟨E₁⟩.',
+    solutionHtml:'<div class="solution-workspace"><h4>Основное уравнение МКТ</h4><div class="sr-fml">p = 2/3 · n · ⟨Eₖ⟩</div><h4>Отношение энергий</h4><div class="sr-fml">⟨E₂⟩/⟨E₁⟩ = (p₂/p₁) · (n₁/n₂) = 1/4 · 1 = 0,25</div><p><strong>Ответ: 0,25.</strong></p></div>',
+    boardSolutionHtml:'<div class="task-board-manual"><div class="task-board-step"><strong>Формула:</strong> p = ⅔ n⟨Eₖ⟩</div><div class="task-board-step"><strong>Концентрация постоянна:</strong> ⟨E₂⟩/⟨E₁⟩ = p₂/p₁</div><div class="task-board-step"><strong>Ответ:</strong> 1/4 = 0,25</div></div>',
+    solutionTitle:'Решение задачи 04',ans:'0,25',acceptedAnswers:['0,25','0.25','1/4'],isBlank:false
+  },
+  {
+    id:'ege-mkt-43-oxygen-hydrogen-05',boardMode:'ege-mkt-43-oxygen-hydrogen-05',mode:'ege-mkt-43-oxygen-hydrogen-05',
+    animationId:'mkt-gas-mass-pressure-43',animId:'mkt-gas-mass-pressure-43',hasAnimation:true,
+    num:5,level:1,exam:'ЕГЭ (1 балл)',points:1,
+    title:'Давление кислорода и водорода',
+    cond:'Чему равно отношение давлений в сосудах с кислородом и водородом, если концентрации газов и средние квадратичные скорости молекул одинаковы? Найдите p(O₂)/p(H₂).',
+    given:'n(O₂) = n(H₂); vₖᵥ(O₂) = vₖᵥ(H₂).<br>M(O₂) = 32 г/моль; M(H₂) = 2 г/моль.<br><span class="pt-find">Найти: p(O₂)/p(H₂)</span>',
+    boardConditionHtml:'Концентрации и средние квадратичные скорости кислорода и водорода одинаковы. Определить отношение давлений.',
+    solutionHtml:'<div class="solution-workspace"><h4>Основное уравнение МКТ</h4><div class="sr-fml">p = 1/3 · n · m₀ · v²ₖᵥ</div><h4>Отношение давлений</h4><p>Концентрации и скорости одинаковы. Масса одной молекулы пропорциональна молярной массе.</p><div class="sr-fml">p(O₂)/p(H₂) = M(O₂)/M(H₂) = 32/2 = 16</div><p><strong>Ответ: 16.</strong></p></div>',
+    boardSolutionHtml:'<div class="task-board-manual"><div class="task-board-step"><strong>Формула:</strong> p = ⅓ nm₀v²ₖᵥ</div><div class="task-board-step"><strong>При равных n и v:</strong> p(O₂)/p(H₂) = m(O₂)/m(H₂)</div><div class="task-board-step"><strong>Расчёт:</strong> 32/2 = 16</div><div class="task-board-step"><strong>Ответ:</strong> 16</div></div>',
+    solutionTitle:'Решение задачи 05',ans:'16',acceptedAnswers:['16','16,0','16.0'],isBlank:false
+  },
+
+  {
     id:'ege-mkt-43-temperature-energy-03',
     boardMode:'ege-mkt-43-temperature-energy-03',mode:'ege-mkt-43-temperature-energy-03',
     animationId:'mkt-temperature-energy-43',animId:'mkt-temperature-energy-43',hasAnimation:true,
@@ -12027,7 +12052,7 @@ function hasRegisteredTaskAnimation(task){
   if(!task) return false;
   const animationId=String(task.animationId||task.animId||'');
   if(LEGACY_TASK_ANIMATION_IDS.has(animationId)) return true;
-  if(animationId==='mkt-pressure-ratio-43'||animationId==='mkt-rms-pressure-43'||animationId==='mkt-temperature-energy-43'||isFreeFallAnimationId(animationId)||isBallisticsTaskAnimationId(animationId)||isGasHeatingAnimationId(animationId)) return true;
+  if(animationId==='mkt-cooling-pressure-43'||animationId==='mkt-gas-mass-pressure-43'||animationId==='mkt-pressure-ratio-43'||animationId==='mkt-rms-pressure-43'||animationId==='mkt-temperature-energy-43'||isFreeFallAnimationId(animationId)||isBallisticsTaskAnimationId(animationId)||isGasHeatingAnimationId(animationId)) return true;
   return animationId==='ballistics-incline-elastic-bounce-task03'||animationId==='lesson12-task10'||
     animationId==='lesson-25-task-04'||animationId==='lesson-25-task-06'||animationId==='lesson-25-task-07';
 }
@@ -15433,7 +15458,79 @@ function openMktTemperatureEnergy43(taskId){
  modal.innerHTML='<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder();return false;">✕ Закрыть</button>'+renderMktTemperatureEnergy43();
  bindMktTemperatureEnergy43(modal);return false;
 }
+
+/* Lesson 43: independent pressure/molecular-mass visual simulators. */
+function renderMktTwoGas43(mode){
+const cooling=mode==='cool';
+return `<section class="mkt-compare43" data-mode="${cooling?'cool':'gases'}">
+<style>
+.mkt-compare43{font-family:inherit;background:#081626;color:#e8f6ff;border-radius:18px;padding:18px;max-width:1050px;margin:auto}
+.mkt-compare43 h2{font-size:clamp(18px,2.5vw,26px);margin:0 0 9px;color:#e8f6ff}
+.mkt-compare43 p{color:#b3cce2;font-size:13px;margin:0 0 12px}
+.mkt-compare43 .mtg-vessels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.mkt-compare43 .mtg-vessel{background:#0c2238;border:1px solid #355877;padding:13px;border-radius:13px}
+.mkt-compare43 .mtg-vessel b{display:block;margin-bottom:8px}
+.mkt-compare43 .mtg-chamber{position:relative;height:180px;overflow:hidden;border-radius:9px;border:1px solid #3a6281;background:radial-gradient(circle,#164265,#071523)}
+.mkt-compare43 .mtg-dot{position:absolute;left:var(--x);top:var(--y);width:var(--size);height:var(--size);border-radius:50%;background:var(--color);box-shadow:0 0 8px var(--color);animation:mtg-drift var(--duration) linear infinite alternate;animation-delay:var(--delay)}
+@keyframes mtg-drift{from{transform:translate(-8px,-9px)}to{transform:translate(10px,10px)}}
+.mkt-compare43 .mtg-info{margin-top:9px;font-size:12px;line-height:1.6;color:#d9eeff}
+.mkt-compare43 .mtg-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:14px 0}
+.mkt-compare43 .mtg-control{display:grid;gap:8px;background:#112d48;padding:12px;border-radius:11px}
+.mkt-compare43 input[type=range]{width:100%;accent-color:#38bdf8}
+.mkt-compare43 .mtg-result{display:grid;gap:6px;border:1px solid #3ca1cf;background:#10334c;padding:13px;border-radius:13px}
+.mkt-compare43 .mtg-result strong{color:#83e6ff;font-size:clamp(20px,3vw,27px)}
+.mkt-compare43 .mtg-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}
+.mkt-compare43 button{background:#166caa;border:1px solid #62bff0;padding:9px 13px;color:white;cursor:pointer;border-radius:8px}
+.mkt-compare43 button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+@media(max-width:620px){.mkt-compare43 .mtg-vessels,.mkt-compare43 .mtg-controls{grid-template-columns:1fr}.mkt-compare43 .mtg-chamber{height:135px}}
+@media(prefers-reduced-motion:reduce){.mkt-compare43 .mtg-dot{animation:none}}
+</style>
+<h2>${cooling?'Задача 04 · Охлаждение газа':'Задача 05 · Кислород и водород'}</h2>
+<p>${cooling?'Меняйте отношение давлений при постоянной концентрации молекул.':'Сравните два сосуда: концентрации и скорости первоначально равны. Регулируйте массу молекулы кислорода, относительную концентрацию и отношение скоростей.'} Частицы изображены схематично.</p>
+<div class="mtg-vessels"><div class="mtg-vessel"><b>${cooling?'Начальное состояние':'Водород H₂'}</b><div class="mtg-chamber" data-mtg-chamber="a"></div><div class="mtg-info" data-mtg-info="a"></div></div><div class="mtg-vessel"><b>${cooling?'Конечное состояние':'Кислород O₂'}</b><div class="mtg-chamber" data-mtg-chamber="b"></div><div class="mtg-info" data-mtg-info="b"></div></div></div>
+<div class="mtg-controls">
+${cooling?'<label class="mtg-control">Давление p₂/p₁ <b data-mtg-val="pressure">0,25</b><input data-mtg-slider="pressure" type="range" min="0.1" max="2" step="0.05" value="0.25"></label>':'<label class="mtg-control">Молярная масса второго газа, г/моль <b data-mtg-val="mass">32</b><input data-mtg-slider="mass" type="range" min="2" max="40" step="1" value="32"></label><label class="mtg-control">Концентрация n₂/n₁ <b data-mtg-val="n">1,00</b><input data-mtg-slider="n" type="range" min="0.25" max="2" step="0.05" value="1"></label><label class="mtg-control">Скорость v₂/v₁ <b data-mtg-val="v">1,00</b><input data-mtg-slider="v" type="range" min="0.25" max="2" step="0.05" value="1"></label>'}
+</div>
+<div class="mtg-result" aria-live="polite"><span data-mtg-formula></span><strong data-mtg-result></strong><span data-mtg-explanation></span></div>
+<div class="mtg-actions"><button type="button" data-mtg-action="task">По условию задачи</button><button type="button" data-mtg-action="reset">Сброс</button><button type="button" data-mtg-action="pause">Пауза</button></div></section>`;
+}
+function bindMktTwoGas43(modal){
+const root=modal.querySelector('.mkt-compare43');if(!root)return;
+const cooling=root.dataset.mode==='cool',fmt=v=>Number(v).toFixed(2).replace('.',',');
+const get=v=>root.querySelector('[data-mtg-slider="'+v+'"]'),set=(k,v)=>{get(k).value=v};
+let paused=false;
+function particles(el,count,speed,color,size){
+const frag=document.createDocumentFragment();
+for(let i=0;i<count;i++){const d=document.createElement('i');d.className='mtg-dot';d.style.setProperty('--x',(8+(i*31+9)%83)+'%');d.style.setProperty('--y',(9+(i*47+13)%79)+'%');d.style.setProperty('--size',size+'px');d.style.setProperty('--color',color);d.style.setProperty('--duration',((1.5+(i%6)*.22)/Math.max(.25,speed))+'s');d.style.setProperty('--delay',(-i*.21)+'s');d.style.animationPlayState=paused?'paused':'running';frag.appendChild(d)}el.replaceChildren(frag)}
+function update(){
+let ratio,nratio=1,vratio=1,mass=2,energy;
+if(cooling){ratio=Number(get('pressure').value);energy=ratio;root.querySelector('[data-mtg-val="pressure"]').textContent=fmt(ratio)}
+else{mass=Number(get('mass').value);nratio=Number(get('n').value);vratio=Number(get('v').value);ratio=mass/2*nratio*vratio*vratio;root.querySelector('[data-mtg-val="mass"]').textContent=mass;root.querySelector('[data-mtg-val="n"]').textContent=fmt(nratio);root.querySelector('[data-mtg-val="v"]').textContent=fmt(vratio)}
+root.querySelector('[data-mtg-formula]').textContent=cooling?'p = ⅔ n⟨Eₖ⟩; n₂/n₁ = 1':'p = ⅓ nm₀v²ₖᵥ; p₂/p₁ = (M₂/M₁)(n₂/n₁)(v₂/v₁)²';
+root.querySelector('[data-mtg-result]').textContent=cooling?'⟨E₂⟩/⟨E₁⟩ = '+fmt(ratio):'p(O₂)/p(H₂) = '+fmt(ratio);
+root.querySelector('[data-mtg-explanation]').textContent=cooling?'При постоянной концентрации энергия прямо пропорциональна давлению.':'M₁ = 2 г/моль; M₂ = '+mass+' г/моль. Для условий задачи отношение равно 16.';
+root.querySelector('[data-mtg-info="a"]').textContent=cooling?'p₁ = 120 кПа · ⟨E₁⟩ = 6·10⁻²¹ Дж':'H₂: M₁ = 2 г/моль · n₁ = n₀ · v₁ = v₀';
+root.querySelector('[data-mtg-info="b"]').textContent=cooling?'p₂ = '+fmt(120*ratio)+' кПа · ⟨E₂⟩ = '+fmt(6*ratio)+'·10⁻²¹ Дж':'Второй газ: M₂ = '+mass+' г/моль · n₂/n₁ = '+fmt(nratio)+' · v₂/v₁ = '+fmt(vratio);
+particles(root.querySelector('[data-mtg-chamber="a"]'),32,1,'#64c9ff',6);
+particles(root.querySelector('[data-mtg-chamber="b"]'),cooling?32:Math.round(32*nratio),cooling?Math.sqrt(ratio):vratio,'#ffd166',cooling?6:Math.max(5,Math.min(11,5+mass/10)));
+}
+root.querySelectorAll('input[type=range]').forEach(el=>el.addEventListener('input',update));
+root.querySelector('[data-mtg-action="task"]').addEventListener('click',()=>{if(cooling)set('pressure',.25);else{set('mass',32);set('n',1);set('v',1)}update()});
+root.querySelector('[data-mtg-action="reset"]').addEventListener('click',()=>{if(cooling)set('pressure',1);else{set('mass',2);set('n',1);set('v',1)}update()});
+const pause=root.querySelector('[data-mtg-action="pause"]');pause.addEventListener('click',()=>{paused=!paused;root.querySelectorAll('.mtg-dot').forEach(d=>d.style.animationPlayState=paused?'paused':'running');pause.textContent=paused?'Продолжить':'Пауза'});update();
+}
+function openMktTwoGas43(taskId){
+if(!document.getElementById('taskAnimationPlaceholderOverlay'))openTaskAnimationPlaceholder(taskId);
+const overlay=document.getElementById('taskAnimationPlaceholderOverlay');if(!overlay)return false;
+const keep=!!(TASK_ANIMATION_CONTEXT&&TASK_ANIMATION_CONTEXT.fromBoard&&taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
+overlay.dataset.keepTaskBoard=keep?'true':'false';overlay.classList.add('open');overlay.style.display='flex';
+const modal=overlay.querySelector('.task-animation-placeholder-modal');if(!modal)return false;
+modal.classList.remove('freefall-anim-modal','ballistics-task-animation-modal','task03-flying-cyclist-modal');
+modal.innerHTML='<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder();return false;">✕ Закрыть</button>'+renderMktTwoGas43(taskId==='mkt-cooling-pressure-43'?'cool':'gases');
+bindMktTwoGas43(modal);return false;
+}
 function openTaskAnimationOverlay(taskId){
+  if(taskId==='mkt-cooling-pressure-43'||taskId==='mkt-gas-mass-pressure-43')return openMktTwoGas43(taskId);
   if(taskId==='mkt-temperature-energy-43')return openMktTemperatureEnergy43(taskId);
   if(taskId==='mkt-rms-pressure-43')return openMktRmsPressureSimulator(taskId);
   if(taskId==='mkt-pressure-ratio-43')return openMktPressureSimulator(taskId);
