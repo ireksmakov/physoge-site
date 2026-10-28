@@ -10603,6 +10603,18 @@ const LESSON_TASKS={
 
 'ege-phy:Основы МКТ':[
   {
+    id:'ege-mkt-43-rms-pressure-02',boardMode:'ege-mkt-43-rms-pressure-02',mode:'ege-mkt-43-rms-pressure-02',
+    animationId:'mkt-rms-pressure-43',animId:'mkt-rms-pressure-43',hasAnimation:true,
+    num:2,level:1,exam:'ЕГЭ (1 балл)',points:1,title:'Давление и средняя квадратичная скорость молекул',
+    cond:'При неизменной концентрации молекул идеального газа средняя квадратичная скорость теплового движения его молекул уменьшилась в 2 раза. Чему равно отношение конечного давления к начальному?',
+    given:'n₂ = n₁; v₂ = v₁/2.<br><span class="pt-find">Найти: p₂/p₁</span>',
+    boardConditionHtml:'При неизменной концентрации молекул идеального газа средняя квадратичная скорость уменьшилась в 2 раза. Найти p₂/p₁.',
+    boardSolutionHtml:'<div class="task-board-manual"><div class="task-board-step"><div class="task-board-step-num">1</div><div class="task-board-step-body"><strong>Основное уравнение МКТ:</strong><div class="sr-fml">p = (1/3) n m₀ v²ₖᵥ</div></div></div><div class="task-board-step"><div class="task-board-step-num">2</div><div class="task-board-step-body"><strong>Концентрация неизменна:</strong><div class="sr-fml">p₂/p₁ = (v₂/v₁)²</div></div></div><div class="task-board-step"><div class="task-board-step-num">3</div><div class="task-board-step-body"><strong>Расчёт:</strong><div class="sr-fml">p₂/p₁ = (1/2)² = 1/4 = 0,25</div></div></div><div class="task-board-step"><div class="task-board-step-num">4</div><div class="task-board-step-body"><strong>Ответ:</strong> 0,25.</div></div></div>',
+    solutionTitle:'Решение задачи 02 · Основное уравнение МКТ',
+    solutionHtml:'<div class="solution-workspace"><h4>1. Формула давления</h4><div class="sr-fml">p = (1/3) n m₀ v²ₖᵥ</div><h4>2. Сравнение состояний</h4><p>Концентрация n и масса молекулы m₀ не изменились, поэтому давление пропорционально квадрату средней квадратичной скорости.</p><div class="sr-fml">p₂/p₁ = (v₂/v₁)² = (1/2)² = 1/4</div><p><strong>Ответ: 0,25.</strong></p></div>',ans:'0,25',acceptedAnswers:['0,25','0.25','1/4'],isBlank:false
+  },
+
+  {
     id:'ege-mkt-43-pressure-energy-concentration-01',
     boardMode:'ege-mkt-43-pressure-energy-concentration-01',
     mode:'ege-mkt-43-pressure-energy-concentration-01',
@@ -12000,7 +12012,7 @@ function hasRegisteredTaskAnimation(task){
   if(!task) return false;
   const animationId=String(task.animationId||task.animId||'');
   if(LEGACY_TASK_ANIMATION_IDS.has(animationId)) return true;
-  if(animationId==='mkt-pressure-ratio-43'||isFreeFallAnimationId(animationId)||isBallisticsTaskAnimationId(animationId)||isGasHeatingAnimationId(animationId)) return true;
+  if(animationId==='mkt-pressure-ratio-43'||animationId==='mkt-rms-pressure-43'||isFreeFallAnimationId(animationId)||isBallisticsTaskAnimationId(animationId)||isGasHeatingAnimationId(animationId)) return true;
   return animationId==='ballistics-incline-elastic-bounce-task03'||animationId==='lesson12-task10'||
     animationId==='lesson-25-task-04'||animationId==='lesson-25-task-06'||animationId==='lesson-25-task-07';
 }
@@ -15290,7 +15302,57 @@ function openMktPressureSimulator(taskId){
   modal.innerHTML='<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder();return false;">✕ Закрыть</button>'+renderMktPressureSimulator();
   bindMktPressureSimulator(modal);return false;
 }
+
+function renderMktRmsPressureSimulator(){
+return `<section class="mkt-rms43" style="background:#081524;color:#ecf6ff;border-radius:16px;padding:18px;max-width:1000px;margin:auto">
+<style>
+.mkt-rms43 *{box-sizing:border-box}.mkt-rms43 h2{font-size:clamp(19px,3vw,27px);margin:0 0 7px;color:#ecf6ff}
+.mkt-rms43 .rms-note{color:#b5cae2;font-size:13px;margin:0 0 15px}
+.mkt-rms43 .rms-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mkt-rms43 .rms-box{background:#0c2037;border:1px solid #355779;border-radius:13px;padding:12px}
+.mkt-rms43 .rms-box h3{font-size:14px;margin:0 0 10px;color:#c9e8ff}
+.mkt-rms43 .rms-vessel{height:210px;position:relative;overflow:hidden;border-radius:10px;border:1px solid #385776;background:radial-gradient(circle at center,#173e5d,#081625)}
+.mkt-rms43 .rms-dot{position:absolute;width:7px;height:7px;border-radius:50%;background:#5ed8ff;box-shadow:0 0 9px #37bdff;animation:rmsDrift var(--speed) ease-in-out infinite alternate;animation-delay:var(--delay)}
+.mkt-rms43 .rms-box:nth-child(2) .rms-dot{background:#ffd166;box-shadow:0 0 8px #ffbc50}
+@keyframes rmsDrift{from{transform:translate(-12px,-10px)}to{transform:translate(13px,11px)}}
+.mkt-rms43 .rms-slider{display:grid;gap:8px;padding:14px;background:#102b46;border-radius:12px;margin:14px 0}
+.mkt-rms43 input[type=range]{width:100%;accent-color:#38bdf8}
+.mkt-rms43 .rms-answer{border:1px solid #35a2d5;background:#10354f;padding:14px;border-radius:12px;display:grid;gap:7px}
+.mkt-rms43 .rms-answer strong{color:#7ee0ff;font-size:clamp(20px,3vw,29px)}
+.mkt-rms43 .rms-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+.mkt-rms43 button{border-radius:8px;background:#176fb5;color:white;border:1px solid #57b7ee;padding:9px 13px;cursor:pointer}
+@media(max-width:620px){.mkt-rms43 .rms-grid{grid-template-columns:1fr}.mkt-rms43 .rms-vessel{height:145px}}
+@media(prefers-reduced-motion:reduce){.mkt-rms43 .rms-dot{animation:none}}
+</style>
+<h2>Задача 02 · Давление и скорость молекул</h2>
+<p class="rms-note">Концентрация n и масса молекулы m₀ постоянны. Меняется только средняя квадратичная скорость. Движение частиц показано схематично.</p>
+<div class="rms-grid">
+<div class="rms-box"><h3>Начальное состояние</h3><div class="rms-vessel" data-rms-box="initial"></div><p style="margin:8px 0 0">v₁ = 600 м/с<br>p₁ = 120 000 Па<br>n₁ = n₂</p></div>
+<div class="rms-box"><h3>Конечное состояние</h3><div class="rms-vessel" data-rms-box="final"></div><p data-rms-final style="margin:8px 0 0"></p></div>
+</div>
+<label class="rms-slider">Отношение скоростей v₂/v₁: <b data-rms-ratio-label>0,50</b><input data-rms-slider type="range" min="0.1" max="2" step="0.05" value="0.5"></label>
+<div class="rms-answer" aria-live="polite"><span>p = ⅓ n m₀ v²ₖᵥ</span><span data-rms-equation>p₂/p₁ = (0,50)²</span><strong data-rms-result>p₂/p₁ = 0,25</strong><span data-rms-summary>Давление уменьшилось в 4 раза.</span></div>
+<div class="rms-actions"><button type="button" data-rms-action="task">Условие: скорость в 2 раза меньше</button><button type="button" data-rms-action="reset">Сброс</button><button type="button" data-rms-action="pause">Пауза</button></div>
+</section>`;
+}
+function bindMktRmsPressureSimulator(modal){
+const root=modal.querySelector('.mkt-rms43');if(!root)return;
+const slider=root.querySelector('[data-rms-slider]'),fmt=x=>Number(x).toFixed(2).replace('.',',');let paused=false;
+function fill(box,r){const fragment=document.createDocumentFragment();for(let i=0;i<34;i++){const dot=document.createElement('i');dot.className='rms-dot';dot.style.left=(8+(i*31+11)%83)+'%';dot.style.top=(9+(i*43+7)%80)+'%';dot.style.setProperty('--speed',(1.5+(i%6)*0.2)/r+'s');dot.style.setProperty('--delay',(-i*0.19)+'s');dot.style.animationPlayState=paused?'paused':'running';fragment.appendChild(dot)}box.replaceChildren(fragment)}
+fill(root.querySelector('[data-rms-box="initial"]'),1);
+function update(){const r=Number(slider.value),p2=120000*r*r;root.querySelector('[data-rms-ratio-label]').textContent=fmt(r);root.querySelector('[data-rms-equation]').textContent='p₂/p₁ = ('+fmt(r)+')²';root.querySelector('[data-rms-result]').textContent='p₂/p₁ = '+fmt(r*r);root.querySelector('[data-rms-final]').textContent='v₂ = '+Math.round(600*r)+' м/с · p₂ = '+Math.round(p2).toLocaleString('ru-RU')+' Па · n₂ = n₁';root.querySelector('[data-rms-summary]').textContent=r*r<1?'Давление уменьшилось в '+fmt(1/(r*r))+' раза.':r*r>1?'Давление увеличилось в '+fmt(r*r)+' раза.':'Давление не изменилось.';fill(root.querySelector('[data-rms-box="final"]'),r)}
+slider.addEventListener('input',update);root.querySelector('[data-rms-action="task"]').addEventListener('click',()=>{slider.value='.5';update()});root.querySelector('[data-rms-action="reset"]').addEventListener('click',()=>{slider.value='1';update()});const btn=root.querySelector('[data-rms-action="pause"]');btn.addEventListener('click',()=>{paused=!paused;root.querySelectorAll('.rms-dot').forEach(dot=>dot.style.animationPlayState=paused?'paused':'running');btn.textContent=paused?'Продолжить':'Пауза'});update();
+}
+function openMktRmsPressureSimulator(taskId){
+if(!document.getElementById('taskAnimationPlaceholderOverlay'))openTaskAnimationPlaceholder(taskId);
+const overlay=document.getElementById('taskAnimationPlaceholderOverlay');if(!overlay)return false;
+const keep=!!(TASK_ANIMATION_CONTEXT&&TASK_ANIMATION_CONTEXT.fromBoard&&taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));overlay.dataset.keepTaskBoard=keep?'true':'false';overlay.classList.add('open');overlay.style.display='flex';
+const modal=overlay.querySelector('.task-animation-placeholder-modal');if(!modal)return false;
+modal.classList.remove('freefall-anim-modal','ballistics-task-animation-modal','task03-flying-cyclist-modal');
+modal.innerHTML='<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder();return false;">✕ Закрыть</button>'+renderMktRmsPressureSimulator();bindMktRmsPressureSimulator(modal);return false;
+}
 function openTaskAnimationOverlay(taskId){
+  if(taskId==='mkt-rms-pressure-43')return openMktRmsPressureSimulator(taskId);
   if(taskId==='mkt-pressure-ratio-43')return openMktPressureSimulator(taskId);
   if(LEGACY_TASK_ANIMATION_IDS.has(String(taskId||''))){
     return openLegacyTaskAnimation(taskId);
