@@ -10601,6 +10601,22 @@ const LESSON_TASKS={
   }
 ],
 
+'ege-phy:Уравнение Менделеева-Клайперона':[
+{
+ id:'ege-phy-44-molar-mass-v2-01',boardMode:'ege-phy-44-molar-mass-v2-01',mode:'ege-phy-44-molar-mass-v2-01',
+ num:1,level:2,exam:'ЕГЭ (1 балл)',points:1,
+ title:'Молярная масса газа по графику среднего квадрата скорости',
+ cond:'На рисунке изображён график зависимости среднего значения квадрата скорости молекул идеального газа от температуры. Определите молярную массу этого газа. Ответ выразите в граммах на моль и округлите до целого числа.',
+ given:'t = 427 °C, ⟨v²⟩ = 623250 м²/с², R = 8,31 Дж/(моль·К).<br><span class="pt-find">Найти: M, г/моль</span>',
+ schemeHtml:'<svg viewBox="0 0 560 355" role="img" aria-label="График среднего квадрата скорости от температуры: точки 77 °C — 311625, 427 °C — 623250, 777 °C — 934875" style="width:100%;max-width:600px;background:#0b2135;border-radius:12px"><g stroke="#405a70" stroke-width="1"><path d="M88 55V300M198 55V300M308 55V300M418 55V300M88 55H418M88 136H418M88 218H418M88 300H418"/></g><path d="M70 25V300H450" fill="none" stroke="#d7efff" stroke-width="2"/><path d="M65 40L70 25L75 40M435 295L450 300L435 305" fill="none" stroke="#d7efff" stroke-width="2"/><path d="M88 218L198 136L308 55" fill="none" stroke="#f59e0b" stroke-width="3"/><g fill="#f59e0b"><circle cx="88" cy="218" r="5"/><circle cx="198" cy="136" r="5"/><circle cx="308" cy="55" r="5"/></g><g fill="#e5f3ff" font-size="17"><text x="10" y="24">⟨v²⟩, м²/с²</text><text x="443" y="325">t, °C</text><text x="76" y="327">77</text><text x="177" y="327">427</text><text x="286" y="327">777</text><text x="5" y="223">311625</text><text x="5" y="141">623250</text><text x="5" y="60">934875</text></g></svg>',
+ animationId:'mkt-molar-mass-44',animId:'mkt-molar-mass-44',hasAnimation:true,
+ solutionTitle:'Решение задачи 01 — молярная масса',
+ solutionHtml:'<div class="solution-workspace"><h4>1. Связь средней квадратичной скорости и температуры</h4><div class="sr-fml">⟨v²⟩ = 3RT/M</div><h4>2. Перевод температуры в кельвины</h4><div class="sr-fml">T = 427 + 273 = 700 К</div><h4>3. Определим молярную массу</h4><div class="sr-fml">M = 3RT/⟨v²⟩ = 3 · 8,31 · 700 / 623250 = 0,028 кг/моль</div><p><strong>Ответ: 28 г/моль.</strong></p></div>',
+ boardSolutionHtml:'<div class="task-board-manual"><div class="task-board-step"><strong>Формула:</strong> ⟨v²⟩ = 3RT/M</div><div class="task-board-step"><strong>СИ:</strong> T = 427 + 273 = 700 К</div><div class="task-board-step"><strong>Расчёт:</strong> M = 3 · 8,31 · 700 / 623250 ≈ 0,028 кг/моль</div><div class="task-board-step"><strong>Ответ:</strong> 28 г/моль</div></div>',
+ ans:'28',acceptedAnswers:['28','28,0','28.0'],isBlank:false
+}
+],
+
 'ege-phy:Основы МКТ':[
   {
     id:'ege-mkt-43-gas-density-07',boardMode:'ege-mkt-43-gas-density-07',mode:'ege-mkt-43-gas-density-07',
@@ -12079,7 +12095,7 @@ function hasRegisteredTaskAnimation(task){
   if(!task) return false;
   const animationId=String(task.animationId||task.animId||'');
   if(LEGACY_TASK_ANIMATION_IDS.has(animationId)) return true;
-  if(animationId==='mkt-gas-density-43'||animationId==='mkt-graph-pressure-concentration-43'||animationId==='mkt-cooling-pressure-43'||animationId==='mkt-gas-mass-pressure-43'||animationId==='mkt-pressure-ratio-43'||animationId==='mkt-rms-pressure-43'||animationId==='mkt-temperature-energy-43'||isFreeFallAnimationId(animationId)||isBallisticsTaskAnimationId(animationId)||isGasHeatingAnimationId(animationId)) return true;
+  if(animationId==='mkt-molar-mass-44'||animationId==='mkt-gas-density-43'||animationId==='mkt-graph-pressure-concentration-43'||animationId==='mkt-cooling-pressure-43'||animationId==='mkt-gas-mass-pressure-43'||animationId==='mkt-pressure-ratio-43'||animationId==='mkt-rms-pressure-43'||animationId==='mkt-temperature-energy-43'||isFreeFallAnimationId(animationId)||isBallisticsTaskAnimationId(animationId)||isGasHeatingAnimationId(animationId)) return true;
   return animationId==='ballistics-incline-elastic-bounce-task03'||animationId==='lesson12-task10'||
     animationId==='lesson-25-task-04'||animationId==='lesson-25-task-06'||animationId==='lesson-25-task-07';
 }
@@ -15677,7 +15693,63 @@ overlay.dataset.keepTaskBoard=keep?'true':'false';overlay.classList.add('open');
 const modal=overlay.querySelector('.task-animation-placeholder-modal');if(!modal)return false;
 modal.innerHTML='<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder();return false;">✕ Закрыть</button>'+renderMktDensity43();bindMktDensity43(modal);return false;
 }
+
+function renderMktMolarMass44(){
+return `<section class="mkt44" style="padding:18px;background:#081727;border-radius:16px;color:#eef8ff;max-width:1000px;margin:auto">
+<style>
+.mkt44 h2{font-size:clamp(19px,3vw,26px);color:#eaf7ff}.mkt44 p{color:#aebfd5;font-size:13px}
+.mkt44 .m44-grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(230px,1fr);gap:15px}
+.mkt44 svg{width:100%;height:auto;background:#0c2439;border-radius:12px;border:1px solid #365671}
+.mkt44 .m44-controls{display:grid;gap:12px;align-content:start}
+.mkt44 label{display:grid;gap:7px;padding:12px;background:#12314c;border-radius:10px}
+.mkt44 input{accent-color:#38bdf8;width:100%}
+.mkt44 .m44-result{padding:13px;border-radius:12px;background:#12324d;border:1px solid #4aaddb;display:grid;gap:6px;margin-top:12px}
+.mkt44 .m44-result strong{font-size:clamp(20px,3vw,28px);color:#74e0ff}
+.mkt44 .m44-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+.mkt44 button{padding:9px 13px;background:#126ba9;border:1px solid #5dc5fa;border-radius:8px;color:#fff;cursor:pointer}
+@media(max-width:650px){.mkt44 .m44-grid{grid-template-columns:1fr}}
+</style>
+<h2>Урок 44 · Молярная масса по графику</h2><p>Изменяйте температуру и молярную массу. Линия показывает зависимость ⟨v²⟩ = 3RT/M; отметка указывает выбранное состояние.</p>
+<div class="m44-grid"><svg viewBox="0 0 500 340" role="img" aria-label="Интерактивный график среднего квадрата скорости от температуры">
+<g stroke="#3b586f" stroke-width="1">${Array.from({length:7},(_,i)=>'<path d="M70 '+(30+i*40)+'H460"/>').join('')}${Array.from({length:9},(_,i)=>'<path d="M'+(70+i*45)+' 30V290"/>').join('')}</g>
+<path d="M70 20V290H475" stroke="#c6e8ff" stroke-width="2" fill="none"/>
+<path data-m44-line stroke="#ffa94d" stroke-width="3" fill="none"/>
+<circle data-m44-dot r="6" fill="#f59e0b" stroke="white" stroke-width="2"/>
+<g fill="#eaf6ff" font-size="15"><text x="10" y="16">⟨v²⟩</text><text x="448" y="320">t, °C</text><text x="70" y="314">0</text><text x="189" y="314">350</text><text x="320" y="314">700</text></g>
+</svg>
+<div class="m44-controls">
+<label>Температура, °C <b data-m44-val="t">427</b><input data-m44-slider="t" type="range" min="0" max="800" step="1" value="427"></label>
+<label>Молярная масса, г/моль <b data-m44-val="m">28</b><input data-m44-slider="m" type="range" min="2" max="100" step="1" value="28"></label>
+</div></div>
+<div class="m44-result" aria-live="polite"><span>⟨v²⟩ = 3RT/M</span><strong data-m44-v2>⟨v²⟩ = 623250 м²/с²</strong><span data-m44-tk>T = 700 К</span></div>
+<div class="m44-actions"><button type="button" data-m44-action="task">Условие задачи</button><button type="button" data-m44-action="reset">Сброс</button></div>
+</section>`;
+}
+function bindMktMolarMass44(modal){
+const r=modal.querySelector('.mkt44');if(!r)return;
+const ts=r.querySelector('[data-m44-slider="t"]'),ms=r.querySelector('[data-m44-slider="m"]'),line=r.querySelector('[data-m44-line]'),dot=r.querySelector('[data-m44-dot]');
+function update(){const tc=Number(ts.value),mass=Number(ms.value),T=tc+273,R=8.31,v2=3*R*T/(mass/1000);
+const pt=t=>{const x=70+(t/800)*360,y=290-(3*R*(t+273)/(mass/1000))/1200000*250;return [x,Math.max(25,Math.min(290,y))]};
+const a=pt(0),b=pt(800),d=pt(tc);
+line.setAttribute('d','M'+a.join(' ')+'L'+b.join(' '));dot.setAttribute('cx',d[0]);dot.setAttribute('cy',d[1]);
+r.querySelector('[data-m44-val="t"]').textContent=tc;r.querySelector('[data-m44-val="m"]').textContent=mass;
+r.querySelector('[data-m44-v2]').textContent='⟨v²⟩ = '+Math.round(v2).toLocaleString('ru-RU')+' м²/с²';
+r.querySelector('[data-m44-tk]').textContent='T = '+T+' К; M = '+mass+' г/моль'}
+ts.addEventListener('input',update);ms.addEventListener('input',update);
+r.querySelector('[data-m44-action="task"]').addEventListener('click',()=>{ts.value=427;ms.value=28;update()});
+r.querySelector('[data-m44-action="reset"]').addEventListener('click',()=>{ts.value=20;ms.value=28;update()});update();
+}
+function openMktMolarMass44(taskId){
+if(!document.getElementById('taskAnimationPlaceholderOverlay'))openTaskAnimationPlaceholder(taskId);
+const overlay=document.getElementById('taskAnimationPlaceholderOverlay');if(!overlay)return false;
+const keep=!!(TASK_ANIMATION_CONTEXT&&TASK_ANIMATION_CONTEXT.fromBoard&&taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
+overlay.dataset.keepTaskBoard=keep?'true':'false';overlay.classList.add('open');overlay.style.display='flex';
+const modal=overlay.querySelector('.task-animation-placeholder-modal');if(!modal)return false;
+modal.innerHTML='<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder();return false;">✕ Закрыть</button>'+renderMktMolarMass44();
+bindMktMolarMass44(modal);return false;
+}
 function openTaskAnimationOverlay(taskId){
+ if(taskId==='mkt-molar-mass-44')return openMktMolarMass44(taskId);
  if(taskId==='mkt-gas-density-43')return openMktDensity43(taskId);
   if(taskId==='mkt-graph-pressure-concentration-43')return openMktGraph43(taskId);
   if(taskId==='mkt-cooling-pressure-43'||taskId==='mkt-gas-mass-pressure-43')return openMktTwoGas43(taskId);
