@@ -10603,6 +10603,21 @@ const LESSON_TASKS={
 
 'ege-phy:Основы МКТ':[
   {
+    id:'ege-mkt-43-temperature-energy-03',
+    boardMode:'ege-mkt-43-temperature-energy-03',mode:'ege-mkt-43-temperature-energy-03',
+    animationId:'mkt-temperature-energy-43',animId:'mkt-temperature-energy-43',hasAnimation:true,
+    num:3,level:1,exam:'ЕГЭ (1 балл)',points:1,
+    title:'Абсолютная температура и кинетическая энергия',
+    cond:'Во сколько раз изменится абсолютная температура газа при увеличении средней кинетической энергии теплового движения молекул в 2 раза?',
+    given:'⟨E₂⟩ = 2⟨E₁⟩.<br><span class="pt-find">Найти: T₂/T₁</span>',
+    boardConditionHtml:'Средняя кинетическая энергия теплового движения молекул увеличилась в 2 раза. Во сколько раз изменится абсолютная температура газа?',
+    boardSolutionHtml:'<div class="task-board-manual"><div class="task-board-step"><div class="task-board-step-num">1</div><div class="task-board-step-body"><strong>Связь энергии и абсолютной температуры:</strong><div class="sr-fml">⟨Eₖ⟩ = 3/2 · kT</div></div></div><div class="task-board-step"><div class="task-board-step-num">2</div><div class="task-board-step-body"><strong>Сравним состояния:</strong><div class="sr-fml">T₂/T₁ = ⟨E₂⟩/⟨E₁⟩</div></div></div><div class="task-board-step"><div class="task-board-step-num">3</div><div class="task-board-step-body"><strong>Подставим:</strong><div class="sr-fml">T₂/T₁ = 2</div></div></div><div class="task-board-step"><div class="task-board-step-num">4</div><div class="task-board-step-body"><strong>Ответ:</strong> температура увеличится в 2 раза.</div></div></div>',
+    solutionTitle:'Решение задачи 03 · Энергия и абсолютная температура',
+    solutionHtml:'<div class="solution-workspace"><h4>1. Связь энергии и температуры</h4><div class="sr-fml">⟨Eₖ⟩ = 3/2 · kT</div><h4>2. Сравним два состояния</h4><p>Средняя кинетическая энергия прямо пропорциональна абсолютной температуре.</p><div class="sr-fml">T₂/T₁ = ⟨E₂⟩/⟨E₁⟩ = 2</div><p><strong>Ответ: увеличится в 2 раза.</strong></p></div>',
+    ans:'2',acceptedAnswers:['2','в 2 раза'],isBlank:false
+  },
+
+  {
     id:'ege-mkt-43-rms-pressure-02',boardMode:'ege-mkt-43-rms-pressure-02',mode:'ege-mkt-43-rms-pressure-02',
     animationId:'mkt-rms-pressure-43',animId:'mkt-rms-pressure-43',hasAnimation:true,
     num:2,level:1,exam:'ЕГЭ (1 балл)',points:1,title:'Давление и средняя квадратичная скорость молекул',
@@ -12012,7 +12027,7 @@ function hasRegisteredTaskAnimation(task){
   if(!task) return false;
   const animationId=String(task.animationId||task.animId||'');
   if(LEGACY_TASK_ANIMATION_IDS.has(animationId)) return true;
-  if(animationId==='mkt-pressure-ratio-43'||animationId==='mkt-rms-pressure-43'||isFreeFallAnimationId(animationId)||isBallisticsTaskAnimationId(animationId)||isGasHeatingAnimationId(animationId)) return true;
+  if(animationId==='mkt-pressure-ratio-43'||animationId==='mkt-rms-pressure-43'||animationId==='mkt-temperature-energy-43'||isFreeFallAnimationId(animationId)||isBallisticsTaskAnimationId(animationId)||isGasHeatingAnimationId(animationId)) return true;
   return animationId==='ballistics-incline-elastic-bounce-task03'||animationId==='lesson12-task10'||
     animationId==='lesson-25-task-04'||animationId==='lesson-25-task-06'||animationId==='lesson-25-task-07';
 }
@@ -15351,7 +15366,75 @@ const modal=overlay.querySelector('.task-animation-placeholder-modal');if(!modal
 modal.classList.remove('freefall-anim-modal','ballistics-task-animation-modal','task03-flying-cyclist-modal');
 modal.innerHTML='<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder();return false;">✕ Закрыть</button>'+renderMktRmsPressureSimulator();bindMktRmsPressureSimulator(modal);return false;
 }
+
+function renderMktTemperatureEnergy43(){
+ return `<section class="mkt-temp43" style="background:#081524;color:#e9f5ff;border-radius:18px;padding:18px;max-width:980px;margin:0 auto">
+ <style>
+ .mkt-temp43 *{box-sizing:border-box}.mkt-temp43 h2{font-size:clamp(20px,3vw,27px);color:#eaf6ff;margin:0 0 10px}
+ .mkt-temp43 p{font-size:13px;color:#bdd4eb;margin:0 0 12px}
+ .mkt-temp43 .mt-panels{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+ .mkt-temp43 .mt-panel{border:1px solid #345672;border-radius:13px;background:#0b2137;padding:12px}
+ .mkt-temp43 .mt-gas{height:175px;position:relative;overflow:hidden;background:radial-gradient(circle,#173d5c,#081827);border:1px solid #3f617d;border-radius:10px}
+ .mkt-temp43 .mt-dot{position:absolute;width:7px;height:7px;border-radius:50%;background:#57caff;box-shadow:0 0 8px #47c4ff;animation:mtFloat var(--duration) ease-in-out infinite alternate;animation-delay:var(--delay)}
+ .mkt-temp43 .mt-panel:nth-child(2) .mt-dot{background:#ffcb65;box-shadow:0 0 8px #ffc04b}
+ @keyframes mtFloat{from{transform:translate(-12px,-10px)}to{transform:translate(13px,11px)}}
+ .mkt-temp43 .mt-controls{display:grid;gap:9px;background:#102b46;border:1px solid #285b7b;border-radius:12px;padding:13px;margin:14px 0}
+ .mkt-temp43 .mt-controls input{width:100%;accent-color:#38bdf8}
+ .mkt-temp43 .mt-result{border:1px solid #42a5d2;background:#102c42;border-radius:12px;padding:14px;display:grid;gap:6px}
+ .mkt-temp43 .mt-result strong{color:#86e3ff;font-size:clamp(20px,3vw,28px)}
+ .mkt-temp43 .mt-buttons{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+ .mkt-temp43 button{border:1px solid #5ab8e8;border-radius:8px;background:#176eae;color:white;padding:9px 12px;cursor:pointer}
+ .mkt-temp43 .mt-panel h3{font-size:14px;margin:0 0 9px;color:#dbeeff}
+ .mkt-temp43 .mt-metrics{font-size:13px;margin-top:8px;color:#deecfc}
+ @media(max-width:600px){.mkt-temp43 .mt-panels{grid-template-columns:1fr}.mkt-temp43 .mt-gas{height:135px}}
+ @media(prefers-reduced-motion:reduce){.mkt-temp43 .mt-dot{animation:none}}
+ </style>
+ <h2>Задача 03 · Энергия и абсолютная температура</h2>
+ <p>Увеличивайте среднюю кинетическую энергию молекул и наблюдайте изменение абсолютной температуры. Точки — условная модель теплового движения.</p>
+ <div class="mt-panels">
+ <div class="mt-panel"><h3>Начальное состояние</h3><div class="mt-gas" data-mt-gas="before"></div><div class="mt-metrics">T₁ = 300 К<br>⟨E₁⟩ = 6,21·10⁻²¹ Дж</div></div>
+ <div class="mt-panel"><h3>Конечное состояние</h3><div class="mt-gas" data-mt-gas="after"></div><div class="mt-metrics" data-mt-final></div></div>
+ </div>
+ <label class="mt-controls">Во сколько раз изменится средняя кинетическая энергия? <b data-mt-factor>2,00</b><input type="range" min="0.25" max="4" step="0.05" value="2" data-mt-slider></label>
+ <div class="mt-result" aria-live="polite"><span>⟨Eₖ⟩ = (3/2) kT</span><span data-mt-expression>T₂/T₁ = ⟨E₂⟩/⟨E₁⟩</span><strong data-mt-answer>T₂/T₁ = 2,00</strong><span data-mt-explain>Абсолютная температура увеличилась в 2 раза.</span></div>
+ <div class="mt-buttons"><button type="button" data-mt-action="task">По условию: ×2</button><button type="button" data-mt-action="reset">Сброс: ×1</button><button type="button" data-mt-action="pause">Пауза</button></div>
+ </section>`;
+}
+function bindMktTemperatureEnergy43(modal){
+const root=modal.querySelector('.mkt-temp43');if(!root)return;
+const slider=root.querySelector('[data-mt-slider]'),fmt=x=>Number(x).toFixed(2).replace('.',',');let paused=false;
+function particles(target,factor){
+ const frag=document.createDocumentFragment();
+ for(let i=0;i<32;i++){const dot=document.createElement('i');dot.className='mt-dot';dot.style.left=(8+(i*31+19)%84)+'%';dot.style.top=(9+(i*41+13)%79)+'%';dot.style.setProperty('--duration',((1.8+(i%6)*.23)/Math.sqrt(factor))+'s');dot.style.setProperty('--delay',(-i*.21)+'s');dot.style.animationPlayState=paused?'paused':'running';frag.appendChild(dot)}
+ target.replaceChildren(frag);
+}
+particles(root.querySelector('[data-mt-gas="before"]'),1);
+function update(){
+ const f=Number(slider.value);root.querySelector('[data-mt-factor]').textContent=fmt(f);
+ root.querySelector('[data-mt-final]').textContent='T₂ = '+Math.round(300*f)+' К · ⟨E₂⟩ = '+(6.21*f).toFixed(2).replace('.',',')+'·10⁻²¹ Дж';
+ root.querySelector('[data-mt-expression]').textContent='T₂/T₁ = ⟨E₂⟩/⟨E₁⟩ = '+fmt(f);
+ root.querySelector('[data-mt-answer]').textContent='T₂/T₁ = '+fmt(f);
+ root.querySelector('[data-mt-explain]').textContent=f>1?'Температура увеличилась в '+fmt(f)+' раза.':f<1?'Температура уменьшилась в '+fmt(1/f)+' раза.':'Температура не изменилась.';
+ particles(root.querySelector('[data-mt-gas="after"]'),f);
+}
+slider.addEventListener('input',update);
+root.querySelector('[data-mt-action="task"]').addEventListener('click',()=>{slider.value=2;update()});
+root.querySelector('[data-mt-action="reset"]').addEventListener('click',()=>{slider.value=1;update()});
+const btn=root.querySelector('[data-mt-action="pause"]');btn.addEventListener('click',()=>{paused=!paused;root.querySelectorAll('.mt-dot').forEach(dot=>dot.style.animationPlayState=paused?'paused':'running');btn.textContent=paused?'Продолжить':'Пауза'});
+update();
+}
+function openMktTemperatureEnergy43(taskId){
+ if(!document.getElementById('taskAnimationPlaceholderOverlay'))openTaskAnimationPlaceholder(taskId);
+ const overlay=document.getElementById('taskAnimationPlaceholderOverlay');if(!overlay)return false;
+ const keep=!!(TASK_ANIMATION_CONTEXT&&TASK_ANIMATION_CONTEXT.fromBoard&&taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
+ overlay.dataset.keepTaskBoard=keep?'true':'false';overlay.classList.add('open');overlay.style.display='flex';
+ const modal=overlay.querySelector('.task-animation-placeholder-modal');if(!modal)return false;
+ modal.classList.remove('freefall-anim-modal','ballistics-task-animation-modal','task03-flying-cyclist-modal');
+ modal.innerHTML='<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder();return false;">✕ Закрыть</button>'+renderMktTemperatureEnergy43();
+ bindMktTemperatureEnergy43(modal);return false;
+}
 function openTaskAnimationOverlay(taskId){
+  if(taskId==='mkt-temperature-energy-43')return openMktTemperatureEnergy43(taskId);
   if(taskId==='mkt-rms-pressure-43')return openMktRmsPressureSimulator(taskId);
   if(taskId==='mkt-pressure-ratio-43')return openMktPressureSimulator(taskId);
   if(LEGACY_TASK_ANIMATION_IDS.has(String(taskId||''))){
