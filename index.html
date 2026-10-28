@@ -10603,6 +10603,19 @@ const LESSON_TASKS={
 
 'ege-phy:Основы МКТ':[
   {
+    id:'ege-mkt-43-graph-pressure-concentration-06',boardMode:'ege-mkt-43-graph-pressure-concentration-06',mode:'ege-mkt-43-graph-pressure-concentration-06',
+    animationId:'mkt-graph-pressure-concentration-43',animId:'mkt-graph-pressure-concentration-43',hasAnimation:true,
+    num:6,level:1,exam:'ЕГЭ (1 балл)',points:1,title:'График давления от концентрации двух идеальных газов',
+    cond:'На графике показана зависимость давления от концентрации для двух идеальных газов при фиксированных температурах. Чему равно отношение температур T₂/T₁ этих газов?',
+    schemeHtml:"<svg viewBox=\"0 0 460 320\" role=\"img\" aria-label=\"График давления от концентрации: прямая 1 вдвое круче прямой 2\" style=\"width:100%;height:auto;max-width:540px;background:#0a2138;border-radius:12px\"><g stroke=\"#45647e\" stroke-width=\"1\"><path d=\"M55 30V270\"/><path d=\"M95 30V270\"/><path d=\"M135 30V270\"/><path d=\"M175 30V270\"/><path d=\"M215 30V270\"/><path d=\"M255 30V270\"/><path d=\"M295 30V270\"/><path d=\"M335 30V270\"/><path d=\"M375 30V270\"/><path d=\"M55 30H375\"/><path d=\"M55 70H375\"/><path d=\"M55 110H375\"/><path d=\"M55 150H375\"/><path d=\"M55 190H375\"/><path d=\"M55 230H375\"/><path d=\"M55 270H375\"/></g><g stroke=\"#d6edff\" stroke-width=\"2\"><path d=\"M55 20V270H388\"/><path d=\"m49 33 6-13 6 13M375 264l13 6-13 6\"/></g><g fill=\"none\" stroke-width=\"3\"><path stroke=\"#ffae49\" d=\"M55 270L175 30\"/><path stroke=\"#63d7ff\" d=\"M55 270L295 30\"/></g><g fill=\"#e9f7ff\" font-size=\"20\"><text x=\"32\" y=\"20\">p</text><text x=\"390\" y=\"280\">n</text><text x=\"43\" y=\"293\">0</text><text x=\"169\" y=\"22\">1</text><text x=\"290\" y=\"22\">2</text></g></svg>",
+    boardConditionHtml:'По графику p(n) двух идеальных газов при постоянных температурах найдите T₂/T₁.',
+    given:'p = nkT; при одинаковом p концентрация на прямой 2 вдвое больше, чем на прямой 1.<br><span class="pt-find">Найти: T₂/T₁</span>',
+    solutionHtml:'<div class="solution-workspace"><h4>1. Уравнение идеального газа</h4><div class="sr-fml">p = nkT</div><p>Наклон графика p(n) равен kT, следовательно, больше наклон — выше температура.</p><h4>2. Сравним наклоны по клеткам</h4><p>При одном и том же давлении на графике n₂ = 2n₁. Поэтому T₂/T₁ = n₁/n₂.</p><div class="sr-fml">T₂/T₁ = 1/2 = 0,5</div><p><strong>Ответ: 0,5.</strong></p></div>',
+    boardSolutionHtml:'<div class="task-board-manual"><div class="task-board-step"><strong>Формула:</strong> p = nkT</div><div class="task-board-step"><strong>Сравнение:</strong> при одинаковом p: n₂ = 2n₁</div><div class="task-board-step"><strong>Ответ:</strong> T₂/T₁ = n₁/n₂ = 1/2 = 0,5</div></div>',
+    solutionTitle:'Решение задачи 06 · График p(n)',ans:'0,5',acceptedAnswers:['0,5','0.5','1/2'],isBlank:false
+  },
+
+  {
     id:'ege-mkt-43-cooling-pressure-04',boardMode:'ege-mkt-43-cooling-pressure-04',mode:'ege-mkt-43-cooling-pressure-04',
     animationId:'mkt-cooling-pressure-43',animId:'mkt-cooling-pressure-43',hasAnimation:true,
     num:4,level:1,exam:'ЕГЭ (1 балл)',points:1,
@@ -12052,7 +12065,7 @@ function hasRegisteredTaskAnimation(task){
   if(!task) return false;
   const animationId=String(task.animationId||task.animId||'');
   if(LEGACY_TASK_ANIMATION_IDS.has(animationId)) return true;
-  if(animationId==='mkt-cooling-pressure-43'||animationId==='mkt-gas-mass-pressure-43'||animationId==='mkt-pressure-ratio-43'||animationId==='mkt-rms-pressure-43'||animationId==='mkt-temperature-energy-43'||isFreeFallAnimationId(animationId)||isBallisticsTaskAnimationId(animationId)||isGasHeatingAnimationId(animationId)) return true;
+  if(animationId==='mkt-graph-pressure-concentration-43'||animationId==='mkt-cooling-pressure-43'||animationId==='mkt-gas-mass-pressure-43'||animationId==='mkt-pressure-ratio-43'||animationId==='mkt-rms-pressure-43'||animationId==='mkt-temperature-energy-43'||isFreeFallAnimationId(animationId)||isBallisticsTaskAnimationId(animationId)||isGasHeatingAnimationId(animationId)) return true;
   return animationId==='ballistics-incline-elastic-bounce-task03'||animationId==='lesson12-task10'||
     animationId==='lesson-25-task-04'||animationId==='lesson-25-task-06'||animationId==='lesson-25-task-07';
 }
@@ -15529,7 +15542,71 @@ modal.classList.remove('freefall-anim-modal','ballistics-task-animation-modal','
 modal.innerHTML='<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder();return false;">✕ Закрыть</button>'+renderMktTwoGas43(taskId==='mkt-cooling-pressure-43'?'cool':'gases');
 bindMktTwoGas43(modal);return false;
 }
+
+function renderMktGraph43(){
+return `<section class="mktgraph43">
+<style>
+.mktgraph43{background:#081626;color:#eaf6ff;padding:18px;border-radius:18px;max-width:950px;margin:auto}
+.mktgraph43 h2{font-size:clamp(18px,3vw,27px);color:#eaf6ff}
+.mktgraph43 .mg-layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(210px,1fr);gap:16px}
+.mktgraph43 svg{width:100%;height:auto;display:block;border:1px solid #385977;border-radius:12px;background:#0b2237}
+.mktgraph43 .mg-controls{display:grid;gap:13px;align-content:start}
+.mktgraph43 label{display:grid;gap:6px;background:#12314c;border-radius:10px;padding:11px;font-size:13px}
+.mktgraph43 input{width:100%;accent-color:#45b9ef}
+.mktgraph43 .mg-answer{padding:12px;background:#12314c;border:1px solid #3fa6d8;border-radius:10px;font-size:13px}
+.mktgraph43 .mg-answer b{font-size:25px;color:#7be5ff;display:block;margin:6px 0}
+.mktgraph43 button{padding:9px 12px;background:#146fab;color:white;border:1px solid #68c4f5;border-radius:8px;cursor:pointer}
+.mktgraph43 .mg-actions{display:flex;flex-wrap:wrap;gap:8px}
+@media(max-width:690px){.mktgraph43 .mg-layout{grid-template-columns:1fr}}
+</style>
+<h2>Задача 06 · Графики p(n) и температуры</h2>
+<p>Изменяйте температуру газа 2 и концентрацию; график перестраивается согласно p = nkT. Линия 1 фиксирована.</p>
+<div class="mg-layout">
+<svg viewBox="0 0 460 320" role="img" aria-label="Зависимость давления от концентрации для газов 1 и 2">
+<g stroke="#3b526a" stroke-width="1">${Array.from({length:9},(_,i)=>'<path d="M'+(55+i*40)+' 30V270"/>').join('')}${Array.from({length:7},(_,i)=>'<path d="M55 '+(30+i*40)+'H375"/>').join('')}</g>
+<g stroke="#d6edff" stroke-width="2" fill="none"><path d="M55 20V270H390"/><path d="M49 33L55 20L61 33M377 264L390 270L377 276"/></g>
+<path d="M55 270L175 30" stroke="#ffab45" stroke-width="3" fill="none"/>
+<line data-mg-line x1="55" y1="270" x2="295" y2="30" stroke="#58cfff" stroke-width="3"/>
+<circle data-mg-dot r="6" fill="#fff" stroke="#38bdf8" stroke-width="3"/>
+<g fill="#eaf6ff" font-size="18"><text x="30" y="19">p</text><text x="400" y="277">n</text><text x="42" y="295">0</text><text x="167" y="25">1</text><text data-mg-label x="296" y="25">2</text></g>
+</svg>
+<div class="mg-controls">
+<label>Температура газа 2: T₂/T₁ = <b data-mg-value="t">0,50</b><input type="range" min="0.2" max="2" step="0.05" value="0.5" data-mg-slider="t"></label>
+<label>Концентрация газа 2, условные единицы: <b data-mg-value="n">4,00</b><input type="range" min="0.2" max="6" step="0.1" value="4" data-mg-slider="n"></label>
+<div class="mg-answer"><span>p₂ = n₂kT₂</span><b data-mg-pressure>p₂ = 2,00 усл. ед.</b><div data-mg-explain>Наклон прямой 2 вдвое меньше наклона прямой 1.</div></div>
+<div class="mg-actions"><button data-mg-action="task" type="button">Условие задачи</button><button data-mg-action="reset" type="button">Сброс</button></div>
+</div></div>
+</section>`;
+}
+function bindMktGraph43(modal){
+const root=modal.querySelector('.mktgraph43');if(!root)return;
+const t=root.querySelector('[data-mg-slider="t"]'),n=root.querySelector('[data-mg-slider="n"]'),line=root.querySelector('[data-mg-line]'),dot=root.querySelector('[data-mg-dot]'),label=root.querySelector('[data-mg-label]');
+const fmt=v=>Number(v).toFixed(2).replace('.',',');
+function update(){
+const tr=Number(t.value),nr=Number(n.value),p=tr*nr;
+const topX=55+120/tr;
+if(topX<=375){line.setAttribute('x2',topX);line.setAttribute('y2',30);label.setAttribute('x',Math.min(415,topX+5));label.setAttribute('y',25)}
+else{line.setAttribute('x2',375);line.setAttribute('y2',270-320*tr);label.setAttribute('x',380);label.setAttribute('y',Math.max(45,270-320*tr))}
+dot.setAttribute('cx',55+40*nr);dot.setAttribute('cy',270-40*p);
+root.querySelector('[data-mg-value="t"]').textContent=fmt(tr);
+root.querySelector('[data-mg-value="n"]').textContent=fmt(nr);
+root.querySelector('[data-mg-pressure]').textContent='p₂ = '+fmt(p)+' усл. ед.';
+root.querySelector('[data-mg-explain]').textContent='T₂/T₁ = '+fmt(tr)+'. При одинаковом p: n₂/n₁ = '+fmt(1/tr)+'.';
+}
+t.addEventListener('input',update);n.addEventListener('input',update);
+root.querySelector('[data-mg-action="task"]').addEventListener('click',()=>{t.value=.5;n.value=4;update()});
+root.querySelector('[data-mg-action="reset"]').addEventListener('click',()=>{t.value=1;n.value=3;update()});update();
+}
+function openMktGraph43(taskId){
+if(!document.getElementById('taskAnimationPlaceholderOverlay'))openTaskAnimationPlaceholder(taskId);
+const overlay=document.getElementById('taskAnimationPlaceholderOverlay');if(!overlay)return false;
+const keep=!!(TASK_ANIMATION_CONTEXT&&TASK_ANIMATION_CONTEXT.fromBoard&&taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
+overlay.dataset.keepTaskBoard=keep?'true':'false';overlay.classList.add('open');overlay.style.display='flex';
+const modal=overlay.querySelector('.task-animation-placeholder-modal');if(!modal)return false;
+modal.innerHTML='<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder();return false;">✕ Закрыть</button>'+renderMktGraph43();bindMktGraph43(modal);return false;
+}
 function openTaskAnimationOverlay(taskId){
+  if(taskId==='mkt-graph-pressure-concentration-43')return openMktGraph43(taskId);
   if(taskId==='mkt-cooling-pressure-43'||taskId==='mkt-gas-mass-pressure-43')return openMktTwoGas43(taskId);
   if(taskId==='mkt-temperature-energy-43')return openMktTemperatureEnergy43(taskId);
   if(taskId==='mkt-rms-pressure-43')return openMktRmsPressureSimulator(taskId);
