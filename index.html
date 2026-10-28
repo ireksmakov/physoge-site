@@ -2771,6 +2771,10 @@ body.trainer-theme footer{background:rgba(255,255,255,.42)}
   #landing .cta-s{margin:34px 14px;padding:32px 20px}
 }
 
+
+/* Course lesson completion: red pending, green completed */
+.lesson-progress-toggle{flex:0 0 23px;width:23px;height:23px;min-width:23px;padding:0;margin-left:auto;align-self:center;border:2px solid #dc2626;border-radius:50%;background:rgba(220,38,38,.1);color:#dc2626;display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;cursor:pointer}
+.lesson-progress-toggle.is-done{border-color:#16a34a;background:#16a34a;color:white}.lesson-progress-toggle:focus-visible{outline:2px solid #2563eb;outline-offset:3px}.lli .lni{min-width:0;overflow-wrap:anywhere}
 </style>
 </head>
 <body class="view-mode">
@@ -7845,6 +7849,12 @@ function closeMobileCourseMenu(restoreFocus=true){
   if(restoreFocus&&mobileCourseMenuReturnFocus&&typeof mobileCourseMenuReturnFocus.focus==='function')mobileCourseMenuReturnFocus.focus();
 }
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&document.getElementById('mobileCourseMenu')?.classList.contains('open'))closeMobileCourseMenu();});
+
+const FIZMAT_LESSON_COMPLETION_KEY='fizmat:lesson-completion:v1';
+function getLessonCompletionMap(){try{const v=JSON.parse(localStorage.getItem(FIZMAT_LESSON_COMPLETION_KEY)||'{}');return v&&typeof v==='object'&&!Array.isArray(v)?v:{}}catch(e){return {}}}
+function getLessonCompletionId(courseKey,mi,li){return JSON.stringify([courseKey,mi,li])}
+function renderLessonCompletionButton(courseKey,mi,li){const done=getLessonCompletionMap()[getLessonCompletionId(courseKey,mi,li)]===true;return '<button type="button" class="lesson-progress-toggle'+(done?' is-done':'')+'" aria-label="'+(done?'Отметить тему как не пройденную':'Отметить тему как пройденную')+'" title="'+(done?'Тема пройдена':'Тема не пройдена')+'" aria-pressed="'+done+'" onclick="toggleLessonCompletion(event,'+mi+','+li+')">'+(done?'✓':'×')+'</button>'}
+function toggleLessonCompletion(e,mi,li){if(e){e.preventDefault();e.stopPropagation()}if(!COURSES[AC]||!COURSES[AC].modules[mi]||!COURSES[AC].modules[mi].lessons[li])return;const map=getLessonCompletionMap(),id=getLessonCompletionId(AC,mi,li);if(map[id])delete map[id];else map[id]=true;try{localStorage.setItem(FIZMAT_LESSON_COMPLETION_KEY,JSON.stringify(map))}catch(err){console.warn('Не удалось сохранить прогресс темы',err)}renderSb()}
 function renderSb(){
   const c=COURSES[AC];let n=1,h='';
   h=`<div class="sb-top"><span class="sb-lbl">Содержание</span></div>`;
@@ -7880,6 +7890,7 @@ function renderSb(){
           return`<div class="lli${act?' active':''}" data-mi="${mi}" data-li="${item.li}" onclick="selL(event,${mi},${item.li})">
             <span class="lnum">${item.idx}</span>
             <span class="lni">${item.title}</span>
+            ${renderLessonCompletionButton(AC,mi,item.li)}
           </div>`;
         }).join('');
         return`<div class="school-program-section-group">
@@ -7899,6 +7910,7 @@ function renderSb(){
         return`<div class="lli${act?' active':''}" data-mi="${mi}" data-li="${li}" onclick="selL(event,${mi},${li})">
           <span class="lnum">${idx}</span>
           <span class="lni">${title}</span>
+          ${renderLessonCompletionButton(AC,mi,li)}
         </div>`;
       }).join('');
     }
