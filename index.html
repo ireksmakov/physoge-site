@@ -2775,6 +2775,37 @@ body.trainer-theme footer{background:rgba(255,255,255,.42)}
 /* Course lesson completion: red pending, green completed */
 .lesson-progress-toggle{flex:0 0 23px;width:23px;height:23px;min-width:23px;padding:0;margin-left:auto;align-self:center;border:2px solid #dc2626;border-radius:50%;background:rgba(220,38,38,.1);color:#dc2626;display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;cursor:pointer}
 .lesson-progress-toggle.is-done{border-color:#16a34a;background:#16a34a;color:white}.lesson-progress-toggle:focus-visible{outline:2px solid #2563eb;outline-offset:3px}.lli .lni{min-width:0;overflow-wrap:anywhere}
+
+/* Unified readable light solution surfaces, including lesson 44 and other task cards. */
+.pt-card .pt-solution,
+.pt-card .pt-rich-card,
+.pt-card .pt-rich-card .solution-workspace,
+.pt-card .pt-solution .solution-workspace,
+.pt-card .pt-rich-card .solution-workspace > *,
+.pt-card .pt-solution .solution-workspace > *{
+  background:#f8fbff!important;
+  color:#182b45!important;
+  border-color:#cbd9ea!important;
+}
+.pt-card .solution-workspace h1,.pt-card .solution-workspace h2,
+.pt-card .solution-workspace h3,.pt-card .solution-workspace h4,
+.pt-card .solution-workspace p,.pt-card .solution-workspace strong,
+.pt-card .solution-workspace span,.pt-card .solution-workspace div,
+.pt-card .solution-workspace .sr-fml,
+.pt-card .pt-rich-card .sr-fml{
+  color:#182b45!important;
+}
+.pt-card .solution-workspace h4{color:#153b67!important}
+.pt-card .solution-workspace .sr-fml{
+  background:#edf5ff!important;
+  border:1px solid #d3e4f5!important;
+  border-radius:8px;
+  padding:8px 10px;
+}
+.pt-card .pt-solution-title{color:#153b67!important}
+body.trainer-theme .pt-card .pt-solution,
+body.trainer-theme .pt-card .pt-rich-card,
+body.trainer-theme .pt-card .solution-workspace{background:#f8fbff!important;color:#182b45!important}
 </style>
 </head>
 <body class="view-mode">
