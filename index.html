@@ -10606,6 +10606,9 @@ const LESSON_TASKS={
     id:'ege-mkt-43-pressure-energy-concentration-01',
     boardMode:'ege-mkt-43-pressure-energy-concentration-01',
     mode:'ege-mkt-43-pressure-energy-concentration-01',
+    animationId:'mkt-pressure-ratio-43',
+    animId:'mkt-pressure-ratio-43',
+    hasAnimation:true,
     num:1,
     level:1,
     exam:'ЕГЭ (1 балл)',
@@ -10619,7 +10622,6 @@ const LESSON_TASKS={
     solutionHtml:'<div class="solution-workspace"><h4>1. Основное уравнение МКТ</h4><div class="sr-fml">p = (2/3) n ⟨Eₖ⟩</div><h4>2. Изменения величин</h4><p>Концентрация и средняя кинетическая энергия уменьшились каждая в 2 раза.</p><h4>3. Отношение давлений</h4><div class="sr-fml">p₂/p₁ = (n₂/n₁) · (⟨Eₖ₂⟩/⟨Eₖ₁⟩) = 1/2 · 1/2 = 1/4</div><p><strong>Ответ: 0,25.</strong></p></div>',
     ans:'0,25',
     acceptedAnswers:['0,25','0.25','1/4'],
-    hasAnimation:false,
     isBlank:false
   }
 ],
@@ -11998,7 +12000,7 @@ function hasRegisteredTaskAnimation(task){
   if(!task) return false;
   const animationId=String(task.animationId||task.animId||'');
   if(LEGACY_TASK_ANIMATION_IDS.has(animationId)) return true;
-  if(isFreeFallAnimationId(animationId)||isBallisticsTaskAnimationId(animationId)||isGasHeatingAnimationId(animationId)) return true;
+  if(animationId==='mkt-pressure-ratio-43'||isFreeFallAnimationId(animationId)||isBallisticsTaskAnimationId(animationId)||isGasHeatingAnimationId(animationId)) return true;
   return animationId==='ballistics-incline-elastic-bounce-task03'||animationId==='lesson12-task10'||
     animationId==='lesson-25-task-04'||animationId==='lesson-25-task-06'||animationId==='lesson-25-task-07';
 }
@@ -15202,7 +15204,94 @@ function openGasHeatingAnimation(taskId){
   return false;
 }
 
+
+/* MKT pressure ratio simulator for EGE lesson 43: p = (2/3)n<Ek>. */
+function renderMktPressureSimulator(){
+  return `<div class="mkt43-sim">
+  <style>
+  .mkt43-sim{font-family:inherit;color:#eaf4ff;background:#081423;border-radius:18px;padding:18px;max-width:1100px;margin:auto}
+  .mkt43-sim h2{font-size:clamp(18px,2.6vw,27px);margin:4px 0 8px;color:#eaf4ff}
+  .mkt43-intro{color:#aec5dd;font-size:13px;margin-bottom:12px}
+  .mkt43-chambers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .mkt43-chamber{border:1px solid #375570;border-radius:14px;overflow:hidden;background:#071222}
+  .mkt43-chamber header{position:static!important;display:block;padding:9px 12px!important;background:#15334c!important;border:0!important;font-size:13px;color:#fff!important;backdrop-filter:none!important}
+  .mkt43-particles{height:190px;position:relative;overflow:hidden;background:radial-gradient(circle,#142f4d,#071323)}
+  .mkt43-particle{position:absolute;width:7px;height:7px;border-radius:50%;background:#39ccff;box-shadow:0 0 8px #39ccff;animation:mkt43Move var(--dur) linear infinite alternate;transform:translate(-50%,-50%)}
+  .mkt43-chamber.final .mkt43-particle{background:#ffcf67;box-shadow:0 0 8px #ffcf67}
+  @keyframes mkt43Move{from{translate:-10px -8px}to{translate:10px 8px}}
+  .mkt43-read{padding:10px 12px;font-size:12px;color:#dbeafe;min-height:56px}
+  .mkt43-controls{margin:15px 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .mkt43-controls label{display:grid;gap:5px;background:#10243b;border:1px solid #2c4c6c;padding:12px;border-radius:12px;font-size:13px;color:#eaf4ff}
+  .mkt43-controls input{width:100%;accent-color:#2eb7ff;cursor:pointer}
+  .mkt43-result{padding:14px;border:1px solid #3997c9;border-radius:14px;background:#102a42;display:grid;gap:6px;font-size:14px}
+  .mkt43-result strong{font-size:clamp(18px,3vw,27px);color:#84e6ff}
+  .mkt43-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .mkt43-btns button{background:#157cd0;border:1px solid #5dc4ff;border-radius:8px;color:white;padding:9px 14px;cursor:pointer;font-weight:700}
+  .mkt43-btns button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+  @media(max-width:600px){.mkt43-chambers,.mkt43-controls{grid-template-columns:1fr}.mkt43-particles{height:145px}}
+  @media(prefers-reduced-motion:reduce){.mkt43-particle{animation:none!important}}
+  </style>
+  <h2>МКТ · Давление разреженного газа</h2>
+  <p class="mkt43-intro">Управляйте концентрацией и средней кинетической энергией. Сравните два состояния при неизменном объёме модели. Движение точек условно иллюстрирует тепловое движение.</p>
+  <div class="mkt43-chambers">
+    <div class="mkt43-chamber"><header>Исходное состояние · 1</header><div class="mkt43-particles" data-mkt-particles="initial"></div><div class="mkt43-read">n₁ = 3,0·10²⁵ м⁻³<br>⟨E₁⟩ = 6,0·10⁻²¹ Дж<br>p₁ = 120 000 Па</div></div>
+    <div class="mkt43-chamber final"><header>Конечное состояние · 2</header><div class="mkt43-particles" data-mkt-particles="final"></div><div class="mkt43-read" data-mkt-read="final"></div></div>
+  </div>
+  <div class="mkt43-controls">
+    <label>Концентрация n₂/n₁: <b data-mkt-value="n">0,50</b><input type="range" min="0.1" max="2" step="0.05" value="0.5" data-mkt-slider="n"></label>
+    <label>Средняя кинетическая энергия ⟨E₂⟩/⟨E₁⟩: <b data-mkt-value="e">0,50</b><input type="range" min="0.1" max="2" step="0.05" value="0.5" data-mkt-slider="e"></label>
+  </div>
+  <div class="mkt43-result" aria-live="polite">
+    <span>Основное уравнение МКТ: p = ⅔ n ⟨Eₖ⟩</span>
+    <span data-mkt-equation>p₂/p₁ = 0,50 × 0,50</span>
+    <strong data-mkt-result>p₂/p₁ = 0,25</strong>
+    <span data-mkt-note>Давление уменьшилось в 4 раза.</span>
+  </div>
+  <div class="mkt43-btns"><button type="button" data-mkt-action="example">Условие задачи: ½ и ½</button><button type="button" data-mkt-action="reset">Сброс: 1 и 1</button><button type="button" data-mkt-action="pause">Пауза</button></div>
+  </div>`;
+}
+function bindMktPressureSimulator(modal){
+  const root=modal.querySelector('.mkt43-sim');if(!root)return;
+  const n=root.querySelector('[data-mkt-slider="n"]'),e=root.querySelector('[data-mkt-slider="e"]');
+  const left=root.querySelector('[data-mkt-particles="initial"]'),right=root.querySelector('[data-mkt-particles="final"]');
+  const fmt=x=>Number(x).toFixed(2).replace('.',',');
+  let paused=false;
+  function particles(target,count,energy){
+    target.replaceChildren();const frag=document.createDocumentFragment();
+    for(let i=0;i<count;i++){const dot=document.createElement('i');dot.className='mkt43-particle';dot.style.left=(8+((i*37+13)%84))+'%';dot.style.top=(9+((i*47+23)%80))+'%';dot.style.setProperty('--dur',(1.5+((i*13)%17)/10)/Math.sqrt(energy)+'s');dot.style.animationDelay=-(i*0.37)+'s';frag.appendChild(dot)}
+    target.appendChild(frag);target.style.animationPlayState=paused?'paused':'running';
+    target.querySelectorAll('.mkt43-particle').forEach(dot=>dot.style.animationPlayState=paused?'paused':'running');
+  }
+  particles(left,36,1);
+  function update(){
+    const nr=Number(n.value),er=Number(e.value),p1=120000,p2=p1*nr*er;
+    root.querySelector('[data-mkt-value="n"]').textContent=fmt(nr);
+    root.querySelector('[data-mkt-value="e"]').textContent=fmt(er);
+    root.querySelector('[data-mkt-read="final"]').innerHTML='n₂ = '+fmt(3*nr)+'·10²⁵ м⁻³<br>⟨E₂⟩ = '+fmt(6*er)+'·10⁻²¹ Дж<br>p₂ = '+Math.round(p2).toLocaleString('ru-RU')+' Па';
+    root.querySelector('[data-mkt-equation]').textContent='p₂/p₁ = '+fmt(nr)+' × '+fmt(er);
+    root.querySelector('[data-mkt-result]').textContent='p₂/p₁ = '+fmt(nr*er);
+    root.querySelector('[data-mkt-note]').textContent=nr*er<1?'Давление уменьшилось в '+fmt(1/(nr*er))+' раза.':nr*er>1?'Давление увеличилось в '+fmt(nr*er)+' раза.':'Давление не изменилось.';
+    particles(right,Math.round(36*nr),er);
+  }
+  n.addEventListener('input',update);e.addEventListener('input',update);
+  root.querySelector('[data-mkt-action="example"]').addEventListener('click',()=>{n.value='0.5';e.value='0.5';update()});
+  root.querySelector('[data-mkt-action="reset"]').addEventListener('click',()=>{n.value='1';e.value='1';update()});
+  const pause=root.querySelector('[data-mkt-action="pause"]');
+  pause.addEventListener('click',()=>{paused=!paused;root.querySelectorAll('.mkt43-particle').forEach(dot=>dot.style.animationPlayState=paused?'paused':'running');pause.textContent=paused?'Продолжить':'Пауза'});
+  update();
+}
+function openMktPressureSimulator(taskId){
+  if(!document.getElementById('taskAnimationPlaceholderOverlay'))openTaskAnimationPlaceholder(taskId);
+  const overlay=document.getElementById('taskAnimationPlaceholderOverlay');if(!overlay)return false;
+  const keep=!!(TASK_ANIMATION_CONTEXT&&TASK_ANIMATION_CONTEXT.fromBoard&&taskBoardState&&taskBoardState.overlay&&taskBoardState.overlay.classList.contains('open'));
+  overlay.dataset.keepTaskBoard=keep?'true':'false';overlay.classList.add('open');overlay.style.display='flex';
+  const modal=overlay.querySelector('.task-animation-placeholder-modal');if(!modal)return false;
+  modal.classList.remove('freefall-anim-modal','ballistics-task-animation-modal','task03-flying-cyclist-modal');
+  modal.innerHTML='<button type="button" class="task-animation-placeholder-close" onclick="closeTaskAnimationPlaceholder();return false;">✕ Закрыть</button>'+renderMktPressureSimulator();
+  bindMktPressureSimulator(modal);return false;
+}
 function openTaskAnimationOverlay(taskId){
+  if(taskId==='mkt-pressure-ratio-43')return openMktPressureSimulator(taskId);
   if(LEGACY_TASK_ANIMATION_IDS.has(String(taskId||''))){
     return openLegacyTaskAnimation(taskId);
   }
