@@ -7889,6 +7889,19 @@ function getLessonCompletionMap(){try{const v=JSON.parse(localStorage.getItem(FI
 function getLessonCompletionId(courseKey,mi,li){return JSON.stringify([courseKey,mi,li])}
 function renderLessonCompletionButton(courseKey,mi,li){const done=getLessonCompletionMap()[getLessonCompletionId(courseKey,mi,li)]===true;return '<button type="button" class="lesson-progress-toggle'+(done?' is-done':'')+'" aria-label="'+(done?'Отметить тему как не пройденную':'Отметить тему как пройденную')+'" title="'+(done?'Тема пройдена':'Тема не пройдена')+'" aria-pressed="'+done+'" onclick="toggleLessonCompletion(event,'+mi+','+li+')">'+(done?'✓':'×')+'</button>'}
 function toggleLessonCompletion(e,mi,li){if(e){e.preventDefault();e.stopPropagation()}if(!COURSES[AC]||!COURSES[AC].modules[mi]||!COURSES[AC].modules[mi].lessons[li])return;const map=getLessonCompletionMap(),id=getLessonCompletionId(AC,mi,li);if(map[id])delete map[id];else map[id]=true;try{localStorage.setItem(FIZMAT_LESSON_COMPLETION_KEY,JSON.stringify(map))}catch(err){console.warn('Не удалось сохранить прогресс темы',err)}renderSb()}
+/* ОГЭ · Математика: подписи содержания по программе экспресс-курса.
+   Меняем только надписи у уроков с наполненными заданиями.
+   Ключи уроков, задачи и теория остаются прежними. */
+const OGE_MATH_FILLED_LESSON_SIDEBAR_TITLES={
+  'Степени и корни':'Числа и вычисления: степени и корни',
+  'Уравнения':'Уравнения и системы уравнений',
+  'Неравенства':'Неравенства и системы неравенств'
+};
+function getCourseSidebarLessonTitle(courseKey,lesson){
+  const originalTitle=lessonTitle(lesson);
+  return courseKey==='oge-mat'&&Object.prototype.hasOwnProperty.call(OGE_MATH_FILLED_LESSON_SIDEBAR_TITLES,originalTitle)
+    ?OGE_MATH_FILLED_LESSON_SIDEBAR_TITLES[originalTitle]:originalTitle;
+}
 function renderSb(){
   const c=COURSES[AC];let n=1,h='';
   h=`<div class="sb-top"><span class="sb-lbl">Содержание</span></div>`;
@@ -7905,7 +7918,7 @@ function renderSb(){
           if(countsInLessonNumbering(l))n++;
           return;
         }
-        const idx=n++,title=lessonTitle(l);
+        const idx=n++,title=getCourseSidebarLessonTitle(AC,l);
         const sectionTitle=(l&&l.sectionTitle)||m.name||'Раздел';
         if(!currentGroup||currentGroup.title!==sectionTitle){
           currentGroup={title:sectionTitle,items:[]};
@@ -7940,7 +7953,7 @@ function renderSb(){
           if(countsInLessonNumbering(l))n++;
           return '';
         }
-        const act=mi===CM&&li===CL,idx=n++,title=lessonTitle(l);
+        const act=mi===CM&&li===CL,idx=n++,title=getCourseSidebarLessonTitle(AC,l);
         return`<div class="lli${act?' active':''}" data-mi="${mi}" data-li="${li}" onclick="selL(event,${mi},${li})">
           <span class="lnum">${idx}</span>
           <span class="lni">${title}</span>
