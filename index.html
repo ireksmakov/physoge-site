@@ -12030,6 +12030,11 @@ function renderPTasks(name){
   const isNewtonLessonTasks=name===lesson07Name||name==='Законы Ньютона';
   const blankTasks=name===lesson07Name?[]:normalizeBlankTaskNumbers(name);
   const tasks=baseTasks.concat(blankTasks).map((t,i)=>Object.assign({},t,{num:Number(t.num)||i+1}));
+  // In EGE Physics / Basics of MKT, the task definitions were added newest-first.
+  // Display in ascending task-number order without altering any task data.
+  if(AC==='ege-phy'&&name==='Основы МКТ'){
+    tasks.sort((a,b)=>a.num-b.num);
+  }
   const empty=`<div style="text-align:center;padding:40px 20px;color:var(--gray)"><div style="font-size:32px;margin-bottom:12px">📋</div><div style="font-family:var(--fh);font-size:14px;font-weight:700;color:var(--white);margin-bottom:6px">Задачи в разработке</div><div style="font-size:13px">Задачи для темы <strong style="color:var(--orange)">"${escapeHtml(name||'')}"</strong> появятся в ближайшее время.</div></div>`;
   const lvlL=['','Базовый','Средний','Сложный'],lvlC=['','pt-l1','pt-l2','pt-l3'];
   let h=renderLessonTaskNotice();
