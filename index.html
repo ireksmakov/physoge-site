@@ -8006,6 +8006,11 @@ function renderSb(){
       if(Number(m.grade)===Number(currentGrade)&&getSchoolModuleSubject(AC,m)===currentSubject) h+=renderModule(m,mi);
     });
     h+='</div>';
+  }else if(AC==='oge-mat'){
+    // The OGE Express programme is the primary syllabus. Keep original indices:
+    // equation/inequality trainers depend on CM===0 and CL===1/2.
+    // Other modules remain in COURSES unchanged, preserving existing materials.
+    [4,0,2].forEach(mi=>{const m=c.modules[mi];if(m)h+=renderModule(m,mi);});
   }else{
     c.modules.forEach((m,mi)=>{h+=renderModule(m,mi);});
   }
