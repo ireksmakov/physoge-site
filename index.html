@@ -2809,6 +2809,7 @@ body.trainer-theme .pt-card .solution-workspace{background:#f8fbff!important;col
 
 /* MKT 2027 scanned source tasks: readable in both platform themes */
 .mkt-variant-scan{margin:14px 0;padding:12px;background:#fff;border:1px solid #cbd5e1;border-radius:14px;max-width:100%;overflow:auto}.mkt-variant-scan img{display:block;width:100%;height:auto;max-width:100%;object-fit:contain}.mkt-variant-scan.missing-scan:after{content:'Изображение условия пока не загружено на сервер';display:block;color:#9a3412;font-size:14px;padding:10px}
+.sb-topic-group{margin:12px 12px 6px;padding:8px 10px;border-left:3px solid var(--cyan);border-radius:4px;background:rgba(8,216,255,.07);color:var(--cyan);font-size:12px;font-weight:700;line-height:1.45;overflow-wrap:anywhere}
 </style>
 </head>
 <body class="view-mode">
@@ -4180,7 +4181,10 @@ const COURSES={
     }
   ]},
   'oge-mat':{name:'ОГЭ · Математика',tag:'Математика',cls:'tm',type:'mat',modules:[
-    {name:'Алгебра',open:true,lessons:[makeLesson('Степени и корни','',OGE_MATH_POWERS_ROOTS_THEORY),'Уравнения','Неравенства']},
+    {name:'Алгебра',open:true,lessons:[makeLesson('Степени и корни','',OGE_MATH_POWERS_ROOTS_THEORY),'Уравнения','Неравенства',
+      {title:'Действия с обыкновенными дробями',group:'Числа и вычисления'},
+      {title:'Действия с десятичными дробями',group:'Числа и вычисления'},
+      {title:'Сравнение чисел',group:'Числа и вычисления'}]},
     {name:'Геометрия',open:true,lessons:['Треугольники','Четырёхугольники','Окружность','Площади фигур']},
     {name:'Теория вероятн.',open:true,lessons:['Вероятность событий','Статистика']},
     {name:'Подготовка',open:true,lessons:['Разбор тестовой части','Тренировочный вариант']},
@@ -7962,13 +7966,22 @@ function renderSb(){
         </div>`;
       }).join('');
     }else if(m.open){
-      lh=lessons.map((l,li)=>{
+      const entries=lessons.map((l,li)=>({l,li}));
+      // Preserve original lesson indices: equation and inequality trainers use CL===1/2.
+      if(AC==='oge-mat'&&mi===0){
+        entries.sort((a,b)=>Number(!!(b.l&&b.l.group))-Number(!!(a.l&&a.l.group)));
+      }
+      let currentGroup='';
+      lh=entries.map(({l,li})=>{
         if(isHiddenLesson(l)){
           if(countsInLessonNumbering(l))n++;
           return '';
         }
         const act=mi===CM&&li===CL,idx=n++,title=getCourseSidebarLessonTitle(AC,l);
-        return`<div class="lli${act?' active':''}" data-mi="${mi}" data-li="${li}" onclick="selL(event,${mi},${li})">
+        const group=AC==='oge-mat'&&mi===0&&l&&typeof l==='object'?l.group||'':'';
+        const groupHeading=group&&group!==currentGroup?`<div class="sb-topic-group">${escapeHtml(group)}</div>`:'';
+        currentGroup=group;
+        return`${groupHeading}<div class="lli${act?' active':''}" data-mi="${mi}" data-li="${li}" onclick="selL(event,${mi},${li})">
           <span class="lnum">${idx}</span>
           <span class="lni">${title}</span>
           ${renderLessonCompletionButton(AC,mi,li)}
