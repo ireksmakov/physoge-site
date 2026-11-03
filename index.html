@@ -7998,7 +7998,10 @@ function renderSb(){
         </div>`;
       }).join('');
     }else if(m.open){
-      const entries=lessons.map((l,li)=>({l,li}));
+      // Hide four legacy OGE geometry sidebar entries, but retain their source lessons
+      // and original lesson indices for existing routes, tasks, and saved progress.
+      const entries=lessons.map((l,li)=>({l,li}))
+        .filter(({li})=>!(AC==='oge-mat'&&mi===1&&li<4));
       // Preserve original lesson indices: equation and inequality trainers use CL===1/2.
       if(AC==='oge-mat'&&(mi===0||mi===1)){
         entries.sort((a,b)=>Number(!!(b.l&&b.l.group))-Number(!!(a.l&&a.l.group)));
