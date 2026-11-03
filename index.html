@@ -4186,14 +4186,14 @@ const COURSES={
       {title:'Действия с десятичными дробями',group:'Числа и вычисления'},
       {title:'Сравнение чисел',group:'Числа и вычисления'},
       {title:'Числа на прямой',group:'Числа и вычисления'},
-      {title:'Выбор верного или неверного утверждения',group:'Числа и вычисления'},
+      {title:'Выбор верного или неверного утверждения',group:'Числа и вычисления'}]},
+    {name:'Геометрия',open:true,lessons:['Треугольники','Четырёхугольники','Окружность','Площади фигур']},
+    {name:'Теория вероятностей',open:true,lessons:[
       {title:'Статистика',group:'Статистика. Вероятности. Расчеты по формулам'},
       {title:'Теоремы о вероятностных событиях',group:'Статистика. Вероятности. Расчеты по формулам'},
       {title:'Классические вероятности',group:'Статистика. Вероятности. Расчеты по формулам'},
       {title:'Вычисление по формуле',group:'Статистика. Вероятности. Расчеты по формулам'},
       {title:'Разные задачи',group:'Статистика. Вероятности. Расчеты по формулам'}]},
-    {name:'Геометрия',open:true,lessons:['Треугольники','Четырёхугольники','Окружность','Площади фигур']},
-    {name:'Теория вероятн.',open:true,lessons:['Вероятность событий','Статистика']},
     {name:'Подготовка',open:true,lessons:['Разбор тестовой части','Тренировочный вариант']},
     {name:'Экспресс-программа ОГЭ · 12 занятий',open:false,lessons:[
       makeLesson('Экспресс 01. Числа и вычисления','Обыкновенные и десятичные дроби, степени, корни, сравнение чисел, числа на прямой, рациональные выражения'),
@@ -7985,7 +7985,7 @@ function renderSb(){
           return '';
         }
         const act=mi===CM&&li===CL,idx=n++,title=getCourseSidebarLessonTitle(AC,l);
-        const group=AC==='oge-mat'&&mi===0&&l&&typeof l==='object'?l.group||'':'';
+        const group=AC==='oge-mat'&&(mi===0||mi===2)&&l&&typeof l==='object'?l.group||'':'';
         const groupHeading=group&&group!==currentGroup?`<div class="sb-topic-group">${escapeHtml(group)}</div>`:'';
         currentGroup=group;
         return`${groupHeading}<div class="lli${act?' active':''}" data-mi="${mi}" data-li="${li}" onclick="selL(event,${mi},${li})">
