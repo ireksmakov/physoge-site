@@ -4238,6 +4238,12 @@ const COURSES={
       {title:'Чтение графиков функций'},
       {title:'Растяжения'},
       {title:'Сдвиги'}]},
+    {name:'Практико-ориентированные задания',open:true,lessons:[
+      'Баня',
+      'Шины',
+      'Квартиры',
+      'Местность',
+      'Тарифы']},
   ]},
   'ege-mat-base':{name:'ЕГЭ · Математика База',tag:'Математика',cls:'tm',type:'mat',modules:[
     {name:'Алгебра',open:true,lessons:['Степени и корни','Логарифмы','Уравнения','Неравенства']},
@@ -8073,7 +8079,7 @@ function renderSb(){
     // The OGE Express programme is the primary syllabus. Keep original indices:
     // equation/inequality trainers depend on CM===0 and CL===1/2.
     // Other modules remain in COURSES unchanged, preserving existing materials.
-    [4,0,1].forEach(mi=>{const m=c.modules[mi];if(m)h+=renderModule(m,mi);});
+    [4,0,1,6].forEach(mi=>{const m=c.modules[mi];if(m)h+=renderModule(m,mi);});
   }else{
     c.modules.forEach((m,mi)=>{h+=renderModule(m,mi);});
   }
