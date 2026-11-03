@@ -4185,7 +4185,9 @@ const COURSES={
     }
   ]},
   'oge-mat':{name:'ОГЭ · Математика',tag:'Математика',cls:'tm',type:'mat',modules:[
-    {name:'Алгебра',open:true,lessons:[makeLesson('Степени и корни','',OGE_MATH_POWERS_ROOTS_THEORY),'Уравнения','Неравенства',
+    {name:'Алгебра',open:true,lessons:[makeLesson('Степени и корни','',OGE_MATH_POWERS_ROOTS_THEORY),
+      {...makeLesson('Уравнения',''),group:'Числа и вычисления'},
+      {...makeLesson('Неравенства',''),group:'Числа и вычисления'},
       {title:'Действия с обыкновенными дробями',group:'Числа и вычисления'},
       {title:'Действия с десятичными дробями',group:'Числа и вычисления'},
       {title:'Сравнение чисел',group:'Числа и вычисления'},
