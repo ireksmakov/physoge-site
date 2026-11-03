@@ -2809,6 +2809,10 @@ body.trainer-theme .pt-card .solution-workspace{background:#f8fbff!important;col
 
 /* MKT 2027 scanned source tasks: readable in both platform themes */
 .mkt-variant-scan{margin:14px 0;padding:12px;background:#fff;border:1px solid #cbd5e1;border-radius:14px;max-width:100%;overflow:auto}.mkt-variant-scan img{display:block;width:100%;height:auto;max-width:100%;object-fit:contain}.mkt-variant-scan.missing-scan:after{content:'Изображение условия пока не загружено на сервер';display:block;color:#9a3412;font-size:14px;padding:10px}
+.algebra-nested-modules{margin:10px 0 3px 12px;padding-left:10px;border-left:1px solid var(--border)}
+.algebra-nested-modules>.mod-block{margin:8px 0}
+.algebra-nested-modules .mod-head{min-width:0}
+.algebra-nested-modules .mni{overflow-wrap:anywhere}
 .sb-topic-group{margin:12px 12px 6px;padding:8px 10px;border-left:3px solid var(--cyan);border-radius:4px;background:rgba(8,216,255,.07);color:var(--cyan);font-size:12px;font-weight:700;line-height:1.45;overflow-wrap:anywhere}
 </style>
 </head>
@@ -8005,12 +8009,23 @@ function renderSb(){
     }
 
     if(!m.open)n+=lessons.filter(countsInLessonNumbering).length;
+    // Nest probability and function graphs visually under Algebra while preserving
+    // their stable module indices (2 and 5) and all existing course routes.
+    if(AC==='oge-mat'&&mi===0&&!m.open){
+      [2,5].forEach(nestedMi=>{
+        const nested=c.modules[nestedMi];
+        if(nested)n+=(nested.lessons||[]).filter(countsInLessonNumbering).length;
+      });
+    }
+    const nestedModules=AC==='oge-mat'&&mi===0&&m.open
+      ?`<div class="algebra-nested-modules">${[2,5].map(nestedMi=>c.modules[nestedMi]?renderModule(c.modules[nestedMi],nestedMi):'').join('')}</div>`
+      :'';
     return`<div class="mod-block" data-mi="${mi}">
       <div class="mod-head">
         <button class="mtog${m.open?' open':''}" onclick="togM(${mi})">▶</button>
         <span class="mni">${m.name}</span>
       </div>
-      ${m.open?`<div class="lessons-ul">${lh}</div>`:''}
+      ${m.open?`<div class="lessons-ul">${lh}${nestedModules}</div>`:''}
     </div>`;
   };
 
@@ -8038,7 +8053,7 @@ function renderSb(){
     // The OGE Express programme is the primary syllabus. Keep original indices:
     // equation/inequality trainers depend on CM===0 and CL===1/2.
     // Other modules remain in COURSES unchanged, preserving existing materials.
-    [4,0,1,2,5].forEach(mi=>{const m=c.modules[mi];if(m)h+=renderModule(m,mi);});
+    [4,0,1].forEach(mi=>{const m=c.modules[mi];if(m)h+=renderModule(m,mi);});
   }else{
     c.modules.forEach((m,mi)=>{h+=renderModule(m,mi);});
   }
