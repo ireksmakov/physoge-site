@@ -4208,7 +4208,11 @@ const COURSES={
       makeLesson('Экспресс 10. Решение геометрических задач','Поиск углов и недостающих элементов треугольников, четырёхугольников и окружностей'),
       makeLesson('Экспресс 11. Геометрические доказательства','Окружности, треугольники и четырёхугольники: методы доказательства'),
       makeLesson('Экспресс 12. Текстовые задачи','Движение, проценты, смеси, сплавы и совместная работа')
-    ]}
+    ]},
+    {name:'Графики функций',open:true,lessons:[
+      {title:'Чтение графиков функций'},
+      {title:'Растяжения'},
+      {title:'Сдвиги'}]},
   ]},
   'ege-mat-base':{name:'ЕГЭ · Математика База',tag:'Математика',cls:'tm',type:'mat',modules:[
     {name:'Алгебра',open:true,lessons:['Степени и корни','Логарифмы','Уравнения','Неравенства']},
@@ -8030,7 +8034,7 @@ function renderSb(){
     // The OGE Express programme is the primary syllabus. Keep original indices:
     // equation/inequality trainers depend on CM===0 and CL===1/2.
     // Other modules remain in COURSES unchanged, preserving existing materials.
-    [4,0,2].forEach(mi=>{const m=c.modules[mi];if(m)h+=renderModule(m,mi);});
+    [4,0,2,5].forEach(mi=>{const m=c.modules[mi];if(m)h+=renderModule(m,mi);});
   }else{
     c.modules.forEach((m,mi)=>{h+=renderModule(m,mi);});
   }
