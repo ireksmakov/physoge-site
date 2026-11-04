@@ -4235,7 +4235,8 @@ const COURSES={
       {title:'Теоремы о вероятностных событиях',group:'Статистика. Вероятности. Расчеты по формулам'},
       {title:'Классические вероятности',group:'Статистика. Вероятности. Расчеты по формулам'},
       {title:'Вычисление по формуле',group:'Статистика. Вероятности. Расчеты по формулам'},
-      {title:'Разные задачи',group:'Статистика. Вероятности. Расчеты по формулам'}]},
+      {title:'Разные задачи',group:'Статистика. Вероятности. Расчеты по формулам'},
+      makeLesson('Задание 10 — каталог задач РЕШУ ОГЭ','37 проверенных задач с номерами и ссылками на оригинальные задания, разделённых по трём темам.')]},
     {name:'Подготовка',open:true,lessons:['Разбор тестовой части','Тренировочный вариант']},
     {name:'Экспресс-программа ОГЭ · 12 занятий',open:false,lessons:[
       makeLesson('Экспресс 01. Числа и вычисления','Обыкновенные и десятичные дроби, степени, корни, сравнение чисел, числа на прямой, рациональные выражения'),
@@ -8241,7 +8242,13 @@ function showTab(id,btn,colorClass){
 }
 
 /* ============ THEORY RENDERING ============ */
+function renderOgeMathProbabilitySources(){
+  const groups=[["Классические вероятности",[149,132730,132732,132734,132736,132738,132740,132744,132746,132748,311415,311512,311525,311919,315159,315173,315195,325450,325486,325491,325580,341364,448934,457271,463024,472221,472224,472230,472240]],["Диаграммы событий и деревья вероятностей",[472222,472223,472226,472228,472236]],["Статистика и теоремы о вероятностях",[325457,325458,325502]]];
+  const cards=groups.map(([title,ids])=>`<section style="margin:20px 0 28px"><h3 style="font-size:clamp(15px,2.3vw,21px);margin:0 0 14px;color:var(--cyan)">${escapeHtml(title)} · ${ids.length}</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:12px">${ids.map((id,i)=>`<a href="https://oge.sdamgia.ru/problem?id=${id}" target="_blank" rel="noopener noreferrer" style="display:flex;flex-direction:column;gap:6px;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px;min-width:0;color:var(--white);text-decoration:none"><strong style="font-size:14px;color:var(--white)">Задание № ${id}</strong><span style="font-size:12px;color:var(--cyan)">Открыть условие на РЕШУ ОГЭ ↗</span></a>`).join('')}</div></section>`).join('');
+  return `<div class="probability-sources" style="max-width:1120px;margin:auto"><h2 style="font-size:clamp(20px,3vw,30px);margin-bottom:12px">ОГЭ · Математика · Задание 10</h2><p style="color:var(--gray);margin-bottom:10px">37 проверенных задач: 29 — классические вероятности, 5 — деревья вероятностей, 3 — статистика и теоремы о вероятностях.</p><p style="color:var(--gray);margin-bottom:20px">Это каталог ссылок на первоисточник, а не скопированные условия и решения. Остальные 79 заданий пока не проверены и не включены. Задания открываются на сайте «РЕШУ ОГЭ» в новой вкладке.</p>${cards}</div>`;
+}
 function renderTheory(){
+  if(AC==='oge-mat'&&lessonTitle(getLessonObject(AC,CM,CL))==='Задание 10 — каталог задач РЕШУ ОГЭ')return renderOgeMathProbabilitySources();
   // ОГЭ Математика · Уравнения — четыре теоретические карточки 16:9 без искажения пропорций.
   if(AC==='oge-mat'&&CM===0&&CL===1){
     const theoryImages=[
