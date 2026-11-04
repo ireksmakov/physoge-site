@@ -8,10 +8,11 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Оформление заказа
+      - name: Получить файлы репозитория
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
       - name: Установить ключ SSH
         uses: webfactory/ssh-agent@v0.9.0
@@ -23,10 +24,21 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -p ${{ secrets.ZOMRO_PORT }} -H ${{ secrets.ZOMRO_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Развертывание с помощью rsync
+      - name: Подготовить список файлов без удаления серверных материалов
         run: |
-          rsync -az --delete \
-            --exclude '.git/' \
-            --exclude '.github/' \
+          printf '%s\n' 'index.html' > /tmp/fizmat-deploy-files
+          if git rev-parse HEAD^ >/dev/null 2>&1; then
+            git diff --name-only --diff-filter=ACMRT HEAD^ HEAD >> /tmp/fizmat-deploy-files
+          fi
+          grep -v -E '^\.git(hub)?/' /tmp/fizmat-deploy-files | sort -u | while IFS= read -r file; do
+            if [ -f "$file" ]; then printf '%s\n' "$file"; fi
+          done > /tmp/fizmat-deploy-existing
+          echo "Файлы для отправки:"
+          cat /tmp/fizmat-deploy-existing
+
+      - name: Развернуть изменённые файлы на Zomro
+        run: |
+          rsync -az --no-perms --no-owner --no-group --omit-dir-times \
+            --files-from=/tmp/fizmat-deploy-existing \
             -e "ssh -p ${{ secrets.ZOMRO_PORT }}" \
             ./ ${{ secrets.ZOMRO_USER }}@${{ secrets.ZOMRO_HOST }}:${{ secrets.ZOMRO_PATH }}
