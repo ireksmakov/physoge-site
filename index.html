@@ -8242,6 +8242,47 @@ function showTab(id,btn,colorClass){
 }
 
 /* ============ THEORY RENDERING ============ */
+
+function renderOgeMathProbabilityPractice(){
+  const simple=[["В коробке 10 карандашей, из них 3 синих. Наугад достают один. Какова вероятность взять синий?",3,10],["Из 20 билетов лотереи 5 выигрышных. Какова вероятность выиграть при выборе одного билета?",5,20],["В классе 25 учеников, 10 посещают шахматный кружок. Случайно выбирают ученика. Какова вероятность, что он посещает кружок?",10,25],["Из 12 месяцев 3 являются летними. Какова вероятность случайно выбрать летний месяц?",3,12],["В мешке 8 белых и 12 чёрных шаров. Какова вероятность достать белый шар?",8,20],["На полке 15 книг, из них 6 сборников задач. Какова вероятность случайно взять сборник задач?",6,15],["В наборе 40 карточек, из них 14 зелёных. Какова вероятность вытянуть зелёную карточку?",14,40],["Из 30 деталей 3 имеют брак. Какова вероятность выбрать исправную деталь?",27,30],["На карточках записаны числа от 1 до 20. Какова вероятность вытянуть число, кратное 5?",4,20],["На карточках записаны числа от 1 до 30. Какова вероятность вытянуть чётное число?",15,30],["Бросают правильный шестигранный кубик. Какова вероятность выпадения числа больше 4?",2,6],["Бросают правильный шестигранный кубик. Какова вероятность выпадения делителя числа 6?",4,6],["Из натуральных чисел от 1 до 10 выбирают одно. Какова вероятность выбрать простое число?",4,10],["В коробке 18 ламп, из них 3 неисправны. Какова вероятность выбрать исправную лампу?",15,18],["В секции 24 школьника, из них 9 занимаются плаванием. Какова вероятность случайно выбрать пловца?",9,24],["На диске 10 одинаковых секторов, из которых 7 окрашены в жёлтый цвет. Какова вероятность попадания стрелки на жёлтый сектор?",7,10],["Из 50 одинаковых конвертов 8 содержат приглашение. Какова вероятность выбрать конверт с приглашением?",8,50],["В ящике 16 батареек, из них 4 разряжены. Какова вероятность выбрать заряженную?",12,16],["Случайно выбирают один день невисокосного года. Какова вероятность, что это день января?",31,365],["Из 20 одинаковых жетонов 7 имеют букву А. Какова вероятность вытянуть жетон без буквы А?",13,20],["В наборе 12 карточек с числами от 1 до 12. Какова вероятность выбрать число, кратное 3?",4,12],["В урне 14 красных и 6 синих шаров. Какова вероятность достать синий шар?",6,20],["На остановке 25 автобусов, из них 5 идут по нужному маршруту. Какова вероятность выбрать нужный автобус?",5,25],["Среди 40 задач 16 по алгебре, остальные по геометрии. Какова вероятность случайно выбрать задачу по геометрии?",24,40],["В коробке 9 новых и 3 использованных тетради. Какова вероятность выбрать новую?",9,12],["Из 10 одинаковых карточек 4 помечены звёздочкой. Какова вероятность выбрать карточку без звёздочки?",6,10],["В лототроне 90 шаров с числами от 1 до 90. Какова вероятность вытянуть число, оканчивающееся на 0?",9,90],["В пачке 36 игральных карт 4 туза. Какова вероятность вынуть туза?",4,36],["На рулетке 8 равновеликих секторов: 2 красных, 3 зелёных и 3 синих. Какова вероятность попасть НЕ на красный?",6,8]];
+  const pair=[["Дважды подбрасывают честную монету. Какова вероятность получить два орла?",1,2,1,2],["Дважды бросают правильный кубик. Какова вероятность, что оба раза выпадет 6?",1,6,1,6],["В первом пакете 2 красных из 5 шаров, во втором — 3 красных из 10. Из каждого пакета берут по одному шару. Какова вероятность достать два красных?",2,5,3,10],["Первый стрелок попадает в цель с вероятностью 0,8, второй — с вероятностью 0,5. Какова вероятность, что оба попадут, если выстрелы независимы?",8,10,5,10],["Светофор на двух независимых перекрёстках показывает зелёный с вероятностями 0,6 и 0,7. Какова вероятность дважды увидеть зелёный?",6,10,7,10]];
+  const stat=[["В наборе 20 наблюдений событие произошло 7 раз. Найдите относительную частоту события.",0.35],["Среднее арифметическое четырёх чисел 3, 5, 7 и 9. Запишите результат.",6],["В выборке 2, 4, 4, 6, 9 найдите медиану.",4]];
+  const tasks=simple.map(function(s){return {topic:'Классическая вероятность',question:s[0],answer:s[1]/s[2],hint:'Число благоприятных исходов / число всех равновозможных исходов = '+s[1]+'/'+s[2]};})
+    .concat(pair.map(function(s){return {topic:'Два независимых события',question:s[0],answer:s[1]/s[2]*s[3]/s[4],hint:'Перемножаем вероятности независимых событий: ('+s[1]+'/'+s[2]+') × ('+s[3]+'/'+s[4]+').'};}))
+    .concat(stat.map(function(s,i){return {topic:'Статистика',question:s[0],answer:s[1],hint:['Относительная частота = 7 / 20.','Среднее арифметическое = (3 + 5 + 7 + 9) / 4.','Медиана — среднее число упорядоченного набора.'][i]};}));
+  const cards=tasks.map(function(t,i){
+    const n=i+1, expected=Number(t.answer.toFixed(8));
+    return '<article class="prob-task-card" style="background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px;min-width:0;margin:0 0 12px">'+
+      '<div style="font-size:12px;color:var(--cyan);margin-bottom:8px">Авторская задача '+n+' · '+escapeHtml(t.topic)+'</div>'+
+      '<p style="font-size:15px;line-height:1.65;margin-bottom:15px">'+escapeHtml(t.question)+'</p>'+
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">'+
+      '<input type="text" inputmode="decimal" aria-label="Ответ к задаче '+n+'" placeholder="Числовой ответ" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--white);width:170px;max-width:100%">'+
+      '<button type="button" class="tests-action" data-answer="'+expected+'" onclick="checkOgeProbabilityPractice(this)">Проверить ответ</button>'+
+      '<button type="button" class="tests-action" onclick="toggleOgeProbabilityHint(this)">Показать решение</button></div>'+
+      '<p class="prob-feedback" role="status" style="font-size:13px;margin-top:10px"></p>'+
+      '<div class="prob-hint" hidden style="border-top:1px solid var(--border);margin-top:12px;padding-top:12px;color:var(--gray);font-size:14px"><p>'+escapeHtml(t.hint)+'</p><p style="margin-top:8px;color:var(--green)">Ответ: '+String(expected).replace('.',',')+'</p></div>'+
+      '</article>';
+  }).join('');
+  return '<section style="max-width:1080px;margin:0 auto 35px"><h2 style="font-size:clamp(20px,3vw,30px);margin:0 0 12px">Задание 10. Теория вероятностей</h2>'+
+    '<p style="color:var(--gray);margin-bottom:18px">37 авторских тренировочных задач по формату ОГЭ, с вводом ответа и пошаговой подсказкой. Это не дословные задания сайта «РЕШУ ОГЭ».</p>'+cards+'</section>';
+}
+function checkOgeProbabilityPractice(button){
+  const card=button.closest('.prob-task-card');
+  if(!card)return;
+  const input=card.querySelector('input'), message=card.querySelector('.prob-feedback');
+  const raw=String(input.value||'').trim().replace(',','.').replace(/\s/g,'');
+  if(!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(raw)){message.textContent='Введите числовой ответ, например 0,25.';message.style.color='var(--orange)';return;}
+  const correct=Number(button.dataset.answer);
+  if(Math.abs(Number(raw)-correct)<0.000001){message.textContent='Верно!';message.style.color='var(--green)';}
+  else{message.textContent='Пока неверно. Попробуйте ещё раз.';message.style.color='var(--orange)';}
+}
+function toggleOgeProbabilityHint(button){
+  const hint=button.closest('.prob-task-card')?.querySelector('.prob-hint');
+  if(!hint)return;
+  hint.hidden=!hint.hidden;
+  button.textContent=hint.hidden?'Показать решение':'Скрыть решение';
+}
+
 function renderOgeMathProbabilitySources(){
   const groups=[["Классические вероятности",[149,132730,132732,132734,132736,132738,132740,132744,132746,132748,311415,311512,311525,311919,315159,315173,315195,325450,325486,325491,325580,341364,448934,457271,463024,472221,472224,472230,472240]],["Диаграммы событий и деревья вероятностей",[472222,472223,472226,472228,472236]],["Статистика и теоремы о вероятностях",[325457,325458,325502]]];
   const cards=groups.map(([title,ids])=>`<section style="margin:20px 0 28px"><h3 style="font-size:clamp(15px,2.3vw,21px);margin:0 0 14px;color:var(--cyan)">${escapeHtml(title)} · ${ids.length}</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:12px">${ids.map((id,i)=>`<a href="https://oge.sdamgia.ru/problem?id=${id}" target="_blank" rel="noopener noreferrer" style="display:flex;flex-direction:column;gap:6px;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px;min-width:0;color:var(--white);text-decoration:none"><strong style="font-size:14px;color:var(--white)">Задание № ${id}</strong><span style="font-size:12px;color:var(--cyan)">Открыть условие на РЕШУ ОГЭ ↗</span></a>`).join('')}</div></section>`).join('');
@@ -12169,7 +12210,7 @@ function checkLogAnswer(btn){
   }
 }
 function renderPTasks(name){
-  if(AC==='oge-mat'&&name==='Задание 10 — каталог задач РЕШУ ОГЭ')return renderOgeMathProbabilitySources();
+  if(AC==='oge-mat'&&name==='Задание 10 — каталог задач РЕШУ ОГЭ')return renderOgeMathProbabilityPractice()+renderOgeMathProbabilitySources();
   if(AC==='ege-mat-pro'&&name==='Логарифмы')return renderLogGraphExercises();
   if(AC==='oge-mat'&&CM===0&&CL===1&&name==='Уравнения'){
     return renderOgeMathEquationTasks();
