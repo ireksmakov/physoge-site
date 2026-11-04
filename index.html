@@ -8248,7 +8248,7 @@ function renderOgeMathProbabilitySources(){
   return `<div class="probability-sources" style="max-width:1120px;margin:auto"><h2 style="font-size:clamp(20px,3vw,30px);margin-bottom:12px">ОГЭ · Математика · Задание 10</h2><p style="color:var(--gray);margin-bottom:10px">37 проверенных задач: 29 — классические вероятности, 5 — деревья вероятностей, 3 — статистика и теоремы о вероятностях.</p><p style="color:var(--gray);margin-bottom:20px">Это каталог ссылок на первоисточник, а не скопированные условия и решения. Остальные 79 заданий пока не проверены и не включены. Задания открываются на сайте «РЕШУ ОГЭ» в новой вкладке.</p>${cards}</div>`;
 }
 function renderTheory(){
-  if(AC==='oge-mat'&&lessonTitle(getLessonObject(AC,CM,CL))==='Задание 10 — каталог задач РЕШУ ОГЭ')return renderOgeMathProbabilitySources();
+
   // ОГЭ Математика · Уравнения — четыре теоретические карточки 16:9 без искажения пропорций.
   if(AC==='oge-mat'&&CM===0&&CL===1){
     const theoryImages=[
@@ -12169,6 +12169,7 @@ function checkLogAnswer(btn){
   }
 }
 function renderPTasks(name){
+  if(AC==='oge-mat'&&name==='Задание 10 — каталог задач РЕШУ ОГЭ')return renderOgeMathProbabilitySources();
   if(AC==='ege-mat-pro'&&name==='Логарифмы')return renderLogGraphExercises();
   if(AC==='oge-mat'&&CM===0&&CL===1&&name==='Уравнения'){
     return renderOgeMathEquationTasks();
