@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+<title id="title">Изопроцессы идеального газа</title>
+<desc id="desc">Законы Бойля — Мариотта, Гей-Люссака и Шарля, формулы и графики трёх основных изопроцессов</desc>
+<defs>
+ <linearGradient id="bg" x2="0" y2="1"><stop stop-color="#e9f7ff"/><stop offset="1" stop-color="#c5e9ff"/></linearGradient>
+ <linearGradient id="card" x2="0" y2="1"><stop stop-color="#ffffff"/><stop offset="1" stop-color="#e9f6ff"/></linearGradient>
+ <style>
+ text{font-family:"Times New Roman",Times,serif;fill:#10334e} .heading{font-size:47px;font-weight:700}
+ .sub{font-size:23px}.ctitle{font-size:27px;font-weight:bold}.body{font-size:20px}
+ .small{font-size:18px}.math{font-size:27px;font-weight:bold;font-style:italic}
+ .axis{stroke:#254c64;stroke-width:2.4;fill:none}.curve{stroke:#1769be;stroke-width:4;fill:none;stroke-linecap:round}
+ .pill{fill:#d9edff;stroke:#a0cdeb;stroke-width:1}
+ </style>
+ <g id="axes"><path class="axis" d="M 0,-94 V 0 H 126"/><path d="M -4,-87 L 0,-98 L 4,-87 M 117,-4 L 128,0 L 117,4" stroke="#254c64" fill="none" stroke-width="2"/></g>
+ <g id="piston"><rect x="0" y="12" width="112" height="115" rx="10" fill="#d7eeff" stroke="#28638a" stroke-width="3"/><path d="M 6,42 H106" stroke="#355874" stroke-width="10"/><path d="M 56,0 V42" stroke="#355874" stroke-width="10"/><g fill="#3198e2"><circle cx="26" cy="62" r="5"/><circle cx="78" cy="61" r="5"/><circle cx="53" cy="87" r="5"/><circle cx="22" cy="108" r="5"/><circle cx="92" cy="105" r="5"/></g></g>
+</defs>
+<rect width="1600" height="900" fill="url(#bg)"/>
+<path d="M 0,0 H480 L310,160 H0Z" fill="#c8e7fa" opacity=".8"/>
+<path d="M 1330,0 H1600 V170Z" fill="#a9d9f3" opacity=".5"/>
+<rect x="50" y="36" width="282" height="55" rx="20" fill="#d8eeff" stroke="#6eb0df"/>
+<text x="70" y="70" font-size="24" font-weight="bold">Молекулярная физика</text>
+<rect x="1382" y="30" width="168" height="59" rx="23" fill="#e6f6ff" stroke="#2971a4" stroke-width="2"/>
+<text x="1466" y="68" text-anchor="middle" font-size="30" font-weight="bold">ФИЗМАТ</text>
+<text x="800" y="70" text-anchor="middle" class="heading">ИЗОПРОЦЕССЫ</text>
+<text x="800" y="107" text-anchor="middle" class="sub">Три основных процесса для постоянного количества идеального газа</text>
+<rect x="48" y="123" width="1504" height="61" rx="14" fill="#f5fbff" stroke="#619dc6" stroke-width="2"/>
+<text x="800" y="160" text-anchor="middle" font-size="22">Изопроцесс: один параметр p, V или T постоянен. Уравнение состояния: pV = νRT (ν = const).</text>
+<!-- 3 panels -->
+<g>
+<rect x="42" y="202" width="494" height="583" rx="18" fill="url(#card)" stroke="#448fc4" stroke-width="2.5"/>
+<rect x="552" y="202" width="494" height="583" rx="18" fill="url(#card)" stroke="#448fc4" stroke-width="2.5"/>
+<rect x="1062" y="202" width="494" height="583" rx="18" fill="url(#card)" stroke="#448fc4" stroke-width="2.5"/>
+<rect x="43" y="203" width="492" height="55" rx="16" fill="#acd8fa"/>
+<rect x="553" y="203" width="492" height="55" rx="16" fill="#acd8fa"/>
+<rect x="1063" y="203" width="492" height="55" rx="16" fill="#acd8fa"/>
+<text x="289" y="238" text-anchor="middle" class="ctitle">Изотермический</text>
+<text x="799" y="238" text-anchor="middle" class="ctitle">Изобарный</text>
+<text x="1309" y="238" text-anchor="middle" class="ctitle">Изохорный</text>
+</g>
+<!-- card 1 -->
+<use href="#piston" x="79" y="279"/>
+<rect x="260" y="278" width="227" height="41" rx="12" fill="#ffefc5"/>
+<text x="373" y="307" text-anchor="middle" class="math">T = const</text>
+<text x="255" y="361" class="math">pV = const</text>
+<text x="255" y="392" font-size="21" font-style="italic">Бойль — Мариотт</text>
+<text x="76" y="448" class="body">При V ↑ давление p ↓.</text>
+<text x="76" y="475" class="body">Произведение pV постоянно.</text>
+<g transform="translate(88,642)"><use href="#axes"/><path class="curve" d="M 12,-88 C 17,-38 32,-19 55,-13 S 103,-5 119,-5"/><text x="-16" y="-100" class="small">p</text><text x="130" y="11" class="small">V</text><text x="38" y="-116" class="small">p(V)</text></g>
+<g transform="translate(260,642)"><use href="#axes"/><path class="curve" d="M 60,-90 V-3"/><text x="-16" y="-100" class="small">p</text><text x="130" y="11" class="small">T</text><text x="39" y="-116" class="small">p(T)</text></g>
+<g transform="translate(430,642)"><use href="#axes"/><path class="curve" d="M 60,-90 V-3"/><text x="-16" y="-100" class="small">V</text><text x="130" y="11" class="small">T</text><text x="37" y="-116" class="small">V(T)</text></g>
+<rect x="65" y="691" width="449" height="74" rx="13" class="pill"/>
+<text x="86" y="721" class="small" font-weight="bold">Пример:</text>
+<text x="86" y="744" class="small">Медленное сжатие с теплообменом</text>
+<!-- card 2 -->
+<use href="#piston" x="587" y="279"/>
+<path d="M 716,308 V370 M 711,313 L716,303 L721,313 M 711,364 L716,374 L721,364" fill="none" stroke="#2175c0" stroke-width="3"/>
+<rect x="773" y="278" width="219" height="41" rx="12" fill="#ffefc5"/>
+<text x="882" y="307" text-anchor="middle" class="math">p = const</text>
+<text x="768" y="361" class="math">V/T = const</text>
+<text x="768" y="392" font-size="21" font-style="italic">Гей-Люссак</text>
+<text x="586" y="448" class="body">При T ↑ объём V ↑.</text>
+<text x="586" y="475" class="body">Отношение V/T постоянно.</text>
+<g transform="translate(598,642)"><use href="#axes"/><path class="curve" d="M 1,-1 L115,-87"/><text x="-16" y="-100" class="small">V</text><text x="130" y="11" class="small">T</text><text x="37" y="-116" class="small">V(T)</text></g>
+<g transform="translate(770,642)"><use href="#axes"/><path class="curve" d="M 3,-49 H121"/><text x="-16" y="-100" class="small">p</text><text x="130" y="11" class="small">V</text><text x="38" y="-116" class="small">p(V)</text></g>
+<g transform="translate(940,642)"><use href="#axes"/><path class="curve" d="M 3,-49 H121"/><text x="-16" y="-100" class="small">p</text><text x="130" y="11" class="small">T</text><text x="38" y="-116" class="small">p(T)</text></g>
+<rect x="575" y="691" width="449" height="74" rx="13" class="pill"/>
+<text x="596" y="721" class="small" font-weight="bold">Пример:</text>
+<text x="596" y="744" class="small">Нагревание под подвижным поршнем</text>
+<!-- card 3 -->
+<rect x="1096" y="291" width="112" height="115" rx="11" fill="#d4edff" stroke="#28638a" stroke-width="3"/>
+<path d="M 1096,292 H1208" stroke="#355874" stroke-width="11"/>
+<g fill="#3198e2"><circle cx="1118" cy="322" r="5"/><circle cx="1176" cy="329" r="5"/><circle cx="1144" cy="354" r="5"/><circle cx="1116" cy="383" r="5"/><circle cx="1182" cy="379" r="5"/></g>
+<rect x="1283" y="278" width="219" height="41" rx="12" fill="#ffefc5"/>
+<text x="1392" y="307" text-anchor="middle" class="math">V = const</text>
+<text x="1278" y="361" class="math">p/T = const</text>
+<text x="1278" y="392" font-size="21" font-style="italic">Шарль</text>
+<text x="1096" y="448" class="body">При T ↑ давление p ↑.</text>
+<text x="1096" y="475" class="body">Отношение p/T постоянно.</text>
+<g transform="translate(1108,642)"><use href="#axes"/><path class="curve" d="M 1,-1 L115,-87"/><text x="-16" y="-100" class="small">p</text><text x="130" y="11" class="small">T</text><text x="37" y="-116" class="small">p(T)</text></g>
+<g transform="translate(1280,642)"><use href="#axes"/><path class="curve" d="M 60,-90 V-3"/><text x="-16" y="-100" class="small">p</text><text x="130" y="11" class="small">V</text><text x="38" y="-116" class="small">p(V)</text></g>
+<g transform="translate(1450,642)"><use href="#axes"/><path class="curve" d="M 3,-49 H121"/><text x="-16" y="-100" class="small">V</text><text x="130" y="11" class="small">T</text><text x="38" y="-116" class="small">V(T)</text></g>
+<rect x="1085" y="691" width="449" height="74" rx="13" class="pill"/>
+<text x="1106" y="721" class="small" font-weight="bold">Пример:</text>
+<text x="1106" y="744" class="small">Нагревание в жёстком сосуде</text>
+<rect x="44" y="804" width="1512" height="77" rx="17" fill="#eef8ff" stroke="#508fbc" stroke-width="2"/>
+<text x="73" y="835" font-size="23" font-weight="bold">ЗАПОМНИТЬ</text>
+<text x="73" y="859" class="small">T в кельвинах!</text>
+<path d="M268 813 V869 M730 813 V869 M1136 813 V869" stroke="#7bb4dc" stroke-width="2"/>
+<text x="294" y="836" class="body" font-weight="bold">Изотермический:</text><text x="294" y="861" class="small">pV = const; ΔU = 0</text>
+<text x="758" y="836" class="body" font-weight="bold">Изобарный:</text><text x="758" y="861" class="small">A = pΔV</text>
+<text x="1160" y="836" class="body" font-weight="bold">Изохорный:</text><text x="1160" y="861" class="small">A = 0</text>
+</svg>
