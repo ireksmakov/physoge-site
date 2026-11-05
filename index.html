@@ -12521,6 +12521,50 @@ function checkLogAnswer(btn){
     card.dataset.completed='true';input.disabled=true;btn.disabled=true;
   }
 }
+
+const TASK_GATE_KEY='fizmat:task-gate:v1:';
+function taskGateStorageKey(id){return TASK_GATE_KEY+String(AC||'course')+':'+String(id);}
+function taskGateRead(id){
+ let o={wrong:0,correct:false};
+ try{o=Object.assign(o,JSON.parse(localStorage.getItem(taskGateStorageKey(id))||'{}'));}catch(_){}
+ return {wrong:Math.min(3,Math.max(0,Number(o.wrong)||0)),correct:!!o.correct};
+}
+function taskGateUnlocked(o){return !!(o.correct||o.wrong>=3);}
+function taskGateNormalize(v){return String(v==null?'':v).trim().toLowerCase().replace(/ё/g,'е').replace(/[−–—]/g,'-').replace(/\s+/g,'').replace(/,/g,'.');}
+function taskGateEqual(typed,expected){
+ const a=taskGateNormalize(typed),b=taskGateNormalize(expected);
+ if(!a||!b)return false;
+ if(a===b)return true;
+ const numeric=/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i;
+ return numeric.test(a)&&numeric.test(b)&&Number(a)===Number(b);
+}
+function checkLessonTaskAnswer(button){
+ const card=button&&button.closest('.pt-card[data-task-gate-id]');
+ if(!card)return;
+ const id=card.dataset.taskGateId;
+ const input=card.querySelector('.task-gate-input');
+ const status=card.querySelector('.task-gate-status');
+ const toggle=card.querySelector('.pt-sol-btn');
+ if(!input||!status||!toggle)return;
+ if(!input.value.trim()){status.textContent='Введите ответ.';return;}
+ const state=taskGateRead(id);
+ if(taskGateUnlocked(state))return;
+ if(taskGateEqual(input.value,card.dataset.taskGateAnswer||'')){
+  state.correct=true;status.textContent='✓ Правильно! Решение открыто.';status.style.color='#16834b';
+ }else{
+  state.wrong=Math.min(3,state.wrong+1);
+  status.textContent=state.wrong===3?'Три неправильные попытки. Решение открыто.':'Неверно. Осталось попыток: '+(3-state.wrong)+'.';
+  status.style.color=state.wrong===3?'#1877d5':'#c45625';
+ }
+ try{localStorage.setItem(taskGateStorageKey(id),JSON.stringify(state));}catch(_){}
+ if(taskGateUnlocked(state)){
+  input.disabled=true;button.disabled=true;
+  const panel=card.querySelector('.pt-solution');
+  if(panel&&!panel.classList.contains('open'))ptToggle(panel.id,toggle);
+  else toggle.textContent='▼ Скрыть';
+ }
+}
+
 function renderPTasks(name){
   if(AC==='oge-mat'&&name==='Задание 10 — каталог задач РЕШУ ОГЭ')return renderOgeMathProbabilityPractice()+renderOgeMathProbabilitySources();
   if(AC==='ege-mat-pro'&&name==='Логарифмы')return renderLogGraphExercises();
@@ -12622,7 +12666,19 @@ function renderOneTask(t,i){
     let ogeAccess={wrong:0,correct:false};
     if(ogeProtected){try{ogeAccess=Object.assign(ogeAccess,JSON.parse(localStorage.getItem('fizmat_oge_circle_attempts_'+taskId)||'{}'));}catch(_){}}
     const ogeUnlocked=!!(ogeAccess.correct||Number(ogeAccess.wrong)>=3);
-    return `<div class="pt-card${isBlank?' pt-blank-card':''}" ${AC==='oge-phy'&&String(t.id||'').startsWith('oge-circle-motion-')?`data-oge-task-id="${escapeHtml(taskId)}"`:""}><div class="pt-head"><div class="pt-num">${String(t.num).padStart(2,'0')}</div><span class="pt-level ${lvlC[t.level]||lvlC[1]}">${lvlL[t.level]||lvlL[1]}</span><span class="pt-exam">${AC==='oge-phy'?'ОГЭ':(t.exam||'ЕГЭ')}</span>${AC==='oge-phy'&&t.sourceType?`<span class="pt-exam">${escapeHtml(String(t.sourceType).split(" · ")[0])}</span>`:""}<span class="pt-title">${AC==='oge-phy'&&t.sourceType?titleText.replace(/^Тип\s+(?:Д?\d+)\s*[—–-]\s*/, ""):titleText}</span></div><div class="pt-body"><div class="pt-condition">${cond}</div>${scheme}${AC==='oge-phy'&&String(t.id||'').startsWith('oge-circle-motion-')?`<div class="oge-circle-answer-area" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:12px 0"><label for="oge-answer-${escapeHtml(taskId)}">Ваш ответ:</label><input id="oge-answer-${escapeHtml(taskId)}" class="oge-circle-answer-input" type="text" autocomplete="off" inputmode="text" aria-label="Введите ответ к задаче" style="max-width:190px;min-height:38px;padding:8px;border:1px solid #8eacca;border-radius:8px" onkeydown="if(event.key==='Enter'){event.preventDefault();ogeCircleCheckAnswer(this.nextElementSibling)}"><button type="button" onclick="ogeCircleCheckAnswer(this)" style="padding:8px 12px;border-radius:8px;background:#1877d5;color:#fff;border:0">Проверить</button><span class="oge-circle-answer-feedback" role="status" aria-live="polite"></span></div>`:""}<div class="pt-side">${boardBtn}${animationBtn}<button class="pt-sol-btn" data-action="solution" data-empty-solution="${emptySolution?'1':'0'}" onclick="ptToggle('${sid}',this)">${ogeProtected&&!ogeUnlocked?'🔒 Решение':'▶ Решение'}</button></div></div><div class="pt-solution${ogeProtected&&ogeUnlocked?' open':''}" id="${sid}">${solutionInner}</div></div>`;
+    const gateAvailable=!isBlank&&!ogeProtected&&!emptySolution&&answer.trim()!=='';
+    const gateState=gateAvailable?taskGateRead(taskId):null;
+    const gateUnlocked=gateAvailable&&taskGateUnlocked(gateState);
+    const gateInputId='task-gate-'+lessonTaskDomId(taskId);
+    const gateHtml=gateAvailable
+      ? `<div class="task-gate-area" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:12px 0">
+          <label for="${escapeHtml(gateInputId)}">Ваш ответ:</label>
+          <input id="${escapeHtml(gateInputId)}" class="task-gate-input" type="text" inputmode="decimal" autocomplete="off" placeholder="Введите ответ" aria-label="Введите ответ к задаче" style="width:min(210px,100%);min-height:38px;padding:8px 12px;border:1px solid #8eacca;border-radius:8px;background:#fff;color:#102e54" ${gateUnlocked?'disabled':''} onkeydown="if(event.key==='Enter'){event.preventDefault();checkLessonTaskAnswer(this.nextElementSibling)}">
+          <button type="button" class="task-gate-check" style="min-height:38px;padding:8px 14px;border:0;border-radius:8px;background:#1877d5;color:white;cursor:pointer" ${gateUnlocked?'disabled':''} onclick="checkLessonTaskAnswer(this)">Проверить</button>
+          <span class="task-gate-status" role="status" aria-live="polite" style="font-size:13px">${gateUnlocked?(gateState.correct?'✓ Ответ принят. Решение доступно.':'Три попытки использованы. Решение доступно.'):'Осталось попыток: '+(3-gateState.wrong)}</span>
+        </div>`
+      : '';
+    return `<div class="pt-card${isBlank?' pt-blank-card':''}" ${gateAvailable?`data-task-gate-id="${escapeHtml(taskId)}" data-task-gate-answer="${escapeHtml(answer)}"`:''} ${AC==='oge-phy'&&String(t.id||'').startsWith('oge-circle-motion-')?`data-oge-task-id="${escapeHtml(taskId)}"`:""}><div class="pt-head"><div class="pt-num">${String(t.num).padStart(2,'0')}</div><span class="pt-level ${lvlC[t.level]||lvlC[1]}">${lvlL[t.level]||lvlL[1]}</span><span class="pt-exam">${AC==='oge-phy'?'ОГЭ':(t.exam||'ЕГЭ')}</span>${AC==='oge-phy'&&t.sourceType?`<span class="pt-exam">${escapeHtml(String(t.sourceType).split(" · ")[0])}</span>`:""}<span class="pt-title">${AC==='oge-phy'&&t.sourceType?titleText.replace(/^Тип\s+(?:Д?\d+)\s*[—–-]\s*/, ""):titleText}</span></div><div class="pt-body"><div class="pt-condition">${cond}</div>${scheme}${gateHtml}${AC==='oge-phy'&&String(t.id||'').startsWith('oge-circle-motion-')?`<div class="oge-circle-answer-area" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:12px 0"><label for="oge-answer-${escapeHtml(taskId)}">Ваш ответ:</label><input id="oge-answer-${escapeHtml(taskId)}" class="oge-circle-answer-input" type="text" autocomplete="off" inputmode="text" aria-label="Введите ответ к задаче" style="max-width:190px;min-height:38px;padding:8px;border:1px solid #8eacca;border-radius:8px" onkeydown="if(event.key==='Enter'){event.preventDefault();ogeCircleCheckAnswer(this.nextElementSibling)}"><button type="button" onclick="ogeCircleCheckAnswer(this)" style="padding:8px 12px;border-radius:8px;background:#1877d5;color:#fff;border:0">Проверить</button><span class="oge-circle-answer-feedback" role="status" aria-live="polite"></span></div>`:""}<div class="pt-side">${boardBtn}${animationBtn}<button class="pt-sol-btn" data-action="solution" data-empty-solution="${emptySolution?'1':'0'}" onclick="ptToggle('${sid}',this)">${(ogeProtected&&!ogeUnlocked)||(gateAvailable&&!gateUnlocked)?'🔒 Решение':'▶ Решение'}</button></div></div><div class="pt-solution${ogeProtected&&ogeUnlocked?' open':''}" id="${sid}">${solutionInner}</div></div>`;
   }
   const hasGroups=tasks.some(t=>t&&t.group);
   if(hasGroups){
@@ -12825,6 +12881,13 @@ function closeTaskAnimationPlaceholder(){
 }
 
 function ptToggle(id,btn){
+  const standardCard=btn&&btn.closest('.pt-card[data-task-gate-id]');
+  if(standardCard&&!taskGateUnlocked(taskGateRead(standardCard.dataset.taskGateId))){
+    const feedback=standardCard.querySelector('.task-gate-status');
+    if(feedback)feedback.textContent='Решение откроется после правильного ответа или трёх неправильных попыток.';
+    return;
+  }
+
   const card=btn&&btn.closest('.pt-card[data-oge-task-id]');
   if(card){
     const taskId=card.dataset.ogeTaskId;
