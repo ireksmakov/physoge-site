@@ -18423,6 +18423,10 @@ function taskBoardSimDraw(){
   ctx.fillStyle='#111827';ctx.font='bold 16px Golos Text,sans-serif';ctx.fillText('v′₁ = 0 м/с',bx+12,by+42);ctx.fillText('p′₁ = 0 кг·м/с',bx+12,by+62);
 }
 function renderPSims(name){
+  if(AC==='ege-phy'&&name==='Изопроцессы'&&typeof renderIsoprocessLab==='function'){
+    setTimeout(function(){if(typeof mountIsoprocessLab==='function')mountIsoprocessLab();},0);
+    return renderIsoprocessLab();
+  }
   const currentExam=getCurrentCourseExam();
   const sims=getSimulatorsForLesson(currentExam,name);
   if(!sims||!sims.length) return`<div style="text-align:center;padding:40px 20px;color:var(--gray)"><div style="font-size:32px;margin-bottom:12px">⚡</div><div style="font-family:var(--fh);font-size:14px;font-weight:700;color:var(--white);margin-bottom:6px">Симулятор в разработке</div><div style="font-size:13px">Симулятор для темы <strong style="color:#39ff14">"${name}"</strong> появится в ближайшее время.</div></div>`;
@@ -19291,4 +19295,5 @@ function togglePlatformTheme(){
 })();
 </script>
 <script src="data/homework-tracking.js?v=20261022-light-hw39"></script>
+<script src="isoprocesses-lab.js?v=20261105-1"></script>
 </body>
