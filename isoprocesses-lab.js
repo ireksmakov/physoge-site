@@ -9,7 +9,8 @@ const tests=[
  ['На V(T) прямая выходит из начала координат. Какой процесс?',1],
  ['На p(T) прямая выходит из начала координат. Какой процесс?',2]
 ];
-const st={exp:0,unknown:1,test:0,variable:2,play:false,phase:0,answer:null,teacher:false,condition:true};
+const st={exp:0,unknown:1,test:0,variable:2,play:false,phase:0,answer:null,teacher:false,condition:true,frameId:null,lastFrame:0};
+function pause(){st.play=false;if(st.frameId!==null){cancelAnimationFrame(st.frameId);st.frameId=null}st.lastFrame=0;}
 const byId=()=>document.getElementById('fizmat-iso-lab');
 const currentMode=()=>st.exp<3?st.exp:st.exp===3?st.unknown:tests[st.test][1];
 const state=()=>{
@@ -53,28 +54,49 @@ function draw(){
  '<div class="iso-controls"><button type="button" data-iso-action="fullscreen">⛶ Полный экран</button><button type="button" data-iso-action="teacher">'+(st.teacher?'Показать законы':'Режим учителя')+'</button><button type="button" data-iso-action="condition">'+(st.condition?'Скрыть условие':'Показать условие')+'</button></div>'+
  '<div class="iso-cols"><section class="iso-panel"><h3>'+(quiz?'Эксперимент с вопросом':modeNames[m])+'</h3>'+
  (st.condition?'<p class="iso-muted">'+(st.exp===3?'Определите неизвестный процесс по графику и показаниям.':st.exp===4?tests[st.test][0]:'Изменяйте параметр газа и проверьте соответствующий закон.')+'</p>':'')+
- piston()+'<div class="iso-metrics"><span><small>p, кПа</small><strong>'+format(s.p)+'</strong></span><span><small>V, л</small><strong>'+format(s.V,2)+'</strong></span><span><small>T, К</small><strong>'+format(s.T,0)+'</strong></span></div>'+
- (st.exp===4?'':'<label for="iso-control-range">'+(m===0?'Объём V':'Температура T')+': '+(m===0?format(st.variable,2)+' л':format(st.variable,0)+' К')+'</label><input id="iso-control-range" type="range" min="'+(m===0?'0.9':'200')+'" max="'+(m===0?'4':'600')+'" step="'+(m===0?'0.05':'5')+'" value="'+st.variable+'">')+
+ '<div data-iso-scene>'+piston()+'</div><div class="iso-metrics"><span><small>p, кПа</small><strong>'+format(s.p)+'</strong></span><span><small>V, л</small><strong>'+format(s.V,2)+'</strong></span><span><small>T, К</small><strong>'+format(s.T,0)+'</strong></span></div>'+
+ (st.exp===4?'':'<label for="iso-control-range">'+(m===0?'Объём V':'Температура T')+': '+'<span data-iso-value>'+(m===0?format(st.variable,2)+' л':format(st.variable,0)+' К')+'</span></label><input id="iso-control-range" type="range" min="'+(m===0?'0.9':'200')+'" max="'+(m===0?'4':'600')+'" step="'+(m===0?'0.05':'5')+'" value="'+st.variable+'">')+
  '<div class="iso-controls"><button type="button" data-iso-action="play">'+(st.play?'⏸ Пауза':'▶ Старт')+'</button><button type="button" data-iso-action="reset">↺ Сброс</button></div></section>'+
- '<section class="iso-panel"><h3>Графики и проверка</h3><div class="iso-charts">'+graph(m,false)+graph(m,true)+'</div>'+
+ '<section class="iso-panel"><h3>Графики и проверка</h3><div class="iso-charts" data-iso-graphs>'+graph(m,false)+graph(m,true)+'</div>'+
  '<p class="iso-note" style="margin-top:12px">'+(revealed?'<strong>'+law[0]+' · '+law[1]+'</strong> '+law[2]:'Закон скрыт. Сделайте вывод самостоятельно.')+'</p>'+
  (quiz?'<div class="iso-answers">'+modeNames.map((name,i)=>'<button type="button" data-iso-answer="'+i+'">'+name+'</button>').join('')+'</div><p class="iso-note" role="status">'+(st.answer===null?'Выберите ответ.':st.answer===m?'Верно! '+law[2]:'Неверно. Сравните форму графика с формулами газовых законов.')+'</p><div class="iso-controls"><button type="button" data-iso-action="next">Следующее задание</button></div>':
  '<p class="iso-note">Эксперимент: измените параметр ползунком и сравните показания приборов.</p>')+
  '</section></div></div>';
 }
-function setExp(i){st.exp=i;st.play=false;st.answer=null;if(i===3)st.unknown=Math.floor(Math.random()*3);if(i===4)st.test=0;st.variable=currentMode()===0?2:300;draw()}
-function reset(){st.play=false;st.answer=null;st.variable=currentMode()===0?2:300;draw()}
-function advance(){st.play=false;st.answer=null;if(st.exp===3)st.unknown=(st.unknown+1)%3;else st.test=(st.test+1)%tests.length;st.variable=currentMode()===0?2:300;draw()}
-function animate(){if(!st.play)return;const root=byId();if(!root||!root.isConnected){st.play=false;return}st.phase+=.045;st.variable=currentMode()===0?Number((2.3+1.2*Math.sin(st.phase)).toFixed(2)):Math.round(400+170*Math.sin(st.phase));draw();requestAnimationFrame(animate)}
-window.renderIsoprocessLab=function(){addStyles();st.play=false;return '<div id="fizmat-iso-lab" aria-label="Интерактивная лаборатория изопроцессов"></div>'};
+function setExp(i){pause();st.exp=i;st.answer=null;if(i===3)st.unknown=Math.floor(Math.random()*3);if(i===4)st.test=0;st.variable=currentMode()===0?2:300;draw()}
+function reset(){pause();st.answer=null;st.variable=currentMode()===0?2:300;draw()}
+function advance(){pause();st.answer=null;if(st.exp===3)st.unknown=(st.unknown+1)%3;else st.test=(st.test+1)%tests.length;st.variable=currentMode()===0?2:300;draw()}
+function updateMeasurements(){
+ const root=byId();if(!root)return;
+ const s=state(),m=currentMode(),scene=root.querySelector('[data-iso-scene]'),metrics=root.querySelector('.iso-metrics'),graphs=root.querySelector('[data-iso-graphs]'),value=root.querySelector('[data-iso-value]'),slider=root.querySelector('#iso-control-range');
+ if(scene)scene.innerHTML=piston();
+ if(metrics)metrics.innerHTML='<span><small>p, кПа</small><strong>'+format(s.p)+'</strong></span><span><small>V, л</small><strong>'+format(s.V,2)+'</strong></span><span><small>T, К</small><strong>'+format(s.T,0)+'</strong></span>';
+ if(graphs)graphs.innerHTML=graph(m,false)+graph(m,true);
+ if(value)value.textContent=m===0?format(st.variable,2)+' л':format(st.variable,0)+' К';
+ if(slider&&document.activeElement!==slider)slider.value=String(st.variable);
+}
+function animate(timestamp){
+ st.frameId=null;
+ if(!st.play)return;
+ const root=byId();
+ if(!root||!root.isConnected){pause();return}
+ if(!st.lastFrame||timestamp-st.lastFrame>=40){
+  st.lastFrame=timestamp;
+  st.phase+=.05;
+  st.variable=currentMode()===0?Number((2.3+1.2*Math.sin(st.phase)).toFixed(2)):Math.round(400+170*Math.sin(st.phase));
+  updateMeasurements();
+ }
+ st.frameId=requestAnimationFrame(animate);
+}
+window.renderIsoprocessLab=function(){addStyles();pause();return '<div id="fizmat-iso-lab" aria-label="Интерактивная лаборатория изопроцессов"></div>'};
 window.mountIsoprocessLab=function(){addStyles();draw()};
 document.addEventListener('click',function(e){
  const root=e.target.closest('#fizmat-iso-lab');if(!root)return;
  const t=e.target.closest('[data-iso-exp]');if(t){setExp(Number(t.dataset.isoExp));return}
- const a=e.target.closest('[data-iso-answer]');if(a){st.play=false;st.answer=Number(a.dataset.isoAnswer);draw();return}
+ const a=e.target.closest('[data-iso-answer]');if(a){pause();st.answer=Number(a.dataset.isoAnswer);draw();return}
  const b=e.target.closest('[data-iso-action]');if(!b)return;
  switch(b.dataset.isoAction){
- case 'play':st.play=!st.play;if(st.play)requestAnimationFrame(animate);else draw();break;
+ case 'play':if(st.play){pause();draw();}else{st.play=true;draw();st.frameId=requestAnimationFrame(animate)}break;
  case 'reset':reset();break;
  case 'next':advance();break;
  case 'teacher':st.teacher=!st.teacher;draw();break;
@@ -82,5 +104,5 @@ document.addEventListener('click',function(e){
  case 'fullscreen':if(document.fullscreenElement)document.exitFullscreen?.();else root.requestFullscreen?.();break;
  }
 });
-document.addEventListener('input',function(e){if(e.target.id!=='iso-control-range'||!e.target.closest('#fizmat-iso-lab'))return;st.play=false;st.variable=Number(e.target.value);draw()});
+document.addEventListener('input',function(e){if(e.target.id!=='iso-control-range'||!e.target.closest('#fizmat-iso-lab'))return;pause();st.variable=Number(e.target.value);updateMeasurements();const play=e.target.closest('#fizmat-iso-lab').querySelector('[data-iso-action="play"]');if(play)play.textContent='▶ Старт';});
 })();
