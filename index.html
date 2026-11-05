@@ -4956,15 +4956,15 @@ const SCHOOL_GEOMETRY_GRADE8_PROGRAM=[
   {"title": "Прямоугольник. Решение задач.", "section": "Четырёхугольники", "paragraphs": "§ 3 п.45"},
   {"title": "Ромб и квадрат. Решение задач.", "section": "Четырёхугольники", "paragraphs": "§ 3 п. 46"},
   {"title": "Осевая и центральная симметрии", "section": "Четырёхугольники", "paragraphs": "§ 3 п. 47"},
-  {"title": "Понятие о площади многоугольника. Площадь квадрата.", "section": "Площадь", "paragraphs": "§1 п.48, 49"},
-  {"title": "Площадь прямоугольника. Решение задач.", "section": "Площадь", "paragraphs": "§ 1 п.50"},
-  {"title": "Площадь параллелограмма.", "section": "Площадь", "paragraphs": "§2 п.51"},
+  {"title": "Площадь многоугольника", "section": "Площадь", "paragraphs": "§1 п.48, 49"},
+  {"title": "Площадь прямоугольника", "section": "Площадь", "paragraphs": "§ 1 п.50"},
+  {"title": "Площадь параллелограмма", "section": "Площадь", "paragraphs": "§2 п.51"},
   {"title": "Площадь параллелограмма. Решение задач.", "section": "Площадь", "paragraphs": "§2 п.51"},
-  {"title": "Площадь треугольника.", "section": "Площадь", "paragraphs": "§2 п.52"},
+  {"title": "Площадь треугольника", "section": "Площадь", "paragraphs": "§2 п.52"},
   {"title": "Площадь треугольника. Решение задач.", "section": "Площадь", "paragraphs": "§2 п.52"},
-  {"title": "Площадь трапеции.", "section": "Площадь", "paragraphs": "§2 п.53"},
+  {"title": "Площадь трапеции", "section": "Площадь", "paragraphs": "§2 п.53"},
   {"title": "Площадь трапеции. Решение задач.", "section": "Площадь", "paragraphs": "§2 п.53"},
-  {"title": "Теорема Пифагора.", "section": "Площадь", "paragraphs": "§3 п.54"},
+  {"title": "Теорема Пифагора", "section": "Площадь", "paragraphs": "§3 п.54"},
   {"title": "Теорема Пифагора. Решение задач.", "section": "Площадь", "paragraphs": "§3 п.54"},
   {"title": "Теорема, обратная теореме Пифагора. Решение задач.", "section": "Площадь", "paragraphs": "§3 п.55"},
   {"title": "Теорема Пифагора. Решение задач.", "section": "Площадь", "paragraphs": "§3 п.55"},
@@ -5416,7 +5416,7 @@ const SCHOOL_GEOMETRY_GRADE8_TEXT_TASKS={
 const schoolGeometryGrade8=COURSES['school-math'].modules.find(module=>module.grade===8&&module.sectionIndex===3);
 // Эти пункты остаются в данных и сохраняют исходные идентификаторы и маршруты,
 // но не показываются в левом «Содержании» курса геометрии 8 класса.
-const SCHOOL_GEOMETRY_GRADE8_HIDDEN_CONTENT_NUMBERS=new Set([1,2,4,6,8,18,20,22,24,27,50,54,56,60,62,69,70]);
+const SCHOOL_GEOMETRY_GRADE8_HIDDEN_CONTENT_NUMBERS=new Set([1,2,4,6,8,15,17,19,21,22,23,24,25,27,50,54,56,60,62,69,70]);
 schoolGeometryGrade8.lessons=SCHOOL_GEOMETRY_GRADE8_PROGRAM.map((item,index)=>{
   const topic=makeSchoolTopic(`math-grade-8-section-4-topic-${index+1}`,item.title);
   topic.sectionTitle=item.section;
