@@ -5467,6 +5467,10 @@ schoolGeometryGrade8.lessons=SCHOOL_GEOMETRY_GRADE8_PROGRAM.map((item,index)=>{
   }
   return topic;
 });
+// В видимом содержании геометрии 8 класса меняем местами пункты 10 и 11,
+// сохраняя исходные ID, задачи, теорию и привязанные материалы уроков.
+[schoolGeometryGrade8.lessons[15], schoolGeometryGrade8.lessons[17]] =
+  [schoolGeometryGrade8.lessons[17], schoolGeometryGrade8.lessons[15]];
 function isSchoolCourse(courseKey){return !!(COURSES[courseKey]&&COURSES[courseKey].school);}
 function findSchoolModule(course,grade,sectionIndex){
   return course.modules.findIndex(module=>module.grade===Number(grade)&&module.sectionIndex===Number(sectionIndex));
