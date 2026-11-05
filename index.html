@@ -5416,7 +5416,7 @@ const SCHOOL_GEOMETRY_GRADE8_TEXT_TASKS={
 const schoolGeometryGrade8=COURSES['school-math'].modules.find(module=>module.grade===8&&module.sectionIndex===3);
 // Эти пункты остаются в данных и сохраняют исходные идентификаторы и маршруты,
 // но не показываются в левом «Содержании» курса геометрии 8 класса.
-const SCHOOL_GEOMETRY_GRADE8_HIDDEN_CONTENT_NUMBERS=new Set([1,2,4,8,10,18,20,22,24,27,50,54,56,60,62,69,70]);
+const SCHOOL_GEOMETRY_GRADE8_HIDDEN_CONTENT_NUMBERS=new Set([1,2,4,6,8,18,20,22,24,27,50,54,56,60,62,69,70]);
 schoolGeometryGrade8.lessons=SCHOOL_GEOMETRY_GRADE8_PROGRAM.map((item,index)=>{
   const topic=makeSchoolTopic(`math-grade-8-section-4-topic-${index+1}`,item.title);
   topic.sectionTitle=item.section;
