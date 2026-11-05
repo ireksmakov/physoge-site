@@ -8289,6 +8289,13 @@ function renderOgeMathProbabilitySources(){
   return `<div class="probability-sources" style="max-width:1120px;margin:auto"><h2 style="font-size:clamp(20px,3vw,30px);margin-bottom:12px">ОГЭ · Математика · Задание 10</h2><p style="color:var(--gray);margin-bottom:10px">37 проверенных задач: 29 — классические вероятности, 5 — деревья вероятностей, 3 — статистика и теоремы о вероятностях.</p><p style="color:var(--gray);margin-bottom:20px">Это каталог ссылок на первоисточник, а не скопированные условия и решения. Остальные 79 заданий пока не проверены и не включены. Задания открываются на сайте «РЕШУ ОГЭ» в новой вкладке.</p>${cards}</div>`;
 }
 function renderTheory(){
+  // ЕГЭ Физика · Изопроцессы: учебная инфографика 16:9 и существующая теория.
+  if(AC==='ege-phy'&&lessonTitle(getLessonObject(AC,CM,CL))==='Изопроцессы'){
+    const image={src:'images/ege-physics/isoprocesses-theory-16x9.svg',alt:'ФИЗМАТ — изотермический, изобарный и изохорный процессы: формулы и графики 16:9'};
+    return '<div class="zsi-theory-carousel ege-phy-isoprocesses-theory" style="margin-bottom:18px">'+
+      createImageCarousel([image],{singleClass:'theory-image-block',imgClass:'theory-carousel-img universal-viewable-image image-carousel-img',captions:false,hint:'Нажмите на инфографику, чтобы увеличить.'})+
+      '</div>'+renderTheoryBlocks(getTH());
+  }
 
   // ОГЭ Математика · Уравнения — четыре теоретические карточки 16:9 без искажения пропорций.
   if(AC==='oge-mat'&&CM===0&&CL===1){
