@@ -2814,6 +2814,75 @@ body.trainer-theme .pt-card .solution-workspace{background:#f8fbff!important;col
 .algebra-nested-modules .mod-head{min-width:0}
 .algebra-nested-modules .mni{overflow-wrap:anywhere}
 .sb-topic-group{margin:12px 12px 6px;padding:8px 10px;border-left:3px solid var(--cyan);border-radius:4px;background:rgba(8,216,255,.07);color:var(--cyan);font-size:12px;font-weight:700;line-height:1.45;overflow-wrap:anywhere}
+
+/* ФИЗМАТ: единый светлый фон фото-карточек во всех курсах.
+   Меняем только контейнеры медиа; тёмная тема уроков, задач и инструментов сохраняется. */
+.zsi-theory-carousel,
+.theory-image-block,
+.image-carousel,
+.zsi-slide,
+.image-carousel-slide,
+.solution-image-card,
+.pt-photo-wrap,
+.pt-solution-image-wrap,
+.task-board-photo-wrap,
+.media-zoom-wrap,
+.school-task-image-block,
+.school-task-image-carousel {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+.zsi-theory-carousel,
+.theory-image-block,
+.solution-image-card {
+  border-color: transparent !important;
+}
+.zsi-theory-carousel,
+.theory-image-block {
+  padding: 0 !important;
+}
+.image-carousel,
+.zsi-slide,
+.image-carousel-slide,
+.pt-photo-wrap,
+.pt-solution-image-wrap,
+.task-board-photo-wrap,
+.media-zoom-wrap,
+.school-task-image-block,
+.school-task-image-carousel {
+  border-color: rgba(75,151,210,.22) !important;
+}
+.image-carousel-viewport,
+.image-carousel-track,
+.zsi-carousel-track {
+  background: transparent !important;
+}
+.image-carousel img,
+.zsi-slide img,
+.theory-image-block img,
+.pt-photo-wrap img,
+.pt-solution-image-wrap img,
+.task-board-photo-wrap img,
+.media-zoom-wrap img,
+.school-task-image-block img,
+.school-task-image-carousel img {
+  background: #eff8ff;
+}
+.image-carousel-topbar,
+.image-carousel-caption,
+.image-carousel-hint,
+.zsi-slide figcaption {
+  background: #eaf5ff !important;
+  border-color: rgba(75,151,210,.2) !important;
+  color: #153c5b !important;
+}
+.image-carousel-alt,
+.image-carousel-counter,
+.image-carousel-hint,
+.zsi-slide figcaption {
+  color: #153c5b !important;
+}
 </style>
 </head>
 <body class="view-mode">
