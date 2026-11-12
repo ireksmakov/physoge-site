@@ -86,3 +86,15 @@
 .fg-log-symbol sub{font-size:.65em;vertical-align:sub;line-height:0;position:static;font-weight:500;color:#183d65}
 .fg-log-argument{margin-left:.08em}
 .fg-log-preview-container{padding-bottom:9px}
+
+/* Математическая запись непосредственно под соответствующим полем ввода. */
+.fg-expression-entry{display:flex;flex-direction:column;width:100%;min-width:0;border-bottom:1px solid #d9e9f5}
+.fg-expression-entry .fg-expression-row{border-bottom:0}
+.fg-expression-entry .fg-log-preview-container{width:100%;padding:0 12px 12px 38px;margin-top:0;min-width:0}
+.fg-expression-entry .fg-log-preview-container:empty{display:none}
+.fg-expression-entry .fg-log-preview{display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:8px 11px;background:#e8f5ff;border:1px solid #c7e5fb;border-radius:10px;line-height:1.4}
+.fg-expression-entry .fg-log-intro{color:#48749c;font-size:11px;font-weight:700}
+.fg-expression-entry .fg-log-math{display:block;width:100%;color:#123d65;font-family:"Cambria Math","Times New Roman",serif;font-size:20px;line-height:1.7;overflow-wrap:anywhere;white-space:normal}
+.fg-expression-entry .fg-log-symbol{display:inline;position:static;margin:0;padding:0;white-space:nowrap}
+.fg-expression-entry .fg-log-symbol sub{font-size:.65em;vertical-align:sub;line-height:0}
+@media(max-width:740px){.fg-expression-entry .fg-log-preview-container{padding-left:36px;padding-right:8px}}
