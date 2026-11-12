@@ -5,7 +5,7 @@ const COLORS=['#196ddd','#ef813b','#24a399','#9c5ac8','#d44368','#678b32'];
 const S={rows:[{id:1,expr:'x^2',visible:true,color:0},{id:2,expr:'sin(x)',visible:true,color:1}],shapes:[],nextId:3,
   selected:1,tool:'select',params:{a:1,b:0,c:0,n:2},scale:48,offsetX:0,offsetY:0,grid:true,axes:true,keyboard:true};
 let root=null,canvas=null,ctx=null,w=0,h=0,ratio=1,pressed=null,first=null,activeField=null,frame=0;
-const TOK=/\s*([0-9]+(?:[.,][0-9]+)?(?:[eE][+-]?\d+)?|[a-zA-Zа-яА-Яπ]+|[()+\-*/^,])\s*/gy;
+const TOK=/\s*([0-9]+(?:\.[0-9]+)?(?:[eE][+-]?\d+)?|[a-zA-Zа-яА-Яπ]+|[()+\-*/^,])\s*/gy;
 const FUNCTIONS={sin:Math.sin,cos:Math.cos,tan:Math.tan,tg:Math.tan,asin:Math.asin,acos:Math.acos,atan:Math.atan,sqrt:Math.sqrt,abs:Math.abs,ln:Math.log,log:Math.log10,exp:Math.exp, floor:Math.floor,ceil:Math.ceil};
 function compile(source){
   const input=String(source||'').trim().replace(/−/g,'-').replace(/×/g,'*').replace(/÷/g,'/').replace(/²/g,'^2').replace(/³/g,'^3').replace(/^y\s*=/i,'').replace(/^f\s*\(\s*x\s*\)\s*=/i,'');
