@@ -110,38 +110,41 @@ function boardHTML(){
 /* Ввод остаётся текстовым, а логарифм показывается с редактируемым нижним индексом. */
 function logarithmParts(expr){
  const text=String(expr||'');
- const m=/log\(\s*([^,()]+?)\s*,/i.exec(text);
+ const m=/\blog\s*\(\s*([^,()]*)\s*,/i.exec(text);
  if(!m)return null;
  const start=m.index, open=text.indexOf('(',start),comma=start+m[0].lastIndexOf(',');
  let depth=1,close=-1;
- for(let i=open+1;i<text.length;i++){
+ for(let i=comma+1;i<text.length;i++){
   if(text[i]==='(')depth++;
-  if(text[i]===')'&&--depth===0){close=i;break;}
-  if(text[i]!==')')continue;
+  else if(text[i]===')'&&--depth===0){close=i;break;}
  }
- if(close<0)return null;
- return {start,baseStart:open+1,baseEnd:comma,argument:text.slice(comma+1,close),end:close+1,
-         prefix:text.slice(0,start),suffix:text.slice(close+1),base:text.slice(open+1,comma).trim()};
+ const complete=close>=0;
+ const argument=text.slice(comma+1,complete?close:text.length).trim();
+ return {start,base:text.slice(open+1,comma).trim(),argument,
+         prefix:text.slice(0,start),suffix:complete?text.slice(close+1):'',complete};
 }
 function logPreviewHTML(r){
  const p=logarithmParts(r.expr);
  if(!p)return '';
+ const base=p.base||'□',argument=p.argument||'□';
  const notation=safe(p.prefix).replace(/\*/g,'·')+
-   '<span class="fg-log-symbol">log<sub>'+safe(p.base)+'</sub></span>'+
-   '<span class="fg-log-argument">('+safe(p.argument)+')</span>'+
+   '<span class="fg-log-symbol">log<sub>'+safe(base)+'</sub></span>'+
+   '<span class="fg-log-argument">('+safe(argument).replace(/-/g,'−')+(p.complete?'':'…')+')</span>'+
    safe(p.suffix).replace(/\*/g,'·');
  return '<div class="fg-log-preview" data-log-preview="'+r.id+'">'+
-   '<span class="fg-log-intro">Математическая запись:</span>'+
-   '<span class="fg-log-math" aria-label="Логарифм по основанию '+safe(p.base)+'">'+notation+'</span></div>';
+   '<div class="fg-log-intro">Математическая запись</div>'+
+   '<div class="fg-log-math" aria-label="Логарифм по основанию '+safe(base)+'">y = '+notation+'</div></div>';
 }
 function refreshLogPreview(r){
  const holder=root?.querySelector('[data-log-preview-container="'+r.id+'"]');
  if(holder)holder.innerHTML=logPreviewHTML(r);
 }
 function rowHTML(r){
- return '<div class="fg-expression-row" data-row="'+r.id+'"><button type="button" data-visible="'+r.id+'" class="fg-eye'+(!r.visible?' dim':'')+'" aria-label="'+(r.visible?'Скрыть':'Показать')+' функцию" title="Показать/скрыть"><span style="background:'+COLORS[r.color%COLORS.length]+'"></span></button>'+
- '<label class="fg-expression-label"><span>y =</span><input type="text" class="fg-expression-input" data-input="'+r.id+'" spellcheck="false" autocomplete="off" placeholder="Введите функцию" aria-label="Функция '+r.id+'" value="'+safe(r.expr)+'"></label>'+
- '<button type="button" class="fg-row-del" data-delete="'+r.id+'" aria-label="Удалить функцию">×</button></div><div class="fg-log-preview-container" data-log-preview-container="'+r.id+'">'+logPreviewHTML(r)+'</div>';
+ return '<div class="fg-expression-entry" data-entry="'+r.id+'">'+
+   '<div class="fg-expression-row" data-row="'+r.id+'"><button type="button" data-visible="'+r.id+'" class="fg-eye'+(!r.visible?' dim':'')+'" aria-label="'+(r.visible?'Скрыть':'Показать')+' функцию" title="Показать/скрыть"><span style="background:'+COLORS[r.color%COLORS.length]+'"></span></button>'+
+   '<label class="fg-expression-label"><span>y =</span><input type="text" class="fg-expression-input" data-input="'+r.id+'" spellcheck="false" autocomplete="off" placeholder="Введите функцию" aria-label="Функция '+r.id+'" value="'+safe(r.expr)+'"></label>'+
+   '<button type="button" class="fg-row-del" data-delete="'+r.id+'" aria-label="Удалить функцию">×</button></div>'+
+   '<div class="fg-log-preview-container" data-log-preview-container="'+r.id+'" aria-live="polite">'+logPreviewHTML(r)+'</div></div>';
 }
 function renderRows(focusId=null){
  const area=root.querySelector('#fg-studio-rows');if(!area)return;
