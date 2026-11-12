@@ -2901,6 +2901,10 @@ body.trainer-theme .pt-card .solution-workspace{background:#f8fbff!important;col
 .ege-mat-topic-entry .ege-mat-subtopic.selected{color:#050a11;background:#cfeaff;box-shadow:inset 2px 0 0 #008ac9}
 
 
+/* Математическая дробная черта: числитель сверху, знаменатель снизу. */
+.fraction6-math{display:inline-block;vertical-align:middle;font-size:1.08em;line-height:1.15;margin:0 .1em}
+.fraction6-card .pt-condition strong{display:inline;line-height:2.05}
+.fraction6-card .pt-rich-card p{line-height:2.05}
 /* ОГЭ по математике — тип 6 */
 .fraction6-card{background:#e7effd!important;color:#17243e!important;border:1px solid #b9cae4!important;border-radius:19px;padding:24px 26px;margin-bottom:18px}
 .fraction6-card .pt-head{display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin-bottom:22px}
@@ -12696,6 +12700,15 @@ const OGE_FRACTION_TYPE6_ITEMS=[
  ['(5/6 + 7/15) · 3','3,9','25/30 + 14/30 = 39/30; 39/30 · 3 = 3,9'],
  ['3,6 − 4,1','−0,5','3,6 − 4,1 = −0,5']
 ];
+/* Показываем обыкновенные дроби с горизонтальной чертой. */
+function formatOgeFractionMath(value){
+  return String(value).split(/(\d+\s*\/\s*\d+)/g).map(function(part){
+    const match=part.match(/^(\d+)\s*\/\s*(\d+)$/);
+    if(!match)return escapeHtml(part);
+    return '<math class="fraction6-math" xmlns="http://www.w3.org/1998/Math/MathML" aria-label="'+match[1]+' дробь '+match[2]+'">'+
+      '<mfrac><mn>'+match[1]+'</mn><mn>'+match[2]+'</mn></mfrac></math>';
+  }).join('');
+}
 function checkOgeFractionType6(button){
   const card=button.closest('[data-fraction-type6]');
   if(!card||card.dataset.solved==='true')return;
@@ -12730,14 +12743,14 @@ function renderOgeFractionType6(){
     const id='oge-mat-fraction6-'+String(i+1).padStart(2,'0');
     const sid='fraction6-solution-'+i;
     const task={id:id,boardMode:id,mode:id,num:i+1,level:1,exam:'ОГЭ',
-      title:'Тип 6',cond:'Найдите значение выражения: '+item[0]+'.',
-      ans:item[1],steps:[item[2]],hasAnimation:false};
+      title:'Тип 6',cond:'Найдите значение выражения: '+formatOgeFractionMath(item[0])+'.',
+      ans:item[1],steps:[formatOgeFractionMath(item[2])],hasAnimation:false};
     window.TASK_BOARD_RUNTIME_TASKS=window.TASK_BOARD_RUNTIME_TASKS||{};
     window.TASK_BOARD_RUNTIME_TASKS[id]=task;
     return '<article class="pt-card fraction6-card" data-fraction-type6 data-answer="'+escapeHtml(item[1])+'" data-attempts="3">'+
       '<div class="pt-head"><span class="pt-num">'+String(i+1).padStart(2,'0')+'</span>'+
       '<span class="pt-level pt-l1">Базовый</span><span class="pt-exam">ОГЭ</span><strong class="pt-title">Тип 6</strong></div>'+
-      '<div class="fraction6-row"><div class="pt-condition">Найдите значение выражения <strong>'+escapeHtml(item[0])+'</strong>.</div>'+
+      '<div class="fraction6-row"><div class="pt-condition">Найдите значение выражения <strong>'+formatOgeFractionMath(item[0])+'</strong>.</div>'+
       '<div class="fraction6-answer"><label for="fraction6-a-'+i+'">Ваш ответ:</label>'+
       '<input id="fraction6-a-'+i+'" inputmode="decimal" autocomplete="off" placeholder="Введите ответ" onkeydown="if(event.key===&#39;Enter&#39;){event.preventDefault();checkOgeFractionType6(this.nextElementSibling)}">'+
       '<button type="button" onclick="checkOgeFractionType6(this)">Проверить</button>'+
@@ -12745,7 +12758,7 @@ function renderOgeFractionType6(){
       '<p class="fraction6-feedback" role="status" aria-live="polite"></p></div></div>'+
       '<div class="fraction6-actions"><button type="button" class="pt-board-btn" onclick="return openTaskBoard(&#39;'+id+'&#39;,true,&#39;'+id+'&#39;)">🧑‍🏫 Доска</button>'+
       '<button type="button" class="pt-sol-btn fraction6-sol-btn" disabled onclick="ptToggle(&#39;'+sid+'&#39;,this)">🔒 Решение</button></div>'+
-      '<div class="pt-solution" id="'+sid+'"><div class="pt-rich-card"><strong>Решение:</strong><p>'+escapeHtml(item[2])+'</p><p><strong>Ответ: '+escapeHtml(item[1])+'</strong></p></div></div></article>';
+      '<div class="pt-solution" id="'+sid+'"><div class="pt-rich-card"><strong>Решение:</strong><p>'+formatOgeFractionMath(item[2])+'</p><p><strong>Ответ: '+escapeHtml(item[1])+'</strong></p></div></div></article>';
   }).join('');
 }
 
