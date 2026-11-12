@@ -27,7 +27,7 @@ function compile(source){
     if(/^(?:\d|\.)/.test(token)){const n=Number(token);if(!Number.isFinite(n))throw Error('Неверное число');return ()=>n;}
     if(/^[a-zа-яπ]+$/i.test(token)){
       if(token==='x')return v=>v.x;
-      if(token==='a'||token==='b'||token==='c')return v=>v[token];
+      if(token==='a'||token==='b'||token==='c'||token==='n')return v=>v[token];
       if(token==='pi'||token==='π')return ()=>Math.PI;
       if(token==='e')return ()=>Math.E;
       const f=FUNCTIONS[token];
