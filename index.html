@@ -8162,9 +8162,7 @@ function selectEgeMatProTopic(event,mi,li,topicIndex){
     container.insertBefore(note,container.firstChild);
   }
 }
-let OGE_FRACTIONS_EXPANDED=true;
 function isOgeFractionsLesson(mi,li){return AC==='oge-mat'&&mi===0&&(li===3||li===4);}
-function toggleOgeFractions(event){event?.preventDefault();event?.stopPropagation();OGE_FRACTIONS_EXPANDED=!OGE_FRACTIONS_EXPANDED;renderSb();}
 function selectOgeFractionsLesson(event,li){event?.preventDefault();event?.stopPropagation();selL({target:{tagName:'SPAN'}},0,li);}
 function renderOgeFractionsSwitcher(){
  if(!isOgeFractionsLesson(CM,CL))return '';
@@ -8238,14 +8236,11 @@ function renderSb(){
         if(AC==='oge-mat'&&mi===0&&li===4)return '';
         if(AC==='oge-mat'&&mi===0&&li===3){
           const selected=CM===0&&(CL===3||CL===4);
-          const choices=OGE_FRACTIONS_EXPANDED?'<div class="oge-fractions-children">'+
-          [3,4].map(j=>'<div class="oge-fractions-sub lli'+(CM===0&&CL===j?' active':'')+'" data-mi="0" data-li="'+j+'" onclick="selL(event,0,'+j+')">'+
-            '<span class="oge-fractions-sub-dot">•</span><span class="oge-fractions-sub-name">'+(j===3?'Действия с обыкновенными дробями':'Действия с десятичными дробями')+'</span>'+
-            renderLessonCompletionButton(AC,0,j)+'</div>').join('')+'</div>':'';
-          return groupHeading+'<div class="oge-fractions-combined"><div class="lli oge-fractions-parent'+(selected?' active':'')+'" data-mi="0" data-li="3">'+
-            '<span class="lnum">'+idx+'</span><span class="oge-fractions-title" onclick="selectOgeFractionsLesson(event,'+(selected?CL:3)+')">Числа и вычисления</span>'+
-            '<button type="button" class="oge-fractions-toggle'+(OGE_FRACTIONS_EXPANDED?' expanded':'')+'" aria-expanded="'+OGE_FRACTIONS_EXPANDED+'" aria-label="Раскрыть подтемы" onclick="toggleOgeFractions(event)">▶</button>'+
-            '</div>'+choices+'</div>';
+          // Единая строка без вложенных подпунктов. Оба исходных урока доступны внутри занятия.
+          return groupHeading+'<div class="oge-fractions-combined">'+
+            '<div class="lli oge-fractions-parent'+(selected?' active':'')+'" data-mi="0" data-li="3" onclick="selectOgeFractionsLesson(event,'+(selected?CL:3)+')">'+
+            '<span class="lnum">'+idx+'</span><span class="oge-fractions-title">Числа и вычисления</span>'+
+            '</div></div>';
         }
         const topics=AC==='ege-mat-pro'&&Array.isArray(l&&l.programTopics)?l.programTopics:[];
         if(topics.length){
