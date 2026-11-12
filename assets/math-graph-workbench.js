@@ -70,7 +70,7 @@ function updateStructuredFormula(){
   const preview=document.getElementById('fg-structured-preview');
   if(preview)preview.textContent='y = '+S.f1;
 }
-function applyParam(k,value){
+function applyParam(k,value,fromNumber=false){
   const n=Number(String(value).replace(',','.'));
   if(!Number.isFinite(n)||n< -10||n>10)return false;
   S[k]=Math.round(n*100)/100;
@@ -78,7 +78,7 @@ function applyParam(k,value){
   const number=document.getElementById('fg-'+k+'-number');
   const output=document.getElementById('fg-'+k+'-value');
   if(slider)slider.value=S[k];
-  if(number)number.value=S[k];
+  if(number&&!fromNumber)number.value=S[k];
   if(output)output.textContent=S[k].toFixed(2);
   updateStructuredFormula();draw();return true;
 }
@@ -170,7 +170,7 @@ function init(){
     ['a','b','c'].forEach(k=>{
       document.getElementById('fg-'+k).addEventListener('input',e=>applyParam(k,e.target.value));
       const number=document.getElementById('fg-'+k+'-number');
-      number.addEventListener('input',e=>{if(e.target.value!=='')applyParam(k,e.target.value);});
+      number.addEventListener('input',e=>{if(e.target.value!=='')applyParam(k,e.target.value,true);});
       number.addEventListener('change',()=>{number.value=S[k];});
     });
     panel.querySelectorAll('.fg-preset').forEach(btn=>btn.addEventListener('click',()=>{S.structured=false;S.f1=btn.dataset.formula;document.getElementById('fg-f1').value=S.f1;draw();}));
