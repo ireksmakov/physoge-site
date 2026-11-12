@@ -2900,6 +2900,22 @@ body.trainer-theme .pt-card .solution-workspace{background:#f8fbff!important;col
 .ege-mat-topic-entry .ege-mat-subtopic:hover,
 .ege-mat-topic-entry .ege-mat-subtopic.selected{color:#050a11;background:#cfeaff;box-shadow:inset 2px 0 0 #008ac9}
 
+
+.oge-fractions-combined{min-width:0;margin:4px 0 8px}
+.oge-fractions-parent{background:rgba(30,120,217,.055);border-color:rgba(35,128,224,.16);gap:6px}
+.oge-fractions-title{flex:1;min-width:0;font-size:13px;font-weight:800;line-height:1.45;color:inherit;cursor:pointer;overflow-wrap:anywhere}
+.oge-fractions-toggle{display:grid;place-items:center;width:28px;height:28px;flex-shrink:0;background:rgba(29,126,216,.1);border:1px solid rgba(55,143,232,.25);border-radius:7px;color:#1a8cdd;font-weight:800;cursor:pointer}
+.oge-fractions-toggle.expanded{transform:rotate(90deg)}
+.oge-fractions-children{border-left:2px solid #77bef3;margin-left:23px;padding:4px 0 4px 8px}
+.oge-fractions-sub{margin-bottom:4px;min-height:38px;display:flex;align-items:center;gap:5px}
+.oge-fractions-sub-dot{font-size:15px;color:#267dcb}
+.oge-fractions-sub-name{flex:1;min-width:0;font-size:12px;line-height:1.45;color:inherit;overflow-wrap:anywhere}
+.oge-fractions-switcher{display:flex;flex-wrap:wrap;gap:9px;margin:8px 0 18px}
+.oge-fractions-switch{border:1px solid #93c6ed;background:linear-gradient(120deg,#e9f6ff,#d4ecff);color:#15588f;font-family:var(--fb);font-weight:700;border-radius:10px;padding:10px 14px;cursor:pointer;font-size:13px}
+.oge-fractions-switch.current{color:#fff;background:linear-gradient(120deg,#2188e5,#1264be);border-color:#1370c9}
+.oge-fractions-switch:hover{box-shadow:0 4px 12px rgba(30,116,203,.13)}
+.oge-fractions-switch:focus-visible,.oge-fractions-toggle:focus-visible{outline:2px solid #219de6;outline-offset:2px}
+@media(max-width:540px){.oge-fractions-switch{flex:1 1 100%;text-align:left}}
 </style>
 <link rel="stylesheet" href="assets/math-graph-workbench.css">
 <script src="assets/math-graph-workbench.js"></script>
@@ -8146,6 +8162,15 @@ function selectEgeMatProTopic(event,mi,li,topicIndex){
     container.insertBefore(note,container.firstChild);
   }
 }
+let OGE_FRACTIONS_EXPANDED=true;
+function isOgeFractionsLesson(mi,li){return AC==='oge-mat'&&mi===0&&(li===3||li===4);}
+function toggleOgeFractions(event){event?.preventDefault();event?.stopPropagation();OGE_FRACTIONS_EXPANDED=!OGE_FRACTIONS_EXPANDED;renderSb();}
+function selectOgeFractionsLesson(event,li){event?.preventDefault();event?.stopPropagation();selL({target:{tagName:'SPAN'}},0,li);}
+function renderOgeFractionsSwitcher(){
+ if(!isOgeFractionsLesson(CM,CL))return '';
+ return '<div class="oge-fractions-switcher" role="group" aria-label="Числа и вычисления">'+
+ [3,4].map(li=>'<button type="button" class="oge-fractions-switch'+(CL===li?' current':'')+'" aria-pressed="'+(CL===li)+'" onclick="selectOgeFractionsLesson(event,'+li+')">'+(li===3?'Обыкновенные дроби':'Десятичные дроби')+'</button>').join('')+'</div>';
+}
 function renderSb(){
   const c=COURSES[AC];let n=1,h='';
   h=`<div class="sb-top"><span class="sb-lbl">Содержание</span></div>`;
@@ -8210,6 +8235,18 @@ function renderSb(){
         const group=(AC==='oge-mat'||AC==='ege-mat-base'||AC==='ege-mat-pro'||AC==='spo-mat')&&l&&typeof l==='object'?l.group||'':'';
         const groupHeading=group&&group!==currentGroup?`<div class="sb-topic-group">${escapeHtml(group)}</div>`:'';
         currentGroup=group;
+        if(AC==='oge-mat'&&mi===0&&li===4)return '';
+        if(AC==='oge-mat'&&mi===0&&li===3){
+          const selected=CM===0&&(CL===3||CL===4);
+          const choices=OGE_FRACTIONS_EXPANDED?'<div class="oge-fractions-children">'+
+          [3,4].map(j=>'<div class="oge-fractions-sub lli'+(CM===0&&CL===j?' active':'')+'" data-mi="0" data-li="'+j+'" onclick="selL(event,0,'+j+')">'+
+            '<span class="oge-fractions-sub-dot">•</span><span class="oge-fractions-sub-name">'+(j===3?'Действия с обыкновенными дробями':'Действия с десятичными дробями')+'</span>'+
+            renderLessonCompletionButton(AC,0,j)+'</div>').join('')+'</div>':'';
+          return groupHeading+'<div class="oge-fractions-combined"><div class="lli oge-fractions-parent'+(selected?' active':'')+'" data-mi="0" data-li="3">'+
+            '<span class="lnum">'+idx+'</span><span class="oge-fractions-title" onclick="selectOgeFractionsLesson(event,'+(selected?CL:3)+')">Числа и вычисления</span>'+
+            '<button type="button" class="oge-fractions-toggle'+(OGE_FRACTIONS_EXPANDED?' expanded':'')+'" aria-expanded="'+OGE_FRACTIONS_EXPANDED+'" aria-label="Раскрыть подтемы" onclick="toggleOgeFractions(event)">▶</button>'+
+            '</div>'+choices+'</div>';
+        }
         const topics=AC==='ege-mat-pro'&&Array.isArray(l&&l.programTopics)?l.programTopics:[];
         if(topics.length){
           const key=mi+':'+li;
@@ -8336,10 +8373,12 @@ function togM(mi){
 function renderContent(){
   const c=COURSES[AC],lesson=getLessonObject(AC,CM,CL),name=lessonTitle(lesson),desc=lessonDescription(lesson),ld=gld();
   if(c.school) return renderSchoolTopic(c,lesson);
+  const combinedFractions=isOgeFractionsLesson(CM,CL);
   document.getElementById('cpCon').innerHTML=`
     <div class="lt-row">
-      <div class="lt-inp">${name}</div>
+      <div class="lt-inp">${combinedFractions?'Числа и вычисления':name}</div>
     </div>
+    ${combinedFractions?renderOgeFractionsSwitcher():''}
     <div class="lmeta">${c.modules[CM].name} · ${c.name}</div>
     ${desc?`<div style="margin:8px 0 18px;color:var(--gray);font-size:14px;line-height:1.6">${desc}</div>`:''}
     <div class="cp-stats">
