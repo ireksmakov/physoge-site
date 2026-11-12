@@ -2901,6 +2901,8 @@ body.trainer-theme .pt-card .solution-workspace{background:#f8fbff!important;col
 .ege-mat-topic-entry .ege-mat-subtopic.selected{color:#050a11;background:#cfeaff;box-shadow:inset 2px 0 0 #008ac9}
 
 </style>
+<link rel="stylesheet" href="assets/math-graph-workbench.css">
+<script src="assets/math-graph-workbench.js"></script>
 </head>
 <body class="view-mode">
 
@@ -7282,7 +7284,7 @@ const ACTIVE_LAB_STORAGE_KEY = 'fizmat_active_lab_state';
 const COURSE_SIDEBAR_STATE_PREFIX = 'courseSidebarState:';
 const SCHOOL_GRADE_SIDEBAR_STATE_PREFIX = 'schoolGradeSidebarState:';
 const SCHOOL_PROGRAM_SECTION_STATE_PREFIX = 'schoolProgramSectionState:';
-const COURSE_TABS = ['theory','tasks','sims','lab','video','tests','hw','trainer'];
+const COURSE_TABS = ['theory','tasks','sims','lab','video','tests','graphs','hw','trainer'];
 const COURSE_TAB_ALIASES = {simulators:'sims',labs:'lab',laboratory:'lab',homework:'hw'};
 function normalizeCourseTab(tabId){return COURSE_TAB_ALIASES[tabId]||tabId;}
 function isValidCourseTab(tabId){
@@ -8020,6 +8022,7 @@ function renderSchoolTopic(course,topic){
       <button class="cpt" data-tab="theory" onclick="showTab('theory',this)">📖 Теория</button>
       <button class="cpt" data-tab="video" onclick="showTab('video',this)">▶ Видео</button>
       <button class="cpt" data-tab="tests" onclick="showTab('tests',this)">✏️ Тесты</button>
+      ${AC==='school-math'?'<button class="cpt" data-tab="graphs" onclick="showTab(\'graphs\',this)">📈 Графики функций</button>':''}
       <button class="cpt" data-tab="tasks" onclick="showTab('tasks',this,'active-ptasks')">📋 Задачи</button>
       <button class="cpt" data-tab="hw" onclick="showTab('hw',this)">📎 Домашнее задание</button>
       ${hasTrainer?'<button class="cpt" data-tab="trainer" onclick="showTab(\'trainer\',this)">🧮 Тренажёр</button>':''}
@@ -8027,6 +8030,7 @@ function renderSchoolTopic(course,topic){
     <div id="pan-theory" class="cp-panel">${panels.theory}</div>
     <div id="pan-video" class="cp-panel">${panels.video}</div>
     <div id="pan-tests" class="cp-panel">${panels.tests}</div>
+    ${AC==='school-math'?'<div id="pan-graphs" class="cp-panel">'+renderMathGraphWorkbench()+'</div>':''}
     <div id="pan-tasks" class="cp-panel">${panels.tasks}</div>
     <div id="pan-hw" class="cp-panel">${panels.hw}</div>
     ${hasTrainer?`<div id="pan-trainer" class="cp-panel">${panels.trainer}</div>`:''}`;
@@ -8350,6 +8354,7 @@ function renderContent(){
       <button class="cpt" data-tab="lab" onclick="showTab('lab',this,'active-plab')">🔬 Лабораторные</button>
       <button class="cpt" data-tab="video" onclick="showTab('video',this)">▶ Видео</button>
       <button class="cpt" data-tab="tests" onclick="showTab('tests',this)">✏️ Тесты</button>
+      ${c.type==='mat'?'<button class="cpt" data-tab="graphs" onclick="showTab(\'graphs\',this)">📈 Графики функций</button>':''}
       <button class="cpt" data-tab="hw" onclick="showTab('hw',this)">📎 Домашнее задание</button>
     </div>
     <div id="pan-theory" class="cp-panel active">${renderTheory()}</div>
@@ -8358,6 +8363,7 @@ function renderContent(){
     <div id="pan-lab"    class="cp-panel">${renderPLab(lesson)}</div>
     <div id="pan-video"  class="cp-panel">${renderVideo(ld)}</div>
     <div id="pan-tests"  class="cp-panel">${renderTests(ld)}</div>
+    ${c.type==='mat'?'<div id="pan-graphs" class="cp-panel">'+renderMathGraphWorkbench()+'</div>':''}
     <div id="pan-hw"     class="cp-panel">${renderHW(ld)}</div>`;
   if(typeof showTab === 'function') showTab(CTAB);
 }
@@ -8376,6 +8382,7 @@ function showTab(id,btn,colorClass){
 
   const panel = document.getElementById('pan-'+id);
   if(panel) panel.classList.add('active');
+  if(id==='graphs' && panel && typeof initMathGraphWorkbench==='function') initMathGraphWorkbench();
 
   const tabButton = btn || document.querySelector(`.cpt[data-tab="${id}"]`);
   if(tabButton) tabButton.classList.add(colorClass || getCourseTabActiveClass(id));
