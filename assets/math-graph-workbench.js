@@ -105,19 +105,47 @@ function boardHTML(){
  '<div id="fg-studio-status" class="fg-studio-status" role="status" aria-live="polite">Готово к построению</div></div></div>'+
  '<div id="fg-studio-keyboard" class="fg-studio-keyboard">'+
  '<div class="fg-kb-head"><strong>Математическая клавиатура</strong><button type="button" data-cmd="hide-keyboard" aria-label="Скрыть клавиатуру">×</button></div>'+
- '<div class="fg-kb-layout">'+KEYS.map((r,idx)=>'<div class="fg-key-row fg-key-row-'+idx+'">'+r.map(k=>'<button type="button" class="fg-key" data-key="'+safe(k)+'">'+safe(k)+'</button>').join('')+'</div>').join('')+'</div></div></section>';
+ '<div class="fg-kb-layout">'+KEYS.map((r,idx)=>'<div class="fg-key-row fg-key-row-'+idx+'">'+r.map(k=>'<button type="button" class="fg-key" data-key="'+safe(k)+'">'+(k==='logₐ'?'<span class="fg-key-log">log<sub>a</sub></span>':safe(k))+'</button>').join('')+'</div>').join('')+'</div></div></section>';
+}
+/* Ввод остаётся текстовым, а логарифм показывается с редактируемым нижним индексом. */
+function logarithmParts(expr){
+ const text=String(expr||'');
+ const m=/log\(\s*([^,()]+?)\s*,/i.exec(text);
+ if(!m)return null;
+ const start=m.index, open=text.indexOf('(',start),comma=start+m[0].lastIndexOf(',');
+ let depth=1,close=-1;
+ for(let i=open+1;i<text.length;i++){
+  if(text[i]==='(')depth++;
+  if(text[i]===')'&&--depth===0){close=i;break;}
+  if(text[i]!==')')continue;
+ }
+ if(close<0)return null;
+ return {start,baseStart:open+1,baseEnd:comma,argument:text.slice(comma+1,close),end:close+1,
+         prefix:text.slice(0,start),suffix:text.slice(close+1),base:text.slice(open+1,comma).trim()};
+}
+function logPreviewHTML(r){
+ const p=logarithmParts(r.expr);
+ if(!p)return '';
+ return '<div class="fg-log-preview" data-log-preview="'+r.id+'"><span class="fg-log-intro">Математическая запись:</span>'+
+ '<span class="fg-log-math">'+safe(p.prefix)+'<span class="fg-log-symbol">log'+
+ '<input type="text" class="fg-log-base" data-log-base="'+r.id+'" aria-label="Основание логарифма" title="Основание логарифма" spellcheck="false" value="'+safe(p.base)+'" size="'+Math.max(1,Math.min(p.base.length,5))+'"></span>'+
+ '<span class="fg-log-argument">('+safe(p.argument)+')</span>'+safe(p.suffix)+'</span></div>';
+}
+function refreshLogPreview(r){
+ const holder=root?.querySelector('[data-log-preview-container="'+r.id+'"]');
+ if(holder)holder.innerHTML=logPreviewHTML(r);
 }
 function rowHTML(r){
  return '<div class="fg-expression-row" data-row="'+r.id+'"><button type="button" data-visible="'+r.id+'" class="fg-eye'+(!r.visible?' dim':'')+'" aria-label="'+(r.visible?'Скрыть':'Показать')+' функцию" title="Показать/скрыть"><span style="background:'+COLORS[r.color%COLORS.length]+'"></span></button>'+
  '<label class="fg-expression-label"><span>y =</span><input type="text" class="fg-expression-input" data-input="'+r.id+'" spellcheck="false" autocomplete="off" placeholder="Введите функцию" aria-label="Функция '+r.id+'" value="'+safe(r.expr)+'"></label>'+
- '<button type="button" class="fg-row-del" data-delete="'+r.id+'" aria-label="Удалить функцию">×</button></div>';
+ '<button type="button" class="fg-row-del" data-delete="'+r.id+'" aria-label="Удалить функцию">×</button></div><div class="fg-log-preview-container" data-log-preview-container="'+r.id+'">'+logPreviewHTML(r)+'</div>';
 }
 function renderRows(focusId=null){
  const area=root.querySelector('#fg-studio-rows');if(!area)return;
  area.innerHTML=S.rows.map(rowHTML).join('');
  area.querySelectorAll('input').forEach(input=>{
    input.addEventListener('focus',()=>{S.selected=Number(input.dataset.input);activeField=input;});
-   input.addEventListener('input',()=>{const r=S.rows.find(r=>r.id===Number(input.dataset.input));if(r){r.expr=input.value;message('Функция обновлена');schedule();}});
+   input.addEventListener('input',()=>{const r=S.rows.find(r=>r.id===Number(input.dataset.input));if(r){r.expr=input.value;refreshLogPreview(r);message('Функция обновлена');schedule();}});
  });
  if(focusId!==null){let f=area.querySelector('[data-input="'+focusId+'"]');if(f){f.focus();f.setSelectionRange(f.value.length,f.value.length);}}
 }
@@ -259,6 +287,19 @@ function updateParams(k,val,origin){
  if(n&&origin!=='number')n.value=number;
  schedule();
 }
+function updateLogBase(event){
+ const id=Number(event.target.dataset.logBase);
+ const r=S.rows.find(item=>item.id===id);
+ if(!r)return;
+ const parts=logarithmParts(r.expr);
+ if(!parts)return;
+ const newBase=event.target.value;
+ const main=root.querySelector('[data-input="'+id+'"]');
+ r.expr=r.expr.slice(0,parts.baseStart)+newBase+r.expr.slice(parts.baseEnd);
+ if(main)main.value=r.expr;
+ event.target.size=Math.max(1,Math.min(newBase.length,5));
+ schedule();
+}
 function click(e){
  const btn=e.target.closest('button');if(!btn||!root.contains(btn))return;
  const d=btn.dataset;
@@ -283,6 +324,8 @@ function init(){
  panel.innerHTML=boardHTML();root=panel.querySelector('.fg-studio');canvas=root.querySelector('#fg-studio-canvas');
  renderRows();renderObjects();settings();
  root.addEventListener('click',click);
+ root.addEventListener('input',e=>{if(e.target.matches('.fg-log-base'))updateLogBase(e);});
+ root.addEventListener('change',e=>{if(e.target.matches('.fg-log-base')){const row=S.rows.find(r=>r.id===Number(e.target.dataset.logBase));if(row)refreshLogPreview(row);}});
  ['a','b','c','n'].forEach(k=>{
   root.querySelector('#fg-par-'+k).addEventListener('input',e=>updateParams(k,e.target.value,'range'));
   const input=root.querySelector('#fg-num-'+k);
