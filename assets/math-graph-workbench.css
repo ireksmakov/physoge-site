@@ -36,3 +36,21 @@
 @media(max-width:900px){.fg-layout{grid-template-columns:1fr}.fg-controls{order:2}.fg-plot{order:1}.fg-canvas-area{height:380px}}
 @media(max-width:560px){.fg-workbench{border-radius:14px}.fg-header{padding:19px 17px}.fg-symbol{width:58px;height:50px;font-size:19px}.fg-layout{padding:10px;gap:10px}.fg-controls,.fg-plot{padding:13px}.fg-canvas-area{height:330px;min-height:280px}.fg-grid-label{margin-left:0}.fg-preset{font-size:11px}}
 @media(prefers-reduced-motion:reduce){.fg-preset{transition:none}}
+
+/* Отдельные поля конструктора: функция, степень, числовые параметры */
+.fg-form-help{font-size:12px;line-height:1.6;color:#436988;margin:-6px 0 14px}
+.fg-form-help strong{color:#145c9e}
+.fg-structured-box{border:1px solid #b9d9f1;border-radius:14px;padding:14px;background:linear-gradient(140deg,#eef8ff,#d7edff);box-shadow:0 7px 22px rgba(33,114,197,.09)}
+.fg-structured-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(85px,110px);gap:10px}
+.fg-structured-field{display:flex;flex-direction:column;gap:7px;font-size:12px;line-height:1.4;font-weight:700;color:#174976;min-width:0}
+.fg-structured-field input,.fg-number-input{width:100%;min-width:0;border:1.5px solid #a9ceeb;border-radius:9px;background:#fff;color:#102c49;font:600 15px var(--fb),Arial,sans-serif;padding:10px 11px;min-height:43px;outline:none}
+.fg-structured-field input:focus,.fg-number-input:focus{border-color:#207ddb;box-shadow:0 0 0 3px rgba(32,125,219,.16)}
+.fg-structured-preview{font-size:12px;color:#174d86;background:rgba(255,255,255,.77);border:1px solid #c2dff4;overflow-wrap:anywhere;line-height:1.5;border-radius:9px;padding:10px 12px;margin-top:12px}
+.fg-apply{width:100%;border:0;border-radius:10px;background:linear-gradient(115deg,#1577d6,#0b57b8);color:#fff;font-family:var(--fb),Arial,sans-serif;font-size:13px;font-weight:800;min-height:42px;padding:10px 13px;cursor:pointer;margin-top:11px;box-shadow:0 6px 16px rgba(20,94,183,.22)}
+.fg-apply:hover{background:linear-gradient(115deg,#2589e5,#176aca)}
+.fg-second-heading{margin-top:22px!important}
+.fg-mini-tip{font-size:11px;line-height:1.5;color:#547492;margin:0 0 12px}
+.fg-param-row{display:grid;grid-template-columns:minmax(0,1fr) 82px;gap:10px;align-items:center;margin-top:8px}
+.fg-param-row input[type=range]{margin:0;min-width:0}
+.fg-number-input{min-height:36px;height:36px;padding:6px 7px;font-size:13px;text-align:center}
+@media(max-width:450px){.fg-structured-grid{grid-template-columns:minmax(0,1fr) 90px}.fg-param-row{grid-template-columns:minmax(0,1fr) 76px;gap:7px}.fg-structured-box{padding:11px}}

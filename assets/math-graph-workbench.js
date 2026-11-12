@@ -1,7 +1,7 @@
 /* ФИЗМАТ — учебный построитель графиков. Без eval и внешних библиотек. */
 (function(){
 'use strict';
-const S={f1:'a*x^2+b*x+c',f2:'',a:1,b:0,c:0,scale:10,grid:true};
+const S={f1:'a*x^2+b*x+c',f2:'',base:'x',power:2,structured:true,a:1,b:0,c:0,scale:10,grid:true};
 const COLORS=['#1265d9','#ed7b26'];
 let current=null;
 const TOK=/\s*([0-9]+(?:[.,][0-9]+)?(?:[eE][+-]?\d+)?|[a-zA-Zа-яА-Яπ]+|[()+\-*/^,])\s*/gy;
@@ -57,17 +57,49 @@ function compile(source){
   if(i!==tokens.length)throw Error('Лишний знак: '+tokens[i]);
   return v=>fn(v);
 }
+function structuredFormula(){
+  const base=String(S.base||'x').trim()||'x';
+  const power=Number(S.power);
+  return 'a*('+base+')^('+power+')+b*x+c';
+}
+function updateStructuredFormula(){
+  if(!S.structured)return;
+  S.f1=structuredFormula();
+  const input=document.getElementById('fg-f1');
+  if(input)input.value=S.f1;
+  const preview=document.getElementById('fg-structured-preview');
+  if(preview)preview.textContent='y = '+S.f1;
+}
+function applyParam(k,value,fromNumber=false){
+  const n=Number(String(value).replace(',','.'));
+  if(!Number.isFinite(n)||n< -10||n>10)return false;
+  S[k]=Math.round(n*100)/100;
+  const slider=document.getElementById('fg-'+k);
+  const number=document.getElementById('fg-'+k+'-number');
+  const output=document.getElementById('fg-'+k+'-value');
+  if(slider)slider.value=S[k];
+  if(number&&!fromNumber)number.value=S[k];
+  if(output)output.textContent=S[k].toFixed(2);
+  updateStructuredFormula();draw();return true;
+}
 function html(){
   return '<section class="fg-workbench" aria-label="Построитель графиков функций">'+
   '<div class="fg-header"><div><span class="fg-eyebrow">ФИЗМАТ · ИНТЕРАКТИВНАЯ МАТЕМАТИКА</span><h2>Графики функций</h2><p>Стройте, сравнивайте и исследуйте функции, изменяя параметры в реальном времени.</p></div><div class="fg-symbol">ƒ(x)</div></div>'+
-  '<div class="fg-layout"><div class="fg-controls"><h3>Формулы функций</h3>'+
+  '<div class="fg-layout"><div class="fg-controls"><h3>Конструктор функции</h3>'+
+  '<p class="fg-form-help">Заполните отдельные поля, чтобы получить график вида <strong>y = a·(f(x))ⁿ + b·x + c</strong>.</p>'+
+  '<div class="fg-structured-box"><div class="fg-structured-grid">'+
+  '<label class="fg-structured-field" for="fg-base">Основа функции f(x)<input id="fg-base" type="text" spellcheck="false" autocomplete="off" value="'+esc(S.base)+'" placeholder="x или sin(x)"></label>'+
+  '<label class="fg-structured-field" for="fg-power">Степень n<input id="fg-power" type="number" inputmode="decimal" min="-10" max="10" step="0.5" value="'+esc(S.power)+'"></label></div>'+
+  '<div class="fg-structured-preview" id="fg-structured-preview" aria-live="polite">y = '+esc(S.f1)+'</div>'+
+  '<button type="button" class="fg-apply" id="fg-apply-structured">Построить по полям</button></div>'+
+  '<h3 class="fg-second-heading">Полный ввод формулы</h3>'+
   '<label class="fg-label" for="fg-f1"><span class="fg-dot fg-blue"></span> Функция 1 · y =</label><input id="fg-f1" class="fg-formula" spellcheck="false" autocomplete="off" value="'+esc(S.f1)+'" placeholder="a*x^2+b*x+c">'+
   '<label class="fg-label" for="fg-f2"><span class="fg-dot fg-orange"></span> Функция 2 · y =</label><input id="fg-f2" class="fg-formula" spellcheck="false" autocomplete="off" value="'+esc(S.f2)+'" placeholder="Например: 2*x+1">'+
   '<div class="fg-heading">Готовые примеры</div><div class="fg-presets">'+[
     ['Линейная','a*x+b'],['Парабола','a*x^2+b*x+c'],['Гипербола','a/x'],['Синусоида','a*sin(b*x)+c'],['Косинусоида','a*cos(b*x)+c'],['Модуль','a*abs(x)+b'],['Корень','a*sqrt(x)+b'],['Показательная','a*exp(x)+b'],['Логарифм','a*ln(x)+b']
   ].map(([name,eq])=>'<button type="button" class="fg-preset" data-formula="'+esc(eq)+'">'+name+'</button>').join('')+'</div>'+
-  '<div class="fg-heading">Параметры</div>'+
-  ['a','b','c'].map(k=>'<div class="fg-param"><label for="fg-'+k+'">Коэффициент <strong>'+k+'</strong> <output id="fg-'+k+'-value">'+S[k].toFixed(1)+'</output></label><input type="range" id="fg-'+k+'" min="-10" max="10" step="0.1" value="'+S[k]+'"></div>').join('')+
+  '<div class="fg-heading">Параметры функции</div><p class="fg-mini-tip">Передвигайте ползунок или впишите точное значение коэффициента.</p>'+
+  ['a','b','c'].map(k=>'<div class="fg-param"><label for="fg-'+k+'">Коэффициент <strong>'+k+'</strong> <output id="fg-'+k+'-value">'+S[k].toFixed(2)+'</output></label><div class="fg-param-row"><input type="range" id="fg-'+k+'" min="-10" max="10" step="0.01" value="'+S[k]+'"><input aria-label="Точное значение '+k+'" id="fg-'+k+'-number" class="fg-number-input" type="number" inputmode="decimal" min="-10" max="10" step="0.01" value="'+S[k]+'"></div></div>').join('')+
   '<div class="fg-help">Используйте <b>*</b> для умножения и <b>^</b> для степени. Доступны sin(x), cos(x), sqrt(x), abs(x), ln(x), log(x), exp(x), pi. Углы в радианах.</div>'+
   '</div><div class="fg-plot"><div class="fg-plot-top"><strong>Координатная плоскость</strong><span id="fg-range-label">от −10 до 10</span></div>'+
   '<div class="fg-canvas-area"><canvas id="fg-canvas" aria-label="Графики введённых функций">График недоступен: браузер не поддерживает canvas.</canvas></div>'+
@@ -127,9 +159,21 @@ function init(){
   if(!document.getElementById('fg-canvas'))panel.innerHTML=html();
   if(current!==panel){
     current=panel;
-    ['f1','f2'].forEach(k=>document.getElementById('fg-'+k).addEventListener('input',e=>{S[k]=e.target.value;draw();}));
-    ['a','b','c'].forEach(k=>document.getElementById('fg-'+k).addEventListener('input',e=>{S[k]=Number(e.target.value);document.getElementById('fg-'+k+'-value').textContent=S[k].toFixed(1);draw();}));
-    panel.querySelectorAll('.fg-preset').forEach(btn=>btn.addEventListener('click',()=>{S.f1=btn.dataset.formula;document.getElementById('fg-f1').value=S.f1;draw();}));
+    ['f1','f2'].forEach(k=>document.getElementById('fg-'+k).addEventListener('input',e=>{S[k]=e.target.value;if(k==='f1')S.structured=false;draw();}));
+    document.getElementById('fg-base').addEventListener('input',e=>{S.base=e.target.value;S.structured=true;updateStructuredFormula();draw();});
+    document.getElementById('fg-power').addEventListener('input',e=>{
+      if(e.target.value==='')return;
+      const v=Number(e.target.value);
+      if(Number.isFinite(v)&&v>=-10&&v<=10){S.power=v;S.structured=true;updateStructuredFormula();draw();}
+    });
+    document.getElementById('fg-apply-structured').addEventListener('click',()=>{S.structured=true;updateStructuredFormula();draw();});
+    ['a','b','c'].forEach(k=>{
+      document.getElementById('fg-'+k).addEventListener('input',e=>applyParam(k,e.target.value));
+      const number=document.getElementById('fg-'+k+'-number');
+      number.addEventListener('input',e=>{if(e.target.value!=='')applyParam(k,e.target.value,true);});
+      number.addEventListener('change',()=>{number.value=S[k];});
+    });
+    panel.querySelectorAll('.fg-preset').forEach(btn=>btn.addEventListener('click',()=>{S.structured=false;S.f1=btn.dataset.formula;document.getElementById('fg-f1').value=S.f1;draw();}));
     document.getElementById('fg-zoom-in').addEventListener('click',()=>{S.scale=Math.max(.5,S.scale/1.5);draw();});
     document.getElementById('fg-zoom-out').addEventListener('click',()=>{S.scale=Math.min(250,S.scale*1.5);draw();});
     document.getElementById('fg-reset').addEventListener('click',()=>{S.scale=10;draw();});
