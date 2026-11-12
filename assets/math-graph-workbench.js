@@ -8,7 +8,7 @@ let root=null,canvas=null,ctx=null,w=0,h=0,ratio=1,pressed=null,first=null,activ
 const TOK=/\s*([0-9]+(?:[.,][0-9]+)?(?:[eE][+-]?\d+)?|[a-zA-Zа-яА-Яπ]+|[()+\-*/^,])\s*/gy;
 const FUNCTIONS={sin:Math.sin,cos:Math.cos,tan:Math.tan,tg:Math.tan,asin:Math.asin,acos:Math.acos,atan:Math.atan,sqrt:Math.sqrt,abs:Math.abs,ln:Math.log,log:Math.log10,exp:Math.exp, floor:Math.floor,ceil:Math.ceil};
 function compile(source){
-  const input=String(source||'').trim().replace(/−/g,'-').replace(/×/g,'*').replace(/÷/g,'/').replace(/²/g,'^2').replace(/³/g,'^3').replace(/,/g,'.').replace(/^y\s*=/i,'').replace(/^f\s*\(\s*x\s*\)\s*=/i,'');
+  const input=String(source||'').trim().replace(/−/g,'-').replace(/×/g,'*').replace(/÷/g,'/').replace(/²/g,'^2').replace(/³/g,'^3').replace(/^y\s*=/i,'').replace(/^f\s*\(\s*x\s*\)\s*=/i,'');
   if(!input)return null;
   const tokens=[];TOK.lastIndex=0;let p=0,match;
   while(p<input.length){
@@ -33,7 +33,17 @@ function compile(source){
       const f=FUNCTIONS[token];
       if(!f)throw Error('Неизвестная функция: '+token);
       if(next()!=='(')throw Error('После '+token+' нужны скобки');
-      const arg=expression(0);if(next()!==')')throw Error('Закройте скобку функции');
+      const arg=expression(0);
+      if(token==='log'&&peek()===','){
+        next();
+        const value=expression(0);
+        if(next()!==')')throw Error('Закройте скобку логарифма');
+        return v=>{
+          const base=arg(v),x=value(v);
+          return base>0&&base!==1&&x>0?Math.log(x)/Math.log(base):NaN;
+        };
+      }
+      if(next()!==')')throw Error('Закройте скобку функции');
       return v=>f(arg(v));
     }
     throw Error('Неожиданный знак: '+token);
@@ -72,7 +82,7 @@ const TOOLS=[
 ];
 const KEYS=[
  ['123','x','y','π','a','b','c','n','(',')','⌫'],
- ['x²','xⁿ','√','|x|','sin','cos','tg','ln','log','e','÷'],
+ ['x²','xⁿ','√','|x|','sin','cos','tg','ln','log','logₐ','e','÷'],
  ['7','8','9','×','−','4','5','6','+','1','2','3','0','.','=']
 ];
 function boardHTML(){
@@ -87,7 +97,7 @@ function boardHTML(){
  '<div id="fg-studio-rows" class="fg-studio-rows"></div>'+
  '<div class="fg-side-params"><div class="fg-mini-title">Параметры <span>a, b, c, n</span></div>'+
  ['a','b','c','n'].map(k=>'<label class="fg-slider-line" for="fg-par-'+k+'"><strong>'+k+'</strong><input id="fg-par-'+k+'" type="range" min="-10" max="10" step="0.1" value="'+S.params[k]+'"><input id="fg-num-'+k+'" class="fg-param-num" type="number" inputmode="decimal" min="-10" max="10" step="0.1" aria-label="Параметр '+k+'" value="'+S.params[k]+'"></label>').join('')+
- '<p class="fg-side-help">Пример: <code>a*x^n+b</code>. Вводите степени через ^, умножение через *.</p></div>'+
+ '<p class="fg-side-help">Пример: <code>a*x^n+b</code>. Логарифм с основанием: <code>log(2,x)</code>. Умножение через *, степень через ^.</p></div>'+
  '<div class="fg-side-objects" id="fg-shape-list"></div></aside>'+
  '<div class="fg-studio-graph"><div class="fg-graph-wrap"><canvas id="fg-studio-canvas" tabindex="0" aria-label="Координатная плоскость, инструменты построения"></canvas>'+
  '<div class="fg-graph-actions"><button type="button" data-cmd="zoomin" title="Увеличить масштаб" aria-label="Увеличить масштаб">＋</button><button type="button" data-cmd="zoomout" title="Уменьшить масштаб" aria-label="Уменьшить масштаб">－</button><button type="button" data-cmd="home" title="Вернуть исходный вид" aria-label="Исходный вид">⌂</button><button type="button" data-cmd="grid" title="Переключить сетку" aria-pressed="'+S.grid+'">▦</button></div>'+
@@ -123,7 +133,7 @@ function settings(){
  root.querySelector('#fg-plot-hint').textContent=first?'Укажите вторую точку':hints[S.tool];
 }
 function keyValue(k){
- const map={'x²':'^2','xⁿ':'^(','√':'sqrt(','|x|':'abs(','sin':'sin(','cos':'cos(','tg':'tan(','ln':'ln(','log':'log(','π':'pi','×':'*','÷':'/','−':'-','=':'','⌫':null};
+ const map={'x²':'^2','xⁿ':'^(','√':'sqrt(','|x|':'abs(','sin':'sin(','cos':'cos(','tg':'tan(','ln':'ln(','log':'log(','logₐ':'log(2,','π':'pi','×':'*','÷':'/','−':'-','=':'','⌫':null};
  return Object.prototype.hasOwnProperty.call(map,k)?map[k]:k;
 }
 function keyboard(k){
