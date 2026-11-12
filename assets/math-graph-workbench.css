@@ -67,3 +67,15 @@
 @media(max-width:740px){.fg-studio{min-height:unset}.fg-studio-top{padding:10px}.fg-studio-brand strong{font-size:14px}.fg-studio-workspace{display:flex;flex-direction:column}.fg-studio-side{order:2;max-height:none;min-height:unset;border-right:0;border-top:1px solid #c5ddee}.fg-studio-graph{order:1;min-height:390px}.fg-graph-wrap{min-height:390px;height:390px;flex:unset}#fg-studio-canvas{min-height:390px}.fg-studio-rows{display:grid;grid-template-columns:1fr}.fg-studio-keyboard{padding:9px}.fg-key-row{flex:1 1 100%}.fg-kb-toggle span{display:none}}
 @media(max-width:420px){.fg-tool{min-width:48px}.fg-tool small{font-size:8px}.fg-expression-input{font-size:13px}.fg-studio-graph,.fg-graph-wrap,#fg-studio-canvas{min-height:330px}.fg-graph-wrap{height:330px}.fg-kb-head{font-size:11px}.fg-param-num{width:56px}}
 @media(prefers-reduced-motion:reduce){.fg-tool{transition:none}}
+
+/* Логарифм с основанием под буквой g: учебная математическая нотация */
+.fg-log-preview-container{padding:0 9px 8px 36px;overflow:visible}
+.fg-log-preview{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;color:#1d4977;font-size:12px;line-height:1.9}
+.fg-log-intro{font-size:10px;color:#6685a4}
+.fg-log-math{font-family:"Cambria Math",Georgia,serif;font-size:18px;color:#142d4b;display:inline-flex;align-items:baseline;white-space:pre-wrap;overflow-wrap:anywhere}
+.fg-log-symbol{display:inline-block;position:relative;margin-right:.43em;padding-bottom:.42em;font-style:normal;font-weight:600;line-height:1}
+.fg-log-base{position:absolute;top:1.03em;left:calc(100% - .19em);width:2.5em;min-width:1.4em;max-width:4.7em;box-sizing:content-box;height:1.1em;padding:0 1px;border:0;border-bottom:1px dashed #6b9aca;border-radius:0;background:transparent;color:#0e66a9;font-family:"Cambria Math",Georgia,serif;font-size:12px;font-weight:700;line-height:1;text-align:center;outline-offset:2px}
+.fg-log-argument{margin-left:.42em}
+.fg-key-log{display:inline-block;position:relative;margin-right:9px;padding-bottom:5px;font-family:"Cambria Math",Georgia,serif;font-size:17px;line-height:1;font-weight:700}
+.fg-key-log sub{position:absolute;left:calc(100% - 2px);bottom:-2px;font-size:10px;font-weight:700}
+@media(max-width:740px){.fg-log-preview-container{padding-left:36px}.fg-log-math{font-size:17px}}
