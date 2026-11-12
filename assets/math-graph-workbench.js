@@ -1,9 +1,10 @@
-/* ФИЗМАТ — учебный построитель графиков. Без eval и внешних библиотек. */
+/* ФИЗМАТ — математическая графическая студия. Самостоятельный учебный редактор. */
 (function(){
 'use strict';
-const S={f1:'a*x^2+b*x+c',f2:'',base:'x',power:2,structured:true,a:1,b:0,c:0,scale:10,grid:true};
-const COLORS=['#1265d9','#ed7b26'];
-let current=null;
+const COLORS=['#196ddd','#ef813b','#24a399','#9c5ac8','#d44368','#678b32'];
+const S={rows:[{id:1,expr:'x^2',visible:true,color:0},{id:2,expr:'sin(x)',visible:true,color:1}],shapes:[],nextId:3,
+  selected:1,tool:'select',params:{a:1,b:0,c:0,n:2},scale:48,offsetX:0,offsetY:0,grid:true,axes:true,keyboard:true};
+let root=null,canvas=null,ctx=null,w=0,h=0,ratio=1,pressed=null,first=null,activeField=null,frame=0;
 const TOK=/\s*([0-9]+(?:[.,][0-9]+)?(?:[eE][+-]?\d+)?|[a-zA-Zа-яА-Яπ]+|[()+\-*/^,])\s*/gy;
 const FUNCTIONS={sin:Math.sin,cos:Math.cos,tan:Math.tan,tg:Math.tan,asin:Math.asin,acos:Math.acos,atan:Math.atan,sqrt:Math.sqrt,abs:Math.abs,ln:Math.log,log:Math.log10,exp:Math.exp, floor:Math.floor,ceil:Math.ceil};
 function compile(source){
@@ -57,131 +58,234 @@ function compile(source){
   if(i!==tokens.length)throw Error('Лишний знак: '+tokens[i]);
   return v=>fn(v);
 }
-function structuredFormula(){
-  const base=String(S.base||'x').trim()||'x';
-  const power=Number(S.power);
-  return 'a*('+base+')^('+power+')+b*x+c';
+
+function safe(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function clamp(v,min,max){return Math.min(max,Math.max(min,v));}
+function schedule(){if(!frame)frame=requestAnimationFrame(()=>{frame=0;draw();});}
+function coordinate(px,py){return {x:(px-w/2-S.offsetX)/S.scale,y:(h/2+S.offsetY-py)/S.scale};}
+function px(x){return w/2+S.offsetX+x*S.scale;}
+function py(y){return h/2+S.offsetY-y*S.scale;}
+function message(text,error=false){const el=root?.querySelector('#fg-studio-status');if(el){el.textContent=text;el.classList.toggle('error',error);}}
+const TOOLS=[
+ ['select','↖','Выбор'],['point','•','Точка'],['line','╱','Прямая'],
+ ['segment','／','Отрезок'],['circle','◯','Окружность'],['move','✥','Перемещение']
+];
+const KEYS=[
+ ['123','x','y','π','a','b','c','n','(',')','⌫'],
+ ['x²','xⁿ','√','|x|','sin','cos','tg','ln','log','e','÷'],
+ ['7','8','9','×','−','4','5','6','+','1','2','3','0','.','=']
+];
+function boardHTML(){
+ return '<section class="fg-studio" aria-label="Интерактивная математическая студия ФИЗМАТ">'+
+ '<div class="fg-studio-top">'+
+ '<div class="fg-studio-brand"><strong>ФИЗ<span>МАТ</span></strong><small>Графики и геометрия</small></div>'+
+ '<div class="fg-studio-tools" role="toolbar" aria-label="Инструменты построения">'+
+ TOOLS.map(([id,sign,name])=>'<button type="button" class="fg-tool'+(S.tool===id?' selected':'')+'" data-tool="'+id+'" title="'+name+'" aria-label="'+name+'" aria-pressed="'+(S.tool===id)+'"><span>'+sign+'</span><small>'+name+'</small></button>').join('')+
+ '</div><button class="fg-kb-toggle" type="button" data-cmd="keyboard" aria-label="Математическая клавиатура">⌨ <span>Клавиатура</span></button></div>'+
+ '<div class="fg-studio-workspace"><aside class="fg-studio-side">'+
+ '<div class="fg-studio-side-head"><strong>Функции и объекты</strong><button type="button" data-cmd="add" aria-label="Добавить функцию">＋</button></div>'+
+ '<div id="fg-studio-rows" class="fg-studio-rows"></div>'+
+ '<div class="fg-side-params"><div class="fg-mini-title">Параметры <span>a, b, c, n</span></div>'+
+ ['a','b','c','n'].map(k=>'<label class="fg-slider-line" for="fg-par-'+k+'"><strong>'+k+'</strong><input id="fg-par-'+k+'" type="range" min="-10" max="10" step="0.1" value="'+S.params[k]+'"><input id="fg-num-'+k+'" class="fg-param-num" type="number" inputmode="decimal" min="-10" max="10" step="0.1" aria-label="Параметр '+k+'" value="'+S.params[k]+'"></label>').join('')+
+ '<p class="fg-side-help">Пример: <code>a*x^n+b</code>. Вводите степени через ^, умножение через *.</p></div>'+
+ '<div class="fg-side-objects" id="fg-shape-list"></div></aside>'+
+ '<div class="fg-studio-graph"><div class="fg-graph-wrap"><canvas id="fg-studio-canvas" tabindex="0" aria-label="Координатная плоскость, инструменты построения"></canvas>'+
+ '<div class="fg-graph-actions"><button type="button" data-cmd="zoomin" title="Увеличить масштаб" aria-label="Увеличить масштаб">＋</button><button type="button" data-cmd="zoomout" title="Уменьшить масштаб" aria-label="Уменьшить масштаб">－</button><button type="button" data-cmd="home" title="Вернуть исходный вид" aria-label="Исходный вид">⌂</button><button type="button" data-cmd="grid" title="Переключить сетку" aria-pressed="'+S.grid+'">▦</button></div>'+
+ '<div class="fg-plot-hint" id="fg-plot-hint">Выберите инструмент и работайте на плоскости</div></div>'+
+ '<div id="fg-studio-status" class="fg-studio-status" role="status" aria-live="polite">Готово к построению</div></div></div>'+
+ '<div id="fg-studio-keyboard" class="fg-studio-keyboard">'+
+ '<div class="fg-kb-head"><strong>Математическая клавиатура</strong><button type="button" data-cmd="hide-keyboard" aria-label="Скрыть клавиатуру">×</button></div>'+
+ '<div class="fg-kb-layout">'+KEYS.map((r,idx)=>'<div class="fg-key-row fg-key-row-'+idx+'">'+r.map(k=>'<button type="button" class="fg-key" data-key="'+safe(k)+'">'+safe(k)+'</button>').join('')+'</div>').join('')+'</div></div></section>';
 }
-function updateStructuredFormula(){
-  if(!S.structured)return;
-  S.f1=structuredFormula();
-  const input=document.getElementById('fg-f1');
-  if(input)input.value=S.f1;
-  const preview=document.getElementById('fg-structured-preview');
-  if(preview)preview.textContent='y = '+S.f1;
+function rowHTML(r){
+ return '<div class="fg-expression-row" data-row="'+r.id+'"><button type="button" data-visible="'+r.id+'" class="fg-eye'+(!r.visible?' dim':'')+'" aria-label="'+(r.visible?'Скрыть':'Показать')+' функцию" title="Показать/скрыть"><span style="background:'+COLORS[r.color%COLORS.length]+'"></span></button>'+
+ '<label class="fg-expression-label"><span>y =</span><input type="text" class="fg-expression-input" data-input="'+r.id+'" spellcheck="false" autocomplete="off" placeholder="Введите функцию" aria-label="Функция '+r.id+'" value="'+safe(r.expr)+'"></label>'+
+ '<button type="button" class="fg-row-del" data-delete="'+r.id+'" aria-label="Удалить функцию">×</button></div>';
 }
-function applyParam(k,value,fromNumber=false){
-  const n=Number(String(value).replace(',','.'));
-  if(!Number.isFinite(n)||n< -10||n>10)return false;
-  S[k]=Math.round(n*100)/100;
-  const slider=document.getElementById('fg-'+k);
-  const number=document.getElementById('fg-'+k+'-number');
-  const output=document.getElementById('fg-'+k+'-value');
-  if(slider)slider.value=S[k];
-  if(number&&!fromNumber)number.value=S[k];
-  if(output)output.textContent=S[k].toFixed(2);
-  updateStructuredFormula();draw();return true;
+function renderRows(focusId=null){
+ const area=root.querySelector('#fg-studio-rows');if(!area)return;
+ area.innerHTML=S.rows.map(rowHTML).join('');
+ area.querySelectorAll('input').forEach(input=>{
+   input.addEventListener('focus',()=>{S.selected=Number(input.dataset.input);activeField=input;});
+   input.addEventListener('input',()=>{const r=S.rows.find(r=>r.id===Number(input.dataset.input));if(r){r.expr=input.value;message('Функция обновлена');schedule();}});
+ });
+ if(focusId!==null){let f=area.querySelector('[data-input="'+focusId+'"]');if(f){f.focus();f.setSelectionRange(f.value.length,f.value.length);}}
 }
-function html(){
-  return '<section class="fg-workbench" aria-label="Построитель графиков функций">'+
-  '<div class="fg-header"><div><span class="fg-eyebrow">ФИЗМАТ · ИНТЕРАКТИВНАЯ МАТЕМАТИКА</span><h2>Графики функций</h2><p>Стройте, сравнивайте и исследуйте функции, изменяя параметры в реальном времени.</p></div><div class="fg-symbol">ƒ(x)</div></div>'+
-  '<div class="fg-layout"><div class="fg-controls"><h3>Конструктор функции</h3>'+
-  '<p class="fg-form-help">Заполните отдельные поля, чтобы получить график вида <strong>y = a·(f(x))ⁿ + b·x + c</strong>.</p>'+
-  '<div class="fg-structured-box"><div class="fg-structured-grid">'+
-  '<label class="fg-structured-field" for="fg-base">Основа функции f(x)<input id="fg-base" type="text" spellcheck="false" autocomplete="off" value="'+esc(S.base)+'" placeholder="x или sin(x)"></label>'+
-  '<label class="fg-structured-field" for="fg-power">Степень n<input id="fg-power" type="number" inputmode="decimal" min="-10" max="10" step="0.5" value="'+esc(S.power)+'"></label></div>'+
-  '<div class="fg-structured-preview" id="fg-structured-preview" aria-live="polite">y = '+esc(S.f1)+'</div>'+
-  '<button type="button" class="fg-apply" id="fg-apply-structured">Построить по полям</button></div>'+
-  '<h3 class="fg-second-heading">Полный ввод формулы</h3>'+
-  '<label class="fg-label" for="fg-f1"><span class="fg-dot fg-blue"></span> Функция 1 · y =</label><input id="fg-f1" class="fg-formula" spellcheck="false" autocomplete="off" value="'+esc(S.f1)+'" placeholder="a*x^2+b*x+c">'+
-  '<label class="fg-label" for="fg-f2"><span class="fg-dot fg-orange"></span> Функция 2 · y =</label><input id="fg-f2" class="fg-formula" spellcheck="false" autocomplete="off" value="'+esc(S.f2)+'" placeholder="Например: 2*x+1">'+
-  '<div class="fg-heading">Готовые примеры</div><div class="fg-presets">'+[
-    ['Линейная','a*x+b'],['Парабола','a*x^2+b*x+c'],['Гипербола','a/x'],['Синусоида','a*sin(b*x)+c'],['Косинусоида','a*cos(b*x)+c'],['Модуль','a*abs(x)+b'],['Корень','a*sqrt(x)+b'],['Показательная','a*exp(x)+b'],['Логарифм','a*ln(x)+b']
-  ].map(([name,eq])=>'<button type="button" class="fg-preset" data-formula="'+esc(eq)+'">'+name+'</button>').join('')+'</div>'+
-  '<div class="fg-heading">Параметры функции</div><p class="fg-mini-tip">Передвигайте ползунок или впишите точное значение коэффициента.</p>'+
-  ['a','b','c'].map(k=>'<div class="fg-param"><label for="fg-'+k+'">Коэффициент <strong>'+k+'</strong> <output id="fg-'+k+'-value">'+S[k].toFixed(2)+'</output></label><div class="fg-param-row"><input type="range" id="fg-'+k+'" min="-10" max="10" step="0.01" value="'+S[k]+'"><input aria-label="Точное значение '+k+'" id="fg-'+k+'-number" class="fg-number-input" type="number" inputmode="decimal" min="-10" max="10" step="0.01" value="'+S[k]+'"></div></div>').join('')+
-  '<div class="fg-help">Используйте <b>*</b> для умножения и <b>^</b> для степени. Доступны sin(x), cos(x), sqrt(x), abs(x), ln(x), log(x), exp(x), pi. Углы в радианах.</div>'+
-  '</div><div class="fg-plot"><div class="fg-plot-top"><strong>Координатная плоскость</strong><span id="fg-range-label">от −10 до 10</span></div>'+
-  '<div class="fg-canvas-area"><canvas id="fg-canvas" aria-label="Графики введённых функций">График недоступен: браузер не поддерживает canvas.</canvas></div>'+
-  '<div class="fg-plot-actions"><button type="button" id="fg-zoom-in" aria-label="Увеличить масштаб">＋</button><button type="button" id="fg-zoom-out" aria-label="Уменьшить масштаб">－</button><button type="button" id="fg-reset">↺ Сброс масштаба</button><label class="fg-grid-label"><input id="fg-grid" type="checkbox" checked> Сетка</label></div>'+
-  '<div class="fg-status" id="fg-status" role="status" aria-live="polite">Введите функцию, чтобы построить график.</div></div></div>'+
-  '</section>';
+function renderObjects(){
+ const target=root.querySelector('#fg-shape-list');if(!target)return;
+ target.innerHTML=S.shapes.length?'<div class="fg-mini-title">Геометрические объекты</div>'+S.shapes.map((o,i)=>'<div class="fg-shape-row"><span>'+safe(o.kind==='point'?'Точка '+o.label:o.kind==='circle'?'Окружность '+(i+1):o.kind==='line'?'Прямая '+(i+1):'Отрезок '+(i+1))+'</span><button type="button" data-shape-del="'+i+'" aria-label="Удалить объект">×</button></div>').join(''):'';
 }
-function esc(x){return String(x).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+function settings(){
+ const kb=root.querySelector('#fg-studio-keyboard');kb.hidden=!S.keyboard;
+ root.querySelectorAll('[data-tool]').forEach(b=>{const on=b.dataset.tool===S.tool;b.classList.toggle('selected',on);b.setAttribute('aria-pressed',String(on));});
+ root.querySelector('[data-cmd="grid"]')?.setAttribute('aria-pressed',String(S.grid));
+ const hints={select:'Перемещайте плоскость перетаскиванием',move:'Перетаскивайте плоскость',point:'Нажмите на плоскость, чтобы поставить точку',line:'Укажите две точки для прямой',segment:'Укажите начало и конец отрезка',circle:'Укажите центр, затем точку на окружности'};
+ root.querySelector('#fg-plot-hint').textContent=first?'Укажите вторую точку':hints[S.tool];
+}
+function keyValue(k){
+ const map={'x²':'^2','xⁿ':'^(','√':'sqrt(','|x|':'abs(','sin':'sin(','cos':'cos(','tg':'tan(','ln':'ln(','log':'log(','π':'pi','×':'*','÷':'/','−':'-','=':'','⌫':null};
+ return Object.prototype.hasOwnProperty.call(map,k)?map[k]:k;
+}
+function keyboard(k){
+ const input=activeField&&activeField.isConnected?activeField:root.querySelector('[data-input="'+S.selected+'"]')||root.querySelector('.fg-expression-input');
+ if(!input)return;
+ const a=input.selectionStart??input.value.length,b=input.selectionEnd??a;
+ let text=keyValue(k),start=a,end=b;
+ if(k==='⌫'){if(a===b)start=Math.max(0,a-1);text='';}
+ if(text===null)return;
+ input.value=input.value.slice(0,start)+text+input.value.slice(end);
+ input.focus();input.setSelectionRange(start+text.length,start+text.length);input.dispatchEvent(new Event('input',{bubbles:true}));
+}
+function labelPoint(x,y){
+ const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+ let i=S.shapes.filter(s=>s.kind==='point').length;
+ return chars[i%chars.length]+(i>=chars.length?Math.floor(i/chars.length)+1:'');
+}
+function createShape(p){
+ if(S.tool==='point'){S.shapes.push({kind:'point',x:p.x,y:p.y,label:labelPoint(p.x,p.y)});renderObjects();schedule();return;}
+ if(!['line','segment','circle'].includes(S.tool))return;
+ if(!first){first=p;settings();schedule();return;}
+ if(Math.hypot(first.x-p.x,first.y-p.y)<.04){message('Выберите две разные точки',true);return;}
+ S.shapes.push({kind:S.tool,p1:first,p2:p});
+ first=null;renderObjects();settings();schedule();
+}
+function niceStep(pixelStep){const val=65/pixelStep,p=Math.pow(10,Math.floor(Math.log10(val))),d=val/p;return (d>5?10:d>2?5:d>1?2:1)*p;}
+function curve(f,color){
+ ctx.strokeStyle=color;ctx.lineWidth=2.65;ctx.lineJoin='round';ctx.lineCap='round';
+ ctx.beginPath();let last=null,segments=0;
+ for(let x=0;x<=w;x+=1.2){
+  const domain=(x-w/2-S.offsetX)/S.scale;
+  let y;try{y=f({x:domain,...S.params});}catch(_){y=NaN;}
+  const ypx=py(y);
+  if(!Number.isFinite(ypx)||Math.abs(ypx)>h*8||last!==null&&Math.abs(ypx-last)>h*.65){last=null;continue;}
+  if(last===null)ctx.moveTo(x,ypx);else ctx.lineTo(x,ypx);
+  segments++;last=ypx;
+ }
+ if(segments)ctx.stroke();
+}
+function drawShape(o){
+ ctx.lineWidth=2;ctx.strokeStyle='#8b50b4';ctx.fillStyle='#8b50b4';
+ if(o.kind==='point'){
+  ctx.beginPath();ctx.arc(px(o.x),py(o.y),4.5,0,2*Math.PI);ctx.fill();
+  ctx.font='bold 12px Arial';ctx.fillText(o.label,px(o.x)+9,py(o.y)-8);return;
+ }
+ const a=o.p1,b=o.p2;
+ if(o.kind==='circle'){
+  ctx.beginPath();ctx.arc(px(a.x),py(a.y),Math.hypot(b.x-a.x,b.y-a.y)*S.scale,0,2*Math.PI);ctx.stroke();
+ }else{
+  ctx.beginPath();
+  if(o.kind==='line'){
+   const dx=b.x-a.x,dy=b.y-a.y,factor=10000;
+   ctx.moveTo(px(a.x-dx*factor),py(a.y-dy*factor));ctx.lineTo(px(a.x+dx*factor),py(a.y+dy*factor));
+  }else{ctx.moveTo(px(a.x),py(a.y));ctx.lineTo(px(b.x),py(b.y));}
+  ctx.stroke();
+ }
+}
 function draw(){
-  const container=document.getElementById('pan-graphs');const canvas=document.getElementById('fg-canvas');
-  if(!container||!canvas||!container.classList.contains('active'))return;
-  const rect=canvas.getBoundingClientRect(),w=Math.max(260,Math.floor(rect.width)),h=Math.max(230,Math.floor(rect.height));
-  const pixelRatio=Math.min(window.devicePixelRatio||1,2);
-  canvas.width=Math.round(w*pixelRatio);canvas.height=Math.round(h*pixelRatio);
-  const ctx=canvas.getContext('2d');if(!ctx)return;
-  ctx.setTransform(pixelRatio,0,0,pixelRatio,0,0);
-  ctx.fillStyle='#fcfeff';ctx.fillRect(0,0,w,h);
-  const k=Math.min(w,h)/(2*S.scale),cx=w/2,cy=h/2;
-  const xx=x=>cx+x*k, yy=y=>cy-y*k;
-  const niceStep=target=>{let exp=Math.pow(10,Math.floor(Math.log10(target)));let v=target/exp;return (v>5?10:v>2?5:v>1?2:1)*exp;};
-  const step=niceStep(54/k);
-  if(S.grid){
-    ctx.strokeStyle='#e3eff9';ctx.lineWidth=1;
-    for(let x=Math.ceil(-cx/k/step)*step;x<=((w-cx)/k);x+=step){ctx.beginPath();ctx.moveTo(Math.round(xx(x))+.5,0);ctx.lineTo(Math.round(xx(x))+.5,h);ctx.stroke();}
-    for(let y=Math.ceil((cy-h)/k/step)*step;y<=cy/k;y+=step){ctx.beginPath();ctx.moveTo(0,Math.round(yy(y))+.5);ctx.lineTo(w,Math.round(yy(y))+.5);ctx.stroke();}
-  }
-  ctx.strokeStyle='#6989aa';ctx.lineWidth=1.6;
-  ctx.beginPath();ctx.moveTo(0,cy);ctx.lineTo(w,cy);ctx.moveTo(cx,0);ctx.lineTo(cx,h);ctx.stroke();
-  ctx.fillStyle='#486785';ctx.font='11px Arial,sans-serif';
-  for(let x=Math.ceil(-cx/k/step)*step;x<=(w-cx)/k;x+=step){if(Math.abs(x)<step/10)continue;let px=xx(x);if(px<18||px>w-18)continue;ctx.fillText(Number(x.toPrecision(4)).toString(),px+3,cy+14);}
-  for(let y=Math.ceil((cy-h)/k/step)*step;y<=cy/k;y+=step){if(Math.abs(y)<step/10)continue;let py=yy(y);if(py<12||py>h-10)continue;ctx.fillText(Number(y.toPrecision(4)).toString(),cx+6,py-4);}
-  ctx.fillText('0',cx+5,cy+13);ctx.fillText('x',w-16,cy-8);ctx.fillText('y',cx+10,14);
-  const errors=[];let plots=0;
-  [S.f1,S.f2].forEach((source,index)=>{
-    if(!source.trim())return;
-    let f;
-    try{f=compile(source);}catch(e){errors.push('Функция '+(index+1)+': '+e.message);return;}
-    ctx.strokeStyle=COLORS[index];ctx.lineWidth=2.8;ctx.lineCap='round';ctx.lineJoin='round';
-    let active=false,prevY=0;
-    ctx.beginPath();
-    for(let px=0;px<=w;px+=1.5){
-      const x=(px-cx)/k;let y;try{y=f({x,a:S.a,b:S.b,c:S.c});}catch(e){y=NaN;}
-      const py=yy(y);
-      if(!Number.isFinite(py)||Math.abs(py)>h*6||active&&Math.abs(py-prevY)>h*.85){active=false;continue;}
-      if(!active)ctx.moveTo(px,py);else ctx.lineTo(px,py);
-      prevY=py;active=true;
-    }
-    ctx.stroke();plots++;
-  });
-  const status=document.getElementById('fg-status');
-  if(status){status.textContent=errors.length?errors.join(' · '):plots?('Построено функций: '+plots+'. Изменяйте параметры для исследования графика.'):'Введите формулу, чтобы построить график.';status.classList.toggle('fg-error',!!errors.length);}
-  const label=document.getElementById('fg-range-label');if(label)label.textContent='масштаб ±'+Number(S.scale.toFixed(2));
+ if(!root||!root.isConnected||!root.closest('#pan-graphs')?.classList.contains('active'))return;
+ const rect=canvas.getBoundingClientRect();
+ if(rect.width<50||rect.height<50)return;
+ ratio=Math.min(window.devicePixelRatio||1,2);w=rect.width;h=rect.height;
+ canvas.width=Math.round(w*ratio);canvas.height=Math.round(h*ratio);
+ ctx=canvas.getContext('2d');if(!ctx)return;ctx.setTransform(ratio,0,0,ratio,0,0);
+ ctx.fillStyle='#fbfdff';ctx.fillRect(0,0,w,h);
+ const step=niceStep(S.scale),ox=px(0),oy=py(0);
+ if(S.grid){
+  const startX=Math.ceil((-ox/S.scale)/step)*step,endX=(w-ox)/S.scale;
+  const startY=Math.ceil((oy-h)/S.scale/step)*step,endY=oy/S.scale;
+  ctx.strokeStyle='#d9e6f4';ctx.lineWidth=1;
+  for(let x=startX,c=0;x<=endX&&c++<400;x+=step){ctx.beginPath();ctx.moveTo(Math.round(px(x))+.5,0);ctx.lineTo(Math.round(px(x))+.5,h);ctx.stroke();}
+  for(let y=startY,c=0;y<=endY&&c++<400;y+=step){ctx.beginPath();ctx.moveTo(0,Math.round(py(y))+.5);ctx.lineTo(w,Math.round(py(y))+.5);ctx.stroke();}
+ }
+ if(S.axes){
+  ctx.strokeStyle='#40536c';ctx.lineWidth=1.55;ctx.beginPath();ctx.moveTo(0,oy);ctx.lineTo(w,oy);ctx.moveTo(ox,0);ctx.lineTo(ox,h);ctx.stroke();
+  ctx.fillStyle='#42576c';ctx.font='11px Arial';
+  const xstart=Math.ceil((-ox/S.scale)/step)*step, xend=(w-ox)/S.scale;
+  for(let x=xstart,c=0;x<=xend&&c++<300;x+=step){if(Math.abs(x)<step*.01)continue;const place=px(x);if(place>15&&place<w-25&&oy>8&&oy<h-8)ctx.fillText(String(Number(x.toPrecision(5))),place+2,clamp(oy+14,14,h-5));}
+  const ystart=Math.ceil((oy-h)/S.scale/step)*step,yend=oy/S.scale;
+  for(let y=ystart,c=0;y<=yend&&c++<300;y+=step){if(Math.abs(y)<step*.01)continue;const place=py(y);if(place>12&&place<h-9&&ox>12&&ox<w-40)ctx.fillText(String(Number(y.toPrecision(5))),clamp(ox+6,2,w-34),place-4);}
+ }
+ let errors=[];
+ for(const r of S.rows){
+  if(!r.visible||!r.expr.trim())continue;
+  try{curve(compile(r.expr),COLORS[r.color%COLORS.length]);}
+  catch(e){errors.push('Функция '+r.id+': '+e.message);}
+ }
+ S.shapes.forEach(drawShape);
+ if(first){ctx.setLineDash([5,5]);ctx.strokeStyle='#7853ba';ctx.beginPath();ctx.arc(px(first.x),py(first.y),7,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);}
+ if(errors.length)message(errors.join(' · '),true);
+ else if(root.querySelector('#fg-studio-status')?.classList.contains('error'))message('Готово к построению');
+}
+function getPos(e){const r=canvas.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};}
+function onDown(e){
+ if(e.button!==0&&e.pointerType==='mouse')return;
+ const p=getPos(e);
+ pressed={x:p.x,y:p.y,ox:S.offsetX,oy:S.offsetY,moved:false};
+ try{canvas.setPointerCapture(e.pointerId);}catch(_){}
+}
+function onMove(e){
+ if(!pressed)return;
+ const p=getPos(e),dx=p.x-pressed.x,dy=p.y-pressed.y;
+ if(Math.abs(dx)+Math.abs(dy)>5)pressed.moved=true;
+ if((S.tool==='select'||S.tool==='move')&&pressed.moved){S.offsetX=pressed.ox+dx;S.offsetY=pressed.oy+dy;schedule();}
+}
+function onUp(e){
+ if(!pressed)return;
+ const wasMoved=pressed.moved;pressed=null;
+ if(!wasMoved&&['point','line','segment','circle'].includes(S.tool)){const p=getPos(e);createShape(coordinate(p.x,p.y));}
+}
+function onWheel(e){
+ e.preventDefault();
+ const v=e.deltaY<0?1.12:1/1.12;
+ const p=getPos(e);const c=coordinate(p.x,p.y);
+ S.scale=clamp(S.scale*v,7,600);S.offsetX=p.x-w/2-c.x*S.scale;S.offsetY=p.y-h/2+c.y*S.scale;schedule();
+}
+function updateParams(k,val,origin){
+ if(val===''||val==='-'||val==='.')return;
+ const number=Number(val);if(!Number.isFinite(number)||number< -10||number>10)return;
+ S.params[k]=number;
+ const r=root.querySelector('#fg-par-'+k),n=root.querySelector('#fg-num-'+k);
+ if(r&&origin!=='range')r.value=number;
+ if(n&&origin!=='number')n.value=number;
+ schedule();
+}
+function click(e){
+ const btn=e.target.closest('button');if(!btn||!root.contains(btn))return;
+ const d=btn.dataset;
+ if(d.tool){S.tool=d.tool;first=null;settings();schedule();return;}
+ if(d.key){keyboard(d.key);return;}
+ if(d.visible){const row=S.rows.find(r=>r.id===Number(d.visible));if(row){row.visible=!row.visible;renderRows();schedule();}return;}
+ if(d.delete){S.rows=S.rows.filter(r=>r.id!==Number(d.delete));renderRows();schedule();return;}
+ if(d.shapeDel!==undefined){S.shapes.splice(Number(d.shapeDel),1);renderObjects();schedule();return;}
+ switch(d.cmd){
+ case 'add':{const id=S.nextId++;S.rows.push({id,expr:'',visible:true,color:(id-1)%COLORS.length});renderRows(id);break;}
+ case 'keyboard':S.keyboard=!S.keyboard;settings();break;
+ case 'hide-keyboard':S.keyboard=false;settings();break;
+ case 'zoomin':S.scale=clamp(S.scale*1.3,7,600);schedule();break;
+ case 'zoomout':S.scale=clamp(S.scale/1.3,7,600);schedule();break;
+ case 'home':S.scale=48;S.offsetX=0;S.offsetY=0;schedule();break;
+ case 'grid':S.grid=!S.grid;settings();schedule();break;
+ }
 }
 function init(){
-  const panel=document.getElementById('pan-graphs');
-  if(!panel||!panel.classList.contains('active'))return;
-  if(!document.getElementById('fg-canvas'))panel.innerHTML=html();
-  if(current!==panel){
-    current=panel;
-    ['f1','f2'].forEach(k=>document.getElementById('fg-'+k).addEventListener('input',e=>{S[k]=e.target.value;if(k==='f1')S.structured=false;draw();}));
-    document.getElementById('fg-base').addEventListener('input',e=>{S.base=e.target.value;S.structured=true;updateStructuredFormula();draw();});
-    document.getElementById('fg-power').addEventListener('input',e=>{
-      if(e.target.value==='')return;
-      const v=Number(e.target.value);
-      if(Number.isFinite(v)&&v>=-10&&v<=10){S.power=v;S.structured=true;updateStructuredFormula();draw();}
-    });
-    document.getElementById('fg-apply-structured').addEventListener('click',()=>{S.structured=true;updateStructuredFormula();draw();});
-    ['a','b','c'].forEach(k=>{
-      document.getElementById('fg-'+k).addEventListener('input',e=>applyParam(k,e.target.value));
-      const number=document.getElementById('fg-'+k+'-number');
-      number.addEventListener('input',e=>{if(e.target.value!=='')applyParam(k,e.target.value,true);});
-      number.addEventListener('change',()=>{number.value=S[k];});
-    });
-    panel.querySelectorAll('.fg-preset').forEach(btn=>btn.addEventListener('click',()=>{S.structured=false;S.f1=btn.dataset.formula;document.getElementById('fg-f1').value=S.f1;draw();}));
-    document.getElementById('fg-zoom-in').addEventListener('click',()=>{S.scale=Math.max(.5,S.scale/1.5);draw();});
-    document.getElementById('fg-zoom-out').addEventListener('click',()=>{S.scale=Math.min(250,S.scale*1.5);draw();});
-    document.getElementById('fg-reset').addEventListener('click',()=>{S.scale=10;draw();});
-    document.getElementById('fg-grid').addEventListener('change',e=>{S.grid=e.target.checked;draw();});
-  }
-  window.requestAnimationFrame(draw);
+ const panel=document.getElementById('pan-graphs');if(!panel||!panel.classList.contains('active'))return;
+ if(root&&root.isConnected&&panel.contains(root)){schedule();return;}
+ panel.innerHTML=boardHTML();root=panel.querySelector('.fg-studio');canvas=root.querySelector('#fg-studio-canvas');
+ renderRows();renderObjects();settings();
+ root.addEventListener('click',click);
+ ['a','b','c','n'].forEach(k=>{
+  root.querySelector('#fg-par-'+k).addEventListener('input',e=>updateParams(k,e.target.value,'range'));
+  const input=root.querySelector('#fg-num-'+k);
+  input.addEventListener('input',e=>updateParams(k,e.target.value,'number'));
+  input.addEventListener('change',()=>{input.value=S.params[k];});
+ });
+ canvas.addEventListener('pointerdown',onDown);canvas.addEventListener('pointermove',onMove);
+ canvas.addEventListener('pointerup',onUp);canvas.addEventListener('pointercancel',()=>{pressed=null;});
+ canvas.addEventListener('wheel',onWheel,{passive:false});
+ canvas.addEventListener('keydown',e=>{if(e.key==='Escape'){first=null;settings();schedule();}});
+ schedule();
 }
-window.renderMathGraphWorkbench=()=>'<div class="fg-standby">Откройте вкладку, чтобы начать построение графиков.</div>';
+window.renderMathGraphWorkbench=()=>'<div class="fg-standby">Откройте вкладку «Графики функций».</div>';
 window.initMathGraphWorkbench=init;
-window.addEventListener('resize',()=>{if(document.getElementById('pan-graphs')?.classList.contains('active'))window.requestAnimationFrame(draw);});
+window.addEventListener('resize',()=>{if(root?.isConnected)schedule();});
 })();
