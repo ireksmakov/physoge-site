@@ -79,3 +79,10 @@
 .fg-key-log{display:inline-block;position:relative;margin-right:9px;padding-bottom:5px;font-family:"Cambria Math",Georgia,serif;font-size:17px;line-height:1;font-weight:700}
 .fg-key-log sub{position:absolute;left:calc(100% - 2px);bottom:-2px;font-size:10px;font-weight:700}
 @media(max-width:740px){.fg-log-preview-container{padding-left:36px}.fg-log-math{font-size:17px}}
+
+/* Вариант 2: обычный текстовый ввод сверху, только математический просмотр снизу. */
+.fg-log-math{display:inline;white-space:normal;line-height:1.65;font-family:"Cambria Math","Times New Roman",serif;font-size:19px}
+.fg-log-symbol{display:inline;position:static;margin:0;padding:0;font-weight:500;white-space:nowrap}
+.fg-log-symbol sub{font-size:.65em;vertical-align:sub;line-height:0;position:static;font-weight:500;color:#183d65}
+.fg-log-argument{margin-left:.08em}
+.fg-log-preview-container{padding-bottom:9px}
