@@ -2900,6 +2900,30 @@ body.trainer-theme .pt-card .solution-workspace{background:#f8fbff!important;col
 .ege-mat-topic-entry .ege-mat-subtopic:hover,
 .ege-mat-topic-entry .ege-mat-subtopic.selected{color:#050a11;background:#cfeaff;box-shadow:inset 2px 0 0 #008ac9}
 
+
+/* ОГЭ по математике — тип 6 */
+.fraction6-card{background:#e7effd!important;color:#17243e!important;border:1px solid #b9cae4!important;border-radius:19px;padding:24px 26px;margin-bottom:18px}
+.fraction6-card .pt-head{display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin-bottom:22px}
+.fraction6-card .pt-num{font-size:30px;color:#e4bca8}
+.fraction6-card .pt-level{background:#d8f5e8;color:#15964a;border-radius:7px;padding:5px 10px}
+.fraction6-card .pt-exam{color:#1677d7;background:#d8eeff;border:1px solid #a9defc;border-radius:7px;padding:5px 10px}
+.fraction6-card .pt-title,.fraction6-card .pt-condition{color:#17243e}
+.fraction6-row{display:grid;grid-template-columns:minmax(0,1fr) 265px;gap:24px;min-height:170px}
+.fraction6-answer{display:flex;flex-direction:column;gap:8px;color:#17243e}
+.fraction6-answer label{font-size:19px}
+.fraction6-answer input{min-height:48px;border:1px solid #8daed3;border-radius:9px;background:#fff;color:#17243e;padding:10px 13px;font-size:17px;width:100%}
+.fraction6-answer button{align-self:start;border:0;border-radius:10px;background:#1877d5;color:white;padding:11px 18px;font-size:16px;font-weight:600;cursor:pointer}
+.fraction6-answer button:disabled{opacity:.6;cursor:default}
+.fraction6-feedback{font-size:13px;min-height:20px}
+.fraction6-correct{color:#167f43}
+.fraction6-actions{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+.fraction6-actions button{width:100%;min-height:42px;border-radius:9px}
+.fraction6-actions .pt-board-btn{background:#dcf4ff!important;color:#1677d7!important;border:1px solid #abeaff}
+.fraction6-actions .pt-sol-btn{background:#e8eaf1!important;color:#e59200!important;border:1px solid #efc9a4}
+.fraction6-actions .pt-sol-btn:disabled{opacity:.75;cursor:not-allowed}
+.fraction6-card .pt-solution{margin-top:14px}
+@media(max-width:700px){.fraction6-card{padding:16px}.fraction6-row{grid-template-columns:1fr;gap:18px}.fraction6-answer{max-width:100%}}
+
 </style>
 <link rel="stylesheet" href="assets/math-graph-workbench.css">
 <script src="assets/math-graph-workbench.js"></script>
@@ -12653,7 +12677,80 @@ function checkLessonTaskAnswer(button){
  }
 }
 
+
+/* Тип 6: действия с дробями. Изолированная реализация для ОГЭ по математике. */
+const OGE_FRACTION_TYPE6_ITEMS=[
+ ['2,1 · 9,6','20,16','2,1 · 9,6 = 20,16'],
+ ['1/5 + 19/20','1,15','1/5 = 4/20; 4/20 + 19/20 = 23/20 = 1,15'],
+ ['4/5 : 2/7','2,8','4/5 · 7/2 = 28/10 = 2,8'],
+ ['6,1 − 2,5','3,6','6,1 − 2,5 = 3,6'],
+ ['13,2 : 1,2','11','13,2 : 1,2 = 132 : 12 = 11'],
+ ['1 : (1/35 − 1/60)','84','1/35 − 1/60 = 5/420 = 1/84; 1 : (1/84) = 84'],
+ ['18 · (1/9)² − 20 · (1/9)','−2','18/81 − 20/9 = 2/9 − 20/9 = −2'],
+ ['(2 · 10³)² · (12 · 10⁻³)','48000','4 · 10⁶ · 12 · 10⁻³ = 48000'],
+ ['(5/26 − 3/25) · 13/2','0,47','5/26 − 3/25 = 47/650; 47/650 · 13/2 = 0,47'],
+ ['7,2 : (8,3 − 8,6)','−24','8,3 − 8,6 = −0,3; 7,2 : (−0,3) = −24'],
+ ['−7 · (−4,7) − 6,8','26,1','32,9 − 6,8 = 26,1'],
+ ['80 + 0,4 · (−10)³','−320','(−10)³ = −1000; 80 − 400 = −320'],
+ ['24 : (4 · 4,8)','1,25','4 · 4,8 = 19,2; 24 : 19,2 = 1,25'],
+ ['(5/6 + 7/15) · 3','3,9','25/30 + 14/30 = 39/30; 39/30 · 3 = 3,9'],
+ ['3,6 − 4,1','−0,5','3,6 − 4,1 = −0,5']
+];
+function checkOgeFractionType6(button){
+  const card=button.closest('[data-fraction-type6]');
+  if(!card||card.dataset.solved==='true')return;
+  const input=card.querySelector('input');
+  const feedback=card.querySelector('.fraction6-feedback');
+  let left=Number(card.dataset.attempts);
+  if(left<=0)return;
+  const raw=String(input.value||'').trim().replace(/\s/g,'').replace(',','.');
+  if(!raw){feedback.textContent='Введите ответ.';return;}
+  function numeric(x){
+    if(/^[-+]?\d+(?:\.\d+)?\/[-+]?\d+(?:\.\d+)?$/.test(x)){
+      const p=x.split('/').map(Number);return p[1]===0?NaN:p[0]/p[1];
+    }
+    return /^[-+]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(x)?Number(x):NaN;
+  }
+  const actual=numeric(raw),expected=numeric(card.dataset.answer.replace(',','.'));
+  if(Number.isFinite(actual)&&Math.abs(actual-expected)<1e-9*Math.max(1,Math.abs(expected))){
+    card.dataset.solved='true';feedback.textContent='Верно! Решение разблокировано.';
+    feedback.classList.add('fraction6-correct');
+    input.disabled=true;button.disabled=true;
+    const sol=card.querySelector('.fraction6-sol-btn');
+    sol.disabled=false;sol.textContent='▶ Решение';
+  }else{
+    left-=1;card.dataset.attempts=String(left);
+    feedback.textContent=left?'Неверно. Попробуйте ещё раз.':'Попытки закончились.';
+    if(!left){input.disabled=true;button.disabled=true;}
+  }
+  card.querySelector('.fraction6-left').textContent=String(left);
+}
+function renderOgeFractionType6(){
+  return OGE_FRACTION_TYPE6_ITEMS.map(function(item,i){
+    const id='oge-mat-fraction6-'+String(i+1).padStart(2,'0');
+    const sid='fraction6-solution-'+i;
+    const task={id:id,boardMode:id,mode:id,num:i+1,level:1,exam:'ОГЭ',
+      title:'Тип 6',cond:'Найдите значение выражения: '+item[0]+'.',
+      ans:item[1],steps:[item[2]],hasAnimation:false};
+    window.TASK_BOARD_RUNTIME_TASKS=window.TASK_BOARD_RUNTIME_TASKS||{};
+    window.TASK_BOARD_RUNTIME_TASKS[id]=task;
+    return '<article class="pt-card fraction6-card" data-fraction-type6 data-answer="'+escapeHtml(item[1])+'" data-attempts="3">'+
+      '<div class="pt-head"><span class="pt-num">'+String(i+1).padStart(2,'0')+'</span>'+
+      '<span class="pt-level pt-l1">Базовый</span><span class="pt-exam">ОГЭ</span><strong class="pt-title">Тип 6</strong></div>'+
+      '<div class="fraction6-row"><div class="pt-condition">Найдите значение выражения <strong>'+escapeHtml(item[0])+'</strong>.</div>'+
+      '<div class="fraction6-answer"><label for="fraction6-a-'+i+'">Ваш ответ:</label>'+
+      '<input id="fraction6-a-'+i+'" inputmode="decimal" autocomplete="off" placeholder="Введите ответ" onkeydown="if(event.key===&#39;Enter&#39;){event.preventDefault();checkOgeFractionType6(this.nextElementSibling)}">'+
+      '<button type="button" onclick="checkOgeFractionType6(this)">Проверить</button>'+
+      '<div>Осталось попыток: <span class="fraction6-left">3</span></div>'+
+      '<p class="fraction6-feedback" role="status" aria-live="polite"></p></div></div>'+
+      '<div class="fraction6-actions"><button type="button" class="pt-board-btn" onclick="return openTaskBoard(&#39;'+id+'&#39;,true,&#39;'+id+'&#39;)">🧑‍🏫 Доска</button>'+
+      '<button type="button" class="pt-sol-btn fraction6-sol-btn" disabled onclick="ptToggle(&#39;'+sid+'&#39;,this)">🔒 Решение</button></div>'+
+      '<div class="pt-solution" id="'+sid+'"><div class="pt-rich-card"><strong>Решение:</strong><p>'+escapeHtml(item[2])+'</p><p><strong>Ответ: '+escapeHtml(item[1])+'</strong></p></div></div></article>';
+  }).join('');
+}
+
 function renderPTasks(name){
+  if(AC==='oge-mat'&&name==='Действия с дробями')return renderOgeFractionType6();
   if(AC==='oge-mat'&&name==='Задание 10 — каталог задач РЕШУ ОГЭ')return renderOgeMathProbabilityPractice()+renderOgeMathProbabilitySources();
   if(AC==='ege-mat-pro'&&name==='Логарифмы')return renderLogGraphExercises();
   if(AC==='oge-mat'&&CM===0&&CL===1&&name==='Уравнения'){
