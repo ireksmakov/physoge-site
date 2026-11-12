@@ -1,0 +1,38 @@
+/* ФИЗМАТ · Графики функций — светлая учебная панель */
+#pan-graphs{color:#142d48}
+.fg-workbench{--fg-blue:#1669d2;--fg-ink:#152a42;--fg-border:#c5ddf2;border-radius:22px;overflow:hidden;border:1px solid #b5d8f6;background:linear-gradient(135deg,#e7f5ff 0%,#d8edff 56%,#f1f9ff 100%);box-shadow:0 22px 55px rgba(31,107,177,.12);font-family:var(--fb),Arial,sans-serif}
+.fg-workbench *{box-sizing:border-box}
+.fg-header{padding:26px 30px 22px;background:linear-gradient(120deg,#deefff,#cce8ff 65%,#e5f5ff);display:flex;align-items:center;justify-content:space-between;gap:15px;border-bottom:1px solid #b8daf5}
+.fg-header h2{color:#113760!important;font-family:var(--fh),sans-serif;font-weight:800;font-size:clamp(19px,2vw,29px);margin:5px 0 9px}
+.fg-header p{color:#506f91;font-size:14px;line-height:1.55;margin:0;max-width:640px}
+.fg-eyebrow{font-size:10px;letter-spacing:1.4px;font-weight:800;color:#1972c0}
+.fg-symbol{flex-shrink:0;display:grid;place-items:center;width:88px;height:70px;border:1px solid rgba(21,104,214,.24);border-radius:20px;color:#0865bb;font:800 25px Georgia,serif;background:linear-gradient(140deg,#fff,#b5deff);box-shadow:0 7px 24px rgba(33,117,194,.14)}
+.fg-layout{display:grid;grid-template-columns:minmax(265px,340px) minmax(0,1fr);gap:16px;padding:20px}
+.fg-controls,.fg-plot{border:1px solid var(--fg-border);background:rgba(255,255,255,.86);border-radius:17px;padding:20px;min-width:0;box-shadow:0 8px 22px rgba(53,114,169,.07)}
+.fg-controls h3{font-weight:800;color:#173b60;font-size:16px;margin:0 0 17px}
+.fg-label{display:flex;align-items:center;gap:7px;margin:13px 0 6px;font-weight:700;font-size:12px;color:#315b84}
+.fg-dot{width:10px;height:10px;display:inline-block;border-radius:100%}.fg-blue{background:#1265d9}.fg-orange{background:#ed7b26}
+.fg-formula{font:600 15px var(--fb),sans-serif;width:100%;min-height:44px;border-radius:10px;border:1.5px solid #b9d3e9;color:#122b47;background:#fff;padding:9px 12px;outline:none}
+.fg-formula:focus{border-color:#207ddb;box-shadow:0 0 0 3px rgba(32,125,219,.16)}
+.fg-heading{color:#204a75;font-size:13px;font-weight:800;margin:22px 0 10px}
+.fg-presets{display:flex;flex-wrap:wrap;gap:7px}
+.fg-preset{background:linear-gradient(140deg,#f5fbff,#dcf0ff);color:#16558e;border:1px solid #a9d2f1;border-radius:8px;font-family:inherit;font-weight:700;font-size:11px;padding:8px 10px;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.fg-preset:hover{transform:translateY(-2px);background:linear-gradient(130deg,#cdeaff,#b8dfff);box-shadow:0 5px 14px rgba(24,100,185,.16)}
+.fg-param{margin:13px 0 15px}.fg-param label{display:flex;align-items:center;gap:5px;font-size:13px;color:#31577c}.fg-param output{margin-left:auto;color:#135cb9;font-weight:800;font-variant-numeric:tabular-nums}
+.fg-param input[type=range]{display:block;width:100%;margin-top:10px;accent-color:#1671d5;cursor:pointer}
+.fg-help{background:#eaf5ff;border:1px solid #c8e0f3;padding:11px 12px;border-radius:10px;color:#456889;font-size:11px;line-height:1.6;margin-top:17px}
+.fg-plot{display:flex;flex-direction:column;gap:12px}
+.fg-plot-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;color:#203f61;font-size:14px}
+.fg-plot-top span{background:#e8f4ff;color:#276ba7;border:1px solid #cee5fb;border-radius:30px;padding:5px 10px;font-size:12px}
+.fg-canvas-area{position:relative;width:100%;height:clamp(320px,42vw,510px);min-height:320px;border:1px solid #c3d7e8;background:#fcfeff;border-radius:12px;overflow:hidden}
+#fg-canvas{width:100%;height:100%;display:block}
+.fg-plot-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.fg-plot-actions button{border:1px solid #a6caeb;border-radius:9px;background:linear-gradient(#eaf7ff,#cfe9ff);min-height:35px;padding:6px 11px;color:#145a9c;font-size:13px;font-weight:800;cursor:pointer}
+.fg-plot-actions button:hover{background:#b5dcff}
+.fg-grid-label{margin-left:auto;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#385e82;cursor:pointer}.fg-grid-label input{accent-color:#166ad3}
+.fg-status{font-size:12px;line-height:1.5;min-height:38px;color:#23639b;background:#e7f3ff;border:1px solid #d1e6fa;border-radius:9px;padding:9px 11px}
+.fg-status.fg-error{background:#fff1ef;border-color:#ffd0c9;color:#ae382f}
+.fg-standby{padding:30px;text-align:center;background:#e2f2ff;color:#2e699f;border-radius:14px}
+@media(max-width:900px){.fg-layout{grid-template-columns:1fr}.fg-controls{order:2}.fg-plot{order:1}.fg-canvas-area{height:380px}}
+@media(max-width:560px){.fg-workbench{border-radius:14px}.fg-header{padding:19px 17px}.fg-symbol{width:58px;height:50px;font-size:19px}.fg-layout{padding:10px;gap:10px}.fg-controls,.fg-plot{padding:13px}.fg-canvas-area{height:330px;min-height:280px}.fg-grid-label{margin-left:0}.fg-preset{font-size:11px}}
+@media(prefers-reduced-motion:reduce){.fg-preset{transition:none}}
