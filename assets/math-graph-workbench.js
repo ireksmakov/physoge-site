@@ -126,10 +126,13 @@ function logarithmParts(expr){
 function logPreviewHTML(r){
  const p=logarithmParts(r.expr);
  if(!p)return '';
- return '<div class="fg-log-preview" data-log-preview="'+r.id+'"><span class="fg-log-intro">Математическая запись:</span>'+
- '<span class="fg-log-math">'+safe(p.prefix)+'<span class="fg-log-symbol">log'+
- '<input type="text" class="fg-log-base" data-log-base="'+r.id+'" aria-label="Основание логарифма" title="Основание логарифма" spellcheck="false" value="'+safe(p.base)+'" size="'+Math.max(1,Math.min(p.base.length,5))+'"></span>'+
- '<span class="fg-log-argument">('+safe(p.argument)+')</span>'+safe(p.suffix)+'</span></div>';
+ const notation=safe(p.prefix).replace(/\*/g,'·')+
+   '<span class="fg-log-symbol">log<sub>'+safe(p.base)+'</sub></span>'+
+   '<span class="fg-log-argument">('+safe(p.argument)+')</span>'+
+   safe(p.suffix).replace(/\*/g,'·');
+ return '<div class="fg-log-preview" data-log-preview="'+r.id+'">'+
+   '<span class="fg-log-intro">Математическая запись:</span>'+
+   '<span class="fg-log-math" aria-label="Логарифм по основанию '+safe(p.base)+'">'+notation+'</span></div>';
 }
 function refreshLogPreview(r){
  const holder=root?.querySelector('[data-log-preview-container="'+r.id+'"]');
@@ -287,19 +290,6 @@ function updateParams(k,val,origin){
  if(n&&origin!=='number')n.value=number;
  schedule();
 }
-function updateLogBase(event){
- const id=Number(event.target.dataset.logBase);
- const r=S.rows.find(item=>item.id===id);
- if(!r)return;
- const parts=logarithmParts(r.expr);
- if(!parts)return;
- const newBase=event.target.value;
- const main=root.querySelector('[data-input="'+id+'"]');
- r.expr=r.expr.slice(0,parts.baseStart)+newBase+r.expr.slice(parts.baseEnd);
- if(main)main.value=r.expr;
- event.target.size=Math.max(1,Math.min(newBase.length,5));
- schedule();
-}
 function click(e){
  const btn=e.target.closest('button');if(!btn||!root.contains(btn))return;
  const d=btn.dataset;
@@ -324,8 +314,6 @@ function init(){
  panel.innerHTML=boardHTML();root=panel.querySelector('.fg-studio');canvas=root.querySelector('#fg-studio-canvas');
  renderRows();renderObjects();settings();
  root.addEventListener('click',click);
- root.addEventListener('input',e=>{if(e.target.matches('.fg-log-base'))updateLogBase(e);});
- root.addEventListener('change',e=>{if(e.target.matches('.fg-log-base')){const row=S.rows.find(r=>r.id===Number(e.target.dataset.logBase));if(row)refreshLogPreview(row);}});
  ['a','b','c','n'].forEach(k=>{
   root.querySelector('#fg-par-'+k).addEventListener('input',e=>updateParams(k,e.target.value,'range'));
   const input=root.querySelector('#fg-num-'+k);
