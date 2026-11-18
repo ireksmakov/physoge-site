@@ -2939,6 +2939,11 @@ body.trainer-theme .pt-card .solution-workspace{background:#f8fbff!important;col
 .oge-mat-powers-roots-carousel .image-carousel-viewport{height:auto;overflow:hidden}
 .oge-mat-powers-roots-carousel .image-carousel-slide{width:100%;height:auto}
 .oge-mat-powers-roots-carousel img.oge-mat-powers-roots-slide{display:block;width:100%;max-width:100%;height:auto!important;max-height:none!important;object-fit:contain!important;object-position:center;border-radius:10px}
+/* СПО Математика: оригинальные PNG без кадрирования и изменения пропорций */
+.spo-math-linear-theory-originals{width:100%;max-width:100%;margin:0 0 22px}
+.spo-math-linear-theory-carousel .image-carousel-viewport{height:auto;overflow:hidden}
+.spo-math-linear-theory-carousel .image-carousel-slide{height:auto;width:100%}
+.spo-math-linear-theory-carousel img.spo-math-linear-theory-slide{display:block;width:100%;max-width:100%;height:auto!important;max-height:none!important;object-fit:contain!important;object-position:center}
 </style>
 <link rel="stylesheet" href="assets/math-graph-workbench.css">
 <script src="assets/math-graph-workbench.js"></script>
@@ -8485,6 +8490,22 @@ function renderOgeMathProbabilitySources(){
   return `<div class="probability-sources" style="max-width:1120px;margin:auto"><h2 style="font-size:clamp(20px,3vw,30px);margin-bottom:12px">ОГЭ · Математика · Задание 10</h2><p style="color:var(--gray);margin-bottom:10px">37 проверенных задач: 29 — классические вероятности, 5 — деревья вероятностей, 3 — статистика и теоремы о вероятностях.</p><p style="color:var(--gray);margin-bottom:20px">Это каталог ссылок на первоисточник, а не скопированные условия и решения. Остальные 79 заданий пока не проверены и не включены. Задания открываются на сайте «РЕШУ ОГЭ» в новой вкладке.</p>${cards}</div>`;
 }
 function renderTheory(){
+  // СПО Математика: две оригинальные инфографики к первому уроку.
+  if(AC==='spo-mat'&&CM===0&&CL===0){
+    const theoryImages=[
+      {src:'images/spo-math/linear-equations-inequalities/theory/spo-math-linear-equations-theory-01.png',
+       alt:'ФИЗМАТ · СПО — Линейные уравнения: определения, формулы, алгоритм и примеры'},
+      {src:'images/spo-math/linear-equations-inequalities/theory/spo-math-linear-inequalities-theory-02.png',
+       alt:'ФИЗМАТ · СПО — Линейные неравенства: свойства, алгоритм, примеры и проверка'}
+    ];
+    return '<div class="spo-math-linear-theory-originals">'+
+      createImageCarousel(theoryImages,{
+        className:'zsi-unified-image-carousel spo-math-linear-theory-carousel',
+        imgClass:'theory-carousel-img universal-viewable-image image-carousel-img spo-math-linear-theory-slide',
+        captions:false,
+        hint:'Листайте два слайда стрелками. Нажмите на фотографию, чтобы увеличить.'
+      })+'</div>'+renderTheoryBlocks(getTH());
+  }
   // ОГЭ · Математика · Урок «Степени и корни»: два исходных PNG, без сжатия и обрезки.
   if(AC==='oge-mat'&&CM===0&&CL===0){
     const theoryImages=[
