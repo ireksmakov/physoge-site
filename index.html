@@ -2900,6 +2900,12 @@ body.trainer-theme .pt-card .solution-workspace{background:#f8fbff!important;col
 .ege-mat-topic-entry .ege-mat-subtopic:hover,
 .ege-mat-topic-entry .ege-mat-subtopic.selected{color:#050a11;background:#cfeaff;box-shadow:inset 2px 0 0 #008ac9}
 
+/* Степени и корни · сохраняем оригинальные пропорции 16:9 и разрешение PNG */
+.oge-mat-powers-roots-photo-theory{width:100%;max-width:100%;margin:0 0 22px}
+.oge-mat-powers-roots-carousel{width:100%;max-width:100%}
+.oge-mat-powers-roots-carousel .image-carousel-viewport{height:auto;overflow:hidden}
+.oge-mat-powers-roots-carousel .image-carousel-slide{width:100%;height:auto}
+.oge-mat-powers-roots-carousel img.oge-mat-powers-roots-slide{display:block;width:100%;max-width:100%;height:auto!important;max-height:none!important;object-fit:contain!important;object-position:center;border-radius:10px}
 </style>
 <link rel="stylesheet" href="assets/math-graph-workbench.css">
 <script src="assets/math-graph-workbench.js"></script>
@@ -8446,6 +8452,23 @@ function renderOgeMathProbabilitySources(){
   return `<div class="probability-sources" style="max-width:1120px;margin:auto"><h2 style="font-size:clamp(20px,3vw,30px);margin-bottom:12px">ОГЭ · Математика · Задание 10</h2><p style="color:var(--gray);margin-bottom:10px">37 проверенных задач: 29 — классические вероятности, 5 — деревья вероятностей, 3 — статистика и теоремы о вероятностях.</p><p style="color:var(--gray);margin-bottom:20px">Это каталог ссылок на первоисточник, а не скопированные условия и решения. Остальные 79 заданий пока не проверены и не включены. Задания открываются на сайте «РЕШУ ОГЭ» в новой вкладке.</p>${cards}</div>`;
 }
 function renderTheory(){
+  // ОГЭ · Математика · Урок «Степени и корни»: два исходных PNG, без сжатия и обрезки.
+  if(AC==='oge-mat'&&CM===0&&CL===0){
+    const theoryImages=[
+      {src:'images/oge-math/powers-roots/theory/oge-math-powers-roots-theory-01.png',
+       alt:'ФИЗМАТ — Степени и корни: определения, свойства степеней и корней, примеры'},
+      {src:'images/oge-math/powers-roots/theory/oge-math-powers-roots-theory-02.png',
+       alt:'ФИЗМАТ — Степени и корни: дробные степени, преобразования, типичные ошибки'}
+    ];
+    return '<div class="oge-mat-powers-roots-photo-theory">'+
+      createImageCarousel(theoryImages,{
+        className:'zsi-unified-image-carousel oge-mat-powers-roots-carousel',
+        imgClass:'theory-carousel-img universal-viewable-image image-carousel-img oge-mat-powers-roots-slide',
+        captions:false,
+        hint:'Листайте две карточки стрелками. Нажмите на изображение, чтобы увеличить.'
+      })+
+      '</div>'+renderTheoryBlocks(getTH());
+  }
   // ЕГЭ Физика · Изопроцессы: учебная инфографика 16:9 и существующая теория.
   if(AC==='ege-phy'&&lessonTitle(getLessonObject(AC,CM,CL))==='Изопроцессы'){
     const image={src:'isoprocesses-theory-16x9.svg',alt:'ФИЗМАТ — изотермический, изобарный и изохорный процессы: формулы и графики 16:9'};
