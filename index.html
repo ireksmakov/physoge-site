@@ -2954,6 +2954,11 @@ body.trainer-theme .pt-card .solution-workspace{background:#f8fbff!important;col
 .ege-phy-electric-carousel{width:100%;max-width:100%}
 .ege-phy-electric-carousel .image-carousel-slide{height:auto}
 .ege-phy-electric-carousel img.ege-phy-electric-slide{display:block;width:100%;max-width:100%;height:auto!important;max-height:none!important;object-fit:contain!important}
+/* ЕГЭ Физика · Урок 63 · Эквипотенциальная поверхность */
+.ege-phy-equipotential-theory{width:100%;max-width:100%;margin:0 0 22px}
+.ege-phy-equipotential-carousel{width:100%;max-width:100%}
+.ege-phy-equipotential-carousel .image-carousel-slide{height:auto}
+.ege-phy-equipotential-carousel img.ege-phy-equipotential-slide{display:block;width:100%;max-width:100%;height:auto!important;max-height:none!important;object-fit:contain!important}
 </style>
 <link rel="stylesheet" href="assets/math-graph-workbench.css">
 <script src="assets/math-graph-workbench.js"></script>
@@ -8539,6 +8544,19 @@ function renderTheory(){
         imgClass:'theory-carousel-img universal-viewable-image image-carousel-img ege-phy-electric-slide',
         captions:false,
         hint:'Нажмите на инфографику, чтобы увеличить.'
+      })+'</div>'+renderTheoryBlocks(getTH());
+  }
+  // ЕГЭ Физика · Урок 63 «Эквипотенциальная поверхность»: проверенная первая карточка 16:9.
+  // Вторая пользовательская карточка не выводится из-за неверного знака в формуле работы поля.
+  if(AC==='ege-phy'&&CM===8&&CL===5&&lessonTitle(getLessonObject(AC,CM,CL))==='Эквипотенциальная поверхность'){
+    const theoryImages=[
+      {src:'images/course/ege-phy/m-8/l-5/theory/63theory1.png',alt:'Эквипотенциальная поверхность — определение, свойства, работа поля, направление напряжённости'}
+    ];
+    return '<div class="ege-phy-equipotential-theory">'+
+      createImageCarousel(theoryImages,{
+        singleClass:'theory-image-block ege-phy-equipotential-carousel',
+        imgClass:'theory-carousel-img universal-viewable-image image-carousel-img ege-phy-equipotential-slide',
+        captions:false
       })+'</div>'+renderTheoryBlocks(getTH());
   }
   // ОГЭ · Математика · Урок «Степени и корни»: два исходных PNG, без сжатия и обрезки.
