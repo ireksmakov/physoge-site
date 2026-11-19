@@ -2939,6 +2939,11 @@ body.trainer-theme .pt-card .solution-workspace{background:#f8fbff!important;col
 .oge-mat-powers-roots-carousel .image-carousel-viewport{height:auto;overflow:hidden}
 .oge-mat-powers-roots-carousel .image-carousel-slide{width:100%;height:auto}
 .oge-mat-powers-roots-carousel img.oge-mat-powers-roots-slide{display:block;width:100%;max-width:100%;height:auto!important;max-height:none!important;object-fit:contain!important;object-position:center;border-radius:10px}
+/* Закон Кулона · карусель исходных PNG без обрезки */
+.ege-phy-coulomb-theory-carousel{width:100%;max-width:100%;margin:0 0 22px}
+.ege-phy-coulomb-carousel{width:100%;max-width:100%}
+.ege-phy-coulomb-carousel .image-carousel-slide{height:auto}
+.ege-phy-coulomb-carousel img.ege-phy-coulomb-slide{display:block;width:100%;max-width:100%;height:auto!important;max-height:none!important;object-fit:contain!important}
 </style>
 <link rel="stylesheet" href="assets/math-graph-workbench.css">
 <script src="assets/math-graph-workbench.js"></script>
@@ -8485,6 +8490,20 @@ function renderOgeMathProbabilitySources(){
   return `<div class="probability-sources" style="max-width:1120px;margin:auto"><h2 style="font-size:clamp(20px,3vw,30px);margin-bottom:12px">ОГЭ · Математика · Задание 10</h2><p style="color:var(--gray);margin-bottom:10px">37 проверенных задач: 29 — классические вероятности, 5 — деревья вероятностей, 3 — статистика и теоремы о вероятностях.</p><p style="color:var(--gray);margin-bottom:20px">Это каталог ссылок на первоисточник, а не скопированные условия и решения. Остальные 79 заданий пока не проверены и не включены. Задания открываются на сайте «РЕШУ ОГЭ» в новой вкладке.</p>${cards}</div>`;
 }
 function renderTheory(){
+  // ЕГЭ Физика · Урок 58 «Закон Кулона»: два исходных изображения 16:9.
+  if(AC==='ege-phy'&&lessonTitle(getLessonObject(AC,CM,CL))==='Закон Кулона'){
+    const theoryImages=[
+      {src:'images/course/ege-phy/m-8/l-0/theory/ege-phy-m8-l0-theory-01-coulomb-law.png',alt:'Закон Кулона — формула, направление силы, свойства, единицы измерения'},
+      {src:'images/course/ege-phy/m-8/l-0/theory/ege-phy-m8-l0-theory-02-coulomb-law.png',alt:'Закон Кулона — принцип суперпозиции, графики, применение и примеры'}
+    ];
+    return '<div class="ege-phy-coulomb-theory-carousel">'+
+      createImageCarousel(theoryImages,{
+        className:'zsi-unified-image-carousel ege-phy-coulomb-carousel',
+        imgClass:'theory-carousel-img universal-viewable-image image-carousel-img ege-phy-coulomb-slide',
+        captions:false,
+        hint:'Листайте инфографику стрелками или пальцем. Нажмите для увеличения.'
+      })+'</div>'+renderTheoryBlocks(getTH());
+  }
   // ОГЭ · Математика · Урок «Степени и корни»: два исходных PNG, без сжатия и обрезки.
   if(AC==='oge-mat'&&CM===0&&CL===0){
     const theoryImages=[
