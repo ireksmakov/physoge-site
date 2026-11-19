@@ -14,6 +14,21 @@ jobs:
         with:
           fetch-depth: 2
 
+      - name: Проверить сервер ФИЗМАТ до SSH-подключения
+        env:
+          TARGET_HOST: ${{ secrets.ZOMRO_HOST }}
+          TARGET_PATH: ${{ secrets.ZOMRO_PATH }}
+          TARGET_USER: ${{ secrets.ZOMRO_USER }}
+          TARGET_PORT: ${{ secrets.ZOMRO_PORT }}
+        run: |
+          set -euo pipefail
+          if [ "$TARGET_HOST" != "212.43.148.98" ] || [ "${TARGET_PATH%/}" != "/var/www/physoge" ]; then
+            echo "Остановка: разрешён только сервер 212.43.148.98 и каталог /var/www/physoge."
+            exit 1
+          fi
+          test -n "$TARGET_USER" || { echo "Не указан пользователь SSH."; exit 1; }
+          [[ "$TARGET_PORT" =~ ^[0-9]+$ ]] || { echo "Некорректный порт SSH."; exit 1; }
+
       - name: Установить ключ SSH
         uses: webfactory/ssh-agent@v0.9.0
         with:
@@ -35,6 +50,24 @@ jobs:
           done > /tmp/fizmat-deploy-existing
           echo "Файлы для отправки:"
           cat /tmp/fizmat-deploy-existing
+
+      - name: Создать резервную копию действующего сайта на Zomro
+        env:
+          TARGET_HOST: ${{ secrets.ZOMRO_HOST }}
+          TARGET_PORT: ${{ secrets.ZOMRO_PORT }}
+          TARGET_USER: ${{ secrets.ZOMRO_USER }}
+        run: |
+          set -euo pipefail
+          ssh -o BatchMode=yes -p "$TARGET_PORT" "$TARGET_USER@$TARGET_HOST" 'set -eu
+            test -d /var/www/physoge || { echo "Папка сайта не найдена — публикация отменена."; exit 1; }
+            backup_dir="$HOME/physoge-backups"
+            mkdir -p "$backup_dir"
+            stamp="$(date -u +%Y%m%dT%H%M%SZ)"
+            backup_file="$backup_dir/physoge-$stamp.tar.gz"
+            tar -C /var/www -czf "$backup_file" physoge
+            test -s "$backup_file" || { echo "Не удалось создать резервную копию."; exit 1; }
+            echo "Резервная копия создана: $backup_file"
+          '
 
       - name: Развернуть изменённые файлы на Zomro
         run: |
