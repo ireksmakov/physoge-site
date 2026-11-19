@@ -8546,18 +8546,17 @@ function renderTheory(){
         hint:'Нажмите на инфографику, чтобы увеличить.'
       })+'</div>'+renderTheoryBlocks(getTH());
   }
-  // ЕГЭ Физика · Урок 63 «Эквипотенциальная поверхность»: две карточки 16:9.
+  // ЕГЭ Физика · Урок 63 «Эквипотенциальная поверхность»: проверенная первая карточка 16:9.
+  // Вторая пользовательская карточка не выводится из-за неверного знака в формуле работы поля.
   if(AC==='ege-phy'&&CM===8&&CL===5&&lessonTitle(getLessonObject(AC,CM,CL))==='Эквипотенциальная поверхность'){
     const theoryImages=[
-      {src:'images/course/ege-phy/m-8/l-5/theory/63theory1.png',alt:'Эквипотенциальная поверхность — определение, свойства, работа поля, направление напряжённости'},
-      {src:'images/course/ege-phy/m-8/l-5/theory/63theory2.png',alt:'Эквипотенциальные поверхности — точечный заряд, однородное поле, проводник, формулы ЕГЭ'}
+      {src:'images/course/ege-phy/m-8/l-5/theory/63theory1.png',alt:'Эквипотенциальная поверхность — определение, свойства, работа поля, направление напряжённости'}
     ];
     return '<div class="ege-phy-equipotential-theory">'+
       createImageCarousel(theoryImages,{
-        className:'zsi-unified-image-carousel ege-phy-equipotential-carousel',
+        singleClass:'theory-image-block ege-phy-equipotential-carousel',
         imgClass:'theory-carousel-img universal-viewable-image image-carousel-img ege-phy-equipotential-slide',
-        captions:false,
-        hint:'Листайте карточки стрелками или пальцем. Нажмите на изображение, чтобы увеличить.'
+        captions:false
       })+'</div>'+renderTheoryBlocks(getTH());
   }
   // ОГЭ · Математика · Урок «Степени и корни»: два исходных PNG, без сжатия и обрезки.
