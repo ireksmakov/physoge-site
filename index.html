@@ -8528,18 +8528,17 @@ function renderTheory(){
         hint:'Листайте инфографику стрелками или пальцем. Нажмите для увеличения.'
       })+'</div>'+renderTheoryBlocks(getTH());
   }
-  // ЕГЭ Физика · Урок 61 «Электрическое поле»: две карточки 16:9.
+  // ЕГЭ Физика · Урок 61 «Электрическое поле»: одно доступное изображение теории.
   if(AC==='ege-phy'&&CM===8&&CL===3&&lessonTitle(getLessonObject(AC,CM,CL))==='Электрическое поле'){
     const theoryImages=[
-      {src:'images/course/ege-phy/m-8/l-3/theory/61theory1.png',alt:'Электрическое поле — напряжённость, принцип суперпозиции, поле точечного заряда и силовые линии'},
-      {src:'images/course/ege-phy/m-8/l-3/theory/61theory2.png',alt:'Электрическое поле — потенциал, работа, однородное поле, проводники и закон Гаусса'}
+      {src:'images/course/ege-phy/m-8/l-3/theory/61theory1.png',alt:'Электрическое поле — учебная инфографика: напряжённость, силовые линии, потенциал, работа электрического поля'}
     ];
     return '<div class="ege-phy-electric-theory-carousel">'+
       createImageCarousel(theoryImages,{
-        className:'zsi-unified-image-carousel ege-phy-electric-carousel',
+        singleClass:'theory-image-block ege-phy-electric-carousel',
         imgClass:'theory-carousel-img universal-viewable-image image-carousel-img ege-phy-electric-slide',
         captions:false,
-        hint:'Листайте инфографику стрелками или пальцем. Нажмите для увеличения.'
+        hint:'Нажмите на инфографику, чтобы увеличить.'
       })+'</div>'+renderTheoryBlocks(getTH());
   }
   // ОГЭ · Математика · Урок «Степени и корни»: два исходных PNG, без сжатия и обрезки.
