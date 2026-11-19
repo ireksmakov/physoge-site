@@ -2944,6 +2944,11 @@ body.trainer-theme .pt-card .solution-workspace{background:#f8fbff!important;col
 .ege-phy-coulomb-carousel{width:100%;max-width:100%}
 .ege-phy-coulomb-carousel .image-carousel-slide{height:auto}
 .ege-phy-coulomb-carousel img.ege-phy-coulomb-slide{display:block;width:100%;max-width:100%;height:auto!important;max-height:none!important;object-fit:contain!important}
+/* Урок 59 · Закон сохранения заряда · инфографика 16:9 без обрезки */
+.ege-phy-charge-theory-carousel{width:100%;max-width:100%;margin:0 0 22px}
+.ege-phy-charge-carousel{width:100%;max-width:100%}
+.ege-phy-charge-carousel .image-carousel-slide{height:auto}
+.ege-phy-charge-carousel img.ege-phy-charge-slide{display:block;width:100%;max-width:100%;height:auto!important;max-height:none!important;object-fit:contain!important}
 </style>
 <link rel="stylesheet" href="assets/math-graph-workbench.css">
 <script src="assets/math-graph-workbench.js"></script>
@@ -8500,6 +8505,20 @@ function renderTheory(){
       createImageCarousel(theoryImages,{
         className:'zsi-unified-image-carousel ege-phy-coulomb-carousel',
         imgClass:'theory-carousel-img universal-viewable-image image-carousel-img ege-phy-coulomb-slide',
+        captions:false,
+        hint:'Листайте инфографику стрелками или пальцем. Нажмите для увеличения.'
+      })+'</div>'+renderTheoryBlocks(getTH());
+  }
+  // ЕГЭ Физика · Урок 59 «Закон сохранения заряда»: две инфографики 16:9.
+  if(AC==='ege-phy'&&CM===8&&CL===1&&lessonTitle(getLessonObject(AC,CM,CL))==='Закон сохранения заряда'){
+    const theoryImages=[
+      {src:'images/course/ege-phy/m-8/l-1/theory/59theory1.png',alt:'Закон сохранения заряда — ключевая теория, свойства заряда и электризация'},
+      {src:'images/course/ege-phy/m-8/l-1/theory/59theory2.png',alt:'Закон сохранения заряда — следствия, применение и решение задач'}
+    ];
+    return '<div class="ege-phy-charge-theory-carousel">'+
+      createImageCarousel(theoryImages,{
+        className:'zsi-unified-image-carousel ege-phy-charge-carousel',
+        imgClass:'theory-carousel-img universal-viewable-image image-carousel-img ege-phy-charge-slide',
         captions:false,
         hint:'Листайте инфографику стрелками или пальцем. Нажмите для увеличения.'
       })+'</div>'+renderTheoryBlocks(getTH());
