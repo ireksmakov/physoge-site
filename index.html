@@ -2949,6 +2949,11 @@ body.trainer-theme .pt-card .solution-workspace{background:#f8fbff!important;col
 .ege-phy-charge-carousel{width:100%;max-width:100%}
 .ege-phy-charge-carousel .image-carousel-slide{height:auto}
 .ege-phy-charge-carousel img.ege-phy-charge-slide{display:block;width:100%;max-width:100%;height:auto!important;max-height:none!important;object-fit:contain!important}
+/* Урок 61 · Электрическое поле · две карточки 16:9 без обрезки */
+.ege-phy-electric-theory-carousel{width:100%;max-width:100%;margin:0 0 22px}
+.ege-phy-electric-carousel{width:100%;max-width:100%}
+.ege-phy-electric-carousel .image-carousel-slide{height:auto}
+.ege-phy-electric-carousel img.ege-phy-electric-slide{display:block;width:100%;max-width:100%;height:auto!important;max-height:none!important;object-fit:contain!important}
 </style>
 <link rel="stylesheet" href="assets/math-graph-workbench.css">
 <script src="assets/math-graph-workbench.js"></script>
@@ -8521,6 +8526,19 @@ function renderTheory(){
         imgClass:'theory-carousel-img universal-viewable-image image-carousel-img ege-phy-charge-slide',
         captions:false,
         hint:'Листайте инфографику стрелками или пальцем. Нажмите для увеличения.'
+      })+'</div>'+renderTheoryBlocks(getTH());
+  }
+  // ЕГЭ Физика · Урок 61 «Электрическое поле»: одно доступное изображение теории.
+  if(AC==='ege-phy'&&CM===8&&CL===3&&lessonTitle(getLessonObject(AC,CM,CL))==='Электрическое поле'){
+    const theoryImages=[
+      {src:'images/course/ege-phy/m-8/l-3/theory/61theory1.png',alt:'Электрическое поле — учебная инфографика: напряжённость, силовые линии, потенциал, работа электрического поля'}
+    ];
+    return '<div class="ege-phy-electric-theory-carousel">'+
+      createImageCarousel(theoryImages,{
+        singleClass:'theory-image-block ege-phy-electric-carousel',
+        imgClass:'theory-carousel-img universal-viewable-image image-carousel-img ege-phy-electric-slide',
+        captions:false,
+        hint:'Нажмите на инфографику, чтобы увеличить.'
       })+'</div>'+renderTheoryBlocks(getTH());
   }
   // ОГЭ · Математика · Урок «Степени и корни»: два исходных PNG, без сжатия и обрезки.
