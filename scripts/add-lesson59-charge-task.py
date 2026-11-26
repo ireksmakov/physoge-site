@@ -12,8 +12,7 @@ if marker in html:
     raise SystemExit(0)
 
 anchor = (
-    "  const baseTasks=Array.isArray(LESSON_TASKS[name])?"
-    "LESSON_TASKS[name].map(t=>Object.assign({},t,{isBlank:!!(t&&t.isBlank)})):[];"
+    "  const baseTasks=getLessonTasks(name).map(t=>Object.assign({},t,{isBlank:!!(t&&t.isBlank)}));"
 )
 if html.count(anchor) != 1:
     raise SystemExit("Не найден ровно один штатный renderPTasks; публикация остановлена")
