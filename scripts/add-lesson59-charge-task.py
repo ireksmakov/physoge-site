@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""ФИЗМАТ: безопасное добавление единственной задачи урока 59 к штатному renderPTasks.
+"""ФИЗМАТ: безопасное добавление двух задач урока 59 к штатному renderPTasks.
 Запускается только в каталоге checkout перед отправкой index.html на Zomro.
 Не изменяет PNG/SVG и не переписывает другие задачи."""
 from pathlib import Path
@@ -36,7 +36,23 @@ task_script = r"""
       hasAnimation:false
     });
   }
+  // fizmat-lesson59-field-midpoint: вторая задача урока 59.
+  if (AC==='ege-phy' && CM===8 && CL===1 && name==='Закон сохранения заряда'
+      && !baseTasks.some(t=>t && t.id==='fizmat-lesson59-field-midpoint')) {
+    baseTasks.push({
+      id:'fizmat-lesson59-field-midpoint',
+      boardMode:'fizmat-lesson59-field-midpoint',
+      mode:'fizmat-lesson59-field-midpoint',
+      num:baseTasks.length+1,
+      level:1,
+      exam:'ЕГЭ',
+      title:'Направление напряжённости поля в точке B',
+      cond:'<img src="images/course/ege-phy/m-8/l-1/tasks/59-task-electric-field-midpoint.svg" alt="Точка B — середина AC, в точке A заряд +q, в точке C заряд −5q. Найдите направление напряжённости поля в B." class="universal-viewable-image image-carousel-img" style="display:block;width:100%;height:auto;object-fit:contain;background:white;border-radius:8px">',
+      ans:'вправо',
+      hasAnimation:false
+    });
+  }
 """
 html = html.replace(anchor, anchor + "\n" + task_script, 1)
 page.write_text(html, encoding="utf-8")
-print("Урок 59: задача добавлена к штатному рендеру; решение открывается кнопкой «Решение».")
+print("Урок 59: обе задачи добавлены к штатному рендеру; фото решения первой задачи открывается штатной кнопкой.")
