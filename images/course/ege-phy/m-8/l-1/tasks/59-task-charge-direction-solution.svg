@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+<title id="title">Куда направлено ускорение заряда −q?</title>
+<desc id="desc">Пошаговое решение: отталкивание от отрицательного заряда −Q направлено влево и вниз, притяжение к положительному +Q — вправо и вниз. Горизонтальные компоненты компенсируются, результирующая сила и ускорение направлены вниз.</desc>
+<rect width="1600" height="900" fill="#edf6ff"/>
+<g font-family="Times New Roman,Times,serif" fill="#173b5a">
+<text x="55" y="51" font-size="22" font-weight="bold" fill="#2677c2">ЭЛЕКТРОСТАТИКА  ·  РЕШЕНИЕ ЗАДАЧИ</text>
+<text x="55" y="116" font-size="49" font-weight="bold">Куда направлено ускорение заряда −q?</text>
+<text x="58" y="164" font-size="26" fill="#587a99">Определим направления сил и найдём их равнодействующую.</text>
+</g>
+<rect x="54" y="198" width="752" height="553" rx="24" fill="white" stroke="#bbd8ef" stroke-width="2"/>
+<rect x="829" y="198" width="719" height="553" rx="24" fill="white" stroke="#bbd8ef" stroke-width="2"/>
+<g font-family="Times New Roman,Times,serif" fill="#173b5a">
+<text x="83" y="249" font-weight="bold" font-size="31">Схема сил</text>
+<text x="83" y="284" font-size="22" fill="#587a99">Все силы приложены к заряду −q.</text>
+</g>
+<g stroke="#a9cae7" stroke-width="2.5" stroke-dasharray="11 9" fill="none">
+<path d="M392 429L686 288"/>
+<path d="M392 429L686 570"/>
+<path d="M392 429L686 429"/>
+</g>
+<path d="M686 288V570" stroke="#a9bdd4" stroke-width="2.4"/>
+<g stroke-linecap="round" fill="none" stroke-width="7">
+<path d="M392 429L167 538" stroke="#2b7bc9"/>
+<path d="M392 429L626 543" stroke="#ca781b"/>
+<path d="M392 429V641" stroke="#00887e" stroke-width="8"/>
+</g>
+<path d="M159 542l32-4-17-21z" fill="#2b7bc9"/>
+<path d="M638 550l-26-24-7 30z" fill="#ca781b"/>
+<path d="M392 664l-15-31h30z" fill="#00887e"/>
+<circle cx="392" cy="429" r="15" fill="#173b5a"/>
+<circle cx="686" cy="288" r="15" fill="#2b7bc9"/>
+<circle cx="686" cy="570" r="15" fill="#ca781b"/>
+<g font-family="Times New Roman,Times,serif" font-style="italic" font-size="36">
+<text x="364" y="388" fill="#173b5a">−q</text>
+<text x="713" y="298" fill="#2b7bc9">−Q</text>
+<text x="713" y="579" fill="#ca781b">+Q</text>
+<text x="192" y="464" fill="#2b7bc9">F₁</text>
+<text x="551" y="464" fill="#ca781b">F₂</text>
+<text x="423" y="662" fill="#00887e">Fрез , a</text>
+<text x="543" y="363" fill="#587a99" font-size="27">r</text>
+<text x="543" y="597" fill="#587a99" font-size="27">r</text>
+</g>
+<g font-family="Times New Roman,Times,serif" font-size="23" fill="#2b7bc9">
+<text x="99" y="594">Отталкивание</text>
+</g>
+<text x="524" y="625" fill="#ca781b" font-family="Times New Roman,Times,serif" font-size="23">Притяжение</text>
+<rect x="84" y="690" width="692" height="42" rx="12" fill="#e8f3fd"/>
+<text x="430" y="719" text-anchor="middle" font-family="Times New Roman,Times,serif" font-size="23" fill="#173b5a">Равные расстояния — равные модули сил</text>
+<g font-family="Times New Roman,Times,serif">
+<circle cx="874" cy="246" r="23" fill="#2b7bc9"/><text x="874" y="256" text-anchor="middle" font-size="26" font-weight="bold" fill="white">1</text>
+<text x="910" y="253" font-size="30" font-weight="bold" fill="#2b7bc9">Отталкивание от −Q</text>
+<text x="910" y="291" font-size="24" fill="#173b5a">Одноимённые заряды отталкиваются.</text>
+<text x="910" y="326" font-size="24" fill="#173b5a">Сила F₁ направлена влево и вниз.</text>
+<line x1="858" y1="361" x2="1517" y2="361" stroke="#d1e4f2" stroke-width="2"/>
+<circle cx="874" cy="408" r="23" fill="#ca781b"/><text x="874" y="418" text-anchor="middle" font-size="26" font-weight="bold" fill="white">2</text>
+<text x="910" y="415" font-size="30" font-weight="bold" fill="#ca781b">Притяжение к +Q</text>
+<text x="910" y="453" font-size="24" fill="#173b5a">Разноимённые заряды притягиваются.</text>
+<text x="910" y="488" font-size="24" fill="#173b5a">Сила F₂ направлена вправо и вниз.</text>
+<line x1="858" y1="522" x2="1517" y2="522" stroke="#d1e4f2" stroke-width="2"/>
+<circle cx="874" cy="568" r="23" fill="#00887e"/><text x="874" y="578" text-anchor="middle" font-size="26" font-weight="bold" fill="white">3</text>
+<text x="910" y="575" font-size="30" font-weight="bold" fill="#00887e">Сложение сил</text>
+<text x="910" y="612" font-size="24" fill="#173b5a">По модулю F₁ = F₂. Горизонтальные</text>
+<text x="910" y="645" font-size="24" fill="#173b5a">составляющие компенсируются,</text>
+<text x="910" y="678" font-size="24" fill="#173b5a">вертикальные складываются вниз.</text>
+</g>
+<rect x="849" y="695" width="678" height="42" rx="12" fill="#e8f5f1"/>
+<text x="1188" y="724" text-anchor="middle" font-family="Times New Roman,Times,serif" font-size="23" fill="#00887e">Ускорение направлено по суммарной силе.</text>
+<rect x="54" y="775" width="1494" height="93" rx="20" fill="#153c5c"/>
+<text x="92" y="836" font-family="Times New Roman,Times,serif" font-size="42" font-weight="bold" fill="white">↓ ОТВЕТ: ВНИЗ</text>
+<text x="718" y="832" font-family="Times New Roman,Times,serif" font-size="25" fill="#e6f3ff">По второму закону Ньютона:  a = Fрез / m</text>
+</svg>
