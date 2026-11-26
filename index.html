@@ -4242,9 +4242,15 @@ const COURSES={
         'Электрическое поле',
         Object.assign(makeLesson('Теорема Гаусса'),{hidden:true,preserveNumber:false}), // Убрать из содержания, сохранить исходный индекс CL===4.
         'Эквипотенциальная поверхность',
-        'Конденсатор',
-        'Электроёмкость конденсатора',
-        'Батарея конденсатора'
+        'Конденсатор', // Сохранён исходный индекс CL===6 и ранее существовавшие материалы.
+        Object.assign(makeLesson('Электроёмкость конденсатора'),{hidden:true,preserveNumber:false}), // Старый урок 63 скрыт из содержания, но оставлен на CL===7.
+        Object.assign(makeLesson('Батарея конденсатора'),{hidden:true,preserveNumber:false}), // Сохранён старый урок CL===8; в новом содержании заменён отдельными темами.
+        makeLesson('Потенциал и потенциальная энергия'),
+        makeLesson('Работа поля и напряжение'),
+        makeLesson('Проводники в электрическом поле'),
+        makeLesson('Диэлектрики в электрическом поле'),
+        makeLesson('Соединение конденсаторов'),
+        makeLesson('Энергия заряженного конденсатора')
       ]
     },
     {
@@ -8255,6 +8261,19 @@ function renderSb(){
       // and original lesson indices for existing routes, tasks, and saved progress.
       const entries=lessons.map((l,li)=>({l,li}))
         .filter(({li})=>!(AC==='oge-mat'&&mi===1&&li<4));
+      // ЕГЭ Физика · Электростатика: порядок отображения, без изменения исходных
+      // lessonIndex (CL), маршрутов, материалов и прогресса учеников.
+      if(AC==='ege-phy'&&mi===8){
+        const visibleOrder=[
+          'Закон Кулона','Закон сохранения заряда','Электрическое поле',
+          'Эквипотенциальная поверхность','Потенциал и потенциальная энергия',
+          'Работа поля и напряжение','Проводники в электрическом поле',
+          'Диэлектрики в электрическом поле','Конденсатор',
+          'Соединение конденсаторов','Энергия заряженного конденсатора'
+        ];
+        const position=lesson=>{const i=visibleOrder.indexOf(lessonTitle(lesson));return i<0?visibleOrder.length:i;};
+        entries.sort((a,b)=>position(a.l)-position(b.l)||a.li-b.li);
+      }
       // Preserve original lesson indices: equation and inequality trainers use CL===1/2.
       if(AC==='oge-mat'&&(mi===0||mi===1)){
         entries.sort((a,b)=>Number(!!(b.l&&b.l.group))-Number(!!(a.l&&a.l.group)));
