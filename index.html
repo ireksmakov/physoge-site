@@ -12983,6 +12983,22 @@ function renderPTasks(name){
     });
   }
 
+  // fizmat-lesson60-two-positive-at-A: задача о двух положительных зарядах.
+  if (AC==='ege-phy' && CM===8 && name==='Электрическое поле'
+      && !baseTasks.some(t=>t && t.id==='fizmat-lesson60-two-positive-at-A')) {
+    baseTasks.push({
+      id:'fizmat-lesson60-two-positive-at-A',
+      boardMode:'fizmat-lesson60-two-positive-at-A',
+      mode:'fizmat-lesson60-two-positive-at-A',
+      num:baseTasks.length+1,
+      level:1,
+      exam:'ЕГЭ',
+      title:'Направление суммарного электрического поля двух зарядов +q',
+      cond:'<img src="images/course/ege-phy/m-8/l-3/tasks/60-task-two-positive-charges-point-A.svg" alt="Два неподвижных положительных заряда +q и +q, точка A правее обоих зарядов. Определите направление суммарной напряжённости поля." class="universal-viewable-image image-carousel-img" style="display:block;width:100%;height:auto;object-fit:contain;background:white;border-radius:8px">',
+      ans:'вправо',
+      hasAnimation:false
+    });
+  }
   const lesson07Name=typeof getCourseLessonNameByFlatNumber==='function'
     ? getCourseLessonNameByFlatNumber('ege-phy', 7)
     : 'Законы Ньютона';
