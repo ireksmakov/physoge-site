@@ -2,7 +2,7 @@
    Не меняет данные курса, исходное PNG и другие уроки. */
 (function () {
   'use strict';
-  const imagePath = 'images/ege-physics/lesson-62/theory/potential-energy.png.png';
+  const imagePath = 'lesson-62-potential-energy.png';
   const imageId = 'fizmat-potential-energy-theory-62';
   const lessonRoute = /^#course\/ege-phy\/m\/8\/l\/9(?:\/|$)/i;
 
