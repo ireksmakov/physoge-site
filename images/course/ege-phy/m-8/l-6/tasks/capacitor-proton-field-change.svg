@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="830" viewBox="0 0 1600 830" role="img" aria-labelledby="title desc">
+<title id="title">Задача: протон между пластинами заряженного конденсатора</title>
+<desc id="desc">Протон влетает горизонтально между пластинами конденсатора и отклоняется на угол альфа. При увеличении напряжённости электрического поля требуется определить изменения модуля импульса вылетевшего протона и его ускорения.</desc>
+<rect width="1600" height="830" fill="#fff"/>
+<g font-family="Times New Roman,Times,serif" font-size="32" fill="#262626">
+<text x="28" y="48">Протон, движущийся в вакууме со скоростью v ≪ c, пролетает между</text>
+<text x="28" y="91">пластинами заряженного конденсатора, как показано на рисунке.</text>
+<text x="28" y="134">Расстояние между пластинами равно d, а напряжённость</text>
+<text x="28" y="177">электрического поля между пластинами равна E.</text>
+<text x="28" y="224">Пролетев конденсатор, частица отклоняется от первоначального</text>
+<text x="28" y="267">направления на угол α. Как изменятся модуль импульса</text>
+<text x="28" y="310">вылетевшего протона и его ускорение в конденсаторе,</text>
+<text x="28" y="353">если увеличить напряжённость электрического поля?</text>
+<text x="28" y="399">Силу тяжести не учитывать.</text>
+<text x="28" y="454">Для каждой величины определите характер изменения:</text>
+<text x="43" y="505">1) увеличится</text><text x="43" y="547">2) уменьшится</text><text x="43" y="589">3) не изменится</text>
+<text x="28" y="651">Запишите в таблицу выбранные цифры. Цифры могут повторяться.</text>
+</g>
+<g transform="translate(1120,23)" stroke="#222" stroke-width="4" fill="none">
+<path d="M68 37 H410 M68 261 H410"/>
+<path d="M103 150 H505" stroke="#666" stroke-width="2.5" stroke-dasharray="12 10"/>
+<path d="M108 150 H320" stroke="#111" stroke-dasharray="20 9 4 9"/>
+<path d="M320 150Q383 165 506 245" stroke="#555" stroke-width="2.5" stroke-dasharray="7 8"/>
+<path d="M108 150 Q260 150 333 170 T475 242" stroke="#171717" stroke-width="3"/>
+<path d="M120 146 l-12 4 12 4" stroke="#222" stroke-width="3"/>
+<path d="M110 60 V240" stroke="#111" stroke-width="3"/>
+<path d="M100 72l10-19 10 19 M100 228l10 19 10-19" stroke="#111"/>
+<path d="M320 150l0 49" stroke="#777" stroke-dasharray="7 7"/>
+<path d="M374 150Q380 177 361 189" stroke="#444" stroke-width="2"/>
+<circle cx="435" cy="222" r="7" fill="#111"/>
+</g>
+<g font-family="Times New Roman,Times,serif" font-size="33" font-style="italic" font-weight="bold" fill="#111">
+<text x="1480" y="52">+</text><text x="1480" y="316">−</text>
+<text x="1230" y="172">v</text><text x="1247" y="213">d</text><text x="1513" y="212">α</text>
+</g>
+<rect x="27" y="687" width="1010" height="118" fill="white" stroke="#333" stroke-width="2.5"/>
+<path d="M532 687 V805 M27 748 H1037" stroke="#333" stroke-width="2.5"/>
+<g font-family="Times New Roman,Times,serif" font-size="29" fill="#222" text-anchor="middle">
+<text x="279" y="711">Модуль импульса</text><text x="279" y="743">вылетевшего протона</text>
+<text x="785" y="711">Ускорение протона</text><text x="785" y="743">в конденсаторе</text>
+</g>
+</svg>
