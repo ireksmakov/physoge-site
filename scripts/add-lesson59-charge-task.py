@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""ФИЗМАТ: безопасное добавление двух задач урока 59 к штатному renderPTasks.
+"""ФИЗМАТ: безопасное добавление задачи в урок 59 и задачи в урок 60 к штатному renderPTasks.
 Запускается только в каталоге checkout перед отправкой index.html на Zomro.
 Не изменяет PNG/SVG и не переписывает другие задачи."""
 from pathlib import Path
@@ -36,8 +36,8 @@ task_script = r"""
       hasAnimation:false
     });
   }
-  // fizmat-lesson59-field-midpoint: вторая задача урока 59.
-  if (AC==='ege-phy' && CM===8 && CL===1 && name==='Закон сохранения заряда'
+  // fizmat-lesson59-field-midpoint: задача о напряжённости переносится в урок 60.
+  if (AC==='ege-phy' && CM===8 && CL===2 && name==='Электрическое поле'
       && !baseTasks.some(t=>t && t.id==='fizmat-lesson59-field-midpoint')) {
     baseTasks.push({
       id:'fizmat-lesson59-field-midpoint',
@@ -55,4 +55,4 @@ task_script = r"""
 """
 html = html.replace(anchor, anchor + "\n" + task_script, 1)
 page.write_text(html, encoding="utf-8")
-print("Урок 59: обе задачи добавлены к штатному рендеру; фото решения первой задачи открывается штатной кнопкой.")
+print("Урок 59: первая задача сохранена; урок 60: задача про точку B добавлена.")
