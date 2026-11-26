@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="440" viewBox="0 0 1600 440" role="img" aria-labelledby="task-title task-desc">
+<title id="task-title">Направление результирующей напряжённости поля в точке A</title>
+<desc id="task-desc">Два неподвижных положительных точечных заряда плюс q расположены слева от точки A вдоль одной горизонтали. Куда направлен вектор напряжённости суммарного электрического поля в точке A? Ответ запишите словом.</desc>
+<rect width="1600" height="440" fill="#ffffff"/>
+<g fill="#222" font-family="Times New Roman, Times, serif" font-size="32">
+<text x="28" y="51">На рисунке представлено расположение двух неподвижных</text>
+<text x="28" y="95">положительных точечных электрических зарядов: +q и +q.</text>
+<text x="28" y="139">Как направлен относительно рисунка (вправо, влево, вверх,</text>
+<text x="28" y="183">вниз, к наблюдателю, от наблюдателя) вектор напряжённости</text>
+<text x="28" y="227">суммарного электрического поля этих зарядов в точке A?</text>
+<text x="28" y="283" font-style="italic">Ответ запишите словом (словами).</text>
+</g>
+<g fill="#171717" font-family="Times New Roman, Times, serif" font-size="40" font-weight="bold" font-style="italic" text-anchor="middle">
+<text x="125" y="340">+q</text><text x="275" y="340">+q</text><text x="427" y="340">A</text>
+</g>
+<g stroke="#222" stroke-width="3.2" fill="white">
+<circle cx="125" cy="376" r="15"/><circle cx="275" cy="376" r="15"/>
+</g>
+<circle cx="427" cy="376" r="9" fill="#111"/>
+</svg>
