@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="440" viewBox="0 0 1600 440" role="img" aria-label="Условие задачи: отрицательный заряд минус q и два неподвижных заряда плюс Q и минус Q">
+<rect width="1600" height="440" fill="#fff"/>
+<g fill="#222" font-family="Times New Roman,Times,serif" font-size="32">
+<text x="28" y="50">Отрицательный заряд −q находится в поле двух неподвижных зарядов:</text>
+<text x="28" y="93">положительного +Q и отрицательного −Q (см. рисунок).</text>
+<text x="28" y="151">Куда направлено относительно рисунка (вправо, влево, вверх,</text>
+<text x="28" y="194">вниз, к наблюдателю, от наблюдателя) ускорение заряда −q</text>
+<text x="28" y="237">в этот момент времени, если на него действуют только</text>
+<text x="28" y="280">заряды +Q и −Q?</text>
+<text x="28" y="349" font-style="italic">Ответ запишите словом (словами).</text>
+</g>
+<g stroke="#242424" stroke-width="4" fill="none">
+<path d="M1470 60 V365"/>
+<path d="M1310 214 H1470" stroke-dasharray="13 9" stroke-width="2"/>
+</g>
+<g fill="#171717">
+<circle cx="1470" cy="60" r="9"/>
+<circle cx="1470" cy="365" r="9"/>
+<circle cx="1310" cy="214" r="9"/>
+</g>
+<g fill="#171717" font-family="Times New Roman,Times,serif" font-size="42" font-style="italic">
+<text x="1395" y="47">−Q</text>
+<text x="1223" y="201">−q</text>
+<text x="1395" y="407">+Q</text>
+</g>
+</svg>
