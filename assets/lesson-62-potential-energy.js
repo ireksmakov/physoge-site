@@ -26,7 +26,7 @@
     img.style.cssText = 'display:block;width:100%;max-width:100%;height:auto;object-fit:contain;border-radius:12px;cursor:zoom-in;';
     img.addEventListener('error', function () { figure.style.display = 'none'; });
     figure.appendChild(img);
-    theory.appendChild(figure);
+    theory.prepend(figure);
   }
 
   let scheduled = false;
