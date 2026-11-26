@@ -55,7 +55,7 @@ jobs:
 
       - name: Подготовить список файлов без удаления серверных материалов
         run: |
-          printf '%s\n' 'index.html' 'assets/lesson-62-potential-energy.js' > /tmp/fizmat-deploy-files
+          printf '%s\n' 'index.html' 'assets/lesson-62-potential-energy.js' 'images/ege-physics/lesson-62/theory/potential-energy.png.png' > /tmp/fizmat-deploy-files
           if git rev-parse HEAD^ >/dev/null 2>&1; then
             git diff --name-only --diff-filter=ACMRT HEAD^ HEAD >> /tmp/fizmat-deploy-files
           fi
