@@ -37,7 +37,7 @@ task_script = r"""
     });
   }
   // fizmat-lesson59-field-midpoint: задача о напряжённости переносится в урок 60.
-  if (AC==='ege-phy' && CM===8 && CL===2 && name==='Электрическое поле'
+  if (AC==='ege-phy' && CM===8 && CL===3 && name==='Электрическое поле'
       && !baseTasks.some(t=>t && t.id==='fizmat-lesson59-field-midpoint')) {
     baseTasks.push({
       id:'fizmat-lesson59-field-midpoint',
