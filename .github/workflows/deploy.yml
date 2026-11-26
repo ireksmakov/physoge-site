@@ -39,19 +39,34 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -p ${{ secrets.ZOMRO_PORT }} -H ${{ secrets.ZOMRO_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Подключить инфографику урока 62 без изменения исходного изображения
+      - name: Вставить фотографию прямо в шаблон теории урока 62
         run: |
           python3 - <<'PY'
           from pathlib import Path
           page = Path('index.html')
           html = page.read_text(encoding='utf-8')
-          tag = '<script defer src="assets/lesson-62-potential-energy.js"></script>'
-          if tag not in html:
-              if '</body>' not in html:
-                  raise SystemExit('Отмена публикации: закрывающий тег body не найден')
-              html = html.replace('</body>', tag + '\n</body>', 1)
+          anchor = '${renderTheory()}'
+          flag = 'fizmat-theory62-original-png'
+          if flag not in html:
+              if html.count(anchor) != 1:
+                  raise SystemExit('Остановка: шаблон вкладки «Теория» изменился — безопасная вставка невозможна')
+              markup = (
+                  '<figure id="fizmat-theory62-original-png" style="width:100%;margin:0 0 20px;">'
+                  '<img src="lesson-62-potential-energy.png" '
+                  'alt="Потенциал и потенциальная энергия — теория ЕГЭ" '
+                  'class="theory-carousel-img universal-viewable-image image-carousel-img" '
+                  'style="display:block;width:100%;height:auto;object-fit:contain;border-radius:12px" '
+                  'onerror="this.style.display=\'none\';this.insertAdjacentHTML(\'afterend\',\'<p style=&quot;color:#b91c1c&quot;>Не удалось загрузить изображение урока 62.</p>\')">'
+                  '</figure>'
+              )
+              replacement = "${((AC==='ege-phy'&&CM===8&&CL===9)? " + repr(markup) + " : '') + renderTheory()}"
+              html = html.replace(anchor, replacement, 1)
               page.write_text(html, encoding='utf-8')
           PY
+
+      - name: Проверить наличие изображения урока 62
+        run: |
+          test -s images/ege-physics/lesson-62/theory/potential-energy.png.png
 
       - name: Подготовить список файлов без удаления серверных материалов
         run: |
