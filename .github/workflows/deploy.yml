@@ -55,7 +55,7 @@ jobs:
 
       - name: Подготовить список файлов без удаления серверных материалов
         run: |
-          printf '%s\n' 'index.html' 'assets/lesson-62-potential-energy.js' 'images/ege-physics/lesson-62/theory/potential-energy.png.png' > /tmp/fizmat-deploy-files
+          printf '%s\n' 'index.html' 'assets/lesson-62-potential-energy.js' > /tmp/fizmat-deploy-files
           if git rev-parse HEAD^ >/dev/null 2>&1; then
             git diff --name-only --diff-filter=ACMRT HEAD^ HEAD >> /tmp/fizmat-deploy-files
           fi
@@ -82,6 +82,15 @@ jobs:
             test -s "$backup_file" || { echo "Не удалось создать резервную копию."; exit 1; }
             echo "Резервная копия создана: $backup_file"
           '
+
+      - name: Передать исходный PNG урока 62 без сжатия в корень сайта
+        run: |
+          set -euo pipefail
+          test -s images/ege-physics/lesson-62/theory/potential-energy.png.png
+          rsync -az --no-perms --no-owner --no-group \
+            -e "ssh -p ${{ secrets.ZOMRO_PORT }}" \
+            images/ege-physics/lesson-62/theory/potential-energy.png.png \
+            "${{ secrets.ZOMRO_USER }}@${{ secrets.ZOMRO_HOST }}:${{ secrets.ZOMRO_PATH%/ }}/lesson-62-potential-energy.png"
 
       - name: Развернуть изменённые файлы на Zomro
         run: |
