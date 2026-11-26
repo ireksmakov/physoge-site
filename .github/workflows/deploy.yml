@@ -103,7 +103,7 @@ jobs:
             test -d /var/www/physoge || { echo "Папка сайта не найдена — публикация отменена."; exit 1; }
             backup_dir="$HOME/physoge-backups"
             mkdir -p "$backup_dir"
-            stamp="$(date -u +%Y%m%dT%H%M%SZ)-${GITHUB_RUN_ID:-manual}-${GITHUB_RUN_ATTEMPT:-1}"
+            stamp="$(date -u +%Y%m%dT%H%M%SZ)-$"
             backup_file="$backup_dir/physoge-$stamp.tar.gz"
             tar -C /var/www -czf "$backup_file" physoge
             test -s "$backup_file" || { echo "Не удалось создать резервную копию."; exit 1; }
