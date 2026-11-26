@@ -90,7 +90,7 @@ jobs:
           rsync -az --no-perms --no-owner --no-group \
             -e "ssh -p ${{ secrets.ZOMRO_PORT }}" \
             images/ege-physics/lesson-62/theory/potential-energy.png.png \
-            "${{ secrets.ZOMRO_USER }}@${{ secrets.ZOMRO_HOST }}:${{ secrets.ZOMRO_PATH%/ }}/lesson-62-potential-energy.png"
+            "${{ secrets.ZOMRO_USER }}@${{ secrets.ZOMRO_HOST }}:${{ secrets.ZOMRO_PATH }}/lesson-62-potential-energy.png"
 
       - name: Развернуть изменённые файлы на Zomro
         run: |
