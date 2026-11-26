@@ -2,7 +2,7 @@
    Подключается после основного скрипта сайта. Изображение сохраняется как есть. */
 (function () {
   'use strict';
-  const src = 'images/ege-physics/lesson-62/theory/potential-energy.png';
+  const src = 'images/ege-physics/lesson-62/theory/potential-energy.png.png';
   const marker = 'fizmat-potential-energy-theory-62';
   const targetTitle = /потенциал\s+и\s+потенциальная\s+энергия/i;
 
