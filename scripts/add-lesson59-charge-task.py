@@ -48,6 +48,8 @@ task_script = r"""
       exam:'ЕГЭ',
       title:'Направление напряжённости поля в точке B',
       cond:'<img src="images/course/ege-phy/m-8/l-1/tasks/59-task-electric-field-midpoint.svg" alt="Точка B — середина AC, в точке A заряд +q, в точке C заряд −5q. Найдите направление напряжённости поля в B." class="universal-viewable-image image-carousel-img" style="display:block;width:100%;height:auto;object-fit:contain;background:white;border-radius:8px">',
+      solutionImage:'images/course/ege-phy/m-8/l-3/tasks/60-task-electric-field-midpoint-solution.svg',
+      solutionTitle:'Куда направлена напряжённость поля в точке B? Решение',
       ans:'вправо',
       hasAnimation:false
     });
