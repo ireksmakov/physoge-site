@@ -13001,6 +13001,31 @@ function renderPTasks(name){
       hasAnimation:false
     });
   }
+  // fizmat-capacitor-proton-field-change: конденсатор, протон, изменение импульса и ускорения.
+  if(AC==='ege-phy' && CM===8 && name==='Конденсатор'
+      && !baseTasks.some(t=>t && t.id==='fizmat-capacitor-proton-field-change')){
+    baseTasks.push({
+      id:'fizmat-capacitor-proton-field-change',
+      boardMode:'fizmat-capacitor-proton-field-change',
+      mode:'fizmat-capacitor-proton-field-change',
+      num:baseTasks.length+1,
+      level:1,
+      exam:'ЕГЭ',
+      title:'Протон в электрическом поле конденсатора',
+      cond:'<img src="images/course/ege-phy/m-8/l-6/tasks/capacitor-proton-field-change.svg" alt="Протон пролетает между пластинами конденсатора. Как изменятся модуль импульса и ускорение при увеличении напряжённости поля? Варианты 1 — увеличится, 2 — уменьшится, 3 — не изменится." class="universal-viewable-image image-carousel-img" style="display:block;width:100%;height:auto;object-fit:contain;background:#fff;border-radius:8px">',
+      solution:{
+        idea:'На протон действует электрическая сила F = eE.',
+        steps:[
+          'Ускорение протона a = eE/m при увеличении E возрастает.',
+          'Электрическое поле увеличивает поперечную составляющую импульса, а продольная остаётся неизменной.',
+          'Поэтому модуль импульса вылетающего протона также увеличивается.'
+        ],
+        answer:'11'
+      },
+      ans:'11',
+      hasAnimation:false
+    });
+  }
   const lesson07Name=typeof getCourseLessonNameByFlatNumber==='function'
     ? getCourseLessonNameByFlatNumber('ege-phy', 7)
     : 'Законы Ньютона';
