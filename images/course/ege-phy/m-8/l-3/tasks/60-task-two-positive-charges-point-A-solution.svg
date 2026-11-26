@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+<title id="title">Куда направлена напряжённость поля в точке A? Решение</title>
+<desc id="desc">Два положительных заряда расположены слева от точки A. Напряжённости полей обоих зарядов в точке A направлены вправо, результирующая напряжённость также направлена вправо.</desc>
+<rect width="1600" height="900" fill="#edf6ff"/>
+<g font-family="Times New Roman,Times,serif" fill="#173b5a">
+<text x="57" y="51" font-size="22" font-weight="bold" fill="#2c7abe">ЭЛЕКТРОСТАТИКА  ·  РЕШЕНИЕ ЗАДАЧИ</text>
+<text x="55" y="115" font-size="48" font-weight="bold">Куда направлена напряжённость поля в точке A?</text>
+<text x="58" y="159" font-size="25" fill="#617d92">Два положительных заряда расположены слева от точки A.</text>
+</g>
+<rect x="54" y="198" width="749" height="555" rx="24" fill="#fff" stroke="#c0d6e7" stroke-width="2"/>
+<rect x="830" y="198" width="714" height="555" rx="24" fill="#fff" stroke="#c0d6e7" stroke-width="2"/>
+<g font-family="Times New Roman,Times,serif" fill="#173b5a">
+<text x="84" y="249" font-size="31" font-weight="bold">Расположение зарядов</text>
+<text x="84" y="290" font-size="23" fill="#5d798c">Оба заряда положительные и находятся слева от A.</text>
+</g>
+<path d="M174 378H693" stroke="#b1c9d9" stroke-width="2.6" stroke-dasharray="12 8"/>
+<circle cx="176" cy="378" r="15" fill="#307dc1"/>
+<circle cx="435" cy="378" r="15" fill="#be771e"/>
+<circle cx="693" cy="378" r="7" fill="#173b5a"/>
+<g font-family="Times New Roman,Times,serif" font-size="34" font-style="italic" text-anchor="middle">
+<text x="176" y="339" fill="#307dc1">+q</text>
+<text x="435" y="339" fill="#be771e">+q</text>
+<text x="176" y="431" fill="#173b5a">1-й заряд</text>
+<text x="435" y="431" fill="#be771e">2-й заряд</text>
+<text x="693" y="431" fill="#173b5a">A</text>
+</g>
+<text x="83" y="487" fill="#58798f" font-family="Times New Roman,Times,serif" font-size="24">Векторы в точке A показаны отдельно:</text>
+<g font-family="Times New Roman,Times,serif" font-size="32" font-style="italic">
+<text x="184" y="546" fill="#307dc1">E₁</text>
+<text x="184" y="620" fill="#be771e">E₂</text>
+<text x="184" y="692" fill="#00857e">Eрез</text>
+</g>
+<g stroke-width="8" fill="none"><path d="M296 534H355" stroke="#307dc1"/><path d="M296 608H569" stroke="#be771e"/><path d="M296 679H641" stroke="#00857e"/></g>
+<path d="M374 534l-22-11v22z" fill="#307dc1"/>
+<path d="M589 608l-23-12v24z" fill="#be771e"/>
+<path d="M661 679l-23-12v24z" fill="#00857e"/>
+<g font-family="Times New Roman,Times,serif" font-size="23">
+<text x="400" y="542" fill="#307dc1">от 1-го заряда</text>
+<text x="610" y="617" fill="#be771e">от 2-го заряда</text>
+<text x="688" y="688" fill="#00857e">сумма</text>
+</g>
+<rect x="84" y="710" width="688" height="42" rx="11" fill="#e8f2fc"/>
+<text x="428" y="739" font-family="Times New Roman,Times,serif" font-size="23" fill="#173b5a" text-anchor="middle">Поле положительного заряда направлено от него.</text>
+<g font-family="Times New Roman,Times,serif">
+<circle cx="876" cy="247" r="23" fill="#307dc1"/>
+<text x="876" y="256" font-size="26" fill="white" text-anchor="middle" font-weight="bold">1</text>
+<text x="913" y="252" font-size="30" font-weight="bold" fill="#307dc1">Поле первого заряда +q</text>
+<text x="913" y="290" font-size="24" fill="#173b5a">Напряжённость направлена от</text>
+<text x="913" y="320" font-size="24" fill="#173b5a">положительного заряда.</text>
+<text x="913" y="350" font-size="24" fill="#173b5a">В точке A вектор E₁ направлен вправо.</text>
+<path d="M859 365H1515" stroke="#d5e4ee" stroke-width="2"/>
+<circle cx="876" cy="408" r="23" fill="#be771e"/>
+<text x="876" y="417" font-size="26" fill="white" text-anchor="middle" font-weight="bold">2</text>
+<text x="913" y="413" font-size="30" font-weight="bold" fill="#be771e">Поле второго заряда +q</text>
+<text x="913" y="450" font-size="24" fill="#173b5a">Точка A находится справа и от</text>
+<text x="913" y="480" font-size="24" fill="#173b5a">второго положительного заряда.</text>
+<text x="913" y="510" font-size="24" fill="#173b5a">Поэтому E₂ также направлен вправо.</text>
+<path d="M859 526H1515" stroke="#d5e4ee" stroke-width="2"/>
+<circle cx="876" cy="567" r="23" fill="#00857e"/>
+<text x="876" y="576" font-size="26" fill="white" text-anchor="middle" font-weight="bold">3</text>
+<text x="913" y="572" font-size="30" font-weight="bold" fill="#00857e">Сложение полей</text>
+<text x="913" y="609" font-size="24" fill="#173b5a">Оба вектора направлены вправо.</text>
+<text x="913" y="641" font-size="24" fill="#173b5a">Модули напряжённостей складываются.</text>
+<text x="913" y="675" font-size="24" fill="#173b5a">Ближний заряд создаёт более сильное поле.</text>
+</g>
+<rect x="914" y="702" width="600" height="42" rx="11" fill="#e8f5f1"/>
+<text x="1214" y="732" font-family="Times New Roman,Times,serif" font-size="27" font-style="italic" text-anchor="middle" fill="#00857e">Eрез = E₁ + E₂</text>
+<rect x="54" y="778" width="1490" height="90" rx="20" fill="#153b5c"/>
+<text x="79" y="838" font-family="Times New Roman,Times,serif" font-size="42" font-weight="bold" fill="white">→ ОТВЕТ: ВПРАВО</text>
+<text x="637" y="832" font-family="Times New Roman,Times,serif" font-size="25" fill="#e5f2fc">В точке A оба поля направлены вправо.</text>
+</svg>
