@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+"""ФИЗМАТ: безопасное добавление единственной задачи урока 59 к штатному renderPTasks.
+Запускается только в каталоге checkout перед отправкой index.html на Zomro.
+Не изменяет PNG/SVG и не переписывает другие задачи."""
+from pathlib import Path
+
+page = Path("index.html")
+html = page.read_text(encoding="utf-8")
+marker = "fizmat-lesson59-charge-direction"
+if marker in html:
+    print("Урок 59: подключение уже существует.")
+    raise SystemExit(0)
+
+anchor = (
+    "  const baseTasks=Array.isArray(LESSON_TASKS[name])?"
+    "LESSON_TASKS[name].map(t=>Object.assign({},t,{isBlank:!!(t&&t.isBlank)})):[];"
+)
+if html.count(anchor) != 1:
+    raise SystemExit("Не найден ровно один штатный renderPTasks; публикация остановлена")
+
+task_script = r"""
+  // fizmat-lesson59-charge-direction: штатная задача с кнопкой «Решение».
+  if (AC==='ege-phy' && CM===8 && CL===1 && name==='Закон сохранения заряда'
+      && !baseTasks.some(t=>t && t.id==='fizmat-lesson59-charge-direction')) {
+    baseTasks.push({
+      id:'fizmat-lesson59-charge-direction',
+      boardMode:'fizmat-lesson59-charge-direction',
+      mode:'fizmat-lesson59-charge-direction',
+      num:baseTasks.length+1,
+      level:1,
+      exam:'ЕГЭ',
+      title:'Направление ускорения отрицательного заряда',
+      cond:'<img src="images/course/ege-phy/m-8/l-1/tasks/59-task-charge-direction.svg" alt="Условие задачи о зарядах −q, +Q и −Q" class="universal-viewable-image image-carousel-img" style="display:block;width:100%;height:auto;object-fit:contain;background:white;border-radius:8px">',
+      solutionImage:'images/course/ege-phy/m-8/l-1/tasks/59-task-charge-direction-solution.svg',
+      solutionTitle:'Куда направлено ускорение заряда −q? Решение',
+      ans:'вниз',
+      hasAnimation:false
+    });
+  }
+"""
+html = html.replace(anchor, anchor + "\n" + task_script, 1)
+page.write_text(html, encoding="utf-8")
+print("Урок 59: задача добавлена к штатному рендеру; решение открывается кнопкой «Решение».")
