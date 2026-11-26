@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2048" height="275" viewBox="0 0 2048 275" role="img" aria-labelledby="t d">
+<title id="t">Направление напряжённости электрического поля в точке B</title>
+<desc id="d">Точка B расположена посередине отрезка AC. В A расположен положительный заряд +q, в C отрицательный заряд −5q. Определите направление результирующей напряжённости поля в точке B.</desc>
+<rect width="2048" height="275" fill="#fff"/>
+<g fill="#303030" font-family="Times New Roman, Times, serif" font-size="30">
+<text x="16" y="48">Точка B находится посередине отрезка AC. Неподвижные точечные заряды +q &gt; 0 и −5q расположены в</text>
+<text x="16" y="99">точках A и C соответственно</text>
+<text x="16" y="148">(см. рисунок). Куда направлен относительно рисунка (вправо, влево, вверх, вниз, к наблюдателю, от</text>
+<text x="16" y="199">наблюдателя) вектор напряжённости результирующего электрического поля этих зарядов в точке B?</text>
+<text x="16" y="251" font-style="italic">Ответ запишите словом (словами).</text>
+</g>
+<g stroke="#242424" fill="none" stroke-width="2.4">
+<path d="M1690 86H1967" stroke-dasharray="9 8"/>
+</g>
+<g fill="#151515">
+<circle cx="1690" cy="86" r="9.5"/><circle cx="1828" cy="86" r="5"/><circle cx="1967" cy="86" r="9.5"/>
+</g>
+<g fill="#151515" font-family="Times New Roman, Times, serif" font-size="38" font-style="italic" font-weight="bold" text-anchor="middle">
+<text x="1690" y="49">+q</text><text x="1967" y="49">−5q</text>
+<text x="1690" y="134">A</text><text x="1828" y="134">B</text><text x="1967" y="134">C</text>
+</g>
+</svg>
