@@ -1,22 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="2048" height="275" viewBox="0 0 2048 275" role="img" aria-labelledby="t d">
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="440" viewBox="0 0 1600 440" role="img" aria-labelledby="t d">
 <title id="t">Направление напряжённости электрического поля в точке B</title>
-<desc id="d">Точка B расположена посередине отрезка AC. В A расположен положительный заряд +q, в C отрицательный заряд −5q. Определите направление результирующей напряжённости поля в точке B.</desc>
-<rect width="2048" height="275" fill="#fff"/>
-<g fill="#303030" font-family="Times New Roman, Times, serif" font-size="30">
-<text x="16" y="48">Точка B находится посередине отрезка AC. Неподвижные точечные заряды +q &gt; 0 и −5q расположены в</text>
-<text x="16" y="99">точках A и C соответственно</text>
-<text x="16" y="148">(см. рисунок). Куда направлен относительно рисунка (вправо, влево, вверх, вниз, к наблюдателю, от</text>
-<text x="16" y="199">наблюдателя) вектор напряжённости результирующего электрического поля этих зарядов в точке B?</text>
-<text x="16" y="251" font-style="italic">Ответ запишите словом (словами).</text>
+<desc id="d">Точка B находится посередине отрезка AC. В A находится заряд +q, в C — заряд −5q. Определите направление результирующей напряжённости в B.</desc>
+<rect width="1600" height="440" fill="#fff"/>
+<g fill="#222" font-family="Times New Roman,Times,serif" font-size="32">
+<text x="28" y="50">Точка B находится посередине отрезка AC. Неподвижные точечные</text>
+<text x="28" y="94">заряды +q &gt; 0 и −5q расположены в точках A и C соответственно</text>
+<text x="28" y="138">(см. рисунок). Куда направлен относительно рисунка (вправо,</text>
+<text x="28" y="182">влево, вверх, вниз, к наблюдателю, от наблюдателя) вектор</text>
+<text x="28" y="226">напряжённости результирующего электрического поля этих</text>
+<text x="28" y="270">зарядов в точке B?</text>
+<text x="28" y="346" font-style="italic">Ответ запишите словом (словами).</text>
 </g>
-<g stroke="#242424" fill="none" stroke-width="2.4">
-<path d="M1690 86H1967" stroke-dasharray="9 8"/>
-</g>
+<path d="M1230 212H1534" stroke="#242424" stroke-width="2.4" stroke-dasharray="10 9"/>
 <g fill="#151515">
-<circle cx="1690" cy="86" r="9.5"/><circle cx="1828" cy="86" r="5"/><circle cx="1967" cy="86" r="9.5"/>
+<circle cx="1230" cy="212" r="9"/><circle cx="1382" cy="212" r="5"/><circle cx="1534" cy="212" r="9"/>
 </g>
-<g fill="#151515" font-family="Times New Roman, Times, serif" font-size="38" font-style="italic" font-weight="bold" text-anchor="middle">
-<text x="1690" y="49">+q</text><text x="1967" y="49">−5q</text>
-<text x="1690" y="134">A</text><text x="1828" y="134">B</text><text x="1967" y="134">C</text>
+<g fill="#151515" font-family="Times New Roman,Times,serif" font-size="42" font-style="italic" font-weight="bold" text-anchor="middle">
+<text x="1230" y="165">+q</text><text x="1534" y="165">−5q</text>
+<text x="1230" y="267">A</text><text x="1382" y="267">B</text><text x="1534" y="267">C</text>
 </g>
 </svg>
