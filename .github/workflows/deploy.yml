@@ -64,13 +64,40 @@ jobs:
               page.write_text(html, encoding='utf-8')
           PY
 
+      - name: Добавить задачу по зарядам во вкладку «Задачи» урока 59
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          page = Path('index.html')
+          html = page.read_text(encoding='utf-8')
+          anchor = '${renderPTasks(name)}'
+          flag = 'fizmat-lesson59-charge-direction'
+          if flag not in html:
+              if html.count(anchor) != 1:
+                  raise SystemExit('Не найден единственный шаблон задач; прекращаем публикацию без изменений')
+              markup = (
+                  '<article id="fizmat-lesson59-charge-direction" class="pt-card" style="margin:16px 0;padding:18px;border:1px solid var(--border);border-radius:14px;">'
+                  '<div class="pt-head" style="margin-bottom:12px;"><span class="pt-exam">ЕГЭ · Электростатика</span> '
+                  '<strong class="pt-title">Направление ускорения отрицательного заряда</strong></div>'
+                  '<img src="images/course/ege-phy/m-8/l-1/tasks/59-task-charge-direction.svg" '
+                  'alt="Условие задачи о зарядах минус q, плюс Q и минус Q и схема их расположения" '
+                  'class="universal-viewable-image image-carousel-img" '
+                  'style="display:block;width:100%;height:auto;object-fit:contain;background:white;border-radius:8px;cursor:zoom-in" '
+                  'onerror="this.insertAdjacentHTML(\'afterend\',\'<p>Изображение задачи не загрузилось.</p>\')">'
+                  '</article>'
+              )
+              replacement = "${renderPTasks(name)+((AC==='ege-phy'&&CM===8&&CL===1)? " + repr(markup) + " : '')}"
+              html = html.replace(anchor, replacement, 1)
+              page.write_text(html, encoding='utf-8')
+          PY
+
       - name: Проверить наличие изображения урока 62
         run: |
           test -s images/ege-physics/lesson-62/theory/potential-energy.png.png
 
       - name: Подготовить список файлов без удаления серверных материалов
         run: |
-          printf '%s\n' 'index.html' 'assets/lesson-62-potential-energy.js' > /tmp/fizmat-deploy-files
+          printf '%s\n' 'index.html' 'assets/lesson-62-potential-energy.js' 'images/course/ege-phy/m-8/l-1/tasks/59-task-charge-direction.svg' > /tmp/fizmat-deploy-files
           if git rev-parse HEAD^ >/dev/null 2>&1; then
             git diff --name-only --diff-filter=ACMRT HEAD^ HEAD >> /tmp/fizmat-deploy-files
           fi
