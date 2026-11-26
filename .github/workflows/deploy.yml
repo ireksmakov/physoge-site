@@ -39,9 +39,23 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -p ${{ secrets.ZOMRO_PORT }} -H ${{ secrets.ZOMRO_HOST }} >> ~/.ssh/known_hosts
 
+      - name: Подключить инфографику урока 62 без изменения исходного изображения
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          page = Path('index.html')
+          html = page.read_text(encoding='utf-8')
+          tag = '<script defer src="assets/lesson-62-potential-energy.js"></script>'
+          if tag not in html:
+              if '</body>' not in html:
+                  raise SystemExit('Отмена публикации: закрывающий тег body не найден')
+              html = html.replace('</body>', tag + '\n</body>', 1)
+              page.write_text(html, encoding='utf-8')
+          PY
+
       - name: Подготовить список файлов без удаления серверных материалов
         run: |
-          printf '%s\n' 'index.html' > /tmp/fizmat-deploy-files
+          printf '%s\n' 'index.html' 'assets/lesson-62-potential-energy.js' > /tmp/fizmat-deploy-files
           if git rev-parse HEAD^ >/dev/null 2>&1; then
             git diff --name-only --diff-filter=ACMRT HEAD^ HEAD >> /tmp/fizmat-deploy-files
           fi
