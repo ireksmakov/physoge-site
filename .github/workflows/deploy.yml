@@ -72,6 +72,7 @@ jobs:
         run: |
           test -s images/course/ege-phy/m-8/l-1/tasks/59-task-charge-direction.svg
           test -s images/course/ege-phy/m-8/l-1/tasks/59-task-charge-direction-solution.svg
+          test -s images/course/ege-phy/m-8/l-1/tasks/59-task-electric-field-midpoint.svg
 
       - name: Проверить наличие изображения урока 62
         run: |
@@ -79,7 +80,7 @@ jobs:
 
       - name: Подготовить список файлов без удаления серверных материалов
         run: |
-          printf '%s\n' 'index.html' 'assets/lesson-62-potential-energy.js' 'images/course/ege-phy/m-8/l-1/tasks/59-task-charge-direction.svg' 'images/course/ege-phy/m-8/l-1/tasks/59-task-charge-direction-solution.svg' > /tmp/fizmat-deploy-files
+          printf '%s\n' 'index.html' 'assets/lesson-62-potential-energy.js' 'images/course/ege-phy/m-8/l-1/tasks/59-task-charge-direction.svg' 'images/course/ege-phy/m-8/l-1/tasks/59-task-charge-direction-solution.svg' 'images/course/ege-phy/m-8/l-1/tasks/59-task-electric-field-midpoint.svg' > /tmp/fizmat-deploy-files
           if git rev-parse HEAD^ >/dev/null 2>&1; then
             git diff --name-only --diff-filter=ACMRT HEAD^ HEAD >> /tmp/fizmat-deploy-files
           fi
