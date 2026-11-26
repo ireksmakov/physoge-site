@@ -64,10 +64,6 @@ jobs:
               page.write_text(html, encoding='utf-8')
           PY
 
-      - name: Встроить задачу 59 через существующий механизм задач
-        run: |
-          python3 scripts/add-lesson59-charge-task.py
-
       - name: Проверить оба изображения задачи 59
         run: |
           test -s images/course/ege-phy/m-8/l-1/tasks/59-task-charge-direction.svg
