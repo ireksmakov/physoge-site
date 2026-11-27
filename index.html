@@ -4523,6 +4523,14 @@ const fizmatBookModules=FIZMAT_PHYSICS_GRADE8_BOOK.chapters.map(([chapter,paras]
     lesson.description='Учебник И. М. Перышкина, А. И. Иванова · страница '+page+' · '+chapter;
     lesson.textbookPage=page;
     lesson.theory={title:'§ '+paragraph+'. '+title,content:'Учебная теория, графики, формулы и задачи по этому параграфу будут добавлены отдельно.'};
+    // Школьный курс выводится через renderSchoolTopic(), а не через renderTheory().
+    // Подключаем единственный PNG МКТ к используемому школьным шаблоном массиву images.
+    if(paragraph===1){
+      lesson.theory.images=[{
+        src:'school-physics-grade8-mkt.png',
+        alt:'§ 1. Основные положения молекулярно-кинетической теории строения вещества — инфографика ФИЗМАТ, 8 класс'
+      }];
+    }
     return lesson;
   })
 }));
