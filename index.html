@@ -8568,6 +8568,23 @@ function renderOgeMathProbabilitySources(){
   return `<div class="probability-sources" style="max-width:1120px;margin:auto"><h2 style="font-size:clamp(20px,3vw,30px);margin-bottom:12px">ОГЭ · Математика · Задание 10</h2><p style="color:var(--gray);margin-bottom:10px">37 проверенных задач: 29 — классические вероятности, 5 — деревья вероятностей, 3 — статистика и теоремы о вероятностях.</p><p style="color:var(--gray);margin-bottom:20px">Это каталог ссылок на первоисточник, а не скопированные условия и решения. Остальные 79 заданий пока не проверены и не включены. Задания открываются на сайте «РЕШУ ОГЭ» в новой вкладке.</p>${cards}</div>`;
 }
 function renderTheory(){
+  // Физика · Школа · 8 класс · §1: инфографика МКТ 16:9.
+  // Файл хранится в GitHub по относительному пути; нельзя добавлять префикс images/ повторно.
+  const schoolLesson=getLessonObject(AC,CM,CL);
+  if(AC==='school-physics' && schoolLesson && schoolLesson.id==='physics-grade-8-paragraph-1'){
+    const theoryImage=[{
+      src:'images/school-physics/grade-8/theory/01-mkt.png',
+      alt:'§ 1. Основные положения молекулярно-кинетической теории строения вещества — инфографика ФИЗМАТ, физика 8 класс'
+    }];
+    return '<div class="school-physics-grade8-mkt-theory" style="width:100%;margin-bottom:18px">'+
+      createImageCarousel(theoryImage,{
+        singleClass:'theory-image-block school-physics-grade8-mkt-image',
+        imgClass:'theory-carousel-img universal-viewable-image image-carousel-img',
+        captions:false,
+        hint:'Нажмите на изображение, чтобы увеличить.'
+      })+
+      '</div>'+renderTheoryBlocks(getTH());
+  }
   // ЕГЭ Физика · Урок 58 «Закон Кулона»: два исходных изображения 16:9.
   if(AC==='ege-phy'&&lessonTitle(getLessonObject(AC,CM,CL))==='Закон Кулона'){
     const theoryImages=[
