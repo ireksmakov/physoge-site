@@ -142,6 +142,15 @@ jobs:
             fi
           '
 
+      - name: Опубликовать инфографику 8 класса в доступный каталог сайта
+        run: |
+          set -euo pipefail
+          test -s images/school-physics/grade-8/theory/01-mkt.png
+          rsync -az --no-perms --no-owner --no-group \
+            -e "ssh -p ${{ secrets.ZOMRO_PORT }}" \
+            images/school-physics/grade-8/theory/01-mkt.png \
+            "${{ secrets.ZOMRO_USER }}@${{ secrets.ZOMRO_HOST }}:${{ secrets.ZOMRO_PATH }}/school-physics-grade8-mkt.png"
+
       - name: Развернуть изменённые файлы на Zomro
         run: |
           rsync -az --no-perms --no-owner --no-group --omit-dir-times \
