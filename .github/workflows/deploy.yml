@@ -122,6 +122,26 @@ jobs:
             images/ege-physics/lesson-62/theory/potential-energy.png.png \
             "${{ secrets.ZOMRO_USER }}@${{ secrets.ZOMRO_HOST }}:${{ secrets.ZOMRO_PATH }}/lesson-62-potential-energy.png"
 
+      - name: Проверить права на папки школьной физики
+        env:
+          TARGET_HOST: ${{ secrets.ZOMRO_HOST }}
+          TARGET_PORT: ${{ secrets.ZOMRO_PORT }}
+          TARGET_USER: ${{ secrets.ZOMRO_USER }}
+        run: |
+          set -euo pipefail
+          ssh -o BatchMode=yes -p "$TARGET_PORT" "$TARGET_USER@$TARGET_HOST" '
+            echo "SSH_USER=$(id -un)"
+            echo "SSH_UID=$(id -u)"
+            for path in /var/www/physoge /var/www/physoge/images /var/www/physoge/images/school-physics; do
+              if [ -e "$path" ]; then ls -ld "$path"; else echo "MISSING $path"; fi
+            done
+            if sudo -n true >/dev/null 2>&1; then
+              echo "SUDO_NONINTERACTIVE=yes"
+            else
+              echo "SUDO_NONINTERACTIVE=no"
+            fi
+          '
+
       - name: Развернуть изменённые файлы на Zomro
         run: |
           rsync -az --no-perms --no-owner --no-group --omit-dir-times \
